@@ -230,6 +230,7 @@ const INTERNAL_ACTION_EVENTS = ['add', 'preview', 'remove', 'replace']
 
 export default {
   name: 'veui-uploader-media',
+  uiTypes: ['transparent'],
   components: {
     'veui-icon': Icon,
     'veui-popover': Popover,

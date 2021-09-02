@@ -9,7 +9,7 @@
       <veui-radio-button-group
         v-model="type"
         ui="s"
-        :items="avaliableTypes"
+        :items="availableTypes"
       />
       <div class="space"/>
       <veui-checkbox v-model="autoupload">autoupload</veui-checkbox>
@@ -30,6 +30,14 @@
         v-if="maxCount < 2"
         v-model="multiple"
       >multiple</veui-checkbox>
+    </div>
+    <div>
+      Size:
+      <veui-radio-button-group
+        v-model="size"
+        ui="s"
+        :items="availableSizes"
+      />
     </div>
     <div>
       Custom:
@@ -285,7 +293,8 @@ const availableActions = [
     value: remoteFakeUploadTarget
   }
 ]
-const avaliableTypes = ['file', 'video', 'image', 'media'].map(mapper)
+const availableTypes = ['file', 'video', 'image', 'media'].map(mapper)
+const availableSizes = ['m', 's'].map(mapper)
 const availableCustoms = [
   '#desc',
   '#button-label',
@@ -337,7 +346,8 @@ export default {
       uploaderStatus: Uploader.status,
       statusIcons,
       statusTexts,
-      avaliableTypes,
+      availableTypes,
+      availableSizes,
       avaliableMaxCounts,
       availableCustoms,
       availableActions,
@@ -354,6 +364,7 @@ export default {
 
       autoupload: true,
       type: 'image',
+      size: 'm',
 
       accept: '.jpg,.jpeg,.png',
       maxCount: 5,
@@ -413,6 +424,7 @@ export default {
           'pickerPosition',
           'convertResponse'
         ]),
+        ui: this.size,
         upload: this.customUploadRequest,
         controls: includes(this.enabledCustoms, ':controls')
           ? this.customItemControls

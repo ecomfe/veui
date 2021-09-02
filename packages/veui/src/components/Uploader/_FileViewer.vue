@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  uiTypes: ['transparent'],
   props: {
     tag: String,
     src: process.env.VUE_ENV === 'server' ? String : [String, File]

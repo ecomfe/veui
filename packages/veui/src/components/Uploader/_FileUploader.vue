@@ -116,6 +116,7 @@ import Progress from '../Progress'
 
 export default {
   name: 'veui-uploader-file',
+  uiTypes: ['transparent'],
   components: {
     'veui-icon': Icon,
     'veui-button': Button,
