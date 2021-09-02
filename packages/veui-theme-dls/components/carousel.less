@@ -4,9 +4,9 @@
   // TODO: use a better default size
   @width-normal: 480px;
   @height-normal: 270px;
-  @dls-carousel-default-timing-function: ease;
+  // TODO UE要求动效统一用 ease-in-out, 直接改 veui-transition ？
+  @dls-carousel-default-timing-function: ease-in-out;
 
-  --dls-carousel-transition-timing-function: @dls-carousel-default-timing-function;
   --dls-carousel-transition-duration: @veui-transition-duration;
   --dls-carousel-slide-gutter: @dls-carousel-slide-gutter;
   position: relative;
@@ -72,7 +72,6 @@
     .veui-transition(opacity);
     transition-duration: var(--dls-carousel-transition-duration);
     transition-timing-function: @dls-carousel-default-timing-function;
-    transition-timing-function: var(--dls-carousel-transition-timing-function);
 
     &-enter,
     &-leave-to {
@@ -95,7 +94,6 @@
     .veui-transition(transform);
     transition-duration: var(--dls-carousel-transition-duration);
     transition-timing-function: @dls-carousel-default-timing-function;
-    transition-timing-function: var(--dls-carousel-transition-timing-function);
   }
 
   &-slide &-item {
@@ -105,10 +103,12 @@
   }
 
   &-gutter:not(&-vertical) &-item:not(:last-child) {
+    margin-right: @dls-carousel-slide-gutter;
     margin-right: var(--dls-carousel-slide-gutter, @dls-carousel-slide-gutter);
   }
 
   &-gutter&-vertical &-item:not(:last-child) {
+    margin-bottom: @dls-carousel-slide-gutter;
     margin-bottom: var(--dls-carousel-slide-gutter, @dls-carousel-slide-gutter);
   }
 
@@ -328,20 +328,20 @@
   }
 
   &-outside-indicator &-indicator-item {
-    background-color: @dls-color-gray-4;
+    background-color: @dls-carousel-indicator-background-color-outside;
 
     &:hover {
-      background-color: @dls-color-brand-7;
+      background-color: @dls-carousel-indicator-background-color-outside-hover;
     }
 
     &:active {
-      background-color: @dls-color-brand-7;
+      background-color: @dls-carousel-indicator-background-color-outside-active;
     }
 
     &-current {
       &,
       &:hover {
-        background-color: @dls-color-brand-7;
+        background-color: @dls-carousel-indicator-background-color-outside-current;
       }
     }
   }
