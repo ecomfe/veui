@@ -313,7 +313,7 @@ export default {
           const duplicate = get(this.$refs, `video#${start}[0]`)
           const target = get(this.$refs, `video#${start + offset}[0]`)
           // slot 被覆盖了就什么也取不到了，检查下
-          if (duplicate && duplicate) {
+          if (duplicate && target) {
             target.currentTime = duplicate.currentTime
             if (preserveStart <= start && start < preserveEnd) {
               if (!duplicate.paused) {
