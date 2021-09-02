@@ -50,10 +50,9 @@ export default {
       let [start, end] = range
       while (start < end) {
         const current = this.realDatasource[start]
-        if (isVideo(current)) {
-          const ref = `video#${start}`
-          const video = this.$refs[ref][0]
-          video.pause()
+        const ref = `video#${start}`
+        if (isVideo(current) && this.$refs[ref] && this.$refs[ref][0]) {
+          this.$refs[ref][0].pause()
           this.willReset.push(ref)
         }
         start++
@@ -67,9 +66,9 @@ export default {
       while (start < end) {
         const current = this.realDatasource[start]
         if (isVideo(current)) {
-          const video = this.$refs[`video#${start}`][0]
-          if (this.isAutoplay) {
-            const playPro = video.play()
+          const video = this.$refs[`video#${start}`]
+          if (video && video[0] && this.isAutoplay) {
+            const playPro = video[0].play()
             if (playPro.catch) {
               // play 可能会报错（被 pause 中断等？）先 ignore，DOMException？
               playPro.catch(noop)

@@ -864,6 +864,7 @@ describe('components/Carousel', () => {
         },
         template: `
           <veui-carousel
+            ref="car"
             :datasource="items"
             :index.sync="index"
             :slides-per-group="group"
@@ -901,7 +902,10 @@ describe('components/Carousel', () => {
     let next = wrapper.find('.veui-carousel-control-next')
     next.trigger('click')
     await wait(300)
-    expect(vm.index).to.equal(0)
+    expect(
+      vm.index,
+      `inTransition:${vm.$refs.car.$refs.effect.inTransition}`
+    ).to.equal(0)
 
     // 3/2 那么在5个里面需要补1个空白 pad 且最后一个 view 的最后一个是第一个项目
     vm.index = 2
@@ -1050,6 +1054,55 @@ describe('components/Carousel', () => {
     prev.trigger('click')
     await wait(300)
     expect(video.element.currentTime, 'fade 重置时间').to.equal(0)
+    wrapper.destroy()
+  })
+
+  it('should render item slot correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-carousel': Carousel
+        },
+        template: `
+          <veui-carousel
+            ref="car"
+            :datasource="items"
+            effect="slide"
+            wrap
+          >
+            <div class="demo-slide" slot="item" slot-scope="{ label }">{{ label }}</div>
+          </veui-carousel>`,
+        data () {
+          return {
+            items
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    let { vm } = wrapper
+    let current = wrapper.find('.veui-carousel-item-current .demo-slide')
+    expect(current.exists()).to.equal(true)
+    expect(current.text()).to.equal(vm.items[0].label)
+
+    await wait(0)
+    let prev = wrapper.find('.veui-carousel-control-prev')
+    prev.trigger('click')
+    await wait(300)
+    current = wrapper.find('.veui-carousel-item-current .demo-slide')
+    expect(current.text()).to.equal(vm.items[vm.items.length - 1].label)
+
+    let next = wrapper.find('.veui-carousel-control-next')
+    next.trigger('click')
+    await wait(300)
+    current = wrapper.find('.veui-carousel-item-current .demo-slide')
+    expect(
+      current.text(),
+      `inTransition:${vm.$refs.car.$refs.effect.inTransition}`
+    ).to.equal(vm.items[0].label)
     wrapper.destroy()
   })
 })
