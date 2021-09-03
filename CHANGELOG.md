@@ -1,4 +1,4 @@
-## 2.1.0
+## 2.1.0 "🌰 Chestnut"
 
 ### 💡 主要变更
 
@@ -15,6 +15,13 @@
   - 新增了视频轮播项的支持，并新增 `options` prop 用于指定不同轮播项类型的默认配置。
   - 新增了 `slides-per-view` prop，用于指定同时显示多少个轮播项。
   - 新增了 `slides-per-group` prop，用于指定每次前后切换的一组包含多少个轮播项。
+
+### 🧪 实验性功能
+
+- [+] 为 `Carousel` 组件新增自定义 CSS 属性：
+
+  - `--dls-carousel-slide-gutter`：轮播项的间距；
+  - `--dls-carousel-transition-duration`：轮播一次切换的持续时间。
 
 ### 🐞 问题修复
 
