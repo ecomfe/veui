@@ -107,13 +107,44 @@
       :autoplay="autoplay"
       :vertical="vertical"
       :controls="!!control"
-      :controls-position="control || undefined"
+      :controls-position="control"
       :effect="effect"
       lazy
       :style="{
         '--dls-carousel-transition-duration': `${duration}s`
       }"
     />
+  </section>
+  <section class="carousel-section">
+    <h4>自定义item</h4>
+    <veui-carousel
+      :datasource="items"
+      :index.sync="index"
+      :ui="ui"
+      :interval="interval"
+      :pause-on-hover="pauseOnHover"
+      :switch-trigger="trigger"
+      :wrap="wrap"
+      :indicator="indicator"
+      :indicator-alignment="alignment"
+      :indicator-position="indicatorPosition"
+      :autoplay="autoplay"
+      :vertical="vertical"
+      :controls="!!control"
+      :controls-position="control"
+      :effect="effect"
+      :style="{
+        '--dls-carousel-transition-duration': `${duration}s`
+      }"
+    >
+      <div
+        slot="item"
+        slot-scope="{ label }"
+        class="demo-carousel-slide"
+      >
+        {{ label }}
+      </div>
+    </veui-carousel>
   </section>
   <section class="carousel-section">
     <h4>2 per view, 1 per group</h4>
@@ -140,7 +171,7 @@
       :autoplay="autoplay"
       :vertical="vertical"
       :controls="!!control"
-      :controls-position="control || undefined"
+      :controls-position="control"
       :effect="effect"
       :slides-per-view="2"
       :slides-per-group="1"
@@ -175,7 +206,7 @@
       :autoplay="autoplay"
       :vertical="vertical"
       :controls="!!control"
-      :controls-position="control || undefined"
+      :controls-position="control"
       :effect="effect"
       :slides-per-view="2"
       :slides-per-group="2"
@@ -207,7 +238,7 @@
       :autoplay="autoplay"
       :vertical="vertical"
       :controls="!!control"
-      :controls-position="control || undefined"
+      :controls-position="control"
       :effect="effect"
       :slides-per-view="3"
       :slides-per-group="3"
@@ -239,7 +270,7 @@
       :autoplay="autoplay"
       :vertical="vertical"
       :controls="!!control"
-      :controls-position="control || undefined"
+      :controls-position="control"
       :effect="effect"
       :slides-per-view="3"
       :slides-per-group="2"
@@ -271,7 +302,7 @@
       :autoplay="autoplay"
       :vertical="vertical"
       :controls="!!control"
-      :controls-position="control || undefined"
+      :controls-position="control"
       effect="fade"
       :slide-aspect-ratio="1"
       lazy
@@ -302,7 +333,7 @@
       :autoplay="autoplay"
       :vertical="vertical"
       :controls="!!control"
-      :controls-position="control || undefined"
+      :controls-position="control"
       :effect="effect"
       :slides-per-view="2"
       :slides-per-group="2"
@@ -463,5 +494,13 @@ export default {
 <style scoped>
 .carousel-section {
   margin-bottom: 12px;
+}
+
+.demo-carousel-slide {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ccc;
 }
 </style>

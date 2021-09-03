@@ -36,7 +36,17 @@
           :preload-range="preloadRange"
           :options="options"
           v-bind="isFade ? {} : slideProps"
-        />
+        >
+          <template
+            slot="item"
+            slot-scope="props"
+          >
+            <slot
+              name="item"
+              v-bind="props"
+            />
+          </template>
+        </component>
       </div>
       <div
         v-if="vertical && slideAspectRatio && !isFade"

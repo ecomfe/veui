@@ -64,6 +64,7 @@
 
 <script>
 import carousel, { isVideo, CUSTOM_GUTTER, FALLBACK_GUTTER } from './mixin'
+import { get } from 'lodash'
 
 // index 解释
 // 1. prop index 其实是 view 的 index，即 groupIndex
@@ -309,15 +310,18 @@ export default {
       while (start < end) {
         let item = this.realDatasource[start]
         if (isVideo(item)) {
-          const duplicate = this.$refs[`video#${start}`][0]
-          const target = this.$refs[`video#${start + offset}`][0]
-          target.currentTime = duplicate.currentTime
-          if (preserveStart <= start && start < preserveEnd) {
-            if (!duplicate.paused) {
+          const duplicate = get(this.$refs, `video#${start}[0]`)
+          const target = get(this.$refs, `video#${start + offset}[0]`)
+          // slot 被覆盖了就什么也取不到了，检查下
+          if (duplicate && target) {
+            target.currentTime = duplicate.currentTime
+            if (preserveStart <= start && start < preserveEnd) {
+              if (!duplicate.paused) {
+                target.play()
+              }
+            } else if (this.isAutoplay) {
               target.play()
             }
-          } else if (this.isAutoplay) {
-            target.play()
           }
         }
         start++
