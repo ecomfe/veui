@@ -24,6 +24,7 @@
   >
     <veui-button
       v-longpress.repeat="decrease"
+      tabindex="-1"
       :ui="uiParts.spinner"
       :class="[$c('number-input-step'), $c('number-input-step-down')]"
       :disabled="!editable || reachMinLimit"
@@ -44,6 +45,7 @@
     >
       <veui-button
         v-longpress.repeat="increase"
+        tabindex="-1"
         :ui="uiParts.spinner"
         :class="[$c('number-input-step'), $c('number-input-step-up')]"
         :disabled="!editable || reachMaxLimit"
@@ -56,6 +58,7 @@
       </veui-button>
       <veui-button
         v-longpress.repeat="decrease"
+        tabindex="-1"
         :ui="uiParts.spinner"
         :class="[$c('number-input-step'), $c('number-input-step-down')]"
         :disabled="!editable || reachMinLimit"
@@ -74,6 +77,7 @@
   >
     <veui-button
       v-longpress.repeat="increase"
+      tabindex="-1"
       :ui="uiParts.spinner"
       :class="[$c('number-input-step'), $c('number-input-step-up')]"
       :disabled="!editable || reachMaxLimit"

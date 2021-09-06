@@ -20,7 +20,6 @@ Enterprise UI components for Vue.js. Based on [BAIDU](https://www.baidu.com)'s D
 Packages included in this repo are:
 
 * [`veui`](./packages/veui)
-* [`babel-preset-veui`](./packages/babel-preset-veui)
 * [`babel-plugin-veui`](./packages/babel-plugin-veui)
 * [`veui-loader`](./packages/veui-loader)
 * [`veui-theme-dls`](./packages/veui-theme-dls)
