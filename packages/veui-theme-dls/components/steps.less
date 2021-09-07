@@ -110,7 +110,7 @@
         background-color: @dls-steps-connector-color-completed;
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         .@{veui-prefix}-steps-step-index {
           background-color: @dls-steps-marker-background-color-completed-focus;
           box-shadow: @dls-steps-marker-shadow-completed-focus;
@@ -130,7 +130,7 @@
         .make-index(current);
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         .@{veui-prefix}-steps-step-index {
           background-color: @dls-steps-marker-background-color-current-focus;
           border-color: @dls-steps-marker-border-color-current-focus;
@@ -164,7 +164,7 @@
         .make-index(error);
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         .@{veui-prefix}-steps-step-index {
           background-color: @dls-steps-marker-background-color-error-focus;
           box-shadow: @dls-steps-marker-shadow-error-focus;
@@ -180,7 +180,7 @@
         .make-index(error-current);
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         .@{veui-prefix}-steps-step-index {
           background-color: @dls-steps-marker-background-color-error-current-focus;
           box-shadow: @dls-steps-marker-shadow-error-current-focus;
@@ -322,7 +322,7 @@
   .@{veui-prefix}-steps a,
   .@{veui-prefix}-link {
     &:hover,
-    &.focus-visible,
+    &[data-focus-visible-added],
     &:active,
     &.@{veui-prefix}-disabled {
       text-decoration: none;

@@ -102,7 +102,6 @@
       background-color: @dls-tree-node-background-color-hover;
     }
 
-    &.focus-visible::before,
     &[data-focus-visible-added]::before {
       background-color: @dls-tree-node-background-color-focus;
     }
@@ -125,7 +124,6 @@
         }
       }
 
-      &.focus-visible,
       &[data-focus-visible-added] {
         color: @dls-tree-node-font-color-selected-focus;
         &::before {
@@ -144,7 +142,6 @@
     &.@{veui-prefix}-disabled.@{veui-prefix}-tree-item-selected::before,
     &.@{veui-prefix}-disabled:active::before,
     &.@{veui-prefix}-disabled:hover::before,
-    &.@{veui-prefix}-disabled.focus-visible::before,
     &.@{veui-prefix}-disabled[data-focus-visible-added]::before {
       background-color: transparent;
     }

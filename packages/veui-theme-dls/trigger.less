@@ -32,7 +32,7 @@
     .@{trigger}-clear
     + .@{trigger}-toggle,
   .@{veui-prefix}-focus .@{trigger}-clear + .@{trigger}-toggle,
-  &-clear.focus-visible + .@{trigger}-toggle {
+  &-clear[data-focus-visible-added] + .@{trigger}-toggle {
     opacity: 0;
   }
 
@@ -55,7 +55,7 @@
   &:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
     .@{trigger}-clear,
   .@{veui-prefix}-focus .@{trigger}-clear,
-  .@{trigger}-clear.focus-visible {
+  .@{trigger}-clear[data-focus-visible-added] {
     opacity: 1;
   }
 

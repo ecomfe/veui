@@ -54,7 +54,7 @@
     .veui-button-transition();
     line-height: @dls-line-height-1;
 
-    &.focus-visible {
+    &[data-focus-visible-added] {
       .dls-focus-ring(
         @dls-date-picker-cell-border-color-focus,
         @dls-date-picker-cell-shadow-focus
@@ -161,7 +161,7 @@
     border: none;
     line-height: @dls-line-height-1;
 
-    &.focus-visible,
+    &[data-focus-visible-added],
     &:hover {
       background-color: @dls-background-color-base-1;
       color: @dls-foreground-color-neutral;
@@ -258,7 +258,7 @@
         background-color: @dls-date-picker-cell-background-color-hover;
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         background-color: @dls-date-picker-cell-background-color-focus;
         .dls-focus-ring(
           @dls-date-picker-cell-border-color-focus,
@@ -315,7 +315,7 @@
         background-color: @dls-date-picker-cell-background-color-selected-hover;
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         background-color: @dls-date-picker-cell-background-color-selected-focus;
       }
 
@@ -355,7 +355,7 @@
       background-color: @dls-date-picker-cell-background-color-aux-hover;
     }
 
-    &.focus-visible {
+    &[data-focus-visible-added] {
       background-color: @dls-date-picker-cell-background-color-aux-focus;
     }
 
@@ -400,7 +400,7 @@
       border-color: @dls-date-picker-cell-border-color-range-end-hover;
       color: @dls-date-picker-cell-font-color;
     }
-    &.focus-visible {
+    &[data-focus-visible-added] {
       background-color: @dls-date-picker-cell-background-color-range-end-focus;
     }
     &:active {
@@ -502,7 +502,7 @@
         background-color: @dls-date-picker-list-background-color-hover;
         color: @dls-date-picker-list-font-color-hover;
       }
-      &.focus-visible {
+      &[data-focus-visible-added] {
         background-color: @dls-date-picker-list-background-color-focus;
         color: @dls-date-picker-list-font-color-focus;
       }
@@ -523,7 +523,7 @@
         color: @dls-date-picker-list-font-color-selected-hover;
       }
 
-      &.focus-visible {
+      &[data-focus-visible-added] {
         color: @dls-date-picker-list-font-color-selected-focus;
       }
 

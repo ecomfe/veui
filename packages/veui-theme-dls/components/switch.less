@@ -95,7 +95,7 @@
     }
   }
 
-  .focus-visible + &-switcher {
+  [data-focus-visible-added] + &-switcher {
     background-color: @dls-switch-track-color-off-focus;
     box-shadow: @dls-switch-shadow-off-focus;
 
@@ -104,7 +104,7 @@
     }
   }
 
-  .focus-visible:checked + &-switcher {
+  [data-focus-visible-added]:checked + &-switcher {
     background-color: @dls-switch-track-color-on-focus;
     box-shadow: @dls-switch-shadow-on-focus;
 

@@ -162,7 +162,7 @@
       }
     }
 
-    &.focus-visible {
+    &[data-focus-visible-added] {
       .@{veui-prefix}-slider-thumb-default {
         background-color: @dls-slider-thumb-background-color-focus;
         .dls-focus-ring(
@@ -274,7 +274,7 @@
         }
       }
 
-      &.focus-visible .@{veui-prefix}-slider-thumb-default {
+      &[data-focus-visible-added] .@{veui-prefix}-slider-thumb-default {
         background-color: @dls-slider-thumb-background-color-read-only-focus;
         .dls-focus-ring(
           @dls-slider-thumb-border-color-read-only-focus,

@@ -176,7 +176,7 @@
     &-clear
     + &-toggle,
   .@{veui-prefix}-focus &-clear + &-toggle,
-  &-clear.focus-visible + &-toggle {
+  &-clear[data-focus-visible-added] + &-toggle {
     opacity: 0;
   }
 
@@ -198,7 +198,7 @@
     .@{veui-prefix}-select:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
       &,
     .@{veui-prefix}-focus &,
-    &.focus-visible {
+    &[data-focus-visible-added] {
       opacity: 1;
     }
   }

@@ -73,7 +73,7 @@
     }
   }
 
-  & .focus-visible + &-box {
+  & [data-focus-visible-added] + &-box {
     border-color: @dls-border-color-focus;
     background-color: @dls-radio-background-color-focus;
     .dls-focus-ring(@dls-radio-border-color-focus, @dls-radio-shadow-focus);
@@ -83,7 +83,7 @@
     }
   }
 
-  & .focus-visible:checked + &-box {
+  & [data-focus-visible-added]:checked + &-box {
     background-color: @dls-radio-background-color-checked-focus;
     .dls-focus-ring(
       @dls-radio-border-color-checked-focus,

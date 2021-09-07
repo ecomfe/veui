@@ -65,7 +65,7 @@
     color: @dls-checkbox-foreground-color-hover;
   }
 
-  & .focus-visible + &-box {
+  & [data-focus-visible-added] + &-box {
     .dls-focus-ring(
       @dls-checkbox-border-color-focus,
       @dls-checkbox-shadow-focus
@@ -98,8 +98,8 @@
     background-color: @dls-checkbox-background-color-checked-hover;
   }
 
-  & :checked.focus-visible + &-box,
-  & :indeterminate.focus-visible + &-box {
+  & :checked[data-focus-visible-added] + &-box,
+  & :indeterminate[data-focus-visible-added] + &-box {
     border-color: @dls-checkbox-border-color-checked-focus;
     background-color: @dls-checkbox-background-color-checked-focus;
   }

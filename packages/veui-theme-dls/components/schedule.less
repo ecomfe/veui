@@ -147,11 +147,11 @@
         .veui-button-transition();
 
         &:hover,
-        &.focus-visible {
+        &[data-focus-visible-added] {
           color: @veui-brand-color-10;
         }
 
-        &.focus-visible {
+        &[data-focus-visible-added] {
           .veui-focus-shadow();
           z-index: 1;
         }
@@ -163,7 +163,7 @@
 
         &.@{veui-prefix}-schedule-selected {
           &:hover,
-          &.focus-visible {
+          &[data-focus-visible-added] {
             color: @veui-brand-color-7;
           }
 

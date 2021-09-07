@@ -13,7 +13,7 @@
     pointer-events: all;
   }
 
-  .@{veui-prefix}-button.focus-visible {
+  .@{veui-prefix}-button[data-focus-visible-added] {
     position: relative;
     z-index: 1;
   }
@@ -28,7 +28,7 @@
         height: calc(100% + 2px);
       }
 
-      &.focus-visible::before {
+      &[data-focus-visible-added]::before {
         background-color: transparent;
       }
     }
@@ -104,7 +104,7 @@
     margin-right: -1px;
     flex-grow: 1;
 
-    &.focus-visible:not([ui~="primary"]) {
+    &[data-focus-visible-added]:not([ui~="primary"]) {
       z-index: 1;
     }
   }
@@ -165,7 +165,7 @@
           color: @dls-link-font-color-normal-hover;
         }
 
-        &.focus-visible {
+        &[data-focus-visible-added] {
           color: @dls-link-font-color-normal-focus;
         }
 

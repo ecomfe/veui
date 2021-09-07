@@ -2,7 +2,10 @@
 
 ._veui-grouped-button {
   &.@{veui-prefix}-button-selected {
-    z-index: 3;
+    &,
+    &.@{veui-prefix}-disabled {
+      z-index: 3;
+    }
 
     &:hover,
     &[data-focus-visible-added] {
@@ -17,7 +20,7 @@
       background-color: @dls-checkbox-background-color-strong-checked-hover;
     }
 
-    &.focus-visible {
+    &[data-focus-visible-added] {
       border-color: @dls-button-border-color-focus;
       background-color: @dls-checkbox-background-color-strong-checked-focus;
     }

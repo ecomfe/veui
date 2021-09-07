@@ -83,7 +83,7 @@
     }
   }
 
-  &[ui~="normal"] &-step:not(.focus-visible) {
+  &[ui~="normal"] &-step:not([data-focus-visible-added]) {
     .border-color(transparent, transparent, transparent, _);
   }
 
@@ -96,7 +96,7 @@
       .border-left-radius(0);
     }
 
-    &.focus-visible {
+    &[data-focus-visible-added] {
       z-index: 1;
     }
 
@@ -205,7 +205,7 @@
           margin-right: 1px;
         }
 
-        &.focus-visible {
+        &[data-focus-visible-added] {
           .size(100%);
           border-style: solid;
           margin: 0;

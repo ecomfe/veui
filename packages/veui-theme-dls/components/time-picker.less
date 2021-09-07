@@ -62,7 +62,7 @@
     &-clear
     + &-clock,
   .@{veui-prefix}-focus &-clear + &-clock,
-  &-clear.focus-visible + &-clock {
+  &-clear[data-focus-visible-added] + &-clock {
     opacity: 0;
   }
 
@@ -79,7 +79,7 @@
     .@{veui-prefix}-time-picker:not(.@{veui-prefix}-readonly):not(.@{veui-prefix}-disabled):hover
       &,
     .@{veui-prefix}-focus &,
-    &.focus-visible {
+    &[data-focus-visible-added] {
       opacity: 1;
     }
   }
