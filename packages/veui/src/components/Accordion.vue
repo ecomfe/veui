@@ -6,16 +6,13 @@
 
 <script>
 import ui from '../mixins/ui'
-import { useCoupledParent } from '../mixins/coupled'
+import { useParent } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 import { clone } from 'lodash'
 import '../common/uiTypes'
 
-let accordion = useCoupledParent({
-  type: 'accordion',
-  childrenKey: 'items'
-})
+let accordion = useParent('accordion', { childrenKeys: 'items' })
 
 export default {
   name: 'veui-accordion',
@@ -29,7 +26,7 @@ export default {
   methods: {
     toggleById (id) {
       let item = this.findChildById(id)
-      let key = item.name || item.id
+      let key = item.name || item.childId
       let expanded = clone(this.realExpanded)
       let expand = false
       if (!this.multiple) {
