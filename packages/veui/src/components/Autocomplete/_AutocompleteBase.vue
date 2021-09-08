@@ -81,7 +81,8 @@ export default {
       childrenKey: vm => vm.childrenKey,
       valueKey: vm => vm.valueKey,
       searchKey: 'label',
-      resultKey: 'filteredDatasource'
+      resultKey: 'filteredDatasource',
+      exposeProps: true
     })
   ],
   props: {
@@ -102,13 +103,12 @@ export default {
       type: String,
       default: 'children'
     },
-    match: Function,
     strict: Boolean
   },
   data () {
     return {
       localValue: '',
-      keyword: '',
+      keyword: this.value || '',
       activeDescendant: '',
       optionIdPrefix: uniqueId('veui-autocomplete-option-')
     }

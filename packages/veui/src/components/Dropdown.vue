@@ -234,7 +234,8 @@ export default {
       datasourceKey: 'options',
       childrenKey: 'options',
       keywordKey: 'keyword',
-      resultKey: 'filteredSuggestions'
+      resultKey: 'filteredSuggestions',
+      exposeProps: true
     }),
     focusable,
     i18n

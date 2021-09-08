@@ -159,7 +159,7 @@ import config from '../../managers/config'
 import useConfig from '../../mixins/config'
 import dropdown from '../../mixins/dropdown'
 import useControllable from '../../mixins/controllable'
-import useSearchable from '../../mixins/searchable'
+import useSearchable, { getDefaultFilter } from '../../mixins/searchable'
 import prefix from '../../mixins/prefix'
 import i18n from '../../mixins/i18n'
 import useTree from '../../mixins/tree'
@@ -216,7 +216,8 @@ export default {
       childrenKey: 'options',
       keywordKey: 'keyword',
       filterKey: 'filterParents',
-      resultKey: 'filteredOptions'
+      resultKey: 'filteredOptions',
+      exposeProps: true
     })
   ],
   model: {
@@ -544,13 +545,12 @@ export default {
       return this.updateExpanded(expanded)
     },
     // 在只选叶子的情况下，搜索出来的结果过滤掉非叶子节点
-    filterParents (offsets, current, parents) {
+    filterParents (offsets, current, options) {
       if (this.realSelectLeaves && hasChildren(current, 'options')) {
         return false
       }
-      let matched = Array.isArray(offsets) ? !!offsets.length : !!offsets
-      let parentMatched = parents.some(({ matched }) => matched)
-      return matched || parentMatched
+      const defaultFilter = getDefaultFilter(this, this.filter)
+      return defaultFilter(offsets, current, options)
     },
     updateExpanded (expanded) {
       this.commit('expanded', expanded)

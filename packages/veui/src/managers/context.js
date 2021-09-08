@@ -5,7 +5,7 @@
  *  2. functional 组件定义 provide 无效（inject 有效）
  */
 
-import { uniqueId, isPlainObject, assign } from 'lodash'
+import { uniqueId, isPlainObject, defaults } from 'lodash'
 
 const CommonProviderImpl = {
   name: 'veui-provider', // for better readability in devtools
@@ -39,7 +39,7 @@ export function createContext (name, defaultValue) {
             isPlainObject(parentContextValue) &&
             isPlainObject(this.value) // provide 的值时函数，最后在消费方的 computed 调用，这样保证最终值依赖每个 provider 的 this.value
           ) {
-            return assign({}, parentContextValue, this.value) // 每层 provider 都会和上一层的值合并
+            return defaults({}, this.value, parentContextValue) // 每层 provider 都会和上一层的值合并
           }
           // 无法合并，则以最近的 provider 为准
           return this.value
@@ -68,7 +68,7 @@ export function createContext (name, defaultValue) {
             defaultValue =
               typeof defaultValue === 'function' ? defaultValue() : defaultValue
             // 消费方获取 context 值时和初始值做合并
-            return assign({}, defaultValue, this[contextId]())
+            return defaults({}, this[contextId](), defaultValue)
           }
           return this[contextId]()
         }

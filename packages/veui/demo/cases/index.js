@@ -56,6 +56,7 @@ import Lightbox from './Lightbox'
 import VDragSort from './VDragSort'
 import Plugins from './Plugins'
 import Cascader from './Cascader'
+import ConfigProvider from './ConfigProvider'
 
 export default [
   {
@@ -103,6 +104,11 @@ export default [
     path: '/button-group',
     name: 'ButtonGroup',
     component: ButtonGroup
+  },
+  {
+    path: '/config-provider',
+    name: 'ConfigProvider',
+    component: ConfigProvider
   },
   {
     path: '/calendar',

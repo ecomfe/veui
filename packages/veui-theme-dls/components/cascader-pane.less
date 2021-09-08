@@ -10,6 +10,9 @@
   &-tree {
     .reset-list-style();
     margin: 0;
+  }
+
+  &-tree:not(.@{veui-prefix}-abstract-tree-item-group) {
     will-change: height;
     .veui-transition(height);
   }
