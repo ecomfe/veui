@@ -198,7 +198,8 @@ export default {
       datasourceKey: 'realSuggestions',
       childrenKey: 'options',
       keywordKey: 'keyword',
-      resultKey: 'filteredSuggestions'
+      resultKey: 'filteredSuggestions',
+      exposeProps: true
     }),
     useControllable({
       prop: 'value',

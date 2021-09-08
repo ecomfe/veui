@@ -59,6 +59,11 @@
     }
   }
 
+  // 切换到搜索干掉错误的过渡
+  &-search-result &-pane-tree {
+    transition-duration: 0s;
+  }
+
   &-before,
   &-after {
     padding: 2 * @dls-padding-unit 3 * @dls-padding-unit;

@@ -60,6 +60,7 @@ export function useConfigurable (injectionKey, configurable) {
 }
 
 function map (target, iterator) {
+  // 不用 lodash：target 不是数组时不要当成对象的map
   return (Array.isArray(target) ? target : target == null ? [] : [target]).map(
     iterator
   )
