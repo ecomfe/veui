@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import CheckButtonGroup from '@/components/CheckButtonGroup'
+import { expectDisabled } from '../../../utils'
 
 describe('components/CheckButtonGroup', () => {
   it('should handle props correctly', () => {
@@ -20,12 +21,12 @@ describe('components/CheckButtonGroup', () => {
       }
     )
 
-    let buttons = wrapper.findAll('button.veui-button')
+    let buttons = wrapper.findAll('.veui-button')
 
     expect(buttons.length).to.equal(3)
     expect(buttons.at(0).classes('veui-button-selected')).to.equal(true)
     expect(buttons.at(1).classes('veui-button-selected')).to.equal(false)
-    expect(buttons.at(1).element.disabled).to.equal(true)
+    expectDisabled(buttons.at(1))
     expect(buttons.at(2).classes('veui-button-selected')).to.equal(false)
 
     wrapper.destroy()
@@ -194,7 +195,8 @@ describe('components/CheckButtonGroup', () => {
             emptyValue: 'a'
           }
         },
-        template: '<veui-check-button-group :empty-value="emptyValue" v-model="selected" :items="items"/>'
+        template:
+          '<veui-check-button-group :empty-value="emptyValue" v-model="selected" :items="items"/>'
       },
       {
         sync: false

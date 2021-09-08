@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Calendar from '@/components/Calendar'
+import { expectDisabled } from '../../../utils'
 
 describe('components/Calendar', () => {
   it('should handle selected prop with `null` value.', done => {
@@ -192,7 +193,7 @@ describe('components/Calendar', () => {
       .at(index)
       .findAll('td button')
       .at(5)
-    expect(button.attributes('disabled')).to.equal('disabled')
+    expectDisabled(button)
 
     wrapper.destroy()
   })
@@ -204,16 +205,10 @@ describe('components/Calendar', () => {
       }
     })
 
-    expect(wrapper.attributes('aria-disabled')).to.equal('true')
-    expect(
-      wrapper.find('.veui-calendar-day button').attributes('disabled')
-    ).to.equal('disabled')
-    expect(wrapper.find('.veui-calendar-prev').attributes('disabled')).to.equal(
-      'disabled'
-    )
-    expect(
-      wrapper.find('.veui-calendar-select').attributes('disabled')
-    ).to.equal('disabled')
+    expectDisabled(wrapper)
+    expectDisabled(wrapper.find('.veui-calendar-day button'))
+    expectDisabled(wrapper.find('.veui-calendar-prev'))
+    expectDisabled(wrapper.find('.veui-calendar-select'))
 
     wrapper.destroy()
   })
@@ -226,15 +221,9 @@ describe('components/Calendar', () => {
     })
 
     expect(wrapper.attributes('aria-readonly')).to.equal('true')
-    expect(
-      wrapper.find('.veui-calendar-day button').attributes('disabled')
-    ).to.equal('disabled')
-    expect(wrapper.find('.veui-calendar-prev').attributes('disabled')).to.equal(
-      'disabled'
-    )
-    expect(
-      wrapper.find('.veui-calendar-select').attributes('disabled')
-    ).to.equal('disabled')
+    expectDisabled(wrapper.find('.veui-calendar-day button'))
+    expectDisabled(wrapper.find('.veui-calendar-prev'))
+    expectDisabled(wrapper.find('.veui-calendar-select'))
 
     wrapper.destroy()
   })

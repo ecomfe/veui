@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import Uploader from '@/components/Uploader'
 import Dropdown from '@/components/Dropdown'
 import Lightbox from '@/components/Lightbox'
-import { wait } from '../../../utils'
+import { expectDisabled, wait } from '../../../utils'
 import { UploaderFile } from '@/components/Uploader/_helper'
 import { addOnceEventListener } from '@/utils/dom'
 import { createFileList } from '@/utils/file'
@@ -631,7 +631,7 @@ describe('components/Uploader', function () {
     })
 
     expect(wrapper.vm.canAddImage).to.equal(false)
-    expect(wrapper.find('.veui-button').element.disabled).to.equal(true)
+    expectDisabled(wrapper.find('.veui-button'))
     wrapper.find('.veui-uploader-list-remove').trigger('click')
     expect(wrapper.vm.canAddImage).to.equal(true)
 
