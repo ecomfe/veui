@@ -12,26 +12,66 @@ describe('components/Button', () => {
     expect(wrapper.attributes('ui').split(/\s+/)).to.include('primary')
   })
 
-  it('should be disabled when the button is loading', () => {
+  it('should be disabled when the button is loading', async () => {
+    let clicked = false
+    let entered = false
+
     const wrapper = mount(Button, {
       propsData: {
         loading: true
+      },
+      listeners: {
+        click () {
+          clicked = true
+        },
+        mouseenter () {
+          entered = true
+        }
       }
     })
 
     expect(wrapper.classes('veui-button-loading')).to.equal(true)
-    expect(wrapper.attributes('disabled')).to.equal('disabled')
+    expect(wrapper.attributes('disabled')).to.equal(undefined)
+    expect(wrapper.attributes('aria-disabled')).to.equal(undefined)
+
+    wrapper.trigger('click')
+    wrapper.trigger('mouseenter')
+
+    await wrapper.vm.$nextTick()
+
+    expect(clicked).to.equal(false)
+    expect(entered).to.equal(true)
   })
 
-  it('should support disabled state', () => {
+  it('should support disabled state', async () => {
+    let clicked = false
+    let entered = false
+
     const wrapper = mount(Button, {
       propsData: {
         disabled: true
+      },
+      listeners: {
+        click () {
+          clicked = true
+        },
+        mouseenter () {
+          entered = true
+        }
       }
     })
 
     expect(wrapper.classes('veui-disabled')).to.equal(true)
-    expect(wrapper.attributes('disabled')).to.equal('disabled')
+    expect(wrapper.attributes('disabled')).to.equal(undefined)
+    expect(wrapper.attributes('aria-disabled')).to.equal('true')
+
+    wrapper.trigger('click')
+    wrapper.trigger('mouseenter')
+
+    await wrapper.vm.$nextTick()
+
+    expect(clicked).to.equal(false)
+    expect(entered).to.equal(true)
   })
 
   it('should support submit type', () => {

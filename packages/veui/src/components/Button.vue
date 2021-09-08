@@ -1,5 +1,4 @@
 <script>
-import { omit } from 'lodash'
 import Icon from './Icon'
 import Loading from './Loading'
 import prefix from '../mixins/prefix'
@@ -22,17 +21,28 @@ export default {
     value: String,
     loading: Boolean
   },
-  data () {
-    return {
-      iconOnly: false
-    }
-  },
   computed: {
+    activatable () {
+      return !this.disabled && !this.loading
+    },
     attrs () {
-      let props = omit(this.$props, 'loading')
-      props.disabled = this.disabled || this.loading
-      props.ui = this.realUi
-      return props
+      let { loading, disabled, ...props } = this.$props
+
+      return {
+        tabindex: this.activatable ? null : '0',
+        role: this.activatable ? null : 'button',
+        ...props,
+        'aria-disabled': this.disabled ? 'true' : null,
+        ui: this.realUi
+      }
+    },
+    listeners () {
+      if (this.activatable) {
+        return this.$listeners
+      }
+
+      let { click, ...listeners } = this.$listeners
+      return listeners
     }
   },
   methods: {
@@ -41,8 +51,9 @@ export default {
     }
   },
   render () {
+    let Tag = this.activatable ? 'button' : 'div'
     return (
-      <button
+      <Tag
         class={{
           [this.$c('button')]: true,
           [this.$c('button-loading')]: this.loading,
@@ -50,7 +61,7 @@ export default {
         }}
         {...{
           attrs: this.attrs,
-          on: this.$listeners
+          on: this.listeners
         }}
       >
         {this.loading ? (
@@ -67,10 +78,10 @@ export default {
         {(this.$scopedSlots.default
           ? this.$scopedSlots.default()
           : this.$slots.default || []
-        ).map((vnode) =>
+        ).map(vnode =>
           !vnode.tag && (vnode.text || '').trim() ? <span>{vnode}</span> : vnode
         )}
-      </button>
+      </Tag>
     )
   }
 }

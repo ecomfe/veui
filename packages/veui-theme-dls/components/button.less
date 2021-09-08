@@ -6,12 +6,10 @@
   justify-content: center;
   align-items: center;
   user-select: none;
-  border: 1px solid @dls-button-border-color-normal;
-  background-color: @dls-button-background-color-normal;
-  color: @dls-button-font-color-normal;
   line-height: 2;
   white-space: nowrap;
   cursor: pointer;
+  border: 1px solid;
   .veui-button-transition();
   .veui-stub();
 
@@ -65,42 +63,47 @@
     outline: none;
   }
 
-  &:hover {
-    border-color: @dls-button-border-color-normal-hover;
-    background-color: @dls-button-background-color-normal-hover;
+  &[data-focus-visible-added] {
+    .dls-focus-ring(
+      @dls-button-border-color-focus,
+      @dls-button-shadow-focus
+    ) !important;
   }
 
-  &:active {
-    border-color: @dls-button-border-color-normal-active;
-    background-color: @dls-button-background-color-normal-active;
-  }
-
-  &.@{veui-prefix}-disabled {
-    border-color: @dls-button-border-color-normal-disabled;
-    background-color: @dls-button-background-color-normal-disabled;
-    color: @dls-button-font-color-normal-disabled;
-  }
-
-  &&-loading {
+  &-loading {
     pointer-events: none;
     cursor: default;
-    border-color: @dls-button-border-color-normal-active;
-    background-color: @dls-button-background-color-normal-active;
   }
 
-  .@{veui-prefix}-loading {
-    &-spinner {
-      color: inherit;
+  &[ui~="normal"] {
+    border-color: @dls-button-border-color-normal;
+    background-color: @dls-button-background-color-normal;
+    color: @dls-button-font-color-normal;
+
+    &:hover {
+      border-color: @dls-button-border-color-normal-hover;
+      background-color: @dls-button-background-color-normal-hover;
     }
 
-    &-content {
-      .dls-icon-size(@dls-icon-size-normal);
+    &:active {
+      border-color: @dls-button-border-color-normal-active;
+      background-color: @dls-button-background-color-normal-active;
     }
-  }
 
-  &-loading .@{veui-prefix}-icon:not(&-loading-icon),
-  &-loading .dls-icon:not(&-loading-icon) {
-    display: none;
+    &[data-focus-visible-added]:not(.@{veui-prefix}-disabled):not(&-loading) {
+      background-color: @dls-button-background-color-normal-focus;
+    }
+
+    &.@{veui-prefix}-disabled {
+      border-color: @dls-button-border-color-normal-disabled;
+      background-color: @dls-button-background-color-normal-disabled;
+      color: @dls-button-font-color-normal-disabled;
+    }
+
+    &&-loading {
+      border-color: @dls-button-border-color-normal-active;
+      background-color: @dls-button-background-color-normal-active;
+    }
   }
 
   &[ui~="basic"] {
@@ -253,8 +256,8 @@
     }
 
     &[data-focus-visible-added] {
-      border: none;
-      box-shadow: none;
+      border: none !important;
+      box-shadow: none !important;
       background-color: @dls-button-background-color-text-focus;
       color: @dls-button-font-color-text-focus;
 
@@ -324,8 +327,20 @@
     }
   }
 
-  &[data-focus-visible-added] {
-    background-color: @dls-button-background-color-normal-focus;
-    .dls-focus-ring(@dls-button-border-color-focus, @dls-button-shadow-focus);
+  .@{veui-prefix}-loading {
+    &-spinner {
+      color: inherit;
+    }
+
+    &-content {
+      .dls-icon-size(@dls-icon-size-normal);
+    }
+  }
+
+  &-loading .@{veui-prefix}-icon:not(&-loading-icon),
+  &-loading .dls-icon:not(&-loading-icon) {
+    width: 0;
+    opacity: 0;
+    margin-left: -@dls-button-content-spacing;
   }
 }

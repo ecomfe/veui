@@ -4,225 +4,432 @@
     <code>&lt;veui-button&gt;</code>
   </h1>
   <section>
-    <veui-button ui="xs">保存</veui-button>
-    <veui-button ui="s">保存</veui-button>
-    <veui-button>保存</veui-button>
-    <veui-button ui="l">保存</veui-button>
-    <veui-button ui="xl">保存</veui-button>
-    <veui-button disabled>保存</veui-button>
-    <veui-button loading>保存</veui-button>
+    <veui-button
+      ui="xs"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="s"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button @click="handleClick">保存</veui-button>
+    <veui-button
+      ui="l"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="xl"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      v-tooltip="'点击保存'"
+      disabled
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      loading
+      @click="handleClick"
+    >保存</veui-button>
   </section>
   <section>
-    <veui-button ui="basic xs">保存</veui-button>
-    <veui-button ui="basic s">保存</veui-button>
-    <veui-button ui="basic">保存</veui-button>
-    <veui-button ui="basic l">保存</veui-button>
-    <veui-button ui="basic xl">保存</veui-button>
+    <veui-button
+      ui="basic xs"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="basic s"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="basic"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="basic l"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="basic xl"
+      @click="handleClick"
+    >保存</veui-button>
     <veui-button
       ui="basic"
       disabled
+      @click="handleClick"
     >保存</veui-button>
     <veui-button
       ui="basic"
       loading
+      @click="handleClick"
     >保存</veui-button>
   </section>
   <section>
-    <veui-button ui="strong xs">保存</veui-button>
-    <veui-button ui="strong s">保存</veui-button>
-    <veui-button ui="strong">保存</veui-button>
-    <veui-button ui="strong l">保存</veui-button>
-    <veui-button ui="strong xl">保存</veui-button>
+    <veui-button
+      ui="strong xs"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="strong s"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="strong"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="strong l"
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="strong xl"
+      @click="handleClick"
+    >保存</veui-button>
     <veui-button
       ui="strong"
       disabled
+      @click="handleClick"
     >保存</veui-button>
     <veui-button
       ui="strong"
       loading
+      @click="handleClick"
     >保存</veui-button>
   </section>
   <section>
-    <veui-button ui="primary xs">提交</veui-button>
-    <veui-button ui="primary s">提交</veui-button>
-    <veui-button ui="primary">提交</veui-button>
-    <veui-button ui="primary l">提交</veui-button>
-    <veui-button ui="primary xl">提交</veui-button>
+    <veui-button
+      ui="primary xs"
+      @click="handleClick"
+    >提交</veui-button>
+    <veui-button
+      ui="primary s"
+      @click="handleClick"
+    >提交</veui-button>
+    <veui-button
+      ui="primary"
+      @click="handleClick"
+    >提交</veui-button>
+    <veui-button
+      ui="primary l"
+      @click="handleClick"
+    >提交</veui-button>
+    <veui-button
+      ui="primary xl"
+      @click="handleClick"
+    >提交</veui-button>
     <veui-button
       ui="primary"
       disabled
+      @click="handleClick"
     >提交</veui-button>
     <veui-button
       ui="primary"
       loading
+      @click="handleClick"
     >提交</veui-button>
   </section>
   <section>
-    <veui-button ui="xs">
+    <veui-button
+      ui="xs"
+      @click="handleClick"
+    >
       <veui-icon name="times"/>取消
     </veui-button>
-    <veui-button ui="s">
+    <veui-button
+      ui="s"
+      @click="handleClick"
+    >
       <veui-icon name="times"/>取消
     </veui-button>
-    <veui-button>
+    <veui-button @click="handleClick">
       <veui-icon name="times"/>取消
     </veui-button>
-    <veui-button ui="l">
+    <veui-button
+      ui="l"
+      @click="handleClick"
+    >
       <veui-icon name="times"/>取消
     </veui-button>
-    <veui-button ui="xl">
+    <veui-button
+      ui="xl"
+      @click="handleClick"
+    >
       <veui-icon name="times"/>取消
     </veui-button>
-    <veui-button disabled>
+    <veui-button
+      disabled
+      @click="handleClick"
+    >
       <veui-icon name="times"/>取消
     </veui-button>
-    <veui-button loading>
+    <veui-button
+      loading
+      @click="handleClick"
+    >
       <veui-icon name="times"/>取消
     </veui-button>
   </section>
   <section>
-    <veui-button ui="translucent xs">取消</veui-button>
-    <veui-button ui="translucent s">取消</veui-button>
-    <veui-button ui="translucent">取消</veui-button>
-    <veui-button ui="translucent l">取消</veui-button>
-    <veui-button ui="translucent xl">取消</veui-button>
+    <veui-button
+      ui="translucent xs"
+      @click="handleClick"
+    >取消</veui-button>
+    <veui-button
+      ui="translucent s"
+      @click="handleClick"
+    >取消</veui-button>
+    <veui-button
+      ui="translucent"
+      @click="handleClick"
+    >取消</veui-button>
+    <veui-button
+      ui="translucent l"
+      @click="handleClick"
+    >取消</veui-button>
+    <veui-button
+      ui="translucent xl"
+      @click="handleClick"
+    >取消</veui-button>
     <veui-button
       ui="translucent"
       disabled
+      @click="handleClick"
     >取消</veui-button>
     <veui-button
       ui="translucent"
       loading
+      @click="handleClick"
     >取消</veui-button>
   </section>
   <section>
-    <veui-button ui="text xs">编辑</veui-button>
-    <veui-button ui="text s">编辑</veui-button>
-    <veui-button ui="text">编辑</veui-button>
-    <veui-button ui="text l">编辑</veui-button>
-    <veui-button ui="text xl">编辑</veui-button>
+    <veui-button
+      ui="text xs"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text s"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text l"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text xl"
+      @click="handleClick"
+    >编辑</veui-button>
     <veui-button
       ui="text"
       disabled
+      @click="handleClick"
     >编辑</veui-button>
     <veui-button
       ui="text"
       loading
+      @click="handleClick"
     >编辑</veui-button>
   </section>
   <section>
-    <veui-button ui="text strong xs">编辑</veui-button>
-    <veui-button ui="text strong s">编辑</veui-button>
-    <veui-button ui="text strong">编辑</veui-button>
-    <veui-button ui="text strong l">编辑</veui-button>
-    <veui-button ui="text strong xl">编辑</veui-button>
+    <veui-button
+      ui="text strong xs"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text strong s"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text strong"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text strong l"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text strong xl"
+      @click="handleClick"
+    >编辑</veui-button>
     <veui-button
       ui="text"
       disabled
+      @click="handleClick"
     >编辑</veui-button>
     <veui-button
       ui="text"
       loading
+      @click="handleClick"
     >编辑</veui-button>
   </section>
   <section>
-    <veui-button ui="text aux xs">编辑</veui-button>
-    <veui-button ui="text aux s">编辑</veui-button>
-    <veui-button ui="text aux">编辑</veui-button>
-    <veui-button ui="text aux l">编辑</veui-button>
-    <veui-button ui="text aux xl">编辑</veui-button>
+    <veui-button
+      ui="text aux xs"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text aux s"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text aux"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text aux l"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button
+      ui="text aux xl"
+      @click="handleClick"
+    >编辑</veui-button>
     <veui-button
       ui="text"
       disabled
+      @click="handleClick"
     >编辑</veui-button>
     <veui-button
       ui="text"
       loading
+      @click="handleClick"
     >编辑</veui-button>
   </section>
   <section>
-    <veui-button ui="icon xs">
+    <veui-button
+      ui="icon xs"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon s">
+    <veui-button
+      ui="icon s"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon">
+    <veui-button
+      ui="icon"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon l">
+    <veui-button
+      ui="icon l"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon xl">
+    <veui-button
+      ui="icon xl"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
     <veui-button
       ui="icon"
       disabled
+      @click="handleClick"
     >
       <veui-icon name="search"/>
     </veui-button>
     <veui-button
       ui="icon"
       loading
+      @click="handleClick"
     >
       <veui-icon name="search"/>
     </veui-button>
   </section>
   <section>
-    <veui-button ui="icon strong xs">
+    <veui-button
+      ui="icon strong xs"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon strong s">
+    <veui-button
+      ui="icon strong s"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon strong">
+    <veui-button
+      ui="icon strong"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon strong l">
+    <veui-button
+      ui="icon strong l"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon strong xl">
+    <veui-button
+      ui="icon strong xl"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
     <veui-button
       ui="icon strong"
       disabled
+      @click="handleClick"
     >
       <veui-icon name="search"/>
     </veui-button>
     <veui-button
       ui="icon strong"
       loading
+      @click="handleClick"
     >
       <veui-icon name="search"/>
     </veui-button>
   </section>
   <section>
-    <veui-button ui="icon aux xs">
+    <veui-button
+      ui="icon aux xs"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon aux s">
+    <veui-button
+      ui="icon aux s"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon aux">
+    <veui-button
+      ui="icon aux"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon aux l">
+    <veui-button
+      ui="icon aux l"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
-    <veui-button ui="icon aux xl">
+    <veui-button
+      ui="icon aux xl"
+      @click="handleClick"
+    >
       <veui-icon name="search"/>
     </veui-button>
     <veui-button
       ui="icon aux"
       disabled
+      @click="handleClick"
     >
       <veui-icon name="search"/>
     </veui-button>
     <veui-button
       ui="icon aux"
       loading
+      @click="handleClick"
     >
       <veui-icon name="search"/>
     </veui-button>
@@ -230,7 +437,7 @@
   <section class="block">
     <h4>动态内容</h4>
     <p>
-      <veui-button @click="text = !text">
+      <veui-button @click="handleClickAndToggle">
         <veui-icon name="times"/>
         <template v-if="text">取消</template>
       </veui-button>
@@ -239,42 +446,75 @@
   <section class="block">
     <h4>方形按钮</h4>
     <p>
-      <veui-button ui="square">
+      <veui-button
+        ui="square"
+        @click="handleClick"
+      >
         <veui-icon name="search"/>
       </veui-button>
-      <veui-button ui="square basic">
+      <veui-button
+        ui="square basic"
+        @click="handleClick"
+      >
         <veui-icon name="search"/>
       </veui-button>
-      <veui-button ui="square primary">
+      <veui-button
+        ui="square primary"
+        @click="handleClick"
+      >
         <veui-icon name="search"/>
       </veui-button>
-      <veui-button ui="square strong">
+      <veui-button
+        ui="square strong"
+        @click="handleClick"
+      >
         <veui-icon name="search"/>
       </veui-button>
-      <veui-button ui="square translucent">
+      <veui-button
+        ui="square translucent"
+        @click="handleClick"
+      >
         <veui-icon name="search"/>
       </veui-button>
     </p>
   </section>
   <section class="inline">
     文本 Text
-    <veui-button ui="text">
+    <veui-button
+      ui="text"
+      @click="handleClick"
+    >
       Text
     </veui-button>
-    <veui-button ui="icon">
+    <veui-button
+      ui="icon"
+      @click="handleClick"
+    >
       <veui-icon name="home"/>
     </veui-button>
-    <veui-button ui="icon strong">
+    <veui-button
+      ui="icon strong"
+      @click="handleClick"
+    >
       <veui-icon name="home"/>
     </veui-button>
-    <veui-button ui="icon aux">
+    <veui-button
+      ui="icon aux"
+      @click="handleClick"
+    >
       <veui-icon name="home"/>
     </veui-button>
-    <veui-button ui="primary square">
+    <veui-button
+      ui="primary square"
+      @click="handleClick"
+    >
       <veui-icon name="home"/>
     </veui-button>
-    <veui-button ui="text aux">编辑</veui-button>
-    <veui-button>保存</veui-button>
+    <veui-button
+      ui="text aux"
+      @click="handleClick"
+    >编辑</veui-button>
+    <veui-button @click="handleClick">保存</veui-button>
   </section>
 </article>
 </template>
@@ -282,6 +522,7 @@
 <script>
 import bus from '../bus'
 import { Button, Icon } from 'veui'
+import tooltip from 'veui/directives/tooltip'
 import 'veui-theme-dls-icons/check'
 import 'veui-theme-dls-icons/edit'
 import 'veui-theme-dls-icons/times'
@@ -294,17 +535,22 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
+  directives: {
+    tooltip
+  },
   data () {
     return {
       text: false
     }
   },
-  mounted () {
-    this.$children.forEach(child => {
-      child.$on('click', () => {
-        bus.$emit('log', child.$el.getAttribute('ui'))
-      })
-    })
+  methods: {
+    handleClick (e) {
+      bus.$emit('log', e.currentTarget.getAttribute('ui'))
+    },
+    handleClickAndToggle (e) {
+      this.handleClick(e)
+      this.text = !this.text
+    }
   }
 }
 </script>
