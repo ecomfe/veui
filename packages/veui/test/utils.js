@@ -62,3 +62,10 @@ export function expectTooltip (content, position) {
     }
   }
 }
+
+export function expectDisabled (wrapper, force = true) {
+  const disabled =
+    wrapper.attributes('disabled') === 'disabled' ||
+    wrapper.attributes('aria-disabled') === 'true'
+  expect(disabled).to.equal(force)
+}
