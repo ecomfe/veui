@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import Tabs from '@/components/Tabs'
 import Tab from '@/components/Tab'
 import { findIndex } from 'lodash'
-import { wait } from '../../../utils'
+import { expectDisabled, wait } from '../../../utils'
 
 describe('components/Tabs', () => {
   it('should render default active tab correctly with uncontrolled `active` prop', async () => {
@@ -395,11 +395,11 @@ describe('components/Tabs', () => {
     await vm.$nextTick()
     let add = wrapper.find('.veui-tabs-add')
 
-    expect(add.element.disabled).to.equal(false)
+    expectDisabled(add, false)
     add.trigger('click')
 
     await vm.$nextTick()
-    expect(add.element.disabled).to.equal(true)
+    expectDisabled(add)
 
     wrapper.destroy()
   })
@@ -761,37 +761,37 @@ describe('components/Tabs', () => {
     let list = wrapper.find('.veui-tabs-list').element
 
     expect(list.scrollLeft).to.equal(0)
-    expect(prev.element.disabled).to.equal(true)
-    expect(next.element.disabled).to.equal(false)
+    expectDisabled(prev)
+    expectDisabled(next, false)
 
     next.trigger('click')
 
     await wait(400)
     expect(list.scrollLeft + list.clientWidth).to.equal(list.scrollWidth)
-    expect(prev.element.disabled).to.equal(false)
-    expect(next.element.disabled).to.equal(true)
+    expectDisabled(prev, false)
+    expectDisabled(next)
 
     prev.trigger('click')
 
     await wait(400)
     expect(list.scrollLeft).to.equal(0)
-    expect(prev.element.disabled).to.equal(true)
-    expect(next.element.disabled).to.equal(false)
+    expectDisabled(prev)
+    expectDisabled(next, false)
 
     let btns = wrapper.findAll('.foo-btn')
     btns.at(2).trigger('click')
 
     await wait(400)
     expect(list.scrollLeft + list.clientWidth).to.equal(list.scrollWidth)
-    expect(prev.element.disabled).to.equal(false)
-    expect(next.element.disabled).to.equal(true)
+    expectDisabled(prev, false)
+    expectDisabled(next)
 
     btns.at(0).trigger('click')
 
     await wait(400)
     expect(list.scrollLeft).to.equal(0)
-    expect(prev.element.disabled).to.equal(true)
-    expect(next.element.disabled).to.equal(false)
+    expectDisabled(prev)
+    expectDisabled(next, false)
 
     wrapper.find('.veui-tabs').element.style.width = '300px'
 

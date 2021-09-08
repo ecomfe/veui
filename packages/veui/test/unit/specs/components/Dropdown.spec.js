@@ -1,6 +1,6 @@
 import Dropdown from '@/components/Dropdown'
 import Button from '@/components/Button'
-import { mount, wait } from '../../../utils'
+import { expectDisabled, mount, wait } from '../../../utils'
 
 let datasource = [
   {
@@ -60,9 +60,8 @@ describe('components/Dropdown', () => {
     let attributes = button.attributes()
 
     // disabled
-    expect(button.element.disabled).to.equal(true)
+    expectDisabled(button)
     expect(attributes.class).to.include('veui-disabled')
-    expect(attributes['aria-disabled']).to.equal('true')
     // label
     expect(label.text()).to.equal('测试Dropdown')
     // split
