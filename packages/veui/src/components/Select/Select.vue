@@ -49,7 +49,8 @@ export default {
       datasourceKey: 'realOptions',
       childrenKey: 'options',
       keywordKey: 'inputValue',
-      resultKey: 'filteredOptions'
+      resultKey: 'filteredOptions',
+      exposeProps: true
     }),
     useControllable({
       prop: 'value',

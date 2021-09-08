@@ -1,6 +1,9 @@
 import { omit } from 'lodash'
+import warn from '../utils/warn'
+import useConfig from './config'
+import config from '../managers/config'
 
-function match (item, keywordRe, { searchKey }) {
+function match (item, keyword, { searchKey, keywordRe }) {
   let offsets = []
   const searchVal = item[searchKey]
   if (searchVal) {
@@ -14,7 +17,7 @@ function match (item, keywordRe, { searchKey }) {
   return offsets.length ? offsets : false
 }
 
-function filter (matchResult, item, ancestors) {
+function filter (matchResult, item, { ancestors }) {
   let matched = toBoolean(matchResult)
   return matched || ancestors.some(({ matched }) => matched)
 }
@@ -26,7 +29,13 @@ function toBoolean (matchResult) {
 const metaRE = /[|\\{}()[\]^$+*?.]/g
 function createKeywordRe (keyword, { flags, literal }) {
   keyword = literal ? String(keyword).replace(metaRE, '\\$&') : keyword
-  return new RegExp(keyword, flags)
+  try {
+    return new RegExp(keyword, flags)
+  } catch (e) {
+    // keyword is not a valid regexp pattern or flags are invalid.
+    warn(`[VEUI searchable] ${e.message}`)
+    return null
+  }
 }
 
 function splitText (text, offsets) {
@@ -55,11 +64,7 @@ function splitText (text, offsets) {
   return result
 }
 
-function search (datasource, keyword, options, result = [], ancestors = []) {
-  if (!keyword) {
-    return []
-  }
-
+function search (datasource, keyword, options, result = []) {
   let {
     valueKey,
     childrenKey,
@@ -67,25 +72,16 @@ function search (datasource, keyword, options, result = [], ancestors = []) {
     filterFn,
     limit,
     searchKey,
-    keywordRe
+    ancestors
   } = options
-
-  // 放 options 里面缓存下，保留原来 keyword 变量传给自定义的 matchFn
-  if (!keywordRe) {
-    keywordRe = options.keywordRe = createKeywordRe(keyword, options)
-  }
 
   datasource.some(item => {
     // 包下不会怕属性冲突
-    let itemWrap = {
-      item
-    }
+    let itemWrap = { item }
 
+    // BREAK: match/filter 的第三个参数统一变成 options
     // match
-    let offsets =
-      typeof matchFn === 'function'
-        ? matchFn(item, keyword, ancestors)
-        : match(item, keywordRe, options)
+    let offsets = matchFn(item, keyword, options)
     let isArray = Array.isArray(offsets)
     let isBool = !isArray && typeof offsets === 'boolean'
     if (!isArray && !isBool) {
@@ -96,10 +92,7 @@ function search (datasource, keyword, options, result = [], ancestors = []) {
     itemWrap.matched = toBoolean(offsets, item)
 
     // filter
-    let filtered =
-      typeof filterFn === 'function'
-        ? filterFn(offsets, item, ancestors)
-        : filter(offsets, item, ancestors)
+    let filtered = filterFn(offsets, item, options)
     if (typeof filtered !== 'boolean') {
       throw new Error(
         'The return value of the `filter` function must be a boolean.'
@@ -109,7 +102,7 @@ function search (datasource, keyword, options, result = [], ancestors = []) {
 
     // 即使没有匹配成功，为了渲染简单，还是生成 parts
     if (item[searchKey]) {
-      itemWrap.parts = splitText(item[searchKey], offsets || [])
+      itemWrap.parts = splitText(item[searchKey], isArray ? offsets : [])
     }
 
     let path = [...ancestors, itemWrap]
@@ -122,7 +115,12 @@ function search (datasource, keyword, options, result = [], ancestors = []) {
         })
       }
       if (item[childrenKey]) {
-        search(item[childrenKey], keyword, options, result, path)
+        search(
+          item[childrenKey],
+          keyword,
+          { ...options, ancestors: path },
+          result
+        )
         // update limit after searching children
         return limit && limit <= result.length
       }
@@ -133,6 +131,14 @@ function search (datasource, keyword, options, result = [], ancestors = []) {
 }
 
 const call = (val, context) => (typeof val === 'function' ? val(context) : val)
+
+const CONFIG_NAMESPACE = 'searchable'
+
+// 声明出来，否则不响应式
+config.defaults({
+  [`${CONFIG_NAMESPACE}.match`]: null,
+  [`${CONFIG_NAMESPACE}.filter`]: null
+})
 
 /**
  * searchable mixin，产出一个 computed
@@ -160,27 +166,67 @@ export default function useSearchable ({
   matchKey,
   filterKey,
   flags = 'ig',
-  limit = 100,
-  literal = true
+  limit = 300,
+  literal = true,
+  exposeProps = false
 } = {}) {
+  if (exposeProps) {
+    matchKey = matchKey || 'match'
+    filterKey = filterKey || 'filter'
+  }
+
   return {
+    ...(exposeProps && {
+      // props 名字不一样，就自己暴露（exposeProps： false）
+      props: {
+        match: Function,
+        filter: Function
+      }
+    }),
+    mixins: [useConfig('searchable_mixin_config', CONFIG_NAMESPACE)],
     computed: {
       [resultKey] () {
-        return search(
-          this[call(datasourceKey, this)],
-          this[call(keywordKey, this)],
-          {
-            valueKey: call(valueKey, this),
-            childrenKey: call(childrenKey, this),
-            searchKey: call(searchKey, this),
-            matchFn: this[matchKey],
-            filterFn: this[filterKey],
-            limit,
-            flags,
-            literal
-          }
-        )
+        // 创建 RegExp
+        const keyword = this[call(keywordKey, this)]
+        if (!keyword) {
+          // 没有关键字就不要搜了，搜出来数据结构比较复杂
+          return []
+        }
+
+        const keywordRe = createKeywordRe(keyword, { flags, literal })
+        if (!keywordRe) {
+          return []
+        }
+
+        return search(this[call(datasourceKey, this)], keyword, {
+          valueKey: call(valueKey, this),
+          childrenKey: call(childrenKey, this),
+          searchKey: call(searchKey, this),
+          matchFn: getDefaultMatch(this, matchKey),
+          filterFn: getDefaultFilter(this, filterKey),
+          limit,
+          keywordRe,
+          ancestors: []
+        })
       }
     }
   }
+}
+
+export function getDefaultFilter (vm, impl) {
+  return getConfigurable(vm, impl, 'filter') || filter
+}
+
+export function getDefaultMatch (vm, impl) {
+  return getConfigurable(vm, impl, 'match') || match
+}
+
+function getConfigurable (vm, impl, contextKey) {
+  if (typeof impl === 'string') {
+    impl = vm[impl]
+  }
+
+  return typeof impl === 'function'
+    ? impl
+    : vm.searchable_mixin_config[`${CONFIG_NAMESPACE}.${contextKey}`]
 }

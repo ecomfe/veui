@@ -5,15 +5,11 @@
   </h1>
   <section>
     <h2>普通(m)</h2>
-    <veui-autocomplete
-      v-model="inputValue"
-      :datasource="suggestions"
-    />
+    <veui-autocomplete :datasource="suggestions"/>
   </section>
   <section>
     <h2>可清除(s)</h2>
     <veui-autocomplete
-      v-model="inputValue"
       ui="s"
       clearable
       :datasource="suggestions"
@@ -22,7 +18,6 @@
   <section>
     <h2>禁用(l)</h2>
     <veui-autocomplete
-      v-model="inputValue"
       ui="l"
       :datasource="suggestions"
       :suggest-trigger="['focus', 'input']"
@@ -32,7 +27,6 @@
   <section>
     <h2>只读(xs)</h2>
     <veui-autocomplete
-      v-model="inputValue"
       ui="xs"
       :datasource="suggestions"
       :suggest-trigger="['focus', 'input']"
@@ -42,7 +36,6 @@
   <section>
     <h2>错误</h2>
     <veui-autocomplete
-      v-model="inputValue"
       invalid
       :datasource="suggestions"
       :suggest-trigger="['focus', 'input']"
@@ -107,7 +100,6 @@ export default {
     return {
       value: null,
       treeValue: '',
-      inputValue: 'male',
       suggestions: [
         {
           value: 'male'
