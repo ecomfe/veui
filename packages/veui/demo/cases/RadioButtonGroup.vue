@@ -23,8 +23,8 @@
   <section>
     <p>
       <veui-radio-button-group
-        v-model="picked2"
-        :items="data2"
+        v-model="picked3"
+        :items="data3"
         ui="s"
         :disabled="disabled"
       >
@@ -36,7 +36,31 @@
         </template>
       </veui-radio-button-group>
     </p>
-    <p>已选：{{ picked2 }}</p>
+    <p>已选：{{ picked3 }}</p>
+  </section>
+  <section>
+    <h3>简单样式（simple）</h3>
+    <p>
+      <veui-radio-button-group
+        v-model="picked3"
+        :items="data3"
+        :disabled="disabled"
+        ui="simple"
+      />
+    </p>
+    <h3>简单样式（simple s 最小宽度）</h3>
+    <p>
+      <veui-radio-button-group
+        v-model="picked3"
+        :items="data3"
+        :disabled="disabled"
+        ui="simple s"
+        :style="{
+          '--dls-radio-button-min-width-enable': 'initial'
+        }"
+      />
+    </p>
+    <p>已选: {{ picked3 }}</p>
   </section>
 </article>
 </template>
@@ -53,7 +77,7 @@ export default {
   data () {
     return {
       picked1: 'euro',
-      picked2: null,
+      picked3: null,
       disabled: false,
       data1: [
         {
@@ -69,18 +93,50 @@ export default {
           label: '¥'
         }
       ],
-      data2: [
+      data3: [
         {
-          value: 'bidu',
-          label: '百度'
+          value: 'jonathan',
+          label: 'Jonathan Osterman'
         },
         {
-          value: 'baba',
-          label: '阿里'
+          label: 'Steve Rogers',
+          value: 'steve'
         },
         {
-          value: 'qq',
-          label: '腾讯'
+          label: 'Tony Stark',
+          value: 'tony'
+        },
+        {
+          label: 'Thor',
+          value: 'thor'
+        },
+        {
+          label: 'Hulk',
+          value: 'hulk'
+        },
+        {
+          label: 'Natasha Romanov',
+          value: 'natasha'
+        },
+        {
+          label: 'Stephen Strange',
+          value: 'stephen'
+        },
+        {
+          label: 'Peter Parker',
+          value: 'peter'
+        },
+        {
+          label: 'Vision',
+          value: 'vision'
+        },
+        {
+          label: 'Clint Barton',
+          value: 'clint'
+        },
+        {
+          label: 'Carol Danvers',
+          value: 'carol'
         }
       ]
     }

@@ -3,14 +3,27 @@
 @import (reference) "../grouped-button.less";
 
 .@{veui-prefix}-check-button-group {
+  --dls-checkbox-button-min-width-enable: 0; // 0 | initial?
+  // --dls-checkbox-button-min-width 默认不定义
   position: relative;
+
+  &-items {
+    margin-top: -@dls-checkbox-line-spacing-strong;
+    border-radius: inherit;
+  }
 
   .@{veui-prefix}-button {
     &:extend(._veui-grouped-button all);
+    margin-top: @dls-checkbox-line-spacing-strong;
   }
 
   .@{veui-prefix}-button &-checkmark {
-    .absolute(@dls-checkbox-icon-spacing-strong, @dls-checkbox-icon-spacing-strong, _, _);
+    .absolute(
+      @dls-checkbox-icon-spacing-strong,
+      @dls-checkbox-icon-spacing-strong,
+      _,
+      _
+    );
     color: @dls-button-border-color-basic;
     border: @dls-checkbox-icon-size-strong / 2 solid transparent;
     .border-color(currentColor, currentColor, _, _);
@@ -21,6 +34,11 @@
     }
   }
 
+  .@{veui-prefix}-button:active &-checkmark {
+    color: #d3d9e5; // TODO use token
+  }
+
+  .@{veui-prefix}-button-selected:active &-checkmark,
   .@{veui-prefix}-button-selected &-checkmark {
     color: @dls-checkbox-border-color-strong-checked;
   }
@@ -31,5 +49,56 @@
 
   .@{veui-prefix}-button-selected.@{veui-prefix}-disabled &-checkmark {
     color: @dls-checkbox-border-color-strong-checked-disabled;
+  }
+
+  &[ui~="simple"] {
+    &.@{veui-prefix}-button-group .@{veui-prefix}-button {
+      margin-left: @dls-checkbox-spacing-simple;
+      border-radius: 4px;
+
+      &.@{veui-prefix}-disabled:not(.@{veui-prefix}-button-selected) {
+        background-color: transparent;
+      }
+
+      &:not([data-focus-visible-added]) {
+        border-color: transparent;
+      }
+    }
+  }
+
+  &[ui~="simple"]
+    .@{veui-prefix}-disabled:not(.@{veui-prefix}-button-selected)
+    &-checkmark,
+  &[ui~="simple"]
+    .@{veui-prefix}-button:not(.@{veui-prefix}-button-selected):not(:hover):not(:active):not([data-focus-visible-added])
+    &-checkmark {
+    border-color: transparent;
+  }
+
+  &[ui~="simple"] &-items {
+    margin-left: -@dls-checkbox-spacing-simple;
+  }
+
+  &,
+  &[ui~="m"] {
+    .@{veui-prefix}-button {
+      min-width: var(
+        --dls-checkbox-button-min-width-enable,
+        var(
+          --dls-checkbox-button-min-width,
+          @dls-checkbox-min-width-strong-stable-m
+        )
+      );
+    }
+  }
+
+  &[ui~="s"] .@{veui-prefix}-button {
+    min-width: var(
+      --dls-checkbox-button-min-width-enable,
+      var(
+        --dls-checkbox-button-min-width,
+        @dls-checkbox-min-width-strong-stable-s
+      )
+    );
   }
 }

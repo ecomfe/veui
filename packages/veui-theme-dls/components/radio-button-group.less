@@ -3,7 +3,54 @@
 @import (reference) "../grouped-button.less";
 
 .@{veui-prefix}-radio-button-group {
+  --dls-radio-button-min-width-enable: 0; // 0 | initial?
+  // --dls-radio-button-min-width 默认不定义
+
+  &-items {
+    margin-top: -@dls-checkbox-line-spacing-strong;
+  }
+
   .@{veui-prefix}-button {
     &:extend(._veui-grouped-button all);
+    margin-top: @dls-checkbox-line-spacing-strong;
+  }
+
+  &[ui~="simple"] &-items {
+    margin-left: -@dls-checkbox-spacing-simple;
+  }
+
+  &[ui~="simple"] {
+    &.@{veui-prefix}-button-group .@{veui-prefix}-button {
+      margin-left: @dls-checkbox-spacing-simple;
+      border-radius: 4px;
+
+      &.@{veui-prefix}-disabled:not(.@{veui-prefix}-button-selected) {
+        background-color: transparent;
+      }
+
+      &:not([data-focus-visible-added]) {
+        border-color: transparent;
+      }
+    }
+  }
+
+  &,
+  &[ui~="m"] {
+    .@{veui-prefix}-button {
+      min-width: var(
+        --dls-radio-button-min-width-enable,
+        var(
+          --dls-radio-button-min-width,
+          @dls-checkbox-min-width-strong-stable-m
+        )
+      );
+    }
+  }
+
+  &[ui~="s"] .@{veui-prefix}-button {
+    min-width: var(
+      --dls-radio-button-min-width-enable,
+      var(--dls-radio-button-min-width, @dls-checkbox-min-width-strong-stable-s)
+    );
   }
 }

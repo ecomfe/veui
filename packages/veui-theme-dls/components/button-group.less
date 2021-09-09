@@ -2,6 +2,7 @@
 
 .@{veui-prefix}-button-group {
   display: inline-flex;
+  margin-left: 1px;
 
   .@{veui-prefix}-button {
     position: relative;
@@ -11,7 +12,6 @@
     z-index: 1;
 
     &:first-child {
-      margin-left: 0;
       .border-left-radius(inherit);
     }
 
@@ -19,6 +19,7 @@
       .border-right-radius(inherit);
     }
 
+    &:hover,
     &[data-focus-visible-added] {
       z-index: 2;
     }
@@ -95,16 +96,6 @@
         @dls-button-font-color-normal-disabled,
         percentage(@dls-button-group-separator-opacity)
       );
-    }
-  }
-
-  &[ui~="s"] .@{veui-prefix}-button {
-    &:first-child {
-      .border-left-radius(@dls-button-border-radius-s);
-    }
-
-    &:last-child {
-      .border-right-radius(@dls-button-border-radius-s);
     }
   }
 }

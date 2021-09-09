@@ -2,9 +2,15 @@
 <article>
   <h1><code>&lt;veui-radio-group&gt;</code></h1>
   <p>
+    <veui-checkbox v-model="disabled">
+      禁用
+    </veui-checkbox>
+  </p>
+  <p>
     <veui-radio-group
       v-model="picked1"
       :items="data1"
+      :disabled="disabled"
       name="111"
     >
       <template #item="props">
@@ -39,18 +45,20 @@
 </template>
 
 <script>
-import { RadioGroup } from 'veui'
+import { RadioGroup, Checkbox } from 'veui'
 
 export default {
   name: 'radio-group-demo',
   components: {
-    'veui-radio-group': RadioGroup
+    'veui-radio-group': RadioGroup,
+    'veui-checkbox': Checkbox
   },
   data () {
     return {
       picked1: null,
       picked2: 'Nakano Azusa',
       picked3: null,
+      disabled: false,
       data1: [
         {
           value: 'Hirasawa Yui',
