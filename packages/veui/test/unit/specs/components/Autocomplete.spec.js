@@ -44,7 +44,9 @@ let componentOptions = {
         }
       ],
       readonly: false,
-      disabled: false
+      disabled: false,
+      filter: null,
+      match: null
     }
   }
 }
@@ -284,6 +286,39 @@ describe('components/Autocomplete', function () {
     expect(
       wrapper.find('.veui-option-label').text() === `${value2}-${value2}`
     ).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should handle `match`/`filter` props correctly', async () => {
+    let wrapper = mount(
+      {
+        ...componentOptions,
+        template: `<veui-autocomplete value="f" :datasource="datasource" expanded :match="match" :filter="filter"/>`
+      },
+      debugInBrowser
+    )
+    let { vm } = wrapper
+    await vm.$nextTick()
+
+    let items = wrapper.findAll('.veui-option')
+    expect(items.length).to.equal(1)
+    expect(items.at(0).text()).to.equal('female')
+    expect(wrapper.find('mark').exists(), '高亮1').to.equal(true)
+
+    // 全中无高亮
+    vm.match = () => true
+    await vm.$nextTick()
+    items = wrapper.findAll('.veui-option')
+    expect(items.length).to.equal(2)
+    expect(wrapper.find('mark').exists(), '全中无高亮').to.equal(false)
+
+    // 全中有高亮
+    vm.match = null
+    vm.filter = () => true
+    await vm.$nextTick()
+    items = wrapper.findAll('.veui-option')
+    expect(items.length).to.equal(2)
+    expect(wrapper.find('mark').exists(), '全中有高亮').to.equal(true)
     wrapper.destroy()
   })
 })

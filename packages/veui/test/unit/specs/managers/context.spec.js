@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { createContext } from '@/managers/context'
+import { defaults } from 'lodash'
 
 const Context = createContext('dummy')
 
@@ -95,7 +96,7 @@ describe('managers/context', () => {
     let { vm } = wrapper
     expect(wrapper.find('.dummy-1').text()).to.equal(JSON.stringify(vm.value1))
     expect(wrapper.find('.dummy-2').text()).to.equal(
-      JSON.stringify(Object.assign({}, vm.value1, vm.value2))
+      JSON.stringify(defaults({}, vm.value2, vm.value1))
     )
     wrapper.destroy()
   })
