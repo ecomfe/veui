@@ -78,6 +78,30 @@
     </p>
     <p>value: {{ pickedWithEmpty }}</p>
   </section>
+  <section>
+    <h3>简单样式（simple）</h3>
+    <p>
+      <veui-check-button-group
+        v-model="pickedWithSimple"
+        :items="dataWithExclusive"
+        :disabled="disabled"
+        ui="simple"
+      />
+    </p>
+    <h3>简单样式（simple s 最小宽度）</h3>
+    <p>
+      <veui-check-button-group
+        v-model="pickedWithSimple"
+        :items="dataWithExclusive"
+        :disabled="disabled"
+        ui="simple s"
+        :style="{
+          '--dls-checkbox-button-min-width-enable': 'initial'
+        }"
+      />
+    </p>
+    <p>value: {{ pickedWithSimple }}</p>
+  </section>
 </article>
 </template>
 
@@ -102,6 +126,7 @@ export default {
       picked3: [],
       pickedWithExclusive: [],
       pickedWithEmpty: [],
+      pickedWithSimple: [],
       disabled: false,
       data1: [
         {
@@ -140,19 +165,49 @@ export default {
         {
           value: 'Exclusive2',
           label: 'Exclusive2',
-          exclusive: true
+          exclusive: true,
+          tooltip: 'Exclusive2'
         },
         {
-          value: 'Hirasawa Yui',
-          label: 'Hirasawa Yui'
+          label: 'Steve Rogers',
+          value: 'steve',
+          tooltip: 'Steve Rogers'
         },
         {
-          value: 'Akiyama Mio',
-          label: 'Akiyama Mio'
+          label: 'Tony Stark',
+          value: 'tony'
         },
         {
-          value: 'Nakano Azusa',
-          label: 'Nakano Azusa'
+          label: 'Thor',
+          value: 'thor'
+        },
+        {
+          label: 'Hulk',
+          value: 'hulk'
+        },
+        {
+          label: 'Natasha Romanov',
+          value: 'natasha'
+        },
+        {
+          label: 'Stephen Strange',
+          value: 'stephen'
+        },
+        {
+          label: 'Peter Parker',
+          value: 'peter'
+        },
+        {
+          label: 'Vision',
+          value: 'vision'
+        },
+        {
+          label: 'Clint Barton',
+          value: 'clint'
+        },
+        {
+          label: 'Carol Danvers',
+          value: 'carol'
         }
       ],
       data3: [

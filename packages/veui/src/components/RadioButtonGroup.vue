@@ -8,30 +8,32 @@
   @keydown.left="pick(-1)"
   @keydown.right="pick(1)"
 >
-  <veui-button
-    v-for="(item, index) in items"
-    ref="items"
-    :key="index"
-    :ui="uiParts.button"
-    :class="{
-      [$c('button-selected')]: index === activeIndex
-    }"
-    :disabled="item.disabled || realDisabled || realReadonly"
-    role="radio"
-    :aria-selected="index === activeIndex"
-    :tabindex="
-      index === activeIndex || (activeIndex === -1 && index === 0)
-        ? '0'
-        : '-1'
-    "
-    @click="handleChange(item.value)"
-  >
-    <slot
-      name="item"
-      v-bind="item"
-      :index="index"
-    >{{ item.label }}</slot>
-  </veui-button>
+  <div :class="$c('radio-button-group-items')">
+    <veui-button
+      v-for="(item, index) in items"
+      ref="items"
+      :key="index"
+      :ui="uiParts.button"
+      :class="{
+        [$c('button-selected')]: index === activeIndex
+      }"
+      :disabled="item.disabled || realDisabled || realReadonly"
+      role="radio"
+      :aria-selected="index === activeIndex"
+      :tabindex="
+        index === activeIndex || (activeIndex === -1 && index === 0)
+          ? '0'
+          : '-1'
+      "
+      @click="handleChange(item.value)"
+    >
+      <slot
+        name="item"
+        v-bind="item"
+        :index="index"
+      >{{ item.label }}</slot>
+    </veui-button>
+  </div>
 </div>
 </template>
 

@@ -7,35 +7,37 @@
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
 >
-  <veui-button
-    v-for="(item, index) in items"
-    :key="`b-${item.value}`"
-    :ui="uiParts.button"
-    :class="{
-      [$c('button-selected')]: realValue.indexOf(item.value) !== -1,
-      [$c('button-exclusive')]: !!item.exclusive
-    }"
-    :disabled="item.disabled || realDisabled || realReadonly"
-    role="option"
-    :aria-selected="realValue.indexOf(item.value) !== -1"
-    :aria-posinset="index + 1"
-    :aria-setsize="items.length"
-    @click="handleChange(item)"
-  >
-    <div
-      v-if="!item.exclusive"
-      :key="`i-${item.value}`"
-      :class="$c('check-button-group-checkmark')"
-      aria-hidden="true"
+  <div :class="$c('check-button-group-items')">
+    <veui-button
+      v-for="(item, index) in items"
+      :key="`b-${item.value}`"
+      :ui="uiParts.button"
+      :class="{
+        [$c('button-selected')]: realValue.indexOf(item.value) !== -1,
+        [$c('button-exclusive')]: !!item.exclusive
+      }"
+      :disabled="item.disabled || realDisabled || realReadonly"
+      role="option"
+      :aria-selected="realValue.indexOf(item.value) !== -1"
+      :aria-posinset="index + 1"
+      :aria-setsize="items.length"
+      @click="handleChange(item)"
     >
-      <veui-icon :name="icons.check"/>
-    </div>
-    <slot
-      name="item"
-      v-bind="item"
-      :index="index"
-    >{{ item.label }}</slot>
-  </veui-button>
+      <div
+        v-if="!item.exclusive"
+        :key="`i-${item.value}`"
+        :class="$c('check-button-group-checkmark')"
+        aria-hidden="true"
+      >
+        <veui-icon :name="icons.check"/>
+      </div>
+      <slot
+        name="item"
+        v-bind="item"
+        :index="index"
+      >{{ item.label }}</slot>
+    </veui-button>
+  </div>
 </div>
 </template>
 
@@ -55,13 +57,18 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, input, useControllable({
-    prop: 'value',
-    event: 'change',
-    get (val) {
-      return val || []
-    }
-  })],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    useControllable({
+      prop: 'value',
+      event: 'change',
+      get (val) {
+        return val || []
+      }
+    })
+  ],
   model: {
     event: 'change'
   },
@@ -95,7 +102,9 @@ export default {
           1
         )
         // prop value 可能一开始就包含了如下 2 种错误情况
-        let selectedExclusives = values.filter(val => includes(this.exclusiveValues, val))
+        let selectedExclusives = values.filter(val =>
+          includes(this.exclusiveValues, val)
+        )
         let exLen = selectedExclusives.length
         if (
           exLen > 1 || // 1. 太多 exclusive

@@ -2,8 +2,14 @@
 <article>
   <h1><code>&lt;veui-checkbox-group&gt;</code></h1>
   <p>
+    <veui-checkbox v-model="disabled">
+      禁用
+    </veui-checkbox>
+  </p>
+  <p>
     <veui-checkbox-group
       v-model="picked1"
+      :disabled="disabled"
       :items="data1"
     >
       <template #item="props">
@@ -64,12 +70,13 @@
 </template>
 
 <script>
-import { CheckboxGroup } from 'veui'
+import { CheckboxGroup, Checkbox } from 'veui'
 
 export default {
   name: 'checkbox-group-demo',
   components: {
-    'veui-checkbox-group': CheckboxGroup
+    'veui-checkbox-group': CheckboxGroup,
+    'veui-checkbox': Checkbox
   },
   data () {
     return {
@@ -78,6 +85,7 @@ export default {
       picked3: [],
       pickedWithExclusive: [],
       pickedWithEmpty: [],
+      disabled: false,
       data1: [
         {
           value: 'Hirasawa Yui',
