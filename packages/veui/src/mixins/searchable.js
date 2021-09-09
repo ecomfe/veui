@@ -1,4 +1,4 @@
-import { omit } from 'lodash'
+import { omit, escapeRegExp } from 'lodash'
 import warn from '../utils/warn'
 import useConfig from './config'
 import config from '../managers/config'
@@ -26,14 +26,13 @@ function toBoolean (matchResult) {
   return Array.isArray(matchResult) ? !!matchResult.length : matchResult
 }
 
-const metaRE = /[|\\{}()[\]^$+*?.]/g
 function createKeywordRe (keyword, { flags, literal }) {
-  keyword = literal ? String(keyword).replace(metaRE, '\\$&') : keyword
+  keyword = literal ? escapeRegExp(keyword) : keyword
   try {
     return new RegExp(keyword, flags)
   } catch (e) {
     // keyword is not a valid regexp pattern or flags are invalid.
-    warn(`[VEUI searchable] ${e.message}`)
+    warn(`[veui-searchable] ${e.message}`)
     return null
   }
 }
@@ -79,7 +78,6 @@ function search (datasource, keyword, options, result = []) {
     // 包下不会怕属性冲突
     let itemWrap = { item }
 
-    // BREAK: match/filter 的第三个参数统一变成 options
     // match
     let offsets = matchFn(item, keyword, options)
     let isArray = Array.isArray(offsets)
@@ -133,6 +131,7 @@ function search (datasource, keyword, options, result = []) {
 const call = (val, context) => (typeof val === 'function' ? val(context) : val)
 
 const CONFIG_NAMESPACE = 'searchable'
+const CONTEXT_NAME = 'searchable_mixin_config'
 
 // 声明出来，否则不响应式
 config.defaults({
@@ -183,7 +182,7 @@ export default function useSearchable ({
         filter: Function
       }
     }),
-    mixins: [useConfig('searchable_mixin_config', CONFIG_NAMESPACE)],
+    mixins: [useConfig(CONTEXT_NAME, CONFIG_NAMESPACE)],
     computed: {
       [resultKey] () {
         // 创建 RegExp
@@ -228,5 +227,5 @@ function getConfigurable (vm, impl, contextKey) {
 
   return typeof impl === 'function'
     ? impl
-    : vm.searchable_mixin_config[`${CONFIG_NAMESPACE}.${contextKey}`]
+    : vm[CONTEXT_NAME][`${CONFIG_NAMESPACE}.${contextKey}`]
 }
