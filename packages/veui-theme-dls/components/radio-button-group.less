@@ -3,25 +3,25 @@
 @import (reference) "../grouped-button.less";
 
 .@{veui-prefix}-radio-button-group {
-  --dls-radio-button-min-width-enable: 0; // 0 | initial?
+  --dls-radio-button-stable: 0; // 0 | initial?
   // --dls-radio-button-min-width 默认不定义
 
   &-items {
-    margin-top: -@dls-checkbox-line-spacing-strong;
+    margin-top: -@dls-radio-group-line-spacing-strong;
   }
 
   .@{veui-prefix}-button {
     &:extend(._veui-grouped-button all);
-    margin-top: @dls-checkbox-line-spacing-strong;
+    margin-top: @dls-radio-group-line-spacing-strong;
   }
 
   &[ui~="simple"] &-items {
-    margin-left: -@dls-checkbox-spacing-simple;
+    margin-left: -@dls-radio-group-spacing-simple;
   }
 
   &[ui~="simple"] {
     &.@{veui-prefix}-button-group .@{veui-prefix}-button {
-      margin-left: @dls-checkbox-spacing-simple;
+      margin-left: @dls-radio-group-spacing-simple;
       border-radius: 4px;
 
       &.@{veui-prefix}-disabled:not(.@{veui-prefix}-button-selected) {
@@ -38,19 +38,16 @@
   &[ui~="m"] {
     .@{veui-prefix}-button {
       min-width: var(
-        --dls-radio-button-min-width-enable,
-        var(
-          --dls-radio-button-min-width,
-          @dls-checkbox-min-width-strong-stable-m
-        )
+        --dls-radio-button-stable,
+        var(--dls-radio-button-min-width, @dls-button-min-width-stable-m)
       );
     }
   }
 
   &[ui~="s"] .@{veui-prefix}-button {
     min-width: var(
-      --dls-radio-button-min-width-enable,
-      var(--dls-radio-button-min-width, @dls-checkbox-min-width-strong-stable-s)
+      --dls-radio-button-stable,
+      var(--dls-radio-button-min-width, @dls-button-min-width-stable-s)
     );
   }
 }

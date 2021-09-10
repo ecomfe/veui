@@ -56,7 +56,7 @@
         :disabled="disabled"
         ui="simple s"
         :style="{
-          '--dls-radio-button-min-width-enable': 'initial'
+          '--dls-radio-button-stable': 'initial'
         }"
       />
     </p>

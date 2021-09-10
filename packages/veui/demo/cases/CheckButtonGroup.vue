@@ -96,7 +96,7 @@
         :disabled="disabled"
         ui="simple s"
         :style="{
-          '--dls-checkbox-button-min-width-enable': 'initial'
+          '--dls-checkbox-button-stable': 'initial'
         }"
       />
     </p>
