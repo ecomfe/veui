@@ -8,24 +8,26 @@
   role="group"
   :aria-disabled="disabled"
 >
-  <slot>
-    <veui-button
-      v-for="(item, index) in items"
-      :key="index"
-      :disabled="disabled || item.disabled"
-      :aria-posinset="index + 1"
-      :aria-setsize="items.length"
-      @click="handleClick(item, index, $event)"
-    >
-      <slot
-        name="item"
-        v-bind="item"
-        :index="index"
+  <div :class="$c('button-group-items')">
+    <slot>
+      <veui-button
+        v-for="(item, index) in items"
+        :key="index"
+        :disabled="disabled || item.disabled"
+        :aria-posinset="index + 1"
+        :aria-setsize="items.length"
+        @click="handleClick(item, index, $event)"
       >
-        {{ item.label }}
-      </slot>
-    </veui-button>
-  </slot>
+        <slot
+          name="item"
+          v-bind="item"
+          :index="index"
+        >
+          {{ item.label }}
+        </slot>
+      </veui-button>
+    </slot>
+  </div>
 </div>
 </template>
 
