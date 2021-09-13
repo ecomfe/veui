@@ -545,12 +545,12 @@ export default {
       return this.updateExpanded(expanded)
     },
     // 在只选叶子的情况下，搜索出来的结果过滤掉非叶子节点
-    filterParents (offsets, current, options) {
+    filterParents (current, keyword, options) {
       if (this.realSelectLeaves && hasChildren(current, 'options')) {
         return false
       }
       const defaultFilter = getDefaultFilter(this, this.filter)
-      return defaultFilter(offsets, current, options)
+      return defaultFilter(current, keyword, options)
     },
     updateExpanded (expanded) {
       this.commit('expanded', expanded)
