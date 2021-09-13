@@ -1,8 +1,14 @@
 ## 2.1.1
 
+### 💡 主要变更
+- [+] 为可搜索的组件 `Autocomplete`/`Cascader`/`SearchBox`/`Select`/`Dropdown` 新增 `match`/`filter` prop。
+
+  - `match` 函数签名：`(item, keyword, { ancestors }) => boolean | Array<[start, end]>` 以支持自定义高亮逻辑，其中 `[start, end]` 定义高亮范围；
+  - `filter` 函数签名：`(item, keyword, { ancestors, offsets }) => boolean` 以支持自定义搜索命中逻辑。
+
 ### ⚠️ 非兼容性变更
 
-- [-] `searchable` mixin 用来定制匹配逻辑的 `match` 方法第三个参数从 `ancestors` 改成 `options`, 涉及到组件 `Autocomplete`。
+- [-] 组件 `Autocomplete` 的 `match` prop 参数签名从 `(item, keyword, ancestors)` 变更为 `(item, keyword, { ancestors })`。
 
 ## 2.1.0 "🌰 Chestnut"
 

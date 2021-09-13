@@ -17,8 +17,8 @@ function match (item, keyword, { searchKey, keywordRe }) {
   return offsets.length ? offsets : false
 }
 
-function filter (matchResult, item, { ancestors }) {
-  let matched = toBoolean(matchResult)
+function filter (item, keyword, { ancestors, offsets }) {
+  let matched = toBoolean(offsets)
   return matched || ancestors.some(({ matched }) => matched)
 }
 
@@ -79,7 +79,11 @@ function search (datasource, keyword, options, result = []) {
     let itemWrap = { item }
 
     // match
-    let offsets = matchFn(item, keyword, options)
+    let offsets = matchFn(
+      item,
+      keyword,
+      matchFn === match ? options : { ancestors }
+    )
     let isArray = Array.isArray(offsets)
     let isBool = !isArray && typeof offsets === 'boolean'
     if (!isArray && !isBool) {
@@ -90,7 +94,7 @@ function search (datasource, keyword, options, result = []) {
     itemWrap.matched = toBoolean(offsets, item)
 
     // filter
-    let filtered = filterFn(offsets, item, options)
+    let filtered = filterFn(item, keyword, { ancestors, offsets })
     if (typeof filtered !== 'boolean') {
       throw new Error(
         'The return value of the `filter` function must be a boolean.'
