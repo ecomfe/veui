@@ -12,6 +12,7 @@
       :is="item.exclusive ? 'veui-radio' : 'veui-checkbox'"
       v-for="(item, index) in items"
       :key="index"
+      :ref="`b-${item.value}`"
       :name="localName"
       :disabled="item.disabled || realDisabled || realReadonly"
       :checked="realValue.indexOf(item.value) !== -1"
@@ -20,6 +21,7 @@
       :aria-posinset="index + 1"
       :aria-setsize="items.length"
       @change="checked => handleChange(item, checked)"
+      @mouseenter="handleEnterForDesc(item)"
     >
       <slot
         name="item"
@@ -30,6 +32,19 @@
       </slot>
     </veui-checkbox>
   </div>
+  <veui-popover
+    v-if="currentForDesc"
+    position="top"
+    overlay-class="desc-popover"
+    :target="$refs[`b-${currentForDesc.value}`]"
+    :open.sync="openForDesc"
+    trigger="hover"
+  >
+    <slot
+      name="desc"
+      v-bind="currentForDesc"
+    >{{ currentForDesc.desc }}</slot>
+  </veui-popover>
 </div>
 </template>
 
@@ -41,21 +56,30 @@ import { focusIn } from '../utils/dom'
 import { uniqueId, findIndex, includes } from 'lodash'
 import Checkbox from './Checkbox'
 import Radio from './Radio'
+import Popover from './Popover'
 import useControllable from '../mixins/controllable'
+import useDisabledDesc from '../mixins/button-group'
 
 export default {
   name: 'veui-checkbox-group',
   components: {
     'veui-checkbox': Checkbox,
-    'veui-radio': Radio
+    'veui-radio': Radio,
+    'veui-popover': Popover
   },
-  mixins: [prefix, ui, input, useControllable({
-    prop: 'value',
-    event: 'change',
-    get (val) {
-      return val || []
-    }
-  })],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    useControllable({
+      prop: 'value',
+      event: 'change',
+      get (val) {
+        return val || []
+      }
+    }),
+    useDisabledDesc
+  ],
   model: {
     event: 'change'
   },
@@ -85,14 +109,17 @@ export default {
   methods: {
     handleChange ({ value, exclusive }, checked) {
       let values = [...this.realValue]
-      if (!checked) { // checked 表示要选中
+      if (!checked) {
+        // checked 表示要选中
         // cancel
         values.splice(
           findIndex(values, item => item === value),
           1
         )
         // prop value 可能一开始就包含了如下 2 种错误情况
-        let selectedExclusives = values.filter(val => includes(this.exclusiveValues, val))
+        let selectedExclusives = values.filter(val =>
+          includes(this.exclusiveValues, val)
+        )
         let exLen = selectedExclusives.length
         if (
           exLen > 1 || // 1. 太多 exclusive

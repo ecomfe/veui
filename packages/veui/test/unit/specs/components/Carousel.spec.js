@@ -1091,7 +1091,7 @@ describe('components/Carousel', () => {
     await wait(0)
     let prev = wrapper.find('.veui-carousel-control-prev')
     prev.trigger('click')
-    await wait(300)
+    await wait(400)
     current = wrapper.find('.veui-carousel-item-current .demo-slide')
     expect(current.text()).to.equal(vm.items[vm.items.length - 1].label)
 

@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import CheckboxGroup from '@/components/CheckboxGroup'
+import { wait } from '../../../utils'
 
 describe('components/CheckboxGroup', () => {
   it('should handle items prop correctly', () => {
@@ -39,7 +40,10 @@ describe('components/CheckboxGroup', () => {
         },
         data () {
           return {
-            items: [{ label: 'A', value: 'A' }, { label: 'B', value: 'B' }],
+            items: [
+              { label: 'A', value: 'A' },
+              { label: 'B', value: 'B' }
+            ],
             checked: null
           }
         },
@@ -73,12 +77,14 @@ describe('components/CheckboxGroup', () => {
         },
         data () {
           return {
-            items: [{ label: 'A', value: 'A' }, { label: 'B', value: 'B' }],
+            items: [
+              { label: 'A', value: 'A' },
+              { label: 'B', value: 'B' }
+            ],
             checked: null
           }
         },
-        template:
-          '<veui-checkbox-group :value="checked" :items="items"/>'
+        template: '<veui-checkbox-group :value="checked" :items="items"/>'
       },
       {
         sync: false
@@ -116,8 +122,7 @@ describe('components/CheckboxGroup', () => {
             selected: ['a']
           }
         },
-        template:
-          '<veui-checkbox-group v-model="selected" :items="items"/>'
+        template: '<veui-checkbox-group v-model="selected" :items="items"/>'
       },
       {
         sync: false
@@ -214,6 +219,44 @@ describe('components/CheckboxGroup', () => {
     await vm.$nextTick()
     expect(vm.selected).to.deep.equal([])
 
+    wrapper.destroy()
+  })
+
+  it('should handle disabled desc correctly.', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-checkbox-group': CheckboxGroup
+        },
+        data () {
+          return {
+            disabled: true,
+            items: [
+              { label: 'A', value: 'a', desc: 'wrong' },
+              { label: 'B', value: 'b' }
+            ]
+          }
+        },
+        template: '<veui-checkbox-group :items="items" :disabled="disabled"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let buttons = wrapper.findAll('.veui-checkbox')
+
+    buttons.at(0).trigger('mouseenter')
+    await wait(300)
+    expect(wrapper.find('.desc-popover').isVisible()).to.equal(true)
+    expect(wrapper.find('.desc-popover').text()).to.contains('wrong')
+
+    buttons.at(0).trigger('mouseout', {
+      relatedTarget: document.body
+    })
+    await wait(300)
+    expect(wrapper.find('.desc-popover').isVisible()).to.equal(false)
     wrapper.destroy()
   })
 })

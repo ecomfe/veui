@@ -34,6 +34,9 @@
         >
           <i>{{ props.label }}</i>
         </template>
+        <template #desc>
+          您没有权限！
+        </template>
       </veui-radio-button-group>
     </p>
     <p>已选：{{ picked3 }}</p>
@@ -82,11 +85,13 @@ export default {
       data1: [
         {
           value: 'pound',
-          label: '£'
+          label: '£',
+          desc: "You don't have enough permissions!"
         },
         {
           value: 'euro',
-          label: '€'
+          label: '€',
+          desc: 'Something wrong!'
         },
         {
           value: 'yen',

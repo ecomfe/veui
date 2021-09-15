@@ -11,6 +11,7 @@
     <veui-button
       v-for="(item, index) in items"
       :key="`b-${item.value}`"
+      :ref="`b-${item.value}`"
       :ui="uiParts.button"
       :class="{
         [$c('button-selected')]: realValue.indexOf(item.value) !== -1,
@@ -22,6 +23,7 @@
       :aria-posinset="index + 1"
       :aria-setsize="items.length"
       @click="handleChange(item)"
+      @mouseenter="handleEnterForDesc(item)"
     >
       <div
         v-if="!item.exclusive"
@@ -38,6 +40,19 @@
       >{{ item.label }}</slot>
     </veui-button>
   </div>
+  <veui-popover
+    v-if="currentForDesc"
+    position="top"
+    overlay-class="desc-popover"
+    :target="$refs[`b-${currentForDesc.value}`]"
+    :open.sync="openForDesc"
+    trigger="hover"
+  >
+    <slot
+      name="desc"
+      v-bind="currentForDesc"
+    >{{ currentForDesc.desc }}</slot>
+  </veui-popover>
 </div>
 </template>
 
@@ -50,12 +65,15 @@ import { includes, findIndex } from 'lodash'
 import Button from './Button'
 import Icon from './Icon'
 import useControllable from '../mixins/controllable'
+import useDisabledDesc from '../mixins/button-group'
+import Popover from './Popover'
 
 export default {
   name: 'veui-check-button-group',
   components: {
     'veui-button': Button,
-    'veui-icon': Icon
+    'veui-icon': Icon,
+    'veui-popover': Popover
   },
   mixins: [
     prefix,
@@ -67,7 +85,8 @@ export default {
       get (val) {
         return val || []
       }
-    })
+    }),
+    useDisabledDesc
   ],
   model: {
     event: 'change'

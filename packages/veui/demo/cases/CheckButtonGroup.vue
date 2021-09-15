@@ -31,6 +31,9 @@
         <template #item="props">
           {{ props.label }}
         </template>
+        <template #desc>
+          您没有权限！
+        </template>
       </veui-check-button-group>
     </p>
     <p>value: {{ picked2 }}</p>
@@ -131,11 +134,13 @@ export default {
       data1: [
         {
           value: 'Hirasawa Yui',
-          label: 'Hirasawa Yui'
+          label: 'Hirasawa Yui',
+          desc: "You don't have enough permissions"
         },
         {
           value: 'Akiyama Mio',
-          label: 'Akiyama Mio'
+          label: 'Akiyama Mio',
+          desc: 'Oh! no'
         },
         {
           value: 'Nakano Azusa',

@@ -11,7 +11,7 @@
   <div :class="$c('radio-button-group-items')">
     <veui-button
       v-for="(item, index) in items"
-      ref="items"
+      :ref="`b-${item.value}`"
       :key="index"
       :ui="uiParts.button"
       :class="{
@@ -26,6 +26,7 @@
           : '-1'
       "
       @click="handleChange(item.value)"
+      @mouseenter="handleEnterForDesc(item)"
     >
       <slot
         name="item"
@@ -34,6 +35,19 @@
       >{{ item.label }}</slot>
     </veui-button>
   </div>
+  <veui-popover
+    v-if="currentForDesc"
+    position="top"
+    overlay-class="desc-popover"
+    :target="$refs[`b-${currentForDesc.value}`]"
+    :open.sync="openForDesc"
+    trigger="hover"
+  >
+    <slot
+      name="desc"
+      v-bind="currentForDesc"
+    >{{ currentForDesc.desc }}</slot>
+  </veui-popover>
 </div>
 </template>
 
@@ -43,13 +57,16 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
 import Button from './Button'
+import Popover from './Popover'
 import useControllable from '../mixins/controllable'
+import useDisabledDesc from '../mixins/button-group'
 import { findIndex } from 'lodash'
 
 export default {
   name: 'veui-radio-button-group',
   components: {
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-popover': Popover
   },
   mixins: [
     prefix,
@@ -58,7 +75,8 @@ export default {
     useControllable({
       prop: 'value',
       event: 'change'
-    })
+    }),
+    useDisabledDesc
   ],
   model: {
     event: 'change'
@@ -89,10 +107,13 @@ export default {
           (step % length) +
           length) %
         length
-      this.commit('value', this.items[index].value)
+      let item = this.items[index]
+      this.commit('value', item.value)
 
       this.$nextTick(() => {
-        this.$refs.items[index].focus()
+        if (this.$refs[`b-${item.value}`]) {
+          this.$refs[`b-${item.value}`][0].focus()
+        }
       })
     },
     focus () {
