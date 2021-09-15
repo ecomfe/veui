@@ -3,6 +3,7 @@
 ### ⚠️ 非兼容性变更
 
 - [-] 组件 `Autocomplete` 的 `match` prop 参数签名从 `(item, keyword, ancestors)` 变更为 `(item, keyword, { ancestors })`。
+- [^] 将 `Carousel` 组件的 `indicator-alignment` prop 重命名为 `indicator-align`。
 
 ### 💡 主要变更
 
