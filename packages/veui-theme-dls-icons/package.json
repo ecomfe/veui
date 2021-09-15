@@ -20,7 +20,7 @@
     "dls-icons-vue": "^1.7.0"
   },
   "peerDependencies": {
-    "veui": "2.1.0"
+    "veui": "2.1.1"
   },
   "devDependencies": {
     "esm": "^3.0.84",
