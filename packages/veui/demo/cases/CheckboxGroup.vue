@@ -22,6 +22,7 @@
     <veui-checkbox-group
       v-model="picked2"
       :items="data2"
+      :disabled="disabled"
       ui="s"
     >
       <template
@@ -29,6 +30,9 @@
         slot-scope="props"
       >
         {{ props.label }}
+      </template>
+      <template #desc>
+        您没有权限！
       </template>
     </veui-checkbox-group>
   </p>
@@ -89,11 +93,13 @@ export default {
       data1: [
         {
           value: 'Hirasawa Yui',
-          label: 'Hirasawa Yui'
+          label: 'Hirasawa Yui',
+          desc: "You don't have enough permissions"
         },
         {
           value: 'Akiyama Mio',
-          label: 'Akiyama Mio'
+          label: 'Akiyama Mio',
+          desc: 'Oh! no'
         },
         {
           value: 'Nakano Azusa',

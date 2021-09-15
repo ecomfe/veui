@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import CheckButtonGroup from '@/components/CheckButtonGroup'
-import { expectDisabled } from '../../../utils'
+import { expectDisabled, wait } from '../../../utils'
 
 describe('components/CheckButtonGroup', () => {
   it('should handle props correctly', () => {
@@ -56,7 +56,7 @@ describe('components/CheckButtonGroup', () => {
     )
 
     let { vm } = wrapper
-    let buttons = wrapper.findAll('button.veui-button')
+    let buttons = wrapper.findAll('.veui-button')
 
     buttons.at(0).trigger('click')
     await vm.$nextTick()
@@ -97,7 +97,7 @@ describe('components/CheckButtonGroup', () => {
     )
 
     let { vm } = wrapper
-    let buttons = wrapper.findAll('button.veui-button')
+    let buttons = wrapper.findAll('.veui-button')
 
     buttons.at(0).trigger('click')
     await vm.$nextTick()
@@ -133,7 +133,7 @@ describe('components/CheckButtonGroup', () => {
     )
 
     let { vm } = wrapper
-    let buttons = wrapper.findAll('button.veui-button')
+    let buttons = wrapper.findAll('.veui-button')
 
     expect(buttons.at(0).classes()).to.include('veui-button-exclusive')
     expect(buttons.at(0).classes()).to.include('veui-button-selected')
@@ -204,7 +204,7 @@ describe('components/CheckButtonGroup', () => {
     )
 
     let { vm } = wrapper
-    let buttons = wrapper.findAll('button.veui-button')
+    let buttons = wrapper.findAll('.veui-button')
 
     buttons.at(1).trigger('click')
     await vm.$nextTick()
@@ -218,6 +218,45 @@ describe('components/CheckButtonGroup', () => {
     await vm.$nextTick()
     expect(vm.selected).to.deep.equal([])
 
+    wrapper.destroy()
+  })
+
+  it('should handle disabled desc correctly.', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-check-button-group': CheckButtonGroup
+        },
+        data () {
+          return {
+            disabled: true,
+            items: [
+              { label: 'A', value: 'a', desc: 'wrong' },
+              { label: 'B', value: 'b' }
+            ]
+          }
+        },
+        template:
+          '<veui-check-button-group :items="items" :disabled="disabled"/>'
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let buttons = wrapper.findAll('.veui-button')
+
+    buttons.at(0).trigger('mouseenter')
+    await wait(300)
+    expect(wrapper.find('.desc-popover').isVisible()).to.equal(true)
+    expect(wrapper.find('.desc-popover').text()).to.contains('wrong')
+
+    buttons.at(0).trigger('mouseout', {
+      relatedTarget: document.body
+    })
+    await wait(300)
+    expect(wrapper.find('.desc-popover').isVisible()).to.equal(false)
     wrapper.destroy()
   })
 })
