@@ -145,7 +145,7 @@ export default {
         return includes(['bar', 'radio', 'number', 'none', 'dot'], value)
       }
     },
-    indicatorAlignment: {
+    indicatorAlign: {
       type: String,
       default: 'start',
       validator (value) {
@@ -244,7 +244,7 @@ export default {
         )
     },
     isEndIndicator () {
-      return this.indicatorAlignment === 'end'
+      return this.indicatorAlign === 'end'
     },
     isOutsideIndicator () {
       return (
