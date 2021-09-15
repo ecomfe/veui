@@ -65,7 +65,7 @@ import { includes, findIndex } from 'lodash'
 import Button from './Button'
 import Icon from './Icon'
 import useControllable from '../mixins/controllable'
-import useDisabledDesc from '../mixins/button-group'
+import useDesc from '../mixins/button-group'
 import Popover from './Popover'
 
 export default {
@@ -86,7 +86,7 @@ export default {
         return val || []
       }
     }),
-    useDisabledDesc
+    useDesc
   ],
   model: {
     event: 'change'

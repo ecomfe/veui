@@ -59,7 +59,7 @@ import { focusIn } from '../utils/dom'
 import Button from './Button'
 import Popover from './Popover'
 import useControllable from '../mixins/controllable'
-import useDisabledDesc from '../mixins/button-group'
+import useDesc from '../mixins/button-group'
 import { findIndex } from 'lodash'
 
 export default {
@@ -76,7 +76,7 @@ export default {
       prop: 'value',
       event: 'change'
     }),
-    useDisabledDesc
+    useDesc
   ],
   model: {
     event: 'change'

@@ -53,7 +53,7 @@ import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
 import Radio from './Radio'
 import Popover from './Popover'
-import useDisabledDesc from '../mixins/button-group'
+import useDesc from '../mixins/button-group'
 import { uniqueId } from 'lodash'
 
 export default {
@@ -62,7 +62,7 @@ export default {
     'veui-radio': Radio,
     'veui-popover': Popover
   },
-  mixins: [prefix, ui, input, useDisabledDesc],
+  mixins: [prefix, ui, input, useDesc],
   model: {
     event: 'change'
   },

@@ -58,7 +58,7 @@ import Checkbox from './Checkbox'
 import Radio from './Radio'
 import Popover from './Popover'
 import useControllable from '../mixins/controllable'
-import useDisabledDesc from '../mixins/button-group'
+import useDesc from '../mixins/button-group'
 
 export default {
   name: 'veui-checkbox-group',
@@ -78,7 +78,7 @@ export default {
         return val || []
       }
     }),
-    useDisabledDesc
+    useDesc
   ],
   model: {
     event: 'change'
