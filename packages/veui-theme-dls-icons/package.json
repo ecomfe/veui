@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "node -r esm build/icons.js",
-    "prepublishOnly": "cp -r ./icons/* .",
+    "prepublishOnly": "rollup -c && cp -r ./icons/* .",
     "publish": "rm *.js icon-names.json",
     "prepare": "npm run build"
   },
@@ -23,8 +23,11 @@
     "veui": "2.1.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
     "esm": "^3.0.84",
     "mkdirp": "^0.5.4",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "rollup": "^2.56.3"
   }
 }
