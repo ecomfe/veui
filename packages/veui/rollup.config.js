@@ -89,6 +89,8 @@ function bundleEsm () {
   }
 }
 
+const ESM_VEUI = 'veui/dist/veui.esm'
+
 function bundleLocales (locales) {
   return locales.map(({ input, output }) => ({
     input,
@@ -101,13 +103,19 @@ function bundleLocales (locales) {
       {
         name: 'transform-veui-18n',
         load (id) {
+          if (id === 'veui') {
+            return {
+              id: ESM_VEUI,
+              external: true
+            }
+          }
           return id.includes('/managers/i18n')
-            ? 'import { i18n } from "veui";\n export default i18n;'
+            ? `import { i18n } from "${ESM_VEUI}";\n export default i18n;`
             : null
         }
       }
     ],
-    external: id => id === 'veui'
+    external: id => id === ESM_VEUI
   }))
 }
 
