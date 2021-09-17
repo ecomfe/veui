@@ -209,7 +209,7 @@
     }
 
     &-left&-edge::before {
-      right: -1px;
+      right: 0;
       box-shadow: @dls-table-overflow-shadow-right;
       clip-path: polygon(50% 50%, 150% 50%, 150% 100%, 50% 100%);
 
@@ -219,13 +219,23 @@
     }
 
     &-right&-edge::before {
-      left: -1px;
+      left: 0;
       box-shadow: @dls-table-overflow-shadow-left;
       clip-path: polygon(-50% 50%, 50% 50%, 50% 100%, -50% 100%);
 
       .@{veui-prefix}-table-hit-right & {
         box-shadow: none;
       }
+    }
+  }
+
+  &-bordered &-cell-sticky {
+    &-left&-edge::before {
+      right: -1px;
+    }
+
+    &-right&-edge::before {
+      left: -1px;
     }
   }
 
