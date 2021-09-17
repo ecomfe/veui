@@ -253,6 +253,36 @@ describe('components/DatePicker', () => {
     wrapper.find('.veui-date-picker-clear').trigger('click')
     await vm.$nextTick()
     expect(vm.selected).to.equal(null)
+    expect(wrapper.find('.veui-input-input').text()).to.equal('')
+    wrapper.destroy()
+  })
+
+  it('should clear selected range date correctly.', async () => {
+    let wrapper = mount({
+      data () {
+        return {
+          selected: null
+        }
+      },
+      components: {
+        'veui-date-picker': DatePicker
+      },
+      template: `<veui-date-picker range v-model="selected" clearable/>`
+    })
+
+    let { vm } = wrapper
+    wrapper.find('.veui-date-picker-trigger').trigger('click')
+    await vm.$nextTick()
+    let buttons = wrapper.findAll('.veui-calendar-day button')
+    buttons.at(0).trigger('click')
+    buttons.at(1).trigger('click')
+    await vm.$nextTick()
+    wrapper.find('.veui-date-picker-clear').trigger('click')
+    await vm.$nextTick()
+    expect(vm.selected).to.equal(null)
+    let inputs = wrapper.findAll('.veui-input-input')
+    expect(inputs.at(0).text()).to.equal('')
+    expect(inputs.at(1).text()).to.equal('')
     wrapper.destroy()
   })
 

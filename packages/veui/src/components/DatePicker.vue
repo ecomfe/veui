@@ -255,7 +255,15 @@ export default {
     i18n,
     useControllable({
       prop: 'selected',
-      event: 'select'
+      event: 'select',
+      get (val) {
+        if (this.range) {
+          return Array.isArray(val)
+            ? [val[0] || null, val[1] || null]
+            : [null, null]
+        }
+        return val
+      }
     }),
     useConfig('config', 'datepicker')
   ],
@@ -303,19 +311,13 @@ export default {
       return this.getSorted(true)
     },
     formattedSelection () {
-      let current = this.sortedSelection
-      return Array.isArray(current)
-        ? current.map(date => this.formatDate(date))
-        : this.formatDate(current)
+      return this.getFormatted(this.sortedSelection)
     },
     sorted () {
       return this.getSorted()
     },
     formatted () {
-      let current = this.sorted
-      return Array.isArray(current)
-        ? current.map(date => this.formatDate(date))
-        : this.formatDate(current)
+      return this.getFormatted(this.sorted)
     },
     calendarProps () {
       return pick(this, CALENDAR_PROPS)
@@ -426,6 +428,11 @@ export default {
         }
       }
       return this.realSelected
+    },
+    getFormatted (value) {
+      return Array.isArray(value)
+        ? value.map(date => this.formatDate(date))
+        : this.formatDate(value)
     },
     handleInput (index, val) {
       this.$set(this.localInputValue, index, val)
