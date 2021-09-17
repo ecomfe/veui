@@ -85,6 +85,15 @@ function search (datasource, keyword, options, result = []) {
       matchFn === match ? options : { ancestors }
     )
     let isArray = Array.isArray(offsets)
+    // 特殊处理下只有一段的匹配
+    if (
+      isArray &&
+      typeof offsets[0] === 'number' &&
+      typeof offsets[1] === 'number'
+    ) {
+      offsets = [offsets]
+    }
+
     let isBool = !isArray && typeof offsets === 'boolean'
     if (!isArray && !isBool) {
       throw new Error(

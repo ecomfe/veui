@@ -321,4 +321,28 @@ describe('components/Autocomplete', function () {
     expect(wrapper.find('mark').exists(), '全中有高亮').to.equal(true)
     wrapper.destroy()
   })
+
+  it('should handle `match` prop that returns an array of numbers correctly', async () => {
+    let wrapper = mount(
+      {
+        ...componentOptions,
+        template: `<veui-autocomplete value="f" :datasource="datasource" expanded :match="match"/>`
+      },
+      debugInBrowser
+    )
+    let { vm } = wrapper
+    await vm.$nextTick()
+
+    // 有高亮
+    vm.match = ({ label }, keyword) => {
+      const index = label.indexOf(keyword)
+      return index >= 0 ? [index, index + keyword.length] : false
+    }
+
+    await vm.$nextTick()
+    let items = wrapper.findAll('.veui-option')
+    expect(items.length).to.equal(1)
+    expect(wrapper.find('mark').exists(), 'Only one segment').to.equal(true)
+    wrapper.destroy()
+  })
 })
