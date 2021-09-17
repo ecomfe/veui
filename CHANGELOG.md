@@ -1,3 +1,16 @@
+## 2.1.3
+
+### 💡 主要变更
+
+- [+] 为 `RadioGroup`/`CheckboxGroup`/`RadioButtonGroup`/`CheckboxButtonGroup` 新增 `Popover` 弹层提示支持。新增数据源 `desc` 字段及对应的 `desc` 作用域插槽。
+
+### 🐞 问题修复
+
+- [^] 修正了 locale 包的 ESM 打包版本没有引用 VEUI 的 ESM 版本的问题。
+- [^] 修正了 `DatePicker` 组件清除功能有时不正常的问题。
+- [^] 修正了 `Select`/`Dropdown` 组件可能出现两个滚动条的样式问题。
+- [^] 修正了 `Table` 在无边框样式下组件固定列阴影处有 1px 偏差的问题。
+
 ## 2.1.2
 
 ### 💡 主要变更
