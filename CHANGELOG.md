@@ -3,6 +3,7 @@
 ### 💡 主要变更
 
 - [+] 为 `RadioGroup`/`CheckboxGroup`/`RadioButtonGroup`/`CheckboxButtonGroup` 新增 `Popover` 弹层提示支持。新增数据源 `desc` 字段及对应的 `desc` 作用域插槽。
+- [+] 支持搜索的组件 `Autocomplete`/`Cascader`/`SearchBox`/`Select`/`Dropdown` 的 `match` prop 返回值现在在仅有一段匹配时可以直接返回 `[number, number]`。
 
 ### 🐞 问题修复
 
