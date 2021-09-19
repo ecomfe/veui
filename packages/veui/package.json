@@ -20,7 +20,8 @@
     "./src/locale/**/*.js",
     "./locale/**/*.js",
     "./src/common/uiTypes.js",
-    "./common/uiTypes.js"
+    "./common/uiTypes.js",
+    "./dist/locale.*.esm.js"
   ],
   "dependencies": {
     "bytes": "^3.0.0",
