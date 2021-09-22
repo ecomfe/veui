@@ -10,4 +10,4 @@ yarn-error.log
 **/test/coverage
 /components
 icon-names.json
-**/veui-theme-dls-icons/icons/
+packages/veui-theme-dls-icons/icons/
