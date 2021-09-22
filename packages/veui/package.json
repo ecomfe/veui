@@ -8,8 +8,8 @@
     "lint": "vue-cli-service lint",
     "components": "node ./build/components.js",
     "index": "node ./build/components.js index",
-    "prepublishOnly": "rollup -c && cp -r ./src/* .",
-    "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js ./index-with-locale.js",
+    "prepublishOnly": "rollup -c && cp -r ./src/* . && cp ../../CHANGELOG.md .",
+    "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js ./index-with-locale.js ./CHANGELOG.md",
     "test": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start --single-run",
     "test:start": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=test BABEL_ENV=test karma start"
   },
