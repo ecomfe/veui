@@ -10,10 +10,13 @@
   font-size: @dls-font-size-1;
   min-height: @dls-height-m;
 
+  --dls-field-label-width: @dls-form-label-width;
+
   &-label {
     position: relative;
     flex: none;
     width: @dls-form-label-width;
+    width: var(--dls-field-label-width, @dls-form-label-width);
     margin-right: @dls-form-label-spacing-after-horizontal;
     color: @dls-form-label-font-color;
     text-align: right;
@@ -30,7 +33,12 @@
   }
 
   .@{veui-prefix}-field-tip {
-    .absolute(@dls-height-m / 2, _, _, dls-sum(100%, @dls-form-label-content-spacing));
+    .absolute(
+      @dls-height-m / 2,
+      _,
+      _,
+      dls-sum(100%, @dls-form-label-content-spacing)
+    );
     color: @dls-form-label-icon-color;
     transform: translateY(-50%);
 
@@ -40,7 +48,10 @@
   }
 
   &-no-label {
-    margin-left: dls-sum(@dls-form-label-width, @dls-form-label-spacing-after-horizontal);
+    margin-left: dls-sum(
+      @dls-form-label-width,
+      @dls-form-label-spacing-after-horizontal
+    );
   }
 
   .@{veui-prefix}-field-content {
