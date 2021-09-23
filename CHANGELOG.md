@@ -2,6 +2,7 @@
 
 ### 🐞 问题修复
 
+- [^] 修正 `Tabs` 组件在路由模式下可能会没有正常激活标签项的问题。<!-- #Tabs -->
 - [^] 将 `CheckButtonGroup`/`RadioButtonGroup` 组件的样式 token 升级到最新版本，以解决无法与最新版本 less-plugin-dls 共同工作的问题。<!-- #CheckButtonGroup #RadioButtonGroup -->
 - [^] 修正 `RadioGroup` 组件未实现可受控功能的问题。<!-- #RadioGroup -->
 
