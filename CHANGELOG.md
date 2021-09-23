@@ -1,3 +1,14 @@
+## 2.1.5
+
+### 🐞 问题修复
+
+- [^] 将 `CheckButtonGroup`/`RadioButtonGroup` 组件的样式 token 升级到最新版本，以解决无法与最新版本 less-plugin-dls 共同工作的问题。<!-- #CheckButtonGroup #RadioButtonGroup -->
+- [^] 修正 `RadioGroup` 组件未实现可受控功能的问题。<!-- #RadioGroup -->
+
+### 🧪 实验性功能
+
+- [+] 为 `Field` 组件新增自定义 CSS 属性 `--dls-field-label-width`，用于自定义表单项文字标签列的宽度。<!-- #Field -->
+
 ## 2.1.4
 
 ### 🐞 问题修复
