@@ -70,7 +70,7 @@ export default {
         : this.to
     },
     realMatches () {
-      return this.matches || this.tabs.matches || (() => false)
+      return this.matches || this.tabs.realMatches || (() => false)
     }
   },
   updated () {
