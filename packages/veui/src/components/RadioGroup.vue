@@ -13,9 +13,9 @@
       :key="index"
       :name="localName"
       :value="item.value"
-      :model="value"
+      :model="realValue"
       :disabled="item.disabled || realDisabled || realReadonly"
-      :checked="item.value === value"
+      :checked="item.value === realValue"
       :aria-posinset="index + 1"
       :aria-setsize="items.length"
       @change="checked => handleChange(checked, item.value)"
@@ -54,6 +54,7 @@ import { focusIn } from '../utils/dom'
 import Radio from './Radio'
 import Popover from './Popover'
 import useDesc from '../mixins/button-group'
+import useControllable from '../mixins/controllable'
 import { uniqueId } from 'lodash'
 
 export default {
@@ -62,7 +63,16 @@ export default {
     'veui-radio': Radio,
     'veui-popover': Popover
   },
-  mixins: [prefix, ui, input, useDesc],
+  mixins: [
+    prefix,
+    ui,
+    input,
+    useDesc,
+    useControllable({
+      prop: 'value',
+      event: 'change'
+    })
+  ],
   model: {
     event: 'change'
   },
@@ -80,7 +90,7 @@ export default {
   methods: {
     handleChange (checked, value) {
       if (checked) {
-        this.$emit('change', value)
+        this.commit('value', value)
       }
     },
     focus () {
