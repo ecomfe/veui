@@ -3,7 +3,7 @@
 ### 🐞 问题修复
 
 - [^] 修正 `Tabs` 组件在路由模式下可能会没有正常激活标签项的问题。<!-- #Tabs -->
-- [^] 将 `CheckButtonGroup`/`RadioButtonGroup` 组件的样式 token 升级到最新版本，以解决无法与最新版本 less-plugin-dls 共同工作的问题。<!-- #CheckButtonGroup #RadioButtonGroup -->
+- [^] 将 `CheckButtonGroup` / `RadioButtonGroup` 组件的样式 token 升级到最新版本，以解决无法与最新版本 less-plugin-dls 共同工作的问题。<!-- #CheckButtonGroup #RadioButtonGroup -->
 - [^] 修正 `RadioGroup` 组件未实现可受控功能的问题。<!-- #RadioGroup -->
 
 ### 🧪 实验性功能
@@ -20,14 +20,14 @@
 
 ### 💡 主要变更
 
-- [+] 为 `RadioGroup`/`CheckboxGroup`/`RadioButtonGroup`/`CheckboxButtonGroup` 新增 `Popover` 弹层提示支持。新增数据源 `desc` 字段及对应的 `desc` 作用域插槽。<!-- #RadioGroup #CheckboxGroup #RadioButtonGroup #CheckButtonGroup -->
-- [+] 支持搜索的组件 `Autocomplete`/`Cascader`/`SearchBox`/`Select`/`Dropdown` 的 `match` prop 返回值现在在仅有一段匹配时可以直接返回 `[number, number]`。<!-- #Autocomplete #Cascader #SearchBox #Select #Dropdown -->
+- [+] 为 `RadioGroup` / `CheckboxGroup` / `RadioButtonGroup` / `CheckboxButtonGroup` 新增 `Popover` 弹层提示支持。新增数据源 `desc` 字段及对应的 `desc` 作用域插槽。<!-- #RadioGroup #CheckboxGroup #RadioButtonGroup #CheckButtonGroup -->
+- [+] 支持搜索的组件 `Autocomplete` / `Cascader` / `SearchBox` / `Select` / `Dropdown` 的 `match` prop 返回值现在在仅有一段匹配时可以直接返回 `[number, number]`。<!-- #Autocomplete #Cascader #SearchBox #Select #Dropdown -->
 
 ### 🐞 问题修复
 
 - [^] 修正了 locale 包的 ESM 打包版本没有引用 VEUI 的 ESM 版本的问题。<!-- #veui -->
 - [^] 修正了 `DatePicker` 组件清除功能有时不正常的问题。<!-- #DatePicker -->
-- [^] 修正了 `Select`/`Dropdown` 组件可能出现两个滚动条的样式问题。<!-- #Select #Dropdown -->
+- [^] 修正了 `Select` / `Dropdown` 组件可能出现两个滚动条的样式问题。<!-- #Select #Dropdown -->
 - [^] 修正了 `Table` 在无边框样式下组件固定列阴影处有 1px 偏差的问题。<!-- #Table -->
 
 ## 2.1.2
@@ -47,9 +47,9 @@
 
 ### 💡 主要变更
 
-- [+] 为 `RadioButtonGroup`/`CheckButtonGroup` 新增 `ui` 样式 `simple`，并支持跨行样式。<!-- #RadioButtonGroup #CheckButtonGroup -->
+- [+] 为 `RadioButtonGroup` / `CheckButtonGroup` 新增 `ui` 样式 `simple`，并支持跨行样式。<!-- #RadioButtonGroup #CheckButtonGroup -->
 - [^] `Button` 组件现在可以在禁用状态下响应除了 `click` 以外的事件，并可以接收焦点。<!-- #Button -->
-- [+] 为支持搜索的组件 `Autocomplete`/`Cascader`/`SearchBox`/`Select`/`Dropdown` 新增 `match`/`filter` prop。<!-- #Autocomplete #Cascader #SearchBox #Select #Dropdown -->
+- [+] 为支持搜索的组件 `Autocomplete` / `Cascader` / `SearchBox` / `Select` / `Dropdown` 新增 `match` / `filter` prop。<!-- #Autocomplete #Cascader #SearchBox #Select #Dropdown -->
 
   - `match` 函数签名：`(item, keyword, { ancestors }) => boolean | Array<[number, number]>` 以支持自定义高亮逻辑；
   - `filter` 函数签名：`(item, keyword, { ancestors, offsets }) => boolean` 以支持自定义搜索命中逻辑。
@@ -61,7 +61,7 @@
 - [+] 新增了 `ConfigProvider` 组件，用于对局部组件进行全局配置的自定义。<!-- #ConfigProvider -->
 - [^] 对 `Carousel` 组件进行了功能、样式升级：<!-- #Carousel -->
 
-  - `indicator` prop 新增 `bar`/`dot` 值，用于指定播放指示器的样式类型。其中 `bar` 用于替换之前的 `radio`（`radio` 也保持兼容支持）。
+  - `indicator` prop 新增 `bar` / `dot` 值，用于指定播放指示器的样式类型。其中 `bar` 用于替换之前的 `radio`（`radio` 也保持兼容支持）。
   - 新增了 `effect` prop，用于指定轮播切换效果，其中 `fade` 仅在切换组个数与同时显示个数相同时生效。
   - 新增了 `vertical` prop，用于支持纵向布局的轮播。
   - 新增了 `indicator-alignment` prop，用于支持指示器的相对于布局方向的位置。
@@ -246,7 +246,7 @@
 
 ### 💡 主要变更
 
-- [+] 为 `Popover`/`Tooltip`/`AlertBox`/`ConfirmBox`/`PromptBox`/`Dialog`/`Select`/`Dropdown`/`Lightbox`/`DatePicker`/`TimePicker`/`SearchBox`/`Cascader`/`CascaderPane` 等组件新增 `overlay-style` prop，用于自定义浮层样式。<!-- #Popover #Tooltip #AlertBox #ConfirmBox #PromptBox #Dialog #Select #Dropdown #Lightbox #DatePicker #TimePicker #SearchBox #Cascader #CascaderPane -->
+- [+] 为 `Popover` / `Tooltip` / `AlertBox` / `ConfirmBox` / `PromptBox` / `Dialog` / `Select` / `Dropdown` / `Lightbox` / `DatePicker` / `TimePicker` / `SearchBox` / `Cascader` / `CascaderPane` 等组件新增 `overlay-style` prop，用于自定义浮层样式。<!-- #Popover #Tooltip #AlertBox #ConfirmBox #PromptBox #Dialog #Select #Dropdown #Lightbox #DatePicker #TimePicker #SearchBox #Cascader #CascaderPane -->
 - [+] `Link` 组件现在支持绑定通用的鼠标、键盘事件，无需使用 `.native` 修饰符。<!-- #Link -->
 
 ### 🐞 问题修复
@@ -258,7 +258,7 @@
 
 ### 🧪 实验性功能
 
-- [+] 为 `Select`/`Dropdown`/`SearchBox`/`Cascader` 新增 `--dls-dropdown-max-display-items` 配置支持，见 `2.0.0-rc.0` 版本实验性功能说明。<!-- #Select #Dropdown #SearchBox #Cascader -->
+- [+] 为 `Select` / `Dropdown` / `SearchBox` / `Cascader` 新增 `--dls-dropdown-max-display-items` 配置支持，见 `2.0.0-rc.0` 版本实验性功能说明。<!-- #Select #Dropdown #SearchBox #Cascader -->
 
 ## 2.0.0-rc.0
 
@@ -268,7 +268,7 @@
 
 ### 💡 主要变更
 
-- [+] 为 `Overlay`/`Autocomplete` 等组件新增 `overlay-style` prop，用于自定义浮层样式。<!-- #Overlay #Autocomplete -->
+- [+] 为 `Overlay` / `Autocomplete` 等组件新增 `overlay-style` prop，用于自定义浮层样式。<!-- #Overlay #Autocomplete -->
 - [+] 新增 `v-tooltip` 指令，用于指定全局共享的浮层提示。<!-- #v-tooltip -->
 - [^] 优化了 `v-drag.sort` 的移动触发交互，使拖动排序更顺畅。<!-- #v-drag -->
 
@@ -278,7 +278,7 @@
 
 ### 🧪 实验性功能
 
-- [+] 新增支持通过给浮层设置 CSS 自定义属性 `--dls-dropdown-max-display-items` 来设置 `Autocomplete` 组件下拉浮层最大显示项目数，超出此高度将触发滚动。（给浮层设置样式可通过 `overlay-class`/`overlay-style` prop 的方式。）<!-- #Autocomplete -->
+- [+] 新增支持通过给浮层设置 CSS 自定义属性 `--dls-dropdown-max-display-items` 来设置 `Autocomplete` 组件下拉浮层最大显示项目数，超出此高度将触发滚动。（给浮层设置样式可通过 `overlay-class` / `overlay-style` prop 的方式。）<!-- #Autocomplete -->
 
   > #### 使用示例
   >
@@ -294,12 +294,12 @@
 
 - [+] 新增了部分组件的文案配置 prop（[#750](https://github.com/ecomfe/veui/issues/750)），具体包括：
 
-  - `Dialog`/`Drawer`/`ConfirmBox`/`PromptBox` 组件新增 `ok-label`/`cancel-label` prop；<!-- #Dialog #Drawer #ConfirmBox #PromptBox -->
+  - `Dialog` / `Drawer` / `ConfirmBox` / `PromptBox` 组件新增 `ok-label` / `cancel-label` prop；<!-- #Dialog #Drawer #ConfirmBox #PromptBox -->
   - `AlertBox` 组件新增 `ok-label` prop；<!-- #AlertBox -->
   - `Tabs` 组件新增 `add-label` prop；<!-- #Tabs -->
-  - `Transfer` 组件新增 `candidate-title`/`selected-title` prop。<!-- #Transfer -->
+  - `Transfer` 组件新增 `candidate-title` / `selected-title` prop。<!-- #Transfer -->
 
-- [+] `AlertBox`/`ConfirmBox`/`PromptBox` 均补齐 `disabled`/`loading` prop，与 `Dialog` 组件对齐。<!-- #AlertBox #ConfirmBox #PromptBox -->
+- [+] `AlertBox` / `ConfirmBox` / `PromptBox` 均补齐 `disabled` / `loading` prop，与 `Dialog` 组件对齐。<!-- #AlertBox #ConfirmBox #PromptBox -->
 
 ## 2.0.0-beta.32
 
@@ -324,7 +324,7 @@
 
 ### 🐞 问题修复
 
-- [^] 修正 `Select` 组件在 `s`/`xs` 尺寸下多选标签的样式。<!-- #Select -->
+- [^] 修正 `Select` 组件在 `s` / `xs` 尺寸下多选标签的样式。<!-- #Select -->
 - [^] 修正 `Lightbox` 组件在 Safari 下无法正常显示内容的问题。<!-- #Lightbox -->
 - [^] 修正 `Uploader` 组件在 `request-mode` 为 `custom` 时没有对返回值调用 `convertResponse` 的问题。（#800）<!-- #Uploader -->
 - [^] 修正 `SearchBox` 在显示搜索提示时按下 <kbd>enter</kbd> 没有触发 `search` 事件的问题。（#806）<!-- #SearchBox -->
@@ -334,7 +334,7 @@
 
 ### 💡 主要变更
 
-- [+] `Tree`/`Transfer` 组件新增 `merge-checked` prop，用于对节点勾选的冗余信息进行合并。支持的值如下：<!-- #Tree #Transfer -->
+- [+] `Tree` / `Transfer` 组件新增 `merge-checked` prop，用于对节点勾选的冗余信息进行合并。支持的值如下：<!-- #Tree #Transfer -->
 
   - `keep-all`：默认值，选中值中包含所有勾选状态的节点。
   - `upwards`：尽量向上合并，当某个节点下所有节点均勾选时仅保留该节点本身。
@@ -342,14 +342,14 @@
 
 - [^] `Tree` 组件的被禁用的子节点现在允许切换展开/收起。<!-- #Tree -->
 - [+] `Tree` 组件新增支持对于没有 `value` 的节点，根据 `name` 字段控制展开收起及节点选择（非勾选）状态，用来支持受控切换这两类状态且不出现在已勾选的输出值中（仅作为分组节点使用）。<!-- #Tree -->
-- [+] 在 `Transfer` 组件的 `candidate-head`/`candidate-title`/`selected-head`/`selected-title` 插槽中新增了 `count` 插槽属性，分别表示备选数量和已选数量。<!-- #Transfer -->
+- [+] 在 `Transfer` 组件的 `candidate-head` / `candidate-title` / `selected-head` / `selected-title` 插槽中新增了 `count` 插槽属性，分别表示备选数量和已选数量。<!-- #Transfer -->
 
 ### 🐞 问题修复
 
 - [^] 修复 `Tree` 组件禁用逻辑，现在被禁用的节点的所有子节点也将被禁用。<!-- #Tree -->
 - [^] 修复 `Transfer` 节点在禁用时会受“全选”/“清空”操作影响选择状态的问题。<!-- #Transfer -->
 - [^] 修复 `Transfer` 在搜索/过滤后全选会选中所有数据而非过滤后数据的问题。<!-- #Transfer -->
-- [^] 修正 `Select` 组件“未选择”状态的判断逻辑，现在 `null`/`undefined`/`[]` 均视为未选状态。<!-- #Select -->
+- [^] 修正 `Select` 组件“未选择”状态的判断逻辑，现在 `null` / `undefined` / `[]` 均视为未选状态。<!-- #Select -->
 - [^] 修正 `babel-plugin-veui` 在改写 `import` 时没有更新 local binding 导致 JSX 插件误判组件名为字符串的问题。<!-- #babel-plugin-veui -->
 
 ## 2.0.0-beta.29
@@ -388,7 +388,7 @@
 - [+] `Column` 组件新增 `filter-options` 与 `filter-multiple` prop，用于开启内置的下拉筛选并设置单选/多选。<!-- #Column -->
 - [^] `Column` 组件的 `filter-value` prop 可以支持 `true` 以外的其它属性，在使用内置下拉筛选时对应下拉选项的 `value` 值。当值为 `null` 时，用来指定筛选未激活的状态。<!-- #Column -->
 - [+] `Column` 组件新增 `filter-title` prop，用于指定下拉筛选的标题说明。<!-- #Column -->
-- [+] `Dropdown` 组件的 `trigger` slot 新增作用域参数 `expanded`/`toggle`，用于获取/切换下拉菜单的展开状态。<!-- #Dropdown -->
+- [+] `Dropdown` 组件的 `trigger` slot 新增作用域参数 `expanded` / `toggle`，用于获取/切换下拉菜单的展开状态。<!-- #Dropdown -->
 
 ### 🐞 问题修复
 
@@ -433,9 +433,9 @@
 
 ### 🐞 问题修复
 
-- [^] 修正 `RadioGroup`/`CheckboxGroup` 组件样式可能错误触发容器发生溢出滚动的问题。<!-- #RadioGroup -->
+- [^] 修正 `RadioGroup` / `CheckboxGroup` 组件样式可能错误触发容器发生溢出滚动的问题。<!-- #RadioGroup -->
 - [^] `Link` 组件的 `to` prop 现在可以正常使用绝对路径了。<!-- #Link -->
-- [^] 修正 `Radio`/`Checkbox`/`Switch` 组件在点击时会触发两次 `click` 事件的问题。<!-- #Radio -->
+- [^] 修正 `Radio` / `Checkbox` / `Switch` 组件在点击时会触发两次 `click` 事件的问题。<!-- #Radio -->
 
 ## 2.0.0-beta.23
 
@@ -445,7 +445,7 @@
 
 ### 🐞 问题修复
 
-- [^] 修正 `Overlay` 组件在有开启 `inline`/`local` prop 的父级 `Overlay` 时报错的问题。<!-- #Overlay -->
+- [^] 修正 `Overlay` 组件在有开启 `inline` / `local` prop 的父级 `Overlay` 时报错的问题。<!-- #Overlay -->
 - [^] 修正 `Uploader` 组件在单文件模式下外部修改文件列表不正常的问题。<!-- #Uploader -->
 
 ## 2.0.0-beta.22
@@ -459,7 +459,7 @@
 
 ### 💡 主要变更
 
-- [^] `Dialog` 触发滚动锁定时，新增实验性全局配置项 `modal.scrollLockMode`，可选值为 `safe`/`advanced`。<!-- #Dialog -->
+- [^] `Dialog` 触发滚动锁定时，新增实验性全局配置项 `modal.scrollLockMode`，可选值为 `safe` / `advanced`。<!-- #Dialog -->
 
   > #### 详细说明
   >
@@ -516,7 +516,7 @@
 
 ### 💡 主要变更
 
-- [+] `Lightbox` 组件新增 `options` prop，允许指定视频项播放时的 `muted`/`autoplay`/`controls` 等配置。<!-- #Lightbox -->
+- [+] `Lightbox` 组件新增 `options` prop，允许指定视频项播放时的 `muted` / `autoplay` / `controls` 等配置。<!-- #Lightbox -->
 - [+] `Uploader` 组件新增 `preview-options` prop，允许指定预览时调用的 `Lightbox` 的配置。<!-- #Uploader -->
 
 ### 🐞 问题修复
@@ -543,14 +543,14 @@
 
 ### ⚠️ 非兼容性变更
 
-- [+] `Uploader` 组件新增了 `m`/`s` 两种 `ui` 属性值，默认尺寸有所增大。<!-- #Uploader -->
+- [+] `Uploader` 组件新增了 `m` / `s` 两种 `ui` 属性值，默认尺寸有所增大。<!-- #Uploader -->
 
 ### 💡 主要变更
 
 - [+] 新增了 `Lightbox` 组件。<!-- #Lightbox -->
-- [+] 为 `Dropdown`/`Select`/`SearchBox`/`DatePicker`/`TimePicker`/`Autocomplete` 组件新增可受控 prop `expanded` 和 `toggle` 事件，用来控制其下拉浮层的展开/收起。<!-- #Dropdown -->
+- [+] 为 `Dropdown` / `Select` / `SearchBox` / `DatePicker` / `TimePicker` / `Autocomplete` 组件新增可受控 prop `expanded` 和 `toggle` 事件，用来控制其下拉浮层的展开/收起。<!-- #Dropdown -->
 - [+] `Table` 组件新增 `loading` prop，展示“加载中”状态。<!-- #Table -->
-- [+] `Table`/`Column` 组件新增 `allowed-orders` prop，支持定制允许的顺序。<!-- #Table -->
+- [+] `Table` / `Column` 组件新增 `allowed-orders` prop，支持定制允许的顺序。<!-- #Table -->
 - [+] `Select` 组件新增 `trigger` 插槽，用于自定义下拉触发区域。<!-- #Select -->
 - [+] `Select` 组件新增 `selected` 插槽，用于自定义下拉按钮已选项回填内容的展示。<!-- #Select -->
 
@@ -558,7 +558,7 @@
     >
     > `label` 插槽仅针对收起状态下的已选项回填内容，而 `selected` 插槽包括了展开状态下的已选项回填内容。
 
-- [+] `Uploader` 组件新增了 `type` prop 的可选值 `video`/`media`，用来支持视频上传的场景。<!-- #Uploader -->
+- [+] `Uploader` 组件新增了 `type` prop 的可选值 `video` / `media`，用来支持视频上传的场景。<!-- #Uploader -->
 - [+] `Uploader` 组件新增了 `entries` prop，内置了多入口操作的功能，类型和 `controls` 的返回值相同。<!-- #Uploader -->
 - [^] 为 `Loading` 组件添加了新的动效。<!-- #Loading -->
 
@@ -594,14 +594,14 @@
 ### 💡 主要变更
 
 - [+] `DatePicker` 组件新增 `parse` prop 用于指定如何从输入值解析日期对象。<!-- #DatePicker -->
-- [+] `DatePicker` 组件新增 `selectstart`/`selectprogress` 事件，用于对外同步日期范围选择的过程信息。<!-- #DatePicker -->
-- [+] `Calendar`/`DatePicker` 组件的 `disabeldDate` prop 在日期范围选择过程中，新增第二个参数，表示当前第一个选择日期。<!-- #Calendar -->
-- [+] `Input`/`Textarea` 组件新增 prop `get-length`，用于自定义计算已输入字符串长度的逻辑。<!-- #Input #Textarea -->
+- [+] `DatePicker` 组件新增 `selectstart` / `selectprogress` 事件，用于对外同步日期范围选择的过程信息。<!-- #DatePicker -->
+- [+] `Calendar` / `DatePicker` 组件的 `disabeldDate` prop 在日期范围选择过程中，新增第二个参数，表示当前第一个选择日期。<!-- #Calendar -->
+- [+] `Input` / `Textarea` 组件新增 prop `get-length`，用于自定义计算已输入字符串长度的逻辑。<!-- #Input #Textarea -->
 
 ### 🐞 问题修复
 
 - [^] 修复 `Schedule` 组件快捷选项由于引用被修改导致的数据混乱。<!-- #Schedule -->
-- [^] 修复了 `Dialog`/`Table` 组件在极端条件下触发 Firefox 图层合成 bug 的问题。<!-- #Dialog #Table -->
+- [^] 修复了 `Dialog` / `Table` 组件在极端条件下触发 Firefox 图层合成 bug 的问题。<!-- #Dialog #Table -->
 - [^] `Overlay` 组件现在不仅在初始化时查找 `target` 对应元素，而是在每次显示时均查找，使得定位逻辑不再依赖对应元素的渲染顺序。<!-- #Overlay -->
 - [^] 修正了 `Select` 组件中已选的 `disabled` 选项可以被删除的问题。<!-- #Select -->
 - [^] 修正了 `Select` 组件中内联 `Option` 的 `disabled` prop 不生效的问题。<!-- #Select -->
@@ -663,25 +663,25 @@
 
 ### 💡 主要变更
 
-- [+] `NumberInput` 组件增加 `parse`/`format` prop，用来对输入的内容进行格式化输出。<!-- #NumberInput -->
+- [+] `NumberInput` 组件增加 `parse` / `format` prop，用来对输入的内容进行格式化输出。<!-- #NumberInput -->
 - [+] `Tag` 组件增加 `removed` prop，可以通过外部控制是否被移除。<!-- #Tag -->
 
 ## 2.0.0-beta.3
 
 ### ⚠️ 非兼容性变更
 
-- [^] `veui-theme-dls-icons` 中，`triangle-up`/`triangle-right`/`triangle-down`/`triangle-left` 分别重命名为 `caret-up`/`caret-right`/`caret-down`/`caret-left`。<!-- #veui-theme-dls-icons -->
+- [^] `veui-theme-dls-icons` 中，`triangle-up` / `triangle-right` / `triangle-down` / `triangle-left` 分别重命名为 `caret-up` / `caret-right` / `caret-down` / `caret-left`。<!-- #veui-theme-dls-icons -->
 
 ### 💡 主要变更
 
-- [^] 所有支持 `v-model`/`.sync` 的 prop 现在均支持完全受控模式。<!-- #Accordion #Alert #AlertBox #CheckButtonGroup #CheckboxGroup #Collapse #ConfirmBox #Dialog #Drawer #Input #NumberInput #Progress #PromptBox #Radio #SearchBox #Select #Slider #Switch #Table #Tabs #Tag #Textarea #TimePicker #Toast #Tooltip #Transfer #Tree #Uploader -->
+- [^] 所有支持 `v-model` / `.sync` 的 prop 现在均支持完全受控模式。<!-- #Accordion #Alert #AlertBox #CheckButtonGroup #CheckboxGroup #Collapse #ConfirmBox #Dialog #Drawer #Input #NumberInput #Progress #PromptBox #Radio #SearchBox #Select #Slider #Switch #Table #Tabs #Tag #Textarea #TimePicker #Toast #Tooltip #Transfer #Tree #Uploader -->
 - [+] `Input` 组件增加 `placeholder` 插槽。<!-- #Input -->
 - [^] `Select` 组件的 `label` 插槽现在可以对 `multiple` 及 `searchable` 的状态生效了。<!-- #Select -->
 
 ### 🐞 问题修复
 
 - [^] 修复 `Icon` 组件 `name` 为 `null` 时报错的问题。<!-- #Icon -->
-- [^] 修复 `Select`/`Slider`/`Tabs`/`InputGroup`/`Collapse` 等组件样式细节。<!-- #Select #Slider #Tabs #InputGroup #Collapse -->
+- [^] 修复 `Select` / `Slider` / `Tabs` / `InputGroup` / `Collapse` 等组件样式细节。<!-- #Select #Slider #Tabs #InputGroup #Collapse -->
 - [^] 修复 `Label` 组件 `for` prop 不支持传入组件/元素的问题。<!-- #Label -->
 
 ## 2.0.0-beta.2
@@ -718,32 +718,32 @@
 
   | 组件 | 删除 | 新增 |
   | -- | -- | -- |
-  | `Button` | - | `normal`/`basic`/`aux`/`square` |
-  | `Dropdown` | - | `basic`/`normal` |
-  | `Field` | `micro`/`tiny`/`small`/`large` | `xs`/`s`/`m`/`l` |
-  | `Table` | - | `compact`/`loose`/`normal` |
-  | `Tabs` | - | `simple`/`strong` |
+  | `Button` | - | `normal` / `basic` / `aux` / `square` |
+  | `Dropdown` | - | `basic` / `normal` |
+  | `Field` | `micro` / `tiny` / `small` / `large` | `xs` / `s` / `m` / `l` |
+  | `Table` | - | `compact` / `loose` / `normal` |
+  | `Tabs` | - | `simple` / `strong` |
   | `Tag` | `borderless` | `bordered` |
 
   其中，按钮默认样式变为 `normal`，原默认样式现对应为 `basic`。
 
-- [^] 将 `ButtonGroup`/`RadioGroup`/`CheckboxGroup`/`RadioButtonGroup`/`CheckButtonGroup` 组件的每个项目的作用域插槽从 `default` 更名为 `item`。后续使用时需要用 `<template #item="...">...</template>` 自定义项目内容。<!-- #ButtonGroup #RadioGroup #CheckboxGroup #RadioButtonGroup #CheckButtonGroup -->
+- [^] 将 `ButtonGroup` / `RadioGroup` / `CheckboxGroup` / `RadioButtonGroup` / `CheckButtonGroup` 组件的每个项目的作用域插槽从 `default` 更名为 `item`。后续使用时需要用 `<template #item="...">...</template>` 自定义项目内容。<!-- #ButtonGroup #RadioGroup #CheckboxGroup #RadioButtonGroup #CheckButtonGroup -->
 - [-] 移除了 `GridContainer` 组件的 `flex` prop，默认行容器均使用 flex 布局，不再按条件指定。<!-- #GridContainer -->
-- [-] 移除了 `Input` 组件的 `prepend`/`append` 插槽，并将 `before`/`after` 插槽移入 `Input` 内部。原有的前后组合的场景请使用 `InputGroup` 组件进行组合输入型组件使用。<!-- #Input -->
-- [^] `NumberInput` 组件的 `prepend`/`append` 插槽重命名为 `before`/`after`。<!-- #NumberInput -->
+- [-] 移除了 `Input` 组件的 `prepend` / `append` 插槽，并将 `before` / `after` 插槽移入 `Input` 内部。原有的前后组合的场景请使用 `InputGroup` 组件进行组合输入型组件使用。<!-- #Input -->
+- [^] `NumberInput` 组件的 `prepend` / `append` 插槽重命名为 `before` / `after`。<!-- #NumberInput -->
 - [^] `Progress` 组件的 `append` 插槽重命名为 `after`。<!-- #Progress -->
-- [^] `Tree` 组件的 `item-prepend`/`item-append` 插槽重命名为 `item-before`/`item-after`。<!-- #Tree -->
+- [^] `Tree` 组件的 `item-prepend` / `item-append` 插槽重命名为 `item-before` / `item-after`。<!-- #Tree -->
 
 ### 💡 主要变更
 
 - [^] 将整体设计切换到了 D20 版本。<!-- #veui-theme-dls -->
 - [^] 新增 `Nav` 组件。<!-- #Nav -->
-- [+] `Alert` 组件的 `default`/`extra` 插槽增加参数 `close`，可用来控制提示的关闭。<!-- #Alert -->
+- [+] `Alert` 组件的 `default` / `extra` 插槽增加参数 `close`，可用来控制提示的关闭。<!-- #Alert -->
 - [+] `Alert` 组件的 `extra` 插槽增加参数 `message`。<!-- #Alert -->
 - [+] `Form` 组件新增 `actions` 插槽，用来放置操作按钮。<!-- #Form -->
 - [+] `Icon` 组件的 `name` prop 支持直接传入组件定义进行渲染，此时只支持 `spin` 属性。<!-- #Icon -->
-- [+] `OptionGroup` 组件的 `option-tag` prop 支持传入 `function`，来根据选项数据动态生成内部 `Option`/`OptionGroup` 使用的标签。<!-- #OptionGroup -->
-- [^] `Tree` 组件的 `item`/`item-before`/`item-after`/`item-label` 增加参数 `expanded` 和 `parents`。<!-- #Tree -->
+- [+] `OptionGroup` 组件的 `option-tag` prop 支持传入 `function`，来根据选项数据动态生成内部 `Option` / `OptionGroup` 使用的标签。<!-- #OptionGroup -->
+- [^] `Tree` 组件的 `item` / `item-before` / `item-after` / `item-label` 增加参数 `expanded` 和 `parents`。<!-- #Tree -->
 - [+] `Tree` 组件新增 `include-indeterminate` prop，用来指定半选状态的节点是否被计入 `checked` 结果中。<!-- #Tree -->
 
 ### 🐞 问题修复
@@ -767,7 +767,7 @@
 
 ### 🐞 问题修复
 
-- [^] 修正 `NumberInput` 在输入值被 `min`/`max` 裁切时没有正确同步变更的问题。<!-- #NumberInput -->
+- [^] 修正 `NumberInput` 在输入值被 `min` / `max` 裁切时没有正确同步变更的问题。<!-- #NumberInput -->
 
 ## 2.0.0-alpha.18
 
@@ -796,7 +796,7 @@
 ### 🐞 问题修复
 
 - [^] 修复了 `OptionGroup` 组件在使用内联写法时，动态数据源可能导致渲染结果不正确的问题。<!-- #OptionGroup -->
-- [^] 修复了 `OptionGroup` 组件的 `before`/`after` slot 在配合 `v-slot` 语法结合动态数据源时在数据变化后消失的问题。<!-- #OptionGroup -->
+- [^] 修复了 `OptionGroup` 组件的 `before` / `after` slot 在配合 `v-slot` 语法结合动态数据源时在数据变化后消失的问题。<!-- #OptionGroup -->
 
 ## 2.0.0-alpha.15
 
@@ -832,7 +832,7 @@
 ### 💡 主要变更
 
 - [+] `Autocomplete` 组件新增了 `option-label` 插槽。<!-- #Autocomplete -->
-- [+] `OptionGroup` 组件新增 `before`/`after` 插槽，用于在 `popup` 模式下在新开浮层上下插入自定义内容。<!-- #OptionGroup -->
+- [+] `OptionGroup` 组件新增 `before` / `after` 插槽，用于在 `popup` 模式下在新开浮层上下插入自定义内容。<!-- #OptionGroup -->
 
 ### 🐞 问题修复
 
@@ -973,7 +973,7 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] 使用 `Uploader` 的 `upload` prop 自定义上传过程时，参数中的回调函数 `onload`/`onprogress`/`onerror` 中第一个参数 `file` 被移除，原来提供上传结果、进度或错误信息的第二个参数成为第一个参数。<!-- #Uploader -->
+- [^] 使用 `Uploader` 的 `upload` prop 自定义上传过程时，参数中的回调函数 `onload` / `onprogress` / `onerror` 中第一个参数 `file` 被移除，原来提供上传结果、进度或错误信息的第二个参数成为第一个参数。<!-- #Uploader -->
 
   > #### 迁移指南
   >
@@ -1013,7 +1013,7 @@
 - [^] `Uploader` 没有通过文件类型校验、文件大小校验和自定义校验的文件现在会以上传失败的状态出现在文件列表中。<!-- #Uploader -->
 - [+] `Uploader` 新增 prop `picker-position`，支持图片上传模式下控制上传按钮始终保持在列表最前面还是最后面。<!-- #Uploader -->
 - [+] `Uploader` 新增可供外部调用的方法 `addFiles`，支持通过函数直接添加并上传文件。<!-- #Uploader -->
-- [+] `Menu` 组件新增了 `icon`/`before`/`after` 三个插槽。<!-- #Menu -->
+- [+] `Menu` 组件新增了 `icon` / `before` / `after` 三个插槽。<!-- #Menu -->
 
 ### 🐞 问题修复
 
@@ -1111,7 +1111,7 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] `Uploader` 组件调整为适配 DLS 实现，新增了插槽 `upload` 支持图片模式下自定义上传区域，移除 `type-invald`/`size-invalid`/`count-overflow`/`extra-operation` 这四个插槽，移除 prop `progress`，移除 `ui` 选项 `horizontal`。<!-- #Uploader -->
+- [^] `Uploader` 组件调整为适配 DLS 实现，新增了插槽 `upload` 支持图片模式下自定义上传区域，移除 `type-invald` / `size-invalid` / `count-overflow` / `extra-operation` 这四个插槽，移除 prop `progress`，移除 `ui` 选项 `horizontal`。<!-- #Uploader -->
 - [^] 用来接入多个版本 VEUI 的 `babel-plugin-veui` 与 `veui-loader` 的 `name` 选项重命名为 `alias`。<!-- #babel-plugin-veui #veui-loader -->
 - [^] `Tree` 组件的 `item-click` prop 被移除，现在点击内容区域的行为修改为：`selectable` 时切换选中，否则 `checkable` 时切换勾选，否则在有子节点时切换展开收起。<!-- #Tree -->
 
@@ -1163,16 +1163,16 @@
 - [+] 为 `veui-loader` 与 `babel-plugin-veui` 增加了自定义 `veui` 别名的功能，以允许项目同时使用多个版本的 VEUI，帮助顺利从 `veui@1` 向 `veui@2` 进行切换。详细用法见 #596。<!-- #veui-loader #babel-plugin-veui -->
 - [+] 新增 `InputGroup` 组件。<!-- #InputGroup -->
 - [+] 为 `Label` 组件增加了 `for` prop，用于显式指定被激活的输入组件。<!-- #Label -->
-- [+] 为 `Input`/`NumberInput`/`TimePicker`/`Textarea`/`Autocomplete` 组件增加 `invalid` prop，使其处于错误状态。<!-- #Input #NumberInput #TimePicker #Textarea #Autocomplete -->
-- [+] 为 `Autocomplete`/`Dropdown`/`Input`/`SearchBox`/`TimePicker` 组件新增 `clear` 事件。（#591）<!-- #Autocomplete #Dropdown #Input #SearchBox #TimePicker -->
-- [+] 为 `Dialog`/`Drawer`/`Embedded`/`PromptBox` 新增 `loading` prop，默认使确认按钮处于加载状态。<!-- #Dialog #Drawer #Embedded #PromptBox -->
+- [+] 为 `Input` / `NumberInput` / `TimePicker` / `Textarea` / `Autocomplete` 组件增加 `invalid` prop，使其处于错误状态。<!-- #Input #NumberInput #TimePicker #Textarea #Autocomplete -->
+- [+] 为 `Autocomplete` / `Dropdown` / `Input` / `SearchBox` / `TimePicker` 组件新增 `clear` 事件。（#591）<!-- #Autocomplete #Dropdown #Input #SearchBox #TimePicker -->
+- [+] 为 `Dialog` / `Drawer` / `Embedded` / `PromptBox` 新增 `loading` prop，默认使确认按钮处于加载状态。<!-- #Dialog #Drawer #Embedded #PromptBox -->
 - [+] 为 `PromptBox` 增加 `invalid` prop，会使内部的输入框处于错误状态。<!-- #PromptBox -->
-- [^] 现在 `confirm`/`prompt` 的 manager 与插件中，`ok`/`cancel` 选项函数返回 `false` 或返回的 `Promise` resolve `false` 时，将阻止对话框关闭。<!-- #$confirm #$prompt -->
-- [^] 现在 `prompt` 的 manager 与插件中，`ok`/`cancel` 选项函数会接收到输入框当前值作为第一个参数。（#593）<!-- #$prompt -->
-- [^] `DatePicker`/`Calendar` 组件样式更新到 DLS 版本。<!-- #DatePicker #Calendar -->
+- [^] 现在 `confirm` / `prompt` 的 manager 与插件中，`ok` / `cancel` 选项函数返回 `false` 或返回的 `Promise` resolve `false` 时，将阻止对话框关闭。<!-- #$confirm #$prompt -->
+- [^] 现在 `prompt` 的 manager 与插件中，`ok` / `cancel` 选项函数会接收到输入框当前值作为第一个参数。（#593）<!-- #$prompt -->
+- [^] `DatePicker` / `Calendar` 组件样式更新到 DLS 版本。<!-- #DatePicker #Calendar -->
 - [^] `DatePicker` 组件新增全局配置项 `datepicker.monthRangePlaceholder` 与 `datepicker.yearRangePlaceholder`。<!-- #DatePicker -->
 - [+] `Calendar` 组件 `viewchange` 事件参数中新增该事件触发面板的 `index` 数据。<!-- #Calendar -->
-- [+] `DatePicker`/`Calendar` 组件支持月份/年份的范围选择。<!-- #DatePicker #Calendar -->
+- [+] `DatePicker` / `Calendar` 组件支持月份/年份的范围选择。<!-- #DatePicker #Calendar -->
 - [+] `Calendar` 组件支持月份/年份的多选。<!-- #Calendar -->
 - [+] 可搜索的 `Select` 组件现在在输入过程中会对外触发 `input` 事件并携带输入内容。<!-- #Select -->
 - [+] `Select` 新增作用域插槽 `tag`，用来自定义多选情况下已选项的内容。<!-- #Select -->
@@ -1181,8 +1181,8 @@
 
 - [^] 修复 `Slider` 组件分段模式下两端缺少 marker 的问题。<!-- #Slider -->
 - [^] 修复 `Transfer` 组件中搜索功能没有正确随组件设置禁用的问题。<!-- #Transfer -->
-- [^] 修复 `Column` 的 `head`/`foot` 插槽数据更新失效的问题。<!-- #Column -->
-- [^] 优化了 `Select`/`Dropdown` 组件的键盘操作。<!-- #Select #Dropdown -->
+- [^] 修复 `Column` 的 `head` / `foot` 插槽数据更新失效的问题。<!-- #Column -->
+- [^] 优化了 `Select` / `Dropdown` 组件的键盘操作。<!-- #Select #Dropdown -->
 - [^] 优化了 `NumberInput` 组件的显示。<!-- #NumberInput -->
 - [^] 修复 `Textarea` 的 `placeholder` 没有生效的问题。<!-- #Textarea -->
 - [^] 修复 `SearchBox` 在未触发下拉提示时按下 <kbd>enter</kbd> 也不触发 `submit` 事件的问题。<!-- #SearchBox -->
@@ -1218,15 +1218,15 @@
 ### ⚠️ 非兼容性变更
 
 - [^] 用 Popper.js 替代了 Tether。`Overlay` 组件的 `options` prop（以及多个组件的 `overlay-options` prop）现在都对应于 [Popper.js 的 `options` 参数](https://popper.js.org/popper-documentation.html#new_Popper_new)。`Overlay` 的 `position` prop 在之前的版本就已经兼容了 Popper.js 的语法，所以如果之前就以 Popper.js 风格进行描述，则无需调整。见 [#574](https://github.com/ecomfe/veui/pull/574)。<!-- #Overlay -->
-- [^] `Input` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`，新的 `before`/`after` 位置在输入框外部。并且新增了 `before-label`/`after-label` 两个 slot。见 [#502](https://github.com/ecomfe/veui/issues/502)。<!-- #Input -->
-- [^] `NumberInput` 组件的 `before`/`after` slot 重命名为 `prepend`/`append`。见 [#502](https://github.com/ecomfe/veui/issues/502)。<!-- #NumberInput -->
+- [^] `Input` 组件的 `before` / `after` slot 重命名为 `prepend` / `append`，新的 `before` / `after` 位置在输入框外部。并且新增了 `before-label` / `after-label` 两个 slot。见 [#502](https://github.com/ecomfe/veui/issues/502)。<!-- #Input -->
+- [^] `NumberInput` 组件的 `before` / `after` slot 重命名为 `prepend` / `append`。见 [#502](https://github.com/ecomfe/veui/issues/502)。<!-- #NumberInput -->
 - [-] 移除 `Alert` 组件的 `close-label` 属性。<!-- #Alert -->
 - [^] `Pagination` 组件根据新的设计不再支持总数显示。<!-- #Pagination -->
 - [-] 移除已废弃的 `Pager` 组件，请使用 `Pagination` 组件代替。
 - [-] 移除 `Progress` 组件已废弃的 `precision` prop，请使用 `decimal-place` prop 代替。<!-- #Progress -->
 - [-] 移除 `Progress` 组件已废弃的 `state` prop，请使用 `status` prop 代替。<!-- #Progress -->
 - [-] 移除 `Progress` 组件已废弃的 `auto-succeed` prop，请使用 `autosucceed` prop 代替。<!-- #Progress -->
-- [-] 移除 `Schedule` 组件已废弃的 `shortcuts-display` 值 `expand`/`collapse`，请使用 `inline`/`popup` 代替。<!-- #Schedule -->
+- [-] 移除 `Schedule` 组件已废弃的 `shortcuts-display` 值 `expand` / `collapse`，请使用 `inline` / `popup` 代替。<!-- #Schedule -->
 - [-] 移除 `OptionGroup` 组件已废弃的 `position` 值 `popout`，请使用 `popup` 代替。<!-- #OptionGroup -->
 - [-] 移除 `Tooltip` 组件已废弃的 `custom` prop，请使用 `trigger: 'custom'` 代替。<!-- #Tooltip -->
 - [-] 移除 `Tree` 组件已废弃的 `expands` prop，请使用 `expanded` 代替。<!-- #Tree -->
@@ -1245,7 +1245,7 @@
 - [+] 新增了 `Drawer` 组件。<!-- #Drawer -->
 - [+] 新增了 `Embedded` 组件。<!-- #Embedded -->
 - [+] 新增了 `Anchor` 组件。<!-- #Anchor -->
-- [+] 为 `Overlay`/`Dialog` 组件新增了 `inline` prop，允许内联在内容中进行渲染。<!-- #Overlay #Dialog -->
+- [+] 为 `Overlay` / `Dialog` 组件新增了 `inline` prop，允许内联在内容中进行渲染。<!-- #Overlay #Dialog -->
 - [+] 为 `Overlay` 组件新增了 `match-width` prop，允许对于相对指定元素定位时，以目标元素宽度为浮层最小宽度。<!-- #Overlay -->
 - [+] 为 `Progress` 组件新增了 `append` slot。<!-- #Progress -->
 - [+] 为 `Alert` 组件新增了 `title`、`extra` slot。<!-- #Alert -->
@@ -1260,7 +1260,7 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] `Select`/`Input`/`Checkbox`/`Radio`/`Switch` 组件现在不会在外部数据发生变化后触发更新时抛出 `input` 或 `change` 事件。当需要始终同步数据时，则需使用 `v-model` 进行绑定。<!-- #Select #Input #Checkbox #Radio #Switch -->
+- [^] `Select` / `Input` / `Checkbox` / `Radio` / `Switch` 组件现在不会在外部数据发生变化后触发更新时抛出 `input` 或 `change` 事件。当需要始终同步数据时，则需使用 `v-model` 进行绑定。<!-- #Select #Input #Checkbox #Radio #Switch -->
 
 ### 💡 主要变更
 
@@ -1274,7 +1274,7 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] 修正 `Uploader` 组件中 `file`/`uploading`/`failure` 三个作用域插槽参数。由 `{ file: { name, src, status, index } }` 修正为 `{ name, src, status, index }`。<!-- #Uploader -->
+- [^] 修正 `Uploader` 组件中 `file` / `uploading` / `failure` 三个作用域插槽参数。由 `{ file: { name, src, status, index } }` 修正为 `{ name, src, status, index }`。<!-- #Uploader -->
 
 ### 💡 主要变更
 
@@ -1412,7 +1412,7 @@
 - [^] 修正了 `AlerBox` 和 `Tabs` 组件存在硬编码文本的问题。<!-- #AlertBox #Tabs -->
 - [^] 修正了 `Select` 和 `OptionGroup` 在使用内联组件时，作用域插槽没有生效的问题。<!-- #Select #OptionGroup -->
 - [^] 修正了 `Textarea` 在显示行号且不自动扩展时，行号滚动不同步的问题。<!-- #Textarea -->
-- [^] 修正了 `Tooltip` 组件的在 `target`/`trigger` 改变时重新绑定事件的逻辑。<!-- #Tooltip -->
+- [^] 修正了 `Tooltip` 组件的在 `target` / `trigger` 改变时重新绑定事件的逻辑。<!-- #Tooltip -->
 
 ## 1.0.0-alpha.21
 
@@ -1434,7 +1434,7 @@
 - [+] `Searchbox` 新增了 `suggestions-before` 与 `suggestions-after` 两个插槽。<!-- #SearchBox -->
 - [^] `Searchbox` 提示层只在选择选项后关闭，如果点击自定义插槽而非默认的选择选项时，提示层不再自动关闭。<!-- #SearchBox -->
 - [+] 在控制台警告中增加了组件层级信息。<!-- #veui -->
-- [+] 为 `Tree`/`FilterPanel`/`Transfer` 组件的增加了键盘交互。<!-- #Tree #FilterPanel #Transfer -->
+- [+] 为 `Tree` / `FilterPanel` / `Transfer` 组件的增加了键盘交互。<!-- #Tree #FilterPanel #Transfer -->
 - [+] 为所有支持聚焦或激活操作的组件添加了 `focus` 或 `activate` 方法。<!-- #Checkbox #CheckboxGroup #DatePicker #Dialog #Dropdown #Input #NumberInput #Overlay #Radio #RadioButtonGroup #RadioGroup #RegionPicker #Schedule #SearchBox #Slider #Switch #Textarea #Uploader -->
 - [+] 对于使用路由模式的 `Tabs` 及 `Tab` 组件，新增函数 prop `matches(current, to)` 来允许指定自定义的激活状态判断，不再需要手动在 `Tabs` 组件中控制 `index`。`Tab` 组件的 `matches` 逻辑优先于上层 `Tabs` 组件中的 `matches`。<!-- #Tabs #Tab -->
 - [+] 增加了全局配置项 `tabs.matches` 来允许全局自定义 `Tab` 组件 `matches` prop 的默认值。<!-- #Tabs -->
@@ -1445,7 +1445,7 @@
 - [^] 修复了 `Overlay` 组件的 `target` prop 类型。<!-- #Overlay -->
 - [^] 修正了主模块没有导出 `OptionGroup` 组件的问题。<!-- #OptionGroup -->
 - [^] 提前判断是否需要修正复选框 `indeterminate` 兼容性，而非在用到的组件 `mounted` 以后才判断，避免模拟的点击触发了已经定义的事件监听器。<!-- #Checkbox -->
-- [^] 去除了多余的类型判断，修复 `min`/`max` 规则失效的问题。<!-- #NumberInput -->
+- [^] 去除了多余的类型判断，修复 `min` / `max` 规则失效的问题。<!-- #NumberInput -->
 
 ## 1.0.0-alpha.19
 
@@ -1544,13 +1544,13 @@
 - [+] 增加 `longpress` 指令。<!-- #v-longpress -->
 - [+] `Dropdown` 组件增加了 `trigger` prop，来指定何时展开下拉框。<!-- #Dropdown -->
 - [+] `Dropdown` 组件增加了 `split` prop，来允许拆分指令按钮与下拉切换按钮。<!-- #Dropdown -->
-- [+] `Button` 组件增加了 `mouseenter`/`mouseleave` 事件。<!-- #Button -->
+- [+] `Button` 组件增加了 `mouseenter` / `mouseleave` 事件。<!-- #Button -->
 - [+] `NumberInput` 组件支持长按调整值。<!-- #NumberInput -->
-- [+] 增加了 `GridContainer`/`GridRow`/`GridColumn` 组件。<!-- #GridContainer #GridRow #GridColumn -->
+- [+] 增加了 `GridContainer` / `GridRow` / `GridColumn` 组件。<!-- #GridContainer #GridRow #GridColumn -->
 - [+] `Progress` 组件增加了预设 `ui` 值 `fluid`，自适应容器宽度。<!-- #Progress -->
-- [+] `Dialog` 组件增加了预设 `ui` 值 `small`/`large`/`auto`，用于指定预设宽度。<!-- #Dialog -->
-- [+] 为 `Overlay`/`Dialog`/`AlertBox`/`ConfirmBox`/`PromptBox` 组件增加了 `afterclose` 事件。<!-- #Overlay #Dialog #AlertBox #ConfirmBox #PromptBox -->
-- [^] 调整了 `alert`/`confirm`/`prompt`/`toast` 插件的接口，现在 `$alert`/`$confirm`/`$prompt`/`$toast` 均可直接作为函数调用。<!-- #alert #confirm #prompt #toast -->
+- [+] `Dialog` 组件增加了预设 `ui` 值 `small` / `large` / `auto`，用于指定预设宽度。<!-- #Dialog -->
+- [+] 为 `Overlay` / `Dialog` / `AlertBox` / `ConfirmBox` / `PromptBox` 组件增加了 `afterclose` 事件。<!-- #Overlay #Dialog #AlertBox #ConfirmBox #PromptBox -->
+- [^] 调整了 `alert` / `confirm` / `prompt` / `toast` 插件的接口，现在 `$alert` / `$confirm` / `$prompt` / `$toast` 均可直接作为函数调用。<!-- #$alert #$confirm #$prompt #$toast -->
 
 ### 🐞 问题修复
 
@@ -1586,13 +1586,13 @@
   > +    less: generateLoaders('less', { javascriptEnabled: true }),
   > ```
 
-- [^] `Dialog` 组件现在默认会在点击默认的按钮及按下 <kbd>esc</kbd> 键时关闭并通过 `.sync` 修饰符同步外部数据。并且新增 `before-close` 函数 prop 来处理需要阻止对话框关闭的情况。增加 `default`/`foot` slot 的 slot 参数 `close`，用来在重写组件 slot 时调用关闭逻辑。<!-- #Dialog -->
+- [^] `Dialog` 组件现在默认会在点击默认的按钮及按下 <kbd>esc</kbd> 键时关闭并通过 `.sync` 修饰符同步外部数据。并且新增 `before-close` 函数 prop 来处理需要阻止对话框关闭的情况。增加 `default` / `foot` slot 的 slot 参数 `close`，用来在重写组件 slot 时调用关闭逻辑。<!-- #Dialog -->
 
   > #### 迁移指南
   >
   > 对于重写 `foot` slot 处理关闭逻辑的使用方式，不会受新逻辑影响。
   >
-  > 对于监听 `ok`/`cancel` 事件并直接关闭对话框时，亦不受此改动影响。当需要阻止对话框关闭时，需要使用新增的 `before-close` 函数 prop。
+  > 对于监听 `ok` / `cancel` 事件并直接关闭对话框时，亦不受此改动影响。当需要阻止对话框关闭时，需要使用新增的 `before-close` 函数 prop。
   >
   > `before-close` prop 对应的函数类型为 `function(type: string): boolean=|Promise<boolean=>`，`type` 将会是 `Dialog` 组件关闭操作的类型，默认情况下会有 `ok` 与 `cancel`。返回值可以是一个 `boolean`，也可以是一个 resolve `boolean` 的 `Promise`，用来处理可能需要异步决定对话框关闭状态的情况。返回值或 resolve 值非 `false` 时才会关闭对话框。例如，如果我们要异步处理 `ok`，而对 `cancel` 直接关闭，可以按如下方式处理：
   >
@@ -1620,7 +1620,7 @@
   > }
   > ```
   >
-  > 对于需要重写 slot（例如添加底部按钮等）的情况，可以使用新增的 slot 参数 `close`，类型为 `function(type: string): void`，使用者只需要在合适的时机自行调用 `close` 函数即可，`type` 默认支持 `ok`/`cancel` 并会透传到 `before-close` 的流程中。例如：
+  > 对于需要重写 slot（例如添加底部按钮等）的情况，可以使用新增的 slot 参数 `close`，类型为 `function(type: string): void`，使用者只需要在合适的时机自行调用 `close` 函数即可，`type` 默认支持 `ok` / `cancel` 并会透传到 `before-close` 的流程中。例如：
   >
   > ```html
   > <veui-dialog :open.sync="dialogOpen" :before-close="submit">
@@ -1632,8 +1632,8 @@
   > ```
 
 - [^] `Pagination` 组件的 `redirect` 事件回调参数从 `({ page, event })` 调整为 `(page, event)`。<!-- #Pagination -->
-- [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options`/`option` 更名为 `items`/`item`。<!-- #FilterPanel -->
-- [^] 调整 `resize` 指令的默认每次都触发回调，增加 `throttle`/`debounce`/`leading` 三个 modifier。<!-- #v-resize -->
+- [^] 调整 `FilterPanel` 组件和 `Tree` 组件的对外接口参数名，统一将 `options` / `option` 更名为 `items` / `item`。<!-- #FilterPanel -->
+- [^] 调整 `resize` 指令的默认每次都触发回调，增加 `throttle` / `debounce` / `leading` 三个 modifier。<!-- #v-resize -->
 - [^] 通过 `prompt` manager 以指令式调用输入弹框功能时，现在返回的 `Promise` 在确认提交与取消时 `resolve` 的值分别是字符串和 `null`，与原生全局 `prompt` 方法一致（原来是 `{ isOk: true, value }` 与 `false`）。<!-- #$prompt -->
 - [^] `Button` 组件加载中的文本修改为默认 slot 的内容。<!-- #Button -->
 - [^] 调整 `rule` 出错信息变量模板匹配语法从 `%{ruleValue}` 修为 `${ruleValue}`，旧语法将在 `1.0.0` 移除。<!-- #veui -->
@@ -1663,9 +1663,9 @@
 - [^] 去除了 `Steps` 组件的多余外边距。<!-- #Steps -->
 - [^] 去除了 `Progress` 组件多余的内边距。<!-- #Progress -->
 - [^] 修正了 `Progress` 组件的 `auto-succeed` prop 的逻辑。<!-- #Progress -->
-- [^] 修正了 `NumberInput` 组件的 `min`/`max` prop 有时失效的问题。<!-- #NumberInput -->
+- [^] 修正了 `NumberInput` 组件的 `min` / `max` prop 有时失效的问题。<!-- #NumberInput -->
 - [^] 修正了 `Alert` 组件多消息导航和关闭按钮不会同时显示的问题。<!-- #Alert -->
-- [^] 修正了 `alert`/`confirm`/`prompt` plugin 不能正常工作的问题。<!-- #$alert #$confirm #$prompt -->
+- [^] 修正了 `alert` / `confirm` / `prompt` plugin 不能正常工作的问题。<!-- #$alert #$confirm #$prompt -->
 - [^] 修复了 `Table` 组件 `foot` slot 的渲染。<!-- #Table -->
 
 ## 1.0.0-alpha.14
@@ -1673,7 +1673,7 @@
 ### ⚠️ 非兼容性变更
 
 - [^] `Progress` 组件的 `state` prop 更名为 `status`。`state` 将在 `1.0.0` 移除。<!-- #Progress -->
-- [^] `Schedule` 组件的 `shortcuts-display` prop 值 `expand`/`collapse` 分别更名为 `inline`/`popup`。旧的值将在 `1.0.0` 移除。<!-- #Schedule -->
+- [^] `Schedule` 组件的 `shortcuts-display` prop 值 `expand` / `collapse` 分别更名为 `inline` / `popup`。旧的值将在 `1.0.0` 移除。<!-- #Schedule -->
 - [^] `Schedule` 组件的 `header` slot 更名为 `header-content`，新 `header` slot 现在包括顶部内容的整个容器。<!-- #Schedule -->
 
 ### 💡 主要变更
@@ -1798,7 +1798,7 @@
   > </script>
   > ```
 
-- [+] `NumberInput` 新增 `max`/`min` prop，优先从直接父组件 `Field` 的 prop `rule` 中继承 `max`/`min` rule 的值。<!-- #NumberInput -->
+- [+] `NumberInput` 新增 `max` / `min` prop，优先从直接父组件 `Field` 的 prop `rule` 中继承 `max` / `min` rule 的值。<!-- #NumberInput -->
 - [+] `Input` 新增 `clearable` prop，提供清除输入内容的功能；补充 `placeholder` prop 对 IE9 的支持。<!-- #Input -->
 - [^] `Uploader` 组件的事件 `success`、`failure`、`remove` 增加参数：当前处理文件的序号。<!-- #Uploader -->
 - [^] `Uploader` 组件在重新上传的时候不再触发 `remove` 事件。<!-- #Uploader -->
@@ -1821,7 +1821,7 @@
 
 ### ⚠️ 非兼容性变更
 
-- [^] `AlertBox` 组件，之前只能通过 `ui` prop 传递类型信息（ `success`/`error`/`info` ），现在和 `Toast` 保持风格统一，使用 `type` prop 传递类型信息。<!-- #AlertBox -->
+- [^] `AlertBox` 组件，之前只能通过 `ui` prop 传递类型信息（ `success` / `error` / `info` ），现在和 `Toast` 保持风格统一，使用 `type` prop 传递类型信息。<!-- #AlertBox -->
 
   > #### 迁移指南
   >
@@ -1836,7 +1836,7 @@
 ### 💡 主要变更
 
 - [+] 新增了 `NumberInput` 组件。<!-- #NumberInput -->
-- [+] 为 `Input` 增加了 `before`/`after` slot，提供扩展的空间。<!-- #Input -->
+- [+] 为 `Input` 增加了 `before` / `after` slot，提供扩展的空间。<!-- #Input -->
 - [+] 为 `Select` 增加了 `filter` prop，用来过滤下拉内容。<!-- #Select -->
 - [+] 为 `OptionGroup` 增加了 `position` prop，用来指定在弹出菜单中显示。<!-- #OptionGroup -->
 - [+] 为 `Option` 增加了 `hidden` prop。<!-- #Option -->
@@ -1857,7 +1857,7 @@
 - [^] 修复了 `FocusManager` 在 `trap` 模式下会自动聚焦最后一个元素的问题。<!-- #veui -->
 - [^] 修复了 `Textarea` 组件在 IE9 下的兼容性问题。<!-- #Textarea -->
 - [^] 修复了 `Field` 组件使用 `slot` 时 `class` 判断遗漏的问题。<!-- #Field -->
-- [^] 修复了 `pattern`/`numeric` 校验规则的优先级，使 `pattern` 置于 `numeric` 之后。<!-- #veui -->
+- [^] 修复了 `pattern` / `numeric` 校验规则的优先级，使 `pattern` 置于 `numeric` 之后。<!-- #veui -->
 - [^] 去除了 `rule` 校验失败信息中包含部分校验成功的无用信息。<!-- #veui -->
 - [^] 去除了 `Input` 部分过时的 prop。<!-- #Input -->
 
@@ -1947,7 +1947,7 @@
 
 - [+] 新增 `Textarea` 组件。<!-- #Textarea -->
 - [+] `Column` 组件新增 prop `span`，用来指定行/列方向合并单元格的逻辑。<!-- #Column -->
-- [^] `Column` 组件的默认 scoped slot 传入的参数现在会将列表项的数据展开，不需要多加一层 `item` 进行访问（与其它类似数据源的组件一致，需注意数据源对象中不能使用 `item`/`index` 作为属性名）。<!-- #Column -->
+- [^] `Column` 组件的默认 scoped slot 传入的参数现在会将列表项的数据展开，不需要多加一层 `item` 进行访问（与其它类似数据源的组件一致，需注意数据源对象中不能使用 `item` / `index` 作为属性名）。<!-- #Column -->
 - [+] `Table` 组件新增 prop `key-field`，指明用哪一个 field 作为表格数据的键。当 `Table` 为 `selectable` 时，可以用来指定选择列纵向合并单元格的逻辑需要参照的列，以及选择逻辑返回的值来自哪一列。<!-- #Table -->
 - [+] 优化 `Column` 组件注册到 `Table` 的逻辑，支持在模板中通过 `v-for`、`v-if` 等动态配置，并且将注册过程移入 `created` 生命周期以支持服务端渲染。<!-- #Column -->
 - [^] `Breadcrumb` 组件 `routes` 数据项的文本域重命名为 `label`，保留了 `text` 的用法进行兼容。<!-- #Breadcrumb -->
@@ -2221,11 +2221,11 @@
 - [+] 将样式代码独立为单独的包 `veui-theme-dux`。<!-- #veui-theme-dux -->
 - [+] 使用 `babel-plugin-veui` 识别、改写对组件的引用，无缝引入可配置的样式文件包。<!-- #babel-plugin-veui -->
 - [+] 增加 `Form`、`Field`、`Fieldset` 组件。<!-- #Form #Field #Fieldset -->
-- [^] 根据表单逻辑修改了输入型控件 `disabled`/`readonly` 的实际生效方式，最终生效的值更改为计算属性 `realDisalbed`/`realReadonly`。
+- [^] 根据表单逻辑修改了输入型控件 `disabled` / `readonly` 的实际生效方式，最终生效的值更改为计算属性 `realDisalbed` / `realReadonly`。
 - [+] 增加 `Tabs` 和 `Tab` 组件。<!-- #Tabs #Tab -->
 - [+] 增加 `Switch` 组件。<!-- #Switch -->
 - [^] `Checkbox` 新增 `true-value` 和 `false-value` prop，调整相应逻辑。<!-- #Checkbox -->
-- [+] 增加指令式调用 `alert`/`confirm`/`prompt` 的功能。
+- [+] 增加指令式调用 `alert` / `confirm` / `prompt` 的功能。
 - [^] `Pager` 组件新增 `pageSizes` prop，用来指定可选的页数。<!-- #Pager -->
 
 ## 0.1.3
