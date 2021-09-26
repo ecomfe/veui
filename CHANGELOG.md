@@ -857,108 +857,111 @@
 
 - [-] 移除了 `babel-preset-veui`。<!-- #babel-preset-veui -->
 - [-] 移除了 `veui-theme-one`。<!-- #veui-theme-one -->
-- [^] 对 `Tabs` 组件进行了重写，其中引入的非兼容性变更如下：<!-- #Tabs -->
+- [-] 移除了 `Tabs` 组件的 `index` prop，现在控制激活标签页只能使用 `active` prop，并支持可受控模式。<!-- #Tabs -->
 
-  - [-] 移除了 `index` prop，现在控制激活标签页只能使用 `active` prop，并支持可受控模式。
-  - [^] `tabs-extra` slot 更名为 `extra`，且仅包括提示区域的内容，不包括添加按钮。
-  - [-] 移除了 `tabs-extra-label` 与 `tabs-extra-tip` slot。
-  - [^] `tab-item` scoped slot 现在包含整个按钮/链接，方便替换为自定义实现。
-  - [-] 移除了 `tab-item-extra` scoped slot，`removable` 的 `Tab` 组件始终显示移除按钮。
-  - [^] 在路由模式下，不再自动输出 `<router-view>` 组件，需要通过 `Tab` 的 `default` slot 或 `Tabs` 新增的 `panel` slot 中进行输出。
+  > #### 使用指南
+  >
+  > ##### 使用 `active` prop 与 `change` 事件完全外部控制激活状态
+  >
+  > ```html
+  > <veui-tabs :active="active" @change="tab => active = tab.name">
+  >   <veui-tab label="A" name="a">Content A</veui-tab>
+  >   <veui-tab label="B" name="b">Content B</veui-tab>
+  >   <veui-tab label="C" name="c">Content C</veui-tab>
+  > </veui-tabs>
+  > ```
+  > ##### 使用 `active.sync` 双向同步激活状态
+  >
+  > ```html
+  > <veui-tabs :active.sync="active">
+  >   <veui-tab label="A" name="a">Content A</veui-tab>
+  >   <veui-tab label="B" name="b">Content B</veui-tab>
+  >   <veui-tab label="C" name="c">Content C</veui-tab>
+  > </veui-tabs>
+  > ```
+  > ##### 激活状态完全由组件内部控制
+  >
+  > ```html
+  > <veui-tabs>
+  >   <veui-tab label="A">Content A</veui-tab>
+  >   <veui-tab label="B">Content B</veui-tab>
+  >   <veui-tab label="C">Content C</veui-tab>
+  > </veui-tabs>
+  > ```
 
-  其余变更：
+- [^] `Tabs` 组件的 `tabs-extra` slot 更名为 `extra`，且仅包括提示区域的内容，不包括添加按钮。<!-- #Tabs -->
+- [-] 移除了 `Tabs` 组件的 `tabs-extra-label` 与 `tabs-extra-tip` slot。<!-- #Tabs -->
+- [^] `Tabs` 组件的 `tab-item` scoped slot 现在包含整个按钮/链接，方便替换为自定义实现。<!-- #Tabs -->
+- [-] 移除了`Tabs` 组件的 `tab-item-extra` scoped slot，`removable` 的 `Tab` 组件始终显示移除按钮。<!-- #Tabs -->
+- [^] `Tabs` 组件在路由模式下，不再自动输出 `<router-view>` 组件，需要通过 `Tab` 的 `default` slot 或 `Tabs` 新增的 `panel` slot 中进行输出。<!-- #Tabs -->
 
-  - [+] 新增了 <del>`tab-item-label`</del><ins datetime="2020-10-21" title="修正于 2020-10-21">`tab-label`</ins> scoped slot，用于仅自定义标签项内容。
-  - [+] 新增 `panel` slot，用于指定标签下方面板内的自定义内容。
-  - [+] 新增 `change` 事件，回调参数为 `tab` 对像，包含 `name`、`label`、`to`、`status` 等字段。
-  - [+] `Tab` 组件新增了 `item` slot，用于自定义标签内容，与 `Tabs` 组件的 `tab-item` 对应，优先级更高。
-  - [+] `Tab` 组件新增了 `label` slot，用于自定义标签内容，与 `Tabs` 组件的 `tab-label` 对应，优先级更高。
+  > #### 使用指南
+  >
+  > ##### （嵌套）路由模式
+  >
+  > 在之前的版本，如果 `Tab` 组件的 `default` slot 未传入任何内容，路由模式下 VEUI 会自动在标签内容容器内渲染 `<router-view>`。这导致在不使用嵌套路由时或是希望灵活控制 `<router-view>` 位置时产生额外的问题。所以在这个版本中移除了这个逻辑，用户可以使用 `Tabs` 的 `panel` slot 来统一在标签内容容器中输出 `<router-view>`，也可以在某些 `Tab` 的 `default` slot 中输出 `<router-view>` 及额外内容来覆盖全局的 `panel` slot，甚至可以将 `<router-view>` 输出到其它任意合适的位置。
+  >
+  > ```html
+  > <veui-tabs>
+  >   <veui-tab label="A" to="content/a"/>
+  >   <veui-tab label="B" to="content/b"/>
+  >   <veui-tab label="C" to="content/c">
+  >     <h3>Content C</h3>
+  >     <router-view/>
+  >   </veui-tab>
+  >   <template #panel>
+  >     <router-view/>
+  >   </template>
+  > </veui-tabs>
+  > ```
 
-    > #### 使用指南
-    >
-    > ##### 使用 `active` prop 与 `change` 事件完全外部控制激活状态
-    >
-    > ```html
-    > <veui-tabs :active="active" @change="tab => active = tab.name">
-    >   <veui-tab label="A" name="a">Content A</veui-tab>
-    >   <veui-tab label="B" name="b">Content B</veui-tab>
-    >   <veui-tab label="C" name="c">Content C</veui-tab>
-    > </veui-tabs>
-    > ```
-    > ##### 使用 `active.sync` 双向同步激活状态
-    >
-    > ```html
-    > <veui-tabs :active.sync="active">
-    >   <veui-tab label="A" name="a">Content A</veui-tab>
-    >   <veui-tab label="B" name="b">Content B</veui-tab>
-    >   <veui-tab label="C" name="c">Content C</veui-tab>
-    > </veui-tabs>
-    > ```
-    > ##### 激活状态完全由组件内部控制
-    >
-    > ```html
-    > <veui-tabs>
-    >   <veui-tab label="A">Content A</veui-tab>
-    >   <veui-tab label="B">Content B</veui-tab>
-    >   <veui-tab label="C">Content C</veui-tab>
-    > </veui-tabs>
-    > ```
-    >
-    > ##### （嵌套）路由模式
-    >
-    > 在之前的版本，如果 `Tab` 组件的 `default` slot 未传入任何内容，路由模式下 VEUI 会自动在标签内容容器内渲染 `<router-view>`。这导致在不使用嵌套路由时或是希望灵活控制 `<router-view>` 位置时产生额外的问题。所以在这个版本中移除了这个逻辑，用户可以使用 `Tabs` 的 `panel` slot 来统一在标签内容容器中输出 `<router-view>`，也可以在某些 `Tab` 的 `default` slot 中输出 `<router-view>` 及额外内容来覆盖全局的 `panel` slot，甚至可以将 `<router-view>` 输出到其它任意合适的位置。
-    >
-    > ```html
-    > <veui-tabs>
-    >   <veui-tab label="A" to="content/a"/>
-    >   <veui-tab label="B" to="content/b"/>
-    >   <veui-tab label="C" to="content/c">
-    >     <h3>Content C</h3>
-    >     <router-view/>
-    >   </veui-tab>
-    >   <template #panel>
-    >     <router-view/>
-    >   </template>
-    > </veui-tabs>
-    > ```
-    >
-    > ##### 自定义标签项内容
-    >
-    > 可以使用 `Tabs` 的 `tab-item` scoped slot 来自定义所有标签项的内容，也可以使用 `Tab` 的 `item` scoped slot 来自定义单个标签项内容（单个内容将覆盖整体的内容）。
-    >
-    > ```html
-    > <veui-tabs>
-    >   <veui-tab label="A">
-    >     Content A
-    >     <template #item="tab">
-    >       <button
-    >         type="button"
-    >         class="foo-btn"
-    >         :disabled="tab.disabled"
-    >         v-bind="tab.attrs"
-    >         @click="tab.activate"
-    >       >
-    >         {{ `${tab.label} ${tab.active ? '✅' : '' }` }}
-    >       </button>
-    >     </template>
-    >   </veui-tab>
-    >   <veui-tab label="B">Content B</veui-tab>
-    >   <veui-tab label="C">Content C</veui-tab>
-    > </veui-tabs>
-    > ```
-    >
-    > 如果只想定义文本区域的内容（不需重写点击激活等逻辑），请使用 `Tabs` 的 `tab-label` 或 `Tab` 的 `label` scoped slot，用法类似。
-    >
-    > ```html
-    > <veui-tabs>
-    >   <veui-tab label="A">
-    >     Content A
-    >     <template #label="tab">Content A {{ `${tab.active ? '✅' : '' }` }}</template>
-    >   </veui-tab>
-    >   <veui-tab label="B">Content B</veui-tab>
-    >   <veui-tab label="C">Content C</veui-tab>
-    > </veui-tabs>
-    > ```
+### 💡 主要变更
+
+- [+] 新增了 `Tabs` 组件的 `tab-label` scoped slot，用于仅自定义标签项内容。
+- [+] 新增 `Tabs` 组件的 `panel` slot，用于指定标签下方面板内的自定义内容。
+- [+] 新增 `Tabs` 组件的 `change` 事件，回调参数为 `tab` 对像，包含 `name`、`label`、`to`、`status` 等字段。
+- [+] 新增 `Tab` 组件的 `item` slot，用于自定义标签内容，与 `Tabs` 组件的 `tab-item` 对应，优先级更高。
+- [+] 新增 `Tab` 组件的 `label` slot，用于自定义标签内容，与 `Tabs` 组件的 `tab-label` 对应，优先级更高。
+
+  > #### 使用指南
+  >
+  > ##### 自定义标签项内容
+  >
+  > 可以使用 `Tabs` 的 `tab-item` scoped slot 来自定义所有标签项的内容，也可以使用 `Tab` 的 `item` scoped slot 来自定义单个标签项内容（单个内容将覆盖整体的内容）。
+  >
+  > ```html
+  > <veui-tabs>
+  >   <veui-tab label="A">
+  >     Content A
+  >     <template #item="tab">
+  >       <button
+  >         type="button"
+  >         class="foo-btn"
+  >         :disabled="tab.disabled"
+  >         v-bind="tab.attrs"
+  >         @click="tab.activate"
+  >       >
+  >         {{ `${tab.label} ${tab.active ? '✅' : '' }` }}
+  >       </button>
+  >     </template>
+  >   </veui-tab>
+  >   <veui-tab label="B">Content B</veui-tab>
+  >   <veui-tab label="C">Content C</veui-tab>
+  > </veui-tabs>
+  > ```
+  >
+  > 如果只想定义文本区域的内容（不需重写点击激活等逻辑），请使用 `Tabs` 的 `tab-label` 或 `Tab` 的 `label` scoped slot，用法类似。
+  >
+  > ```html
+  > <veui-tabs>
+  >   <veui-tab label="A">
+  >     Content A
+  >     <template #label="tab">Content A {{ `${tab.active ? '✅' : '' }` }}</template>
+  >   </veui-tab>
+  >   <veui-tab label="B">Content B</veui-tab>
+  >   <veui-tab label="C">Content C</veui-tab>
+  > </veui-tabs>
+  > ```
 
 ### 🐞 问题修复
 
