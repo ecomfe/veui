@@ -95,6 +95,9 @@ export default {
         }
       })
     },
+    hasRouteItem () {
+      return this.items.some(({ to }) => !!to)
+    },
     activeTab () {
       let active = this.realActive
       return (
@@ -107,7 +110,7 @@ export default {
       return findIndex(this.items, tab => tab === this.activeTab)
     },
     matchedTab () {
-      if (!this.$route || !this.items.some(({ to }) => to)) {
+      if (!this.$route || !this.hasRouteItem) {
         return null
       }
 
@@ -133,6 +136,14 @@ export default {
       this.scrollTimer = setTimeout(() => {
         this.scrollTabIntoView(tab)
       })
+    },
+    $route (value) {
+      if (value && this.hasRouteItem) {
+        let newValue = this.matchedTab
+          ? this.matchedTab.name || this.matchedTab.id
+          : null
+        this.commit('active', newValue)
+      }
     }
   },
   mounted () {

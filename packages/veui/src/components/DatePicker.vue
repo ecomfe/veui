@@ -276,7 +276,8 @@ export default {
       type: [Array, Date]
     },
     clearable: Boolean,
-    placeholder: String,
+    // array for range date-picker
+    placeholder: [String, Array],
     format: {
       type: [String, Function]
     },
