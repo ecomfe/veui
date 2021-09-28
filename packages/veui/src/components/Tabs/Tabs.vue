@@ -15,7 +15,8 @@ import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle, pick } from 'lodash'
 
 let tabs = useParent('tabs', {
-  childrenKey: 'items'
+  childrenKey: 'items',
+  onBeforeRemoveChild: 'handleRemoveChild'
 })
 
 config.defaults(
@@ -256,9 +257,12 @@ export default {
         return
       }
 
-      let tab = this.items[index === 0 ? 0 : index - 1]
+      let tab = this.items[index === 0 ? 1 : index - 1]
       if (tab) {
         this.commit('active', tab.name || tab.id)
+      } else {
+        // 当前的已经是最后了，清空 active
+        this.commit('active', null)
       }
     }
   },
