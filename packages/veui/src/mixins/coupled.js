@@ -3,7 +3,10 @@ import { getTypedAncestor } from '../utils/helper'
 import { getIndexOfType } from '../utils/context'
 import '../common/uiTypes'
 
-export function useParent (type, { childrenKey = 'items' } = {}) {
+export function useParent (
+  type,
+  { childrenKey = 'items', onBeforeRemoveChild } = {}
+) {
   return {
     uiTypes: [type],
     data () {
@@ -33,6 +36,9 @@ export function useParent (type, { childrenKey = 'items' } = {}) {
         return index
       },
       removeChildByIndex (index) {
+        if (typeof this[onBeforeRemoveChild] === 'function') {
+          this[onBeforeRemoveChild](index)
+        }
         this.$data.__coupled_children__.splice(index, 1)
       },
       findChildById (id) {
@@ -124,10 +130,6 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
       }
 
       let index = parent.findChildIndexById(this.childId)
-
-      if (typeof parent.handleRemoveChild === 'function') {
-        parent.handleRemoveChild(index)
-      }
 
       parent.removeChildByIndex(index)
     }

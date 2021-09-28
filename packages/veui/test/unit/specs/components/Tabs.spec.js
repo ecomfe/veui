@@ -300,43 +300,55 @@ describe('components/Tabs', () => {
     let tabs = wrapper.findAll('.veui-tabs-item')
     let btns = wrapper.findAll('.veui-tabs-item-remove')
     expect(tabs.at(1).classes()).to.include('veui-tabs-item-active')
-    btns.at(1).trigger('click')
 
+    btns.at(1).trigger('click')
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
     btns = wrapper.findAll('.veui-tabs-item-remove')
     expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
     expect(tabs.at(1).text()).to.equal('#3')
-    btns.at(2).trigger('click')
+    expect(vm.active).to.eql(vm.tabs[0].name)
 
+    btns.at(2).trigger('click')
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
     expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
+    expect(vm.active).to.eql(vm.tabs[0].name)
     expect(tabs.at(2).text()).to.equal('#5')
-    vm.active = '5'
 
+    vm.active = '5'
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
     btns = wrapper.findAll('.veui-tabs-item-remove')
     expect(tabs.at(2).classes()).to.include('veui-tabs-item-active')
-    btns.at(2).trigger('click')
+    expect(vm.active).to.eql(vm.tabs[2].name)
 
+    btns.at(2).trigger('click')
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
     expect(tabs.at(1).classes()).to.include('veui-tabs-item-active')
+    expect(vm.active).to.eql(vm.tabs[1].name)
+
+    // 删完
+    btns = wrapper.findAll('.veui-tabs-item-remove')
+    btns.at(0).trigger('click')
+    await vm.$nextTick()
+    btns = wrapper.findAll('.veui-tabs-item-remove')
+    btns.at(0).trigger('click')
+    await vm.$nextTick()
+    expect(vm.active).to.eql(null)
 
     let add = wrapper.find('.veui-tabs-add')
     add.trigger('click')
-
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
-    expect(tabs.at(2).text()).to.equal('#6')
+    expect(tabs.at(0).text()).to.equal('#6')
 
+    add = wrapper.find('.veui-tabs-add')
     add.trigger('click')
-
     await vm.$nextTick()
     tabs = wrapper.findAll('.veui-tabs-item')
-    expect(tabs.at(3).text()).to.equal('#7')
+    expect(tabs.at(1).text()).to.equal('#7')
 
     wrapper.destroy()
   })
