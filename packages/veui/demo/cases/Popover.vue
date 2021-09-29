@@ -2,6 +2,14 @@
 <article>
   <h1><code>&lt;veui-popover&gt;</code></h1>
   <section>
+    <veui-checkbox
+      v-model="aimCenter"
+      style="margin-left: 20px"
+    >
+      对准中心
+    </veui-checkbox>
+  </section>
+  <section>
     <div class="demo-wrap">
       <div style="margin-bottom:10px;">
         hover事件
@@ -169,6 +177,7 @@
       :overlay-style="{
         '--dls-dropdown-max-display-items': 8
       }"
+      :aim-center="aimCenter"
       trigger="hover"
     >
       当前是hover事件
@@ -339,6 +348,7 @@
       :position="clickPosition"
       :target="clickTarget"
       :open.sync="clickOpen"
+      :aim-center="aimCenter"
       trigger="click"
     >
       当前是click事件
@@ -349,12 +359,13 @@
 
 <script>
 import bus from '../bus'
-import { Button, Popover } from 'veui'
+import { Button, Checkbox, Popover } from 'veui'
 
 export default {
   name: 'popover-demo',
   components: {
     'veui-button': Button,
+    'veui-checkbox': Checkbox,
     'veui-popover': Popover
   },
   data () {
@@ -365,7 +376,8 @@ export default {
       clickTarget: 'topLeftClick',
       open: false,
       clickOpen: false,
-      overlayOptions: {}
+      overlayOptions: {},
+      aimCenter: false
     }
   },
   mounted () {

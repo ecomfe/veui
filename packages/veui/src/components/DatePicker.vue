@@ -292,7 +292,7 @@ export default {
       picking: null,
       localSelected: null,
       localInputValue: [],
-      localOverlayOptions: {
+      defaultOverlayOptions: {
         position: 'top-start',
         inner: {
           enabled: true

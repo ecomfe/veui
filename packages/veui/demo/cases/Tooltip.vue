@@ -2,12 +2,19 @@
 <article>
   <h1><code>&lt;veui-tooltip&gt;</code></h1>
   <section>
-    <veui-button
-      ui="primary"
-      @click="ui = ui ? '' : 'reverse'"
+    <veui-checkbox
+      v-model="ui"
+      true-value="reverse"
+      false-value=""
     >
-      切换皮肤
-    </veui-button>
+      反色皮肤
+    </veui-checkbox>
+    <veui-checkbox
+      v-model="aimCenter"
+      style="margin-left: 20px"
+    >
+      对准中心
+    </veui-checkbox>
   </section>
   <section>
     <div class="demo-wrap">
@@ -173,6 +180,7 @@
       :target="target"
       :open.sync="open"
       :overlay-options="overlayOptions"
+      :aim-center="aimCenter"
       trigger="hover"
     >
       当前是hover事件
@@ -341,6 +349,7 @@
       :ui="ui"
       :target="clickTarget"
       :open.sync="clickOpen"
+      :aim-center="aimCenter"
       trigger="click"
     >
       当前是click事件
@@ -366,6 +375,7 @@
         '--dls-dropdown-max-display-items': 8
       }"
       :open.sync="numberOpen"
+      :aim-center="aimCenter"
     >
       你focus到了
     </veui-tooltip>
@@ -380,6 +390,7 @@
       trigger="hover"
       :interactive="false"
       :hide-delay="0"
+      :aim-center="aimCenter"
     >
       你focus到了
     </veui-tooltip>
@@ -414,7 +425,7 @@
 
 <script>
 import bus from '../bus'
-import { Tooltip, Button, Input } from 'veui'
+import { Tooltip, Checkbox, Button, Input } from 'veui'
 import { tooltip } from 'veui/directives'
 
 export default {
@@ -424,6 +435,7 @@ export default {
   },
   components: {
     'veui-button': Button,
+    'veui-checkbox': Checkbox,
     'veui-tooltip': Tooltip,
     'veui-input': Input
   },
@@ -441,7 +453,8 @@ export default {
       overlayOptions: {},
       descA: 1,
       descB: 'B',
-      showDesc: true
+      showDesc: true,
+      aimCenter: false
     }
   },
   mounted () {

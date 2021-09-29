@@ -24,7 +24,7 @@ const baseMixin = {
   },
   data () {
     return {
-      localOverlayOptions: {
+      defaultOverlayOptions: {
         position: 'bottom-start'
       },
       dropdownId: uniqueId('veui-dropdown-')

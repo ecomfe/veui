@@ -56,14 +56,8 @@ export default {
       type: Boolean,
       default: true
     },
-    autofocus: Boolean
-  },
-  data () {
-    return {
-      localOverlayOptions: {
-        position: this.position
-      }
-    }
+    autofocus: Boolean,
+    aimCenter: Boolean
   },
   computed: {
     realTrigger () {
@@ -102,6 +96,23 @@ export default {
     },
     realAutofocus () {
       return this.interactive ? this.autofocus : false
+    },
+    defaultOverlayOptions () {
+      return {
+        position: this.position,
+        ...(this.aimCenter
+          ? {
+            offset: {
+              offset:
+                  this.position.indexOf('start') !== -1
+                    ? '50%'
+                    : this.position.indexOf('end') !== -1
+                      ? '-50%'
+                      : 0
+            }
+          }
+          : {})
+      }
     }
   },
   watch: {
@@ -113,7 +124,7 @@ export default {
       this.rebindHandler()
     },
     position (val) {
-      this.localOverlayOptions.position = val
+      this.defaultOverlayOptions.position = val
     }
   },
   mounted () {
@@ -186,7 +197,10 @@ export default {
         autofocus={this.realAutofocus}
       >
         <div
-          class={this.$c('tooltip')}
+          class={{
+            [this.$c('tooltip')]: true,
+            [this.$c('tooltip-aim-center')]: this.aimCenter
+          }}
           ui={this.realUi}
           role="tooltip"
           {...{ directives }}

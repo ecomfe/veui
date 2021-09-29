@@ -93,7 +93,7 @@ const OptionGroup = {
   data () {
     return {
       items: [],
-      localOverlayOptions: {
+      defaultOverlayOptions: {
         position: 'right-start'
       },
       outsideRefs: ['button'],
