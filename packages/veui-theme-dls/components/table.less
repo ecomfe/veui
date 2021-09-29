@@ -191,7 +191,7 @@
   &-cell-sticky-left,
   &-cell-sticky-right {
     position: sticky;
-    z-index: 1;
+    z-index: 5;
   }
 
   &-cell-sticky {
@@ -242,7 +242,7 @@
   &-bordered &-cell-sticky-left {
     &::after {
       content: "";
-      .absolute(0, -1px, 0, _);
+      .absolute(-1px, -1px, 0, _);
       width: 1px;
       background-color: @dls-table-cell-border-color;
     }
