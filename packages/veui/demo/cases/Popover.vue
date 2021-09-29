@@ -170,6 +170,7 @@
       </div>
     </div>
     <veui-popover
+      ui="s"
       :position="position"
       :target="target"
       :open.sync="open"
@@ -345,10 +346,12 @@
     </div>
     <veui-popover
       ui="m"
+      title="标题"
       :position="clickPosition"
       :target="clickTarget"
       :open.sync="clickOpen"
       :aim-center="aimCenter"
+      :footless="false"
       trigger="click"
     >
       当前是click事件

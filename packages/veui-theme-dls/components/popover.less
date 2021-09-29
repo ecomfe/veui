@@ -11,7 +11,7 @@
     border: 0.1px solid transparent;
 
     .@{veui-prefix}-tooltip-content {
-      overflow: auto;
+      overflow: visible;
       margin: @dls-popover-padding-y @dls-popover-padding-x;
     }
 
@@ -79,14 +79,49 @@
       .make-align(left);
     }
 
+    .@{veui-prefix}-popover-head {
+      font-weight: 500;
+    }
+
+    .@{veui-prefix}-popover-content {
+      overflow: auto;
+    }
+
+    .@{veui-prefix}-popover-foot {
+      display: flex;
+      justify-content: flex-end;
+
+      .@{veui-prefix}-button + .@{veui-prefix}-button {
+        margin-left: 8px;
+      }
+    }
+
     &[ui~="s"] {
       border-radius: @dls-popover-border-radius-s;
       font-size: @dls-popover-font-size-s;
     }
 
+    &[ui~="s"] .@{veui-prefix}-popover-head {
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    &[ui~="s"] .@{veui-prefix}-popover-foot {
+      margin-top: 8px;
+    }
+
     &[ui~="m"] {
       border-radius: @dls-popover-border-radius-m;
       font-size: @dls-popover-font-size-m;
+    }
+
+    &[ui~="m"] .@{veui-prefix}-popover-head {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    &[ui~="m"] .@{veui-prefix}-popover-foot {
+      margin-top: 12px;
     }
   }
 }
