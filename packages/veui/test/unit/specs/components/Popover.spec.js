@@ -111,4 +111,89 @@ describe('components/Popover', function () {
     expect(document.activeElement.tagName.toLowerCase()).to.equal('input')
     wrapper.destroy()
   })
+
+  it('should handle title prop correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-popover': Popover
+        },
+        template: `
+          <div>
+            <div ref="t">?</div>
+            <veui-popover target="t" open title="title"/>
+          </div>`
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-popover-head').text()).to.contains('title')
+    wrapper.destroy()
+  })
+
+  it('should handle title slot correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-popover': Popover
+        },
+        template: `
+          <div>
+            <div ref="t">?</div>
+            <veui-popover target="t" open>
+              <div slot="title">title</div>
+            </veui-popover>
+          </div>`
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-popover-head').text()).to.contains('title')
+    wrapper.destroy()
+  })
+
+  it('should render foot correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-popover': Popover
+        },
+        data () {
+          return {
+            renderSlot: false
+          }
+        },
+        template: `
+          <div>
+            <div ref="t">?</div>
+            <veui-popover target="t" open :footless="false">
+              <div v-if="renderSlot" slot="foot">foot</div>
+            </veui-popover>
+          </div>`
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-popover-foot').exists()).to.eql(true)
+
+    vm.renderSlot = true
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-popover-foot').text()).to.contains('foot')
+    wrapper.destroy()
+  })
 })
