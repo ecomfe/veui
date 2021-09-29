@@ -11,14 +11,9 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      localOverlayOptions: {}
-    }
-  },
   computed: {
     realOverlayOptions () {
-      return { ...this.localOverlayOptions, ...this.overlayOptions }
+      return { ...this.defaultOverlayOptions, ...this.overlayOptions }
     }
   },
   methods: {

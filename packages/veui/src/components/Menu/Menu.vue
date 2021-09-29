@@ -254,7 +254,7 @@ export default {
   },
   data () {
     return {
-      localOverlayOptions: {
+      defaultOverlayOptions: {
         position: 'right-start'
       },
       hoverItem: null,

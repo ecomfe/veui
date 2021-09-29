@@ -92,6 +92,11 @@
 
   @arrow-offset: @arrow-indent - @arrow-size / 2;
 
+  .make-align(@side) {
+    &.@{veui-prefix}-tooltip-aim-center {
+      margin-@{side}: dls-sum(-@arrow-indent, -@arrow-size / 2);
+    }
+  }
   .make-align(top) {
     &-arrow {
       top: @arrow-offset;
