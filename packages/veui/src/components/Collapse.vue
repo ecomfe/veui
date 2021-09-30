@@ -14,10 +14,15 @@
     @keydown.enter.space.prevent="toggle"
   >
     <veui-icon
-      :class="$c('collapse-toggle')"
+      v-if="realExpandIconPosition !== 'none'"
+      :class="{
+        [$c('collapse-toggle')]: true,
+        [$c('collapse-toggle-end')]: realExpandIconPosition === 'end'
+      }"
       :name="icons.collapse"
     />
     <slot name="title">{{ label }}</slot>
+    <div :class="$c('collapse-title-after')"><slot name="title-after"/></div>
   </div>
   <veui-expand-transition :name="$c('collapse-body')">
     <div
@@ -44,6 +49,13 @@ import useControllable from '../mixins/controllable'
 let accordionItem = useChild('accordion-item', 'accordion', ['name'], {
   direct: true
 })
+
+export const expandIconPositionProp = {
+  type: String,
+  validator (val) {
+    return [null, 'start', 'end', 'none'].indexOf(val) >= 0
+  }
+}
 
 export default {
   name: 'veui-collapse',
@@ -93,6 +105,7 @@ export default {
         return typeof val === 'boolean'
       }
     },
+    expandIconPosition: expandIconPositionProp,
     disabled: Boolean,
     name: {
       type: [String, Number],
@@ -106,6 +119,9 @@ export default {
         return accordion.disabled || this.disabled
       }
       return this.disabled
+    },
+    realExpandIconPosition () {
+      return this.inheritFromAccordion('expandIconPosition') || 'start'
     }
   },
   methods: {
@@ -121,6 +137,13 @@ export default {
         this.accordion.toggleById(this.childId)
       }
       this.$emit('toggle', expanded)
+    },
+    inheritFromAccordion (field) {
+      let { accordion } = this
+      if (accordion && this[field] == null) {
+        return accordion[field]
+      }
+      return this[field]
     }
   }
 }

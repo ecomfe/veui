@@ -143,4 +143,43 @@ describe('components/Collapse', () => {
 
     wrapper.destroy()
   })
+
+  it('should handle expandIconPosition prop correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-collapse': Collapse
+        },
+        data () {
+          return {
+            position: 'start'
+          }
+        },
+        template: `
+          <veui-collapse label="点击切换" :expand-icon-position="position">
+            Content
+          </veui-collapse>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    expect(wrapper.find('.veui-collapse-toggle').classes()).to.not.includes(
+      'veui-collapse-toggle-end'
+    )
+
+    vm.position = 'end'
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-collapse-toggle').classes()).to.includes(
+      'veui-collapse-toggle-end'
+    )
+
+    vm.position = 'none'
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-collapse-toggle').exists()).to.equal(false)
+
+    wrapper.destroy()
+  })
 })

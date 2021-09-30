@@ -1,5 +1,8 @@
 <template>
-<div :class="$c('accordion')">
+<div
+  :ui="realUi"
+  :class="$c('accordion')"
+>
   <slot/>
 </div>
 </template>
@@ -10,6 +13,7 @@ import { useParent } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 import { clone } from 'lodash'
+import { expandIconPositionProp } from './Collapse'
 import '../common/uiTypes'
 
 let accordion = useParent('accordion', { childrenKeys: 'items' })
@@ -21,7 +25,8 @@ export default {
   props: {
     multiple: Boolean,
     disabled: Boolean,
-    expanded: [Number, String, Array]
+    expanded: [Number, String, Array],
+    expandIconPosition: expandIconPositionProp
   },
   methods: {
     toggleById (id) {
