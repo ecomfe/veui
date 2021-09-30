@@ -25,18 +25,12 @@
       background-color: @dls-collapse-header-background-color-hover;
     }
 
-    &[data-focus-visible-added] {
-      background-color: @dls-collapse-header-background-color-focus;
-      border-color: @dls-collapse-border-color-focus;
-      z-index: 1;
-    }
-
     &:active {
       background-color: @dls-collapse-header-background-color-active;
     }
   }
 
-  &-collapsed &-header {
+  &-collapsed > &-header {
     .border-bottom-radius(inherit);
   }
 
@@ -47,12 +41,22 @@
     .veui-transition(transform);
   }
 
-  &-expanded &-toggle {
+  &-toggle-end {
+    margin-right: 0;
+    margin-left: @dls-collapse-header-content-spacing;
+    order: 3;
+  }
+
+  &-title-after {
+    margin-left: auto;
+  }
+
+  &-expanded > &-header &-toggle {
     transform: rotateZ(90deg);
   }
 
   &.@{veui-prefix}-disabled {
-    .@{veui-prefix}-collapse {
+    & > .@{veui-prefix}-collapse {
       &-header {
         background-color: @dls-collapse-header-background-color-disabled;
         color: @dls-collapse-header-font-color-disabled;
@@ -74,6 +78,8 @@
     color: @dls-collapse-body-font-color;
     font-size: @dls-collapse-body-font-size-m;
     line-height: @dls-collapse-body-line-height;
+    margin: -1px;
+    border: inherit;
   }
 
   &-content {
@@ -83,7 +89,7 @@
   &[ui~="s"] {
     border-radius: @dls-collapse-border-radius-s;
 
-    .@{veui-prefix}-collapse {
+    & > .@{veui-prefix}-collapse {
       &-header {
         font-size: @dls-collapse-header-font-size-s;
       }
@@ -91,6 +97,100 @@
       &-body {
         font-size: @dls-collapse-body-font-size-s;
       }
+    }
+  }
+
+  &[ui~="basic"] > &-header,
+  &[ui~="strong"] > &-header,
+  &[ui~="simple"] > &-header {
+    border-color: inherit;
+
+    .@{veui-prefix}-collapse-expanded& {
+      border-bottom-color: transparent;
+    }
+  }
+
+  // simple，透明，无分割线
+  &[ui~="simple"] > &-header {
+    background-color: @dls-collapse-header-background-color-simple;
+
+    &:hover {
+      background-color: @dls-collapse-header-background-color-simple-hover;
+    }
+
+    &:active {
+      background-color: @dls-collapse-header-background-color-simple-active;
+    }
+  }
+
+  &[ui~="simple"].@{veui-prefix}-disabled > &-header {
+    background-color: @dls-collapse-header-background-color-simple-disabled;
+  }
+
+  &[ui~="simple"] > &-body {
+    background-color: @dls-collapse-body-background-color-simple;
+  }
+
+  // basic 白底，无分割线
+  &[ui~="basic"] > &-header {
+    background-color: @dls-collapse-header-background-color-basic;
+  }
+
+  &[ui~="basic"] > &-body {
+    background-color: @dls-collapse-body-background-color-basic;
+  }
+
+  &[ui~="basic"]:not([ui~="dull"]) > &-header {
+    &:hover {
+      background-color: @dls-collapse-header-background-color-basic-hover;
+    }
+
+    &:active {
+      background-color: @dls-collapse-header-background-color-basic-active;
+    }
+  }
+
+  &[ui~="basic"].@{veui-prefix}-disabled > &-header {
+    background-color: @dls-collapse-header-background-color-basic-disabled;
+  }
+
+  // strong 浅灰，无分割线
+  &[ui~="strong"] > &-header {
+    background-color: @dls-collapse-header-background-color-strong;
+  }
+
+  &[ui~="strong"] > &-body {
+    background-color: @dls-collapse-body-background-color-strong;
+  }
+
+  &[ui~="strong"]:not([ui~="dull"]) > &-header {
+    &:hover {
+      background-color: @dls-collapse-header-background-color-strong-hover;
+    }
+
+    &:active {
+      background-color: @dls-collapse-header-background-color-strong-active;
+    }
+  }
+
+  &[ui~="strong"].@{veui-prefix}-disabled > &-header {
+    background-color: @dls-collapse-header-background-color-strong-disabled;
+  }
+
+  &[ui~="simple"][ui~="borderless"],
+  &[ui~="basic"]:not([ui~="bordered"]),
+  &[ui~="strong"]:not([ui~="bordered"]) {
+    border-color: transparent;
+  }
+
+  &-header,
+  &[ui~="simple"] &-header,
+  &[ui~="basic"] &-header,
+  &[ui~="strong"] &-header {
+    &[data-focus-visible-added] {
+      border-color: @dls-collapse-header-border-color-focus;
+      box-shadow: @dls-collapse-header-shadow-focus;
+      z-index: 1;
     }
   }
 }

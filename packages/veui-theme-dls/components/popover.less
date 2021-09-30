@@ -92,7 +92,7 @@
       justify-content: flex-end;
 
       .@{veui-prefix}-button + .@{veui-prefix}-button {
-        margin-left: 8px;
+        margin-left: @dls-dialog-action-content-spacing;
       }
     }
 
@@ -102,12 +102,12 @@
     }
 
     &[ui~="s"] .@{veui-prefix}-popover-head {
-      margin-bottom: 4px;
+      margin-bottom: @dls-popover-title-spacing-s;
       font-size: 14px;
     }
 
     &[ui~="s"] .@{veui-prefix}-popover-foot {
-      margin-top: 8px;
+      margin-top: @dls-popover-action-spacing-s;
     }
 
     &[ui~="m"] {
@@ -116,12 +116,12 @@
     }
 
     &[ui~="m"] .@{veui-prefix}-popover-head {
-      margin-bottom: 8px;
+      margin-bottom: @dls-popover-title-spacing-m;
       font-size: 16px;
     }
 
     &[ui~="m"] .@{veui-prefix}-popover-foot {
-      margin-top: 12px;
+      margin-top: @dls-popover-action-spacing-m;
     }
   }
 }
