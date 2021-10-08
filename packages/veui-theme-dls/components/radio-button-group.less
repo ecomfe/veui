@@ -3,7 +3,6 @@
 @import (reference) "../grouped-button.less";
 
 .@{veui-prefix}-radio-button-group {
-  --dls-radio-button-stable: 0; // 0 | initial?
   // --dls-radio-button-min-width 默认不定义
 
   &-items {
@@ -34,20 +33,22 @@
     }
   }
 
-  &,
-  &[ui~="m"] {
-    .@{veui-prefix}-button {
+  &[ui~="stable"] {
+    &,
+    &[ui~="m"] {
+      .@{veui-prefix}-button {
+        min-width: var(
+          --dls-radio-button-min-width,
+          @dls-button-min-width-stable-m
+        );
+      }
+    }
+
+    &[ui~="s"] .@{veui-prefix}-button {
       min-width: var(
-        --dls-radio-button-stable,
-        var(--dls-radio-button-min-width, @dls-button-min-width-stable-m)
+        --dls-radio-button-min-width,
+        @dls-button-min-width-stable-s
       );
     }
-  }
-
-  &[ui~="s"] .@{veui-prefix}-button {
-    min-width: var(
-      --dls-radio-button-stable,
-      var(--dls-radio-button-min-width, @dls-button-min-width-stable-s)
-    );
   }
 }

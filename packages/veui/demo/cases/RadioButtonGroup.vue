@@ -57,10 +57,7 @@
         v-model="picked3"
         :items="data3"
         :disabled="disabled"
-        ui="simple s"
-        :style="{
-          '--dls-radio-button-stable': 'initial'
-        }"
+        ui="simple s stable"
       />
     </p>
     <p>已选: {{ picked3 }}</p>

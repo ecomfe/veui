@@ -97,10 +97,7 @@
         v-model="pickedWithSimple"
         :items="dataWithExclusive"
         :disabled="disabled"
-        ui="simple s"
-        :style="{
-          '--dls-checkbox-button-stable': 'initial'
-        }"
+        ui="simple s stable"
       />
     </p>
     <p>value: {{ pickedWithSimple }}</p>

@@ -3,7 +3,6 @@
 @import (reference) "../grouped-button.less";
 
 .@{veui-prefix}-check-button-group {
-  --dls-checkbox-button-stable: 0; // 0 | initial?
   // --dls-checkbox-button-min-width 默认不定义
   position: relative;
 
@@ -75,20 +74,21 @@
     margin-left: -@dls-checkbox-group-spacing-simple;
   }
 
-  &,
-  &[ui~="m"] {
-    .@{veui-prefix}-button {
+  &[ui~="stable"] {
+    &,
+    &[ui~="m"] {
+      .@{veui-prefix}-button {
+        min-width: var(
+          --dls-checkbox-button-min-width,
+          @dls-button-min-width-stable-m
+        );
+      }
+    }
+    &[ui~="s"] .@{veui-prefix}-button {
       min-width: var(
-        --dls-checkbox-button-stable,
-        var(--dls-checkbox-button-min-width, @dls-button-min-width-stable-m)
+        --dls-checkbox-button-min-width,
+        @dls-button-min-width-stable-s
       );
     }
-  }
-
-  &[ui~="s"] .@{veui-prefix}-button {
-    min-width: var(
-      --dls-checkbox-button-stable,
-      var(--dls-checkbox-button-min-width, @dls-button-min-width-stable-s)
-    );
   }
 }
