@@ -2,14 +2,19 @@
 
 ### 💡 主要变更
 
-- [+] 为 `Tooltip` / `Popover` 组件新增 `aim-center` prop，用来支持浮层箭头始终指向目标元素中心的模式。
+- [+] 为 `Tooltip` / `Popover` 组件新增 `aim-center` prop，用来支持浮层箭头始终指向目标元素中心的模式。<!-- #Tooltip #Popover -->
+- [+] 为 `RadioButtonGroup` / `CheckButtonGroup` 组件新增 `ui` 选项 `stable`，来实现多行显示多个按钮组时更整齐的视觉效果。<!-- #RadioButtonGroup #CheckButtonGroup -->
 
 ### 🐞 问题修复
 
-- [^] 修正 `Tabs` 组件在路由模式下 `active` 数据可能没有正确响应路由变化的问题。
-- [^] 修正 `Tabs` 组件在移除最后一个标签页时 `active` 计算不正确的问题。
-- [^] 修正 `DatePicker` 组件的 `placeholder` 类型描述漏掉 `Array` 的问题。
-- [^] 修正 `Table` 组件固定列 `z-index` 过低可能导致被滚动内容穿透的问题。
+- [^] 修正 `Tabs` 组件在路由模式下 `active` 数据可能没有正确响应路由变化的问题。<!-- #Tabs -->
+- [^] 修正 `Tabs` 组件在移除最后一个标签页时 `active` 计算不正确的问题。<!-- #Tabs -->
+- [^] 修正 `DatePicker` 组件的 `placeholder` 类型描述漏掉 `Array` 的问题。<!-- #DatePicker -->
+- [^] 修正 `Table` 组件固定列 `z-index` 过低可能导致被滚动内容穿透的问题。<!-- #Table -->
+
+### 🧪 实验性功能
+
+- [+] 为 `RadioButtonGroup` / `CheckButtonGroup` 组件分别新增自定义 CSS 属性 `--dls-radio-button-min-width` / `--dls-checkbox-button-min-width`，用于自定义组内按钮项的最小宽度。<!-- #RadioButtonGroup #CheckButtonGroup -->
 
 ## 2.1.5
 
