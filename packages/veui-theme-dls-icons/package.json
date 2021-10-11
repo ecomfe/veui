@@ -13,7 +13,7 @@
   "scripts": {
     "build": "node -r esm build/icons.js",
     "prepublishOnly": "rollup -c && cp -r ./icons/* .",
-    "publish": "rm *.js icon-names.json",
+    "publish": "rimraf '!(*.config).js icon-names.json'",
     "prepare": "npm run build"
   },
   "dependencies": {
