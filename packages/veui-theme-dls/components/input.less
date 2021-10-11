@@ -103,9 +103,6 @@
 
   &.@{veui-prefix}-focus {
     position: relative;
-  }
-
-  &.@{veui-prefix}-focus {
     .dls-focus-ring(@dls-input-border-color-focus, @dls-input-shadow-focus);
   }
 
@@ -139,6 +136,7 @@
   &.@{veui-prefix}-disabled &-before,
   &.@{veui-prefix}-disabled &-after {
     color: @dls-input-font-color-disabled;
+    -webkit-text-fill-color: @dls-input-font-color-disabled;
     pointer-events: none;
   }
 

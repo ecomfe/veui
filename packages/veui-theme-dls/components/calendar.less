@@ -68,15 +68,15 @@
     width: dls-sum(@date-panel-width, -@dls-date-picker-year-scroller-width);
   }
 
+  &-panels {
+    display: flex;
+  }
+
   &-panel {
     position: relative;
     display: flex;
     flex-direction: column;
     .size(@date-panel-width, auto);
-
-    .@{veui-prefix}-calendar-range & {
-      display: inline-flex;
-    }
 
     & + & {
       padding-left: @dls-date-picker-range-panel-spacing;
@@ -159,6 +159,7 @@
     margin: auto;
     height: auto;
     border: none;
+    font-variant-numeric: tabular-nums;
     line-height: @dls-line-height-1;
 
     &[data-focus-visible-added],
@@ -296,9 +297,12 @@
 
   &-month-table,
   &-year-table {
+    height: 100%;
+
     td {
       width: 100% / 3;
     }
+
     button {
       // TODO
       transition-duration: 0s;

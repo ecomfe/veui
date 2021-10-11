@@ -14,294 +14,298 @@
   @mouseleave="markEnd()"
 >
   <slot name="before"/>
-  <div
-    v-for="(p, pIndex) in panels"
-    :key="pIndex"
-    ref="panel"
-    :class="{
-      [$c('calendar-panel')]: true,
-      [$c(`calendar-expanded`)]: p.expanded
-    }"
-  >
+  <div :class="$c('calendar-panels')">
     <div
-      v-if="!isYearType"
-      :class="$c('calendar-head')"
-      :aria-hidden="!!pIndex"
-    >
-      <veui-button
-        ref="backward"
-        :class="{
-          [$c('calendar-backward')]: true,
-          [$c('calendar-visible')]: !isYearsView(p)
-        }"
-        :ui="uiParts.nav"
-        :disabled="disabled || readonly"
-        :aria-hidden="pIndex > 0"
-        :aria-label="t('prevYear')"
-        :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(pIndex, false, 'year')"
-      >
-        <veui-icon :name="icons.backward"/>
-      </veui-button>
-      <veui-button
-        ref="prev"
-        :class="{
-          [$c('calendar-prev')]: true,
-          [$c('calendar-visible')]: isDateType
-        }"
-        :ui="uiParts.nav"
-        :disabled="disabled || readonly"
-        :aria-hidden="pIndex > 0"
-        :aria-label="t('prevMonth')"
-        :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(pIndex, false, 'month')"
-      >
-        <veui-icon :name="icons.prev"/>
-      </veui-button>
-      <template>
-        <veui-button
-          v-if="type !== 'year'"
-          :id="`${id}:panel-title:${pIndex}`"
-          ref="expansion-select"
-          :ui="uiParts.toggle"
-          :class="{
-            [$c('calendar-select')]: true,
-            [$c('calendar-visible')]: true
-          }"
-          :disabled="disabled || readonly"
-          :aria-label="selectButtonAriaLabel(p)"
-          @click="setExpanded(pIndex, !p.expanded)"
-        >
-          <b>{{ getExpansionText(p) }}</b>
-          <veui-icon :name="icons.expand"/>
-        </veui-button>
-        <b
-          v-else
-          :id="`${id}:panel-title:${pIndex}`"
-          :aria-hidden="true"
-          :class="$c('calendar-select')"
-        >{{ t('year', { year: p.year }) }}</b>
-      </template>
-      <veui-button
-        ref="next"
-        :class="{
-          [$c('calendar-next')]: true,
-          [$c('calendar-visible')]: isDateType
-        }"
-        :ui="uiParts.nav"
-        :disabled="disabled || readonly"
-        :aria-label="t('nextMonth')"
-        :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(pIndex, true, 'month')"
-      >
-        <veui-icon :name="icons.next"/>
-      </veui-button>
-      <veui-button
-        ref="forward"
-        :class="{
-          [$c('calendar-forward')]: true,
-          [$c('calendar-visible')]: !isYearsView(p)
-        }"
-        :ui="uiParts.nav"
-        :disabled="disabled || readonly"
-        :aria-label="t('nextYear')"
-        :aria-controls="`${id}:panel-title:${pIndex}`"
-        @click="step(pIndex, true, 'year')"
-      >
-        <veui-icon :name="icons.forward"/>
-      </veui-button>
-    </div>
-    <div
-      ref="body"
+      v-for="(p, pIndex) in panels"
+      :key="pIndex"
+      ref="panel"
       :class="{
-        [$c('calendar-body')]: true,
-        [$c('calendar-multiple-range')]: multiple && range
+        [$c('calendar-panel')]: true,
+        [$c('calendar-expanded')]: p.expanded
       }"
     >
-      <infinite-scroll
-        v-if="isDateType && p.expanded"
-        :row="150"
-        :initial="panelData[pIndex].initialScrollYear"
+      <div
+        v-if="!isYearType"
+        :class="$c('calendar-head')"
+        :aria-hidden="!!pIndex"
       >
-        <template slot-scope="{ onscroll, start, row, page }">
-          <ul
-            :ref="`yearScroller-${pIndex}`"
-            :class="$c('calendar-year-scroller')"
-            @scroll="onscroll"
+        <veui-button
+          ref="backward"
+          :class="{
+            [$c('calendar-backward')]: true,
+            [$c('calendar-visible')]: !isYearsView(p)
+          }"
+          :ui="uiParts.nav"
+          :disabled="disabled || readonly"
+          :aria-hidden="pIndex > 0"
+          :aria-label="t('prevYear')"
+          :aria-controls="`${id}:panel-title:${pIndex}`"
+          @click="step(pIndex, false, 'year')"
+        >
+          <veui-icon :name="icons.backward"/>
+        </veui-button>
+        <veui-button
+          ref="prev"
+          :class="{
+            [$c('calendar-prev')]: true,
+            [$c('calendar-visible')]: isDateType
+          }"
+          :ui="uiParts.nav"
+          :disabled="disabled || readonly"
+          :aria-hidden="pIndex > 0"
+          :aria-label="t('prevMonth')"
+          :aria-controls="`${id}:panel-title:${pIndex}`"
+          @click="step(pIndex, false, 'month')"
+        >
+          <veui-icon :name="icons.prev"/>
+        </veui-button>
+        <template>
+          <veui-button
+            v-if="type !== 'year'"
+            :id="`${id}:panel-title:${pIndex}`"
+            ref="expansion-select"
+            :ui="uiParts.toggle"
+            :class="{
+              [$c('calendar-select')]: true,
+              [$c('calendar-visible')]: true
+            }"
+            :disabled="disabled || readonly"
+            :aria-label="selectButtonAriaLabel(p)"
+            @click="setExpanded(pIndex, !p.expanded)"
           >
-            <li
-              v-for="idx in row"
-              :key="idx + start - 1 + `-${page}`"
-              :class="getYearClass(p, idx + start - 1)"
-              :data-index="idx - 1"
-            >
-              <button
-                type="button"
-                tabindex="-1"
-                @click="selectYear(pIndex, idx + start - 1)"
-              >
-                {{ idx + start - 1 }}
-              </button>
-            </li>
-          </ul>
+            <b>{{ getExpansionText(p) }}</b>
+            <veui-icon :name="icons.expand"/>
+          </veui-button>
+          <b
+            v-else
+            :id="`${id}:panel-title:${pIndex}`"
+            :aria-hidden="true"
+            :class="$c('calendar-select')"
+          >{{ t('year', { year: p.year }) }}</b>
         </template>
-      </infinite-scroll>
-      <table
-        v-if="!isYearsView(p)"
-        ref="table"
+        <veui-button
+          ref="next"
+          :class="{
+            [$c('calendar-next')]: true,
+            [$c('calendar-visible')]: isDateType
+          }"
+          :ui="uiParts.nav"
+          :disabled="disabled || readonly"
+          :aria-label="t('nextMonth')"
+          :aria-controls="`${id}:panel-title:${pIndex}`"
+          @click="step(pIndex, true, 'month')"
+        >
+          <veui-icon :name="icons.next"/>
+        </veui-button>
+        <veui-button
+          ref="forward"
+          :class="{
+            [$c('calendar-forward')]: true,
+            [$c('calendar-visible')]: !isYearsView(p)
+          }"
+          :ui="uiParts.nav"
+          :disabled="disabled || readonly"
+          :aria-label="t('nextYear')"
+          :aria-controls="`${id}:panel-title:${pIndex}`"
+          @click="step(pIndex, true, 'year')"
+        >
+          <veui-icon :name="icons.forward"/>
+        </veui-button>
+      </div>
+      <div
+        ref="body"
         :class="{
-          [$c('calendar-table')]: true,
-          [$c('calendar-date-table')]: isDaysView(pIndex),
-          [$c('calendar-month-table')]: isMonthsView(pIndex)
+          [$c('calendar-body')]: true,
+          [$c('calendar-multiple-range')]: multiple && range
         }"
       >
-        <template v-if="isDaysView(pIndex)">
-          <thead>
-            <tr>
-              <th
-                v-for="index in 7"
-                :key="index"
-                :aria-label="getDayFullNames()[index - 1]"
-              >
-                {{ getDayNames()[index - 1] }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(week, index) in p.weeks"
-              :key="index"
+        <infinite-scroll
+          v-if="isDateType && p.expanded"
+          :row="150"
+          :initial="panelData[pIndex].initialScrollYear"
+        >
+          <template slot-scope="{ onscroll, start, row, page }">
+            <ul
+              :ref="`yearScroller-${pIndex}`"
+              :class="$c('calendar-year-scroller')"
+              @scroll="onscroll"
             >
-              <td
-                v-for="day in week"
-                :key="`${day.year}-${day.month + 1}-${day.date}`"
-                :class="getDateClass(day, p)"
+              <li
+                v-for="idx in row"
+                :key="idx + start - 1 + `-${page}`"
+                :class="getYearClass(p, idx + start - 1)"
+                :data-index="idx - 1"
               >
                 <button
-                  v-if="fillMonth || day.month === p.month"
+                  type="button"
+                  tabindex="-1"
+                  @click="selectYear(pIndex, idx + start - 1)"
+                >
+                  {{ idx + start - 1 }}
+                </button>
+              </li>
+            </ul>
+          </template>
+        </infinite-scroll>
+        <table
+          v-if="!isYearsView(p)"
+          ref="table"
+          :class="{
+            [$c('calendar-table')]: true,
+            [$c('calendar-date-table')]: isDaysView(pIndex),
+            [$c('calendar-month-table')]: isMonthsView(pIndex)
+          }"
+        >
+          <template v-if="isDaysView(pIndex)">
+            <thead>
+              <tr>
+                <th
+                  v-for="index in 7"
+                  :key="index"
+                  :aria-label="getDayFullNames()[index - 1]"
+                >
+                  {{ getDayNames()[index - 1] }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(week, index) in p.weeks"
+                :key="index"
+              >
+                <td
+                  v-for="day in week"
+                  :key="`${day.year}-${day.month + 1}-${day.date}`"
+                  :class="getDateClass(day, p)"
+                >
+                  <button
+                    v-if="fillMonth || day.month === p.month"
+                    :ref="day.isFocus ? 'focus' : null"
+                    type="button"
+                    :disabled="realDisabled || realReadonly || day.isDisabled"
+                    :autofocus="day.isFocus"
+                    :aria-label="getLocaleString(day)"
+                    :aria-current="day.isToday ? 'date' : null"
+                    :tabindex="day.isFocus ? null : '-1'"
+                    @click="selectDay(pIndex, day)"
+                    @mouseenter="markEnd(day)"
+                    @focus="markEnd(day)"
+                    @keydown.up.prevent="moveFocus(pIndex, -7)"
+                    @keydown.right.prevent="moveFocus(pIndex, 1)"
+                    @keydown.down.prevent="moveFocus(pIndex, 7)"
+                    @keydown.left.prevent="moveFocus(pIndex, -1)"
+                  >
+                    <slot
+                      name="date"
+                      v-bind="{
+                        year: day.year,
+                        month: day.month,
+                        date: day.date
+                      }"
+                    >{{ day.date }}</slot>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+          <tbody v-else-if="isMonthsView(pIndex)">
+            <tr
+              v-for="(days, row) in p.months"
+              :key="row"
+            >
+              <td
+                v-for="(day, col) in days"
+                :key="col"
+                :class="getMonthClass(p, day)"
+              >
+                <button
                   :ref="day.isFocus ? 'focus' : null"
                   type="button"
-                  :disabled="realDisabled || realReadonly || day.isDisabled"
-                  :autofocus="day.isFocus"
-                  :aria-label="getLocaleString(day)"
-                  :aria-current="day.isToday ? 'date' : null"
                   :tabindex="day.isFocus ? null : '-1'"
-                  @click="selectDay(pIndex, day)"
-                  @mouseenter="markEnd(day)"
-                  @focus="markEnd(day)"
-                  @keydown.up.prevent="moveFocus(pIndex, -7)"
+                  :disabled="
+                    !p.expanded &&
+                      (realDisabled || realReadonly || day.isDisabled)
+                  "
+                  @click="selectMonth(p, day)"
+                  @mouseenter="handleMonthMouseEnter(p, day)"
+                  @keydown.up.prevent="moveFocus(pIndex, -3)"
                   @keydown.right.prevent="moveFocus(pIndex, 1)"
-                  @keydown.down.prevent="moveFocus(pIndex, 7)"
+                  @keydown.down.prevent="moveFocus(pIndex, 3)"
                   @keydown.left.prevent="moveFocus(pIndex, -1)"
                 >
-                  <slot
-                    name="date"
-                    v-bind="{
-                      year: day.year,
-                      month: day.month,
-                      date: day.date
-                    }"
-                  >{{ day.date }}</slot>
+                  {{
+                    t('month', { month: day.month + 1 }) ||
+                      t(`monthsShort[${day.month}]`)
+                  }}
                 </button>
               </td>
             </tr>
           </tbody>
-        </template>
-        <tbody v-else-if="isMonthsView(pIndex)">
-          <tr
-            v-for="(days, row) in p.months"
-            :key="row"
-          >
-            <td
-              v-for="(day, col) in days"
-              :key="col"
-              :class="getMonthClass(p, day)"
+        </table>
+        <infinite-scroll
+          v-else
+          :row="50"
+          :col="3"
+          :initial="panelData[pIndex].initialScrollYear"
+        >
+          <template slot-scope="{ onscroll, start, row, page }">
+            <div
+              :ref="`yearScroller-${pIndex}`"
+              :class="$c('calendar-year-table-wrap')"
+              @scroll="onscroll"
             >
-              <button
-                :ref="day.isFocus ? 'focus' : null"
-                type="button"
-                :tabindex="day.isFocus ? null : '-1'"
-                :disabled="
-                  !p.expanded &&
-                    (realDisabled || realReadonly || day.isDisabled)
-                "
-                @click="selectMonth(p, day)"
-                @mouseenter="handleMonthMouseEnter(p, day)"
-                @keydown.up.prevent="moveFocus(pIndex, -3)"
-                @keydown.right.prevent="moveFocus(pIndex, 1)"
-                @keydown.down.prevent="moveFocus(pIndex, 3)"
-                @keydown.left.prevent="moveFocus(pIndex, -1)"
+              <table
+                ref="table"
+                :class="{
+                  [$c('calendar-year-table')]: true,
+                  [$c('calendar-table')]: true
+                }"
               >
-                {{
-                  t('month', { month: day.month + 1 }) ||
-                    t(`monthsShort[${day.month}]`)
-                }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <infinite-scroll
-        v-else
-        :row="50"
-        :col="3"
-        :initial="panelData[pIndex].initialScrollYear"
-      >
-        <template slot-scope="{ onscroll, start, row, page }">
-          <div
-            :ref="`yearScroller-${pIndex}`"
-            :class="$c('calendar-year-table-wrap')"
-            @scroll="onscroll"
-          >
-            <table
-              ref="table"
-              :class="{
-                [$c('calendar-year-table')]: true,
-                [$c('calendar-table')]: true
-              }"
-            >
-              <tbody>
-                <tr
-                  v-for="i in row"
-                  :key="`${i}-${page}`"
-                >
-                  <td
-                    v-for="j in 3"
-                    :key="j"
-                    :class="getYearClass(p, start + 3 * (i - 1) + j - 1)"
-                    :data-index="3 * (i - 1) + j - 1"
+                <tbody>
+                  <tr
+                    v-for="i in row"
+                    :key="`${i}-${page}`"
                   >
-                    <button
-                      type="button"
-                      :tabindex="i === 1 && j === 1 ? null : '-1'"
-                      :disabled="
-                        !p.expanded &&
-                          (realDisabled ||
-                            realReadonly ||
-                            markDisabled(start + 3 * (i - 1) + j - 1))
-                      "
-                      @click="selectYear(pIndex, start + 3 * (i - 1) + j - 1)"
-                      @mouseenter="
-                        handleYearMouseEnter(start + 3 * (i - 1) + j - 1)
-                      "
-                      @keydown.up.prevent="
-                        moveFocus(pIndex, getYearOffset(i, j, false))
-                      "
-                      @keydown.right.prevent="moveFocus(pIndex, 1)"
-                      @keydown.down.prevent="
-                        moveFocus(pIndex, getYearOffset(i, j, true))
-                      "
-                      @keydown.left.prevent="moveFocus(pIndex, -1)"
+                    <td
+                      v-for="j in 3"
+                      :key="j"
+                      :class="getYearClass(p, start + 3 * (i - 1) + j - 1)"
+                      :data-index="3 * (i - 1) + j - 1"
                     >
-                      {{ start + 3 * (i - 1) + j - 1 }}
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </template>
-      </infinite-scroll>
+                      <button
+                        type="button"
+                        :tabindex="i === 1 && j === 1 ? null : '-1'"
+                        :disabled="
+                          !p.expanded &&
+                            (realDisabled ||
+                              realReadonly ||
+                              markDisabled(start + 3 * (i - 1) + j - 1))
+                        "
+                        @click="
+                          selectYear(pIndex, start + 3 * (i - 1) + j - 1)
+                        "
+                        @mouseenter="
+                          handleYearMouseEnter(start + 3 * (i - 1) + j - 1)
+                        "
+                        @keydown.up.prevent="
+                          moveFocus(pIndex, getYearOffset(i, j, false))
+                        "
+                        @keydown.right.prevent="moveFocus(pIndex, 1)"
+                        @keydown.down.prevent="
+                          moveFocus(pIndex, getYearOffset(i, j, true))
+                        "
+                        @keydown.left.prevent="moveFocus(pIndex, -1)"
+                      >
+                        {{ start + 3 * (i - 1) + j - 1 }}
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </template>
+        </infinite-scroll>
+      </div>
     </div>
   </div>
   <slot name="after"/>
