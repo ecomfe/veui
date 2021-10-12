@@ -116,7 +116,7 @@
   }
 
   &-status {
-    &-success {
+    &-success:not(.@{veui-prefix}-progress-indeterminate) {
       .@{veui-prefix}-progress-meter {
         background-color: @dls-progress-indicator-color-success;
         stroke: @dls-progress-indicator-color-success;

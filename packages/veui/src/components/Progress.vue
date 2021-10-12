@@ -54,7 +54,7 @@
     :id="descId"
     :class="$c('progress-desc')"
   >
-    <slot v-bind="{ percent, value: realValue, status }">
+    <slot v-bind="{ percent, value: realValue, status: realStatus }">
       <veui-icon
         v-if="realStatus"
         :class="$c('progress-status-icon')"
@@ -63,7 +63,7 @@
       <template v-else>{{ valueText }}</template>
       <slot
         name="after"
-        v-bind="{ percent, value: realValue, status }"
+        v-bind="{ percent, value: realValue, status: realStatus }"
       />
     </slot>
   </div>
@@ -169,13 +169,26 @@ export default {
       return this.percent.toFixed(this.decimalPlace) + '%'
     }
   },
-  watch: {
-    realValue (val) {
-      if (this.status && this.status !== 'success') {
+  created () {
+    if (this.max <= this.min) {
+      warn('[veui-progress] `max` must be larger than `min`.', this)
+    }
+
+    this.$watch(() => [this.realValue, this.autosucceed], this.updateStatus, {
+      immediate: true
+    })
+  },
+  methods: {
+    getLength (val) {
+      return `${Math.round(val * 100) / 100}`
+    },
+    updateStatus () {
+      if (this.realStatus && this.realStatus !== 'success') {
         return
       }
+      const val = this.realValue
 
-      if (this.status === 'success' && val < this.max) {
+      if (this.realStatus === 'success' && val < this.max) {
         this.commit('status', null)
         return
       }
@@ -187,20 +200,12 @@ export default {
         } else if (this.autosucceed === false) {
           return
         }
+
+        clearTimeout(this.timer)
         this.timer = setTimeout(() => {
           this.commit('status', val === this.max ? 'success' : null)
         }, this.autosucceed)
       }
-    }
-  },
-  created () {
-    if (this.max <= this.min) {
-      warn('[veui-progress] `max` must be larger than `min`.', this)
-    }
-  },
-  methods: {
-    getLength (val) {
-      return `${Math.round(val * 100) / 100}`
     }
   },
   destroy () {
