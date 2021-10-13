@@ -50,6 +50,7 @@ import {
   pick,
   includes,
   isString,
+  identity,
   findIndex,
   find,
   omit,
@@ -86,6 +87,7 @@ config.defaults({
   'uploader.iframeMode': 'postmessage',
   'uploader.callbackNamespace': 'veuiUploadResult',
   'uploader.pickerPosition': 'after',
+  'uploader.convertResponse': identity,
   'uploader.mediaExtensions': {
     image: [
       'apng',

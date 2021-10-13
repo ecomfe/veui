@@ -21,11 +21,21 @@ describe('components/Progress', function () {
 
     let progress = wrapper.find('.veui-progress')
     expect(progress.classes()).to.not.contains('veui-progress-status-complete')
+    let rail = wrapper
+      .find('.veui-progress-rail')
+      .element.getBoundingClientRect()
+    let meter = wrapper
+      .find('.veui-progress-meter')
+      .element.getBoundingClientRect()
+    expect((meter.right - rail.left) * 2).to.equal(rail.width)
 
     vm.value = 100
     await wait(0)
     progress = wrapper.find('.veui-progress')
     expect(progress.classes()).to.contains('veui-progress-status-complete')
+    rail = wrapper.find('.veui-progress-rail').element.getBoundingClientRect()
+    meter = wrapper.find('.veui-progress-meter').element.getBoundingClientRect()
+    expect(meter.right - rail.left).to.equal(rail.width)
 
     wrapper.destroy()
   })
@@ -100,6 +110,13 @@ describe('components/Progress', function () {
     vm.value = 99
     await wait(0)
     expect(vm.status).to.equal(null)
+
+    vm.autosucceed = 200
+    vm.value = 100
+    await wait(100)
+    expect(vm.status).to.equal(null)
+    await wait(200)
+    expect(vm.status).to.equal('success')
 
     wrapper.destroy()
   })
