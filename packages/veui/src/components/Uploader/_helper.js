@@ -538,7 +538,7 @@ function getXhrUploadRequest (options) {
   }
 }
 
-function getCustomUploadRequest ({ upload, convertResponse = identity }) {
+function getCustomUploadRequest ({ upload, convertResponse }) {
   // 之前的实现里自定义上传函数的 context 是 null，这里继续保留
   return function (file, callbacks) {
     // 自定义上传也调用 convertResponse 处理结果
@@ -557,7 +557,7 @@ function getCustomUploadRequest ({ upload, convertResponse = identity }) {
   }
 }
 
-function getResonpseParse ({ convertResponse = identity, dataType }) {
+function getResonpseParse ({ convertResponse, dataType }) {
   return function (data) {
     if (typeof data === 'string' && dataType === 'json') {
       try {
