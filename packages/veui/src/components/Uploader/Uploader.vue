@@ -88,6 +88,7 @@ config.defaults(
     iframeMode: 'postmessage',
     callbackNamespace: 'veuiUploadResult',
     pickerPosition: 'after',
+    convertResponse: identity,
     mediaExtensions: {
       image: [
         'apng',
