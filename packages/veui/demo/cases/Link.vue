@@ -57,16 +57,40 @@
     <veui-link>Nowhere</veui-link> &larr; fallback to
     <code>&lt;span&gt;</code>
   </section>
+  <section>
+    <veui-config-provider :value="config">
+      <veui-link to="button">Button</veui-link>
+    </veui-config-provider>
+  </section>
 </article>
 </template>
 
 <script>
-import { Link } from 'veui'
+import { Link, ConfigProvider } from 'veui'
+import Vue from 'vue'
+import Router from 'vue-router'
+
+Vue.use(Router)
+
+const MyLink = {
+  name: 'my-link',
+  extends: Vue.component('RouterLink')
+}
+
+Vue.component('my-link', MyLink)
 
 export default {
   name: 'link-demo',
   components: {
-    'veui-link': Link
+    'veui-link': Link,
+    'veui-config-provider': ConfigProvider
+  },
+  data () {
+    return {
+      config: {
+        'link.routerComponent': 'my-link'
+      }
+    }
   }
 }
 </script>

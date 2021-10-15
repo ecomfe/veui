@@ -1,10 +1,13 @@
 import { normalize } from 'vue-directive-normalizer'
 import config from '../managers/config'
 
-config.defaults({
-  'longpress.timeout': 500,
-  'longpress.repeatInterval': 100
-})
+config.defaults(
+  {
+    timeout: 500,
+    repeatInterval: 100
+  },
+  'longpress'
+)
 
 const OPTIONS_SCHEMA = {
   value: 'handler',

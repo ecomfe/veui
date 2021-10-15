@@ -50,9 +50,12 @@ import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import useControllable from '../mixins/controllable'
 
-config.defaults({
-  'promptbox.priority': 100
-})
+config.defaults(
+  {
+    priority: 100
+  },
+  'promptbox'
+)
 
 export default {
   name: 'veui-prompt-box',

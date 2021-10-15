@@ -26,7 +26,7 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   let name = to.name === 'Empty' ? '' : to.name
   document.title = `Veui${name} - demo`
   next()

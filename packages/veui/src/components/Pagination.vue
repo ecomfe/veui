@@ -134,10 +134,13 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 
-config.defaults({
-  'pagination.pageSize': 30,
-  'pagination.pageSizes': [30, 50, 100]
-})
+config.defaults(
+  {
+    pageSize: 30,
+    pageSizes: [30, 50, 100]
+  },
+  'pagination'
+)
 
 const HREF_TPL_PLACEHOLDER = /:page\b/g
 

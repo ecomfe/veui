@@ -21,9 +21,7 @@ let tabs = useParent('tabs', {
 
 config.defaults(
   {
-    matches (current, to) {
-      return current.fullPath === to.fullPath
-    }
+    matches: (current, to) => current.fullPath === to.fullPath
   },
   'tabs'
 )

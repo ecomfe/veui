@@ -14,9 +14,12 @@ const TRIGGER_MAP = {
   hover: 'mouseenter'
 }
 
-config.defaults({
-  'tooltip.hideDelay': 300
-})
+config.defaults(
+  {
+    hideDelay: 300
+  },
+  'tooltip'
+)
 
 export default {
   name: 'veui-tooltip',

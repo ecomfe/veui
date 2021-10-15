@@ -348,9 +348,12 @@ import Button from '../Button'
 import InfiniteScroll from '../Calendar/_InfiniteScroll'
 import addMonths from 'date-fns/addMonths'
 
-config.defaults({
-  'calendar.weekStart': 1
-})
+config.defaults(
+  {
+    weekStart: 1
+  },
+  'calendar'
+)
 
 const VIEW_CELL_CLASS_MAP = {
   days: 'calendar-day',

@@ -66,9 +66,12 @@ import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
 import useControllable from '../mixins/controllable'
 
-config.defaults({
-  'alertbox.priority': 100
-})
+config.defaults(
+  {
+    priority: 100
+  },
+  'alertbox'
+)
 
 export default {
   name: 'veui-alert-box',

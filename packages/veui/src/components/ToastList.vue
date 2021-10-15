@@ -7,9 +7,12 @@ import useConfig from '../mixins/config'
 import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
 
-config.defaults({
-  'toast.priority': 101
-})
+config.defaults(
+  {
+    priority: 101
+  },
+  'toast'
+)
 
 export default {
   name: 'toast-list',

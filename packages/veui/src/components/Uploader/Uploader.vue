@@ -82,34 +82,36 @@ import {
   getUploadRequest
 } from './_helper'
 
-config.defaults({
-  'uploader.requestMode': 'xhr',
-  'uploader.iframeMode': 'postmessage',
-  'uploader.callbackNamespace': 'veuiUploadResult',
-  'uploader.pickerPosition': 'after',
-  'uploader.convertResponse': identity,
-  'uploader.mediaExtensions': {
-    image: [
-      'apng',
-      'avif',
-      'bmp',
-      'gif',
-      'ico',
-      'cur',
-      'jpg',
-      'jpeg',
-      'jfif',
-      'pjpeg',
-      'pjp',
-      'png',
-      'svg',
-      'tif',
-      'tiff',
-      'webp'
-    ],
-    video: ['mp4', 'mov', 'wmv', 'flv', 'avi', 'avchd', 'webm', 'mkv']
-  }
-})
+config.defaults(
+  {
+    requestMode: 'xhr',
+    iframeMode: 'postmessage',
+    callbackNamespace: 'veuiUploadResult',
+    pickerPosition: 'after',
+    mediaExtensions: {
+      image: [
+        'apng',
+        'avif',
+        'bmp',
+        'gif',
+        'ico',
+        'cur',
+        'jpg',
+        'jpeg',
+        'jfif',
+        'pjpeg',
+        'pjp',
+        'png',
+        'svg',
+        'tif',
+        'tiff',
+        'webp'
+      ],
+      video: ['mp4', 'mov', 'wmv', 'flv', 'avi', 'avchd', 'webm', 'mkv']
+    }
+  },
+  'uploader'
+)
 
 export default {
   name: 'veui-uploader',

@@ -46,9 +46,12 @@ import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import useControllable from '../mixins/controllable'
 
-config.defaults({
-  'confirmbox.priority': 100
-})
+config.defaults(
+  {
+    priority: 100
+  },
+  'confirmbox'
+)
 
 export default {
   name: 'veui-confirm-box',

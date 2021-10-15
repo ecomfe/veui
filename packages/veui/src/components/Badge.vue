@@ -32,9 +32,12 @@ import { isNumber } from 'lodash'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
 
-config.defaults({
-  'badge.max': 999
-})
+config.defaults(
+  {
+    max: 999
+  },
+  'badge'
+)
 
 export default {
   name: 'veui-badge',

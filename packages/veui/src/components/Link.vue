@@ -1,13 +1,22 @@
 <script>
 import { uniq, noop, omit } from 'lodash'
+import config from '../managers/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
+import useConfig from '../mixins/config'
+
+config.defaults(
+  {
+    routerComponent: 'router-link'
+  },
+  'link'
+)
 
 const ABS_RE = /^(\w+:)?\/\//
 
 export default {
   name: 'veui-link',
-  mixins: [prefix, ui],
+  mixins: [prefix, ui, useConfig('config', 'link')],
   inheritAttrs: false,
   props: {
     to: {
@@ -117,7 +126,7 @@ export default {
     let component = !this.to
       ? this.fallback
       : this.useRouter
-        ? 'router-link'
+        ? this.config['link.routerComponent']
         : 'a'
 
     // 除了 click，其他的事件全部透传
@@ -145,7 +154,7 @@ export default {
           ...this.$attrs
         },
         props: {
-          ...(component === 'router-link'
+          ...(this.useRouter
             ? {
               to: this.to,
               replace: this.replace,
@@ -153,7 +162,7 @@ export default {
             }
             : null)
         },
-        ...(component === 'router-link'
+        ...(this.useRouter && this.to
           ? {
             nativeOn: {
               click: this.handleNativeClick,

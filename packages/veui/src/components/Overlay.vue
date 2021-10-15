@@ -26,10 +26,13 @@ const EMITS = ['locate', 'orderchange', 'afteropen', 'afterclose']
 
 ignoreElements(VEUI_OVERLAY_ELEMENT_NAME)
 
-config.defaults({
-  'overlay.baseZIndex': 200,
-  'overlay.overlayClass': {}
-})
+config.defaults(
+  {
+    baseZIndex: 200,
+    overlayClass: {}
+  },
+  'overlay'
+)
 
 overlayManager.setBaseOrder(config.get('overlay.baseZIndex'))
 

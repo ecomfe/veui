@@ -1,9 +1,12 @@
 import { normalize } from 'vue-directive-normalizer'
 import config from '../managers/config'
 
-config.defaults({
-  'nudge.step': 1
-})
+config.defaults(
+  {
+    step: 1
+  },
+  'nudge'
+)
 
 const OPTIONS_SCHEMA = {
   value: 'update',
