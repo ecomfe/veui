@@ -399,14 +399,17 @@
   }
 
   &-in-range&-action-end button {
+    &,
     &:hover {
       background-color: @dls-date-picker-cell-background-color-range-end-hover;
       border-color: @dls-date-picker-cell-border-color-range-end-hover;
       color: @dls-date-picker-cell-font-color;
     }
+
     &[data-focus-visible-added] {
       background-color: @dls-date-picker-cell-background-color-range-end-focus;
     }
+
     &:active {
       color: @dls-date-picker-cell-font-color;
       background-color: @dls-date-picker-cell-background-color-range-end-active;
