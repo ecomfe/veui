@@ -7,7 +7,7 @@ import useConfig from '../mixins/config'
 
 config.defaults(
   {
-    routerComponent: 'router-link'
+    routerLink: 'router-link'
   },
   'link'
 )
@@ -126,7 +126,7 @@ export default {
     let component = !this.to
       ? this.fallback
       : this.useRouter
-        ? this.config['link.routerComponent']
+        ? this.config['link.routerLink']
         : 'a'
 
     // 除了 click，其他的事件全部透传

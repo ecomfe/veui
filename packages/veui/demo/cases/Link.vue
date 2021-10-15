@@ -88,7 +88,7 @@ export default {
   data () {
     return {
       config: {
-        'link.routerComponent': 'my-link'
+        'link.routerLink': 'my-link'
       }
     }
   }
