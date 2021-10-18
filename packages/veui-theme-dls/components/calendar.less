@@ -103,6 +103,7 @@
   &-panel + &-expanded &-body,
   &-expanded + &-panel &-body {
     position: relative;
+
     &::after {
       content: "";
       display: block;
@@ -115,6 +116,7 @@
   &-type-year &-panel {
     width: dls-sum(@date-panel-width, -@dls-date-picker-year-scroller-width);
   }
+
   &-type-month &-panel + &-panel {
     width: dls-sum(
       @date-panel-width,
@@ -149,6 +151,7 @@
   &-prev {
     margin-left: @dls-date-picker-header-pagination-spacing;
   }
+
   &-next {
     margin-right: @dls-date-picker-header-pagination-spacing;
   }
@@ -224,6 +227,7 @@
         )
         @dls-date-picker-panel-padding-x 0;
     }
+
     .@{veui-prefix}-calendar-year-table {
       width: 100%;
     }
@@ -345,6 +349,7 @@
 
   &-year-table {
     border-spacing: 0 @dls-date-picker-year-cell-spacing-y;
+
     button {
       width: auto;
       padding: 0 @dls-date-picker-year-cell-padding-x;
@@ -368,16 +373,19 @@
     }
   }
 
-  &-month-table &-current button,
-  &-year-scroller &-current button,
-  &-today button {
-    color: @dls-date-picker-cell-font-color-current;
-    font-weight: @dls-font-weight-3;
+  &-month-table &-current,
+  &-year-scroller &-current,
+  &-today {
+    button {
+      color: @dls-date-picker-cell-font-color-current;
+      font-weight: @dls-font-weight-3;
+    }
   }
 
   // in-range
   &-in-range {
     position: relative;
+
     button {
       background-color: @dls-date-picker-cell-background-color-range-end-hover;
       border-radius: 0;
@@ -386,6 +394,7 @@
 
   &-in-range&-range-start {
     background-color: transparent;
+
     button {
       .border-left-radius(@dls-date-picker-cell-border-radius-m);
     }
@@ -393,6 +402,7 @@
 
   &-in-range&-range-end {
     background-color: transparent;
+
     button {
       .border-right-radius(@dls-date-picker-cell-border-radius-m);
     }
@@ -407,6 +417,7 @@
     }
 
     &[data-focus-visible-added] {
+      border-color: @dls-border-color-focus;
       background-color: @dls-date-picker-cell-background-color-range-end-focus;
     }
 
@@ -444,6 +455,7 @@
       .veui-button-transition();
     }
   }
+
   &-range-end,
   &-in-range:last-child {
     .@{veui-prefix}-calendar-date-table &::before {
@@ -455,9 +467,11 @@
   &-range-end,
   &-in-range:first-child,
   &-in-range:last-child {
-    .@{veui-prefix}-calendar-month-table &::before,
-    .@{veui-prefix}-calendar-year-table &::before {
-      width: 50%;
+    .@{veui-prefix}-calendar-month-table,
+    .@{veui-prefix}-calendar-year-table {
+      &::before {
+        width: 50%;
+      }
     }
   }
 
@@ -468,6 +482,7 @@
       right: 0;
     }
   }
+
   &-range-start&-range-end,
   &-range-start:last-child,
   &-range-end:first-child {
@@ -509,10 +524,12 @@
         background-color: @dls-date-picker-list-background-color-hover;
         color: @dls-date-picker-list-font-color-hover;
       }
+
       &[data-focus-visible-added] {
         background-color: @dls-date-picker-list-background-color-focus;
         color: @dls-date-picker-list-font-color-focus;
       }
+
       &:active {
         background-color: @dls-date-picker-list-background-color-active;
         color: @dls-date-picker-list-font-color-active;
@@ -553,6 +570,7 @@
         .absolute(dls-sum(@header-height, -1px), 0, _, 0);
       }
     }
+
     &.@{veui-prefix}-calendar-type-month .@{veui-prefix}-calendar-panel,
     &.@{veui-prefix}-calendar-type-year .@{veui-prefix}-calendar-panel,
     &.@{veui-prefix}-calendar-type-year .@{veui-prefix}-date-picker-inputs {
