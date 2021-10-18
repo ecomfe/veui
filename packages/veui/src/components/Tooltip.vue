@@ -85,6 +85,9 @@ export default {
         ? this.config['tooltip.hideDelay']
         : this.hideDelay
     },
+    realPosition () {
+      return this.position || 'top'
+    },
     targetNode () {
       return this.getTargetNode(this.target)
     },
@@ -101,15 +104,16 @@ export default {
       return this.interactive ? this.autofocus : false
     },
     defaultOverlayOptions () {
+      let position = this.realPosition
       return {
-        position: this.position,
+        position,
         ...(this.aimCenter
           ? {
             offset: {
               offset:
-                  this.position.indexOf('start') !== -1
+                  position.indexOf('start') !== -1
                     ? '50%'
-                    : this.position.indexOf('end') !== -1
+                    : position.indexOf('end') !== -1
                       ? '-50%'
                       : 0
             }
@@ -119,7 +123,7 @@ export default {
     }
   },
   watch: {
-    targetNode (val, oldVal) {
+    targetNode (_, oldVal) {
       this.removeHandler(oldVal)
       this.bindHandler()
     },
