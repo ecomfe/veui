@@ -48,6 +48,7 @@
         :value="formattedSelection[1]"
         :placeholder="realPlaceholder[1]"
         tabindex="-1"
+        @click="activateByEnd = true"
       />
     </template>
     <div :class="$c('date-picker-icon')">
@@ -133,7 +134,7 @@
               ref="start"
               :value="realInputValue[0]"
               :ui="uiParts.input"
-              autofocus
+              :autofocus="activateByEnd ? null : ''"
               @input="handleInput(0, $event)"
               @focus="handleInputFocus"
             />
@@ -143,6 +144,7 @@
                 ref="end"
                 :value="realInputValue[1]"
                 :ui="uiParts.input"
+                :autofocus="activateByEnd ? '' : null"
                 @input="handleInput(1, $event)"
                 @focus="handleInputFocus"
               />
@@ -292,11 +294,9 @@ export default {
       picking: null,
       localSelected: null,
       localInputValue: [],
+      activateByEnd: false,
       defaultOverlayOptions: {
-        position: 'top-start',
-        inner: {
-          enabled: true
-        }
+        position: 'bottom-start'
       }
     }
   },
@@ -376,6 +376,8 @@ export default {
             }
           }
         })
+      } else {
+        this.activateByEnd = false
       }
     }
   },
@@ -522,7 +524,7 @@ export default {
         this.relocate()
       })
     },
-    clear (e) {
+    clear () {
       this.commit('selected', null)
       this.commit('expanded', false)
       this.localInputValue = []

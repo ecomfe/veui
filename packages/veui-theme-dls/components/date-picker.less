@@ -119,21 +119,40 @@
 
   &-overlay-content {
     &:extend(._veui-dropdown-overlay all);
+    box-shadow: @dls-date-picker-dropdown-shadow;
+    .border-radius(@dls-date-picker-dropdown-border-radius-m);
+    display: flex;
+    align-items: stretch;
+
     &[ui] {
       max-height: none;
     }
-    box-shadow: @dls-date-picker-dropdown-shadow;
-    .border-radius(@dls-date-picker-dropdown-border-radius-m);
-    margin-top: -1px;
-    display: flex;
-    align-items: stretch;
+
+    [x-placement*="top"] & {
+      margin-bottom: -@dls-input-height-m;
+    }
+
+    [x-placement*="top"] &[ui~="s"] {
+      margin-bottom: -@dls-input-height-s;
+    }
+
+    [x-placement*="bottom"] & {
+      margin-top: -@dls-input-height-m;
+    }
+
+    [x-placement*="bottom"] &[ui~="s"] {
+      margin-top: -@dls-input-height-s;
+    }
 
     .@{veui-prefix}-calendar {
       border-radius: inherit;
     }
   }
+
   &-overlay-content .@{veui-prefix}-calendar-type-year,
-  &-overlay-content .@{veui-prefix}-calendar-type-year .@{veui-prefix}-calendar-panel,
+  &-overlay-content
+    .@{veui-prefix}-calendar-type-year
+    .@{veui-prefix}-calendar-panel,
   &-overlay-content &-inputs {
     min-width: 100%;
   }
