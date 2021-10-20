@@ -467,11 +467,9 @@
   &-range-end,
   &-in-range:first-child,
   &-in-range:last-child {
-    .@{veui-prefix}-calendar-month-table,
-    .@{veui-prefix}-calendar-year-table {
-      &::before {
-        width: 50%;
-      }
+    .@{veui-prefix}-calendar-month-table &::before,
+    .@{veui-prefix}-calendar-year-table &::before {
+      width: 50%;
     }
   }
 
