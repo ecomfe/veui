@@ -13,7 +13,7 @@
   "scripts": {
     "build": "node -r esm build/icons.js",
     "prepublishOnly": "rollup -c && cp -r ./icons/* .",
-    "publish": "rimraf '!(*.config).js icon-names.json'",
+    "publish": "del '*.js' '!*.config.js' 'icon-names.json'",
     "prepare": "npm run build"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
+    "del-cli": "^4.0.1",
     "esm": "^3.0.84",
     "mkdirp": "^0.5.4",
     "rimraf": "^2.6.2",
