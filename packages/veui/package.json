@@ -1,6 +1,6 @@
 {
   "name": "veui",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "Baidu Enterprise UI for Vue.js.",
   "scripts": {
     "serve": "cross-env NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service serve",
@@ -47,7 +47,7 @@
     "babel-eslint": "^10.0.1",
     "babel-plugin-istanbul": "^5.1.4",
     "babel-plugin-lodash": "^3.3.4",
-    "babel-plugin-veui": "^2.1.6",
+    "babel-plugin-veui": "^2.1.7",
     "chai": "^4.2.0",
     "classlist-polyfill": "^1.2.0",
     "cross-env": "^5.2.0",
@@ -83,9 +83,9 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-vue": "^5.1.9",
     "sinon": "^8.0.4",
-    "veui-loader": "^2.1.6",
-    "veui-theme-dls": "^2.1.6",
-    "veui-theme-dls-icons": "^2.1.6",
+    "veui-loader": "^2.1.7",
+    "veui-theme-dls": "^2.1.7",
+    "veui-theme-dls-icons": "^2.1.7",
     "vue": "^2.6.11",
     "vue-router": "^3.3.4",
     "vue-template-compiler": "^2.6.11"
