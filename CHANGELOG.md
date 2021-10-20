@@ -2,13 +2,15 @@
 
 ### 💡 主要变更
 
-- [+] 为 `Link` 组件新增全局配置项 `link.routerLink`，用于在路由模式下允许使用除了 `<router-link>` 以外的组件，比如在 Nuxt 项目下使用 `<nuxt-link>`。
+- [+] 为 `Link` 组件新增全局配置项 `link.routerLink`，用于在路由模式下允许使用除了 `<router-link>` 以外的组件，比如在 Nuxt 项目下使用 `<nuxt-link>`。<!-- #Link -->
 
 ### 🐞 问题修复
 
 - [^] 修正 `Progress` 组件的状态一致性问题。<!-- #Progress -->
 - [^] 修正 `Uploader` 组件的 `convertResponse` 无法通过 `ConfigProvider` 组件进行局部配置的问题。<!-- #Uploader -->
 - [^] 修正 `Textarea` / `Calendar` / `Input` 组件在 Safari 下的样式问题。<!-- #Textarea #Calendar #Input -->
+- [^] 修正 `DatePicker` 组件的下拉浮层在溢出视口时没有正确左右翻转的问题。<!-- #DatePicker -->
+- [^] 修正 `v-tooltip` 指令在目标元素销毁时可能没有消失的问题。<!-- #v-tooltip -->
 
 ## 2.1.6
 
