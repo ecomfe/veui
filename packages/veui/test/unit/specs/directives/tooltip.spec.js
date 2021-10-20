@@ -155,4 +155,60 @@ describe('directives/tooltip', () => {
 
     wrapper.destroy()
   })
+
+  it('should close correctly when target is destroyed', async function () {
+    this.timeout(5000)
+    let warmup = config.get('tooltip.warmup')
+    let cooldown = config.get('tooltip.cooldown')
+
+    let wrapper = mount(
+      {
+        directives: { tooltip },
+        template: `
+          <div style="width: 200px; height: 200px; display: flex; align-items: center; justify-content: center">
+            <div class="a" v-if="a" key="a" v-tooltip="'Hi'">A</div>
+            <div class="b" v-if="b" key="b" v-tooltip="{ content: 'Hey' }">B</div>
+          </div>`,
+        data () {
+          return {
+            position: 'top',
+            a: true,
+            b: true
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+    let a = wrapper.find('.a')
+
+    a.trigger('mouseenter')
+
+    await wait(warmup + 50)
+    expectTooltip('Hi', 'top')
+
+    vm.a = false
+    await vm.$nextTick()
+    await wait(cooldown + 50)
+    expectTooltip(null)
+
+    vm.a = true
+    await vm.$nextTick()
+    a = wrapper.find('.a')
+    a.trigger('mouseenter')
+    await wait(warmup + 50)
+    expectTooltip('Hi', 'top')
+
+    vm.b = false
+    await vm.$nextTick()
+    await wait(cooldown + 50)
+    expectTooltip('Hi', 'top')
+
+    tooltipManager.destroy()
+
+    wrapper.destroy()
+  })
 })

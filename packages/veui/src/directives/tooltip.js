@@ -52,6 +52,7 @@ function refresh (el, binding) {
 function clear (el) {
   const { handleMouseEnter, handleMouseLeave } = el.__tooltip_context__
 
+  tooltip.leave(el)
   el.removeEventListener('mouseenter', handleMouseEnter)
   el.removeEventListener('mouseleave', handleMouseLeave)
 
