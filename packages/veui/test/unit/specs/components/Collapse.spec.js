@@ -144,7 +144,7 @@ describe('components/Collapse', () => {
     wrapper.destroy()
   })
 
-  it('should handle expandIconPosition prop correctly', async () => {
+  it('should handle togglePosition prop correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -156,7 +156,7 @@ describe('components/Collapse', () => {
           }
         },
         template: `
-          <veui-collapse label="点击切换" :expand-icon-position="position">
+          <veui-collapse label="点击切换" :toggle-position="position">
             Content
           </veui-collapse>`
       },
