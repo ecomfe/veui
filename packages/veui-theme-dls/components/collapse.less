@@ -25,6 +25,12 @@
       background-color: @dls-collapse-header-background-color-hover;
     }
 
+    &[data-focus-visible-added] {
+      border-color: @dls-collapse-header-border-color-focus !important;
+      box-shadow: @dls-collapse-header-shadow-focus;
+      z-index: 1;
+    }
+
     &:active {
       background-color: @dls-collapse-header-background-color-active;
     }
@@ -181,16 +187,5 @@
   &[ui~="basic"]:not([ui~="bordered"]),
   &[ui~="strong"]:not([ui~="bordered"]) {
     border-color: transparent;
-  }
-
-  &-header,
-  &[ui~="simple"] &-header,
-  &[ui~="basic"] &-header,
-  &[ui~="strong"] &-header {
-    &[data-focus-visible-added] {
-      border-color: @dls-collapse-header-border-color-focus;
-      box-shadow: @dls-collapse-header-shadow-focus;
-      z-index: 1;
-    }
   }
 }
