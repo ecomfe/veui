@@ -14,10 +14,10 @@
     @keydown.enter.space.prevent="toggle"
   >
     <veui-icon
-      v-if="realExpandIconPosition !== 'none'"
+      v-if="realTogglePosition !== 'none'"
       :class="{
         [$c('collapse-toggle')]: true,
-        [$c('collapse-toggle-end')]: realExpandIconPosition === 'end'
+        [$c('collapse-toggle-end')]: realTogglePosition === 'end'
       }"
       :name="icons.collapse"
     />
@@ -50,7 +50,7 @@ let accordionItem = useChild('accordion-item', 'accordion', ['name'], {
   direct: true
 })
 
-export const expandIconPositionProp = {
+export const togglePositionProp = {
   type: String,
   validator (val) {
     return [null, 'start', 'end', 'none'].indexOf(val) >= 0
@@ -105,7 +105,7 @@ export default {
         return typeof val === 'boolean'
       }
     },
-    expandIconPosition: expandIconPositionProp,
+    togglePosition: togglePositionProp,
     disabled: Boolean,
     name: {
       type: [String, Number],
@@ -120,8 +120,8 @@ export default {
       }
       return this.disabled
     },
-    realExpandIconPosition () {
-      return this.inheritFromAccordion('expandIconPosition') || 'start'
+    realTogglePosition () {
+      return this.inheritFromAccordion('togglePosition') || 'start'
     }
   },
   methods: {

@@ -13,7 +13,7 @@ import { useParent } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 import { clone } from 'lodash'
-import { expandIconPositionProp } from './Collapse'
+import { togglePositionProp } from './Collapse'
 import '../common/uiTypes'
 
 let accordion = useParent('accordion', { childrenKeys: 'items' })
@@ -26,7 +26,7 @@ export default {
     multiple: Boolean,
     disabled: Boolean,
     expanded: [Number, String, Array],
-    expandIconPosition: expandIconPositionProp
+    togglePosition: togglePositionProp
   },
   methods: {
     toggleById (id) {
