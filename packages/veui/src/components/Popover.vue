@@ -74,10 +74,10 @@ export default {
         {!this.footless && (
           <div class={this.$c('popover-foot')}>
             {this.$slots.foot || [
-              <Button ui="text aux" onClick={this.handleCancel}>
+              <Button ui={this.uiParts.cancel} onClick={this.handleCancel}>
                 {this.cancelLabel || this.t('cancel')}
               </Button>,
-              <Button ui="text strong" onClick={this.handleOk}>
+              <Button ui={this.uiParts.ok} onClick={this.handleOk}>
                 {this.okLabel || this.t('ok')}
               </Button>
             ]}
