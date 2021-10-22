@@ -125,7 +125,7 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
     },
     destroyed () {
       let parent = this[parentKey]
-      if (!parent || parent.__destroying__) {
+      if (!parent || parent.__coupled_destroying__) {
         return
       }
 
