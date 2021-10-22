@@ -17,7 +17,6 @@
       }"
       :items="normalizedItems"
       :expanded="realExpanded"
-      :matches="treeMatches"
     >
       <template
         slot="item"
