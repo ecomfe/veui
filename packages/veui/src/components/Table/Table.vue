@@ -467,6 +467,26 @@ export default {
       return this.selectColumnWidth + this.expandColumnWidth
     }
   },
+  watch: {
+    selectable (val) {
+      if (val) {
+        this.$nextTick(() => {
+          this.updateSelectColumnWidth()
+        })
+      } else {
+        this.selectColumnWidth = 0
+      }
+    },
+    expandable (val) {
+      if (val) {
+        this.$nextTick(() => {
+          this.updateExpandColumnWidth()
+        })
+      } else {
+        this.expandColumnWidth = 0
+      }
+    }
+  },
   mounted () {
     if (this.supportSticky === null) {
       if (supportSticky === null) {
@@ -485,14 +505,10 @@ export default {
     })
 
     if (this.selectable) {
-      this.selectColumnWidth = this.$el.querySelector(
-        `.${this.$c('table-cell-select')}`
-      ).offsetWidth
+      this.updateSelectColumnWidth()
     }
     if (this.expandable) {
-      this.expandColumnWidth = this.$el.querySelector(
-        `.${this.$c('table-cell-expand')}`
-      ).offsetWidth
+      this.updateExpandColumnWidth()
     }
   },
   beforeDestroy () {
@@ -507,6 +523,16 @@ export default {
     }
   },
   methods: {
+    updateSelectColumnWidth () {
+      this.selectColumnWidth = this.$el.querySelector(
+        `.${this.$c('table-cell-select')}`
+      ).offsetWidth
+    },
+    updateExpandColumnWidth () {
+      this.expandColumnWidth = this.$el.querySelector(
+        `.${this.$c('table-cell-expand')}`
+      ).offsetWidth
+    },
     select (selected, index) {
       let item = null
       let value

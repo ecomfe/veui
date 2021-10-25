@@ -15,6 +15,9 @@
     <veui-button @click="filtered = null">清空筛选</veui-button>
   </section>
   <section>
+    <veui-checkbox v-model="selectable">可选择</veui-checkbox>
+  </section>
+  <section>
     <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
     <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
     <veui-label>内容固定行<veui-number-input
@@ -53,7 +56,7 @@
       :data="data"
       :column-filter="columns"
       :key-field="selectSpanRow ? 'group' : 'id'"
-      selectable
+      :selectable="selectable"
       :order-by="orderBy"
       :order="order"
       :selected.sync="selected1"
@@ -674,6 +677,7 @@ export default {
     return {
       filtered: null,
       s: false,
+      selectable: true,
       idTitle: '#',
       showGroup: true,
       selectSpanRow: true,
