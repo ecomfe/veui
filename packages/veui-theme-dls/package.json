@@ -26,7 +26,7 @@
     "veui-theme-dls-icons": "^2.1.7"
   },
   "peerDependencies": {
-    "veui": "2.1.7"
+    "veui": "2.2.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",

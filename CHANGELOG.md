@@ -1,3 +1,22 @@
+## 2.2.0
+
+### 💡 主要变更
+
+- [+] 为 `Popover` 组件新增 `title` prop 与 `title` 插槽，用于自定义标题内容。<!-- #Popover -->
+- [+] 为 `Popover` 组件新增 `foot` / `okLabel` / `cancelLabel` prop 与 `foot` 插槽，用于开启底部操作区并自定义操作按钮文本。<!-- #Popover -->
+- [+] 为 `Accordion` / `Collapse` 组件新增 `ui` 样式 `simple` / `basic` / `strong` / `bordered` / `borderless` / `dull`。<!-- #Accordion #Collapse -->
+- [+] 为 `Accordion` / `Collapse` 组件新增 `toggle-position` prop，用于自定义展开/收起箭头的位置。<!-- #Accordion #Collapse -->
+- [+] 为 `Collapse` 组件新增 `title-after` 插槽，用于自定标题后缀内容。<!-- #Collapse -->
+
+### 🐞 问题修复
+
+- [^] 修正 `Tabs` 组件销毁过程中触发数据变化的问题。<!-- #Tabs -->
+
+### 🧪 实验性功能
+
+- [+] 为 `Table` 组件新增自定义 CSS 属性 `--dls-table-cell-lines` / `--dls-table-head-cell-lines`，用于指定显示固定内容/表头行数的表格。<!-- #Table -->
+- [+] 为 `Accordion` 组件新增自定义 CSS 属性 `--dls-accordion-gutter`，用于自定义折叠面板间距。<!-- #Accordion -->
+
 ## 2.1.7
 
 ### 💡 主要变更
