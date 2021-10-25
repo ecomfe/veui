@@ -90,7 +90,6 @@
       <h2>小尺寸月份范围</h2>
       <veui-date-picker
         v-model="selectedDateRange"
-        :overlay-options="{ position: 'right-start' }"
         clearable
         range
         type="month"

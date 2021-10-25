@@ -24,7 +24,7 @@ The above config means that two additional modules will be loaded for each compo
 
 ### `locale`
 
-Type: `string|Array<string>`
+Type: `string | Array<string>`
 
 Default: `'zh-Hans'`
 
@@ -68,7 +68,7 @@ The template for the peer file name for the component. Must contain the placehol
 
 #### `transform`
 
-Type: `'kebab-case'`|`'camleCase'`|`'PascalCase'`|`false`
+Type: `'kebab-case' | 'camleCase' | 'PascalCase' | false`
 
 Default: `'kebab-case'`
 

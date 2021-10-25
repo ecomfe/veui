@@ -4,9 +4,7 @@
 
 Documentation: [中文 🇨🇳](https://veui.dev) | [English 🇺🇸](https://veui.dev/en-US)
 
-Enterprise UI components for Vue.js. Based on [BAIDU](https://www.baidu.com)'s Design Language System (DLS).
-
-🚧 *This is a work in progress.* 🚧
+Enterprise UI components for Vue.js. Based on [BAIDU](https://www.baidu.com)'s Light Design Language System (Light Design).
 
 ## Features
 

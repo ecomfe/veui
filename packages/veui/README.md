@@ -2,9 +2,7 @@
 
 [![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui)
 
-Enterprise UI components for Vue.js. Based on Baidu Design Language System (DLS).
-
-*This is a work in progress.*
+Enterprise UI components for Vue.js. Based on Baidu Light Design Language System (Light Design).
 
 [DEMO](https://dls.veui.dev/)
 
