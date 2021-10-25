@@ -16,10 +16,7 @@ export default {
   props: {
     title: String,
     open: Boolean,
-    footless: {
-      type: Boolean,
-      default: true
-    },
+    foot: Boolean,
     okLabel: String,
     cancelLabel: String
   },
@@ -49,7 +46,7 @@ export default {
       this.$emit('cancel')
     }
   },
-  render (h) {
+  render () {
     return (
       <Tooltip
         ui={compact([this.uiParts.self, this.ui]).join(' ')}
@@ -71,7 +68,7 @@ export default {
           </div>
         )}
         <div class={this.$c('popover-content')}>{this.$slots.default}</div>
-        {!this.footless && (
+        {this.foot && (
           <div class={this.$c('popover-foot')}>
             {this.$slots.foot || [
               <Button ui={this.uiParts.cancel} onClick={this.handleCancel}>

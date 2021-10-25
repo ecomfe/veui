@@ -176,7 +176,7 @@ describe('components/Popover', function () {
         template: `
           <div>
             <div ref="t">?</div>
-            <veui-popover target="t" open :footless="false">
+            <veui-popover target="t" open foot>
               <div v-if="renderSlot" slot="foot">foot</div>
             </veui-popover>
           </div>`
