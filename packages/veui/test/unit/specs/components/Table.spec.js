@@ -3,7 +3,7 @@ import Popover from '@/components/Popover'
 import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 import Select from '@/components/Select'
-import { mount } from '../../../utils'
+import { mount, wait } from '../../../utils'
 
 describe('components/Table', () => {
   it('should select the specified fields.', async () => {
@@ -2005,6 +2005,66 @@ describe('components/Table', () => {
       ['a'],
       null
     ])
+    wrapper.destroy()
+  })
+
+  it('should switch selectable prop value correctly', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            selectable: true,
+            data: [
+              { id: 1, name: '1name' },
+              { id: 2, name: '2name' }
+            ]
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+            :selectable="selectable"
+            :scroll="{
+              x: 1280
+            }"
+          >
+            <veui-table-column
+              field="id"
+              title="id"
+              fixed
+              :width="120"
+            />
+            <veui-table-column
+              field="name"
+              title="name"
+              :width="1200"
+            />
+          </veui-table>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    await wait(0)
+    expect(wrapper.find('.veui-table-cell-select').exists()).to.equal(true)
+    expect(
+      wrapper.find('.veui-table-cell-sticky-edge').element.style.left
+    ).to.not.equal('0px')
+
+    vm.selectable = false
+    await wait(0)
+    expect(wrapper.find('.veui-table-cell-select').exists()).to.equal(false)
+    expect(
+      wrapper.find('.veui-table-cell-sticky-edge').element.style.left
+    ).to.equal('0px')
+
     wrapper.destroy()
   })
 })
