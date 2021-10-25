@@ -16,9 +16,17 @@
   </section>
   <section>
     <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
-  </section>
-  <section>
     <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
+    <veui-label>内容固定行<veui-number-input
+      v-model="lines"
+      :min="0"
+      :max="2"
+    /></veui-label>
+    <veui-label>表头固定行<veui-number-input
+      v-model="headLines"
+      :min="0"
+      :max="2"
+    /></veui-label>
   </section>
   <section>
     <veui-checkboxgroup
@@ -50,6 +58,7 @@
       :order="order"
       :selected.sync="selected1"
       :loading="loading"
+      :style="style"
       @select="handleSelect"
       @sort="handleSort"
     >
@@ -77,6 +86,7 @@
         <veui-table-column
           field="typeId"
           title="类型 ID"
+          sortable
           :span="typeSpan"
         >
           <template #desc="{ close }">
@@ -472,7 +482,9 @@ import {
   CheckboxGroup,
   Table,
   Column,
-  Link
+  Link,
+  NumberInput,
+  Label
 } from 'veui'
 import { tooltip } from 'veui/directives'
 
@@ -646,7 +658,9 @@ export default {
     'veui-checkbox': Checkbox,
     'veui-input': Input,
     'veui-link': Link,
-    'veui-checkboxgroup': CheckboxGroup
+    'veui-checkboxgroup': CheckboxGroup,
+    'veui-number-input': NumberInput,
+    'veui-label': Label
   },
   directives: {
     tooltip
@@ -663,6 +677,8 @@ export default {
       idTitle: '#',
       showGroup: true,
       selectSpanRow: true,
+      lines: 0,
+      headLines: 0,
       fields: [
         { name: 'id', title: 'ID' },
         { name: 'desc', title: '描述' }
@@ -741,6 +757,20 @@ export default {
     },
     inputFilterActive () {
       return this.inputFilter === '' ? null : true
+    },
+    style () {
+      return {
+        ...(this.lines
+          ? {
+            '--dls-table-cell-lines': this.lines
+          }
+          : null),
+        ...(this.headLines
+          ? {
+            '--dls-table-head-cell-lines': this.headLines
+          }
+          : null)
+      }
     }
   },
   mounted () {
