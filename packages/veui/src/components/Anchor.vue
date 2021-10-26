@@ -1,6 +1,9 @@
 <template>
 <div
-  :class="$c('anchor')"
+  :class="{
+    [$c('anchor')]: true,
+    [$c('anchor-sticky')]: sticky
+  }"
   :ui="realUi"
 >
   <div
@@ -56,15 +59,7 @@ import Tree from './Tree'
 import Link from './Link'
 import ui from '../mixins/ui'
 import prefix from '../mixins/prefix'
-import {
-  debounce,
-  reduce,
-  startsWith,
-  includes,
-  get,
-  isString,
-  isObject
-} from 'lodash'
+import { debounce, reduce, startsWith, includes, get } from 'lodash'
 import {
   scrollToAlign,
   getVisibleRect,
@@ -176,68 +171,33 @@ export default {
   watch: {
     container: {
       handler (val) {
-        // isObject 检查：避免 SSR 时访问 window
-        if (!val || (isObject(val) && val === window)) {
-          this.realContainer = this.anchorMounted ? val || window : val
-          this.$nextTick(this.updateOnContainerChange)
-        } else if (isString(val)) {
-          // ref, 那么在 nextTick 中才能拿到 dom
+        if (process.env.VUE_ENV === 'server') {
+          return
+        }
+
+        if (!val) {
+          this.realContainer = window
+        } else {
           this.$nextTick(() => {
             this.realContainer = get(
               getNodes(val, this.$vnode.context),
               '[0]',
               null
             )
-            this.updateOnContainerChange()
           })
-        } else {
-          // vue instance...
-          this.realContainer = get(
-            getNodes(val, this.$vnode.context),
-            '[0]',
-            null
-          )
-          this.$nextTick(this.updateOnContainerChange)
         }
       },
       immediate: true
     }
   },
   mounted () {
-    this.debounceActivateAnchor = debounce(this.activateAnchor, 1000 / 60)
+    this.debouncedActivateAnchor = debounce(this.activateAnchor, 1000 / 60)
     this.installScrollHandler()
 
     let hash = decodeURIComponent(location.hash)
     if (hash && includes(this.allAnchors, hash)) {
       this.updateActive(hash)
-
-      // url 上初始就有 hash，那么最好一开始就滚动到对应的位置
-      // 但是浏览器自己可能也会滚动，因为 Anchor 是可以指定容器滚动的，所以浏览器的滚动不一定是我们想要的位置
-      // 所以希望可以覆盖掉浏览器的滚动，最终滚动到合适位置
-      this.ensureHashActive = true
-      const isLoading = document.readyState === 'loading'
-      if (isLoading) {
-        this.waitForLoaded = true
-        window.addEventListener('DOMContentLoaded', () => {
-          // 为了尽可能在浏览器滚动后再滚动一次
-          setTimeout(() => {
-            this.waitForLoaded = false
-            // 如果这里没有 container，那么会在 container watch 时候再补上
-            if (this.realContainer) {
-              this.scrollForHash()
-            }
-          }, 0)
-        })
-      }
-    } else if (!this.container) {
-      this.$nextTick(() => {
-        if (!this.realContainer) {
-          this.realContainer = window
-          this.updateOnContainerChange()
-        }
-      })
     }
-    this.anchorMounted = true
   },
   beforeDestroy () {
     this.removeScrollHandler()
@@ -254,26 +214,11 @@ export default {
         link === this.localActive ? this.uiParts.current : ''
       }`.trim()
     },
-    updateOnContainerChange () {
-      // dom 加载好了还没有滚动到 url hash 处，说明加载事件中还没有 container，这里补上。
-      if (this.realContainer) {
-        if (this.ensureHashActive && !this.waitForLoaded) {
-          this.scrollForHash()
-        } else if (!this.ensureHashActive) {
-          if (this.sticky) this.toggleSticky()
-          this.activateAnchor()
-        }
-      }
-    },
-    scrollForHash () {
-      // 立即滚动到 hash 处
-      this.scrollToAnchor(() => {
-        this.ensureHashActive = false
-        // 可能因为浏览器的滚动或保留上次滚动位置，而导致实际不会触发滚动，所以补个 sticky 检测
-        if (this.sticky) this.toggleSticky()
-      }, 0)
-    },
     installScrollHandler () {
+      /**
+       * 为什么往 window 上加事件而非直接在 container 上？
+       * 当 container 变化时不用重新绑定
+       */
       if (!globalScrollHandler.fns.length) {
         // not bubbles
         window.addEventListener('scroll', globalScrollHandler, true)
@@ -387,6 +332,12 @@ export default {
           }
         }
       }
+      let container =
+        this.realContainer === window
+          ? document.documentElement
+          : this.realContainer
+      let prev = container.style.scrollBehavior
+      container.style.scrollBehavior = 'auto'
       this.animating = true
       scrollToAlign(this.realContainer, el, {
         targetPosition: 0,
@@ -394,12 +345,10 @@ export default {
         duration,
         beforeScroll,
         afterScroll: () => {
-          // 这里要两个raf， 因为 scroll 用 raf 节流了
           raf(() => {
-            raf(() => {
-              this.animating = false
-              if (cb) cb()
-            })
+            this.animating = false
+            container.style.scrollBehavior = prev
+            if (cb) cb()
           })
         }
       })
@@ -434,39 +383,25 @@ export default {
       this.scrollToAnchor()
     },
     handleScroll (event) {
-      // 滚动到 url hash 之前不处理事件
-      if (this.ensureHashActive) {
+      let isWindow = this.realContainer === window
+      // window 滚动时，target 是 document
+      let isContainerScrolling =
+        event.target === this.realContainer ||
+        (event.target === document && isWindow)
+      let isParentScrolling =
+        !isContainerScrolling &&
+        !isWindow &&
+        this.realContainer.compareDocumentPosition(event.target) &
+          Node.DOCUMENT_POSITION_CONTAINS
+
+      if (!isContainerScrolling && !isParentScrolling) {
         return
       }
-      if (!this.ticking) {
-        raf(() => {
-          this.ticking = false
-          if (!this.realContainer) {
-            return
-          }
-          let isWindow = this.realContainer === window
-          // window 滚动时，target 是 document
-          let isContainerScrolling =
-            event.target === this.realContainer ||
-            (event.target === document && isWindow)
-          let isParentScrolling =
-            !isContainerScrolling &&
-            !isWindow &&
-            this.realContainer.compareDocumentPosition(event.target) &
-              Node.DOCUMENT_POSITION_CONTAINS
-          if (!isContainerScrolling && !isParentScrolling) {
-            return
-          }
-          if (this.sticky) this.toggleSticky()
-          if (
-            isContainerScrolling &&
-            !this.animating &&
-            !this.ensureHashActive
-          ) {
-            this.debounceActivateAnchor()
-          }
-        })
-        this.ticking = true
+
+      if (this.sticky) this.toggleSticky()
+
+      if (isContainerScrolling && !this.animating) {
+        this.debouncedActivateAnchor()
       }
     }
   }
