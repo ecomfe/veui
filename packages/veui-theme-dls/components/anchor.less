@@ -16,6 +16,10 @@
   overflow: auto;
   line-height: @dls-line-height-1;
 
+  &-sticky {
+    position: sticky;
+  }
+
   &-placeholder {
     display: block;
     width: 0;
@@ -40,6 +44,7 @@
   &-wrapper {
     max-height: 100vh;
     display: block;
+
     .@{veui-prefix}-tree-item {
       height: @dls-anchor-height-m;
       line-height: @dls-anchor-height-m;
