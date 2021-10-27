@@ -6,12 +6,8 @@
     "build-plugin": "cd packages/babel-plugin-veui && npm run build && cd ../..",
     "build-loader": "cd packages/veui-loader && npm run build && cd ../..",
     "build": "lerna run build",
-    "bootstrap": "npm i && lerna bootstrap && npm run build-plugin && npm run build-loader"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "bootstrap": "npm i && lerna bootstrap && npm run build-plugin && npm run build-loader",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -24,7 +20,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
-    "husky": "^4.3.0",
+    "husky": "^7.0.0",
     "lerna": "^4.0.0",
     "lerna-audit": "^1.2.0",
     "lint-staged": "^10.5.1",
