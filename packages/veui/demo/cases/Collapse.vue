@@ -49,7 +49,7 @@
     </p>
     <veui-collapse
       :expanded.sync="expanded"
-      :expand-icon-position="position"
+      :toggle-position="position"
       :ui="realVariants"
       label="点击切换"
     >
@@ -104,7 +104,7 @@
         '--dls-accordion-gutter': `${gutter}px`
       }"
       :ui="`${realVariants} ${Separate ? 'separate' : ''}`.trim()"
-      :expand-icon-position="position"
+      :toggle-position="position"
     >
       <veui-collapse label="标题一">
         Content
