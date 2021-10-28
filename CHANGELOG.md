@@ -1,12 +1,12 @@
-## 2.2.0
+## 2.2.0 "🪗 Accordion"
 
 ### 💡 主要变更
 
-- [+] 为 `Popover` 组件新增 `title` prop 与 `title` 插槽，用于自定义标题内容。<!-- #Popover -->
-- [+] 为 `Popover` 组件新增 `foot` / `okLabel` / `cancelLabel` prop 与 `foot` 插槽，用于开启底部操作区并自定义操作按钮文本。<!-- #Popover -->
 - [+] 为 `Accordion` / `Collapse` 组件新增 `ui` 样式 `simple` / `basic` / `strong` / `bordered` / `borderless` / `dull`。<!-- #Accordion #Collapse -->
 - [+] 为 `Accordion` / `Collapse` 组件新增 `toggle-position` prop，用于自定义展开/收起箭头的位置。<!-- #Accordion #Collapse -->
 - [+] 为 `Collapse` 组件新增 `title-after` 插槽，用于自定标题后缀内容。<!-- #Collapse -->
+- [+] 为 `Popover` 组件新增 `title` prop 与 `title` 插槽，用于自定义标题内容。<!-- #Popover -->
+- [+] 为 `Popover` 组件新增 `foot` / `okLabel` / `cancelLabel` prop 与 `foot` 插槽，用于开启底部操作区并自定义操作按钮文本。<!-- #Popover -->
 
 ### 🐞 问题修复
 
