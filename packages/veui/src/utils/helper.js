@@ -232,10 +232,24 @@ export function hasClass (vnode, clazz) {
   )
 }
 
+const pxRe = /px$/
+const percentRe = /%$/
+
 export function resolveOffset (val, base) {
-  let isPx = isString(val) && /px$/.test(val)
-  let num = isPx ? +val.replace(/px$/, '') : val || 0
-  return base == null ? num : isPx ? num : base * num
+  if (val == null) {
+    return 0
+  }
+
+  let result = val
+  if (isString(val)) {
+    if (pxRe.test(val)) {
+      result = +val.replace(pxRe, '')
+    } else if (percentRe.test(val)) {
+      val = +val.replace(percentRe, '') / 100
+      result = base == null ? val : base * val
+    }
+  }
+  return result
 }
 
 export function ignoreElements (names) {

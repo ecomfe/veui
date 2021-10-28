@@ -1,9 +1,6 @@
 <template>
 <div
-  :class="{
-    [$c('anchor')]: true,
-    [$c('anchor-sticky')]: sticky
-  }"
+  :class="$c('anchor')"
   :ui="realUi"
 >
   <div
@@ -124,10 +121,7 @@ export default {
   mixins: [prefix, ui],
   props: {
     items: Tree.props.datasource,
-    sticky: {
-      type: Boolean,
-      default: true
-    },
+    sticky: Boolean,
     container: {
       type:
         process.env.VUE_ENV === 'server' ? true : [String, HTMLElement, Window],
