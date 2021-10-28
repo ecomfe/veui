@@ -84,8 +84,9 @@
     color: @dls-collapse-body-font-color;
     font-size: @dls-collapse-body-font-size-m;
     line-height: @dls-collapse-body-line-height;
-    margin: -1px;
-    border: inherit;
+    margin: 0 -1px;
+    border-left: inherit;
+    border-right: inherit;
   }
 
   &-content {
@@ -106,13 +107,19 @@
     }
   }
 
-  &[ui~="basic"] > &-header,
-  &[ui~="strong"] > &-header,
-  &[ui~="simple"] > &-header {
-    border-color: inherit;
+  &[ui~="basic"] > &,
+  &[ui~="strong"] > &,
+  &[ui~="simple"] > & {
+    &-header {
+      border-color: inherit;
 
-    .@{veui-prefix}-collapse-expanded& {
-      border-bottom-color: transparent;
+      .@{veui-prefix}-collapse-expanded& {
+        border-bottom-color: transparent;
+      }
+    }
+
+    &-body > .@{veui-prefix}-collapse-content {
+      padding-top: 0;
     }
   }
 
