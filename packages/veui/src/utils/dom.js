@@ -529,7 +529,7 @@ export function scrollToAlign (viewport, target, options) {
   } else if (Array.isArray(options)) {
     positions = options
     options = {}
-  } else if (typeof options === 'number') {
+  } else if (typeof options === 'number' || typeof options === 'string') {
     positions = [options, options]
     options = {}
   } else {

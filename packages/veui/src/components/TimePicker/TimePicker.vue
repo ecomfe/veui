@@ -373,8 +373,8 @@ export default {
         let selected = viewport.querySelector(`.${this.$c('option-selected')}`)
         if (selected) {
           scrollToAlign(viewport, selected, {
-            targetPosition: 0.5,
-            viewportPosition: 0.5,
+            targetPosition: '50%',
+            viewportPosition: '50%',
             duration
           })
         }

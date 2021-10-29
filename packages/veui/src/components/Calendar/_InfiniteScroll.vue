@@ -59,7 +59,7 @@ export default {
     }
   },
   mounted () {
-    this.scrollToAlign(this.initial - this.start, 0.5)
+    this.scrollToAlign(this.initial - this.start, '50%')
   },
   methods: {
     handleScroll () {
@@ -75,7 +75,7 @@ export default {
     },
     // 翻页之后尽量将之前的发生翻页的地方恢复到原来位置
     restorePosition (downward) {
-      this.scrollToAlign(this.getEdgeIndex(downward), downward ? 1 : 0)
+      this.scrollToAlign(this.getEdgeIndex(downward), downward ? '100%' : 0)
     },
     getEdgeIndex (downward) {
       return downward

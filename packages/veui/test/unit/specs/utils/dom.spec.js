@@ -60,18 +60,18 @@ describe('utils/dom', () => {
 
     let target = el.childNodes[0]
 
-    scrollToAlign(el, target, 0.5)
+    scrollToAlign(el, target, '50%')
     await wait(500)
-    expect(el.scrollTop, 'scrollToAlign 0.5').to.be.equal(
+    expect(el.scrollTop, 'scrollToAlign 50%').to.be.equal(
       calcScroll(el, 200, 0.5, 400, 0.5)
     )
 
     scrollToAlign(el, target, {
-      targetPosition: 0.2,
-      viewportPosition: 0.2
+      targetPosition: '20%',
+      viewportPosition: '20%'
     })
     await wait(500)
-    expect(el.scrollTop, 'scrollToAlign 0.2').to.be.equal(
+    expect(el.scrollTop, 'scrollToAlign 20%').to.be.equal(
       calcScroll(el, 200, 0.2, 400, 0.2)
     )
 

@@ -943,8 +943,8 @@ export default {
           container.querySelector(`.${this.$c('calendar-today')}`)
         if (el) {
           scrollToAlign(container, el, {
-            targetPosition: 0.5,
-            viewportPosition: 0.5,
+            targetPosition: '50%',
+            viewportPosition: '50%',
             duration
           })
           focusIn(this.isMonthType ? el : el)
