@@ -14,9 +14,10 @@
   </div>
   <h2 class="sticky-header">sticky anchor</h2>
   <veui-anchor
+    sticky
     :container="container"
     class="anchor-one"
-    :target-offset="0.1"
+    target-offset="10%"
     :items="coffees0"
   >
     <span
@@ -26,17 +27,17 @@
   </veui-anchor>
   <h2 class="header-four">sticky anchor (100px)</h2>
   <veui-anchor
+    sticky
     :container="container"
     class="anchor-four"
-    :target-offset="0.1"
+    target-offset="10%"
     sticky-offset="100px"
     :items="coffees0"
   />
   <h2 class="static-header">static small anchor</h2>
   <veui-anchor
-    :sticky="false"
     ui="s"
-    :target-offset="0.1"
+    target-offset="10%"
     :container="container"
     class="anchor-two"
     :items="coffees"
