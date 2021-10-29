@@ -6,7 +6,7 @@
 - [+] 为 `Accordion` / `Collapse` 组件新增 `toggle-position` prop，用于自定义展开/收起箭头的位置。<!-- #Accordion #Collapse -->
 - [+] 为 `Collapse` 组件新增 `title-after` 插槽，用于自定标题后缀内容。<!-- #Collapse -->
 - [+] 为 `Popover` 组件新增 `title` prop 与 `title` 插槽，用于自定义标题内容。<!-- #Popover -->
-- [+] 为 `Popover` 组件新增 `foot` / `okLabel` / `cancelLabel` prop 与 `foot` 插槽，用于开启底部操作区并自定义操作按钮文本。<!-- #Popover -->
+- [+] 为 `Popover` 组件新增 `foot` / `ok-label` / `cancel-label` prop 与 `foot` 插槽，用于开启底部操作区并自定义操作按钮文本。<!-- #Popover -->
 
 ### 🐞 问题修复
 
@@ -30,7 +30,7 @@
 ### 🐞 问题修复
 
 - [^] 修正 `Progress` 组件的状态一致性问题。<!-- #Progress -->
-- [^] 修正 `Uploader` 组件的 `convertResponse` 无法通过 `ConfigProvider` 组件进行局部配置的问题。<!-- #Uploader -->
+- [^] 修正 `Uploader` 组件的 `convert-response` 无法通过 `ConfigProvider` 组件进行局部配置的问题。<!-- #Uploader -->
 - [^] 修正 `Textarea` / `Calendar` / `Input` 组件在 Safari 下的样式问题。<!-- #Textarea #Calendar #Input -->
 - [^] 修正 `DatePicker` 组件的下拉浮层在溢出视口时没有正确左右翻转的问题。<!-- #DatePicker -->
 - [^] 修正 `v-tooltip` 指令在目标元素销毁时可能没有消失的问题。<!-- #v-tooltip -->
