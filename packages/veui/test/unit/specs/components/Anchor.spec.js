@@ -68,8 +68,8 @@ describe('components/Anchor', function () {
       {
         ...componentOptions,
         template: `<div style="padding-top: 50px;">
-            <veui-anchor :items="coffees"/>
-            <veui-anchor class="anchor-two" :items="coffees" :sticky="false"/>
+            <veui-anchor :items="coffees" sticky/>
+            <veui-anchor class="anchor-two" :items="coffees"/>
             <div style="height: 200vh;"/>
           </div>`
       },
@@ -83,12 +83,12 @@ describe('components/Anchor', function () {
     await new Promise(resolve => {
       setTimeout(() => {
         expect(
-          stickyFirstAnchor.element.getBoundingClientRect().top === 0
-        ).to.equal(true)
+          stickyFirstAnchor.element.getBoundingClientRect().top
+        ).to.equal(0)
         let staticFirstAnchor = wrapper.find(`.anchor-two ${ANCHOR_ITEM}`)
         expect(
-          staticFirstAnchor.element.getBoundingClientRect().top !== 0
-        ).to.equal(true)
+          staticFirstAnchor.element.getBoundingClientRect().top
+        ).to.not.equal(0)
         resolve()
       }, 500)
     })
@@ -98,8 +98,8 @@ describe('components/Anchor', function () {
     await new Promise(resolve => {
       setTimeout(() => {
         expect(
-          stickyFirstAnchor.element.getBoundingClientRect().top !== 0
-        ).to.equal(true)
+          stickyFirstAnchor.element.getBoundingClientRect().top
+        ).to.not.equal(0)
         resolve()
       }, 500)
     })
@@ -114,8 +114,8 @@ describe('components/Anchor', function () {
         ...componentOptions,
         template: `<div ref="wrapper" style="overflow: auto;height: 80vh;">
             <div style="height: 10px;"/>
-            <veui-anchor ref="anchor" :items="coffees" container="wrapper"/>
-            <veui-anchor class="anchor-two" :items="coffees" :sticky="false"/>
+            <veui-anchor ref="anchor" :items="coffees" container="wrapper" sticky/>
+            <veui-anchor class="anchor-two" :items="coffees"/>
             <div style="height: 200vh;"/>
           </div>`
       },
@@ -130,12 +130,12 @@ describe('components/Anchor', function () {
     await new Promise(resolve => {
       setTimeout(() => {
         expect(
-          stickyFirstAnchor.element.getBoundingClientRect().top === 0
-        ).to.equal(true)
+          stickyFirstAnchor.element.getBoundingClientRect().top
+        ).to.equal(0)
         let staticFirstAnchor = wrapper.find(`.anchor-two ${ANCHOR_ITEM}`)
         expect(
-          staticFirstAnchor.element.getBoundingClientRect().top !== 0
-        ).to.equal(true)
+          staticFirstAnchor.element.getBoundingClientRect().top
+        ).to.not.equal(0)
         resolve()
       }, 500)
     })
@@ -145,8 +145,8 @@ describe('components/Anchor', function () {
     await new Promise(resolve => {
       setTimeout(() => {
         expect(
-          stickyFirstAnchor.element.getBoundingClientRect().top !== 0
-        ).to.equal(true)
+          stickyFirstAnchor.element.getBoundingClientRect().top
+        ).to.not.equal(0)
         resolve()
       }, 500)
     })
@@ -161,7 +161,7 @@ describe('components/Anchor', function () {
         ...componentOptions,
         template: `<div ref="wrapper" style="overflow: auto;height: 80vh;">
             <div style="height: 10px;"/>
-            <veui-anchor ref="anchor" :items="coffees" container="wrapper"/>
+            <veui-anchor ref="anchor" :items="coffees" container="wrapper" sticky/>
             <div id="infused" style="height: 200vh;"/>
           </div>`
       },
@@ -171,12 +171,11 @@ describe('components/Anchor', function () {
     await vm.$nextTick()
     let stickyFirstAnchor = wrapper.find(ANCHOR_ITEM)
     stickyFirstAnchor.trigger('click')
-    // 延时检查下
     await new Promise(resolve => {
       setTimeout(() => {
         expect(
-          stickyFirstAnchor.element.getBoundingClientRect().top === 0
-        ).to.equal(true)
+          stickyFirstAnchor.element.getBoundingClientRect().top
+        ).to.equal(0)
         resolve()
       }, 500)
     })
