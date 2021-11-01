@@ -11,7 +11,6 @@
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
-    white-space: nowrap;
   }
 
   &-main {
@@ -30,6 +29,7 @@
       display: -webkit-box;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -488,17 +488,28 @@
       }
     }
 
-    tr:last-child th .@{veui-prefix}-table-cell {
+    th .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-m));
-      height: calc(@lh * var(--dls-table-head-cell-lines));
+      // only set height when `--dls-table-head-cell-lines` is a valid number
+      height: calc(
+        @lh * var(--dls-table-head-cell-lines) /
+          var(--dls-table-head-cell-lines)
+      );
 
       &-content {
         -webkit-line-clamp: var(--dls-table-head-cell-lines);
       }
     }
 
+    tr:last-child th .@{veui-prefix}-table-cell {
+      @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-m));
+      height: @lh;
+      height: calc(@lh * var(--dls-table-head-cell-lines));
+    }
+
     td:not([rowspan]) .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-m));
+      height: @lh;
       height: calc(@lh * var(--dls-table-cell-lines));
 
       &-content {
@@ -542,17 +553,29 @@
       }
     }
 
-    tr:last-child th .@{veui-prefix}-table-cell {
+    th .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-s));
-      height: calc(@lh * var(--dls-table-head-cell-lines));
+      // only set height when `--dls-table-head-cell-lines` is a valid number
+      height: @lh;
+      height: calc(
+        @lh * var(--dls-table-head-cell-lines) /
+          var(--dls-table-head-cell-lines)
+      );
 
       &-content {
         -webkit-line-clamp: var(--dls-table-head-cell-lines);
       }
     }
 
+    tr:last-child th .@{veui-prefix}-table-cell {
+      @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-s));
+      height: @lh;
+      height: calc(@lh * var(--dls-table-head-cell-lines));
+    }
+
     td:not([rowspan]) .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-s));
+      height: @lh;
       height: calc(@lh * var(--dls-table-cell-lines));
 
       &-content {

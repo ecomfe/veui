@@ -3,7 +3,7 @@
   <h1>
     <code>&lt;veui-table&gt;</code>
   </h1>
-  <section>
+  <section class="options">
     <veui-button
       ui="primary"
       @click="append"
@@ -14,24 +14,28 @@
     <veui-button @click="toggleLoading">切换加载</veui-button>
     <veui-button @click="filtered = null">清空筛选</veui-button>
   </section>
-  <section>
-    <veui-checkbox v-model="selectable">可选择</veui-checkbox>
-  </section>
-  <section>
-    <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
-    <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
+  <section class="options">
     <veui-label>内容固定行<veui-number-input
       v-model="lines"
-      :min="0"
+      :disabled="linesAuto"
+      :min="1"
       :max="2"
     /></veui-label>
+    <veui-checkbox v-model="linesAuto">自适应</veui-checkbox>
     <veui-label>表头固定行<veui-number-input
       v-model="headLines"
-      :min="0"
+      :disabled="headLinesAuto"
+      :min="1"
       :max="2"
     /></veui-label>
+    <veui-checkbox v-model="headLinesAuto">自适应</veui-checkbox>
   </section>
-  <section>
+  <section class="options">
+    <veui-checkbox v-model="selectable">可选择</veui-checkbox>
+    <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
+    <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
+  </section>
+  <section class="options">
     <veui-checkboxgroup
       v-model="columns"
       type="checkbox"
@@ -76,6 +80,7 @@
           <strong>
             数据
             <span style="color: #3998fc">ID</span>
+            很长很长很长很长很长很长很长很长很长很长很长很长很长很长
           </strong>
         </template>
         <template slot="foot">
@@ -100,7 +105,7 @@
         <veui-table-column
           v-if="showGroup"
           field="group"
-          title="数据分组"
+          title="数据分组很长很长很长很长很长很长很长很长很长很长很长很长很长很长"
           align="right"
           :span="groupSpan"
         />
@@ -494,7 +499,8 @@ import { tooltip } from 'veui/directives'
 const tableData = [
   {
     id: '3154',
-    desc: '数据描述1',
+    desc:
+      '数据描述1-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
     price: 1024,
     updateDate: '20131117',
     group: '1577',
@@ -681,8 +687,10 @@ export default {
       idTitle: '#',
       showGroup: true,
       selectSpanRow: true,
-      lines: 0,
-      headLines: 0,
+      lines: 1,
+      linesAuto: false,
+      headLines: 1,
+      headLinesAuto: false,
       fields: [
         { name: 'id', title: 'ID' },
         { name: 'desc', title: '描述' }
@@ -764,16 +772,10 @@ export default {
     },
     style () {
       return {
-        ...(this.lines
-          ? {
-            '--dls-table-cell-lines': this.lines
-          }
-          : null),
-        ...(this.headLines
-          ? {
-            '--dls-table-head-cell-lines': this.headLines
-          }
-          : null)
+        '--dls-table-cell-lines': this.linesAuto ? 'auto' : this.lines,
+        '--dls-table-head-cell-lines': this.headLinesAuto
+          ? 'auto'
+          : this.headLines
       }
     }
   },
@@ -848,6 +850,15 @@ section {
   .veui-button + .veui-button {
     margin-left: 20px;
   }
+
+  &.options {
+    display: flex;
+    align-content: center;
+  }
+}
+
+.veui-number-input {
+  margin-left: 8px;
 }
 
 label {
