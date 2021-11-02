@@ -233,9 +233,11 @@ section {
 .video {
   display: flex;
   align-items: center;
+
   .play-button {
     margin-right: 1em;
   }
+
   .duration {
     flex: 1 0 150px;
     text-align: right;

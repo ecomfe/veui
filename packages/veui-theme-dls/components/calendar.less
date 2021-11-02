@@ -430,6 +430,7 @@
   &-range {
     td {
       position: relative;
+
       &::before {
         content: "";
         display: block;
@@ -563,6 +564,7 @@
       & + .@{veui-prefix}-calendar-panel {
         width: dls-sum(@date-panel-width, @dls-date-picker-range-panel-spacing);
       }
+
       &::before {
         .make-header-height(@dls-date-picker-font-size-s);
         .absolute(dls-sum(@header-height, -1px), 0, _, 0);
@@ -591,6 +593,7 @@
     .size(auto, @dls-date-picker-cell-height-s);
     border-radius: @dls-date-picker-cell-border-radius-s;
   }
+
   &[ui~="s"] &-date-table button {
     .size(@dls-date-picker-cell-width-s, @dls-date-picker-cell-height-s);
   }

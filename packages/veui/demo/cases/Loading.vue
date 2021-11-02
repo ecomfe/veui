@@ -229,10 +229,12 @@ export default {
     background: #ccc;
     padding: 8px;
   }
+
   p {
     display: flex;
     line-height: 32px;
   }
+
   .veui-span {
     margin-right: 15px;
   }

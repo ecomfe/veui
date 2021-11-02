@@ -58,6 +58,7 @@
 
   &-custom-width &-column-wrap {
     flex: none;
+
     &:last-child {
       flex: 1 0;
     }
@@ -70,6 +71,7 @@
     .padding(_, @option-padding-x);
     // reset dropdown option background, use tree item background
     background-color: transparent;
+
     &:hover {
       background-color: transparent;
     }
@@ -112,6 +114,7 @@
         .@{veui-prefix}-cascader-pane-option-label {
           color: @dls-option-font-color-hover;
         }
+
         &::before {
           background-color: @dls-tree-node-background-color-hover;
         }
@@ -121,6 +124,7 @@
         .@{veui-prefix}-cascader-pane-option-label {
           color: @dls-option-font-color-focus;
         }
+
         &::before {
           background-color: @dls-option-background-color-focus;
         }
@@ -131,6 +135,7 @@
         .@{veui-prefix}-cascader-pane-option-label {
           color: @dls-option-font-color-active;
         }
+
         &::before {
           background-color: @dls-button-background-color-normal-active;
         }
@@ -142,6 +147,7 @@
         font-weight: @dls-option-font-weight-selected-parent;
         background-color: @dls-option-background-color-selected-parent;
       }
+
       &:active::before {
         background-color: @dls-option-background-color-active;
       }
@@ -207,9 +213,11 @@
     padding: 2 * @dls-padding-unit 3 * @dls-padding-unit;
     color: @dls-foreground-color-neutral-weak;
   }
+
   &-column-before {
     margin-top: -@dls-option-group-padding-y;
   }
+
   &-column-after {
     margin-bottom: -@dls-option-group-padding-y;
     position: sticky;

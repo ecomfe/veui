@@ -25,6 +25,7 @@
   &-tree {
     display: inline-block;
     padding: 0 0 0 @dls-anchor-track-width;
+
     &::before {
       content: "";
       display: block;
@@ -32,6 +33,7 @@
       width: @dls-anchor-track-width;
       .absolute(0, _, 0, 0);
     }
+
     ul {
       padding-left: @dls-anchor-level-indent;
     }
@@ -45,6 +47,7 @@
       height: @dls-anchor-height-m;
       line-height: @dls-anchor-height-m;
       margin-top: @dls-anchor-padding-x;
+
       &:hover::before {
         display: none;
       }

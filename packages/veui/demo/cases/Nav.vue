@@ -230,6 +230,7 @@ export default {
   .veui-nav {
     height: 100px;
   }
+
   .rest-nav {
     width: 500px;
   }

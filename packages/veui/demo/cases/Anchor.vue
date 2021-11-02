@@ -259,6 +259,7 @@ export default {
 main#content {
   overflow-x: auto;
 }
+
 .anchor-demo {
   &-middle {
     position: fixed;
@@ -266,13 +267,16 @@ main#content {
     border-top: 1px solid #ccc;
     width: 100%;
   }
+
   .content-wrapper {
     position: relative;
+
     &::after {
       display: table;
       content: "";
       clear: both;
     }
+
     .block {
       float: left;
       clear: both;
@@ -280,16 +284,19 @@ main#content {
       border-top: 1px solid #ccc;
       width: 100px;
       height: 180px;
+
       & + .block {
         margin-top: 20px;
       }
     }
   }
+
   .anchor-one {
     position: absolute;
     left: 250px;
     top: 200px;
   }
+
   .sticky-header {
     position: absolute;
     left: 250px;
@@ -301,11 +308,13 @@ main#content {
     left: 700px;
     top: 200px;
   }
+
   .header-four {
     position: absolute;
     left: 450px;
     top: 100px;
   }
+
   .anchor-four {
     position: absolute;
     top: 80px;
@@ -317,6 +326,7 @@ main#content {
     left: 700px;
     top: 100px;
   }
+
   .anchor-three {
     position: absolute;
     top: 70px;
@@ -326,10 +336,12 @@ main#content {
   .anchor-three-wrapper {
     clear: both;
     border: 1px solid blue;
+
     .long {
       height: 500px;
     }
   }
+
   .anchor-three-scroll {
     overflow: auto;
     height: 300px;
@@ -339,11 +351,13 @@ main#content {
   :target {
     border-color: red !important;
   }
+
   .line {
     position: fixed;
     top: ~"calc((100vh - 30px) * 0.1)";
     width: 180px;
     border-top: 1px solid #ccc;
+
     &::after {
       content: "10%";
       position: absolute;

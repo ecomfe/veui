@@ -360,17 +360,21 @@ export default {
   display: flex;
   align-items: center;
   height: 32px;
+
   & > * {
     margin-right: 32px;
   }
+
   .veui-input {
     width: 80px;
   }
 }
+
 .size-wrap {
   display: flex;
   min-height: 40px;
   align-items: center;
+
   .size {
     display: inline-block;
     width: 2em;

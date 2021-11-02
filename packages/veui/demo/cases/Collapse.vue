@@ -319,6 +319,7 @@ export default {
 section {
   margin-bottom: 10px;
 }
+
 .control-wrap {
   display: flex;
   align-items: center;

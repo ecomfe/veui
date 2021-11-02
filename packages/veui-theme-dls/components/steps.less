@@ -91,15 +91,19 @@
       &-completed {
         background-color: @dls-steps-connector-color-completed;
       }
+
       &-current {
         background-color: @dls-steps-connector-color-current;
       }
+
       &-incomplete {
         background-color: @dls-steps-connector-color-incomplete;
       }
+
       &-error {
         background-color: @dls-steps-connector-color-error;
       }
+
       &-error-current {
         background-color: @dls-steps-connector-color-error-current;
       }
@@ -147,9 +151,11 @@
         &-index {
           .make-index(incomplete);
         }
+
         &-label {
           color: @dls-steps-title-font-color-incomplete;
         }
+
         &-desc {
           color: @dls-steps-desc-font-color-incomplete;
         }
@@ -372,10 +378,12 @@
       &-label {
         margin-top: @dls-steps-marker-spacing;
         margin-right: 0;
+
         &::after {
           display: none;
         }
       }
+
       &-index,
       &-desc {
         .margin(_, auto);
@@ -494,6 +502,7 @@
         &-connector {
           margin-top: dls-sum(@step-height / 2, -@separator-width / 2);
         }
+
         &::after {
           top: dls-sum(
             @step-height / 2,
@@ -513,15 +522,18 @@
         }
       }
     }
+
     &[ui~="vertical"] {
       .@{veui-prefix}-steps-step {
         &-index::after {
           top: @step-height + @separator-gap-y;
           left: @step-height / 2;
         }
+
         &-connector-placeholder {
           margin-left: dls-sum(@step-height / 2, -@separator-width / 2);
         }
+
         &-connector {
           margin-left: dls-sum(@step-height / 2, -@separator-width / 2);
         }

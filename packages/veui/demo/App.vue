@@ -117,13 +117,16 @@ body {
 
   &.collapse {
     @collapse-width: 30px;
+
     #main-nav {
       left: @collapse-width - @nav-width;
     }
+
     #content,
     #console {
       left: @collapse-width;
     }
+
     #main-nav,
     #content,
     #console {

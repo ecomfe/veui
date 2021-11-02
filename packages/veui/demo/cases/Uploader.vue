@@ -658,12 +658,15 @@ h2 {
 legend {
   padding: 3px 6px;
 }
+
 legend sup {
   font-weight: bold;
 }
+
 fieldset {
   margin: 20px 0;
 }
+
 fieldset > div {
   margin: 5px 0;
 }

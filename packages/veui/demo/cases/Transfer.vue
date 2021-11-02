@@ -204,7 +204,17 @@
 </template>
 
 <script>
-import { Transfer, Form, Field, Button, Tree, FilterPanel, Table, Column, RadioGroup } from 'veui'
+import {
+  Transfer,
+  Form,
+  Field,
+  Button,
+  Tree,
+  FilterPanel,
+  Table,
+  Column,
+  RadioGroup
+} from 'veui'
 import { cloneDeep } from 'lodash'
 
 export default {
@@ -458,9 +468,11 @@ export default {
       padding: 0 20px;
     }
   }
+
   .custom-table {
     width: 300px;
   }
+
   .check-strategy {
     display: inline-flex;
     margin-bottom: 12px;

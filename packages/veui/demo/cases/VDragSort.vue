@@ -301,8 +301,7 @@ section {
   padding: 0;
   list-style-position: inside;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-flow: column wrap;
   height: 300px;
   resize: both;
   overflow: scroll;

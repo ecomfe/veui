@@ -999,6 +999,7 @@ export default {
 .veui-option-custom {
   position: relative;
   padding-left: 24px;
+
   &::after {
     content: "❤️";
     position: absolute;

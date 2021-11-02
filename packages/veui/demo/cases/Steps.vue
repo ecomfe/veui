@@ -107,6 +107,7 @@ input[type="number"] {
   text-align: center;
   font-size: 14px;
 }
+
 .star {
   vertical-align: text-top;
 }

@@ -417,27 +417,33 @@ section {
   padding: 30px;
   border: 1px solid #ccc;
 }
+
 .box {
   position: relative;
 }
+
 .top,
 .bottom {
   width: 100%;
   clear: both;
   text-align: center;
 }
+
 .left {
   width: 100px;
   float: left;
 }
+
 .right {
   width: 100px;
   float: right;
 }
+
 .top .veui-button,
 .bottom .veui-button {
   margin-right: 10px;
 }
+
 .left .veui-button,
 .right .veui-button {
   margin-bottom: 10px;

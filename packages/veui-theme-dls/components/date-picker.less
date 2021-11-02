@@ -173,6 +173,7 @@
       &:first-child {
         border-top-left-radius: inherit;
       }
+
       &:last-child {
         border-top-right-radius: inherit;
       }
@@ -256,9 +257,11 @@
   &[ui~="s"] {
     font-size: @dls-date-picker-font-size-s;
   }
+
   &-overlay-content[ui~="s"] {
     .border-radius(@dls-date-picker-dropdown-border-radius-s);
   }
+
   &-overlay-content[ui~="s"] &-shortcut {
     .centered-line(@dls-date-picker-list-item-height-s);
     .border-left-radius(@dls-date-picker-dropdown-border-radius-s);

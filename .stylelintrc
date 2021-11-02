@@ -1,9 +1,15 @@
 {
+  "customSyntax": "postcss-less",
   "extends": [
     "stylelint-config-standard",
     "stylelint-config-prettier"
   ],
   "rules": {
+    "selector-class-pattern": "^_?([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
+    "alpha-value-notation": "number",
+    "value-no-vendor-prefix": null,
+    "property-no-vendor-prefix": null,
+    "color-function-notation": "legacy",
     "declaration-empty-line-before": null,
     "no-descending-specificity": null,
     "no-empty-source": null,
@@ -24,5 +30,15 @@
       }
     ]
   },
-  "ignoreFiles": ["**/*.js"]
+  "ignoreFiles": [
+    "**/*.js"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.vue"
+      ],
+      "customSyntax": "postcss-html"
+    }
+  ]
 }

@@ -24,6 +24,7 @@
       .veui-transition(height);
       overflow: hidden;
     }
+
     &-item-group {
       padding-left: @dls-menu-level-indent;
     }
@@ -83,6 +84,7 @@
       &.@{veui-prefix}-menu-link:hover,
       &:hover .@{veui-prefix}-menu-link {
         color: @dls-menu-item-font-color-hover;
+
         &::before {
           background-color: @dls-menu-item-background-color-hover;
         }
@@ -92,12 +94,15 @@
       .@{veui-prefix}-menu-link {
         &[data-focus-visible-added] {
           color: @dls-menu-item-font-color-focus;
+
           &::before {
             background-color: @dls-menu-item-background-color-focus;
           }
         }
+
         &:active {
           color: @dls-menu-item-font-color-active;
+
           &::before {
             background-color: @dls-menu-item-background-color-active;
           }
@@ -165,6 +170,7 @@
         pointer-events: none;
       }
     }
+
     & > li:first-child > &-item {
       margin-top: 0;
     }
@@ -224,12 +230,14 @@
         font-weight: @dls-menu-item-font-weight-current;
         .veui-transition(color);
       }
+
       &[data-focus-visible-added] {
         &,
         & + .@{veui-prefix}-option-group-expandable {
           color: @dls-menu-item-font-color-current-focus;
         }
       }
+
       &:active {
         &,
         & + .@{veui-prefix}-option-group-expandable {
@@ -246,6 +254,7 @@
       &::before {
         background-color: @dls-menu-item-background-color-current-hover;
       }
+
       &::after {
         background-color: @dls-menu-indicator-color-hover;
       }
@@ -256,9 +265,11 @@
         background-color: @dls-menu-item-background-color-current;
         .veui-transition(background-color);
       }
+
       &[data-focus-visible-added]::before {
         background-color: @dls-menu-item-background-color-current-focus;
       }
+
       &:active::before {
         background-color: @dls-menu-item-background-color-current-active;
       }
@@ -273,6 +284,7 @@
       &[data-focus-visible-added]::after {
         background-color: @dls-menu-indicator-color-focus;
       }
+
       &:active::after {
         background-color: @dls-menu-indicator-color-active;
       }
@@ -301,6 +313,7 @@
     margin-left: @dls-menu-item-content-spacing;
     transform: rotateZ(90deg);
   }
+
   &-item-expanded &-item-toggle {
     transform: rotateZ(-90deg);
   }

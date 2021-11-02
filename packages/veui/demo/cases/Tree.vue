@@ -295,6 +295,7 @@ export default {
 p {
   margin: 30px;
 }
+
 .check-strategy {
   display: inline-flex;
 }
