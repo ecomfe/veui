@@ -1,3 +1,10 @@
+## 2.2.1
+
+### 🐞 问题修复
+
+- [^] 修正 `Button` 组件在 Safari 浏览器上的样式问题。<!-- #Button -->
+- [^] 修正 `DatePicker` 组件在 Safari 浏览器上点击快捷方式报错的问题。<!-- #DatePicker -->
+
 ## 2.2.0 "🪗 Accordion"
 
 ### 💡 主要变更

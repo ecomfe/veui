@@ -166,7 +166,7 @@ const useKeySelect = ({
           break
         default: {
           // 先就简单支持下，目前仅用到 tab 和 enter
-          let handler = get(handlers, e.key.toLowerCase())
+          let handler = e.key && get(handlers, e.key.toLowerCase())
           if (handler) {
             handler.call(this, e)
           }
