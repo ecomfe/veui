@@ -1,6 +1,5 @@
 <script>
 import { prefixify } from '../mixins/prefix'
-import { mergeClasses } from '../utils/helper'
 import Icon from './Icon'
 
 export default {
@@ -13,16 +12,10 @@ export default {
     // eslint-disable-next-line vue/require-prop-types
     separator: {}
   },
-  render (h, { props }) {
+  render (_, { props }) {
     let { matches, matchClass, separatorClass, separator } = props
-    matchClass = mergeClasses(
-      prefixify('search-result-item-matched'),
-      matchClass
-    )
-    separatorClass = mergeClasses(
-      prefixify('search-result-item-separator'),
-      separatorClass
-    )
+    matchClass = [prefixify('search-result-item-matched'), matchClass]
+    separatorClass = [prefixify('search-result-item-separator'), separatorClass]
     return (matches || []).reduce((result, { parts }, idx) => {
       let items = parts.map(({ text, matched }, index) =>
         matched ? (

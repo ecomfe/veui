@@ -63,7 +63,7 @@ describe('components/Anchor', function () {
     wrapper.destroy()
   })
 
-  it('should handle scroll correctly when container is window(or falsy)', async () => {
+  it('should handle scroll correctly when container is window or falsy', async () => {
     let wrapper = mount(
       {
         ...componentOptions,
@@ -82,9 +82,9 @@ describe('components/Anchor', function () {
     let stickyFirstAnchor = wrapper.find(ANCHOR_ITEM)
     await new Promise(resolve => {
       setTimeout(() => {
-        expect(
-          stickyFirstAnchor.element.getBoundingClientRect().top
-        ).to.equal(0)
+        expect(stickyFirstAnchor.element.getBoundingClientRect().top).to.equal(
+          0
+        )
         let staticFirstAnchor = wrapper.find(`.anchor-two ${ANCHOR_ITEM}`)
         expect(
           staticFirstAnchor.element.getBoundingClientRect().top
@@ -129,9 +129,9 @@ describe('components/Anchor', function () {
     let stickyFirstAnchor = wrapper.find(ANCHOR_ITEM)
     await new Promise(resolve => {
       setTimeout(() => {
-        expect(
-          stickyFirstAnchor.element.getBoundingClientRect().top
-        ).to.equal(0)
+        expect(stickyFirstAnchor.element.getBoundingClientRect().top).to.equal(
+          0
+        )
         let staticFirstAnchor = wrapper.find(`.anchor-two ${ANCHOR_ITEM}`)
         expect(
           staticFirstAnchor.element.getBoundingClientRect().top
@@ -173,9 +173,9 @@ describe('components/Anchor', function () {
     stickyFirstAnchor.trigger('click')
     await new Promise(resolve => {
       setTimeout(() => {
-        expect(
-          stickyFirstAnchor.element.getBoundingClientRect().top
-        ).to.equal(0)
+        expect(stickyFirstAnchor.element.getBoundingClientRect().top).to.equal(
+          0
+        )
         resolve()
       }, 500)
     })
