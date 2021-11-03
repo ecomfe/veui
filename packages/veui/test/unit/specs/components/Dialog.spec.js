@@ -107,17 +107,17 @@ describe('components/Dialog', () => {
       sync: false
     })
 
-    expect(
-      wrapper.vm.$refs.overlay.overlayClass['veui-dialog-box-mask']
-    ).to.equal(false)
+    expect(wrapper.find('.veui-dialog-box').classes()).to.not.contain(
+      'veui-dialog-box-mask'
+    )
 
     wrapper.setProps({ modal: true })
 
     await wrapper.vm.$nextTick()
 
-    expect(
-      wrapper.vm.$refs.overlay.overlayClass['veui-dialog-box-mask']
-    ).to.equal(true)
+    expect(wrapper.find('.veui-dialog-box').classes()).to.contain(
+      'veui-dialog-box-mask'
+    )
 
     wrapper.destroy()
   })

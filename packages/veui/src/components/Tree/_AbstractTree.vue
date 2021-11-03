@@ -47,7 +47,6 @@
 <script>
 import prefix from '../../mixins/prefix'
 import ExpandTransition from '../_ExpandTransition'
-import { mergeClasses } from '../../utils/helper'
 import { hasChildren } from '../../utils/datasource'
 
 export default {
@@ -93,7 +92,7 @@ export default {
   },
   computed: {
     realGroupClass () {
-      return mergeClasses(this.$c('abstract-tree-item-group'), this.groupClass)
+      return [this.$c('abstract-tree-item-group'), this.groupClass]
     }
   },
   methods: {

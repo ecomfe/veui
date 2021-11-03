@@ -45,7 +45,7 @@ export function findAncestor (component, predicate) {
 }
 
 export function isVueComponent (val) {
-  return val && val._isVue
+  return !!(val && val._isVue)
 }
 
 /**
@@ -95,16 +95,22 @@ export function isAbstractVNode (vnode) {
  * @return {boolean} 检查结果
  */
 export function isTopMostOfType (vm, type, scopeType) {
-  let parent = vm.$parent
-  while (parent && !isType(parent, type)) {
-    if (scopeType && isType(parent, scopeType)) {
-      parent = null
+  if (!isType(vm, type)) {
+    return false
+  } else if (scopeType && isType(vm, scopeType)) {
+    return true
+  }
+
+  let current = vm.$parent
+  while (current && !isType(current, type)) {
+    if (scopeType && isType(current, scopeType)) {
+      current = null
       break
     }
 
-    parent = parent.$parent
+    current = current.$parent
   }
-  return !parent
+  return !current
 }
 
 export function getModelProp (vm) {
@@ -128,11 +134,11 @@ export function isEmpty (val) {
 /**
  * Vue 里面有三种设置 class 的方式：
  * 1. 字符串
- * 2. 字符串数组
+ * 2. 字符串
  * 3. object
  * 此处统一将这些形式的 class 转换成 object 形式的
  *
- * @param {string|Array<string>|Object<string, boolean>} klasses
+ * @param {string | Array<string | Object> | Object<string, boolean>} klasses
  */
 export function normalizeClass (klasses) {
   let klassObj = {}
@@ -142,7 +148,7 @@ export function normalizeClass (klasses) {
     })
   } else if (Array.isArray(klasses)) {
     klasses.forEach(klass => {
-      klassObj[klass] = true
+      assign(klassObj, normalizeClass(klass))
     })
   } else if (isObject(klasses)) {
     assign(klassObj, klasses)
@@ -150,18 +156,8 @@ export function normalizeClass (klasses) {
   return klassObj
 }
 
-export function mergeClasses (...klasses) {
-  return assign({}, ...klasses.map(normalizeClass))
-}
-
-export function mergeStyles (...styles) {
-  return styles.reduce((result, style) => {
-    return result.concat(style || [])
-  }, [])
-}
-
 export function getConfigKey (name) {
-  return name.replace(/^veui|-*/g, '').toLowerCase()
+  return name.replace(/^veui|-*/gi, '').toLowerCase()
 }
 
 /**
@@ -197,13 +193,16 @@ export function deepSet (obj, path, val) {
   })
 }
 
-const RE_NUMBER = /^(?:\d*(?:\.\d+)?|\.\d+)$/
+const RE_NUMBER = /^-?(?:\d*(?:\.\d+)?|\.\d+)$/
 export function normalizeLength (val) {
   if (!val) {
     return null
   }
-  if (typeof val === 'number' || RE_NUMBER.test(val)) {
-    return Number(val) > 0 ? `${val}px` : null
+  if (
+    typeof val === 'number' ||
+    (typeof val === 'string' && RE_NUMBER.test(val))
+  ) {
+    return Number(val) !== 0 ? `${val}px` : null
   }
   return val
 }
@@ -236,20 +235,22 @@ const pxRe = /px$/
 const percentRe = /%$/
 
 export function resolveOffset (val, base) {
-  if (val == null) {
+  if (val == null || typeof base !== 'number' || isNaN(base)) {
     return 0
   }
 
   let result = val
   if (isString(val)) {
     if (pxRe.test(val)) {
-      result = +val.replace(pxRe, '')
+      result = val.replace(pxRe, '')
     } else if (percentRe.test(val)) {
       val = +val.replace(percentRe, '') / 100
-      result = base == null ? val : base * val
+      result = base * val
     }
   }
-  return result
+
+  result = Number(result)
+  return isNaN(result) ? 0 : result
 }
 
 export function ignoreElements (names) {
@@ -305,7 +306,8 @@ export function createPortal (el, target) {
 
 export function renderSlot (vm, name, props = {}) {
   return (
-    (vm.$scopedSlots[name] ? vm.$scopedSlots[name](props) : vm.$slots[name]) ||
+    vm.$slots[name] ||
+    (vm.$scopedSlots[name] ? vm.$scopedSlots[name](props) : null) ||
     null
   )
 }
@@ -319,11 +321,10 @@ export function forwardSlots (slots, vm) {
   return reduce(
     slots,
     (result, to, from) => {
-      let scoped = $scopedSlots[from]
-      if (scoped) {
-        result.scopedSlots[to] = props => scoped(props)
-      } else if ($slots[from]) {
+      if ($slots[from]) {
         result.slots.push(h('template', { slot: to }, $slots[from]))
+      } else if ($scopedSlots[from]) {
+        result.scopedSlots[to] = props => $scopedSlots[from](props)
       }
       return result
     },

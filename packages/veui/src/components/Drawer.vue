@@ -1,7 +1,6 @@
 <script>
 import Dialog from './Dialog'
 import prefix from '../mixins/prefix'
-import { mergeClasses } from '../utils/helper'
 
 const PLACEMENT = ['top', 'right', 'bottom', 'left']
 
@@ -25,13 +24,11 @@ export default {
       attrs: {
         // attrs 都直接透传到 Dialog 去
         ...this.$attrs,
-        overlayClass: mergeClasses(
-          {
-            [this.$c(`drawer-${this.placement}`)]: true,
-            [this.$c('drawer-box')]: true
-          },
+        overlayClass: [
+          this.$c(`drawer-${this.placement}`),
+          this.$c('drawer-box'),
           this.overlayClass
-        ),
+        ],
         draggable: false
       },
       // nativeOn 直接在 drawer 上注册到 dom ，不需透传
