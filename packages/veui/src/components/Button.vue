@@ -26,12 +26,14 @@ export default {
       return !this.disabled && !this.loading
     },
     attrs () {
-      let { loading, disabled, ...props } = this.$props
+      let { loading, disabled, type, ...props } = this.$props
 
       return {
         tabindex: this.activatable ? null : '0',
         role: this.activatable ? null : 'button',
         ...props,
+        // 渲染成 div 的时候，type="button" 会导致在 Safari 上样式出现问题
+        type: this.activatable ? type : null,
         'aria-disabled': this.disabled ? 'true' : null,
         ui: this.realUi
       }

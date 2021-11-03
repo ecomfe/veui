@@ -553,7 +553,10 @@ export default {
       )
     },
     handleHoverShortcut (picking) {
-      this.$refs.cal.pick(picking)
+      // 点击快捷方式会触发面板关闭，即会触发 mouseleave，且在 Safari 上拿不到 refs.cal。
+      if (this.$refs.cal) {
+        this.$refs.cal.pick(picking)
+      }
     },
     isDisabled (date, another) {
       return (
