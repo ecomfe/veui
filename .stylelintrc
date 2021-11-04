@@ -31,7 +31,9 @@
     ]
   },
   "ignoreFiles": [
-    "**/*.js"
+    "**/*.js",
+    "**/*.json",
+    "**/*.md"
   ],
   "overrides": [
     {

@@ -1,6 +1,6 @@
 # VEUI
 
-[![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui) [![](https://badgen.net/codecov/c/github/ecomfe/veui)](https://codecov.io/gh/ecomfe/veui)
+[![](https://img.shields.io/github/checks-status/ecomfe/veui/d20)](https://circleci.com/gh/ecomfe/veui) [![](https://img.shields.io/codecov/c/github/ecomfe/veui)](https://codecov.io/gh/ecomfe/veui)
 
 Documentation: [中文 🇨🇳](https://veui.dev) | [English 🇺🇸](https://veui.dev/en-US)
 
@@ -22,8 +22,6 @@ Packages included in this repo are:
 * [`veui-loader`](./packages/veui-loader)
 * [`veui-theme-dls`](./packages/veui-theme-dls)
 * [`veui-theme-dls-icons`](./packages/veui-theme-dls-icons)
-
-Please visit each package for further introductions.
 
 ## Contribution
 
