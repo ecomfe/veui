@@ -1,9 +1,21 @@
 ## 2.2.1
 
+### ⚠️ 非兼容性变更
+
+- [^] `Anchor` 组件的 `target-offset` / `sticky-offset` 使用数值时不再作为比例系数，而是作为绝对 `px` 值。<!-- #Anchor -->
+
+### 💡 主要变更
+
+- [+] `Anchor` 组件的 `target-offset` / `sticky-offset` 支持传入如 `'10%'` 格式的字符串，用于支持比例系数。<!-- #Anchor -->
+
 ### 🐞 问题修复
 
 - [^] 修正 `Button` 组件在 Safari 浏览器上的样式问题。<!-- #Button -->
 - [^] 修正 `DatePicker` 组件在 Safari 浏览器上点击快捷方式报错的问题。<!-- #DatePicker -->
+
+### 🧪 实验性功能
+
+- [^] `Table` 组件的自定义 CSS 属性 `--dls-table-cell-lines` / `--dls-table-head-cell-lines` 默认值更新为 `1`，可以通过设置为 `auto` 来设置自适应高度。<!-- #Table -->
 
 ## 2.2.0 "🪗 Accordion"
 
