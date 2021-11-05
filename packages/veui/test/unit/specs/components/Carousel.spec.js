@@ -10,30 +10,30 @@ let items = [
     src:
       'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
     alt: 'A cute kitty looking at you with its greenish eyes.',
-    label: '猫'
+    label: '猫1'
   },
   {
     src:
       'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
     alt: 'A common kingfisher flying above river.',
-    label: '翠鸟'
+    label: '翠鸟2'
   },
   {
     src:
       'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
     alt: 'A white and gray dolphin in blue water.',
-    label: '海豚'
+    label: '海豚3'
   },
   {
     src: 'https://www.baidu.com/img/bd_logo1.png',
     alt: 'Baidu logo.',
-    label: '百度'
+    label: '百度4'
   },
   {
     src:
       'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg',
     alt: 'Tesla logo.',
-    label: '特斯拉'
+    label: '特斯拉5'
   }
 ]
 
@@ -69,6 +69,7 @@ describe('components/Carousel', () => {
         .at(0)
         .classes()
     ).to.include('veui-carousel-item-current')
+    await wait(100)
     prev.trigger('click')
 
     await vm.$nextTick()
@@ -78,6 +79,7 @@ describe('components/Carousel', () => {
         .at(0)
         .classes()
     ).to.include('veui-carousel-item-current')
+    await wait(100)
     next.trigger('click')
 
     await vm.$nextTick()
@@ -645,16 +647,16 @@ describe('components/Carousel', () => {
     next.element.focus()
 
     await vm.$nextTick()
-    expect(wrapper.classes()).to.include('veui-focus')
+    expect(wrapper.classes(), '#focus1').to.include('veui-focus')
     next.element.blur()
 
     await vm.$nextTick()
-    expect(wrapper.classes()).to.not.include('veui-focus')
+    expect(wrapper.classes(), '#focus2').to.not.include('veui-focus')
     next.element.focus()
 
     await vm.$nextTick()
     prev.element.focus()
-    expect(wrapper.classes()).to.include('veui-focus')
+    expect(wrapper.classes(), '#focus3').to.include('veui-focus')
     wrapper.trigger('keydown.right')
 
     await wait(0)
@@ -763,7 +765,7 @@ describe('components/Carousel', () => {
         attachToDocument: true
       }
     )
-
+    await wait(100)
     let slides = wrapper.findAll(
       '.veui-carousel-item:not(.veui-carousel-item-duplicate):not(.veui-carousel-item-pad)'
     )
@@ -807,7 +809,7 @@ describe('components/Carousel', () => {
         attachToDocument: true
       }
     )
-
+    await wait(100)
     let { vm } = wrapper
     let slides = wrapper.findAll(
       '.veui-carousel-item:not(.veui-carousel-item-duplicate):not(.veui-carousel-item-pad)'
@@ -856,7 +858,8 @@ describe('components/Carousel', () => {
     wrapper.destroy()
   })
 
-  it('should work with wrap + slidesPerGroup/slidesPerView', async () => {
+  it('should work with wrap + slidesPerGroup/slidesPerView', async function () {
+    this.timeout(3000)
     let wrapper = mount(
       {
         components: {
@@ -894,14 +897,14 @@ describe('components/Carousel', () => {
     expect(pads.length).to.equal(1)
     let prev = wrapper.find('.veui-carousel-control-prev')
     // 这里一定要 wait
-    await wait(0)
+    await wait(100)
     prev.trigger('click')
-    await wait(300)
+    await wait(400)
     expect(vm.index).to.equal(2)
 
     let next = wrapper.find('.veui-carousel-control-next')
     next.trigger('click')
-    await wait(300)
+    await wait(400)
     expect(
       vm.index,
       `inTransition:${vm.$refs.car.$refs.effect.inTransition}`
@@ -977,7 +980,8 @@ describe('components/Carousel', () => {
     wrapper.destroy()
   })
 
-  it('should handle video content correctly', async () => {
+  it('should handle video content correctly', async function () {
+    this.timeout(3000)
     let wrapper = mount(
       {
         components: {
@@ -1026,10 +1030,11 @@ describe('components/Carousel', () => {
     let { vm } = wrapper
     let video = wrapper.find('.veui-carousel-item-current video')
     video.element.currentTime = 1
-    await wait(0)
+    await wait(100)
     let next = wrapper.find('.veui-carousel-control-next')
     next.trigger('click')
-    await wait(300)
+    await wait(400)
+
     let prev = wrapper.find('.veui-carousel-control-prev')
     prev.trigger('click')
     await wait(300)
@@ -1057,7 +1062,8 @@ describe('components/Carousel', () => {
     wrapper.destroy()
   })
 
-  it('should render item slot correctly', async () => {
+  it('should render item slot and handle clicking prev/next button correctly', async function () {
+    this.timeout(3000)
     let wrapper = mount(
       {
         components: {
@@ -1087,11 +1093,11 @@ describe('components/Carousel', () => {
     let current = wrapper.find('.veui-carousel-item-current .demo-slide')
     expect(current.exists()).to.equal(true)
     expect(current.text()).to.equal(vm.items[0].label)
-
-    await wait(0)
+    // 初始点击之前等下。保证初始渲染和点击切换后的渲染都能渲染出来，否则影响transition
+    await wait(100)
     let prev = wrapper.find('.veui-carousel-control-prev')
     prev.trigger('click')
-    await wait(400)
+    await wait(500)
     current = wrapper.find('.veui-carousel-item-current .demo-slide')
     expect(current.text()).to.equal(vm.items[vm.items.length - 1].label)
 
