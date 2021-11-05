@@ -5,8 +5,8 @@
     [$c('carousel-items-slide')]: true,
     [$c('carousel-items-vertical')]: vertical
   }"
-  @transitionend="handleTransitionEnd"
-  @transitioncancel="handleTransitionEnd"
+  @transitionend.self="handleTransitionEnd"
+  @transitioncancel.self="handleTransitionEnd"
 >
   <li
     v-for="(item, rdIndex) in realDatasource"
