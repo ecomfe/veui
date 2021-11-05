@@ -1,6 +1,6 @@
 # VEUI
 
-[![](https://img.shields.io/github/checks-status/ecomfe/veui/d20)](https://circleci.com/gh/ecomfe/veui) [![](https://img.shields.io/codecov/c/github/ecomfe/veui)](https://codecov.io/gh/ecomfe/veui)
+[![](https://img.shields.io/github/workflow/status/ecomfe/veui/test/d20)](https://github.com/ecomfe/veui/actions/workflows/test.yml) [![](https://img.shields.io/codecov/c/github/ecomfe/veui)](https://codecov.io/gh/ecomfe/veui)
 
 Documentation: [中文 🇨🇳](https://veui.dev) | [English 🇺🇸](https://veui.dev/en-US)
 
