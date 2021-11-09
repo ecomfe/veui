@@ -15,14 +15,16 @@ module.exports = {
   css: {
     loaderOptions: {
       less: {
-        javascriptEnabled: true,
-        modifyVars: {
-          ...vars,
-          ...(VEUI_PREFIX
-            ? {
-              'veui-prefix': VEUI_PREFIX
-            }
-            : {})
+        lessOptions: {
+          javascriptEnabled: true,
+          modifyVars: {
+            ...vars,
+            ...(VEUI_PREFIX
+              ? {
+                'veui-prefix': VEUI_PREFIX
+              }
+              : {})
+          }
         }
       }
     }

@@ -27,4 +27,4 @@ jobs:
         run: npm run test
 
       - name: Collect coverage
-        run: npx codecov
+        uses: codecov/codecov-action@v2

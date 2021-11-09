@@ -10,15 +10,20 @@ const STYLE_PATTERNS = [
   'packages/veui/demo/**/*.vue'
 ]
 
+const JSON_PATTERNS = [
+  'packages/**/package-lock.json'
+]
+
 module.exports = staged => {
   const relativePaths = staged.map(p => relative(__dirname, p))
   const scripts = micromatch(relativePaths, SCRIPT_PATTERNS).join(' ')
   const styles = micromatch(relativePaths, STYLE_PATTERNS).join(' ')
+  const jsons = micromatch(relativePaths, JSON_PATTERNS).join(' ')
 
   const tasks = []
 
-  if (scripts || styles) {
-    tasks.push(`prettier --write ${[scripts, styles].join(' ')}`)
+  if (scripts || styles || jsons) {
+    tasks.push(`prettier --write ${[scripts, styles, jsons].join(' ')}`)
   }
 
   if (scripts) {

@@ -1,8 +1,6 @@
 .DS_Store
 node_modules
-npm-debug.log
-lerna-debug.log
-yarn-error.log
+*.log
 **/test/unit/coverage
 .vscode
 **/dist
