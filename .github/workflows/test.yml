@@ -28,3 +28,6 @@ jobs:
 
       - name: Collect coverage
         uses: codecov/codecov-action@v2
+        with:
+          files: |
+            packages/veui/test/coverage/coverage-final.json

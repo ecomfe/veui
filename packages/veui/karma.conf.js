@@ -45,7 +45,7 @@ module.exports = function (config) {
 
     coverageIstanbulReporter: {
       dir: './test/coverage',
-      reports: ['html', 'lcov', 'text-summary'],
+      reports: ['html', 'json', 'text-summary'],
       combineBrowserReports: true,
       fixWebpackSourcePaths: true,
       skipFilesWithNoCoverage: false,
@@ -53,7 +53,7 @@ module.exports = function (config) {
         html: {
           subdir: 'html'
         },
-        lcov: {
+        json: {
           subdir: '.'
         }
       }
