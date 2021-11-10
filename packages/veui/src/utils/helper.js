@@ -334,3 +334,17 @@ export function forwardSlots (slots, vm) {
     { scopedSlots: {}, slots: [] }
   )
 }
+
+const LOW_SURROGATE = /[\uD800-\uDBFF]/
+
+export function safeSliceStringByLength (str, length) {
+  if (str.length > length) {
+    while (length--) {
+      if (!LOW_SURROGATE.test(str[length])) {
+        break
+      }
+    }
+    return str.slice(0, length + 1)
+  }
+  return str
+}

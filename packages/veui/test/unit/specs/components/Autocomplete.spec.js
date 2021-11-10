@@ -6,6 +6,7 @@ const NATIVE_INPUT = '.veui-input input'
 const INPUT_PLACEHOLDER = '.veui-input .veui-input-placeholder'
 const SUGGESTIONS = '.veui-autocomplete-suggestions'
 const SUGGESTION_ITEM = '.veui-autocomplete-suggestions .veui-option'
+const FOUR = '👩‍👩‍👧‍👧'
 
 let componentOptions = {
   components: {
@@ -41,6 +42,10 @@ let componentOptions = {
               ]
             }
           ]
+        },
+        {
+          label: FOUR,
+          value: FOUR
         }
       ],
       readonly: false,
@@ -118,7 +123,7 @@ describe('components/Autocomplete', function () {
       {
         ...componentOptions,
         template:
-          '<veui-autocomplete v-model="value" strict suggest-trigger="focus" :datasource="groupedDatasource"/>'
+          '<veui-autocomplete v-model="value" strict maxlength="7" suggest-trigger="focus" :datasource="groupedDatasource"/>'
       },
       debugInBrowser
     )
@@ -132,7 +137,18 @@ describe('components/Autocomplete', function () {
     expect(options.length).to.equal(1)
     document.body.click()
     await vm.$nextTick()
-    expect(vm.value).to.equal('')
+    expect(vm.value).to.equal('2')
+
+    nativeInput = wrapper.find(NATIVE_INPUT)
+    nativeInput.trigger('focus')
+    nativeInput.element.value = '👩'
+    nativeInput.trigger('input')
+    await vm.$nextTick()
+    options = wrapper.findAll(SUGGESTION_ITEM)
+    expect(options.length).to.equal(1)
+    options.at(0).trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.equal(FOUR.slice(0, 6))
     wrapper.destroy()
   })
 

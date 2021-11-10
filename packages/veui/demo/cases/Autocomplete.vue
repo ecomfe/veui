@@ -53,7 +53,7 @@
     <h2>树型数据，focus 时下拉，最多展示4个</h2>
     <veui-autocomplete
       v-model="treeValue"
-      :datasource="treeSuggestions"
+      :datasource="coffees"
       placeholder="请输入"
       suggest-trigger="focus"
       :overlay-style="{
@@ -62,13 +62,14 @@
       expanded
     />
   </section>
-  <section>
-    <h2>strict: 下拉关闭时，强制清除不匹配值</h2>
+  <section style="margin-top: 160px">
+    <h2>strict: 强制不能超过最大长度7</h2>
     <veui-autocomplete
       v-model="treeValue"
-      :datasource="treeSuggestions"
+      :datasource="coffees.concat({ label: '👩‍👩‍👧‍👧', value: '👩‍👩‍👧‍👧' })"
       placeholder="请输入"
-      suggest-trigger="focus"
+      :suggest-trigger="['focus', 'input']"
+      :maxlength="7"
       strict
     />
   </section>
@@ -81,20 +82,16 @@
       strict
     />
   </section>
-  <veui-button @click="value = 'male'">设置list->male</veui-button>
-  <veui-button @click="treeValue = 'male'">设置tree->male</veui-button>
-  <veui-button @click="switchDatasource">切换数据源</veui-button>
 </article>
 </template>
 
 <script>
-import { Autocomplete, Button } from 'veui'
+import { Autocomplete } from 'veui'
 
 export default {
   name: 'autocomplete-demo',
   components: {
-    'veui-autocomplete': Autocomplete,
-    'veui-button': Button
+    'veui-autocomplete': Autocomplete
   },
   data () {
     return {
@@ -102,43 +99,74 @@ export default {
       treeValue: '',
       suggestions: [
         {
-          value: 'male'
+          value: 'Moka'
         },
         {
-          value: 'female'
+          value: 'Turkish'
+        },
+        {
+          value: 'latte'
+        },
+        {
+          value: 'cappuccino'
         }
       ],
-      treeSuggestions: [
+      coffees: [
         {
-          label: '组1',
-          options: ['1', '11']
-        },
-        {
-          label: '组2',
+          label: 'Infused',
+          value: 'infused',
           options: [
             {
-              label: '男组',
-              options: [
-                {
-                  label: 'male',
-                  value: 'male'
-                }
-              ]
+              label: 'French press',
+              value: 'french-press'
             },
             {
-              label: 'female',
-              value: 'female'
+              label: 'Cold brew',
+              value: 'cold-brew'
+            }
+          ]
+        },
+        {
+          label: 'Espresso',
+          value: 'espresso',
+          options: [
+            {
+              label: 'Espresso Romano',
+              value: 'espresso-romano'
+            },
+            {
+              label: 'Guillermo',
+              value: 'guillermo'
+            },
+            {
+              label: 'Ristretto',
+              value: 'ristretto'
+            }
+          ]
+        },
+        {
+          label: 'Milk coffee',
+          value: 'milk-coffee',
+          options: [
+            {
+              label: 'Latte',
+              value: 'latte'
+            },
+            {
+              label: 'Macchiato',
+              value: 'macchiato'
+            },
+            {
+              label: 'Cappuccino',
+              value: 'cappuccino'
+            },
+            {
+              label: 'White coffee',
+              value: 'white-coffee'
             }
           ]
         }
       ]
-    }
-  },
-  methods: {
-    switchDatasource () {
-      let tmp = this.suggestions
-      this.suggestions = this.treeSuggestions
-      this.treeSuggestions = tmp
     }
   }
 }

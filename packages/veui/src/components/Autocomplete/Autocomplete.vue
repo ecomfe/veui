@@ -12,7 +12,7 @@
   :aria-disabled="realDisabled"
   aria-haspopup="listbox"
   v-bind="baseProps"
-  v-on="$listeners"
+  v-on="baseEvents"
 >
   <template
     slot="input"
@@ -32,11 +32,11 @@
         :disabled="realDisabled"
         :invalid="realInvalid"
         v-bind="inputProps"
+        v-on="inputEvents"
         @blur="props.closeSuggestions"
         @keydown="props.handleKeydown"
         @input="handleTrigger($event, props, 'input')"
         @focus="handleTrigger($event, props, 'focus')"
-        @clear="handleClear"
       />
     </slot>
   </template>
@@ -65,26 +65,12 @@
             name="option-label"
             v-bind="props"
           >
-            <template v-if="!!suggestionsProps.keyword">
-              <template v-for="({ parts }, idx) in props.matches">
-                <template v-for="({ text, matched }, index) in parts">
-                  <mark
-                    v-if="matched"
-                    :key="`${idx}-${index}`"
-                    :class="$c('option-matched')"
-                  >{{ text }}</mark>
-                  <span
-                    v-else
-                    :key="`${idx}-${index}`"
-                  >{{ text }}</span>
-                </template>
-                <span
-                  v-if="idx < props.matches.length - 1"
-                  :key="idx"
-                  :class="$c('autocomplete-suggestion-separator')"
-                >&gt;</span>
-              </template>
-            </template>
+            <veui-search-result
+              v-if="!!suggestionsProps.keyword"
+              :matches="props.matches"
+              :separator="icons.separator"
+              :separator-class="$c('autocomplete-search-result-item-separator')"
+            />
             <span v-else>{{ props.label }}</span>
           </slot>
         </template>
@@ -99,8 +85,10 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import overlay from '../../mixins/overlay'
+import { normalizeInt, safeSliceStringByLength } from '../../utils/helper'
 import outside from '../../directives/outside'
 import AutocompleteBase from './_AutocompleteBase'
+import SearchResult from '../_SearchResult'
 import Input from '../Input'
 import { includes, pick, omit } from 'lodash'
 import OptionGroup from '../Select/OptionGroup'
@@ -111,7 +99,17 @@ const SHARED_PROPS = [
   'autofocus',
   'selectOnFocus',
   'composition',
-  'clearable'
+  'clearable',
+  'maxlength',
+  'getLength',
+  'strict',
+  'trim'
+]
+
+const BASE_EVENTS = [
+  'input',
+  'select',
+  'toggle'
 ]
 
 export default {
@@ -120,6 +118,7 @@ export default {
   components: {
     'veui-input': Input,
     'veui-autocomplete-base': AutocompleteBase,
+    'veui-search-result': SearchResult,
     'veui-option-group': OptionGroup
   },
   directives: { outside },
@@ -146,8 +145,21 @@ export default {
         ...this.$attrs
       }
     },
+    baseEvents () {
+      return pick(this.$listeners, BASE_EVENTS)
+    },
+    inputEvents () {
+      return omit(this.$listeners, BASE_EVENTS)
+    },
     realTriggers () {
       return [].concat(this.suggestTrigger)
+    },
+    // strict 且没有定制 getLength，选中建议也遵循 input 的 strict 的行为
+    isLimitSimpleLength () {
+      return this.getLength == null && this.realMaxlength != null && this.strict
+    },
+    realMaxlength () {
+      return normalizeInt(this.maxlength)
     }
   },
   methods: {
@@ -155,6 +167,10 @@ export default {
       this.$refs.base.focus()
     },
     handleSelect (value) {
+      value = value || ''
+      if (this.isLimitSimpleLength && value.length > this.realMaxlength) {
+        value = safeSliceStringByLength(value, this.realMaxlength)
+      }
       this.$refs.base.suggestionUpdateValue(value)
     },
     openSuggestionOn (mode) {
@@ -167,9 +183,6 @@ export default {
       if (eventName === 'input') {
         props.updateValue(val)
       }
-    },
-    handleClear () {
-      this.$emit('clear')
     }
   }
 }

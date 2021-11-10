@@ -28,4 +28,13 @@
     @sizes: xs, s, m, l;
     .veui-dropdown-max-height(@sizes, var(--dls-dropdown-max-display-items, 8));
   }
+
+  &-suggestions &-suggestion-group > .@{veui-prefix}-option {
+    .veui-search-result();
+
+    & .@{veui-prefix}-option-label {
+      display: flex;
+      align-items: center;
+    }
+  }
 }

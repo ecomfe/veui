@@ -258,12 +258,12 @@
     <section>
       <veui-input
         placeholder="允许溢出"
-        maxlength="5"
+        maxlength="6"
         clearable
       />
       <veui-input
         placeholder="不允许溢出"
-        maxlength="5"
+        maxlength="6"
         clearable
         strict
       />

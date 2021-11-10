@@ -109,6 +109,7 @@
         ref="uploader"
         v-model="files"
         v-bind="uploaderOptions"
+        :entries="entries"
         @success="handleUploaderEvent('success', ...arguments)"
         @failure="handleUploaderEvent('failure', ...arguments)"
         @invalid="handleUploaderEvent('invalid', ...arguments)"
@@ -244,6 +245,7 @@ import {
   Dialog
 } from 'veui'
 import 'veui-theme-dls-icons/chevron-right'
+import 'veui-theme-dls-icons/star'
 import 'veui-theme-dls-icons/id-card'
 import bus from '../bus'
 
@@ -384,7 +386,22 @@ export default {
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1
       },
-      pickerPosition: undefined
+      pickerPosition: undefined,
+      entries (defaultEntries) {
+        return [
+          ...defaultEntries,
+          {
+            name: 'star1',
+            icon: 'star',
+            label: 'star'
+          },
+          {
+            name: 'star2',
+            icon: 'star',
+            label: 'star'
+          }
+        ]
+      }
     }
   },
   computed: {

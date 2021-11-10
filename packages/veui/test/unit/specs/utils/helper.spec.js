@@ -23,7 +23,8 @@ import {
   createPortal,
   renderSlot,
   Void,
-  forwardSlots
+  forwardSlots,
+  safeSliceStringByLength
 } from '@/utils/helper'
 
 describe('utils/helper', () => {
@@ -687,5 +688,14 @@ describe('utils/helper', () => {
 
     expect(wrapper.find('.default').text()).to.equal('bar')
     expect(wrapper.find('.foo').text()).to.equal('bar-foo')
+  })
+
+  it('should slice string safely, considering surrogate pair.', () => {
+    const str = '👩‍👩‍👧‍👧'
+    expect(safeSliceStringByLength(str, 1), '#1').to.equal('')
+    expect(safeSliceStringByLength(str, 2), '#2').to.equal(str.slice(0, 2))
+    expect(safeSliceStringByLength(str, 3), '#3').to.equal(str.slice(0, 3))
+    expect(safeSliceStringByLength(str, 4), '#4').to.equal(str.slice(0, 3))
+    expect(safeSliceStringByLength(str, 5), '#5').to.equal(str.slice(0, 5))
   })
 })
