@@ -305,15 +305,22 @@
       .dls-icon-size(@dls-uploader-media-entry-icon-size, true);
     }
 
+    &:hover {
+      background-color: @dls-button-background-color-basic-hover;
+    }
+
     & > .@{veui-prefix}-uploader-controls {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 100%;
       padding: 0;
 
       .@{veui-prefix}-control-item {
         justify-content: flex-start;
+
+        & + .@{veui-prefix}-control-item {
+          padding-top: @dls-uploader-media-spacing-y;
+        }
       }
     }
   }

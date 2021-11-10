@@ -52,6 +52,7 @@ let accordionItem = useChild('accordion-item', 'accordion', ['name'], {
 
 export const togglePositionProp = {
   type: String,
+  default: 'start',
   validator (val) {
     return [null, 'start', 'end', 'none'].indexOf(val) >= 0
   }

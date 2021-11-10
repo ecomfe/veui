@@ -196,4 +196,32 @@ describe('components/Popover', function () {
     expect(wrapper.find('.veui-popover-foot').text()).to.contains('foot')
     wrapper.destroy()
   })
+
+  it('should open correctly when used as uncontrolled component.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-popover': Popover
+        },
+        template: `
+          <div>
+            <div class="test-target" ref="t">?</div>
+            <veui-popover target="t" trigger="click">
+              <div class="test-content">popover</div>
+            </veui-popover>
+          </div>`
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+    wrapper.find('.test-target').trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.find('.test-content').isVisible()).to.eql(true)
+    wrapper.destroy()
+  })
 })

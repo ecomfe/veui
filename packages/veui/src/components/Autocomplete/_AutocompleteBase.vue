@@ -6,7 +6,7 @@
 >
   <slot
     :open-suggestions="openSuggestions"
-    :close-suggestions="closeAndAutoSuggestion"
+    :close-suggestions="closeSuggestions"
     :handleKeydown="handleSuggestionKeydown"
     :update-value="inputUpdateValue"
     :value="realValue"
@@ -50,17 +50,6 @@ import Overlay from '../Overlay'
 import { findComponent } from '../../utils/context'
 import { isFunction, cloneDeep, uniqueId } from 'lodash'
 
-function findSuggestions (suggestions, value, finder, childrenKey) {
-  let target = false
-  suggestions.some(item => {
-    target = item[childrenKey]
-      ? findSuggestions(item[childrenKey], value, finder, childrenKey)
-      : finder(item, value)
-    return !!target
-  })
-  return target
-}
-
 function createFinder (valueKey) {
   return (item, value) => (item[valueKey] === value ? item : false)
 }
@@ -102,8 +91,7 @@ export default {
     childrenKey: {
       type: String,
       default: 'children'
-    },
-    strict: Boolean
+    }
   },
   data () {
     return {
@@ -167,7 +155,7 @@ export default {
     },
     suggestionUpdateValue (val) {
       this.inputUpdateValue(val)
-      this.$emit('suggest', val)
+      this.$emit('select', val)
       this.closeSuggestions()
     },
     findComponentByMethod (name) {
@@ -229,25 +217,6 @@ export default {
       if (!this.realExpanded) {
         this.keyword = this.realValue
         this.commit('expanded', true)
-      }
-    },
-    autoSuggest () {
-      let match = findSuggestions(
-        this.realDatasource,
-        this.realValue,
-        this.realFinder,
-        this.childrenKey
-      )
-      if (!match) {
-        this.suggestionUpdateValue('')
-      }
-    },
-    closeAndAutoSuggestion () {
-      if (this.realExpanded) {
-        this.closeSuggestions()
-        if (this.realValue && this.strict) {
-          this.autoSuggest()
-        }
       }
     }
   }

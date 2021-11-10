@@ -1,4 +1,5 @@
 import ui from 'veui/managers/ui'
+import { IconChevronRight } from 'dls-icons-vue'
 
 ui.defaults(
   {
@@ -8,6 +9,9 @@ ui.defaults(
         default: 'm',
         inherit: true
       }
+    },
+    icons: {
+      separator: IconChevronRight
     }
   },
   'autocomplete'
