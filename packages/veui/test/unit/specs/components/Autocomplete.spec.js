@@ -7,6 +7,7 @@ const INPUT_PLACEHOLDER = '.veui-input .veui-input-placeholder'
 const SUGGESTIONS = '.veui-autocomplete-suggestions'
 const SUGGESTION_ITEM = '.veui-autocomplete-suggestions .veui-option'
 const FOUR = '👩‍👩‍👧‍👧'
+const TWO = '👩‍👩‍👧‍👧'.slice(0, 5)
 
 let componentOptions = {
   components: {
@@ -44,7 +45,11 @@ let componentOptions = {
           ]
         },
         {
-          label: FOUR,
+          label: TWO,
+          value: TWO
+        },
+        {
+          label: FOUR, // 放在最后
           value: FOUR
         }
       ],
@@ -128,28 +133,35 @@ describe('components/Autocomplete', function () {
       debugInBrowser
     )
     let { vm } = wrapper
-    let nativeInput = wrapper.find(NATIVE_INPUT)
-    nativeInput.trigger('focus')
-    nativeInput.element.value = '2'
-    nativeInput.trigger('input')
-    await vm.$nextTick()
+
+    await input('2')
     let options = wrapper.findAll(SUGGESTION_ITEM)
     expect(options.length).to.equal(1)
     document.body.click()
     await vm.$nextTick()
     expect(vm.value).to.equal('2')
 
-    nativeInput = wrapper.find(NATIVE_INPUT)
-    nativeInput.trigger('focus')
-    nativeInput.element.value = '👩'
-    nativeInput.trigger('input')
-    await vm.$nextTick()
+    await input(TWO)
     options = wrapper.findAll(SUGGESTION_ITEM)
     expect(options.length).to.equal(1)
     options.at(0).trigger('click')
     await vm.$nextTick()
+    expect(vm.value).to.equal(TWO)
+
+    await input('')
+    options = wrapper.findAll(SUGGESTION_ITEM)
+    options.at(options.length - 1).trigger('click')
+    await vm.$nextTick()
     expect(vm.value).to.equal(FOUR.slice(0, 6))
     wrapper.destroy()
+
+    async function input (val) {
+      let nativeInput = wrapper.find(NATIVE_INPUT)
+      nativeInput.trigger('focus')
+      nativeInput.element.value = val
+      nativeInput.trigger('input')
+      await vm.$nextTick()
+    }
   })
 
   it('should render placeholder correctly', () => {
