@@ -24,7 +24,7 @@ import {
   renderSlot,
   Void,
   forwardSlots,
-  safeSliceStringByLength
+  safeSlice
 } from '@/utils/helper'
 
 describe('utils/helper', () => {
@@ -692,10 +692,10 @@ describe('utils/helper', () => {
 
   it('should slice string safely, considering surrogate pair.', () => {
     const str = '👩‍👩‍👧‍👧'
-    expect(safeSliceStringByLength(str, 1), '#1').to.equal('')
-    expect(safeSliceStringByLength(str, 2), '#2').to.equal(str.slice(0, 2))
-    expect(safeSliceStringByLength(str, 3), '#3').to.equal(str.slice(0, 3))
-    expect(safeSliceStringByLength(str, 4), '#4').to.equal(str.slice(0, 3))
-    expect(safeSliceStringByLength(str, 5), '#5').to.equal(str.slice(0, 5))
+    expect(safeSlice(str, 1), '#1').to.equal('')
+    expect(safeSlice(str, 2), '#2').to.equal(str.slice(0, 2))
+    expect(safeSlice(str, 3), '#3').to.equal(str.slice(0, 3))
+    expect(safeSlice(str, 4), '#4').to.equal(str.slice(0, 3))
+    expect(safeSlice(str, 5), '#5').to.equal(str.slice(0, 5))
   })
 })

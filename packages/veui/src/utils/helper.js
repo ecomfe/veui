@@ -337,7 +337,7 @@ export function forwardSlots (slots, vm) {
 
 const LOW_SURROGATE = /[\uD800-\uDBFF]/
 
-export function safeSliceStringByLength (str, length) {
+export function safeSlice (str, length) {
   if (str.length > length) {
     while (length--) {
       if (!LOW_SURROGATE.test(str[length])) {

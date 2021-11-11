@@ -3,13 +3,19 @@ import warn from '../utils/warn'
 import useConfig from './config'
 import config from '../managers/config'
 
+const ZERO_WIDTH_JOINER = '\u200d'
+
 function match (item, keyword, { searchKey, keywordRe }) {
   let offsets = []
   const searchVal = item[searchKey]
   if (searchVal) {
     let result = keywordRe.exec(searchVal)
     while (result) {
-      offsets.push([result.index, result.index + result[0].length])
+      const index = result.index
+      // 前后不是 ZERO_WIDTH_JOINER ，后面在正则里保证
+      if (!index || (index && searchVal[index - 1] !== ZERO_WIDTH_JOINER)) {
+        offsets.push([index, index + result[0].length])
+      }
       result = keywordRe.exec(searchVal)
     }
     keywordRe.lastIndex = 0
@@ -29,7 +35,7 @@ function toBoolean (matchResult) {
 function createKeywordRe (keyword, { flags, literal }) {
   keyword = literal ? escapeRegExp(keyword) : keyword
   try {
-    return new RegExp(keyword, flags)
+    return new RegExp(`${keyword}(?!${ZERO_WIDTH_JOINER})`, flags)
   } catch (e) {
     // keyword is not a valid regexp pattern or flags are invalid.
     warn(`[veui-searchable] ${e.message}`)
