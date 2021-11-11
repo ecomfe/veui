@@ -85,7 +85,7 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import overlay from '../../mixins/overlay'
-import { normalizeInt, safeSliceStringByLength } from '../../utils/helper'
+import { normalizeInt, safeSlice } from '../../utils/helper'
 import outside from '../../directives/outside'
 import AutocompleteBase from './_AutocompleteBase'
 import SearchResult from '../_SearchResult'
@@ -169,7 +169,7 @@ export default {
     handleSelect (value) {
       value = value || ''
       if (this.isLimitSimpleLength && value.length > this.realMaxlength) {
-        value = safeSliceStringByLength(value, this.realMaxlength)
+        value = safeSlice(value, this.realMaxlength)
       }
       this.$refs.base.suggestionUpdateValue(value)
     },
