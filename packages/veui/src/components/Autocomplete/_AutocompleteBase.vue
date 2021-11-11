@@ -149,7 +149,7 @@ export default {
     },
     $listeners ({ suggest }) {
       if (suggest) {
-        warn('[veui-autocomplete]`suggest` event is deprecated, please use `select` event instead.')
+        warn('[veui-autocomplete] The `suggest` event is deprecated and will be removed in future versions. Please use the `select` event instead.')
       }
     }
   },
