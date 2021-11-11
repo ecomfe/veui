@@ -48,6 +48,7 @@ import { useKeySelect } from '../../mixins/key-select'
 import useSearchable from '../../mixins/searchable'
 import Overlay from '../Overlay'
 import { findComponent } from '../../utils/context'
+import warn from '../../utils/warn'
 import { isFunction, cloneDeep, uniqueId } from 'lodash'
 
 function createFinder (valueKey) {
@@ -145,6 +146,11 @@ export default {
       if (this.realExpanded) {
         this.keyword = val
       }
+    },
+    $listeners ({ suggest }) {
+      if (suggest) {
+        warn('[veui-autocomplete]`suggest` event is deprecated, please use `select` event instead.')
+      }
     }
   },
   methods: {
@@ -155,6 +161,7 @@ export default {
     },
     suggestionUpdateValue (val) {
       this.inputUpdateValue(val)
+      this.$emit('suggest', val)
       this.$emit('select', val)
       this.closeSuggestions()
     },

@@ -108,6 +108,7 @@ const SHARED_PROPS = [
 
 const BASE_EVENTS = [
   'input',
+  'suggest',
   'select',
   'toggle'
 ]

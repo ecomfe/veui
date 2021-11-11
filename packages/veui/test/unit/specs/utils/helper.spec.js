@@ -697,5 +697,6 @@ describe('utils/helper', () => {
     expect(safeSlice(str, 3), '#3').to.equal(str.slice(0, 3))
     expect(safeSlice(str, 4), '#4').to.equal(str.slice(0, 3))
     expect(safeSlice(str, 5), '#5').to.equal(str.slice(0, 5))
+    expect(safeSlice(str, str.length + 1), '#6').to.equal(str)
   })
 })

@@ -42,8 +42,8 @@ ui.defaults(
     parts: {
       remove: 'icon aux',
       progress: 's',
-      control: 'text m',
-      entry: 'icon',
+      control: 'icon m',
+      entry: 'text',
       preview: 'auto',
       media: 'basic'
     }
