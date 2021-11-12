@@ -420,6 +420,44 @@
       >{{ showDesc ? 'Disable' : 'Enable' }}</veui-button>
     </section>
   </section>
+  <section>
+    <h3><code>v-tooltip.overflow</code></h3>
+    <section class="group overflow">
+      <p
+        v-tooltip.overflow="{
+          content: descA,
+          disabled: !showDesc
+        }"
+        class="ellipsis"
+      >
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore
+        nisi suscipit saepe ipsum enim mollitia voluptates, blanditiis aperiam
+        vel facere assumenda hic libero iusto, at soluta magni cum in
+        voluptatibus?
+      </p>
+      <p
+        v-tooltip.overflow="{
+          content: descA,
+          disabled: !showDesc
+        }"
+        class="ellipsis"
+      >
+        Lorem ipsum.
+      </p>
+      <p
+        v-tooltip.overflow="{
+          content: descB,
+          disabled: !showDesc
+        }"
+        class="line-clamp"
+      >
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae
+        quia modi, architecto sunt dolorem provident? Hic similique, at
+        corrupti dolorem, tempore libero magni accusantium aut repellat cum
+        fuga quidem et.
+      </p>
+    </section>
+  </section>
 </article>
 </template>
 
@@ -531,5 +569,25 @@ section {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.group.overflow {
+  flex-direction: column;
+}
+
+.ellipsis {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  width: 200px;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
 }
 </style>

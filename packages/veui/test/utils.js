@@ -52,6 +52,7 @@ export function expectTooltip (content, position) {
   if (content === null) {
     expect(tooltip).to.equal(null)
   } else if (content === false) {
+    expect(tooltip).to.not.equal(null)
     expect(tooltip.style.display).to.equal('none')
   } else {
     expect(tooltip).to.not.equal(null)

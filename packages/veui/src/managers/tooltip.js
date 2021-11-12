@@ -18,6 +18,7 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
 
   function destroy () {
     clearTimeout(timer)
+    timer = null
 
     if (component) {
       component.$destroy()
@@ -67,7 +68,6 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
     // warmup complete and being active
     timer = setTimeout(
       () => {
-        timer = null
         destroy()
       },
       cooldown == null ? config.get('tooltip.cooldown') : cooldown

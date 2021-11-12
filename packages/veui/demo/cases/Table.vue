@@ -113,6 +113,7 @@
       <veui-table-column
         field="desc"
         title="数据描述"
+        :tooltip="({ desc }) => desc.substring(0, 30) + '...'"
       />
       <veui-table-column
         field="price"
@@ -552,7 +553,8 @@ const tableData = [
   },
   {
     id: '3156',
-    desc: '数据描述3',
+    desc:
+      '数据描述3-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
     price: 820,
     updateDate: '20170610',
     group: '1578',
@@ -578,7 +580,8 @@ const tableData = [
   },
   {
     id: '3157',
-    desc: '数据描述4',
+    desc:
+      '数据描述4-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
     price: 736,
     updateDate: '20180109',
     group: '1578',

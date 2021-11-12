@@ -16,6 +16,7 @@ let col = useChild('table-column', 'colgroup', [
   'span',
   'allowedOrders',
   'desc',
+  'tooltip',
   ['filterValue', 'realFilterValue'],
   'filterTitle',
   ['filterOptions', 'realFilterOptions'],
@@ -77,7 +78,8 @@ export default {
     filterValue: {},
     filterTitle: String,
     filterOptions: Array,
-    filterMultiple: Boolean
+    filterMultiple: Boolean,
+    tooltip: [Boolean, Function]
   },
   computed: {
     realFixed () {

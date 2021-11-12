@@ -89,7 +89,7 @@ export default {
       return this.position || 'top'
     },
     targetNode () {
-      return this.getTargetNode(this.target)
+      return this.getTargetNode()
     },
     outsideOptions () {
       return {
@@ -141,7 +141,7 @@ export default {
     this.removeHandler()
   },
   methods: {
-    getTargetNode (target) {
+    getTargetNode () {
       return getNodes(this.target, this.$vnode.context)[0]
     },
     openHandler () {

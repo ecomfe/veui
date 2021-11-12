@@ -6,11 +6,27 @@ import Icon from '../Icon'
 import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
+import tooltip from '../../directives/tooltip'
 import '../../common/uiTypes'
+
+function renderTooltip (tooltip, item, field) {
+  if (tooltip === true) {
+    return item[field]
+  }
+
+  if (typeof tooltip === 'function') {
+    return tooltip(item, field)
+  }
+
+  return null
+}
 
 export default {
   name: 'veui-table-row',
   mixins: [prefix, table, i18n],
+  directives: {
+    tooltip
+  },
   uiTypes: ['transparent'],
   props: {
     index: Number,
@@ -257,7 +273,20 @@ export default {
             {...data}
           >
             <div class={this.$c('table-cell')}>
-              <div class={this.$c('table-cell-content')}>
+              <div
+                class={this.$c('table-cell-content')}
+                {...(col.tooltip
+                  ? {
+                    directives: [
+                      {
+                        name: 'tooltip',
+                        value: renderTooltip(col.tooltip, item, col.field),
+                        modifiers: { overflow: true }
+                      }
+                    ]
+                  }
+                  : {})}
+              >
                 {(isSubRow ? col.renderSubRow : col.renderBody)({
                   ...item,
                   item,

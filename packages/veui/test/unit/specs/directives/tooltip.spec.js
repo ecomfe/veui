@@ -19,6 +19,7 @@ describe('directives/tooltip', () => {
           </div>`
       },
       {
+        sync: false,
         attachToDocument: true
       }
     )
@@ -79,6 +80,7 @@ describe('directives/tooltip', () => {
         }
       },
       {
+        sync: false,
         attachToDocument: true
       }
     )
@@ -129,6 +131,7 @@ describe('directives/tooltip', () => {
         }
       },
       {
+        sync: false,
         attachToDocument: true
       }
     )
@@ -159,7 +162,6 @@ describe('directives/tooltip', () => {
   it('should close correctly when target is destroyed', async function () {
     this.timeout(5000)
     let warmup = config.get('tooltip.warmup')
-    let cooldown = config.get('tooltip.cooldown')
 
     let wrapper = mount(
       {
@@ -167,7 +169,6 @@ describe('directives/tooltip', () => {
         template: `
           <div style="width: 200px; height: 200px; display: flex; align-items: center; justify-content: center">
             <div class="a" v-if="a" key="a" v-tooltip="'Hi'">A</div>
-            <div class="b" v-if="b" key="b" v-tooltip="{ content: 'Hey' }">B</div>
           </div>`,
         data () {
           return {
@@ -178,6 +179,7 @@ describe('directives/tooltip', () => {
         }
       },
       {
+        sync: false,
         attachToDocument: true
       }
     )
@@ -192,7 +194,7 @@ describe('directives/tooltip', () => {
 
     vm.a = false
     await vm.$nextTick()
-    await wait(cooldown + 50)
+    await wait(0)
     expectTooltip(null)
 
     vm.a = true
@@ -202,10 +204,82 @@ describe('directives/tooltip', () => {
     await wait(warmup + 50)
     expectTooltip('Hi', 'top')
 
-    vm.b = false
-    await vm.$nextTick()
+    tooltipManager.destroy()
+
+    wrapper.destroy()
+  })
+
+  it('should respect `overflow` modifier', async function () {
+    this.timeout(8000)
+    let warmup = config.get('tooltip.warmup')
+    let cooldown = config.get('tooltip.cooldown')
+
+    let wrapper = mount(
+      {
+        directives: { tooltip },
+        template: `
+          <div style="width: 200px; height: 200px; display: flex; align-items: center; justify-content: center">
+            <div class="a" style="width: 30px; overflow: hidden; white-space: nowrap"
+              v-tooltip.overflow="'Hi'"
+            >ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+            <div class="b" style="width: 30px; overflow: hidden; white-space: nowrap"
+              v-tooltip.overflow="'Hi'"
+            >B</div>
+          </div>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let a = wrapper.find('.a')
+    let b = wrapper.find('.b')
+
+    a.trigger('mouseenter')
+
+    await wait(warmup - 100)
+    expectTooltip(null)
+
+    a.trigger('mouseleave') // should cancel
+    await wait(150)
+    expectTooltip(null)
+
+    a.trigger('mouseenter')
+    await wait(warmup - 100)
+    expectTooltip(null)
+
+    await wait(150)
+    // active
+    expectTooltip('Hi')
+
+    a.trigger('mouseleave')
+    await wait(cooldown - 100)
+    expectTooltip(false)
+
+    b.trigger('mouseenter')
+    await wait(0)
+    expectTooltip(false)
+
+    await wait(150)
+    expectTooltip(null)
+
+    b.trigger('mouseleave')
     await wait(cooldown + 50)
-    expectTooltip('Hi', 'top')
+    expectTooltip(null)
+
+    b.trigger('mouseenter')
+    await wait(warmup + 100)
+
+    expectTooltip(null)
+
+    b.trigger('mouseleave')
+    a.trigger('mouseenter')
+    await wait(warmup - 100)
+    expectTooltip(null)
+
+    await wait(200)
+    expectTooltip('Hi')
 
     tooltipManager.destroy()
 

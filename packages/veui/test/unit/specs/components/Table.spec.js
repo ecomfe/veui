@@ -3,7 +3,9 @@ import Popover from '@/components/Popover'
 import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 import Select from '@/components/Select'
-import { mount, wait } from '../../../utils'
+import { expectTooltip, mount, wait } from '../../../utils'
+import tooltipManager from '@/managers/tooltip'
+import config from '@/managers/config'
 
 describe('components/Table', () => {
   it('should select the specified fields.', async () => {
@@ -2065,6 +2067,68 @@ describe('components/Table', () => {
       wrapper.find('.veui-table-cell-sticky-edge').element.style.left
     ).to.equal('0px')
 
+    wrapper.destroy()
+  })
+
+  it('should support tooltip prop on Columns', async () => {
+    const loremIpsum =
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!'
+
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            selectable: true,
+            data: [
+              { id: 1, name: loremIpsum },
+              { id: 2, name: '2name' }
+            ]
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+          >
+            <veui-table-column
+              field="id"
+              title="id"
+              :width="120"
+            />
+            <veui-table-column
+              field="name"
+              title="name"
+              :width="200"
+              tooltip
+            />
+          </veui-table>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let [, long, , short] = wrapper.findAll(
+      'tbody .veui-table-cell-content'
+    ).wrappers
+
+    long.trigger('mouseenter')
+    let warmup = config.get('tooltip.warmup')
+
+    await wait(warmup + 100)
+    expectTooltip(loremIpsum)
+
+    long.trigger('mouseleave')
+    short.trigger('mouseenter')
+    await wait(warmup + 100)
+    expectTooltip(null)
+
+    tooltipManager.destroy()
     wrapper.destroy()
   })
 })

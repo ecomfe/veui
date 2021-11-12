@@ -251,7 +251,7 @@ export default {
             target="self"
             open={this.descOpen}
             onToggle={this.handleToggleDesc}
-            position="bottom"
+            position="top"
           >
             {desc}
           </Popover>
