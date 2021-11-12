@@ -2894,8 +2894,9 @@ export default {
       ageRule: [
         {
           name: 'required',
+          message: 'required from rule.',
           value: true,
-          triggers: 'input'
+          triggers: 'blur'
         },
         {
           name: 'numeric',

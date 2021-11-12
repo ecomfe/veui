@@ -147,10 +147,10 @@ export default {
       }
     },
     baseEvents () {
-      return pick(this.$listeners, BASE_EVENTS)
+      return pick(this.listenersWithValidations, BASE_EVENTS)
     },
     inputEvents () {
-      return omit(this.$listeners, BASE_EVENTS)
+      return omit(this.listenersWithValidations, BASE_EVENTS)
     },
     realTriggers () {
       return [].concat(this.suggestTrigger)

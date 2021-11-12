@@ -1,4 +1,5 @@
 import Input from '@/components/Input'
+import Autocomplete from '@/components/Autocomplete'
 import { mount } from '@vue/test-utils'
 import Button from '@/components/Button'
 import Form from '@/components/Form/Form'
@@ -16,6 +17,7 @@ function genSimpleForm (propsData = {}, defaultSlot = slot) {
         'veui-field': Field,
         'veui-input': Input,
         'veui-button': Button,
+        'veui-autocomplete': Autocomplete,
         'veui-form': Form
       },
       data () {
@@ -363,5 +365,113 @@ describe('components/Form/Form', () => {
     expect(data.gender).to.equal('male')
     expect(data.age).to.equal('18')
     wrapper.destroy()
+  })
+
+  it('input should apply validations correctly when using native blur as triggers.', async () => {
+    let slot = `
+      <veui-field name="gender" :rules="propsData.rules" field="gender" ref="f"><veui-input class="gender-input" v-model="propsData.data.gender"/></veui-field>
+    `
+    const ruleErr = 'required'
+    const valiErr = 'gender出错啦'
+    let { wrapper } = genSimpleForm(
+      {
+        data: {
+          gender: null
+        },
+        rules: [{ name: 'required', message: ruleErr, triggers: 'blur' }],
+        validators: [
+          {
+            fields: ['gender'],
+            validate: gender => {
+              return !gender
+                ? {
+                  gender: valiErr
+                }
+                : true
+            },
+            triggers: 'blur'
+          }
+        ]
+      },
+      slot
+    )
+    const { vm } = wrapper
+    await vm.$nextTick()
+    await blurWithValue(null)
+    expect(wrapper.find('.veui-field-error').text()).to.contains(valiErr)
+
+    await blurWithValue(1)
+    expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
+
+    vm.propsData.validators = null
+    await blurWithValue(null)
+    expect(wrapper.find('.veui-field-error').text()).to.contains(ruleErr)
+
+    await blurWithValue('1')
+    expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
+
+    wrapper.destroy()
+
+    async function blurWithValue (val) {
+      vm.propsData.data.gender = val
+      await vm.$nextTick()
+      let input = wrapper.find('.veui-input input')
+      input.trigger('blur')
+      await wait(100)
+    }
+  })
+
+  it('autocomplete should apply validations correctly when using input as triggers.', async () => {
+    let slot = `
+      <veui-field name="gender" :rules="propsData.rules" field="gender"><veui-autocomplete class="gender-input" v-model="propsData.data.gender"/></veui-field>
+    `
+    const ruleErr = 'required'
+    const valiErr = 'gender出错啦'
+    let { wrapper } = genSimpleForm(
+      {
+        data: {
+          gender: null
+        },
+        rules: [{ name: 'required', message: ruleErr, triggers: 'input' }],
+        validators: [
+          {
+            fields: ['gender'],
+            validate: gender => {
+              return !gender
+                ? {
+                  gender: valiErr
+                }
+                : true
+            },
+            triggers: 'input'
+          }
+        ]
+      },
+      slot
+    )
+    const { vm } = wrapper
+    await vm.$nextTick()
+    await inputWithValue(null)
+    expect(wrapper.find('.veui-field-error').text()).to.contains(valiErr)
+
+    await inputWithValue('1')
+    expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
+
+    vm.propsData.validators = null
+    await inputWithValue(null)
+    expect(wrapper.find('.veui-field-error').text()).to.contains(ruleErr)
+
+    await inputWithValue('1')
+    expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
+
+    wrapper.destroy()
+
+    async function inputWithValue (val) {
+      await vm.$nextTick()
+      let input = wrapper.find('.veui-input input')
+      input.element.value = val
+      input.trigger('input')
+      await vm.$nextTick()
+    }
   })
 })
