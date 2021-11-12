@@ -1,4 +1,4 @@
-import { includes } from 'lodash'
+import { includes, mergeWith } from 'lodash'
 import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
 import '../common/uiTypes'
 import focusable from './focusable'
@@ -39,6 +39,20 @@ export default {
             !this.formField.validity.valid &&
             this.isTopMostInput)
       )
+    },
+    listenersWithValidations () {
+      if (
+        this.formField &&
+        this.isTopMostInput &&
+        Object.keys(this.formField.interactiveHandlers).length
+      ) {
+        return mergeWith(
+          { ...this.$listeners },
+          this.formField.interactiveHandlers,
+          (a, b) => [].concat(a || [], b || [])
+        )
+      }
+      return this.$listeners
     },
     ...getTypedAncestorTracker('form-field').computed
   },

@@ -27,7 +27,8 @@ import {
   assign,
   zipObject,
   map,
-  debounce,
+  uniq,
+  fill,
   omit
 } from 'lodash'
 import { getVnodes } from '../../utils/context'
@@ -76,43 +77,34 @@ export default {
       let targets = this.fields.filter(target => target.name)
       return zipObject(map(targets, 'name'), targets)
     },
-    interactiveValidatorsMap () {
-      let map = {}
-      if (this.validators) {
-        this.validators.forEach(({ validate, handler, triggers, fields }) => {
-          let fn = validate || handler
-          // 没有 trigger 代表 submit 检查，这里只存交互的
-          if (!isFunction(fn) || !fields || !triggers) {
-            return
+    normalizedValidators () {
+      return (this.validators || [])
+        .filter(
+          ({ validate, handler, fields }) =>
+            fields && isFunction(validate || handler)
+        )
+        .map(({ validate, handler, fields, triggers }) => {
+          fields = Array.isArray(fields) ? fields : [fields]
+          // triggers 和 fields 数组长度一致了
+          triggers = normalizeTriggers(triggers, fields.length)
+          const fn = validate || handler
+          return {
+            validate: fn,
+            fields, // string[]
+            triggers // string[][]
           }
-
-          // 参照上述 props.validator 支持的格式
-          triggers = Array.isArray(triggers) ? triggers : [triggers]
-          triggers.forEach(events => {
-            events.split(',').forEach(event => {
-              if (event === 'submit') {
-                return
-              }
-
-              let debounceFn = debounce(() => {
-                this.execValidator(fn, fields)
-              }, 300)
-              let item = {
-                fields,
-                validate: debounceFn,
-                handler: debounceFn
-              }
-
-              if (map[event]) {
-                map[event].push(item)
-              } else {
-                map[event] = [item]
-              }
-            })
-          })
         })
-      }
-      return map
+    },
+    fieldEvents () {
+      return this.normalizedValidators.reduce((acc, { fields, triggers }) => {
+        fields.forEach((field, index) => {
+          acc[field] = acc[field] || []
+          acc[field] = uniq(
+            acc[field].concat(triggers[index].filter(item => item !== 'submit'))
+          )
+        })
+        return acc
+      }, {})
     }
   },
   created () {
@@ -229,16 +221,13 @@ export default {
       this.handleValidities(validities, fields)
       return validities
     },
-    handleInteract (eventName, name) {
-      let validators = this.interactiveValidatorsMap[eventName]
-      if (validators) {
-        validators.forEach(({ validate, handler, fields }) => {
-          let fn = validate || handler
-          if (includes(fields, name) && isFunction(fn)) {
-            fn()
-          }
-        })
-      }
+    handleInteract (eventName, fieldName) {
+      this.normalizedValidators.forEach(({ fields, triggers, validate }) => {
+        const fIndex = fields.indexOf(fieldName)
+        if (fIndex >= 0 && triggers[fIndex].indexOf(eventName) >= 0) {
+          this.execValidator(validate, fields)
+        }
+      })
     },
     /**
      * 处理validator产生的校验信息
@@ -311,5 +300,25 @@ export default {
       })
     }
   }
+}
+
+function normalizeTriggers (triggers, length) {
+  triggers = triggers || 'submit'
+  if (typeof triggers === 'string') {
+    triggers = fill(Array(length), triggers)
+  } else if (Array.isArray(triggers)) {
+    let len = triggers.length
+    triggers =
+      len < length
+        ? triggers.concat(fill(Array(length - len), triggers))
+        : triggers.slice(0, length)
+  } else {
+    throw new Error(
+      '[veui-form] The triggers of validators must be an Array or a string.'
+    )
+  }
+  return triggers.map(item => {
+    return typeof item === 'string' ? item.split(/\s*,\s*/) : item
+  })
 }
 </script>

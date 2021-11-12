@@ -51,7 +51,7 @@ import type from '../../managers/type'
 import rule from '../../managers/rule'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import { isBoolean, get, last, includes } from 'lodash'
+import { isBoolean, get, last, includes, uniq } from 'lodash'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import Tooltip from '../Tooltip'
@@ -138,30 +138,40 @@ export default {
       let map = {}
       if (this.realRules) {
         this.realRules.forEach(({ triggers, name, message, value }) => {
-          if (!triggers) {
-            return
+          if (triggers) {
+            if (typeof triggers === 'string') {
+              triggers = triggers.split(',')
+            }
+
+            triggers.forEach(eventName => {
+              if (eventName !== 'submit') {
+                map[eventName] = map[eventName] || []
+                map[eventName].push({
+                  value,
+                  name,
+                  message
+                })
+              }
+            })
           }
-
-          triggers = triggers.split(',')
-          triggers.forEach(eventName => {
-            if (eventName === 'submit') {
-              return
-            }
-
-            let item = {
-              value,
-              name,
-              message
-            }
-            if (map[eventName]) {
-              map[eventName].push(item)
-            } else {
-              map[eventName] = [item]
-            }
-          })
         })
       }
       return map
+    },
+    interactiveHandlers () {
+      let allEvents = []
+      if (this.form) {
+        let events = this.form.fieldEvents[this.realName]
+        if (events) {
+          allEvents = allEvents.concat(events)
+        }
+      }
+
+      allEvents = allEvents.concat(Object.keys(this.interactiveRulesMap))
+      return uniq(allEvents).reduce((acc, eventName) => {
+        acc[eventName] = () => this.handleInteract(eventName)
+        return acc
+      }, {})
     },
     realDisabled () {
       let { disabled, fieldset, form } = this
@@ -181,6 +191,9 @@ export default {
     },
     realField () {
       return this.field || this.name
+    },
+    realName () {
+      return this.name || this.field
     },
     ...form,
     ...fieldset
@@ -257,13 +270,19 @@ export default {
     },
     handleInteract (eventName) {
       // 需要让对应的 data 更新完值之后，再去 validate，都要 nextTick 来保证
-      if (this.interactiveRulesMap[eventName]) {
-        this.$nextTick(() => this.validate(this.interactiveRulesMap[eventName]))
-      }
+      this.$nextTick(() => {
+        if (this.interactiveRulesMap[eventName]) {
+          this.validate(this.interactiveRulesMap[eventName])
+        }
 
-      if (this.name) {
-        this.$nextTick(() => this.form.$emit('interact', eventName, this.name))
-      }
+        if (
+          this.form &&
+          this.realName &&
+          includes(this.form.fieldEvents[this.realName], eventName)
+        ) {
+          this.form.$emit('interact', eventName, this.realName)
+        }
+      })
     },
     hideValidity (fields) {
       if (!fields || !fields.length) {
