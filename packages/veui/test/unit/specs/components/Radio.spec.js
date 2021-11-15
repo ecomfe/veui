@@ -1,5 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Radio from '@/components/Radio'
+import Form from '@/components/Form'
+import Field from '@/components/Field'
 
 describe('components/Radio', () => {
   it('should handle value prop with `null` value.', done => {
@@ -233,5 +235,117 @@ describe('components/Radio', () => {
     expectChecked([false, false, false, false, false, false])
 
     wrapper.destroy()
+  })
+
+  it('should apply validations correctly when using input(instance)/blur(native) as triggers.', async () => {
+    const ruleErr = 'required'
+    const valiErr = 'gender出错啦'
+    const validators = [
+      {
+        fields: ['gender'],
+        validate: gender => {
+          return !gender
+            ? {
+              gender: valiErr
+            }
+            : true
+        },
+        triggers: 'blur'
+      }
+    ]
+
+    let wrapper = mount(
+      {
+        components: {
+          'veui-field': Field,
+          'veui-radio': Radio,
+          'veui-form': Form
+        },
+        data () {
+          return {
+            data: {
+              gender: null
+            },
+            rules: [
+              {
+                name: 'pattern',
+                value: /true/,
+                message: ruleErr,
+                triggers: 'blur'
+              }
+            ],
+            validators
+          }
+        },
+        template: `<veui-form ref="form" :data="data" :validators="validators">
+          <veui-field name="gender" :rules="rules" field="gender"><veui-radio ref="radio" v-model="data.gender" :value="true"/></veui-field>
+        </veui-form>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    await vm.$nextTick()
+    await blurWithValue(false)
+    hasError(valiErr)
+
+    await blurWithValue(true)
+    hasError(false)
+
+    vm.validators = null
+    await blurWithValue(false)
+    hasError(ruleErr)
+
+    await blurWithValue(true)
+    hasError(false)
+
+    await changeTrigger('input')
+
+    await inputWithValue(false)
+    hasError(valiErr)
+
+    await inputWithValue(true)
+    hasError(false)
+
+    vm.validators = null
+    await inputWithValue(false)
+    hasError(ruleErr)
+
+    await inputWithValue(true)
+    hasError(false)
+
+    wrapper.destroy()
+
+    async function blurWithValue (val) {
+      vm.data.gender = val
+      await vm.$nextTick()
+      let input = wrapper.find('.veui-radio input')
+      input.trigger('blur')
+      await vm.$nextTick()
+    }
+
+    async function inputWithValue (val) {
+      vm.data.gender = val
+      await vm.$nextTick()
+      // 这里为了测试校验，直接触发trigger，交互比较难改radio的值(一个radio只能选中)
+      vm.$refs.radio.$emit('input', val)
+      await vm.$nextTick()
+    }
+
+    async function changeTrigger (triggers) {
+      vm.rules = [{ ...vm.rules[0], triggers }]
+      vm.validators = [{ ...validators[0], triggers }]
+      await vm.$nextTick()
+    }
+
+    function hasError (err) {
+      if (err) {
+        expect(wrapper.find('.veui-field-error').text()).to.contains(err)
+      } else {
+        expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
+      }
+    }
   })
 })

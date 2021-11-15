@@ -107,10 +107,13 @@ export default {
       }
     },
     boxListeners () {
-      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+      return pick(this.listenersWithValidations, [
+        ...KEYBOARD_EVENTS,
+        ...FOCUS_EVENTS
+      ])
     },
     labelListeners () {
-      return pick(this.$listeners, MOUSE_EVENTS)
+      return pick(this.listenersWithValidations, MOUSE_EVENTS)
     }
   },
   watch: {

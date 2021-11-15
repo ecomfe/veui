@@ -158,7 +158,7 @@ export default {
       }
       return map
     },
-    interactiveHandlers () {
+    interactiveListeners () {
       let allEvents = []
       if (this.form) {
         let events = this.form.fieldEvents[this.realName]
@@ -166,7 +166,6 @@ export default {
           allEvents = allEvents.concat(events)
         }
       }
-
       allEvents = allEvents.concat(Object.keys(this.interactiveRulesMap))
       return uniq(allEvents).reduce((acc, eventName) => {
         acc[eventName] = () => this.handleInteract(eventName)

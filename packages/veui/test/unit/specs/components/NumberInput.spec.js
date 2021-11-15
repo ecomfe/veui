@@ -2,6 +2,8 @@ import { mount } from '@vue/test-utils'
 import sinon from 'sinon'
 import Input from '@/components/Input'
 import NumberInput from '@/components/NumberInput'
+import Form from '@/components/Form'
+import Field from '@/components/Field'
 
 describe('components/NumberInput', () => {
   it('should handle value prop with `null` value.', async () => {
@@ -239,5 +241,110 @@ describe('components/NumberInput', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.val).to.equal(null)
     wrapper.destroy()
+  })
+
+  it('should apply validations correctly when using input(instance)/blur(native) as triggers.', async () => {
+    const ruleErr = 'required'
+    const valiErr = 'gender出错啦'
+    const validators = [
+      {
+        fields: ['gender'],
+        validate: gender => {
+          return !gender
+            ? {
+              gender: valiErr
+            }
+            : true
+        },
+        triggers: 'blur'
+      }
+    ]
+
+    let wrapper = mount(
+      {
+        components: {
+          'veui-field': Field,
+          'veui-number-input': NumberInput,
+          'veui-form': Form
+        },
+        data () {
+          return {
+            data: {
+              gender: null
+            },
+            rules: [{ name: 'required', message: ruleErr, triggers: 'blur' }],
+            validators
+          }
+        },
+        template: `<veui-form ref="form" :data="data" :validators="validators">
+          <veui-field name="gender" :rules="rules" field="gender"><veui-number-input v-model="data.gender"/></veui-field>
+        </veui-form>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    await vm.$nextTick()
+    await blurWithValue(null)
+    hasError(valiErr)
+
+    await blurWithValue(1)
+    hasError(false)
+
+    vm.validators = null
+    await blurWithValue(null)
+    hasError(ruleErr)
+
+    await blurWithValue(1)
+    hasError(false)
+
+    await changeTrigger('input')
+
+    await inputWithValue(null)
+    hasError(valiErr)
+
+    await inputWithValue(1)
+    hasError(false)
+
+    vm.validators = null
+    await inputWithValue(null)
+    hasError(ruleErr)
+
+    await inputWithValue(1)
+    hasError(false)
+
+    wrapper.destroy()
+
+    async function blurWithValue (val) {
+      vm.data.gender = val
+      await vm.$nextTick()
+      let input = wrapper.find('.veui-number-input input')
+      input.trigger('blur')
+      await vm.$nextTick()
+    }
+
+    async function inputWithValue (val) {
+      await vm.$nextTick()
+      let input = wrapper.find('.veui-number-input input')
+      input.element.value = val
+      input.trigger('change')
+      await vm.$nextTick()
+    }
+
+    async function changeTrigger (triggers) {
+      vm.rules = [{ ...vm.rules[0], triggers }]
+      vm.validators = [{ ...validators[0], triggers }]
+      await vm.$nextTick()
+    }
+
+    function hasError (err) {
+      if (err) {
+        expect(wrapper.find('.veui-field-error').text()).to.contains(err)
+      } else {
+        expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
+      }
+    }
   })
 })

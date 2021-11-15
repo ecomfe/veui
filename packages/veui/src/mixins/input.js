@@ -1,4 +1,4 @@
-import { includes, mergeWith } from 'lodash'
+import { mergeWith, reduce, forEach } from 'lodash'
 import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
 import '../common/uiTypes'
 import focusable from './focusable'
@@ -40,37 +40,56 @@ export default {
             this.isTopMostInput)
       )
     },
+    isUnderField () {
+      return this.formField && this.formField.realField && this.isTopMostInput
+    },
     listenersWithValidations () {
+      // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归
+      let listeners = reduce(
+        this.$listeners,
+        (acc, listener, key) => {
+          acc[key] = (...args) => listener.call(this, ...args)
+          return acc
+        },
+        {}
+      )
       if (
-        this.formField &&
-        this.isTopMostInput &&
-        Object.keys(this.formField.interactiveHandlers).length
+        this.isUnderField &&
+        Object.keys(this.formField.interactiveListeners).length
       ) {
         return mergeWith(
-          { ...this.$listeners },
-          this.formField.interactiveHandlers,
+          listeners,
+          this.formField.interactiveListeners || {},
           (a, b) => [].concat(a || [], b || [])
         )
       }
-      return this.$listeners
+      return listeners
     },
     ...getTypedAncestorTracker('form-field').computed
   },
   created () {
-    if (!this.isTopMostInput || !this.formField || !this.formField.realField) {
+    if (!this.isUnderField) {
       return
     }
 
-    this.$emit = this.realEmit.bind(this, this.$emit)
+    this.$watch(
+      () => this.formField.interactiveListeners,
+      this.applyValidationListeners,
+      { immediate: true }
+    )
   },
   methods: {
-    realEmit (originalEmit, eventName, ...args) {
-      originalEmit.apply(this, [eventName, ...args])
-      // 过滤掉 vue 内部 hook 和 .sync 的 update 事件，不需要往上处理
-      let [prefix, name] = eventName.split(':')
-      if (!name || !includes(['hook', 'update'], prefix)) {
-        this.formField.$emit('interact', eventName)
-      }
+    applyValidationListeners (val = {}, prev = {}) {
+      forEach(prev, (listener, eventName) => {
+        if (val[eventName] !== listener) {
+          this.$off(eventName, listener)
+        }
+      })
+      forEach(val, (listener, eventName) => {
+        if (prev[eventName] !== listener) {
+          this.$on(eventName, listener)
+        }
+      })
     }
   }
 }

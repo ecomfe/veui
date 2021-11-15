@@ -177,7 +177,7 @@ export default {
       return this.uiProps.style === 'strong'
     },
     listeners () {
-      return omit(this.$listeners, VALUE_EVENTS)
+      return omit(this.listenersWithValidations, VALUE_EVENTS)
     },
     attrs () {
       return {
