@@ -1,4 +1,6 @@
 import { createTooltipManager } from '@/managers/tooltip'
+import config from '@/managers/config'
+import { getPortalEntry } from '@/utils/dom'
 import { expectTooltip, wait } from '../../../utils'
 
 describe('managers/tooltip', () => {
@@ -36,5 +38,39 @@ describe('managers/tooltip', () => {
     expectTooltip(null)
 
     manager.destroy()
+  })
+
+  it('should handle ignore invalid usage', async () => {
+    const warmup = config.get('tooltip.warmup')
+
+    const manager = createTooltipManager()
+    const el = document.createElement('div')
+
+    manager.enter(null, { content: 'Hi' })
+    await wait(warmup + 50)
+    expectTooltip(null)
+
+    manager.enter(el, {})
+    await wait(warmup + 50)
+    expectTooltip(null)
+
+    manager.leave()
+
+    manager.destroy()
+  })
+
+  it('should be safely destroyed', async () => {
+    const manager = createTooltipManager({ warmup: 100 })
+    const el = document.createElement('div')
+
+    manager.enter(el, { content: 'Hi' })
+    await wait(150)
+    expectTooltip('Hi')
+
+    const entry = getPortalEntry(document.querySelector('.veui-tooltip'))
+    entry.remove()
+
+    manager.destroy()
+    expectTooltip(null)
   })
 })

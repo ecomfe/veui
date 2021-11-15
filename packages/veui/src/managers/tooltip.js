@@ -51,11 +51,7 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
     )
   }
 
-  function leave (target) {
-    if (target && component && target !== component.target) {
-      return
-    }
-
+  function leave () {
     close()
     if (timer !== null) {
       // warmup timer
@@ -75,12 +71,12 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
   }
 
   function open (target, { position, content }) {
-    if (!component) {
-      component = createComponent()
-    }
-
     if (!target || !content) {
       return
+    }
+
+    if (!component) {
+      component = createComponent()
     }
 
     assign(component, {
