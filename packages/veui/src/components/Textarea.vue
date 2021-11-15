@@ -166,13 +166,16 @@ export default {
       }
     },
     inputListeners () {
-      return pick(this.$listeners, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+      return pick(this.listenersWithValidations, [
+        ...KEYBOARD_EVENTS,
+        ...FOCUS_EVENTS
+      ])
+    },
+    containerListeners () {
+      return pick(this.listenersWithValidations, MOUSE_EVENTS)
     },
     realAutoresize () {
       return this.autoresize && !this.resizable
-    },
-    containerListeners () {
-      return pick(this.$listeners, MOUSE_EVENTS)
     },
     measure () {
       return (
