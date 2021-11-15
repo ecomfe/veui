@@ -2070,7 +2070,9 @@ describe('components/Table', () => {
     wrapper.destroy()
   })
 
-  it('should support tooltip prop on Columns', async () => {
+  it('should support tooltip prop on Columns', async function () {
+    this.timeout(5000)
+
     const loremIpsum =
       'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!'
 
@@ -2084,8 +2086,8 @@ describe('components/Table', () => {
           return {
             selectable: true,
             data: [
-              { id: 1, name: loremIpsum },
-              { id: 2, name: '2name' }
+              { id: 1, foo: loremIpsum, bar: loremIpsum, baz: loremIpsum },
+              { id: 2, foo: 'foo', bar: 'bar', baz: 'baz' }
             ]
           }
         },
@@ -2095,15 +2097,22 @@ describe('components/Table', () => {
             :data="data"
           >
             <veui-table-column
-              field="id"
-              title="id"
-              :width="120"
-            />
-            <veui-table-column
-              field="name"
-              title="name"
+              field="foo"
+              title="Foo"
               :width="200"
               tooltip
+            />
+            <veui-table-column
+              field="bar"
+              title="Bar"
+              :width="200"
+              :tooltip="({ bar }) => bar"
+            />
+            <veui-table-column
+              field="baz"
+              title="Baz"
+              :width="200"
+              :tooltip="null"
             />
           </veui-table>`
       },
@@ -2113,18 +2122,23 @@ describe('components/Table', () => {
       }
     )
 
-    let [, long, , short] = wrapper.findAll(
+    let [longFoo, longBar, longBaz, shortFoo] = wrapper.findAll(
       'tbody .veui-table-cell-content'
     ).wrappers
 
-    long.trigger('mouseenter')
+    longFoo.trigger('mouseenter')
     let warmup = config.get('tooltip.warmup')
 
     await wait(warmup + 100)
     expectTooltip(loremIpsum)
 
-    long.trigger('mouseleave')
-    short.trigger('mouseenter')
+    longBar.trigger('mouseleave')
+    shortFoo.trigger('mouseenter')
+    await wait(warmup + 100)
+    expectTooltip(null)
+
+    shortFoo.trigger('mouseleave')
+    longBaz.trigger('mouseenter')
     await wait(warmup + 100)
     expectTooltip(null)
 
