@@ -17,7 +17,7 @@
       >
         <veui-button
           :key="control.name"
-          :ui="uiParts.control"
+          :ui="buttonUi"
           :disabled="
             control.disabled !== undefined ? control.disabled : disabled
           "
@@ -33,7 +33,7 @@
     <veui-button
       v-else
       :key="control.name"
-      :ui="uiParts.control"
+      :ui="buttonUi"
       :disabled="control.disabled !== undefined ? control.disabled : disabled"
       :class="$c('control-item')"
       :aria-label="control.label"
@@ -65,7 +65,13 @@ export default {
     items: Array,
     expanded: Boolean,
     disabled: Boolean,
-    showLabel: Boolean
+    showLabel: Boolean,
+    isEntry: Boolean
+  },
+  computed: {
+    buttonUi () {
+      return this.uiParts[this.isEntry ? 'entry' : 'control']
+    }
   },
   methods: {
     handleButtonClick (val) {

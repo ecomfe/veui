@@ -1,5 +1,9 @@
-import { mergeWith, reduce, forEach } from 'lodash'
-import { getTypedAncestorTracker, isTopMostOfType } from '../utils/helper'
+import { mergeWith, forEach } from 'lodash'
+import {
+  getTypedAncestorTracker,
+  isTopMostOfType,
+  wrapListeners
+} from '../utils/helper'
 import '../common/uiTypes'
 import focusable from './focusable'
 
@@ -45,14 +49,7 @@ export default {
     },
     listenersWithValidations () {
       // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归
-      let listeners = reduce(
-        this.$listeners,
-        (acc, listener, key) => {
-          acc[key] = (...args) => listener.call(this, ...args)
-          return acc
-        },
-        {}
-      )
+      let listeners = wrapListeners(this.$listeners)
       if (
         this.isUnderField &&
         Object.keys(this.formField.interactiveListeners).length
