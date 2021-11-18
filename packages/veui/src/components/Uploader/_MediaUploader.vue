@@ -197,6 +197,7 @@
               :expanded.sync="expandedEntryDropdown"
               :disabled="disabled"
               show-label
+              is-entry
               @click="handleMediaEntry"
             />
           </div>

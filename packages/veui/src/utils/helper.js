@@ -348,3 +348,15 @@ export function safeSlice (str, length) {
   }
   return str
 }
+
+// 避免 vue invoke handler 导致的无限递归
+export function wrapListeners (listeners) {
+  return reduce(
+    listeners,
+    (acc, listener, key) => {
+      acc[key] = Array.isArray(listener) ? listener : [listener]
+      return acc
+    },
+    {}
+  )
+}
