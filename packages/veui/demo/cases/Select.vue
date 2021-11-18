@@ -951,7 +951,7 @@ export default {
             label: v + '**',
             value: v
           }))
-          .concat(this.searchResult || [])
+          .concat(this.searchResult)
         : null
     }
   },

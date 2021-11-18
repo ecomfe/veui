@@ -138,7 +138,6 @@
 </template>
 
 <script>
-import Overlay from '../Overlay'
 import Checkbox from '../Checkbox'
 import Icon from '../Icon'
 import Button from '../Button'
@@ -155,11 +154,10 @@ import {
 import { scrollIntoView } from '../../utils/dom'
 import AbstractTree from '../Tree/_AbstractTree'
 
-const CascaderPane = {
+export default {
   name: 'veui-cascader-pane',
   components: {
     'veui-icon': Icon,
-    'veui-overlay': Overlay,
     'veui-checkbox': Checkbox,
     'veui-button': Button,
     AbstractTree
@@ -418,6 +416,4 @@ function hasChildren (option) {
 function getKey ({ name, value }) {
   return name != null ? name : value
 }
-
-export default CascaderPane
 </script>

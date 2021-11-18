@@ -3,20 +3,15 @@ import Pagination from '@/components/Pagination'
 
 describe('components/Pagination', () => {
   it('should handle props correctly', async () => {
-    let wrapper = mount(
-      Pagination,
-      {
-        propsData: {
-          page: 1,
-          total: 25,
-          pageSize: 20,
-          pageSizes: [20, 40]
-        }
+    let wrapper = mount(Pagination, {
+      propsData: {
+        page: 1,
+        total: 25,
+        pageSize: 20,
+        pageSizes: [20, 40]
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     expect(wrapper.find('.veui-pagination-total').text()).to.equal('共 25 条')
     wrapper.find('.veui-select-trigger').trigger('mouseup')
@@ -59,18 +54,13 @@ describe('components/Pagination', () => {
   })
 
   it('should render page indicator series correctly', async () => {
-    let wrapper = mount(
-      Pagination,
-      {
-        propsData: {
-          page: 6,
-          total: 300
-        }
+    let wrapper = mount(Pagination, {
+      propsData: {
+        page: 6,
+        total: 300
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     let { vm } = wrapper
     // pages is: 1, ..., 5, 6, 7, ..., 10
@@ -147,18 +137,13 @@ describe('components/Pagination', () => {
   })
 
   it('should handle redirect event correctly', () => {
-    let wrapper = mount(
-      Pagination,
-      {
-        propsData: {
-          page: 4,
-          total: 300
-        }
+    let wrapper = mount(Pagination, {
+      propsData: {
+        page: 4,
+        total: 300
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     wrapper.vm.$on('redirect', page => {
       expect(page).to.equal(5)
@@ -170,19 +155,14 @@ describe('components/Pagination', () => {
   })
 
   it('should support goto feature correctly', () => {
-    let wrapper = mount(
-      Pagination,
-      {
-        propsData: {
-          page: 4,
-          total: 300,
-          goto: true
-        }
+    let wrapper = mount(Pagination, {
+      propsData: {
+        page: 4,
+        total: 300,
+        goto: true
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
 
     let pages = []
     wrapper.vm.$on('redirect', page => {

@@ -67,17 +67,12 @@ describe('components/PromptBox', function () {
 
   it('should handle value correctly when submit value', async () => {
     let returnedValue
-    let wrapper = mount(
-      PromptBox,
-      {
-        propsData: {
-          open: true
-        }
+    let wrapper = mount(PromptBox, {
+      propsData: {
+        open: true
       },
-      {
-        sync: false
-      }
-    )
+      sync: false
+    })
     let { vm } = wrapper
     let input = wrapper.find('input')
     vm.$on('ok', value => {

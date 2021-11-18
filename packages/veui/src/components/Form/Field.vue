@@ -290,11 +290,11 @@ export default {
         let validities = this.validities
         // 提供一个仅清除本地检查的方法
         if (fields === 'native:*') {
-          validities = this.validities.filter(
+          validities = validities.filter(
             validity => !includes(validity.fields, 'native:')
           )
         } else {
-          validities = this.validities.filter(validity =>
+          validities = validities.filter(validity =>
             Array.isArray(fields)
               ? !includes(fields, validity.fields)
               : fields !== validity.fields

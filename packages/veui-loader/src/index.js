@@ -80,7 +80,7 @@ export default async function (content) {
  * @param {Function} resolveSync Resolves module path to file path
  */
 export function processSync (content, file, options, resolveSync) {
-  let component = resolveComponent(file)
+  let component = resolveComponent(file, options)
   if (!component) {
     return content
   }

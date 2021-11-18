@@ -134,7 +134,7 @@ export default {
       }
     })
   ],
-  inhertiAttrs: false,
+  inheritAttrs: false,
   props: {
     ui: String,
     value: Number,
@@ -389,7 +389,7 @@ function formatDecimal (val, decimalPlace) {
   let isNum = typeof val === 'number'
   if (decimalPlace === -1 || !isNum) {
     return val == null ? '' : String(val)
-  } else if (isNum) {
+  } else {
     return val.toFixed(decimalPlace)
   }
 }

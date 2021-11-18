@@ -53,7 +53,6 @@
     />
     <h3>非受控（感知输入法），localValue：{{ uncontrolled1 }}</h3>
     <veui-textarea
-      ref="text2"
       composition
       line-number
       autofocus
@@ -64,7 +63,6 @@
     />
     <h3>非受控（不感知输入法），localValue：{{ uncontrolled2 }}</h3>
     <veui-textarea
-      ref="text2"
       line-number
       autofocus
       ui="s"

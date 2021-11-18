@@ -106,7 +106,7 @@ function search (datasource, keyword, options, result = []) {
         'The return value of the `match` function must either be a boolean or an array.'
       )
     }
-    itemWrap.matched = toBoolean(offsets, item)
+    itemWrap.matched = toBoolean(offsets)
 
     // filter
     let filtered = filterFn(item, keyword, { ancestors, offsets })

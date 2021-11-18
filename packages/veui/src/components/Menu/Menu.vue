@@ -45,7 +45,7 @@
               :tabindex="
                 depth === 1 ? link.tabIndex : link.disabled ? null : '-1'
               "
-              @click="handleItemClick(link, true)"
+              @click="handleItemClick(link)"
               @keydown="handleKeydown($event, link)"
             >
               <span

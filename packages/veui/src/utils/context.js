@@ -69,7 +69,7 @@ export function getVnodes (ref, context) {
       }
     })
   }
-  return vnodes || []
+  return vnodes
 }
 
 /**

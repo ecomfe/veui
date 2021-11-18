@@ -26,7 +26,7 @@ export default function ({ types: t }) {
           }
 
           let newImports = node.specifiers.map(({ imported, local }) => {
-            if (imported.name === 'default') {
+            if (!imported || imported.name === 'default') {
               return t.importDeclaration(
                 [t.importDefaultSpecifier(t.identifier(local.name))],
                 t.stringLiteral(src)
@@ -40,7 +40,7 @@ export default function ({ types: t }) {
                   [
                     t.importSpecifier(
                       t.identifier(local.name),
-                      t.identifier(imported ? imported.name : local.name)
+                      t.identifier(local.name)
                     )
                   ],
                   t.stringLiteral(src)
