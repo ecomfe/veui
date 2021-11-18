@@ -827,14 +827,15 @@ describe('components/Uploader', function () {
 
     let input = wrapper.find('input[type="file"]').element
     let clickTriggeredPromise = Promise.race([
-      new Promise(
-        resolve => {
-          input.addEventListener('click', function () {
+      new Promise(resolve => {
+        input.addEventListener(
+          'click',
+          function () {
             resolve(true)
-          })
-        },
-        { once: true }
-      ),
+          },
+          { once: true }
+        )
+      }),
       new Promise(resolve => {
         setTimeout(function () {
           resolve(false)

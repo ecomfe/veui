@@ -22,7 +22,7 @@
     <div
       v-show="empty"
       :class="$c('input-placeholder')"
-      @selectstart.prevent="() => false"
+      @selectstart.prevent
     >
       <slot name="placeholder">{{ placeholder }}</slot>
     </div>

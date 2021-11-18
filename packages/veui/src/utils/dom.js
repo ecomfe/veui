@@ -868,7 +868,7 @@ export function addOnceEventListener (el, evt, listener) {
 export function getStableBoundingClientRect (el) {
   let parent = el.offsetParent
   let parentRect = parent ? parent.getBoundingClientRect() : null
-  let scroll = getScrollOffset(el, parent)
+  let scroll = getScrollOffset(el, parent || document.documentElement)
 
   let top = parentRect
     ? parentRect.top + el.offsetTop - scroll.top

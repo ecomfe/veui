@@ -210,8 +210,8 @@ export default class TimePickerUtil {
             // *──/
             op = UNION
           } else if (
-            intersection(result, rangeFromMin) === 1 &&
-            intersection(result, rangeFromMax) === 1
+            intersection(result, rangeFromMin).length === 1 &&
+            intersection(result, rangeFromMax).length === 1
           ) {
             // *──*
             // *──*

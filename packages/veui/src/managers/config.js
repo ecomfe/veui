@@ -41,7 +41,7 @@ export class ConfigManager {
       },
       // 为了 @@xxx 和 i18n 配置联动起来
       transformValue (context, key, path) {
-        if (context && (context._isVue || context._Ctor)) {
+        if (!context || context._isVue || context._Ctor) {
           return
         }
 

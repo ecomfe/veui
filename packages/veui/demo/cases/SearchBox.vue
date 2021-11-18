@@ -342,8 +342,8 @@ export default {
         }
       }, 1000)
     },
-    log (item) {
-      bus.$emit('log', item)
+    log (...items) {
+      bus.$emit('log', ...items)
     },
     suggestHandler (value) {
       this.suggestions8 = this.suggestions8.map(item => {

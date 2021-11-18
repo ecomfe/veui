@@ -55,8 +55,7 @@ export default {
                   : this.$slots.separator}
               </template>
             </BreadcrumbItem>
-          )) ||
-          this.$slots.default}
+          ))}
       </ol>
     )
   }

@@ -238,7 +238,7 @@ export default {
     findParentOverlayId () {
       let cur = this.$parent
       while (cur) {
-        if (cur && isType(cur, 'overlay') && cur.overlayNode) {
+        if (isType(cur, 'overlay') && cur.overlayNode) {
           return cur.overlayNode.id
         }
         cur = cur.$parent

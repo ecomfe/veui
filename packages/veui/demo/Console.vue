@@ -76,7 +76,7 @@ export default {
       })
     },
     format (text) {
-      if (text != null) {
+      if (text) {
         return text
       }
       return `<span style="color: #ccc">${

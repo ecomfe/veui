@@ -540,7 +540,7 @@ export default {
     selected (val) {
       this.picking = this.pickingRanges = null
       val = [].concat(val)
-      if (!this.multiple && val && val[0]) {
+      if (!this.multiple && val[0]) {
         this.navigate(val)
       }
     }

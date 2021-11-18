@@ -178,6 +178,9 @@ export default {
       immediate: true
     })
   },
+  destroyed () {
+    clearTimeout(this.timer)
+  },
   methods: {
     getLength (val) {
       return `${Math.round(val * 100) / 100}`
@@ -207,9 +210,6 @@ export default {
         }, this.autosucceed)
       }
     }
-  },
-  destroy () {
-    clearTimeout(this.timer)
   }
 }
 </script>
