@@ -13,8 +13,8 @@ i18n.register(
     current: 'Page {page}, current page',
     gotoPage: 'Page {page}',
     go: 'Go',
-    forward: 'Forward {count} pages',
-    backward: 'Backward {count} pages'
+    forward: 'Previous {count} pages',
+    backward: 'Next {count} pages'
   },
   {
     ns: 'pagination'

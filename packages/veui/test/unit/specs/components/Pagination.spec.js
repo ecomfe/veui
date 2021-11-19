@@ -215,4 +215,19 @@ describe('components/Pagination', () => {
 
     wrapper.destroy()
   })
+
+  it('should render correctly when total is zero', () => {
+    let wrapper = mount(Pagination, {
+      propsData: {
+        page: 1,
+        total: 0
+      },
+      sync: false
+    })
+
+    const pages = wrapper.findAll('.veui-pagination-page .veui-link')
+    expect(pages.length).to.equal(1)
+    expect(pages.at(0).classes()).to.contains('veui-disabled')
+    wrapper.destroy()
+  })
 })
