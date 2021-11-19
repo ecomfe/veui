@@ -11,7 +11,7 @@
   <li
     v-for="(item, rdIndex) in realDatasource"
     ref="item"
-    :key="rdIndex"
+    :key="keyField ? item[keyField] : rdIndex"
     :class="{
       [$c('carousel-item')]: true,
       [$c('carousel-item-duplicate')]: item.duplicate,

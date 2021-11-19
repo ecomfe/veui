@@ -8,6 +8,7 @@
   :ui="realUi"
   :items="normalizedItems"
   :expanded="realExpanded"
+  :key-field="keyField || 'value'"
   @focusin.native="focused = true"
   @focusout.native="focused = false"
 >
@@ -146,7 +147,8 @@ export default {
     selected: {},
     /* eslint-ensable vue/require-prop-types */
     datasource: AbstractTree.props.items,
-    expanded: AbstractTree.props.expanded
+    expanded: AbstractTree.props.expanded,
+    keyField: String
   },
   data () {
     return {

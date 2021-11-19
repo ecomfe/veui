@@ -12,7 +12,7 @@
     <slot>
       <veui-button
         v-for="(item, index) in items"
-        :key="index"
+        :key="item[keyField || 'label']"
         :disabled="disabled || item.disabled"
         :aria-posinset="index + 1"
         :aria-setsize="items.length"
@@ -52,7 +52,8 @@ export default {
         return []
       }
     },
-    disabled: Boolean
+    disabled: Boolean,
+    keyField: String
   },
   methods: {
     handleClick (item, index, e) {

@@ -1222,6 +1222,43 @@ describe('components/Tree', () => {
         .trigger('change')
     }
   })
+
+  it('should handle keyField prop correctly.', async () => {
+    const ds = [
+      { label: '1', value: '1' },
+      { label: '2', value: '2' }
+    ]
+    let wrapper = mount(Tree, {
+      propsData: {
+        datasource: ds,
+        keyField: 'label'
+      },
+      sync: false,
+      attachToDocument: true
+    })
+    const { vm } = wrapper
+    await vm.$nextTick()
+    markDom()
+    wrapper.setProps({ datasource: [ds[1]] })
+    await vm.$nextTick()
+    checkDom(ds[1].label)
+
+    wrapper.destroy()
+
+    function markDom () {
+      let items = wrapper.findAll('.veui-abstract-tree-item-wrapper')
+      items.at(0).element.setAttribute('foo', vm.datasource[0].label)
+      items.at(1).element.setAttribute('foo', vm.datasource[1].label)
+    }
+
+    function checkDom (label) {
+      expect(
+        wrapper
+          .find('.veui-abstract-tree-item-wrapper')
+          .element.getAttribute('foo')
+      ).to.equal(label)
+    }
+  })
 })
 
 function unorderedEqual (a, b) {

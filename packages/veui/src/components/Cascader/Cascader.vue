@@ -114,6 +114,7 @@
           :select-mode="selectMode"
           :column-width="keyword ? null : columnWidth"
           :expanded="realExpanded"
+          :key-field="keyField"
           @update:expanded="handlePaneUpdateExpanded"
           @select="handlePaneSelect"
           @keydown.native="!searchable && handleCascaderKeydown($event)"
@@ -258,7 +259,8 @@ export default {
       }
     },
     inline: Boolean,
-    max: Number
+    max: Number,
+    keyField: String
   },
   data () {
     return {

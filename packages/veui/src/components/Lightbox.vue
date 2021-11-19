@@ -71,7 +71,7 @@
             v-for="(item, i) in datasource"
             v-show="realIndex === i"
             ref="item"
-            :key="`${i}#${item.src}`"
+            :key="keyField ? item[keyField] : `${i}#${item.src}`"
             tabindex="0"
             data-autofocus
             :class="{
@@ -195,7 +195,8 @@ export default {
           }
         }
       }
-    }
+    },
+    keyField: String
   },
   computed: {
     attrs () {

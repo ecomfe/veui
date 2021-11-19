@@ -10,7 +10,7 @@
     <veui-radio
       v-for="(item, index) in items"
       :ref="`b-${item.value}`"
-      :key="index"
+      :key="item[keyField || 'value']"
       :name="localName"
       :value="item.value"
       :model="realValue"
@@ -79,6 +79,7 @@ export default {
   },
   props: {
     items: Array,
+    keyField: String,
     /* eslint-disable vue/require-prop-types */
     value: {}
     /* eslint-enable vue/require-prop-types */

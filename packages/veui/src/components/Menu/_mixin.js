@@ -34,7 +34,8 @@ export default {
       default (route, item) {
         return ensureSlash(route.path) === ensureSlash(item.path)
       }
-    }
+    },
+    keyField: String
   },
   computed: {
     normalizedItems () {

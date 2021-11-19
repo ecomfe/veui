@@ -12,7 +12,7 @@
     <veui-button
       v-for="(item, index) in items"
       :ref="`b-${item.value}`"
-      :key="index"
+      :key="item[keyField || 'value']"
       :ui="uiParts.button"
       :class="{
         [$c('button-selected')]: index === activeIndex
@@ -84,6 +84,7 @@ export default {
   },
   props: {
     items: Array,
+    keyField: String,
     /* eslint-disable vue/require-prop-types */
     value: {}
     /* eslint-enable vue/require-prop-types */

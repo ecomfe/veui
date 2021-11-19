@@ -17,6 +17,7 @@
       :class="$c('anchor-tree')"
       :datasource="items"
       :expanded="allAnchors"
+      :key-field="keyField"
     >
       <template
         slot="item"
@@ -137,7 +138,8 @@ export default {
       type: [String, Number],
       validator: offsetValidator,
       default: 0
-    }
+    },
+    keyField: String
   },
   data () {
     return {

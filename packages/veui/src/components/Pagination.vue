@@ -56,8 +56,8 @@
       ]"
     >
       <li
-        v-for="(item, i) in pageIndicatorSeries"
-        :key="i"
+        v-for="item in pageIndicatorSeries"
+        :key="item.page"
         :class="{
           [$c('pagination-page')]: true,
           [$c('active')]: item.current

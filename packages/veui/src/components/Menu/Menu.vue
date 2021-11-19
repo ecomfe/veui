@@ -17,6 +17,7 @@
       }"
       :items="normalizedItems"
       :expanded="realExpanded"
+      :key-field="keyField"
     >
       <template
         slot="item"
@@ -115,6 +116,7 @@
               :ref="`dropdown-${link.name}`"
               :overlay-class="$c('menu-overlay')"
               :options="link.options"
+              :key-field="keyField"
               position="popup"
               trigger="hover"
               option-tag="div"
