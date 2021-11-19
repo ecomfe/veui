@@ -6,11 +6,13 @@
   :ui="realUi"
 >
   <div :class="$c('pagination-info')">
-    <div :class="$c('pagination-total')">
+    <div
+      v-if="showTotal"
+      :class="$c('pagination-total')"
+    >
       {{ t('total', { total: realTotal }) }}
     </div>
     <div :class="$c('pagination-size')">
-      <span>{{ t('pageSize') }}</span>
       <veui-select
         v-model="realPageSize"
         :ui="uiParts.pageSize"
@@ -18,7 +20,14 @@
         :overlay-class="$c('pagination-select-overlay')"
         :aria-label="t('pageSizeLabel')"
         @change="size => $emit('pagesizechange', size)"
-      />
+      >
+        <template
+          #option-label="{ label }"
+        >{{ label }}{{ t('pageSize') }}</template>
+        <template
+          #selected="{ label }"
+        >{{ label }}{{ t('pageSize') }}</template>
+      </veui-select>
     </div>
   </div>
   <div :class="$c('pagination-switch')">
@@ -50,6 +59,12 @@
       >
         <veui-link
           :ref="getKey(item)"
+          v-tooltip="{
+            content: item.forward
+              ? getMoreText('backward')
+              : getMoreText('forward'),
+            disabled: !item.more
+          }"
           :class="{
             [$c('current')]: item.current,
             [$c('pagination-more')]: item.more
@@ -133,6 +148,7 @@ import useConfig from '../mixins/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import tooltip from '../directives/tooltip'
 
 config.defaults(
   {
@@ -171,6 +187,9 @@ export default {
     'veui-input': Input,
     'veui-button': Button
   },
+  directives: {
+    tooltip
+  },
   mixins: [prefix, ui, i18n, useConfig('config', ['pagination'])],
   props: {
     page: {
@@ -194,7 +213,8 @@ export default {
     goto: {
       type: Boolean,
       default: false
-    }
+    },
+    showTotal: Boolean
   },
   data () {
     return {
@@ -355,6 +375,9 @@ export default {
       if (page !== this.page) {
         this.$emit('redirect', page, event)
       }
+    },
+    getMoreText (text) {
+      return this.t(text, { count: moreIndicatorOffsetLength })
     },
     getPageIndicator (page, more = false, forward = false) {
       return {
