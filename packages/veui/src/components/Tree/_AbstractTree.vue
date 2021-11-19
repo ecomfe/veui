@@ -5,7 +5,7 @@
 >
   <li
     v-for="(item, index) in items"
-    :key="index"
+    :key="keyField ? item[keyField] : index"
     role="treeitem"
     :class="$c('abstract-tree-item-wrapper')"
   >
@@ -28,6 +28,7 @@
         :parents="[...parents, item]"
         :group-class="groupClass"
         :class="realGroupClass"
+        :key-field="keyField"
       >
         <template
           slot="item"
@@ -88,7 +89,8 @@ export default {
     expand: Function,
     groupClass: {
       type: [String, Object]
-    }
+    },
+    keyField: String
   },
   computed: {
     realGroupClass () {

@@ -35,6 +35,7 @@
           :slide-aspect-ratio="slideAspectRatio"
           :preload-range="preloadRange"
           :options="options"
+          :key-field="keyField"
           v-bind="isFade ? {} : slideProps"
         >
           <template
@@ -152,6 +153,7 @@ export default {
         return includes(['start', 'end'], value)
       }
     },
+    keyField: String,
     indicatorPosition: {
       type: String,
       default: 'inside',

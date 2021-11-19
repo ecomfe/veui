@@ -11,7 +11,8 @@ export default {
     options: Object,
     preloadRange: Array,
     datasource: Array,
-    index: Number
+    index: Number,
+    keyField: String
   },
   created () {
     // 过渡完成后重置视频时间

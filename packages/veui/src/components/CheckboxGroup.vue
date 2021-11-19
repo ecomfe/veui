@@ -11,7 +11,7 @@
     <veui-checkbox
       :is="item.exclusive ? 'veui-radio' : 'veui-checkbox'"
       v-for="(item, index) in items"
-      :key="index"
+      :key="item[keyField || 'value']"
       :ref="`b-${item.value}`"
       :name="localName"
       :disabled="item.disabled || realDisabled || realReadonly"
@@ -91,6 +91,7 @@ export default {
         return []
       }
     },
+    keyField: String,
     /* eslint-disable vue/require-prop-types */
     emptyValue: {}
     /* eslint-enable vue/require-prop-types */

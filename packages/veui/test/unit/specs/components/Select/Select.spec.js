@@ -941,4 +941,40 @@ describe('components/Select/Select', () => {
 
     wrapper.destroy()
   })
+
+  it('should handle keyField prop correctly.', async () => {
+    const ds = [
+      { label: '1', value: '1' },
+      { label: '2', value: '2' }
+    ]
+    let wrapper = mount(Select, {
+      propsData: {
+        options: ds,
+        keyField: 'label',
+        expanded: true
+      },
+      sync: false,
+      attachToDocument: true
+    })
+    const { vm } = wrapper
+    await vm.$nextTick()
+    markDom()
+    wrapper.setProps({ options: [ds[1]] })
+    await vm.$nextTick()
+    checkDom(ds[1].label)
+
+    wrapper.destroy()
+
+    function markDom () {
+      let items = wrapper.findAll('.veui-option')
+      items.at(0).element.setAttribute('foo', vm.options[0].label)
+      items.at(1).element.setAttribute('foo', vm.options[1].label)
+    }
+
+    function checkDom (label) {
+      expect(wrapper.find('.veui-option').element.getAttribute('foo')).to.equal(
+        label
+      )
+    }
+  })
 })

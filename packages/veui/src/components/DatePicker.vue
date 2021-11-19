@@ -95,8 +95,8 @@
         :class="$c('date-picker-shortcuts')"
       >
         <button
-          v-for="({ from, to, label }, index) in realShortcuts"
-          :key="index"
+          v-for="{ from, to, label } in realShortcuts"
+          :key="label"
           type="button"
           :class="$c('date-picker-shortcut')"
           @click="handleSelect([from, to])"

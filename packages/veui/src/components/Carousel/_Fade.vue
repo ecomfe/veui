@@ -12,7 +12,7 @@
     v-for="(item, idx) in datasource"
     v-show="idx === index"
     ref="item"
-    :key="`item#${idx}`"
+    :key="keyField ? item[keyField] : `item#${idx}`"
     :class="{
       [$c('carousel-item')]: true,
       [$c('carousel-item-current')]: idx === index

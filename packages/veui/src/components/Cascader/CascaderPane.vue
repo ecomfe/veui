@@ -36,6 +36,7 @@
         :expand="expand"
         :class="$c('cascader-pane-tree')"
         :group-class="$c('cascader-pane-tree')"
+        :key-field="keyField"
       >
         <template
           slot="item"
@@ -202,7 +203,8 @@ export default {
       validator (val) {
         return ['leaf-only', 'any'].indexOf(val) >= 0
       }
-    }
+    },
+    keyField: String
   },
   computed: {
     isClickTrigger () {

@@ -10,7 +10,7 @@
   >
     <li
       v-for="item in realItems"
-      :key="item.name"
+      :key="item[keyField || 'name']"
       :ref="item.name"
       :class="{
         [$c('nav-more-hidden')]: isMoreBtn(item) && !restItems.length
@@ -102,7 +102,7 @@
           >
             <li
               v-for="cardItem in item.children"
-              :key="cardItem.name"
+              :key="cardItem[keyField || 'name']"
               :class="$c('nav-card-item')"
               @click="handleItemClick(cardItem)"
             >
@@ -147,7 +147,7 @@
               >
                 <li
                   v-for="subCardItem in cardItem.children"
-                  :key="subCardItem.name"
+                  :key="subCardItem[keyField || 'name']"
                   @click="handleItemClick(subCardItem)"
                 >
                   <slot

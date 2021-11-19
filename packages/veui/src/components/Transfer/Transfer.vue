@@ -41,6 +41,7 @@ export default {
         return []
       }
     },
+    keyField: String,
     searchable: {
       type: Boolean,
       default: true
@@ -142,6 +143,7 @@ export default {
                 mergeChecked: this.mergeChecked,
                 includeIndeterminate: this.includeIndeterminate,
                 uiParts: this.uiParts,
+                keyField: this.keyField,
                 ui: this.realUi
               },
               on: {
@@ -173,6 +175,7 @@ export default {
                 title: this.selectedTitle,
                 isSelectable: this.isSelectable,
                 icons: this.icons,
+                keyField: this.keyField,
                 uiParts: this.uiParts,
                 ui: this.realUi
               },

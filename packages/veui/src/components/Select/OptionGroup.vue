@@ -69,6 +69,7 @@ const OptionGroup = {
     options: Array,
     disabled: Boolean,
     expanded: Boolean,
+    keyField: String,
     position: {
       type: String,
       default: 'inline',
@@ -281,7 +282,8 @@ const OptionGroup = {
             overlayStyle={this.overlayStyle}
             optionTag={this.optionTag}
             labelTag={this.labelTag}
-            key={i}
+            key={this.keyField ? option[this.keyField] : i}
+            keyField={this.keyField}
             trigger={option.trigger || this.trigger}
             option={option} // pass raw option
             scopedSlots={{
@@ -310,7 +312,7 @@ const OptionGroup = {
             hidden={option.hidden}
             disabled={this.disabled || option.disabled}
             tag={optionTag}
-            key={i}
+            key={this.keyField ? option[this.keyField] : i}
           >
             {this.$scopedSlots.option
               ? this.$scopedSlots.option(option)

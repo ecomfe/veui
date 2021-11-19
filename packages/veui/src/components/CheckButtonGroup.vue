@@ -10,7 +10,7 @@
   <div :class="$c('check-button-group-items')">
     <veui-button
       v-for="(item, index) in items"
-      :key="`b-${item.value}`"
+      :key="item[keyField || 'value']"
       :ref="`b-${item.value}`"
       :ui="uiParts.button"
       :class="{
@@ -99,6 +99,7 @@ export default {
         return []
       }
     },
+    keyField: String,
     /* eslint-disable vue/require-prop-types */
     emptyValue: {}
     /* eslint-enable vue/require-prop-types */

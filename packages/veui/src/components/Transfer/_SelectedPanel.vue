@@ -38,6 +38,7 @@
       :expanded.sync="expanded"
       :class="$c('transfer-selected-tree')"
       :disabled="!isSelectable"
+      :key-field="keyField || 'value'"
     >
       <template
         slot="item"
@@ -133,7 +134,8 @@ export default {
     isSelectable: Boolean,
     ui: String,
     icons: Object,
-    uiParts: Object
+    uiParts: Object,
+    keyField: String
   },
   data () {
     return {

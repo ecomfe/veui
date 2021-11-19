@@ -81,7 +81,8 @@ export default {
     searchable: Boolean,
     options: Array,
     multiple: Boolean,
-    max: Number
+    max: Number,
+    keyField: String
   },
   data () {
     return {
@@ -527,6 +528,7 @@ export default {
             key={key}
             v-show={!!options}
             hidden={!options}
+            keyField={this.keyField}
             aria-hidden={!options}
             ref="options"
             options={options}

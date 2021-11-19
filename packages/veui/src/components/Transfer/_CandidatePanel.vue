@@ -41,6 +41,7 @@
       :checked="realSelected"
       :ui="uiParts.tree"
       :disabled="!isSelectable"
+      :key-field="keyField || 'value'"
       @check="handleSelect"
     >
       <template
@@ -110,7 +111,8 @@ export default {
     selected: Array,
     ...useTree().props,
     uiParts: Object,
-    ui: String
+    ui: String,
+    keyField: String
   },
   data () {
     return {
