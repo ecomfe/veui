@@ -5,14 +5,20 @@
   :aria-label="t('infoLabel', { page, pageCount })"
   :ui="realUi"
 >
-  <div :class="$c('pagination-info')">
+  <div
+    v-if="showTotal || showPageSizes"
+    :class="$c('pagination-info')"
+  >
     <div
       v-if="showTotal"
       :class="$c('pagination-total')"
     >
       {{ t('total', { total: realTotal }) }}
     </div>
-    <div :class="$c('pagination-size')">
+    <div
+      v-if="showPageSizes"
+      :class="$c('pagination-size')"
+    >
       <veui-select
         v-model="realPageSize"
         :ui="uiParts.pageSize"
@@ -21,12 +27,12 @@
         :aria-label="t('pageSizeLabel')"
         @change="size => $emit('pagesizechange', size)"
       >
-        <template
-          #option-label="{ label }"
-        >{{ label }}{{ t('pageSize') }}</template>
-        <template
-          #selected="{ label }"
-        >{{ label }}{{ t('pageSize') }}</template>
+        <template #option-label="{ label }">{{
+          t('pageSize', { size: label })
+        }}</template>
+        <template #selected="{ label }">{{
+          t('pageSize', { size: label })
+        }}</template>
       </veui-select>
     </div>
   </div>
@@ -111,7 +117,7 @@
     </veui-link>
   </div>
   <div
-    v-if="goto"
+    v-if="goto || showGoto"
     :class="$c('pagination-goto')"
   >
     <span
@@ -214,6 +220,11 @@ export default {
     goto: {
       type: Boolean,
       default: false
+    },
+    showGoto: Boolean,
+    showPageSizes: {
+      type: Boolean,
+      default: true
     },
     showTotal: Boolean
   },

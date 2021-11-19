@@ -32,13 +32,13 @@ describe('components/Pagination', () => {
         .at(0)
         .find('.veui-option-label')
         .text()
-    ).to.equal('20条/页')
+    ).to.equal('20 条/页')
     expect(
       options
         .at(1)
         .find('.veui-option-label')
         .text()
-    ).to.equal('40条/页')
+    ).to.equal('40 条/页')
 
     // pages is: 1, 2
     let pages = wrapper.findAll('.veui-pagination-page')
