@@ -70,6 +70,7 @@
             [$c('pagination-more')]: item.more
           }"
           tabindex="0"
+          :disabled="isEmpty"
           :role="to ? null : 'button'"
           :to="item.href"
           :native="native"
@@ -237,6 +238,9 @@ export default {
     realTotal () {
       return this.total || 0
     },
+    isEmpty () {
+      return this.realTotal === 0
+    },
     pageNavHref () {
       return {
         prev: this.getPageIndicator(Math.max(1, this.page - 1)),
@@ -273,6 +277,10 @@ export default {
     pageIndicatorSeries () {
       let { page, pageCount, getPageIndicator } = this
 
+      if (this.isEmpty) {
+        return [getPageIndicator(1, { current: false })]
+      }
+
       let continuousIndicatorLength = aroundIndicatorLength * 2 + 1
       let boundaryIndicatorLength =
         (pageIndicatorLength - continuousIndicatorLength - 2) / 2
@@ -289,7 +297,9 @@ export default {
         case page <= boundaryIndicatorLength + aroundIndicatorLength + 2:
           leftLen = pageIndicatorLength - boundaryIndicatorLength - 1
           return getPageSeries(1, leftLen)
-            .concat(getPageIndicator(offsetForward, true, true))
+            .concat(
+              getPageIndicator(offsetForward, { more: true, forward: true })
+            )
             .concat(
               getPageSeries(
                 pageCount - boundaryIndicatorLength + 1,
@@ -301,19 +311,25 @@ export default {
           pageCount - boundaryIndicatorLength - aroundIndicatorLength - 1:
           rightLen = pageIndicatorLength - boundaryIndicatorLength - 1
           return getPageSeries(1, boundaryIndicatorLength)
-            .concat(getPageIndicator(offsetBackward, true, false))
+            .concat(
+              getPageIndicator(offsetBackward, { more: true, forward: false })
+            )
             .concat(getPageSeries(pageCount - rightLen + 1, rightLen))
 
         default:
           return getPageSeries(1, boundaryIndicatorLength)
-            .concat(getPageIndicator(offsetBackward, true, false))
+            .concat(
+              getPageIndicator(offsetBackward, { more: true, forward: false })
+            )
             .concat(
               getPageSeries(
                 page - aroundIndicatorLength,
                 continuousIndicatorLength
               )
             )
-            .concat(getPageIndicator(offsetForward, true, true))
+            .concat(
+              getPageIndicator(offsetForward, { more: true, forward: true })
+            )
             .concat(
               getPageSeries(
                 pageCount - boundaryIndicatorLength + 1,
@@ -379,12 +395,12 @@ export default {
     getMoreText (text) {
       return this.t(text, { count: moreIndicatorOffsetLength })
     },
-    getPageIndicator (page, more = false, forward = false) {
+    getPageIndicator (page, { more = false, forward = false, current } = {}) {
       return {
         page,
         more,
         forward,
-        current: page === this.page,
+        current: current == null ? page === this.page : !!current,
         text: page,
         href: page ? this.formatHref(page) : null
       }
