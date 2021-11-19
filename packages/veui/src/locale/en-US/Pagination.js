@@ -4,7 +4,7 @@ i18n.register(
   'en-US',
   {
     infoLabel: 'Pagination navigation, page {page} of {pageCount}',
-    pageSize: 'Items per page',
+    pageSize: '{size} / page',
     pageSizeLabel: 'Select items per page',
     total: '{total} in total',
     prev: 'Previous page',

@@ -4,12 +4,19 @@
   <section>
     <h2>三种尺寸</h2>
     <section>
+      <check-button-group
+        v-model="flags"
+        :items="flagOptions"
+      />
+    </section>
+    <section>
       <veui-pagination
         :page="page"
         :total="total"
         :to="to"
-        goto
-        show-total
+        :show-total="flags.includes('showTotal')"
+        :show-page-sizes="flags.includes('showPageSizes')"
+        :show-goto="flags.includes('showGoto')"
       />
     </section>
 
@@ -18,7 +25,9 @@
         :page="page"
         :total="total"
         :to="to"
-        goto
+        :show-total="flags.includes('showTotal')"
+        :show-page-sizes="flags.includes('showPageSizes')"
+        :show-goto="flags.includes('showGoto')"
         ui="s"
       />
     </section>
@@ -29,7 +38,9 @@
         :total="total"
         :page-sizes="pageSizes"
         :to="to"
-        goto
+        :show-total="flags.includes('showTotal')"
+        :show-page-sizes="flags.includes('showPageSizes')"
+        :show-goto="flags.includes('showGoto')"
         ui="xs"
         :page-size.sync="pageSize"
       />
@@ -108,12 +119,13 @@
 
 <script>
 import bus from '../bus'
-import { Pagination } from 'veui'
+import { Pagination, CheckButtonGroup } from 'veui'
 
 export default {
   name: 'pagination-demo',
   components: {
-    'veui-pagination': Pagination
+    'veui-pagination': Pagination,
+    'check-button-group': CheckButtonGroup
   },
   data () {
     return {
@@ -123,7 +135,13 @@ export default {
       pageSize: 30,
       pageSizes: [30, 60, 100, 200],
       fifthPaginationMessage: '',
-      p: 1
+      p: 1,
+      flagOptions: [
+        { label: 'showTotal', value: 'showTotal' },
+        { label: 'showPageSizes', value: 'showPageSizes' },
+        { label: 'showGoto', value: 'showGoto' }
+      ],
+      flags: []
     }
   },
   mounted () {

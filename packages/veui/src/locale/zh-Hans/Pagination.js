@@ -4,7 +4,7 @@ i18n.register(
   'zh-Hans',
   {
     infoLabel: '分页导航，当前为第 {page} 页，共 {pageCount} 页',
-    pageSize: '条/页',
+    pageSize: '{size} 条/页',
     pageSizeLabel: '选择每页显示条数',
     total: '共 {total} 条',
     prev: '上一页',
