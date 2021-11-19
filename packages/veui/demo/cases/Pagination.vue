@@ -9,6 +9,7 @@
         :total="total"
         :to="to"
         goto
+        show-total
       />
     </section>
 

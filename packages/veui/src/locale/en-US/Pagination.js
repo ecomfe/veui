@@ -12,7 +12,9 @@ i18n.register(
     pageLabel: 'Go to page {page}',
     current: 'Page {page}, current page',
     gotoPage: 'Page {page}',
-    go: 'Go'
+    go: 'Go',
+    forward: 'Forward {count} pages',
+    backward: 'Backward {count} pages'
   },
   {
     ns: 'pagination'
