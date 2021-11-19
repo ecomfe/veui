@@ -8,7 +8,8 @@ describe('components/Pagination', () => {
         page: 1,
         total: 25,
         pageSize: 20,
-        pageSizes: [20, 40]
+        pageSizes: [20, 40],
+        showTotal: true
       },
       sync: false
     })
@@ -31,13 +32,13 @@ describe('components/Pagination', () => {
         .at(0)
         .find('.veui-option-label')
         .text()
-    ).to.equal('20')
+    ).to.equal('20条/页')
     expect(
       options
         .at(1)
         .find('.veui-option-label')
         .text()
-    ).to.equal('40')
+    ).to.equal('40条/页')
 
     // pages is: 1, 2
     let pages = wrapper.findAll('.veui-pagination-page')
@@ -63,7 +64,7 @@ describe('components/Pagination', () => {
     })
 
     let { vm } = wrapper
-    // pages is: 1, ..., 5, 6, 7, ..., 10
+    // pages is: 1, ..., 5, 6, 7, ..., 15
     let pages = wrapper.findAll('.veui-pagination-page')
     expect(
       pages
@@ -101,12 +102,12 @@ describe('components/Pagination', () => {
         .at(6)
         .find('.veui-link')
         .text()
-    ).to.equal('10')
+    ).to.equal('15')
 
-    wrapper.setProps({ page: 7 })
+    wrapper.setProps({ page: 12 })
     await vm.$nextTick()
 
-    // pages is: 1，...，6, 7, 8, 9, 10
+    // pages are: 1，...，11, 12, 13, 14, 15
     pages = wrapper.findAll('.veui-pagination-page')
     expect(
       pages
@@ -125,13 +126,13 @@ describe('components/Pagination', () => {
         .at(2)
         .find('.veui-link')
         .text()
-    ).to.equal('6')
+    ).to.equal('11')
     expect(
       pages
         .at(5)
         .find('.veui-link')
         .text()
-    ).to.equal('9')
+    ).to.equal('14')
 
     wrapper.destroy()
   })
