@@ -13,8 +13,8 @@ i18n.register(
     current: '第 {page} 页，当前页',
     gotoPage: '去第 {page} 页',
     go: '确定',
-    forward: '向前 {count} 页',
-    backward: '向后 {count} 页'
+    previousPages: '向前 {count} 页',
+    nextPages: '向后 {count} 页'
   },
   {
     ns: 'pagination'

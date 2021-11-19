@@ -61,8 +61,8 @@
           :ref="getKey(item)"
           v-tooltip="{
             content: item.forward
-              ? getMoreText('backward')
-              : getMoreText('forward'),
+              ? getMoreText('nextPages')
+              : getMoreText('previousPages'),
             disabled: !item.more
           }"
           :class="{
