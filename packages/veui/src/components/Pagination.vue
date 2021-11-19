@@ -152,8 +152,8 @@ import tooltip from '../directives/tooltip'
 
 config.defaults(
   {
-    pageSize: 30,
-    pageSizes: [30, 50, 100]
+    pageSize: 20,
+    pageSizes: [20, 50, 100]
   },
   'pagination'
 )
