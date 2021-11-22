@@ -9,7 +9,8 @@ describe('components/Pagination', () => {
         total: 25,
         pageSize: 20,
         pageSizes: [20, 40],
-        showTotal: true
+        showTotal: true,
+        showPageSize: true
       },
       sync: false
     })
