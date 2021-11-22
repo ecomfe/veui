@@ -15,7 +15,7 @@
         :total="total"
         :to="to"
         :show-total="flags.includes('showTotal')"
-        :show-page-sizes="flags.includes('showPageSizes')"
+        :show-page-size="flags.includes('showPageSize')"
         :show-goto="flags.includes('showGoto')"
       />
     </section>
@@ -26,7 +26,7 @@
         :total="total"
         :to="to"
         :show-total="flags.includes('showTotal')"
-        :show-page-sizes="flags.includes('showPageSizes')"
+        :show-page-size="flags.includes('showPageSize')"
         :show-goto="flags.includes('showGoto')"
         ui="s"
       />
@@ -39,7 +39,7 @@
         :page-sizes="pageSizes"
         :to="to"
         :show-total="flags.includes('showTotal')"
-        :show-page-sizes="flags.includes('showPageSizes')"
+        :show-page-size="flags.includes('showPageSize')"
         :show-goto="flags.includes('showGoto')"
         ui="xs"
         :page-size.sync="pageSize"
@@ -138,7 +138,7 @@ export default {
       p: 1,
       flagOptions: [
         { label: 'showTotal', value: 'showTotal' },
-        { label: 'showPageSizes', value: 'showPageSizes' },
+        { label: 'showPageSize', value: 'showPageSize' },
         { label: 'showGoto', value: 'showGoto' }
       ],
       flags: []
