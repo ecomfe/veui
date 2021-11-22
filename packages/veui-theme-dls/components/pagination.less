@@ -14,7 +14,7 @@
   }
 
   &-info {
-    margin-right: @dls-pagination-page-items-margin-before;
+    margin-right: @dls-pagination-part-spacing;
   }
 
   &-size {
@@ -24,14 +24,14 @@
     .@{veui-prefix}-select {
       width: auto;
       flex-grow: 0;
-      margin-left: @dls-pagination-spacing-1;
+      margin-left: @dls-pagination-content-spacing;
     }
   }
 
   &-goto {
     display: flex;
     align-items: center;
-    margin-left: @dls-pagination-page-items-margin-after;
+    margin-left: @dls-pagination-part-spacing;
 
     .@{veui-prefix}-input {
       width: @dls-pagination-goto-input-width;
@@ -44,15 +44,12 @@
     }
 
     &-label-before {
-      margin-right: @dls-pagination-spacing-1;
+      margin-right: @dls-pagination-content-spacing;
     }
 
-    &-label-after {
-      margin-left: @dls-pagination-spacing-1;
-    }
-
+    &-label-after,
     .@{veui-prefix}-button {
-      margin-left: @dls-pagination-spacing-2;
+      margin-left: @dls-pagination-content-spacing;
     }
   }
 

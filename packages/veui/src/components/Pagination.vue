@@ -223,10 +223,7 @@ export default {
       default: false
     },
     showGoto: Boolean,
-    showPageSize: {
-      type: Boolean,
-      default: true
-    },
+    showPageSize: Boolean,
     showTotal: Boolean
   },
   data () {
