@@ -390,7 +390,7 @@ export default {
   created () {
     if ('goto' in this.$options.propsData) {
       warn(
-        '[veui-pagination] The `goto` prop is deprecated and will be removed in future versions. Please use the `showGoto` prop instead.'
+        '[veui-pagination] The `goto` prop is deprecated and will be removed in future versions. Please use the `show-goto` prop instead.'
       )
     }
   },
