@@ -57,7 +57,7 @@ export function getVnodes (ref, context) {
     } else {
       vnodes = Array.isArray(vnodes) ? vnodes : [vnodes]
     }
-    vnodes = vnodes.map(item => item.$vnode || item)
+    vnodes = vnodes.filter(Boolean).map(item => item.$vnode || item)
   } else {
     ref = Array.isArray(ref) ? ref : [ref]
     vnodes = ref.map(item => {
