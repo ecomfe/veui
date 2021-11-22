@@ -87,7 +87,7 @@ export default {
   }
 }
 
-export function isVideo ({ type, raw }) {
+export function isVideo ({ type, raw } = {}) {
   return type === 'video' || (!!raw && raw.type === 'video')
 }
 
