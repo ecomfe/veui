@@ -6,7 +6,7 @@
   :ui="realUi"
 >
   <div
-    v-if="showTotal || showPageSizes"
+    v-if="showTotal || showPageSize"
     :class="$c('pagination-info')"
   >
     <div
@@ -16,7 +16,7 @@
       {{ t('total', { total: realTotal }) }}
     </div>
     <div
-      v-if="showPageSizes"
+      v-if="showPageSize"
       :class="$c('pagination-size')"
     >
       <veui-select
@@ -223,7 +223,7 @@ export default {
       default: false
     },
     showGoto: Boolean,
-    showPageSizes: {
+    showPageSize: {
       type: Boolean,
       default: true
     },
