@@ -506,7 +506,7 @@ export default {
 
     let beforeSlot =
       !this.multiple && !this.searchable && !this.isEmpty ? (
-        <span
+        <div
           class={{
             [this.$c('select-label')]: true
           }}
@@ -516,7 +516,7 @@ export default {
             ...this.selected,
             selected: true
           }) || this.label}
-        </span>
+        </div>
       ) : null
 
     let renderGroup = (options, children, key) => {
