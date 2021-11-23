@@ -9,13 +9,17 @@
 - [^] `Autocomplete` 组件的 `strict` prop 行为对齐到 `Input` 组件的 `strict` prop，不再表示限制只能选择 `datasource` 中的值。<!-- #Autocomplete -->
 - [^] 废弃 `Autocomplete` 组件的 `suggest` 事件，当用户采纳建议时额外触发新增的 `select` 事件。<!-- #Autocomplete -->
 - [^] `Autocomplete` 组件新增 `maxlength` prop 来限制值的长度。<!-- #Autocomplete -->
-- [^] `Pagination` 组件新增 `show-total` / `show-page-size` / `show-goto` prop 来定制是否显示对应总数/每页数量/跳转部分。将 `goto` prop 废弃并重命名为 `show-goto`。<!-- #Pagination -->
+- [^] `Pagination` 组件新增 `show-total` / `show-page-size` / `show-goto` prop 来分别指定是否显示项目总数/每页条数/跳转到指定页。将 `goto` prop 废弃并重命名为 `show-goto`。<!-- #Pagination -->
+- [+] `v-tooltip` 指令新增修饰符 `overflow`，用来指定仅当目标元素内容发生溢出时才显示悬浮提示。<!-- #v-tooltip -->
+- [+] `Column` 组件新增 `tooltip` prop，用于指定某列内容溢出时展示的悬浮提示文本。<!-- #Column -->
 
 ### 🐞 问题修复
 
 - [^] 修正大部分输入型组件的一些事件无法作为表单校验的触发器。涉及组件包括: `Autocomplete` / `Checkbox` / `Input` / `Radio` / `Switch` / `Textarea`。<!-- #Autocomplete #Checkbox #Input #Radio #Switch #Textarea -->
 - [^] 修正 `Uploader` 组件继续上传按钮的样式问题。<!-- #Uploader -->
 - [^] 修正 `Carousel` 组件切换时报错的问题。<!-- #Carousel -->
+- [^] 优化搜索类组件对 Unicode 代理对与 Zero Width Joiner (`U+200D`) 的支持。<!-- #Autocomplete #Dropdown #Select #Cascader #SearchBox -->
+- [^] 修正 `Table` 组件的自定义 CSS 属性 `--dls-table-cell-lines` / `--dls-table-head-cell-lines` 默认值没有设置为 `1` 的问题。<!-- #Table -->
 
 ## 2.2.1
 
