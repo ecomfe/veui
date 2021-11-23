@@ -6,14 +6,14 @@
 
 ### 💡 主要变更
 
-- [^] `Autocomplete` 组件的 `strict` prop 行为对齐到 `Input` 组件的 `strict` prop。<!-- #Autocomplete -->
+- [^] `Autocomplete` 组件的 `strict` prop 行为对齐到 `Input` 组件的 `strict` prop，不再表示限制只能选择 `datasource` 中的值。<!-- #Autocomplete -->
 - [^] 废弃 `Autocomplete` 组件的 `suggest` 事件，当用户采纳建议时额外触发新增的 `select` 事件。<!-- #Autocomplete -->
 - [^] `Autocomplete` 组件新增 `maxlength` prop 来限制值的长度。<!-- #Autocomplete -->
-- [^] `Pagination` 组件新增 `show-total`/`show-page-size`/`show-goto` prop 来定制是否显示对应总数/每页数量/跳转部分，废弃 `goto` prop 而推荐使用 `show-goto`。<!-- #Pagination -->
+- [^] `Pagination` 组件新增 `show-total` / `show-page-size` / `show-goto` prop 来定制是否显示对应总数/每页数量/跳转部分。将 `goto` prop 废弃并重命名为 `show-goto`。<!-- #Pagination -->
 
 ### 🐞 问题修复
 
-- [^] 修正大部分输入型组件的一些事件无法作为表单校验的触发器。涉及组件包括: `Autocomplete`/`Checkbox`/`Input`/`Radio`/`Switch`/`Textarea`。
+- [^] 修正大部分输入型组件的一些事件无法作为表单校验的触发器。涉及组件包括: `Autocomplete` / `Checkbox` / `Input` / `Radio` / `Switch` / `Textarea`。<!-- #Autocomplete #Checkbox #Input #Radio #Switch #Textarea -->
 - [^] 修正 `Uploader` 组件继续上传按钮的样式问题。<!-- #Uploader -->
 - [^] 修正 `Carousel` 组件切换时报错的问题。<!-- #Carousel -->
 
