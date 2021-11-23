@@ -4,6 +4,7 @@ import Input from '@/components/Input'
 import NumberInput from '@/components/NumberInput'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
+import { wait } from '../../../utils'
 
 describe('components/NumberInput', () => {
   it('should handle value prop with `null` value.', async () => {
@@ -322,7 +323,7 @@ describe('components/NumberInput', () => {
       await vm.$nextTick()
       let input = wrapper.find('.veui-number-input input')
       input.trigger('blur')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function inputWithValue (val) {
@@ -330,13 +331,13 @@ describe('components/NumberInput', () => {
       let input = wrapper.find('.veui-number-input input')
       input.element.value = val
       input.trigger('change')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function changeTrigger (triggers) {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
-      await vm.$nextTick()
+      await wait(0)
     }
 
     function hasError (err) {

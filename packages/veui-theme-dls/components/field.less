@@ -61,11 +61,19 @@
     position: relative;
   }
 
+  &-main {
+    display: flex;
+    flex-direction: column;
+  }
+
   &-error {
-    position: absolute;
-    left: 0;
-    top: dls-sum(100%, @dls-form-field-error-spacing-before-vertical);
+    // position: absolute;
+    // left: 0;
+    // top: dls-sum(100%, @dls-form-field-error-spacing-before-vertical);
     color: @dls-form-field-error-font-color;
+    margin-bottom: -@dls-form-field-spacing-vertical;
+    min-height: @dls-form-field-spacing-vertical;
+    padding-top: @dls-form-field-error-spacing-before-vertical;
   }
 
   .make-ui(@font-size, @min-height) {

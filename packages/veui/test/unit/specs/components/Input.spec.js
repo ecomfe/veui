@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import Input from '@/components/Input'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
+import { wait } from '../../../utils'
 
 describe('components/Input', () => {
   it('should handle value prop with `null` value.', done => {
@@ -430,7 +431,7 @@ describe('components/Input', () => {
       await vm.$nextTick()
       let input = wrapper.find('.veui-input input')
       input.trigger('blur')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function inputWithValue (val) {
@@ -438,13 +439,13 @@ describe('components/Input', () => {
       let input = wrapper.find('.veui-input input')
       input.element.value = val
       input.trigger('input')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function changeTrigger (triggers) {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
-      await vm.$nextTick()
+      await wait(0)
     }
 
     function hasError (err) {

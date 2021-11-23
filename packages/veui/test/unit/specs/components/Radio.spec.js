@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import Radio from '@/components/Radio'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
+import { wait } from '../../../utils'
 
 describe('components/Radio', () => {
   it('should handle value prop with `null` value.', done => {
@@ -323,7 +324,7 @@ describe('components/Radio', () => {
       await vm.$nextTick()
       let input = wrapper.find('.veui-radio input')
       input.trigger('blur')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function inputWithValue (val) {
@@ -331,13 +332,13 @@ describe('components/Radio', () => {
       await vm.$nextTick()
       // 这里为了测试校验，直接触发trigger，交互比较难改radio的值(一个radio只能选中)
       vm.$refs.radio.$emit('input', val)
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function changeTrigger (triggers) {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
-      await vm.$nextTick()
+      await wait(0)
     }
 
     function hasError (err) {

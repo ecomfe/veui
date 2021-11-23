@@ -5,7 +5,9 @@ import {
   isString,
   isObject,
   assign,
-  reduce
+  pick,
+  reduce,
+  forEach
 } from 'lodash'
 import Vue from 'vue'
 
@@ -359,4 +361,61 @@ export function wrapListeners (listeners) {
     },
     {}
   )
+}
+const DATA_KEYS = [
+  'class',
+  'staticClass',
+  'style',
+  'attrs',
+  'props',
+  'domProps',
+  'on',
+  'nativeOn',
+  'ref',
+  'key',
+  'directives',
+  'scopesSlots',
+  'slot'
+]
+
+// refers to https://jsfiddle.net/Linusborg/px3he5vc/
+export function cloneVnode (
+  { tag, context, componentOptions, data, text, children },
+  { class: clazz, listeners } = {}
+) {
+  if (!tag) {
+    return text
+  }
+  const isComp = !!componentOptions
+  let realData = pick(data, DATA_KEYS)
+
+  if (isComp) {
+    realData.props = componentOptions.propsData
+    realData.on = componentOptions.listeners
+  }
+
+  if (clazz) {
+    realData.class = data.class ? [].concat(clazz, data.class) : clazz
+  }
+
+  realData.on = reduce(
+    realData.on,
+    (acc, listener, name) => {
+      acc[name] = Array.isArray(listener) ? listener : [listener]
+      return acc
+    },
+    {}
+  )
+
+  forEach(listeners, (listener, name) => {
+    realData.on[name] = realData.on[name]
+      ? realData.on[name].concat(listener)
+      : [listener]
+  })
+
+  const realChildren = isComp ? componentOptions.children : children
+
+  const realTag = isComp ? componentOptions.Ctor : tag
+
+  return context.$createElement(realTag, realData, realChildren)
 }

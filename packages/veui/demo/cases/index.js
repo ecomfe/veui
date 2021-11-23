@@ -57,6 +57,7 @@ import VDragSort from './VDragSort'
 import Plugins from './Plugins'
 import Cascader from './Cascader'
 import ConfigProvider from './ConfigProvider'
+import Validation from './Validation'
 
 export default [
   {
@@ -174,6 +175,11 @@ export default [
     path: '/form',
     name: 'Form',
     component: Form
+  },
+  {
+    path: '/validation',
+    name: 'Validation',
+    component: Validation
   },
   {
     path: '/grid',

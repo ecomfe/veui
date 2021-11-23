@@ -319,7 +319,7 @@ describe('components/Textarea', () => {
       await vm.$nextTick()
       let input = wrapper.find('.veui-textarea textarea')
       input.trigger('blur')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function inputWithValue (val) {
@@ -327,13 +327,13 @@ describe('components/Textarea', () => {
       let input = wrapper.find('.veui-textarea textarea')
       input.element.value = val
       input.trigger('input')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function changeTrigger (triggers) {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
-      await vm.$nextTick()
+      await wait(0)
     }
 
     function hasError (err) {

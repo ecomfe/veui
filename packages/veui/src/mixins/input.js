@@ -48,6 +48,11 @@ export default {
       return this.formField && this.formField.realField && this.isTopMostInput
     },
     listenersWithValidations () {
+      // validator 包的 Input 不需要合并事件，直接合并到 vnode 上了
+      if (this.formValidator) {
+        return this.$listeners
+      }
+
       // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归
       let listeners = wrapListeners(this.$listeners)
       if (
@@ -62,18 +67,18 @@ export default {
       }
       return listeners
     },
-    ...getTypedAncestorTracker('form-field').computed
+    ...getTypedAncestorTracker('form-field').computed,
+    ...getTypedAncestorTracker('form-validator').computed
   },
   created () {
-    if (!this.isUnderField) {
-      return
+    // validator 包的 Input 不需要合并事件
+    if (this.isUnderField && !this.formValidator) {
+      this.$watch(
+        () => this.formField.interactiveListeners,
+        this.applyValidationListeners,
+        { immediate: true }
+      )
     }
-
-    this.$watch(
-      () => this.formField.interactiveListeners,
-      this.applyValidationListeners,
-      { immediate: true }
-    )
   },
   methods: {
     applyValidationListeners (val = {}, prev = {}) {

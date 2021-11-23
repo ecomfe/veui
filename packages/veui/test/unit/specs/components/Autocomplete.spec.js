@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import Autocomplete from '@/components/Autocomplete/Autocomplete'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
+import { wait } from '../../../utils'
 
 const INPUT = '.veui-input'
 const NATIVE_INPUT = '.veui-input input'
@@ -455,7 +456,7 @@ describe('components/Autocomplete', function () {
       await vm.$nextTick()
       let input = wrapper.find('.veui-input input')
       input.trigger('blur')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function inputWithValue (val) {
@@ -463,13 +464,13 @@ describe('components/Autocomplete', function () {
       let input = wrapper.find('.veui-input input')
       input.element.value = val
       input.trigger('input')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function changeTrigger (triggers) {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
-      await vm.$nextTick()
+      await wait(0)
     }
 
     function hasError (err) {

@@ -3,6 +3,7 @@ import Switch from '@/components/Switch'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
 import sinon from 'sinon'
+import { wait } from '../../../utils'
 
 describe('components/Switch', () => {
   it('should handle checked prop with `null` value.', done => {
@@ -434,7 +435,7 @@ describe('components/Switch', () => {
       await vm.$nextTick()
       let input = wrapper.find('.veui-switch input')
       input.trigger('blur')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function inputWithValue (val) {
@@ -442,13 +443,13 @@ describe('components/Switch', () => {
       let input = wrapper.find('.veui-switch input')
       input.element.checked = val
       input.trigger('change')
-      await vm.$nextTick()
+      await wait(0)
     }
 
     async function changeTrigger (triggers) {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
-      await vm.$nextTick()
+      await wait(0)
     }
 
     function hasError (err) {
