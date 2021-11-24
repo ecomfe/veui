@@ -1,4 +1,14 @@
-import { getScrollbarWidth } from '../utils/dom'
+import { getScrollbarWidth, cssSupports } from '../utils/dom'
+
+let hasCSSSupport = null
+
+function getCSSSupport () {
+  if (hasCSSSupport === null) {
+    hasCSSSupport = cssSupports('scrollbar-gutter', 'stable')
+  }
+
+  return hasCSSSupport
+}
 
 export class ModalManager {
   count = 0
@@ -85,14 +95,21 @@ function lockScroll (trigger, target = trigger) {
 
   if (overflowY !== 'hidden' && (isRoot || overflowY !== 'visible')) {
     let targetStyle = target.getAttribute('style') || ''
-    let { paddingRight } = getComputedStyle(target)
     let scrollbarWidth = getScrollbarWidth()
 
-    let newPaddingRight = `${parseInt(paddingRight, 10) + scrollbarWidth}px`
-    target.setAttribute(
-      'style',
-      `${targetStyle};padding-right:${newPaddingRight};overflow-y:hidden`
-    )
+    if (getCSSSupport()) {
+      target.setAttribute(
+        'style',
+        `${targetStyle};scrollbar-gutter:stable;overflow-y:hidden`
+      )
+    } else {
+      let { paddingRight } = getComputedStyle(target)
+      let newPaddingRight = `${parseInt(paddingRight, 10) + scrollbarWidth}px`
+      target.setAttribute(
+        'style',
+        `${targetStyle};padding-right:${newPaddingRight};overflow-y:hidden`
+      )
+    }
 
     return () => {
       trigger.setAttribute('style', triggerStyle)
