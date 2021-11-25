@@ -1,6 +1,6 @@
 import { normalize } from 'vue-directive-normalizer'
 import tooltip from '../managers/tooltip'
-import { flatMap } from 'lodash'
+import { flatMap, pick } from 'lodash'
 import { isOverflow } from '../utils/dom'
 
 const OPTIONS_SCHEMA = {
@@ -22,6 +22,7 @@ function refresh (el, binding) {
 
   if (context) {
     context.options = options
+    tooltip.update(pick(options, 'content', 'position'))
     return
   }
 

@@ -285,4 +285,36 @@ describe('directives/tooltip', () => {
 
     wrapper.destroy()
   })
+
+  it('should respect reactive content', async () => {
+    let warmup = config.get('tooltip.warmup')
+
+    let wrapper = mount(
+      {
+        directives: { tooltip },
+        template: `<div class="a" v-tooltip="content">A</div>`,
+        data () {
+          return {
+            content: 'Hi'
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    wrapper.trigger('mouseenter')
+    await wait(warmup + 50)
+    expectTooltip('Hi')
+
+    wrapper.setData({ content: 'Bye' })
+    await wait(0)
+    expectTooltip('Bye')
+
+    tooltipManager.destroy()
+
+    wrapper.destroy()
+  })
 })

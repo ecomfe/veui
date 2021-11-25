@@ -73,4 +73,19 @@ describe('managers/tooltip', () => {
     manager.destroy()
     expectTooltip(null)
   })
+
+  it('should respect reactive content', async () => {
+    const manager = createTooltipManager({ warmup: 100 })
+    const el = document.createElement('div')
+
+    manager.enter(el, { content: 'Hi' })
+    await wait(150)
+    expectTooltip('Hi')
+
+    manager.update({ content: 'Hey' })
+    await wait(0)
+    expectTooltip('Hey')
+
+    manager.destroy()
+  })
 })
