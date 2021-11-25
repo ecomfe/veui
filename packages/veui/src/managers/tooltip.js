@@ -15,6 +15,7 @@ config.defaults(
 export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
   let component = null
   let timer = null
+  let currentTarget = null
 
   function destroy () {
     clearTimeout(timer)
@@ -33,6 +34,8 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
   }
 
   function enter (target, options) {
+    currentTarget = target
+
     if (timer !== null) {
       // cooldown timer
       clearTimeout(timer)
@@ -52,6 +55,8 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
   }
 
   function leave () {
+    currentTarget = null
+
     close()
     if (timer !== null) {
       // warmup timer
@@ -70,8 +75,8 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
     )
   }
 
-  function update (options) {
-    if (!component) {
+  function update (target, options) {
+    if (!component || currentTarget !== target) {
       return
     }
 
@@ -87,7 +92,7 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
       component = createComponent()
     }
 
-    update({
+    assign(component, {
       target,
       content,
       position,

@@ -292,10 +292,15 @@ describe('directives/tooltip', () => {
     let wrapper = mount(
       {
         directives: { tooltip },
-        template: `<div class="a" v-tooltip="content">A</div>`,
+        template: `
+          <div>
+            <div class="a" v-tooltip="contentA">A</div>
+            <div class="b" v-tooltip="contentB">B</div>
+          </div>`,
         data () {
           return {
-            content: 'Hi'
+            contentA: 'Hi',
+            contentB: 'Hey'
           }
         }
       },
@@ -305,11 +310,17 @@ describe('directives/tooltip', () => {
       }
     )
 
-    wrapper.trigger('mouseenter')
+    let a = wrapper.find('.a')
+
+    a.trigger('mouseenter')
     await wait(warmup + 50)
     expectTooltip('Hi')
 
-    wrapper.setData({ content: 'Bye' })
+    wrapper.setData({ contentA: 'Bye' })
+    await wait(0)
+    expectTooltip('Bye')
+
+    wrapper.setData({ contentB: 'See you' })
     await wait(0)
     expectTooltip('Bye')
 
