@@ -77,12 +77,17 @@ describe('managers/tooltip', () => {
   it('should respect reactive content', async () => {
     const manager = createTooltipManager({ warmup: 100 })
     const el = document.createElement('div')
+    const el2 = document.createElement('div')
 
     manager.enter(el, { content: 'Hi' })
     await wait(150)
     expectTooltip('Hi')
 
-    manager.update({ content: 'Hey' })
+    manager.update(el, { content: 'Hey' })
+    await wait(0)
+    expectTooltip('Hey')
+
+    manager.update(el2, { content: 'Bye' })
     await wait(0)
     expectTooltip('Hey')
 

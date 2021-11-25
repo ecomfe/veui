@@ -22,7 +22,7 @@ function refresh (el, binding) {
 
   if (context) {
     context.options = options
-    tooltip.update(pick(options, 'content', 'position'))
+    tooltip.update(el, pick(options, 'content', 'position'))
     return
   }
 
