@@ -201,7 +201,6 @@ export default {
         this.overlayNode.appendTo(this.findParentOverlayId(), this.priority)
       }
     },
-
     initPortal () {
       let { box } = this.$refs
 
@@ -218,7 +217,6 @@ export default {
 
       this.updateLocator()
     },
-
     disposePortal () {
       this.destroyLocator()
 
@@ -234,7 +232,6 @@ export default {
         this.removePortal = null
       }
     },
-
     findParentOverlayId () {
       let cur = this.$parent
       while (cur) {
@@ -244,7 +241,6 @@ export default {
         cur = cur.$parent
       }
     },
-
     updateWidth () {
       if (!this.matchWidth) {
         this.minWidth = null
@@ -259,7 +255,6 @@ export default {
 
       this.minWidth = `${targetEl.offsetWidth}px`
     },
-
     updateLocator () {
       if (!this.realOpen) {
         return
@@ -298,13 +293,11 @@ export default {
         })
       }
     },
-
     relocate () {
       if (this.popper) {
         this.popper.scheduleUpdate()
       }
     },
-
     updateTargetElement () {
       if (this.target) {
         this.targetEl = getNodes(this.target, this.$vnode.context)[0]
@@ -312,7 +305,6 @@ export default {
         this.targetEl = null
       }
     },
-
     focus () {
       if (this.overlayNode) {
         this.overlayNode.toTop()
@@ -321,7 +313,6 @@ export default {
         this.focusContext.toTop()
       }
     },
-
     initFocus () {
       if (!this.autofocus) {
         return
@@ -334,7 +325,6 @@ export default {
         }
       })
     },
-
     createFocusContext () {
       if (!this.focusContext) {
         this.focusContext = focusManager.createContext(this.$refs.box, {
@@ -345,27 +335,34 @@ export default {
         this.lastSource = document.activeElement
       }
     },
-
     destroyFocus () {
       if (this.focusContext) {
         focusManager.remove(this.focusContext)
         this.focusContext = null
       }
     },
-
     toggleLocator (enable) {
       if (this.inline || !this.popper) {
         return
       }
       this.popper[enable ? 'enableEventListeners' : 'disableEventListeners']()
     },
-
     destroyLocator () {
       if (this.inline || !this.popper) {
         return
       }
       this.popper.destroy()
       this.popper = null
+    },
+    handleAfterEnter () {
+      this.$emit('afteropen')
+    },
+    handleLeave () {
+      this.leaving = true
+    },
+    handleAfterLeave () {
+      this.leaving = false
+      this.$emit('afterclose')
     }
   },
   render () {
@@ -394,16 +391,9 @@ export default {
         <transition
           name={this.$c('overlay')}
           appear
-          onAfterEnter={() => {
-            this.$emit('afteropen')
-          }}
-          onLeave={() => {
-            this.leaving = true
-          }}
-          onAfterLeave={() => {
-            this.leaving = false
-            this.$emit('afterclose')
-          }}
+          onAfterEnter={this.handleAfterEnter}
+          onLeave={this.handleLeave}
+          onAfterLeave={this.handleAfterLeave}
         >
           {box}
         </transition>

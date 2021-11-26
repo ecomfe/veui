@@ -165,31 +165,75 @@ export function isOverflow (elem) {
   )
 }
 
+function getScrollportOffset (elem) {
+  let container = getScrollParent(elem)
+
+  if (!container) {
+    return {
+      top: elem.offsetTop,
+      left: elem.offsetLeft
+    }
+  }
+
+  let current = elem
+  let top = 0
+  let left = 0
+
+  while (current && current !== container) {
+    if (container.contains(current)) {
+      top += current.offsetTop
+      left += current.offsetLeft
+    } else {
+      top -= container.offsetTop
+      left -= container.offsetLeft
+    }
+
+    current = current.offsetParent
+  }
+
+  return {
+    top,
+    left
+  }
+}
+
 /**
  * 如果指定元素不完全在滚动父级可视范围内，将其滚动到可视范围内
  *
  * @param {Element} elem 指定元素
  */
 export function scrollIntoView (elem, forceToTop) {
+  if (!document.documentElement.contains(elem)) {
+    return
+  }
+
   let container = getScrollParent(elem)
+
   if (!container) {
     return
   }
-  let { top: cTop, bottom: cBottom } = container.getBoundingClientRect()
-  let { top: oTop, bottom: oBottom } = elem.getBoundingClientRect()
+
+  let { top } = getScrollportOffset(elem)
 
   if (forceToTop) {
-    container.scrollTop -= cTop - oTop
+    container.scrollTop = top
     return
   }
+
+  let { offsetHeight: elHeight } = elem
+  let { scrollTop, clientHeight: scrollportHeight } = container
+  let clientTop = top - scrollTop
+  let clientBottom = clientTop + elHeight
+
   // fully visible
-  if (oTop >= cTop && oBottom <= cBottom) {
+  if (clientTop >= 0 && clientBottom <= scrollportHeight) {
     return
   }
-  if (oTop < cTop) {
-    container.scrollTop -= cTop - oTop
+
+  if (clientTop < 0) {
+    container.scrollTop = top
   } else {
-    container.scrollTop += oBottom - cBottom
+    container.scrollTop = top + elHeight - scrollportHeight
   }
 }
 
