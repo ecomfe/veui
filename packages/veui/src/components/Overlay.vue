@@ -101,6 +101,7 @@ export default {
     realOpen (val) {
       if (val) {
         this.leaving = false
+        this.handleAfterOpen()
       }
 
       if (this.inline) {
@@ -354,13 +355,15 @@ export default {
       this.popper.destroy()
       this.popper = null
     },
-    handleAfterEnter () {
-      this.$emit('afteropen')
+    handleAfterOpen () {
+      this.$nextTick(() => {
+        this.$emit('afteropen')
+      })
     },
     handleLeave () {
       this.leaving = true
     },
-    handleAfterLeave () {
+    handleAfterClose () {
       this.leaving = false
       this.$emit('afterclose')
     }
@@ -391,9 +394,8 @@ export default {
         <transition
           name={this.$c('overlay')}
           appear
-          onAfterEnter={this.handleAfterEnter}
           onLeave={this.handleLeave}
-          onAfterLeave={this.handleAfterLeave}
+          onAfterLeave={this.handleAfterClose}
         >
           {box}
         </transition>

@@ -257,8 +257,10 @@ function getHotRects (elements, container, axis, target, dragElementIndex) {
 
   // `getStableBoundingClientRect` is used here as it will ignore interpolated
   // values during transition
-  const elementRects = [...elements].map(el => getStableBoundingClientRect(el))
-  const currentRect = getStableBoundingClientRect(target)
+  const elementRects = [...elements].map(el =>
+    getStableBoundingClientRect(el, container)
+  )
+  const currentRect = getStableBoundingClientRect(target, container)
 
   // 找出换行的 index，切成行，按行处理热区
   const breakIndices = elementRects

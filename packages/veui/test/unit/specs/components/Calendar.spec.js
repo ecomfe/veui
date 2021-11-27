@@ -7,7 +7,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         selected: null
-      }
+      },
+      attachToDocument: true
     })
 
     wrapper.vm.$on('select', val => {
@@ -24,7 +25,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         type: 'year'
-      }
+      },
+      attachToDocument: true
     })
 
     wrapper.vm.$on('select', val => {
@@ -41,7 +43,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         type: 'month'
-      }
+      },
+      attachToDocument: true
     })
 
     wrapper.vm.$on('select', val => {
@@ -55,17 +58,22 @@ describe('components/Calendar', () => {
   })
 
   it('should select date multiple correctly.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            selected: null
+          }
+        },
+        template: '<veui-calendar v-model="selected" multiple />'
       },
-      data () {
-        return {
-          selected: null
-        }
-      },
-      template: '<veui-calendar v-model="selected" multiple />'
-    })
+      {
+        attachToDocument: true
+      }
+    )
 
     const days = wrapper.findAll('.veui-calendar-day button')
     const { vm } = wrapper
@@ -84,17 +92,22 @@ describe('components/Calendar', () => {
   })
 
   it('should select date range correctly.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            selected: null
+          }
+        },
+        template: '<veui-calendar v-model="selected" range />'
       },
-      data () {
-        return {
-          selected: null
-        }
-      },
-      template: '<veui-calendar v-model="selected" range />'
-    })
+      {
+        attachToDocument: true
+      }
+    )
 
     const days = wrapper.findAll('.veui-calendar-day button')
     days.at(0).trigger('click')
@@ -115,7 +128,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         panel: 3
-      }
+      },
+      attachToDocument: true
     })
 
     const panels = wrapper.findAll('.veui-calendar-panel')
@@ -128,7 +142,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         today: new Date(2019, 10, 1)
-      }
+      },
+      attachToDocument: true
     })
 
     expect(wrapper.vm.getDefaultDate() - new Date(2019, 10, 1)).to.equal(0)
@@ -143,7 +158,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         weekStart: 6
-      }
+      },
+      attachToDocument: true
     })
 
     expect(wrapper.vm.getDayNames()[0] === wrapper.vm.daysShort[5]).to.equal(
@@ -157,17 +173,21 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         fillMonth: false
-      }
+      },
+      attachToDocument: true
     })
 
     expect(wrapper.find('.veui-calendar-aux button').exists()).to.equal(false)
+
+    wrapper.destroy()
   })
 
   it('should support customized date-class correctly.', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         dateClass: 'date-class'
-      }
+      },
+      attachToDocument: true
     })
 
     const cells = wrapper.findAll('tbody td')
@@ -184,7 +204,8 @@ describe('components/Calendar', () => {
         disabledDate: date => {
           return date.getDay() === 6
         }
-      }
+      },
+      attachToDocument: true
     })
 
     const index = Math.floor(Math.random() * 2) + 1
@@ -202,7 +223,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         disabled: true
-      }
+      },
+      attachToDocument: true
     })
 
     expectDisabled(wrapper)
@@ -217,7 +239,8 @@ describe('components/Calendar', () => {
     let wrapper = mount(Calendar, {
       propsData: {
         readonly: true
-      }
+      },
+      attachToDocument: true
     })
 
     expect(wrapper.attributes('aria-readonly')).to.equal('true')
@@ -232,7 +255,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         selected: new Date(1987, 6, 11)
-      }
+      },
+      attachToDocument: true
     })
 
     const { vm } = wrapper
@@ -247,20 +271,26 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       slots: {
         before: '<div class="calendar-before">Before</div>'
-      }
+      },
+      attachToDocument: true
     })
 
     expect(wrapper.find('.calendar-before').exists()).to.equal(true)
+
+    wrapper.destroy()
   })
 
   it('should support after solt correctly.', () => {
     const wrapper = mount(Calendar, {
       slots: {
         after: '<div class="calendar-after">After</div>'
-      }
+      },
+      attachToDocument: true
     })
 
     expect(wrapper.find('.calendar-after').exists()).to.equal(true)
+
+    wrapper.destroy()
   })
 
   it('should support date slot correctly.', () => {
@@ -268,7 +298,8 @@ describe('components/Calendar', () => {
       scopedSlots: {
         date:
           '<template slot-scope="{year, month,date}">{{ year }}-{{ month + 1 }}-{{ date }}</template>'
-      }
+      },
+      attachToDocument: true
     })
 
     const date = new Date()
@@ -280,51 +311,65 @@ describe('components/Calendar', () => {
         .text()
         .trim()
     ).to.equal(target)
+
+    wrapper.destroy()
   })
 
   it('should handle select.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
-      },
-      data () {
-        return {
-          selected: null
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            selected: null
+          }
+        },
+        template: '<veui-calendar @select="handleSelect" />',
+        methods: {
+          handleSelect (selected) {
+            this.selected = selected
+          }
         }
       },
-      template: '<veui-calendar @select="handleSelect" />',
-      methods: {
-        handleSelect (selected) {
-          this.selected = selected
-        }
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     wrapper.find('.veui-calendar-day button').trigger('click')
     const { vm } = wrapper
     await vm.$nextTick()
     expect(vm.selected).to.be.an.instanceof(Date)
+
+    wrapper.destroy()
   })
 
   it('should handle select correctly when set range.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
-      },
-      data () {
-        return {
-          selected: null,
-          times: 0
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            selected: null,
+            times: 0
+          }
+        },
+        template: '<veui-calendar range @select="handleSelect" />',
+        methods: {
+          handleSelect (selected) {
+            this.selected = selected
+            this.times += 1
+          }
         }
       },
-      template: '<veui-calendar range @select="handleSelect" />',
-      methods: {
-        handleSelect (selected) {
-          this.selected = selected
-          this.times += 1
-        }
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     const days = wrapper.findAll('.veui-calendar-day button')
 
@@ -341,25 +386,30 @@ describe('components/Calendar', () => {
   })
 
   it('should handle select correctly when set multiple.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
-      },
-      data () {
-        return {
-          selected: null,
-          times: 0
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            selected: null,
+            times: 0
+          }
+        },
+        template:
+          '<veui-calendar v-model="selected" multiple @select="handleSelect" />',
+        methods: {
+          handleSelect (selected) {
+            this.selected = selected
+            this.times += 1
+          }
         }
       },
-      template:
-        '<veui-calendar v-model="selected" multiple @select="handleSelect" />',
-      methods: {
-        handleSelect (selected) {
-          this.selected = selected
-          this.times += 1
-        }
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     const days = wrapper.findAll('.veui-calendar-day button')
 
@@ -378,24 +428,29 @@ describe('components/Calendar', () => {
   })
 
   it('should handle selectstart.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
-      },
-      data () {
-        return {
-          start: null,
-          times: 0
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            start: null,
+            times: 0
+          }
+        },
+        template: '<veui-calendar range @selectstart="handleSelectStart" />',
+        methods: {
+          handleSelectStart (start) {
+            this.start = start
+            this.times += 1
+          }
         }
       },
-      template: '<veui-calendar range @selectstart="handleSelectStart" />',
-      methods: {
-        handleSelectStart (start) {
-          this.start = start
-          this.times += 1
-        }
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     const days = wrapper.findAll('.veui-calendar-day button')
     days.at(0).trigger('click')
@@ -409,23 +464,28 @@ describe('components/Calendar', () => {
   })
 
   it('should handle selectprogress when multiple is false.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
-      },
-      data () {
-        return {
-          selectProgress: null
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            selectProgress: null
+          }
+        },
+        template:
+          '<veui-calendar range @selectprogress="handleSelectProgress" />',
+        methods: {
+          handleSelectProgress (selectProgress) {
+            this.selectProgress = selectProgress
+          }
         }
       },
-      template:
-        '<veui-calendar range @selectprogress="handleSelectProgress" />',
-      methods: {
-        handleSelectProgress (selectProgress) {
-          this.selectProgress = selectProgress
-        }
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     const days = wrapper.findAll('.veui-calendar-day button')
     days.at(0).trigger('click')
@@ -441,24 +501,29 @@ describe('components/Calendar', () => {
   })
 
   it('should handle selectprogress when multiple is true.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
-      },
-      data () {
-        return {
-          selected: null,
-          selectProgress: null
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            selected: null,
+            selectProgress: null
+          }
+        },
+        template:
+          '<veui-calendar multiple range v-model="selected" @selectprogress="handleSelectProgress" />',
+        methods: {
+          handleSelectProgress (selectProgress) {
+            this.selectProgress = selectProgress
+          }
         }
       },
-      template:
-        '<veui-calendar multiple range v-model="selected" @selectprogress="handleSelectProgress" />',
-      methods: {
-        handleSelectProgress (selectProgress) {
-          this.selectProgress = selectProgress
-        }
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     const days = wrapper.findAll('.veui-calendar-day button')
     days.at(0).trigger('click')
@@ -481,24 +546,29 @@ describe('components/Calendar', () => {
   })
 
   it('should handle viewchange.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
-      },
-      data () {
-        return {
-          year: null,
-          month: null
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            year: null,
+            month: null
+          }
+        },
+        template: '<veui-calendar @viewchange="handleViewChange" />',
+        methods: {
+          handleViewChange ({ year, month }) {
+            this.year = year
+            this.month = month
+          }
         }
       },
-      template: '<veui-calendar @viewchange="handleViewChange" />',
-      methods: {
-        handleViewChange ({ year, month }) {
-          this.year = year
-          this.month = month
-        }
+      {
+        attachToDocument: true
       }
-    })
+    )
 
     const date = new Date()
     let year = date.getFullYear()
@@ -525,7 +595,8 @@ describe('components/Calendar', () => {
         range: true,
         fillMonth: false,
         selected: [new Date(2019, 9, 1), new Date(2019, 11, 31)]
-      }
+      },
+      attachToDocument: true
     })
     const { vm } = wrapper
     let [p1, p2] = vm.panelData
@@ -550,7 +621,9 @@ describe('components/Calendar', () => {
   })
 
   it('should handle selected prop correctly on using as a uncontrolled component.', async () => {
-    const wrapper = mount(Calendar)
+    const wrapper = mount(Calendar, {
+      attachToDocument: true
+    })
     const { vm } = wrapper
     const today = wrapper.find('.veui-calendar-today button')
     today.trigger('click')
@@ -565,7 +638,8 @@ describe('components/Calendar', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         type: 'year'
-      }
+      },
+      attachToDocument: true
     })
     const { vm } = wrapper
     function isVisible (container, target) {
@@ -593,17 +667,22 @@ describe('components/Calendar', () => {
   })
 
   it('should update panel date correctly on selecting next month.', async () => {
-    const wrapper = mount({
-      components: {
-        'veui-calendar': Calendar
+    const wrapper = mount(
+      {
+        components: {
+          'veui-calendar': Calendar
+        },
+        data () {
+          return {
+            selected: [new Date(2020, 6, 15)]
+          }
+        },
+        template: '<veui-calendar ref="calendar" multiple v-model="selected"/>'
       },
-      data () {
-        return {
-          selected: [new Date(2020, 6, 15)]
-        }
-      },
-      template: '<veui-calendar ref="calendar" multiple v-model="selected"/>'
-    })
+      {
+        attachToDocument: true
+      }
+    )
     const { vm } = wrapper
     let next = wrapper.find('.veui-calendar-day + .veui-calendar-aux button')
     next.trigger('click')

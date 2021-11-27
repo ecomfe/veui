@@ -512,7 +512,7 @@ export function getBoundingRect (container) {
   if (container === window) {
     return getWindowRect()
   }
-  return container.getBoundingClientRect()
+  return getStableBoundingClientRect(container)
 }
 
 function getClientSize (container) {
@@ -904,39 +904,30 @@ export function addOnceEventListener (el, evt, listener) {
   return remove
 }
 
-/**
- * To get relatively stable bounding client rect based on the offsetParent to
- * avoid interpolated values during transition.
- * @param {HTMLElement} el The target element
- */
-export function getStableBoundingClientRect (el) {
-  let parent = el.offsetParent
-  let parentRect = parent ? parent.getBoundingClientRect() : null
-  let scroll = getScrollOffset(el, parent || document.documentElement)
+function getStableOffset (el, context) {
+  let current = el
+  let top = 0
+  let left = 0
 
-  let top = parentRect
-    ? parentRect.top + el.offsetTop - scroll.top
-    : el.offsetTop
-  let left = parentRect
-    ? parentRect.left + el.offsetLeft - scroll.left
-    : el.offsetLeft
-  let width = el.offsetWidth
-  let height = el.offsetHeight
-
-  return {
-    width,
-    height,
-    top,
-    right: left + width,
-    bottom: top + height,
-    left
+  while (current && current !== context) {
+    if (!context || context.contains(current)) {
+      top += current.offsetTop
+      left += current.offsetLeft
+    } else {
+      top -= context.offsetTop
+      left -= context.offsetLeft
+    }
+    current = current.offsetParent
   }
+
+  return { top, left }
 }
 
 /**
  * Get accumulated scroll offsets from the starting element to a specified context element
  * @param {HTMLElement} el the starting element
  * @param {HTMLElement} context the context element
+ * @returns {{top: number, left: number}} the accumulated scroll offsets
  */
 export function getScrollOffset (el, context) {
   if (!context.contains(el)) {
@@ -955,6 +946,34 @@ export function getScrollOffset (el, context) {
 
   return {
     top,
+    left
+  }
+}
+
+/**
+ * To get relatively stable bounding client rect based on the offsetParent to
+ * avoid interpolated values during transition.
+ * @param {HTMLElement} el The target element
+ * @returns {{top: number, right: number, bottom: number, left: number, width: number, height: number}} The bounding client rect
+ */
+export function getStableBoundingClientRect (el, context) {
+  let { top, left } = getStableOffset(el, context)
+  let { top: contextTop, left: contextLeft } = context
+    ? context.getBoundingClientRect()
+    : { top: 0, left: 0 }
+  let scroll = getScrollOffset(el, context || document.documentElement)
+
+  top += contextTop - scroll.top
+  left += contextLeft - scroll.left
+  let width = el.offsetWidth
+  let height = el.offsetHeight
+
+  return {
+    width,
+    height,
+    top,
+    right: left + width,
+    bottom: top + height,
     left
   }
 }
