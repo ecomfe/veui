@@ -25,6 +25,7 @@
   ],
   "dependencies": {
     "bytes": "^3.0.0",
+    "clone-element": "^0.1.0",
     "core-js": "^3.8.3",
     "date-fns": "^2.14.0",
     "dls-graphics": "^1.0.0-alpha.1",

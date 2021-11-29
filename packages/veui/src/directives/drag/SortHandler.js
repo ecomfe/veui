@@ -9,10 +9,10 @@ import {
   camelCase,
   kebabCase
 } from 'lodash'
+import cloneElement from 'clone-element'
 import { prefixify } from '../../mixins/prefix'
 import {
   isInsideTransformedContainer,
-  cloneElementWithComputedStyle,
   getStableBoundingClientRect,
   appendTemporaryStyle
 } from '../../utils/dom'
@@ -418,7 +418,7 @@ function setDragSnapshotImage (el, event) {
   let { offsetX, offsetY } = event
   let newEl
   if (isSafari && isInsideTransformedContainer(el)) {
-    newEl = cloneElementWithComputedStyle(el)
+    newEl = cloneElement(el)
     assign(newEl.style, {
       position: 'fixed',
       top: 0,
