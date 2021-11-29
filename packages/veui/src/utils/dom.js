@@ -91,8 +91,8 @@ export function patchIndeterminate (element) {
 }
 
 /**
- * 判断两个元素是否存在父子关系。
- * IE9 的 SVGSVGElement 上没有 contains 方法，做下 hack 。
+ * 判断两个元素是否存在父子关系，与原生方法不同之处在于可以感知
+ * VEUI 中的 portal 机制。
  *
  * @param {Element} parentElem 父元素
  * @param {Element} childElem 子元素
@@ -117,20 +117,14 @@ export function contains (parentElem, childElem, followPortal) {
 
 /**
  * 判断一个元素是否匹配某个指定的选择器。
-
+ * TODO: remove after dropping IE11 support
+ *
  * @param {Element} elem 指定元素
  * @param {string} selector 选择器字符串
  * @return {boolean} 是否匹配
  */
 export function matches (elem, selector) {
-  return (
-    elem.matches ||
-    elem.matchesSelector ||
-    elem.mozMatchesSelector ||
-    elem.msMatchesSelector ||
-    elem.oMatchesSelector ||
-    elem.webkitMatchesSelector
-  ).call(elem, selector)
+  return (elem.matches || elem.msMatchesSelector).call(elem, selector)
 }
 
 /**
