@@ -165,7 +165,7 @@ export function isOverflow (elem) {
   )
 }
 
-function getScrollportOffset (elem) {
+function getScrollContainerOffset (elem) {
   let container = getScrollParent(elem)
 
   if (!container) {
@@ -213,7 +213,7 @@ export function scrollIntoView (elem, forceToTop) {
     return
   }
 
-  let { top } = getScrollportOffset(elem)
+  let { top } = getScrollContainerOffset(elem)
 
   if (forceToTop) {
     container.scrollTop = top
