@@ -28,7 +28,7 @@
     "clone-element": "^0.1.0",
     "core-js": "^3.8.3",
     "date-fns": "^2.14.0",
-    "dls-graphics": "^1.0.0-alpha.1",
+    "dls-graphics": "^1.0.0",
     "lodash": "^4.17.19",
     "popper.js": "^1.16.0",
     "resize-detector": "^0.1.6",
