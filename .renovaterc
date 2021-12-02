@@ -6,6 +6,7 @@
     },
     {
       "matchPackageNames": ["dls-icons-vue"],
+      "matchBaseBranches": ["d20"],
       "enabled": true
     }
   ]
