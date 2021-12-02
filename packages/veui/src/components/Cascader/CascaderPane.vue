@@ -189,11 +189,13 @@ export default {
         return ['hover', 'click'].indexOf(val) >= 0
       }
     },
+    // eslint-disable-next-line vue/require-prop-types
     value: {},
     options: Array,
     disabled: Boolean,
     inline: Boolean,
     multiple: Boolean,
+    // eslint-disable-next-line vue/require-prop-types
     expanded: {},
     columnWidth: [Number, String],
     selectMode: {
