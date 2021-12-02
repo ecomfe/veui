@@ -1,0 +1,12 @@
+{
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": ["dls-icons-vue"],
+      "enabled": true
+    }
+  ]
+}
