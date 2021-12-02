@@ -1,3 +1,16 @@
+## 2.3.1
+
+### 💡 主要变更
+
+- [^] 优化了下拉浮层展开时列表滚动到激活项的功能，避免可见的闪动。<!-- #Select #Cascader #DatePicker #TimePicker -->
+- [^] 在滚动锁定开启时尝试使用原生的 `scrollbar-gutter` 来避免页面内容整体抖动。<!-- #Dialog -->
+- [^] 优化了 `v-drag.sort` 指令在 Safari 下在 `transform` 容器内拖动时拖动元素初始样式的覆盖场景。<!-- #v-drag -->
+
+### 🐞 问题修复
+
+- [^] 修正了 `v-tooltip` 指令提示内容没有实时响应式更新的问题。<!-- #v-tooltip -->
+- [^] 升级了 `Loading` 组件的加载动效，避免了在 Chrome 下可能由于动画不同步造成的闪动。<!-- #Loading -->
+
 ## 2.3.0 "🏍️ Motorcycle"
 
 ### ⚠️ 非兼容性变更
