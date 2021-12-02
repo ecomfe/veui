@@ -1,4 +1,5 @@
 {
+  "repositories": ["ecomfe/veui"],
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],
@@ -9,5 +10,10 @@
       "matchBaseBranches": ["d20"],
       "enabled": true
     }
-  ]
+  ],
+  "postUpgradeTasks": {
+    "commands": ["prettier --write"],
+    "fileFilters": ["packages/**/package-lock.json"],
+    "executionMode": "update"
+  }
 }
