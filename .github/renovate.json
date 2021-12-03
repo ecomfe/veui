@@ -11,9 +11,11 @@
       "enabled": true
     }
   ],
+  "allowedPostUpgradeCommands": ["prettier"],
   "postUpgradeTasks": {
     "commands": ["prettier --write"],
     "fileFilters": ["packages/**/package-lock.json"],
     "executionMode": "update"
-  }
+  },
+  "commitBody": "[skip ci]"
 }
