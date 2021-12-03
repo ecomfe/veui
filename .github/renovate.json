@@ -1,4 +1,7 @@
 {
+  "repositories": [
+    "ecomfe/veui"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],
