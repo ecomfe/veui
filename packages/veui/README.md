@@ -1,6 +1,6 @@
 # VEUI
 
-[![](https://badgen.net/circleci/github/ecomfe/veui)](https://circleci.com/gh/ecomfe/veui)
+[![](https://img.shields.io/github/workflow/status/ecomfe/veui/test/d20)](https://github.com/ecomfe/veui/actions/workflows/test.yml) [![](https://img.shields.io/codecov/c/github/ecomfe/veui)](https://codecov.io/gh/ecomfe/veui)
 
 Enterprise UI components for Vue.js. Based on Baidu Light Design Language System (Light Design).
 
