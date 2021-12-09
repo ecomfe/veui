@@ -125,7 +125,7 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import carousel from '../../mixins/carousel'
-import { CUSTOM_GUTTER, FALLBACK_GUTTER, getRatio } from './mixin'
+import { CUSTOM_GUTTER, FALLBACK_GUTTER, getRatio } from './_mixin'
 import '../../common/global'
 
 export default {

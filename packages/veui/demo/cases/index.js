@@ -57,12 +57,18 @@ import VDragSort from './VDragSort'
 import Plugins from './Plugins'
 import Cascader from './Cascader'
 import ConfigProvider from './ConfigProvider'
+import Layout from './Layout'
 
 export default [
   {
     path: '/color-palette',
     name: 'Colors',
     component: Colors
+  },
+  {
+    path: '/layout',
+    name: 'Layout',
+    component: Layout
   },
   {
     path: '/alert',
