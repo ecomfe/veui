@@ -1,0 +1,43 @@
+@import "../lib.less";
+
+.@{veui-prefix}-layout {
+  display: flex;
+  flex: auto;
+  background-color: @dls-layout-background-color;
+
+  &:not(& &) {
+    min-height: 100%;
+    min-width: @dls-layout-min-width;
+  }
+
+  &-column {
+    flex-direction: column;
+  }
+
+  &-row {
+    flex-direction: row;
+  }
+
+  &:not(&-has-sidebar) {
+    --dls-layout-header-height: unset;
+    --dls-layout-footer-height: unset;
+  }
+
+  & > &-header,
+  & > &-sidebar,
+  & > &-footer {
+    z-index: 10;
+  }
+
+  & > & > &-header,
+  & > & > &-sidebar,
+  & > & > &-footer {
+    z-index: 9;
+  }
+
+  & > & > & > &-header,
+  & > & > & > &-sidebar,
+  & > & > & > &-footer {
+    z-index: 8;
+  }
+}

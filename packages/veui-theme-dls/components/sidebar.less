@@ -1,0 +1,91 @@
+@import "../lib.less";
+
+.@{veui-prefix}-layout-sidebar {
+  display: flex;
+  flex-direction: column;
+  box-shadow: @dls-layout-sidebar-shadow;
+  background-color: @dls-layout-sidebar-background-color;
+  width: @dls-layout-sidebar-width;
+  margin-left: 0;
+  .veui-transition(width, margin-left);
+
+  &-content {
+    flex: auto;
+    overflow: auto;
+  }
+
+  &-sticky {
+    position: sticky;
+    top: var(--dls-layout-header-height, 0);
+    max-height: calc(
+      100vh - var(--dls-layout-header-height, 0) -
+        var(--dls-layout-footer-height, 0)
+    );
+  }
+
+  &-toggle {
+    display: flex;
+    height: @dls-layout-sidebar-toggle-height;
+    border-top: 1px solid @dls-layout-sidebar-separator-color;
+    padding-right: @dls-layout-sidebar-toggle-padding-x;
+    position: sticky;
+    bottom: var(--dls-layout-footer-height, 0);
+    flex: none;
+    background: @dls-layout-sidebar-background-color;
+    z-index: 1;
+    flex-direction: row-reverse;
+
+    &-inside {
+      flex: none;
+    }
+  }
+
+  // for 优先级
+  & &-float-toggle {
+    position: fixed;
+    left: @dls-layout-sidebar-width;
+    top: 50%;
+    transform: translate3d(0, -50%, 0);
+    will-change: transform;
+    .veui-button-transition(transform);
+    padding: 0;
+    width: @dls-layout-sidebar-float-toggle-width;
+    .border-right-radius(@dls-layout-sidebar-float-toggle-radius);
+    .border-left-radius(0);
+    background-color: @dls-layout-sidebar-float-toggle-backgroud-color;
+    color: @dls-layout-sidebar-float-button-font-color;
+
+    &:hover {
+      background-color: @dls-layout-sidebar-float-toggle-backgroud-color-hover;
+    }
+
+    &:active {
+      background-color: @dls-layout-sidebar-float-toggle-backgroud-color-active;
+    }
+  }
+
+  &-collapsed &-float-toggle {
+    transform: translate3d(-@dls-layout-sidebar-width, -50%, 0);
+  }
+
+  &-mode-hidden&-collapsed,
+  &-mode-hidden&-collapsed &-float-toggle {
+    transition-duration: 100ms;
+  }
+
+  &-collapsed&-mode-slim {
+    width: @dls-layout-sidebar-width-slim;
+  }
+
+  &-collapsed&-mode-slim &-toggle {
+    padding-right: 0;
+
+    &-inside {
+      flex: auto;
+    }
+  }
+
+  &-collapsed&-mode-hidden {
+    margin-left: -@dls-layout-sidebar-width;
+  }
+}

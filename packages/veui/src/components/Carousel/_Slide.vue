@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import carousel, { isVideo, CUSTOM_GUTTER, FALLBACK_GUTTER } from './mixin'
+import carousel, { isVideo, CUSTOM_GUTTER, FALLBACK_GUTTER } from './_mixin'
 import { get } from 'lodash'
 
 // index 解释

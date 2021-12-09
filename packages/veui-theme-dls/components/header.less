@@ -1,0 +1,14 @@
+@import "../lib.less";
+
+.@{veui-prefix}-layout-header {
+  height: var(--dls-layout-header-height, @dls-layout-header-height);
+  flex: none;
+  background-color: @dls-layout-header-background-color;
+  box-shadow: @dls-layout-header-shadow;
+  z-index: 9;
+
+  &-sticky {
+    position: sticky;
+    top: 0;
+  }
+}

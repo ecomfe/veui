@@ -122,12 +122,14 @@ function search (datasource, keyword, options, result = []) {
       itemWrap.parts = splitText(item[searchKey], isArray ? offsets : [])
     }
 
-    let path = [...ancestors, itemWrap]
+    const path = [...ancestors, itemWrap]
+    const disabled = path.some(({ item }) => !!item.disabled)
     let limited = limit && limit <= result.length
     if (!limited) {
       if (item[valueKey] && itemWrap.filtered) {
         result.push({
           matches: path,
+          disabled,
           ...omit(item, childrenKey) // for flat optionGroup
         })
       }
