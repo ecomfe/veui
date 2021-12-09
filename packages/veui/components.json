@@ -1,11 +1,15 @@
 [
   {
-    "name": "Accordion",
-    "path": "Accordion.vue"
-  },
-  {
     "name": "Icon",
     "path": "Icon.vue"
+  },
+  {
+    "name": "Collapse",
+    "path": "Collapse.vue"
+  },
+  {
+    "name": "Accordion",
+    "path": "Accordion.vue"
   },
   {
     "name": "Loading",
@@ -37,15 +41,15 @@
   },
   {
     "name": "Tree",
-    "path": "Tree/Tree.vue"
-  },
-  {
-    "name": "Tree",
     "path": "Tree"
   },
   {
     "name": "Tree",
     "path": "Tree/index.js"
+  },
+  {
+    "name": "Tree",
+    "path": "Tree/Tree.vue"
   },
   {
     "name": "Link",
@@ -144,6 +148,14 @@
     "path": "Cascader/index.js"
   },
   {
+    "name": "Tooltip",
+    "path": "Tooltip.vue"
+  },
+  {
+    "name": "Popover",
+    "path": "Popover.vue"
+  },
+  {
     "name": "CheckButtonGroup",
     "path": "CheckButtonGroup.vue"
   },
@@ -154,10 +166,6 @@
   {
     "name": "CheckboxGroup",
     "path": "CheckboxGroup.vue"
-  },
-  {
-    "name": "Collapse",
-    "path": "Collapse.vue"
   },
   {
     "name": "Column",
@@ -174,6 +182,14 @@
   {
     "name": "ConfirmBox",
     "path": "ConfirmBox.vue"
+  },
+  {
+    "name": "Content",
+    "path": "Content.js"
+  },
+  {
+    "name": "Content",
+    "path": "Layout/Content.vue"
   },
   {
     "name": "DatePicker",
@@ -204,10 +220,6 @@
     "path": "Label.vue"
   },
   {
-    "name": "Tooltip",
-    "path": "Tooltip.vue"
-  },
-  {
     "name": "Field",
     "path": "Field.js"
   },
@@ -226,6 +238,14 @@
   {
     "name": "FilterPanel",
     "path": "FilterPanel.vue"
+  },
+  {
+    "name": "Footer",
+    "path": "Footer.js"
+  },
+  {
+    "name": "Footer",
+    "path": "Layout/Footer.vue"
   },
   {
     "name": "Form",
@@ -262,6 +282,30 @@
   {
     "name": "GridRow",
     "path": "Grid/GridRow.vue"
+  },
+  {
+    "name": "Header",
+    "path": "Header.js"
+  },
+  {
+    "name": "Header",
+    "path": "Layout/Header.vue"
+  },
+  {
+    "name": "Sidebar",
+    "path": "Sidebar.js"
+  },
+  {
+    "name": "Sidebar",
+    "path": "Layout/Sidebar.vue"
+  },
+  {
+    "name": "Layout",
+    "path": "Layout.js"
+  },
+  {
+    "name": "Layout",
+    "path": "Layout/Layout.vue"
   },
   {
     "name": "Lightbox",
@@ -302,10 +346,6 @@
   {
     "name": "Pagination",
     "path": "Pagination.vue"
-  },
-  {
-    "name": "Popover",
-    "path": "Popover.vue"
   },
   {
     "name": "Progress",

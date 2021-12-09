@@ -12,6 +12,7 @@
     <veui-autocomplete
       ui="s"
       clearable
+      autofocus
       :datasource="suggestions"
     />
   </section>
@@ -66,10 +67,12 @@
     <h2>strict: 强制不能超过最大长度7</h2>
     <veui-autocomplete
       v-model="treeValue"
-      :datasource="coffees.concat([
-        { label: '👩‍👩‍👧‍👧'.slice(0, 5), value: '👩‍👩‍👧‍👧'.slice(0, 5) },
-        { label: '👩‍👩‍👧‍👧', value: '👩‍👩‍👧‍👧' }
-      ])"
+      :datasource="
+        coffees.concat([
+          { label: '👩‍👩‍👧‍👧'.slice(0, 5), value: '👩‍👩‍👧‍👧'.slice(0, 5) },
+          { label: '👩‍👩‍👧‍👧', value: '👩‍👩‍👧‍👧' }
+        ])
+      "
       placeholder="请输入"
       :suggest-trigger="['focus', 'input']"
       :maxlength="7"

@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import carousel from './mixin'
+import carousel from './_mixin'
 
 export default {
   name: 'veui-carousel-fade',

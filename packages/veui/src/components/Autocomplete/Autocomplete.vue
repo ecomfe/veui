@@ -28,6 +28,7 @@
         autocomplete="off"
         :value="props.value"
         :ui="realUi"
+        :autofocus="autofocus"
         :readonly="realReadonly"
         :disabled="realDisabled"
         :invalid="realInvalid"
@@ -69,7 +70,9 @@
               v-if="!!suggestionsProps.keyword"
               :matches="props.matches"
               :separator="icons.separator"
-              :separator-class="$c('autocomplete-search-result-item-separator')"
+              :separator-class="
+                $c('autocomplete-search-result-item-separator')
+              "
             />
             <span v-else>{{ props.label }}</span>
           </slot>
@@ -96,7 +99,6 @@ import '../../common/uiTypes'
 
 const SHARED_PROPS = [
   'placeholder',
-  'autofocus',
   'selectOnFocus',
   'composition',
   'clearable',
@@ -106,12 +108,7 @@ const SHARED_PROPS = [
   'trim'
 ]
 
-const BASE_EVENTS = [
-  'input',
-  'suggest',
-  'select',
-  'toggle'
-]
+const BASE_EVENTS = ['input', 'suggest', 'select', 'toggle']
 
 export default {
   name: 'veui-autocomplete',
@@ -134,6 +131,7 @@ export default {
       type: String,
       default: 'options'
     },
+    autofocus: Boolean,
     ...pick(Input.props, SHARED_PROPS)
   },
   computed: {
