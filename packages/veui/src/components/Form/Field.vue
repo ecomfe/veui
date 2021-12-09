@@ -4,12 +4,13 @@
   :class="{
     [$c('field')]: true,
     [$c('invalid')]: isInvalid,
-    [$c('field-no-label')]: !label && !$slots.label,
+    [$c('field-abstract')]: abstract,
+    [$c('field-no-label')]: !abstract && !label && !$slots.label,
     [$c('field-required')]: isRequired
   }"
 >
   <div
-    v-if="label || $slots.label"
+    v-if="(!abstract && label) || $slots.label"
     :class="$c('field-label')"
   >
     <slot name="label">
@@ -34,10 +35,16 @@
   </div>
   <div :class="$c('field-main')">
     <div :class="$c('field-content')">
-      <slot/>
+      <slot
+        :listeners="interactiveListeners"
+        :invalid="isInvalid"
+        :validities="realValidities"
+        :readonly="realReadonly"
+        :disabled="realDisabled"
+      />
     </div>
     <div
-      v-if="!isBubble && msgValidities.length"
+      v-if="!abstract && msgValidities.length"
       :class="$c('field-error')"
     >
       <div
@@ -65,14 +72,24 @@ import Icon from '../Icon'
 import Tooltip from '../Tooltip'
 import Vue from 'vue'
 import '../../common/uiTypes'
-import { useValidationConsumer } from './_ValidationContext'
 import useValidation from './_useValidation'
 
-const { computed: fieldset } = getTypedAncestorTracker('fieldset')
+/**
+ * 多个规则同时校验会根据规则的优先级进行排序，显示优先级最高的错误。
+ * 但是如果中间有交互式的检查，交互顺序会打破优先级的排序。
+ * 比如配置了 input 和 change 时校验两个不同级别的规则，
+ * 输入了两种规则都不匹配的值：
+ * 1. 会在输入过程显示 input 指定的错误消息；
+ * 2. 失去焦点显示 change 指定的错误消息；
+ * 3. 提交时显示级别高的那个错误消息；
+ * 4. 单次交互校验内部多规则遵从优先级排序
+ *
+ */
+const { computed: formField } = getTypedAncestorTracker('form-field')
 
 export default {
   name: 'veui-field',
-  uiTypes: ['form-field', 'form-container', 'form-validatable'],
+  uiTypes: ['form-field', 'form-container'],
   components: {
     'veui-icon': Icon,
     'veui-label': Label,
@@ -81,25 +98,12 @@ export default {
   mixins: [
     prefix,
     ui,
-    useValidationConsumer('validation'),
     useValidation({
-      getName () {
-        return this.name || this.field
+      getFieldName () {
+        return this.realName
       },
       getFieldValue () {
-        return get(this.form.data, this.realField)
-      },
-      getRuleValidities () {
-        return this.validation.getRuleValidities(this.realName)
-      },
-      updateRuleValidities (val, ruleNames) {
-        if (ruleNames) {
-          this.validation.replaceRuleValidities(this.realName, ruleNames, val)
-        } else if (val) {
-          this.validation.updateRuleValidities(this.realName, val)
-        } else {
-          this.validation.removeRuleValidities(this.realName)
-        }
+        return this.getFieldValue()
       }
     })
   ],
@@ -109,68 +113,27 @@ export default {
     tip: String,
     disabled: Boolean,
     readonly: Boolean,
-    displayError: {
-      type: String,
-      validator (val) {
-        // todo tooltip
-        return [null, 'bubble', 'verbose', 'tooltip'].indexOf(val) >= 0
-      }
-    },
+    abstract: Boolean, // 无label（无margin），不展示错误信息
+    withholdValidity: Boolean, // 不自动invalid，不自动listener，不自动得到validity
+    // displayError: {
+    //   type: String,
+    //   default: 'first',
+    //   validator (val) {
+    //     // todo tooltip
+    //     return ['first', 'bubble', 'verbose', 'tooltip'].indexOf(val) >= 0
+    //   }
+    // },
     field: String // form data 上的 path
   },
-  data () {
-    return {
-      /**
-       * 多个规则同时校验会根据规则的优先级进行排序，显示优先级最高的错误。
-       * 但是如果中间有交互式的检查，交互顺序会打破优先级的排序。
-       * 比如配置了 input 和 change 时校验两个不同级别的规则，
-       * 输入了两种规则都不匹配的值：
-       * 1. 会在输入过程显示 input 指定的错误消息；
-       * 2. 失去焦点显示 change 指定的错误消息；
-       * 3. 提交时显示级别高的那个错误消息；
-       * 4. 单次交互校验内部多规则遵从优先级排序
-       *
-       */
-      validators: []
-    }
-  },
   computed: {
-    isBubble () {
-      return this.displayError === 'bubble'
+    realName () {
+      return this.name || this.field
     },
-    isVerbose () {
-      return this.displayError === 'verbose'
-    },
-    validityNames () {
-      const names = [].concat(
-        this.realName || [],
-        this.validators.map(i => i.name).filter(Boolean)
-      )
-      if (this.isFieldset) {
-        return this.fieldset.items.reduce((acc, field) => {
-          return field.isBubble ? acc.concat(field.validityNames) : acc
-        }, names)
-      }
-      return names
-    },
-    realValidities () {
-      return this.validityNames.reduce((acc, name) => {
-        return acc.concat(this.validation.realValidities[name] || [])
-      }, [])
+    realField () {
+      return this.field || this.name
     },
     isInvalid () {
-      return !!this.realValidities.length
-    },
-    msgValidities () {
-      const msg = this.realValidities.filter(({ message }) => !!message)
-      return this.isVerbose ? msg : msg.slice(0, 1)
-    },
-    validity () {
-      const validity = this.realValidities[0]
-      return {
-        ...(validity || {}),
-        valid: !validity
-      }
+      return !this.validity.valid
     },
     isRequired () {
       return (
@@ -179,45 +142,36 @@ export default {
       )
     },
     realDisabled () {
-      let { disabled, fieldset, form } = this
+      let { disabled, formField, form } = this
       return (
-        disabled || (fieldset && fieldset.disabled) || (form && form.disabled)
+        disabled ||
+        (formField && formField.realDisabled) ||
+        (form && form.disabled)
       )
     },
     realReadonly () {
-      let { readonly, fieldset, form } = this
+      let { readonly, formField, form } = this
       return (
-        readonly || (fieldset && fieldset.readonly) || (form && form.readonly)
+        readonly ||
+        (formField && formField.realDeadonly) ||
+        (form && form.readonly)
       )
-    },
-    realField () {
-      return this.field || this.name
     },
     isFieldset () {
       const uiTypes = getVnodes(this)[0].context.$options.uiTypes || []
       return uiTypes.indexOf('fieldset') >= 0
     },
-    ...fieldset
+    ...formField
   },
   created () {
     if (this.realField) {
       this.initialData = type.clone(this.getFieldValue())
-      this.form.fields.push(this)
     }
-    if (this.realName && !this.isFieldset && this.fieldset) {
-      this.fieldset.items.push(this)
-    }
-  },
-  beforeDestroy () {
-    if (this.realField) {
-      this.form.fields.splice(this.form.fields.indexOf(this), 1)
-    }
-    if (this.realName && !this.isFieldset && this.fieldset) {
-      this.fieldset.items.splice(this.fieldset.items.indexOf(this), 1)
-    }
-    // 销毁校验结果在 useValidation 中。
   },
   methods: {
+    getFieldValue () {
+      return get(this.form.data, this.realField)
+    },
     resetValue () {
       if (!this.realField) {
         return

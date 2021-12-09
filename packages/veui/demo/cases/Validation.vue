@@ -112,7 +112,7 @@
     </veui-form>
 
     <h2>
-      复杂字段, 用 Validator 直接调用校验逻辑，错误展示到上层 `Field` 中
+      复杂字段, 用 abstract field 直接调用校验逻辑，错误展示到上层 `Field` 中
     </h2>
     <veui-form :data="storeData2">
       <veui-field
@@ -124,24 +124,41 @@
       >
         <veui-transfer
           v-model="storeData2.stores"
+          class="store-transfer"
           :datasource="storeOptions"
+          @select="handleStoreSelect"
         >
           <template #selected-item-label="{ label, value }">
             <div class="store-label">
               {{ label }}
-              <veui-validator
-                :key="`storeCounts.${value}`"
-                :name="`storeCounts.${value}`"
+              <veui-field
+                :key="`storeCounts.${value}.0`"
+                :name="`storeCounts.${value}.0`"
                 :rules="[
-                  { name: 'required', message: `请在'${label}'填写数量` }
+                  { name: 'required', message: `请在'${label}'填写第一数量` }
                 ]"
+                abstract
               >
                 <veui-number-input
-                  v-model="storeCounts[value]"
+                  v-model="storeData2.storeCounts[value][0]"
                   class="store-number"
                   ui="s"
                 />
-              </veui-validator>
+              </veui-field>
+              <veui-field
+                :key="`storeCounts.${value}.1`"
+                :name="`storeCounts.${value}.1`"
+                :rules="[
+                  { name: 'required', message: `请在'${label}'填写第二数量` }
+                ]"
+                abstract
+              >
+                <veui-number-input
+                  v-model="storeData2.storeCounts[value][1]"
+                  class="store-number"
+                  ui="s"
+                />
+              </veui-field>
             </div>
           </template>
         </veui-transfer>
@@ -199,27 +216,43 @@
       :validators="validators2"
     >
       <veui-field
-        label="原生Input"
+        label="原生input"
         field="input"
         name="input"
+        withhold-validity
         :rules="[{ name: 'required', value: true, triggers: 'input' }]"
       >
-        <veui-form-trigger>
+        <template #default="{ listeners, disabled, readonly, invalid }">
           <input
             v-model="storeData4.input"
+            :disabled="disabled"
+            :readonly="readonly"
+            :class="{
+              'demo-field-error': invalid
+            }"
             type="text"
+            v-on="listeners"
           >
-        </veui-form-trigger>
+        </template>
       </veui-field>
       <veui-field
-        label="自定义组件"
+        #default="{ listeners, invalid }"
+        label="内联复合字段"
         field="complexPhone"
         name="complexPhone"
         :rules="[{ name: 'required', triggers: 'input' }]"
+        withhold-validity
       >
-        <custom-phone
-          v-model="storeData4.complexPhone"
+        <veui-select
+          v-model="storeData4.complexPhone.type"
           :options="phoneTypeOptions"
+        />
+        <veui-input
+          v-model="storeData4.complexPhone.phone"
+          :class="{
+            'demo-field-error': invalid
+          }"
+          v-on="listeners"
         />
       </veui-field>
       <template slot="actions">
@@ -243,50 +276,58 @@ import {
   Input,
   Button,
   Select,
-  Validator,
-  FormTrigger,
   Transfer,
   NumberInput
 } from 'veui'
 import bus from '../bus'
 
-const PhoneComponent = {
-  name: 'phone-component',
-  uiTypes: ['input'],
-  props: {
-    value: Object,
-    options: Array
-  },
-  methods: {
-    updatePhone (val) {
-      const newVal = {
-        type: this.value.type,
-        phone: val
-      }
-      this.$emit('input', newVal)
-    },
-    updateType (val) {
-      this.$emit('input', {
-        type: val,
-        phone: ''
-      })
-    }
-  },
-  render () {
-    return (
-      <div>
-        <Select
-          options={this.options}
-          value={this.value.type}
-          onChange={this.updateType}
-        />
-        <FormTrigger>
-          <Input value={this.value.phone} onInput={this.updatePhone} />
-        </FormTrigger>
-      </div>
-    )
-  }
-}
+// const PhoneComponent = {
+//   name: 'phone-component',
+//   props: {
+//     value: Object,
+//     options: Array,
+//     inputProps: Object
+//   },
+//   methods: {
+//     updatePhone (val) {
+//       const newVal = {
+//         type: this.value.type,
+//         phone: val
+//       }
+//       this.$emit('input', newVal)
+//     },
+//     updateType (val) {
+//       this.$emit('input', {
+//         type: val,
+//         phone: ''
+//       })
+//     }
+//   },
+//   render () {
+//     const { disabled, readonly, isInvalid, listeners } = this.inputProps
+//     return (
+//       <div>
+//         <Select
+//           readonly={!!readonly}
+//           disabled={!!disabled}
+//           options={this.options}
+//           value={this.value.type}
+//           onChange={this.updateType}
+//         />
+//         <Input
+//           readonly={!!readonly}
+//           disabled={!!disabled}
+//           onInput={listeners.input}
+//           value={this.value.phone}
+//           onInput={this.updatePhone}
+//           class={{
+//             'demo-field-error': isInvalid
+//           }}
+//         />
+//       </div>
+//     )
+//   }
+// }
 
 export default {
   name: 'demo-form',
@@ -300,10 +341,8 @@ export default {
     'veui-fieldset': Fieldset,
     'veui-field': Field,
     'veui-select': Select,
-    'veui-transfer': Transfer,
-    'veui-validator': Validator,
-    'veui-form-trigger': FormTrigger,
-    'custom-phone': PhoneComponent
+    'veui-transfer': Transfer
+    // 'custom-phone': PhoneComponent
   },
 
   data () {
@@ -319,7 +358,6 @@ export default {
     ]
     return {
       phoneTypeOptions,
-      storeCounts: {},
       storeOptions: [
         { label: '春日路门店', value: 1 },
         { label: '夏月路门店', value: 2 },
@@ -327,7 +365,8 @@ export default {
         { label: '冬辰路门店', value: 4 }
       ],
       storeData2: {
-        stores: []
+        stores: [],
+        storeCounts: {}
       },
       storeData4: {
         name: 'liyunteng1',
@@ -394,6 +433,20 @@ export default {
     }
   },
   methods: {
+    handleStoreSelect (val) {
+      val = val || []
+      let counts = this.storeData2.storeCounts
+      val.forEach(id => {
+        if (!counts[id]) {
+          this.$set(counts, id, [])
+        }
+      })
+      Object.keys(counts).forEach(id => {
+        if (val.indexOf(+id) === -1) {
+          this.$delete(counts, id)
+        }
+      })
+    },
     handleInvalid (e) {
       this.isValidating = false
     },
@@ -432,5 +485,16 @@ export default {
       width: 67px;
     }
   }
+
+  // 示例
+  .store-transfer {
+    .veui-filter-panel {
+      width: 360px;
+    }
+  }
+}
+
+.demo-field-error {
+  border: 1px solid red;
 }
 </style>

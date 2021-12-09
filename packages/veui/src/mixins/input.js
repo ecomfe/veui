@@ -37,26 +37,25 @@ export default {
       )
     },
     realInvalid () {
-      return Boolean(
-        this.invalid ||
-          (this.formField &&
-            !this.formField.validity.valid &&
-            this.isTopMostInput)
+      // abstract 下的 veui-input 直接从 scoped props 上得到 invalid 传递给 invalid prop
+      const field = this.formField
+      if (this.invalid || (field && field.withholdValidity)) {
+        return this.invalid
+      }
+      return Boolean(field && !field.validity.valid && this.isTopMostInput)
+    },
+    isAutoApplyValidation () {
+      return (
+        this.formField &&
+        !this.formField.withholdValidity &&
+        this.isTopMostInput
       )
     },
-    isUnderField () {
-      return this.formField && this.formField.realField && this.isTopMostInput
-    },
     listenersWithValidations () {
-      // validator 包的 Input 不需要合并事件，直接合并到 vnode 上了
-      if (this.formValidator) {
-        return this.$listeners
-      }
-
-      // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归
+      // 为啥要 wrap listeners: 避免 $listener 和 field/form 上 interactiveListeners 合并后导致无限递归
       let listeners = wrapListeners(this.$listeners)
       if (
-        this.isUnderField &&
+        this.isAutoApplyValidation &&
         Object.keys(this.formField.interactiveListeners).length
       ) {
         return mergeWith(
@@ -67,12 +66,10 @@ export default {
       }
       return listeners
     },
-    ...getTypedAncestorTracker('form-field').computed,
-    ...getTypedAncestorTracker('form-validator').computed
+    ...getTypedAncestorTracker('form-field').computed
   },
   created () {
-    // validator 包的 Input 不需要合并事件
-    if (this.isUnderField && !this.formValidator) {
+    if (this.isAutoApplyValidation) {
       this.$watch(
         () => this.formField.interactiveListeners,
         this.applyValidationListeners,

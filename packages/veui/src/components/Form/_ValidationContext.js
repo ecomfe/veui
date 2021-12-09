@@ -9,7 +9,7 @@ export function getValidation () {
     data () {
       return {
         ruleValidities: Object.create(null), // Record<fieldName, Array<{name: ruleName, message}>>
-        validatorValidities: Object.create(null) // Record<validatorName, {field1: message, field2: message2}>
+        validatorValidities: Object.create(null) // Record<validatorName, {fieldName1: message, fieldName2: message2}>
       }
     },
     computed: {
@@ -66,11 +66,10 @@ export function getValidation () {
       },
       replaceRuleValidities (fieldName, ruleNames, validity) {
         // todo 以前也没有保证顺序
-        let newValidity = getNewRuleValidities(
-          this.ruleValidities[fieldName],
-          ruleNames,
-          validity
+        const prev = (this.ruleValidities[fieldName] || []).filter(
+          ({ name }) => ruleNames.indexOf(name) === -1
         )
+        const newValidity = [...validity, ...prev]
         this.updateRuleValidities(fieldName, newValidity)
       },
       updateValidatorValidities (validatorName, validity) {
@@ -98,17 +97,6 @@ export function getValidation () {
       }
     }
   })
-}
-
-export function getNewRuleValidities (
-  prevRuleValidities,
-  ruleNames,
-  newValidity = []
-) {
-  const prev = (prevRuleValidities || []).filter(
-    ({ name }) => ruleNames.indexOf(name) === -1
-  )
-  return [...newValidity, ...prev]
 }
 
 export {

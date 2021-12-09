@@ -89,30 +89,29 @@ export default {
         )
         .map(({ validate, handler, fields, triggers }) => {
           fields = Array.isArray(fields) ? fields : [fields]
-          // triggers 和 fields 数组长度一致了
-          triggers = normalizeTriggers(triggers, fields.length)
-          const fn = validate || handler
           return {
-            validate: fn,
-            fields, // string[]
-            triggers // string[][]
+            validate: validate || handler,
+            fields, // Array<string>
+            triggers: normalizeTriggers(triggers, fields.length) // Array<string[] | null>
           }
         })
     },
+    // validatorEvents
     fieldEvents () {
       return this.normalizedValidators.reduce((acc, { fields, triggers }) => {
         fields.forEach((field, index) => {
           acc[field] = acc[field] || []
-          acc[field] = uniq(
-            acc[field].concat(triggers[index].filter(item => item !== 'submit'))
-          )
+          if (triggers[index]) {
+            acc[field] = uniq(
+              acc[field].concat(
+                triggers[index].filter(item => item !== 'submit')
+              )
+            )
+          }
         })
         return acc
       }, {})
     }
-  },
-  created () {
-    this.$on('interact', this.handleInteract)
   },
   methods: {
     submit () {
@@ -151,9 +150,8 @@ export default {
     },
     validate (fieldNames) {
       // 1. disabled 不参与校验
-      // 2. 将 field 和 validator 组件称为 formItem
       const hasName = Array.isArray(fieldNames) && fieldNames.length
-      const formItems = this.fields.filter(item => {
+      const fields = this.fields.filter(item => {
         return item.realDisabled
           ? false
           : hasName
@@ -168,7 +166,7 @@ export default {
         : this.normalizedValidators
 
       return Promise.all([
-        ...formItems.map(target => {
+        ...fields.map(target => {
           return Promise.resolve()
             .then(() => target.validate())
             .then(validity => {
@@ -210,7 +208,7 @@ export default {
     handleInteract (eventName, fieldName) {
       this.normalizedValidators.forEach(({ fields, triggers, validate }) => {
         const fIndex = fields.indexOf(fieldName)
-        if (fIndex >= 0 && triggers[fIndex].indexOf(eventName) >= 0) {
+        if (fIndex >= 0 && (triggers[fIndex] || []).indexOf(eventName) >= 0) {
           this.execValidator(validate, fields)
         }
       })
@@ -234,18 +232,10 @@ export default {
   }
 }
 
-// TODO remove submit
 function normalizeTriggers (triggers, length) {
-  triggers = triggers || 'submit'
-  if (typeof triggers === 'string') {
-    triggers = fill(Array(length), triggers)
-  } else if (Array.isArray(triggers)) {
-    let len = triggers.length
-    triggers =
-      len < length
-        ? triggers.concat(fill(Array(length - len), triggers))
-        : triggers.slice(0, length)
-  } else {
+  if (triggers == null || typeof triggers === 'string') {
+    triggers = fill(Array(length), triggers || null)
+  } else if (!Array.isArray(triggers)) {
     throw new Error(
       '[veui-form] The triggers of validators must be an Array or a string.'
     )

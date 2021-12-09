@@ -2,22 +2,29 @@ import rule from '../../managers/rule'
 import type from '../../managers/type'
 import { getTypedAncestorTracker } from '../../utils/helper'
 import { uniq, includes } from 'lodash'
+import { useValidationConsumer } from './_ValidationContext'
 
 const { computed: form } = getTypedAncestorTracker('form')
 
-export default function validationMixinFactory ({
-  getName,
-  getFieldValue,
-  updateRuleValidities,
-  getRuleValidities
+/*
+ * interactiveListeners
+ * msgValidities
+ * validity
+ * form
+ */
+
+export default function validationConsumerFactory ({
+  getFieldName,
+  getFieldValue
 }) {
   return {
     props: {
       rules: [String, Array]
     },
+    mixins: [useValidationConsumer('validation')],
     computed: {
-      realName () {
-        return getName.call(this)
+      _fieldName () {
+        return getFieldName.call(this)
       },
       realRules () {
         if (!this.rules) {
@@ -39,6 +46,36 @@ export default function validationMixinFactory ({
         rule.initRules(rules)
         return rules
       },
+      validityNames () {
+        return this._fieldName ? [this._fieldName] : []
+        // const names = [].concat(
+        //   this.realName || [],
+        //   this.items.map(i => i.realName).filter(Boolean)
+        // )
+        // if (this.isFieldset) {
+        //   return this.fieldset.items.reduce((acc, field) => {
+        //     return field.isBubble ? acc.concat(field.validityNames) : acc
+        //   }, names)
+        // }
+        // return names
+      },
+      realValidities () {
+        return this.validityNames.reduce((acc, name) => {
+          return acc.concat(this.validation.realValidities[name] || [])
+        }, [])
+      },
+      msgValidities () {
+        return this.realValidities.filter(({ message }) => !!message)
+        // return this.isVerbose ? msg : msg.slice(0, 1)
+      },
+      validity () {
+        const validity = this.realValidities[0]
+        return {
+          ...(validity || {}),
+          valid: !validity
+        }
+      },
+      // 用 event 来取该事件相关的 rules
       interactiveRulesMap () {
         let map = {}
         if (this.realRules) {
@@ -66,7 +103,7 @@ export default function validationMixinFactory ({
       interactiveListeners () {
         let allEvents = []
         if (this.form) {
-          let events = this.form.fieldEvents[this.realName]
+          let events = this.form.fieldEvents[this._fieldName]
           if (events) {
             allEvents = allEvents.concat(events)
           }
@@ -79,23 +116,40 @@ export default function validationMixinFactory ({
       },
       ...form
     },
+    created () {
+      if (this._fieldName) {
+        this.form.fields.push(this)
+      }
+    },
+    beforeDestroy () {
+      if (this._fieldName) {
+        this.form.fields.splice(this.form.fields.indexOf(this), 1)
+        this.validation.clearRuleValidities(this._fieldName)
+      }
+    },
     methods: {
-      getFieldValue () {
-        return getFieldValue.call(this)
+      updateRuleValidities (val, ruleNames) {
+        if (ruleNames) {
+          this.validation.replaceRuleValidities(this._fieldName, ruleNames, val)
+        } else if (val) {
+          this.validation.updateRuleValidities(this._fieldName, val)
+        } else {
+          this.validation.removeRuleValidities(this._fieldName)
+        }
       },
       validate (rules) {
         rules = rules || this.realRules
         let validities = true
-        let prev = getRuleValidities.call(this)
+        let prev = this.validation.getRuleValidities(this._fieldName)
         if (rules) {
           validities = rule.validate(
-            this.getFieldValue(),
+            getFieldValue.call(this),
             rules,
             this.form.data
           )
         } else if (prev) {
           // 没有 rules 了直接清空结果
-          updateRuleValidities.call(this, null)
+          this.updateRuleValidities(null)
         }
 
         // 若之前也是验证成功，不用更新了
@@ -111,8 +165,7 @@ export default function validationMixinFactory ({
             name
           }))
 
-        updateRuleValidities.call(
-          this,
+        this.updateRuleValidities(
           realValidities,
           rules.map(r => r.name)
         )
@@ -125,22 +178,20 @@ export default function validationMixinFactory ({
             this.validate(this.interactiveRulesMap[eventName])
           }
 
+          const name = this._fieldName
           if (
             this.form &&
-            this.realName &&
-            includes(this.form.fieldEvents[this.realName], eventName)
+            name &&
+            includes(this.form.fieldEvents[name], eventName)
           ) {
-            this.form.$emit('interact', eventName, this.realName)
+            this.form.handleInteract(eventName, name)
           }
         })
       },
       hideValidity () {
-        return this.validation.removeValidity(this.realName)
-      }
-    },
-    beforeDestroy () {
-      if (this.realName && this.validation) {
-        this.validation.clearRuleValidities(this.realName)
+        if (this._fieldName) {
+          return this.validation.removeValidity(this._fieldName)
+        }
       }
     }
   }

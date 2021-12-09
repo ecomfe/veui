@@ -28,7 +28,7 @@ import '../../common/uiTypes'
 
 export default {
   name: 'veui-fieldset',
-  uiTypes: ['fieldset', 'form-container'],
+  uiTypes: ['fieldset'],
   components: {
     'veui-field': Field
   },
@@ -41,16 +41,11 @@ export default {
     readonly: Boolean,
     // 因为会出现一行里边有必填和非必填共存，交给使用者决定显不显示星号
     required: Boolean,
-    vertical: Boolean,
-    displayError: {
-      ...Field.props.displayError,
-      default: 'verbose'
-    }
-  },
-  data () {
-    return {
-      items: []
-    }
+    vertical: Boolean
+    // displayError: {
+    //   ...Field.props.displayError,
+    //   default: 'verbose'
+    // }
   },
   computed: {
     attrs () {
