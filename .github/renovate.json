@@ -13,7 +13,7 @@
   ],
   "allowedPostUpgradeCommands": ["prettier"],
   "postUpgradeTasks": {
-    "commands": ["prettier --write"],
+    "commands": ["npx prettier --write"],
     "fileFilters": ["packages/**/package-lock.json"],
     "executionMode": "update"
   },
