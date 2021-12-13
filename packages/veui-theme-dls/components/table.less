@@ -492,7 +492,7 @@
       }
     }
 
-    th .@{veui-prefix}-table-cell {
+    th:not(.@{veui-prefix}-table-cell-hero) .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-m));
       // only set height when `--dls-table-head-cell-lines` is a valid number
       height: calc(
@@ -505,7 +505,9 @@
       }
     }
 
-    tr:last-child th .@{veui-prefix}-table-cell {
+    tr:last-child
+      th:not(.@{veui-prefix}-table-cell-hero)
+      .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-m));
       height: @lh;
       height: calc(@lh * var(--dls-table-head-cell-lines));
@@ -558,7 +560,7 @@
       }
     }
 
-    th .@{veui-prefix}-table-cell {
+    th:not(.@{veui-prefix}-table-cell-hero) .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-s));
       // only set height when `--dls-table-head-cell-lines` is a valid number
       height: @lh;
@@ -572,13 +574,16 @@
       }
     }
 
-    tr:last-child th .@{veui-prefix}-table-cell {
+    tr:last-child
+      th:not(.@{veui-prefix}-table-cell-hero)
+      .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-s));
       height: @lh;
       height: calc(@lh * var(--dls-table-head-cell-lines));
     }
 
-    td:not([rowspan]) .@{veui-prefix}-table-cell {
+    td:not([rowspan]):not(.@{veui-prefix}-table-cell-hero)
+      .@{veui-prefix}-table-cell {
       @lh: floor(dls-line-height(@dls-line-height-1, @dls-table-font-size-s));
       height: @lh;
       height: calc(@lh * var(--dls-table-cell-lines));
