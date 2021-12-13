@@ -1,3 +1,17 @@
+## 2.3.2
+
+### ⚠️ 非兼容性变更
+
+- [^] 将对 `dls-icons-vue` 的依赖更新为 `2.0.0`。其中：<!-- #Icon -->
+
+  * `quality-circle` 图标重命名为 `grade-circle`；
+  * `full-square` 图标重命名为 `full-circle`。
+
+### 🐞 问题修复
+
+- [^] 修正了 `Cascader` 组件在复选模式下搜索框位置不正确的问题。<!-- #Cascader -->
+- [^] 修正了 `Table` 组件通栏展开行、footer 行高度不正确的问题。<!-- #Table -->
+
 ## 2.3.1
 
 ### 💡 主要变更
