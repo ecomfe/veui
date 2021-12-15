@@ -23,6 +23,7 @@
     "./common/global.js",
     "./dist/locale.*.esm.js"
   ],
+  "types": "./types/index.d.ts",
   "dependencies": {
     "bytes": "^3.0.0",
     "clone-element": "^0.1.0",
@@ -44,6 +45,7 @@
     "@vue/cli-plugin-eslint": "^4.5.13",
     "@vue/cli-service": "^4.5.13",
     "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/runtime-dom": "^3.2.26",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
     "babel-plugin-istanbul": "^5.1.4",
