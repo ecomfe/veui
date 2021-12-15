@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    // this aligns with Vue's browser support
+    "target": "es5",
+    // this enables stricter inference for data properties on `this`
+    "strict": true,
+    // if using webpack 2+ or rollup, to leverage tree shaking:
+    "module": "es2015",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "paths": {
+      "veui": ["types/index.d.ts"]
+    }
+  },
+  "vueCompilerOptions": {
+    "experimentalCompatMode": 2,
+    "experimentalTemplateCompilerOptions": {
+      "compatConfig": { "MODE": 2 } // optional
+    }
+  }
+}
