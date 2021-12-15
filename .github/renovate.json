@@ -19,6 +19,5 @@
     "fileFilters": ["packages/**/package-lock.json"],
     "executionMode": "update"
   },
-  "rebaseWhen": "behind-base-branch",
   "commitBody": "[skip ci]"
 }
