@@ -2,6 +2,13 @@
 <article class="veui-demo-calendar">
   <h1><code>&lt;veui-calendar&gt;</code></h1>
   <section>
+    <h2>实验定制样式</h2>
+    <veui-calendar
+      ui="experimental"
+      class="experimental-calendar"
+    />
+  </section>
+  <section>
     <h2>非受控</h2>
     <veui-calendar type="date"/>
   </section>
@@ -192,6 +199,7 @@
 </template>
 
 <script>
+import 'veui-theme-dls/experimental/calendar.less'
 import { Calendar, Button } from 'veui'
 
 export default {
@@ -273,6 +281,14 @@ export default {
         background-color: tint(rebeccapurple, 90%);
       }
     }
+  }
+
+  .experimental-calendar {
+    resize: both;
+    border: 1px solid #ccc;
+    overflow: scroll;
+    width: 400px;
+    height: 400px;
   }
 }
 </style>

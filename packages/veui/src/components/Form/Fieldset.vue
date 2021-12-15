@@ -4,7 +4,7 @@
   :ui="realUi"
   :class="{
     [$c('fieldset')]: true,
-    [$c('fieldset-required')]: required
+    [$c('field-required')]: required
   }"
   role="group"
   v-bind="attrs"
