@@ -18,7 +18,7 @@
   "module": "dist/dls.esm.js",
   "dependencies": {
     "classlist-polyfill": "^1.2.0",
-    "dls-icons-vue": "^2.2.0",
+    "dls-icons-vue": "^2.2.1",
     "focus-visible": "^4.1.0",
     "less-plugin-dls": "^4.0.0",
     "less-plugin-est": "^3.0.0",
