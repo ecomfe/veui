@@ -1,4 +1,5 @@
 /* stylelint-disable at-rule-no-unknown */
+/* stylelint-disable no-invalid-position-at-import-rule */
 @plugin "./functions";
 @import "~less-plugin-est/src/all.less";
 @import "./variables.less";
@@ -100,7 +101,7 @@
   }
 }
 
-.veui-dropdown-max-height(@sizes, @max-count: 8, @fixed-height: false, @padding-y: @dls-option-group-padding-y, @option-height: "dls-option-height") {
+.veui-dropdown-menu-max-height(@sizes, @max-count: 8, @fixed-height: false, @padding-y: @dls-option-group-padding-y, @option-height: "dls-option-height") {
   .loop(@index: 1) when (@index <= length(@sizes)) {
     @size: extract(@sizes, @index);
     @height: "@{option-height}-@{size}";

@@ -80,7 +80,10 @@
     background-color: @dls-option-background-color;
 
     @sizes: xs, s, m, l;
-    .veui-dropdown-max-height(@sizes, var(--dls-dropdown-max-display-items, 8));
+    .veui-dropdown-menu-max-height(
+      @sizes,
+      var(--dls-dropdown-max-display-items, 8)
+    );
   }
 
   .@{veui-prefix}-option {

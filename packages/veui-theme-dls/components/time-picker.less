@@ -15,12 +15,17 @@
     background-color: @dls-option-background-color;
     box-shadow: @dls-option-dropdown-shadow;
     display: flex;
+
+    @sizes: xs, s, m, l;
+    .veui-dropdown-menu-max-height(
+      @sizes,
+      var(--dls-dropdown-max-display-items, 8)
+    );
   }
 
   &-option-group-wrapper {
     flex-shrink: 1;
     flex-grow: 1;
-    max-height: @dls-option-dropdown-max-height-m;
     overflow: auto;
 
     & + & {

@@ -101,9 +101,10 @@
   &-header-filter-overlay {
     & > .@{veui-prefix}-select-options {
       max-height: none; // 内部已经限制 8.5 行 + footer，避免出现两个滚动条
+
       & > .@{veui-prefix}-option-group {
         @sizes: s, m;
-        .veui-dropdown-max-height(@sizes);
+        .veui-dropdown-menu-max-height(@sizes);
       }
     }
   }
