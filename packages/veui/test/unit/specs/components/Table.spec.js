@@ -2145,4 +2145,102 @@ describe('components/Table', () => {
     tooltipManager.destroy()
     wrapper.destroy()
   })
+
+  it('should handle column order correctly when a column is inserted dynamically', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              { id: 1, name: '1name' },
+              { id: 2, name: '2name' }
+            ],
+            toggled: false
+          }
+        },
+        template: `
+          <veui-table
+            key-field="id"
+            :data="data"
+          >
+            <veui-table-column
+              field="id"
+              title="id"
+            />
+            <veui-table-column
+              v-if="!toggled"
+              field="type"
+              title="type"
+            />
+            <veui-table-column
+              v-if="false"
+              field="name"
+              title="name"
+            />
+            <veui-table-column
+              v-if="toggled"
+              key="origin"
+              field="origin"
+              title="origin"
+            />
+            <veui-table-column
+              field="level"
+              title="level"
+            />
+          </veui-table>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    await wait(0)
+    let cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(
+      cols
+        .at(0)
+        .text()
+        .trim()
+    ).to.equal('id')
+    expect(
+      cols
+        .at(1)
+        .text()
+        .trim()
+    ).to.equal('type')
+    expect(
+      cols
+        .at(2)
+        .text()
+        .trim()
+    ).to.equal('level')
+
+    vm.toggled = true
+    await wait(0)
+    cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(
+      cols
+        .at(0)
+        .text()
+        .trim()
+    ).to.equal('id')
+    expect(
+      cols
+        .at(1)
+        .text()
+        .trim()
+    ).to.equal('origin')
+    expect(
+      cols
+        .at(2)
+        .text()
+        .trim()
+    ).to.equal('level')
+    wrapper.destroy()
+  })
 })

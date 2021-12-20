@@ -477,6 +477,40 @@
         sortable
       />
     </veui-table>
+
+    <veui-table
+      key-field="id"
+      :data="items"
+    >
+      <veui-table-column
+        field="id"
+        title="id"
+        sortable
+      />
+      <veui-table-column
+        v-if="!toggled"
+        field="type"
+        title="type"
+      />
+      <veui-table-column
+        v-if="false"
+        field="name"
+        title="name"
+      />
+      <veui-table-column
+        v-if="toggled"
+        key="origin"
+        field="origin"
+        title="origin"
+      />
+      <veui-table-column
+        field="level"
+        title="level"
+      />
+    </veui-table>
+    <veui-button
+      @click="toggled = !toggled"
+    >toggle type and origin</veui-button>
   </section>
 </article>
 </template>
@@ -686,6 +720,7 @@ export default {
     return {
       filtered: null,
       s: false,
+      toggled: false,
       selectable: true,
       idTitle: '#',
       showGroup: true,

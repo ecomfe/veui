@@ -88,6 +88,12 @@ export function getIndexOfType (current, parentType) {
   }
 
   let parentVnodes = parent.$slots.default
+  if (parentVnodes) {
+    parentVnodes = (Array.isArray(parentVnodes)
+      ? parentVnodes
+      : [parentVnodes]
+    ).filter(({ tag }) => !!tag)
+  }
 
   while (current.$parent !== parent) {
     current = current.$parent
