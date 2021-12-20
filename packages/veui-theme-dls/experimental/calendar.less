@@ -39,6 +39,11 @@
       margin-right: 4 * @dls-spacing-unit;
     }
 
+    &-select .@{veui-prefix}-icon {
+      color: inherit;
+      margin-left: 1 * @dls-spacing-unit;
+    }
+
     &-forward,
     &-backward,
     &-prev,
@@ -96,22 +101,27 @@
     }
 
     &-month-table {
-      padding: 8 * @dls-spacing-unit 5 * @dls-spacing-unit 11.5 *
+      padding: 8 * @dls-spacing-unit 5 * @dls-spacing-unit 12 *
         @dls-spacing-unit;
 
+      td {
+        width: 13 * @dls-height-unit;
+      }
+
       button {
-        width: 11.5 * @dls-height-unit;
+        width: 13 * @dls-height-unit;
         height: 8 * @dls-height-unit;
 
         &:hover {
           background-color: @dls-color-brand-3;
         }
       }
-    }
 
-    &-select .@{veui-prefix}-icon {
-      color: inherit;
-      margin-left: 1 * @dls-spacing-unit;
+      button:active,
+      .@{veui-prefix}-calendar-current button {
+        color: #fff;
+        background-color: @dls-color-brand-6;
+      }
     }
 
     &-aux,
@@ -140,9 +150,10 @@
       }
     }
 
-    &-selected {
-      & > button:hover {
-        background-color: @dls-date-picker-cell-background-color-selected;
+    &-selected > button {
+      &,
+      &:hover {
+        background-color: @dls-color-brand-6;
       }
     }
   }

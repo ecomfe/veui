@@ -6,7 +6,14 @@
     <veui-calendar
       ui="experimental"
       class="experimental-calendar"
-    />
+    >
+      <template #date="{ date }">
+        <div class="experimental-cell">
+          {{ date }}
+          <veui-badge v-if="date === 15"/>
+        </div>
+      </template>
+    </veui-calendar>
   </section>
   <section>
     <h2>非受控</h2>
@@ -200,13 +207,14 @@
 
 <script>
 import 'veui-theme-dls/experimental/calendar.less'
-import { Calendar, Button } from 'veui'
+import { Calendar, Button, Badge } from 'veui'
 
 export default {
   name: 'calendar-demo',
   components: {
     'veui-calendar': Calendar,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-badge': Badge
   },
   data () {
     let today = new Date()
@@ -289,6 +297,22 @@ export default {
     overflow: scroll;
     width: 400px;
     height: 400px;
+  }
+
+  .experimental-cell {
+    position: relative;
+    line-height: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .veui-badge {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 }
 </style>
