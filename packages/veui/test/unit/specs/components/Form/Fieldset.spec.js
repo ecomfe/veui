@@ -72,7 +72,7 @@ describe('components/Form/Fieldset', () => {
   it('should handle `required` prop correctly', () => {
     let template = genTemplate()
     let wrapper = genWrapper(template)
-    let fieldsetWrapper = wrapper.find('.veui-fieldset-required')
+    let fieldsetWrapper = wrapper.find('.veui-field-required')
     expect(fieldsetWrapper.exists()).to.equal(true)
     wrapper.destroy()
   })

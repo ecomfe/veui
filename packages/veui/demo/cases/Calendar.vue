@@ -2,6 +2,20 @@
 <article class="veui-demo-calendar">
   <h1><code>&lt;veui-calendar&gt;</code></h1>
   <section>
+    <h2>实验定制样式</h2>
+    <veui-calendar
+      ui="display"
+      class="experimental-calendar"
+    >
+      <template #date="{ date }">
+        <div class="experimental-cell">
+          {{ date }}
+          <veui-badge v-if="date === 15"/>
+        </div>
+      </template>
+    </veui-calendar>
+  </section>
+  <section>
     <h2>非受控</h2>
     <veui-calendar type="date"/>
   </section>
@@ -192,13 +206,15 @@
 </template>
 
 <script>
-import { Calendar, Button } from 'veui'
+import 'veui-theme-dls/experimental/calendar.less'
+import { Calendar, Button, Badge } from 'veui'
 
 export default {
   name: 'calendar-demo',
   components: {
     'veui-calendar': Calendar,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-badge': Badge
   },
   data () {
     let today = new Date()
@@ -272,6 +288,30 @@ export default {
       button {
         background-color: tint(rebeccapurple, 90%);
       }
+    }
+  }
+
+  .experimental-calendar {
+    resize: both;
+    border: 1px solid #ccc;
+    overflow: scroll;
+    width: 400px;
+    height: 400px;
+  }
+
+  .experimental-cell {
+    position: relative;
+    line-height: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .veui-badge {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }

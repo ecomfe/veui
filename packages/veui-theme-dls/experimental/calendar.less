@@ -1,0 +1,160 @@
+@import "../lib.less";
+
+.@{veui-prefix}-calendar-type-date[ui~="display"] {
+  @calendar-button-width: 7 * @dls-height-unit;
+  @calendar-button-height: 7 * @dls-height-unit;
+  @calendar-cell-height: 9.5 * @dls-height-unit;
+
+  border: none;
+
+  .@{veui-prefix}-calendar {
+    &-panel,
+    &-panels {
+      width: 100%;
+      height: 100%;
+    }
+
+    &-panel::before {
+      display: none;
+    }
+
+    &-head {
+      padding: 4 * @dls-padding-unit 6 * @dls-padding-unit 3 * @dls-padding-unit;
+    }
+
+    &-panel:not(.@{veui-prefix}-calendar-expanded)
+      .@{veui-prefix}-calendar-body {
+      padding: 0 4 * @dls-padding-unit;
+    }
+
+    &-panel.@{veui-prefix}-calendar-expanded .@{veui-prefix}-calendar-body {
+      padding: 0;
+    }
+
+    &-prev {
+      margin-left: 4 * @dls-spacing-unit;
+    }
+
+    &-next {
+      margin-right: 4 * @dls-spacing-unit;
+    }
+
+    &-select .@{veui-prefix}-icon {
+      color: inherit;
+      margin-left: 1 * @dls-spacing-unit;
+    }
+
+    &-forward,
+    &-backward,
+    &-prev,
+    &-next {
+      color: @dls-foreground-color-neutral-dim;
+
+      &:hover {
+        color: @dls-foreground-color-neutral-dim-hover;
+      }
+
+      &:active {
+        color: @dls-foreground-color-neutral-dim-active;
+      }
+
+      &:disabled {
+        &,
+        &:hover {
+          color: @dls-foreground-color-neutral-dim-disabled;
+        }
+      }
+    }
+
+    &-table {
+      border-spacing: 0 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      tr {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      tbody {
+        display: flex;
+        flex: auto;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+    }
+
+    &-date-table {
+      thead {
+        flex-grow: 1;
+
+        th {
+          width: @calendar-button-width;
+          color: @dls-foreground-color-neutral-dim;
+        }
+      }
+
+      tbody {
+        flex-grow: 6;
+      }
+    }
+
+    &-month-table {
+      padding: 8 * @dls-spacing-unit 5 * @dls-spacing-unit 12 *
+        @dls-spacing-unit;
+
+      td {
+        width: 13 * @dls-height-unit;
+      }
+
+      button {
+        width: 13 * @dls-height-unit;
+        height: 8 * @dls-height-unit;
+
+        &:hover {
+          background-color: @dls-color-brand-3;
+        }
+      }
+
+      button:active,
+      .@{veui-prefix}-calendar-current button {
+        color: #fff;
+        background-color: @dls-color-brand-6;
+      }
+    }
+
+    &-aux,
+    &-day {
+      width: @calendar-button-width;
+      height: @calendar-cell-height;
+
+      & > button {
+        width: @calendar-button-width;
+        height: @calendar-button-height;
+        border-radius: 50%;
+
+        &:hover {
+          background-color: @dls-color-brand-2;
+        }
+
+        &:active {
+          background-color: @dls-color-brand-3;
+        }
+      }
+    }
+
+    &-day {
+      & > button {
+        font-weight: bold;
+      }
+    }
+
+    &-selected > button {
+      &,
+      &:hover {
+        background-color: @dls-color-brand-6;
+      }
+    }
+  }
+}
