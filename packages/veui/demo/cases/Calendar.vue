@@ -4,7 +4,7 @@
   <section>
     <h2>实验定制样式</h2>
     <veui-calendar
-      ui="experimental"
+      ui="display"
       class="experimental-calendar"
     >
       <template #date="{ date }">
