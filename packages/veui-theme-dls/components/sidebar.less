@@ -7,13 +7,7 @@
   background-color: @dls-layout-sidebar-background-color;
   width: @dls-layout-sidebar-width;
   margin-left: 0;
-  transition-property: width, margin-left;
-  transition-duration: 200ms;
-
-  &-head,
-  &-toggle {
-    padding-right: 16px;
-  }
+  .veui-transition(width, margin-left);
 
   &-content {
     flex: auto;
@@ -33,6 +27,7 @@
     display: flex;
     height: @dls-layout-sidebar-toggle-height;
     border-top: 1px solid @dls-layout-sidebar-separator-color;
+    padding-right: @dls-layout-sidebar-toggle-padding-x;
     position: sticky;
     bottom: var(--dls-layout-footer-height, 0);
     flex: none;
@@ -55,11 +50,11 @@
     top: 50%;
     transform: translateY(-50%);
     will-change: left;
-    transition: left 200ms;
+    .veui-transition(left);
     padding: 0;
     width: @dls-layout-sidebar-float-toggle-width;
-    // height: 32px;
-    .border-left-radius(@dls-layout-sidebar-float-toggle-radius);
+    .border-right-radius(@dls-layout-sidebar-float-toggle-radius);
+    .border-left-radius(0);
     background-color: @dls-layout-sidebar-float-toggle-backgroud-color;
     color: #fff;
 

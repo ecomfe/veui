@@ -98,7 +98,10 @@ export default {
   methods: {
     addAutoCollapse () {
       if (!this.debounced) {
-        this.debounced = debounce(this.handleAutoCollapse, 200)
+        this.debounced = debounce(this.handleAutoCollapse, 200, {
+          leading: true,
+          trailing: false
+        })
       }
 
       window.addEventListener('resize', this.debounced, false)

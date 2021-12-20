@@ -52,6 +52,7 @@
     "chai": "^4.2.0",
     "classlist-polyfill": "^1.2.0",
     "cross-env": "^5.2.0",
+    "dls-icons-vue": "^2.2.1",
     "esbuild": "^0.12.16",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.15.0",
