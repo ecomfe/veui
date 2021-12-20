@@ -626,6 +626,45 @@ describe('components/Select/Select', () => {
     wrapper.destroy()
   })
 
+  it('should handle select correctly when not controlled', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            options: datasource
+          }
+        },
+        template: `<veui-select
+        :options="options"
+      />`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+    let { vm } = wrapper
+    let overlay = wrapper.find('.veui-overlay-box')
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(true)
+
+    let options = wrapper.findAll(OPTION_ITEM)
+    options.at(2).trigger('click')
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(false)
+
+    wrapper.find('.veui-select-trigger').trigger('mouseup')
+    await vm.$nextTick()
+    options = wrapper.findAll(OPTION_ITEM)
+    expect(options.at(2).classes('veui-option-selected')).to.equal(true)
+
+    wrapper.destroy()
+  })
+
   it('should handle disabled option correctly', async () => {
     let wrapper = mount(
       {

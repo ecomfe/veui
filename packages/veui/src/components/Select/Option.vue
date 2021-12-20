@@ -67,10 +67,10 @@ export default {
   },
   computed: {
     selected () {
-      if (!this.select || this.value == null || this.select.value == null) {
+      if (!this.select || this.value == null || this.select.realValue == null) {
         return false
       }
-      let selectValue = this.select.value
+      let selectValue = this.select.realValue
       return Array.isArray(selectValue)
         ? selectValue.indexOf(this.value) !== -1
         : selectValue === this.value
