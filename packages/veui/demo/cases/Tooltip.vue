@@ -456,6 +456,9 @@
         corrupti dolorem, tempore libero magni accusantium aut repellat cum
         fuga quidem et.
       </p>
+      <p>
+        <icon-eye v-tooltip="'Eye'"/>
+      </p>
     </section>
   </section>
 </article>
@@ -465,6 +468,7 @@
 import bus from '../bus'
 import { Tooltip, Checkbox, Button, Input } from 'veui'
 import { tooltip } from 'veui/directives'
+import { IconEye } from 'dls-icons-vue'
 
 export default {
   name: 'tooltip-demo',
@@ -475,7 +479,8 @@ export default {
     'veui-button': Button,
     'veui-checkbox': Checkbox,
     'veui-tooltip': Tooltip,
-    'veui-input': Input
+    'veui-input': Input,
+    IconEye
   },
   data () {
     return {
