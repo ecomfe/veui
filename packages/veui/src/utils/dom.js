@@ -159,9 +159,7 @@ export function isOverflow (elem) {
   )
 }
 
-function getScrollContainerOffset (elem) {
-  let container = getScrollParent(elem)
-
+function getScrollContainerOffset (elem, container) {
   if (!container) {
     return {
       top: elem.offsetTop,
@@ -191,23 +189,35 @@ function getScrollContainerOffset (elem) {
   }
 }
 
+function getOverlayAncestor (elem) {
+  let parent = elem
+  while (parent && parent.tagName.toLowerCase() !== 'veui-x-overlay') {
+    parent = parent.parentElement
+  }
+  return parent
+}
+
 /**
  * 如果指定元素不完全在滚动父级可视范围内，将其滚动到可视范围内
  *
  * @param {Element} elem 指定元素
+ * @param {boolean} forceToTop 尝试强制滚动到容器顶部
  */
 export function scrollIntoView (elem, forceToTop) {
   if (!document.documentElement.contains(elem)) {
     return
   }
 
+  const overlay = getOverlayAncestor(elem)
+
   let container = getScrollParent(elem)
 
-  if (!container) {
+  // 如果在 overlay 里面，那么滚动边界不能突破 overlay
+  if (!container || (overlay && !overlay.contains(container))) {
     return
   }
 
-  let { top } = getScrollContainerOffset(elem)
+  let { top } = getScrollContainerOffset(elem, container)
 
   if (forceToTop) {
     container.scrollTop = top
