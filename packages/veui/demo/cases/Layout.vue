@@ -426,4 +426,8 @@ section {
     align-self: start;
   }
 }
+
+.veui-layout-footer {
+  padding: 24px 0;
+}
 </style>

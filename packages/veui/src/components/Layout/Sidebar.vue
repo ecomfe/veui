@@ -30,7 +30,7 @@
   </div>
   <veui-button
     v-if="collapsible && collapseMode === 'hidden'"
-    :class="$c('layout-sidebar-toggle-outside')"
+    :class="$c('layout-sidebar-float-toggle')"
     @click="updateCollapsed(!realCollapsed)"
   >
     <veui-icon
@@ -46,7 +46,7 @@ import ui from '../../mixins/ui'
 import useControllable from '../../mixins/controllable'
 import Button from '../Button'
 import Icon from '../Icon'
-import { debounce } from 'lodash'
+import { throttle } from 'lodash'
 
 const MIN_WIDTH = 1248
 
@@ -79,7 +79,7 @@ export default {
   watch: {
     autoCollapse: {
       handler (val) {
-        if (val) {
+        if (val && process.env.VUE_ENV !== 'server') {
           this.handleInitialAutoCollapse()
           if (!this.listenerAdded) {
             this.addAutoCollapse()
@@ -91,20 +91,20 @@ export default {
   },
   beforeDestroy () {
     if (this.listenerAdded) {
-      window.removeEventListener('resize', this.debounced, false)
+      window.removeEventListener('resize', this.throttled, false)
       this.listenerAdded = false
     }
   },
   methods: {
     addAutoCollapse () {
-      if (!this.debounced) {
-        this.debounced = debounce(this.handleAutoCollapse, 200, {
+      if (!this.throttled) {
+        this.throttled = throttle(this.handleAutoCollapse, 200, {
           leading: true,
           trailing: false
         })
       }
 
-      window.addEventListener('resize', this.debounced, false)
+      window.addEventListener('resize', this.throttled, false)
       this.listenerAdded = true
     },
     handleAutoCollapse () {
