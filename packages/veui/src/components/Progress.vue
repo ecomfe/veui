@@ -77,6 +77,7 @@ import Icon from './Icon'
 import warn from '../utils/warn'
 import { uniqueId, clamp } from 'lodash'
 import useControllable from '../mixins/controllable'
+import '../common/global'
 
 const RADIUS_DEFAULT = 60
 const STROKE_DEFAULT = 2

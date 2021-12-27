@@ -4,6 +4,7 @@ import config from '../managers/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import useConfig from '../mixins/config'
+import '../common/global'
 
 config.defaults(
   {

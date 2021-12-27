@@ -82,6 +82,7 @@ import Icon from './Icon'
 import { normalizeInt } from '../utils/helper'
 import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 import warn from '../utils/warn'
+import '../common/global'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
 
@@ -177,7 +178,10 @@ export default {
       }
     },
     inputListeners () {
-      return pick(this.listenersWithValidations, [...KEYBOARD_EVENTS, ...FOCUS_EVENTS])
+      return pick(this.listenersWithValidations, [
+        ...KEYBOARD_EVENTS,
+        ...FOCUS_EVENTS
+      ])
     },
     containerListeners () {
       return pick(this.listenersWithValidations, MOUSE_EVENTS)

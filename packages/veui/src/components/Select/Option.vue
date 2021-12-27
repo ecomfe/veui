@@ -35,6 +35,7 @@ import selectItem from '../../mixins/select-item'
 import { scrollIntoView } from '../../utils/dom'
 import { isType } from '../../utils/helper'
 import { useSelectConsumer } from './_SelectContext'
+import '../../common/global'
 
 export default {
   name: 'veui-option',

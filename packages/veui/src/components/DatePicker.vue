@@ -196,6 +196,7 @@ import addWeeks from 'date-fns/addWeeks'
 import addMonths from 'date-fns/addMonths'
 import addQuarters from 'date-fns/addQuarters'
 import addYears from 'date-fns/addYears'
+import '../common/global'
 
 config.defaults(
   {

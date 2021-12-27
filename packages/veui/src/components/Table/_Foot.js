@@ -1,6 +1,5 @@
 import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
-import '../../common/uiTypes'
 
 export default {
   name: 'veui-table-foot',

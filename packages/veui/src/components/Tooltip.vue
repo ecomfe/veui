@@ -9,6 +9,7 @@ import { isString } from 'lodash'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
 import useControllable from '../mixins/controllable'
+import '../common/global'
 
 const TRIGGER_MAP = {
   hover: 'mouseenter'

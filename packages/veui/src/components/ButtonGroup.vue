@@ -37,6 +37,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import { focusIn } from '../utils/dom'
+import '../common/global'
 
 export default {
   name: 'veui-button-group',

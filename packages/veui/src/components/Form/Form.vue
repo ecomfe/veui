@@ -34,7 +34,7 @@ import {
 import { getVnodes } from '../../utils/context'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import '../../common/uiTypes'
+import '../../common/global'
 
 export default {
   name: 'veui-form',

@@ -4,7 +4,6 @@ import {
   isTopMostOfType,
   wrapListeners
 } from '../utils/helper'
-import '../common/uiTypes'
 import focusable from './focusable'
 
 export default {

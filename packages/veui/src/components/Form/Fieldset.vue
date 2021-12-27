@@ -23,7 +23,7 @@ import Field from './Field'
 import { get, pick, assign } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import '../../common/uiTypes'
+import '../../common/global'
 
 export default {
   name: 'veui-fieldset',

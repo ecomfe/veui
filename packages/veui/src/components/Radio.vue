@@ -41,6 +41,7 @@ import {
   FOCUS_EVENTS,
   KEYBOARD_EVENTS
 } from '../utils/dom'
+import '../common/global'
 
 // Track named radio boxes that are not associated with any form,
 // those sharing the same name will be silently unchecked when

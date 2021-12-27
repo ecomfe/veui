@@ -49,6 +49,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import useControllable from '../mixins/controllable'
+import '../common/global'
 
 config.defaults(
   {

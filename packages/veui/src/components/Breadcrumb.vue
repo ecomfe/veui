@@ -2,6 +2,7 @@
 import BreadcrumbItem from './BreadcrumbItem'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
+import '../common/global'
 
 export default {
   name: 'veui-breadcrumb',

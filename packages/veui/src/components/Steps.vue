@@ -98,6 +98,7 @@ import Link from './Link'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import '../common/global'
 
 export default {
   name: 'veui-steps',

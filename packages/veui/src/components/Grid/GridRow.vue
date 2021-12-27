@@ -9,6 +9,7 @@
 
 <script>
 import prefix from '../../mixins/prefix'
+import '../../common/global'
 
 export default {
   name: 'veui-grid-row',

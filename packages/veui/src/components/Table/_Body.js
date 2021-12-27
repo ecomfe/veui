@@ -3,7 +3,6 @@ import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import { flatMap } from 'lodash'
-import '../../common/uiTypes'
 
 export default {
   name: 'veui-table-body',

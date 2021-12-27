@@ -217,7 +217,7 @@ import { some, uniq, includes, forEach, find } from 'lodash'
 import useControllable from '../../mixins/controllable'
 import mixin from './_mixin'
 import { closest, getFocusable } from '../../utils/dom'
-import '../../common/uiTypes'
+import '../../common/global'
 
 export default {
   name: 'veui-menu',

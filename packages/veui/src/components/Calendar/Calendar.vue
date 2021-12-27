@@ -347,6 +347,7 @@ import Icon from '../Icon'
 import Button from '../Button'
 import InfiniteScroll from '../Calendar/_InfiniteScroll'
 import addMonths from 'date-fns/addMonths'
+import '../../common/global'
 
 config.defaults(
   {
@@ -947,7 +948,7 @@ export default {
             viewportPosition: '50%',
             duration
           })
-          focusIn(this.isMonthType ? el : el)
+          focusIn(el)
         }
       })
     },

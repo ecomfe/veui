@@ -3,7 +3,7 @@ import { useChild } from '../../mixins/coupled'
 import useControllable from '../../mixins/controllable'
 import colgroup from '../../mixins/colgroup'
 import { renderSlot } from '../../utils/helper'
-import '../../common/uiTypes'
+import '../../common/global'
 
 let renderBody = vm => item => renderSlot(vm, 'default', item) || item[vm.field]
 

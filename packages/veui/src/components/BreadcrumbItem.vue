@@ -34,6 +34,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import Link from './Link'
 import Icon from './Icon'
+import '../common/global'
 
 const ALLOWED_LINK_TYPES = ['link', 'text']
 

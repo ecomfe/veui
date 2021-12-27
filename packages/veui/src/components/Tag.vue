@@ -7,6 +7,7 @@ import focusable from '../mixins/focusable'
 import useControllable from '../mixins/controllable'
 import i18n from '../mixins/i18n'
 import warn from '../utils/warn'
+import '../common/global'
 
 export default {
   name: 'veui-tag',

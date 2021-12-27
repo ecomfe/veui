@@ -1,7 +1,6 @@
 import { uniqueId, findIndex, camelCase } from 'lodash'
 import { getTypedAncestor } from '../utils/helper'
 import { getIndexOfType } from '../utils/context'
-import '../common/uiTypes'
 
 export function useParent (
   type,

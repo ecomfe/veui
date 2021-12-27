@@ -31,6 +31,7 @@ import ui from '../mixins/ui'
 import { isNumber } from 'lodash'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
+import '../common/global'
 
 config.defaults(
   {

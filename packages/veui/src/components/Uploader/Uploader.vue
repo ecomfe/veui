@@ -81,6 +81,7 @@ import {
   UploaderFile,
   getUploadRequest
 } from './_helper'
+import '../../common/global'
 
 config.defaults(
   {

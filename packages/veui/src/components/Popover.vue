@@ -8,6 +8,7 @@ import i18n from '../mixins/i18n'
 import useControllable from '../mixins/controllable'
 import overlay from '../mixins/overlay'
 import { compact, omit } from 'lodash'
+import '../common/global'
 
 export default {
   name: 'veui-popover',

@@ -1,7 +1,6 @@
 <script>
 import { omit } from 'lodash'
 import OptionGroup from '../OptionGroup'
-import '../../common/uiTypes'
 
 export default {
   name: 'veui-time-picker-option-group',

@@ -130,6 +130,7 @@ import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
+import '../common/global'
 
 export default {
   name: 'alert',

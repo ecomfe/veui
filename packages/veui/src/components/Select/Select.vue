@@ -21,7 +21,7 @@ import { uniqueId, omit } from 'lodash'
 import { contains, focusIn } from '../../utils/dom'
 import { renderSlot } from '../../utils/helper'
 import { SelectProvider } from './_SelectContext'
-import '../../common/uiTypes'
+import '../../common/global'
 
 config.defaults(
   {

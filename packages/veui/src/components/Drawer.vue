@@ -1,6 +1,7 @@
 <script>
 import Dialog from './Dialog'
 import prefix from '../mixins/prefix'
+import '../common/global'
 
 const PLACEMENT = ['top', 'right', 'bottom', 'left']
 

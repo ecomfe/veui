@@ -284,6 +284,7 @@ import warn from '../utils/warn'
 import { contains, focusBefore } from '../utils/dom'
 import { uniqueId, get, cloneDeep, pick } from 'lodash'
 import Vue from 'vue'
+import '../common/global'
 
 export default {
   name: 'veui-region-picker',

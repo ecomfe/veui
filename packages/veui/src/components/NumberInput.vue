@@ -108,6 +108,7 @@ import { isInteger, isNaN, get, find, omit, isFunction } from 'lodash'
 import nudge from '../directives/nudge'
 import longpress from '../directives/longpress'
 import useControllable from '../mixins/controllable'
+import '../common/global'
 
 export default {
   name: 'veui-number-input',

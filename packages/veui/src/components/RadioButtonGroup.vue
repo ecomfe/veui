@@ -61,6 +61,7 @@ import Popover from './Popover'
 import useControllable from '../mixins/controllable'
 import useDesc from '../mixins/button-group'
 import { findIndex } from 'lodash'
+import '../common/global'
 
 export default {
   name: 'veui-radio-button-group',
