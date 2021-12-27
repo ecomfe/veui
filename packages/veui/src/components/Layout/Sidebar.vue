@@ -118,14 +118,15 @@ export default {
       }
     },
     isReachingMinWidth () {
-      return window.innerWidth < MIN_WIDTH
+      return document.documentElement.clientWidth <= MIN_WIDTH
     },
     isCrossMinWidth () {
+      const htmlWidth = document.documentElement.clientWidth
       const result =
         this.prevWidth != null &&
         this.prevWidth > MIN_WIDTH &&
-        window.innerWidth <= MIN_WIDTH
-      this.prevWidth = window.innerWidth
+        htmlWidth <= MIN_WIDTH
+      this.prevWidth = htmlWidth
       return result
     },
     updateCollapsed (val, isAuto) {
