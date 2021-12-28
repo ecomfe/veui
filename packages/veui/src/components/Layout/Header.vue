@@ -1,12 +1,12 @@
 <template>
-<div
+<header
   :class="{
     [$c('layout-header')]: true,
     [$c('layout-header-sticky')]: sticky
   }"
 >
   <slot/>
-</div>
+</header>
 </template>
 
 <script>

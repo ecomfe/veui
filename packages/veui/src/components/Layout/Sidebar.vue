@@ -1,5 +1,5 @@
 <template>
-<div
+<aside
   :class="{
     [$c('layout-sidebar')]: true,
     [$c('layout-sidebar-collapsed')]: realCollapsed,
@@ -37,7 +37,7 @@
       :name="realCollapsed ? icons.hiddenExpand : icons.hiddenCollapse"
     />
   </veui-button>
-</div>
+</aside>
 </template>
 
 <script>
@@ -81,8 +81,8 @@ export default {
       handler (val) {
         if (val && process.env.VUE_ENV !== 'server') {
           this.handleInitialAutoCollapse()
-          if (!this.listenerAdded) {
-            this.addAutoCollapse()
+          if (!this.autocollapseInited) {
+            this.initAutocollapse()
           }
         }
       },
@@ -90,44 +90,43 @@ export default {
     }
   },
   beforeDestroy () {
-    if (this.listenerAdded) {
-      window.removeEventListener('resize', this.throttled, false)
-      this.listenerAdded = false
+    if (this.autocollapseInited) {
+      window.removeEventListener('resize', this.resizeHandler, false)
+      this.autocollapseInited = false
     }
   },
   methods: {
-    addAutoCollapse () {
-      if (!this.throttled) {
-        this.throttled = throttle(this.handleAutoCollapse, 200, {
+    initAutocollapse () {
+      if (!this.resizeHandler) {
+        this.resizeHandler = throttle(this.handleAutoCollapse, 200, {
           leading: true,
           trailing: false
         })
       }
 
-      window.addEventListener('resize', this.throttled, false)
-      this.listenerAdded = true
+      window.addEventListener('resize', this.resizeHandler, false)
+      this.autocollapseInited = true
     },
     handleAutoCollapse () {
-      if (this.autoCollapse && this.isCrossMinWidth()) {
+      if (this.autoCollapse && this.shouldCollapse()) {
         this.updateCollapsed(true, true)
       }
     },
     handleInitialAutoCollapse () {
-      if (this.autoCollapse && this.isReachingMinWidth()) {
+      if (this.autoCollapse && this.shouldCollapse(true)) {
         this.updateCollapsed(true, true)
       }
     },
-    isReachingMinWidth () {
-      return document.documentElement.clientWidth <= MIN_WIDTH
-    },
-    isCrossMinWidth () {
+    shouldCollapse (initial) {
       const htmlWidth = document.documentElement.clientWidth
-      const result =
-        this.prevWidth != null &&
-        this.prevWidth > MIN_WIDTH &&
-        htmlWidth <= MIN_WIDTH
+      if (initial) {
+        return htmlWidth <= MIN_WIDTH
+      }
+      const prevWidth = this.prevWidth
       this.prevWidth = htmlWidth
-      return result
+      return (
+        prevWidth != null && prevWidth > MIN_WIDTH && htmlWidth <= MIN_WIDTH
+      )
     },
     updateCollapsed (val, isAuto) {
       if (this.realCollapsed !== val) {
