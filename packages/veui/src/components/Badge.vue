@@ -67,8 +67,8 @@ export default {
       if (!isNumber(this.value)) {
         return this.value ? this.value : null
       }
-      return this.max && this.value > this.max
-        ? `${this.max}+`
+      return this.realMax && this.value > this.realMax
+        ? `${this.realMax}+`
         : `${this.value}`
     }
   }
