@@ -249,15 +249,15 @@
   },
   {
     "name": "Form",
-    "path": "Form/Form.vue"
-  },
-  {
-    "name": "Form",
     "path": "Form"
   },
   {
     "name": "Form",
     "path": "Form/index.js"
+  },
+  {
+    "name": "Form",
+    "path": "Form/Form.vue"
   },
   {
     "name": "GridColumn",
@@ -454,6 +454,10 @@
   {
     "name": "Transfer",
     "path": "Transfer/index.js"
+  },
+  {
+    "name": "Transition",
+    "path": "Transition.vue"
   },
   {
     "name": "Uploader",

@@ -1,0 +1,151 @@
+@import "../lib.less";
+
+.@{veui-prefix}-transition {
+  // 渐隐渐现
+  &-fade-leave-active {
+    transition-duration: 100ms;
+  }
+
+  &-fade-enter-active {
+    transition-duration: 200ms;
+  }
+
+  &-fade-leave-active,
+  &-fade-enter-active {
+    transition-property: opacity;
+    transition-timing-function: linear;
+  }
+
+  &-fade-leave-to,
+  &-fade-enter {
+    opacity: 0;
+  }
+
+  // 放大渐现，缩小渐隐
+  &-fade-scale-leave-active {
+    transition-duration: 100ms;
+  }
+
+  &-fade-scale-enter-active {
+    transition-duration: 200ms;
+  }
+
+  &-fade-scale-leave-active,
+  &-fade-scale-enter-active {
+    transition-property: opacity, transform;
+    transition-timing-function: linear;
+  }
+
+  &-fade-scale-leave-to,
+  &-fade-scale-enter {
+    opacity: 0;
+    transform: scale3d(0, 0, 1);
+  }
+
+  &-fade-scale-x-leave-active {
+    transition-duration: 100ms;
+  }
+
+  &-fade-scale-x-enter-active {
+    transition-duration: 200ms;
+  }
+
+  &-fade-scale-x-leave-active,
+  &-fade-scale-x-enter-active {
+    transition-property: opacity, transform;
+    transition-timing-function: linear;
+  }
+
+  &-fade-scale-x-leave-to,
+  &-fade-scale-x-enter {
+    opacity: 0;
+    transform: scale3d(0, 1, 1);
+  }
+
+  &-fade-scale-y-leave-active {
+    transition-duration: 100ms;
+  }
+
+  &-fade-scale-y-enter-active {
+    transition-duration: 200ms;
+  }
+
+  &-fade-scale-y-leave-active,
+  &-fade-scale-y-enter-active {
+    transition-property: opacity, transform;
+    transition-timing-function: linear;
+  }
+
+  &-fade-scale-y-leave-to,
+  &-fade-scale-y-enter {
+    opacity: 0;
+    transform: scale3d(1, 0, 1);
+  }
+
+  // 移入，移出
+  &-translate-leave-active {
+    transition-property: transform;
+    transition-duration: 100ms;
+    transition-timing-function: ease-in;
+  }
+
+  &-translate-enter-active {
+    transition-property: transform;
+    transition-duration: 200ms;
+    transition-timing-function: ease-out;
+  }
+
+  &-translate-enter {
+    transform: translate3d(
+      var(--dls-transition-translate-from-x, 0),
+      var(--dls-transition-translate-from-y, 0),
+      0
+    );
+  }
+
+  &-translate-leave-to {
+    transform: translate3d(
+      var(--dls-transition-translate-to-x, 0),
+      var(--dls-transition-translate-to-y, 0),
+      0
+    );
+  }
+
+  &-fade-translate-scale-leave-active {
+    transition-property: opacity, transform;
+    transition-duration: 100ms;
+  }
+
+  &-fade-translate-scale-enter-active {
+    transition-property: opacity, transform;
+    transition-duration: 200ms;
+  }
+
+  &-fade-translate-scale-enter {
+    transform: translate3d(
+        var(--dls-transition-translate-from-x, 0),
+        var(--dls-transition-translate-from-y, 0),
+        0
+      )
+      scale3d(0, 0, 1);
+  }
+
+  &-fade-translate-scale-leave-to {
+    transform: translate3d(
+        var(--dls-transition-translate-to-x, 0),
+        var(--dls-transition-translate-to-y, 0),
+        0
+      )
+      scale3d(0, 0, 1);
+  }
+
+  &-move {
+    transition-property: transform;
+    transition-duration: 200ms;
+    transform: translate3d(
+      var(--dls-transition-translate-x, 0),
+      var(--dls-transition-translate-y, 0),
+      0
+    );
+  }
+}
