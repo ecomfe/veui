@@ -10,6 +10,7 @@ import useTree from '../../mixins/tree'
 import { focusIn } from '../../utils/dom'
 import { isEqualSet } from '../../utils/lang'
 import { renderSlot, forwardSlots } from '../../utils/helper'
+import '../../common/global'
 
 function defaultFilter (type, keyword, item, datasource) {
   return includes(item.label, keyword)

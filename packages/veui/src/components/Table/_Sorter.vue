@@ -34,7 +34,6 @@ import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import config from '../../managers/config'
 import useConfig from '../../mixins/config'
-import '../../common/uiTypes'
 import warn from '../../utils/warn'
 import { intersection, includes } from 'lodash'
 

@@ -6,6 +6,7 @@ import config from '../managers/config'
 import useConfig from '../mixins/config'
 import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
+import '../common/global'
 
 config.defaults(
   {

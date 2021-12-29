@@ -1,6 +1,7 @@
 <script>
 import Dialog from './Dialog'
 import prefix from '../mixins/prefix'
+import '../common/global'
 
 export default {
   name: 'veui-embedded',

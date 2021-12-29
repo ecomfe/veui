@@ -45,6 +45,7 @@ import ui from '../mixins/ui'
 import { useChild } from '../mixins/coupled'
 import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
+import '../common/global'
 
 let accordionItem = useChild('accordion-item', 'accordion', ['name'], {
   direct: true

@@ -7,7 +7,6 @@ import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import tooltip from '../../directives/tooltip'
-import '../../common/uiTypes'
 
 function renderTooltip (tooltip, item, field) {
   if (tooltip === true) {

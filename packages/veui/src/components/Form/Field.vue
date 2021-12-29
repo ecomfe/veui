@@ -56,7 +56,7 @@ import { getTypedAncestorTracker } from '../../utils/helper'
 import Icon from '../Icon'
 import Tooltip from '../Tooltip'
 import Vue from 'vue'
-import '../../common/uiTypes'
+import '../../common/global'
 
 const { computed: form } = getTypedAncestorTracker('form')
 const { computed: fieldset } = getTypedAncestorTracker('fieldset')

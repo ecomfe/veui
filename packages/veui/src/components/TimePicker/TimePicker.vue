@@ -171,6 +171,7 @@ import config from '../../managers/config'
 import useConfig from '../../mixins/config'
 import { scrollToAlign } from '../../utils/dom'
 import TimePickerUtil from './_TimePickerUtil'
+import '../../common/global'
 
 const HOURS = range(24)
 const MINUTES = range(60)

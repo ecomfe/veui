@@ -157,6 +157,7 @@ import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import tooltip from '../directives/tooltip'
 import warn from '../utils/warn'
+import '../common/global'
 
 config.defaults(
   {

@@ -109,6 +109,7 @@ import { map, filter, uniq } from 'lodash'
 import { focusIn, closest } from '../../utils/dom'
 import { isEqualSet } from '../../utils/lang'
 import { mapDatasource, hasChildren } from '../../utils/datasource'
+import '../../common/global'
 
 export default {
   name: 'veui-tree',

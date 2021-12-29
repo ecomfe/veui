@@ -52,6 +52,7 @@ import input from '../mixins/input'
 import useControllable from '../mixins/controllable'
 import { pick } from 'lodash'
 import { MOUSE_EVENTS, FOCUS_EVENTS, KEYBOARD_EVENTS } from '../utils/dom'
+import '../common/global'
 
 export default {
   name: 'veui-switch',

@@ -107,6 +107,7 @@ import outside from '../directives/outside'
 import drag from '../directives/drag'
 import Icon from './Icon'
 import useControllable from '../mixins/controllable'
+import '../common/global'
 
 export default {
   name: 'veui-dialog',

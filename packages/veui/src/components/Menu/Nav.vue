@@ -252,6 +252,7 @@ import resize from '../../directives/resize'
 import { getFocusable } from '../../utils/dom'
 import { last } from 'lodash'
 import warn from '../../utils/warn'
+import '../../common/global'
 
 export default {
   name: 'veui-nav',

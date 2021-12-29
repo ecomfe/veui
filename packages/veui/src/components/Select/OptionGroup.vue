@@ -10,7 +10,7 @@ import selectItem from '../../mixins/select-item'
 import keySelect from '../../mixins/key-select'
 import useControllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
-import '../../common/uiTypes'
+import '../../common/global'
 import { walk } from '../../utils/datasource'
 import { isType, isTopMostOfType, getTypedAncestor } from '../../utils/helper'
 import {

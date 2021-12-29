@@ -10,7 +10,7 @@ import useConfig from '../../mixins/config'
 import { useParent } from '../../mixins/coupled'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
-import '../../common/uiTypes'
+import '../../common/global'
 import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle, pick } from 'lodash'
 

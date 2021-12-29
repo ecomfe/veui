@@ -1,7 +1,6 @@
 import { pick, uniqueId, get } from 'lodash'
 import { getTypedAncestorTracker } from '../utils/helper'
 import { getIndexOfType } from '../utils/context'
-import '../common/uiTypes'
 
 export default {
   uiTypes: ['menu-item'],

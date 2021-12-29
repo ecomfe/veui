@@ -63,6 +63,7 @@ import useControllable from '../mixins/controllable'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
 import { includes } from 'lodash'
+import '../common/global'
 
 config.defaults(
   {

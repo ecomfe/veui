@@ -15,7 +15,7 @@ import {
   createPortal,
   inheritScopeAttrs
 } from '../utils/helper'
-import '../common/uiTypes'
+import '../common/global'
 import { omit } from 'lodash'
 
 const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'

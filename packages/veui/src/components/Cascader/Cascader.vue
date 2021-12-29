@@ -175,6 +175,7 @@ import ui from '../../mixins/ui'
 import SelectTrigger from '../_SelectTrigger'
 import SearchResult from '../_SearchResult'
 import { contains, scrollIntoView } from '../../utils/dom'
+import '../../common/global'
 
 config.defaults(
   {

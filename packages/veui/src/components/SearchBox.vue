@@ -161,7 +161,7 @@ import focusable from '../mixins/focusable'
 import { useKeySelect } from '../mixins/key-select'
 import useControllable from '../mixins/controllable'
 import { pick, without, includes, map } from 'lodash'
-import '../common/uiTypes'
+import '../common/global'
 
 const SHARED_PROPS = [
   'autocomplete',

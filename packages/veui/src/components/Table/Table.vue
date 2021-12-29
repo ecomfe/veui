@@ -116,7 +116,7 @@ import Body from './_Body'
 import Head from './_Head'
 import Foot from './_Foot'
 import ColGroup from './_ColGroup'
-import '../../common/uiTypes'
+import '../../common/global'
 import { isEqualSet } from '../../utils/lang'
 import { walk } from '../../utils/datasource'
 import {

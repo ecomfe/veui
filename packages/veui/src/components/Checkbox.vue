@@ -54,6 +54,7 @@ import {
   FOCUS_EVENTS,
   KEYBOARD_EVENTS
 } from '../utils/dom'
+import '../common/global'
 
 export default {
   name: 'veui-checkbox',

@@ -1,5 +1,6 @@
 <script>
 import { prefixify } from '../mixins/prefix'
+import '../common/global'
 
 export default {
   name: 'veui-span',

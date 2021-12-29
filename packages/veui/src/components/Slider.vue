@@ -130,6 +130,7 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import useControllable from '../mixins/controllable'
 import Tooltip from './Tooltip'
+import '../common/global'
 
 export default {
   name: 'veui-slider',
@@ -141,34 +142,39 @@ export default {
     nudge,
     outside
   },
-  mixins: [prefix, ui, input, useControllable({
-    // 方案1: propValue(formatted), localValue(formatted), realValue(parsed)
-    //   同步步骤: update realValue -> map(format) -> sync local & prop
+  mixins: [
+    prefix,
+    ui,
+    input,
+    useControllable({
+      // 方案1: propValue(formatted), localValue(formatted), realValue(parsed)
+      //   同步步骤: update realValue -> map(format) -> sync local & prop
 
-    // 方案2: propValue(formatted), localValue(parsed), realValue(parsed)
-    //   同步步骤: update realValue -> sync local -> map(format) -> sync prop
+      // 方案2: propValue(formatted), localValue(parsed), realValue(parsed)
+      //   同步步骤: update realValue -> sync local -> map(format) -> sync prop
 
-    // 本来打算采用方案 1，感觉更统一更简单，实际 propValue 和 localValue 可能不一样，因为:
-    // propValue 是用户给的 formatted，而 localValue 是 format 函数产出的，如 '0.1' 和 '0.10'（会导致不必要事件触发）
-    // 所以采用方案 2
-    prop: 'value',
-    get (val) {
-      val = val == null ? [] : [].concat(val)
-      return !this.isControlled('value')
-        ? val
-        : val
-          .map(val => this.getAdjustedValue(this.parse(val)))
-          .sort((a, b) => (a > b ? 1 : -1))
-    },
-    set (value) {
-      // value 其实也是来自 realValue 的
-      if (!isEqual(value, this.realValue)) {
-        this.localValue = value
-        let formatted = value.map(this.format)
-        this.$emit('input', formatted.length > 1 ? formatted : formatted[0])
+      // 本来打算采用方案 1，感觉更统一更简单，实际 propValue 和 localValue 可能不一样，因为:
+      // propValue 是用户给的 formatted，而 localValue 是 format 函数产出的，如 '0.1' 和 '0.10'（会导致不必要事件触发）
+      // 所以采用方案 2
+      prop: 'value',
+      get (val) {
+        val = val == null ? [] : [].concat(val)
+        return !this.isControlled('value')
+          ? val
+          : val
+            .map(val => this.getAdjustedValue(this.parse(val)))
+            .sort((a, b) => (a > b ? 1 : -1))
+      },
+      set (value) {
+        // value 其实也是来自 realValue 的
+        if (!isEqual(value, this.realValue)) {
+          this.localValue = value
+          let formatted = value.map(this.format)
+          this.$emit('input', formatted.length > 1 ? formatted : formatted[0])
+        }
       }
-    }
-  })],
+    })
+  ],
   props: {
     /* eslint-disable vue/require-prop-types */
     value: {},

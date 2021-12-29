@@ -232,6 +232,7 @@ import { normalizeClass } from '../utils/helper'
 import Checkbox from './Checkbox'
 import Tooltip from './Tooltip'
 import Dropdown from './Dropdown'
+import '../common/global'
 
 config.defaults(
   {
@@ -475,7 +476,7 @@ export default {
       if (!this.pickingStart) {
         return
       }
-      if (this.pickingStart && typeof dayIndex === 'undefined') {
+      if (typeof dayIndex === 'undefined') {
         this.pickingStart = null
         return
       }

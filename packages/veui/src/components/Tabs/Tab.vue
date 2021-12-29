@@ -1,7 +1,7 @@
 <script>
 import { includes } from 'lodash'
 import { useChild } from '../../mixins/coupled'
-import '../../common/uiTypes'
+import '../../common/global'
 import prefix from '../../mixins/prefix'
 import { renderSlot, Void } from '../../utils/helper'
 

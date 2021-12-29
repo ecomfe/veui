@@ -14,7 +14,7 @@ import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 import { clone } from 'lodash'
 import { togglePositionProp } from './Collapse'
-import '../common/uiTypes'
+import '../common/global'
 
 let accordion = useParent('accordion', { childrenKeys: 'items' })
 

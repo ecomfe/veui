@@ -66,6 +66,7 @@ import {
 } from '../utils/dom'
 import { resolveOffset, ignoreElements, createPortal } from '../utils/helper'
 import { getNodes } from '../utils/context'
+import '../common/global'
 
 const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
 

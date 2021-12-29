@@ -145,12 +145,12 @@
                 <template v-for="({ text, matched }, index) in parts">
                   <mark
                     v-if="matched"
-                    :key="`${idx}-${index}`"
+                    :key="`m-${idx}-${index}`"
                     :class="$c('option-matched')"
                   >{{ text }}</mark>
                   <span
                     v-else
-                    :key="`${idx}-${index}`"
+                    :key="`s-${idx}-${index}`"
                   >{{ text }}</span>
                 </template>
                 <span
@@ -181,7 +181,7 @@ import { useKeySelect } from '../mixins/key-select'
 import focusable from '../mixins/focusable'
 import useSearchable from '../mixins/searchable'
 import i18n from '../mixins/i18n'
-import '../common/uiTypes'
+import '../common/global'
 import { includes } from 'lodash'
 import { focusIn } from '../utils/dom'
 

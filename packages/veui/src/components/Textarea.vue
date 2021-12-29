@@ -94,6 +94,7 @@ import {
   KEYBOARD_EVENTS,
   FOCUS_EVENTS
 } from '../utils/dom'
+import '../common/global'
 
 const COMPOSITION_UPDATE = 'UPDATE'
 const COMPOSITION_INPUT = 'INPUT'

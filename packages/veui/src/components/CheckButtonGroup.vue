@@ -67,6 +67,7 @@ import Icon from './Icon'
 import useControllable from '../mixins/controllable'
 import useDesc from '../mixins/button-group'
 import Popover from './Popover'
+import '../common/global'
 
 export default {
   name: 'veui-check-button-group',

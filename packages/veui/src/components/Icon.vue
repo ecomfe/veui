@@ -1,6 +1,7 @@
 <script>
 import FaIcon from 'vue-awesome/components/Icon'
 import { prefixify } from '../mixins/prefix'
+import '../common/global'
 
 const {
   render,

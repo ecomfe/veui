@@ -69,7 +69,9 @@
               v-if="!!suggestionsProps.keyword"
               :matches="props.matches"
               :separator="icons.separator"
-              :separator-class="$c('autocomplete-search-result-item-separator')"
+              :separator-class="
+                $c('autocomplete-search-result-item-separator')
+              "
             />
             <span v-else>{{ props.label }}</span>
           </slot>
@@ -92,7 +94,7 @@ import SearchResult from '../_SearchResult'
 import Input from '../Input'
 import { includes, pick, omit } from 'lodash'
 import OptionGroup from '../Select/OptionGroup'
-import '../../common/uiTypes'
+import '../../common/global'
 
 const SHARED_PROPS = [
   'placeholder',
@@ -106,12 +108,7 @@ const SHARED_PROPS = [
   'trim'
 ]
 
-const BASE_EVENTS = [
-  'input',
-  'suggest',
-  'select',
-  'toggle'
-]
+const BASE_EVENTS = ['input', 'suggest', 'select', 'toggle']
 
 export default {
   name: 'veui-autocomplete',

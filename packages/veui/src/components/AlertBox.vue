@@ -65,6 +65,7 @@ import i18n from '../mixins/i18n'
 import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
 import useControllable from '../mixins/controllable'
+import '../common/global'
 
 config.defaults(
   {

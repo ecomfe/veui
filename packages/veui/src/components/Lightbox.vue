@@ -142,6 +142,7 @@ import modal from '../mixins/modal'
 import useControllable from '../mixins/controllable'
 import overlay from '../mixins/overlay'
 import carousel from '../mixins/carousel'
+import '../common/global'
 
 export default {
   name: 'veui-lightbox',

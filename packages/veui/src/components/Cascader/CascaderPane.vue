@@ -146,7 +146,7 @@ import ui from '../../mixins/ui'
 import keySelect from '../../mixins/key-select'
 import useControllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
-import '../../common/uiTypes'
+import '../../common/global'
 import {
   hasChildren as _hasChildren,
   findParents

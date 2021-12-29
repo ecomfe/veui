@@ -32,6 +32,7 @@ import Icon from './Icon'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import { loadingContent as loading } from 'dls-graphics'
+import '../common/global'
 
 export default {
   name: 'veui-loading',
