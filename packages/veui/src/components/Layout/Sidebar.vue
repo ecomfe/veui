@@ -14,12 +14,6 @@
     v-if="collapsible && collapseMode === 'slim'"
     :class="$c('layout-sidebar-toggle')"
   >
-    <div
-      v-if="!realCollapsed"
-      :class="$c('layout-sidebar-toggle-extra')"
-    >
-      <slot name="toggle-extra"/>
-    </div>
     <veui-button
       ui="icon"
       :class="$c('layout-sidebar-toggle-inside')"
@@ -73,11 +67,11 @@ export default {
         return ['slim', 'hidden'].indexOf(val) >= 0
       }
     },
-    autoCollapse: Boolean,
+    autocollapse: Boolean,
     sticky: Boolean
   },
   watch: {
-    autoCollapse: {
+    autocollapse: {
       handler (val) {
         if (val && process.env.VUE_ENV !== 'server') {
           this.handleInitialAutoCollapse()
@@ -108,12 +102,12 @@ export default {
       this.autocollapseInited = true
     },
     handleAutoCollapse () {
-      if (this.autoCollapse && this.shouldCollapse()) {
+      if (this.autocollapse && this.shouldCollapse()) {
         this.updateCollapsed(true, true)
       }
     },
     handleInitialAutoCollapse () {
-      if (this.autoCollapse && this.shouldCollapse(true)) {
+      if (this.autocollapse && this.shouldCollapse(true)) {
         this.updateCollapsed(true, true)
       }
     },

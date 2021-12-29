@@ -84,7 +84,7 @@ export default {
       collapsed: false,
       feature: ['long-content'],
       header: ['header', 'sticky'],
-      sidebar: ['sidebar', 'sticky', 'collapsible', 'autoCollapse'],
+      sidebar: ['sidebar', 'sticky', 'collapsible', 'autocollapse'],
       outerFooter: ['footer', 'sticky'],
       innerFooter: ['footer'],
       headerFeatures: [
@@ -97,7 +97,7 @@ export default {
         { label: '通顶', value: '通顶' },
         { label: '窄收缩', value: 'slim' },
         { label: 'collapsible', value: 'collapsible' },
-        { label: 'autoCollapse', value: 'autoCollapse' }
+        { label: 'autocollapse', value: 'autocollapse' }
       ],
       outerFooterFeatures: [
         { label: 'outerFooter', value: 'footer' },
@@ -274,7 +274,7 @@ export default {
               collapseMode={this.sidebar.includes('slim') ? 'slim' : 'hidden'}
               collapsible={this.sidebar.includes('collapsible')}
               collapsed={this.collapsed}
-              autoCollapse={this.sidebar.includes('autoCollapse')}
+              autocollapse={this.sidebar.includes('autocollapse')}
               {...{
                 on: {
                   'update:collapsed': val => {
