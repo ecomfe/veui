@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Badge from '@/components/Badge'
+import config from '@/managers/config'
 
 describe('components/Badge', () => {
   it('should render corner badge without content correctly', async () => {
@@ -33,9 +34,23 @@ describe('components/Badge', () => {
       components: {
         'veui-badge': Badge
       },
-      template: '<veui-badge :value="100" :max="99">News</veui-badge>'
+      template: '<veui-badge :value="value" :max="max">News</veui-badge>',
+      data () {
+        return {
+          value: 1000,
+          max: null
+        }
+      }
     })
+
+    const { vm } = wrapper
+    const max = config.get('badge.max')
+
     const label = wrapper.find('.veui-badge-label')
+    expect(label.text()).to.equal(`${max}+`)
+    vm.max = 99
+
+    await vm.$nextTick()
     expect(label.text()).to.equal('99+')
   })
 
