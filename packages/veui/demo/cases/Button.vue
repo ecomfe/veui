@@ -7,28 +7,38 @@
     <veui-button
       ui="xs"
       @click="handleClick"
+      @mouseenter="handleEnter"
     >保存</veui-button>
     <veui-button
       ui="s"
       @click="handleClick"
+      @mouseenter="handleEnter"
     >保存</veui-button>
-    <veui-button @click="handleClick">保存</veui-button>
+    <veui-button
+      @click="handleClick"
+      @mouseenter="handleEnter"
+    >保存</veui-button>
     <veui-button
       ui="l"
       @click="handleClick"
+      @mouseenter="handleEnter"
     >保存</veui-button>
     <veui-button
       ui="xl"
       @click="handleClick"
+      @mouseenter="handleEnter"
     >保存</veui-button>
     <veui-button
       v-tooltip="'点击保存'"
       disabled
       @click="handleClick"
+      @mouseenter="handleEnter"
     >保存</veui-button>
     <veui-button
+      v-tooltip="'正在保存'"
       loading
       @click="handleClick"
+      @mouseenter="handleEnter"
     >保存</veui-button>
   </section>
   <section>
@@ -516,6 +526,12 @@
     >编辑</veui-button>
     <veui-button @click="handleClick">保存</veui-button>
   </section>
+  <section>
+    <h4>表单内</h4>
+    <form @submit.prevent="handleSubmit">
+      <veui-button type="submit">Submit</veui-button>
+    </form>
+  </section>
 </article>
 </template>
 
@@ -545,11 +561,17 @@ export default {
   },
   methods: {
     handleClick (e) {
-      bus.$emit('log', e.currentTarget.getAttribute('ui'))
+      bus.$emit('log', ['click', e.currentTarget.getAttribute('ui')])
+    },
+    handleEnter (e) {
+      bus.$emit('log', ['mouseenter', e.currentTarget.getAttribute('ui')])
     },
     handleClickAndToggle (e) {
       this.handleClick(e)
       this.text = !this.text
+    },
+    handleSubmit () {
+      bus.$emit('log', 'submit')
     }
   }
 }

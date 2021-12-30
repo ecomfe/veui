@@ -43,6 +43,40 @@ describe('components/Button', () => {
     expect(entered).to.equal(true)
   })
 
+  it('should be focusable', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-button': Button
+        },
+        template: '<veui-button :disabled="disabled"/>',
+        data () {
+          return {
+            disabled: false
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    const Btn = wrapper.find(Button)
+    const { vm } = wrapper
+
+    Btn.vm.focus()
+    expect(document.activeElement).to.equal(Btn.element)
+
+    Btn.element.blur()
+    vm.disabled = true
+    await vm.$nextTick()
+    Btn.vm.focus()
+    expect(document.activeElement).to.equal(Btn.element)
+
+    wrapper.destroy()
+  })
+
   it('should support disabled state', async () => {
     let clicked = false
     let entered = false
@@ -74,14 +108,102 @@ describe('components/Button', () => {
     expect(entered).to.equal(true)
   })
 
-  it('should support submit type', () => {
-    const wrapper = mount(Button, {
-      propsData: {
-        type: 'submit'
+  it('should support emulate native button', async () => {
+    let count = 0
+    const wrapper = mount(
+      {
+        components: {
+          'veui-button': Button
+        },
+        template: `
+        <form @submit="handleSubmit">
+          <veui-button
+            aria-label="wow"
+            name="foo"
+            :disabled="disabled"
+            type="submit"
+          />
+        </form>`,
+        data () {
+          return {
+            disabled: false
+          }
+        },
+        methods: {
+          handleSubmit (e) {
+            count++
+            e.preventDefault()
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
       }
-    })
+    )
 
-    expect(wrapper.attributes('type')).to.include('submit')
+    const button = wrapper.find('button')
+    const Btn = wrapper.find(Button)
+    const { vm } = wrapper
+
+    expect(Btn.attributes('aria-label')).to.equal('wow')
+    expect(button.attributes('type')).to.equal('submit')
+    expect(button.attributes('name')).to.equal('foo')
+
+    button.trigger('click')
+    Btn.trigger('click')
+    await vm.$nextTick()
+    expect(count).to.equal(1)
+
+    Btn.trigger('keypress', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(count).to.equal(2)
+
+    Btn.trigger('keypress', { key: ' ' })
+    await vm.$nextTick()
+    expect(count).to.equal(2)
+
+    Btn.trigger('keydown', { key: ' ' })
+    Btn.trigger('keyup', { key: ' ' })
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    Btn.trigger('keydown', { key: ' ' })
+    Btn.trigger('blur')
+    Btn.trigger('keyup', { key: ' ' })
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    Btn.trigger('keyup', { key: ' ' })
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    Btn.trigger('keydown', { key: 'A' })
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    Btn.trigger('keyup', { key: 'A' })
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    vm.disabled = true
+    await vm.$nextTick()
+
+    button.trigger('click')
+    Btn.trigger('click')
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    Btn.trigger('keypress', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    Btn.trigger('keydown', { key: ' ' })
+    Btn.trigger('keyup', { key: ' ' })
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    wrapper.destroy()
   })
 
   it('should support set default slot', () => {

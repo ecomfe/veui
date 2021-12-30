@@ -23,13 +23,16 @@
       .border-right-radius(inherit);
     }
 
-    &:hover,
-    &[data-focus-visible-added] {
+    &:hover {
       z-index: 2;
     }
 
     &.@{veui-prefix}-disabled {
       z-index: 0;
+    }
+
+    &[data-focus-visible-added] {
+      z-index: 2;
     }
   }
 
