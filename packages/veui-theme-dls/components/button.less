@@ -3,15 +3,30 @@
 .@{veui-prefix}-button {
   position: relative;
   display: inline-flex;
-  justify-content: center;
-  align-items: center;
   user-select: none;
-  line-height: 2;
-  white-space: nowrap;
-  cursor: pointer;
   border: 1px solid;
+  line-height: 2;
+  cursor: pointer;
   .veui-button-transition();
-  .veui-stub();
+
+  &-native {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: none;
+    white-space: nowrap;
+    background: none;
+    color: inherit;
+    font: inherit;
+    border-radius: inherit;
+    cursor: inherit;
+    .veui-stub();
+
+    &:disabled {
+      pointer-events: none;
+    }
+  }
 
   .make-metrics(@size) {
     @height: ~"dls-button-height-@{size}";
@@ -19,11 +34,14 @@
     @radius: ~"dls-button-border-radius-@{size}";
     @font-size: ~"dls-button-font-size-@{size}";
     height: @@height;
-    .padding(0, @@padding);
     border-radius: @@radius;
     font-size: @@font-size;
 
-    &[ui~="square"] {
+    .@{veui-prefix}-button-native {
+      .padding(0, @@padding);
+    }
+
+    &[ui~="square"] .@{veui-prefix}-button-native {
       width: @@height;
       padding: 0;
     }
@@ -71,7 +89,6 @@
   }
 
   &-loading {
-    pointer-events: none;
     cursor: default;
   }
 
@@ -85,7 +102,8 @@
       background-color: @dls-button-background-color-normal-hover;
     }
 
-    &:active {
+    &:active,
+    &.@{veui-prefix}-active {
       border-color: @dls-button-border-color-normal-active;
       background-color: @dls-button-background-color-normal-active;
     }
@@ -100,7 +118,7 @@
       color: @dls-button-font-color-normal-disabled;
     }
 
-    &&-loading {
+    &.@{veui-prefix}-button-loading {
       border-color: @dls-button-border-color-normal-active;
       background-color: @dls-button-background-color-normal-active;
     }
@@ -121,7 +139,8 @@
       background-color: @dls-button-background-color-basic-focus;
     }
 
-    &:active {
+    &:active,
+    &.@{veui-prefix}-active {
       border-color: @dls-button-border-color-basic-active;
       background-color: @dls-button-background-color-basic-active;
     }
@@ -152,7 +171,8 @@
       background-color: @dls-button-background-color-strong-focus;
     }
 
-    &:active {
+    &:active,
+    &.@{veui-prefix}-active {
       border-color: @dls-button-border-color-strong-active;
       background-color: @dls-button-background-color-strong-active;
     }
@@ -183,7 +203,8 @@
       background-color: @dls-button-background-color-primary-focus;
     }
 
-    &:active {
+    &:active,
+    &.@{veui-prefix}-active {
       border-color: @dls-button-border-color-primary-active;
       background-color: @dls-button-background-color-primary-active;
     }
@@ -214,7 +235,8 @@
       background-color: @dls-button-background-color-translucent-focus;
     }
 
-    &:active {
+    &:active,
+    &.@{veui-prefix}-active {
       border-color: @dls-button-border-color-translucent-active;
       background-color: @dls-button-background-color-translucent-active;
     }
@@ -234,15 +256,19 @@
   &[ui~="text"],
   &[ui~="icon"] {
     border: none;
-    padding: 0;
     height: auto;
     line-height: inherit;
     background-color: @dls-button-background-color-text;
     color: @dls-button-font-color-text;
 
+    .@{veui-prefix}-button-native {
+      padding: 0;
+    }
+
     &::after {
       content: "";
-      .absolute(_, -@dls-button-padding-text);
+      .absolute(50%, -@dls-button-padding-text, _);
+      transform: translateY(-50%);
       height: calc(1em + @dls-button-padding-text * 2);
       border: 1px solid transparent;
       border-radius: inherit;
@@ -269,7 +295,8 @@
       }
     }
 
-    &:active {
+    &:active,
+    &.@{veui-prefix}-active {
       background-color: @dls-button-background-color-text-active;
       color: @dls-button-font-color-text-active;
     }
@@ -290,7 +317,8 @@
         color: @dls-button-font-color-text-strong-focus;
       }
 
-      &:active {
+      &:active,
+      &.@{veui-prefix}-active {
         color: @dls-button-font-color-text-strong-active;
       }
 
@@ -310,7 +338,8 @@
         color: @dls-button-font-color-text-aux-focus;
       }
 
-      &:active {
+      &:active,
+      &.@{veui-prefix}-active {
         color: @dls-button-font-color-text-aux-active;
       }
 
@@ -322,7 +351,6 @@
 
   &[ui~="icon"] {
     &::after {
-      .absolute(auto);
       .size(calc(@dls-icon-size-normal + @dls-button-padding-text * 2));
     }
   }
