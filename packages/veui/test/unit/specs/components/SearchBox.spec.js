@@ -224,7 +224,7 @@ describe('components/SearchBox', () => {
     expect(wrapper.attributes('autofocus')).to.equal('autofocus')
     expect(wrapper.attributes('ui')).to.include('primary')
 
-    wrapper.find('button.veui-input-clear').trigger('click')
+    wrapper.find('.veui-input-clear').trigger('click')
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('input').element.value).to.equal('')
@@ -573,7 +573,7 @@ describe('components/SearchBox', () => {
       }
     })
 
-    wrapper.find('button.veui-input-clear').trigger('click')
+    wrapper.find('.veui-input-clear').trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.find('input').element.value).to.equal('ok')
 

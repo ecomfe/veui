@@ -142,7 +142,7 @@ describe('components/Input', () => {
       }
     )
 
-    wrapper.find('button.veui-input-clear').trigger('click')
+    wrapper.find('.veui-input-clear').trigger('click')
   })
 
   it('should render before slot correctly', () => {

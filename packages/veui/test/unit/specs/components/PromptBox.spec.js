@@ -192,7 +192,7 @@ describe('components/PromptBox', function () {
     })
 
     let { vm } = wrapper
-    let btn = wrapper.find('.veui-dialog-content-foot button:first-child')
+    let btn = wrapper.find('.veui-dialog-content-foot .veui-button:first-child')
     expect(btn.classes('veui-disabled')).to.equal(false)
     expect(btn.classes('veui-button-loading')).to.equal(false)
 
@@ -226,7 +226,7 @@ describe('components/PromptBox', function () {
 
     await wrapper.vm.$nextTick()
 
-    let btns = wrapper.findAll('.veui-dialog-content-foot button')
+    let btns = wrapper.findAll('.veui-dialog-content-foot .veui-button')
     expect(btns.at(0).text()).to.equal('👍')
     expect(btns.at(1).text()).to.equal('👎')
 

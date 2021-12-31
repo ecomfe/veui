@@ -151,7 +151,7 @@ describe('components/AlertBox', function () {
     })
 
     let { vm } = wrapper
-    let btn = wrapper.find('.veui-dialog-content-foot button')
+    let btn = wrapper.find('.veui-dialog-content-foot .veui-button')
     expect(btn.classes('veui-disabled')).to.equal(false)
     expect(btn.classes('veui-button-loading')).to.equal(false)
 
@@ -185,7 +185,7 @@ describe('components/AlertBox', function () {
 
     await wrapper.vm.$nextTick()
 
-    let btn = wrapper.find('.veui-dialog-content-foot button')
+    let btn = wrapper.find('.veui-dialog-content-foot .veui-button')
     expect(btn.text()).to.equal('👍')
 
     wrapper.destroy()

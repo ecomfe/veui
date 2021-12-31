@@ -19,7 +19,7 @@ describe('components/Dialog', () => {
     let { vm } = wrapper
 
     wrapper
-      .find('.veui-dialog-content-foot button:first-child')
+      .find('.veui-dialog-content-foot .veui-button:first-child')
       .trigger('click')
 
     await vm.$nextTick()
@@ -28,7 +28,9 @@ describe('components/Dialog', () => {
     vm.open = true
 
     await vm.$nextTick()
-    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
+    wrapper
+      .find('.veui-dialog-content-foot .veui-button:last-child')
+      .trigger('click')
 
     await vm.$nextTick()
     expect(vm.open).to.equal(false)
@@ -77,7 +79,9 @@ describe('components/Dialog', () => {
     let { vm } = wrapper
 
     await vm.$nextTick()
-    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
+    wrapper
+      .find('.veui-dialog-content-foot .veui-button:last-child')
+      .trigger('click')
 
     await vm.$nextTick()
     expect(vm.open).to.equal(false)
@@ -86,7 +90,7 @@ describe('components/Dialog', () => {
 
     await vm.$nextTick()
     wrapper
-      .find('.veui-dialog-content-foot button:first-child')
+      .find('.veui-dialog-content-foot .veui-button:first-child')
       .trigger('click')
 
     await wait(100)
@@ -177,7 +181,7 @@ describe('components/Dialog', () => {
     await vm.$nextTick()
 
     wrapper
-      .find('.veui-dialog-content-foot button:first-child')
+      .find('.veui-dialog-content-foot .veui-button:first-child')
       .trigger('click')
 
     await vm.$nextTick()
@@ -186,7 +190,9 @@ describe('components/Dialog', () => {
 
     vm.open = true
     await vm.$nextTick()
-    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
+    wrapper
+      .find('.veui-dialog-content-foot .veui-button:last-child')
+      .trigger('click')
 
     await vm.$nextTick()
 
@@ -218,12 +224,14 @@ describe('components/Dialog', () => {
     })
 
     wrapper
-      .find('.veui-dialog-content-foot button:first-child')
+      .find('.veui-dialog-content-foot .veui-button:first-child')
       .trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.veui-dialog-box').isVisible()).to.equal(true)
 
-    wrapper.find('.veui-dialog-content-foot button:last-child').trigger('click')
+    wrapper
+      .find('.veui-dialog-content-foot .veui-button:last-child')
+      .trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.veui-dialog-box').isVisible()).to.equal(true)
 
@@ -245,7 +253,7 @@ describe('components/Dialog', () => {
     })
 
     let { vm } = wrapper
-    let btn = wrapper.find('.veui-dialog-content-foot button:first-child')
+    let btn = wrapper.find('.veui-dialog-content-foot .veui-button:first-child')
     expect(btn.classes('veui-disabled')).to.equal(false)
     expect(btn.classes('veui-button-loading')).to.equal(false)
 
@@ -279,7 +287,7 @@ describe('components/Dialog', () => {
 
     await wrapper.vm.$nextTick()
 
-    let btns = wrapper.findAll('.veui-dialog-content-foot button')
+    let btns = wrapper.findAll('.veui-dialog-content-foot .veui-button')
     expect(btns.at(0).text()).to.equal('👍')
     expect(btns.at(1).text()).to.equal('👎')
 

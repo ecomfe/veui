@@ -136,7 +136,7 @@ describe('components/NumberInput', () => {
     )
 
     let input = wrapper.find('input.veui-input-input')
-    wrapper.find('button.veui-number-input-step-up').trigger('click')
+    wrapper.find('.veui-number-input-step-up').trigger('click')
     await wrapper.vm.$nextTick()
     expect(input.element.value).to.equal('3')
   })
@@ -172,7 +172,7 @@ describe('components/NumberInput', () => {
       done()
     })
 
-    wrapper.find('button.veui-number-input-step-up').trigger('click')
+    wrapper.find('.veui-number-input-step-up').trigger('click')
   })
 
   it('should make prop `value` fully controlled and violate `decimal-place` for respecting prop `value`', async () => {
@@ -211,7 +211,7 @@ describe('components/NumberInput', () => {
       }
     )
 
-    wrapper.find('button.veui-number-input-step-up').trigger('click')
+    wrapper.find('.veui-number-input-step-up').trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.val).to.equal(1)
     wrapper.destroy()

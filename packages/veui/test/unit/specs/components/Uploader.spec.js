@@ -757,7 +757,7 @@ describe('components/Uploader', function () {
     ])
     items
       .at(1)
-      .find('button')
+      .find('.veui-button')
       .trigger('mouseenter')
     expect(dropdown.localExpanded).to.equal(true)
     dropdown.handleSelect('test11')
@@ -804,7 +804,7 @@ describe('components/Uploader', function () {
 
     let buttons = wrapper
       .find('.veui-uploader-entries-container')
-      .findAll('button')
+      .findAll('.veui-button')
 
     buttons.at(0).trigger('click')
     expect(wrapper.emitted('test')[0]).to.eql([])
