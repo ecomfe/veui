@@ -2,9 +2,9 @@ const webpackConfig = require('@vue/cli-service/webpack.config.js')
 const devServer = require('./build/dev-server')
 
 let files = ['test/global.js']
-if (process.env.KARMA_TEST_FILES_ONLY) {
+if (process.env.TEST_FILES) {
   files = files.concat(
-    process.env.KARMA_TEST_FILES_ONLY.split(',')
+    process.env.TEST_FILES.split(',')
       .map(v => v.trim())
       .map(name => `test/unit/**/${name}.spec.js`)
   )
@@ -13,7 +13,7 @@ if (process.env.KARMA_TEST_FILES_ONLY) {
 }
 
 let browsers = []
-if (process.env.KARMA_TEST_WITH_UI) {
+if (process.env.TEST_UI) {
   browsers.push('Chrome')
 } else {
   browsers.push('ChromeHeadless')

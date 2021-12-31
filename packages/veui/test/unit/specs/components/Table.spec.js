@@ -210,10 +210,10 @@ describe('components/Table', () => {
         template: `
           <veui-table :data="data" :expanded="expanded" expandable @update:expanded="updateExpanded">
             <veui-table-column field="field1" title="field1">
-              <template slot="sub-row" slot-scope="{ field3 }">{{ field3 }}</template>
+              <template #sub-row="{ field3 }">{{ field3 }}</template>
             </veui-table-column>
             <veui-table-column field="field2" title="field2">
-              <template slot="sub-row" slot-scope="{ field4 }">{{ field4 }}</template>
+              <template #sub-row="{ field4 }">{{ field4 }}</template>
             </veui-table-column>
           </veui-table>`
       },
@@ -225,7 +225,7 @@ describe('components/Table', () => {
     let { vm } = wrapper
     let rows = wrapper.findAll('tbody tr')
     expect(rows.length).to.equal(2)
-    let btn = wrapper.find('td button')
+    let btn = wrapper.find('td .veui-button')
     btn.trigger('click')
     await vm.$nextTick()
     let totalRows = wrapper.findAll('tbody tr')
