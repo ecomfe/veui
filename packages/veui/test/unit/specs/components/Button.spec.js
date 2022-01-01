@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Button from '@/components/Button'
+import ui from '@/managers/ui'
 
 describe('components/Button', () => {
   it('should create a button component with `primary` ui', () => {
@@ -241,5 +242,21 @@ describe('components/Button', () => {
     wrapper.find('.veui-button').trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.hasClick).to.equal(true)
+  })
+
+  it('should support icon config', () => {
+    ui.set('button.icons', {
+      loading: 'loading'
+    })
+
+    const wrapper = mount(Button, {
+      propsData: {
+        loading: true
+      }
+    })
+
+    expect(wrapper.find('.veui-icon').exists()).to.equal(true)
+
+    ui.set('button.icons', {})
   })
 })
