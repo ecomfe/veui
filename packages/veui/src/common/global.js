@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { uniq } from 'lodash'
-import 'focus-visible'
 
 if (!Vue.config.optionMergeStrategies.uiTypes) {
   Vue.config.optionMergeStrategies.uiTypes = function (
