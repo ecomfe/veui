@@ -688,11 +688,11 @@ function currency (value) {
 }
 
 function time (value) {
-  return moment(value).format('YYYY-MM-DD HH:mm:ss')
+  return moment(value).format('yyyy-MM-DD HH:mm:ss')
 }
 
 function date (value) {
-  return moment(value).format('YYYY-MM-DD')
+  return moment(value).format('yyyy-MM-DD')
 }
 
 export default {
@@ -863,7 +863,7 @@ export default {
         price: Math.floor(Math.random() * 1280),
         updateDate: moment(
           Date.now() + Math.floor(Math.random() * 1e10)
-        ).format('YYYYMMDD')
+        ).format('yyyyMMDD')
       }
       this.nextId++
       this.nextIndex++
