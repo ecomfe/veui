@@ -9,5 +9,6 @@ module.exports = {
       fileName: '{module}.js',
       transform: false
     }
-  ]
+  ],
+  global: ['focus-visible']
 }

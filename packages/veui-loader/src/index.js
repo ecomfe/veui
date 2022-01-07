@@ -174,7 +174,7 @@ function getParts (component, options) {
       .map(l => {
         return { path: `${alias}/locale/${l}/common.js` }
       })
-      .concat(global)
+      .concat(global.map(path => ({ path })))
   }
 
   return modules.reduce(

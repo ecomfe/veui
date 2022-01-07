@@ -1,8 +1,15 @@
+## 2.4.2
+
+### 🐞 问题修复
+
+- [^] 重构了 `Button` 组件以解决在动态切换 `disabled` / `loading` 属性时过渡动效丢失的问题。<!-- #Button -->
+- [^] 修复了 `veui-loader` 中 `global` 选项没有正确处理 `string` 类型配置的问题。<!-- #veui-loader -->
+
 ## 2.4.1
 
 ### 🐞 问题修复
 
-- [^] 修复了 `sideEffects` 配置错误导致依赖组件类型判断的逻辑失效的问题。
+- [^] 修复了 `sideEffects` 配置错误导致依赖组件类型判断的逻辑失效的问题。<!-- #veui -->
 
 ## 2.4.0 "🪆 Nesting Dolls"
 
