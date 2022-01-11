@@ -102,7 +102,7 @@ export default {
       return (
         find(this.items, ({ name, id }) => name === active || id === active) ||
         this.matchedTab ||
-        this.items[0]
+        (this.items || [])[0]
       )
     },
     activeIndex () {
@@ -250,11 +250,11 @@ export default {
         end: list.scrollLeft + list.clientWidth >= list.scrollWidth
       }
     },
-    handleRemoveChild (index) {
-      if (index !== this.activeIndex) {
+    handleRemoveChild (id) {
+      if (!this.activeTab || id !== this.activeTab.id) {
         return
       }
-
+      const index = this.activeIndex
       let tab = this.items[index === 0 ? 1 : index - 1]
       if (tab) {
         this.commit('active', tab.name || tab.id)

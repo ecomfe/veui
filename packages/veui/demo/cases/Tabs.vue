@@ -481,6 +481,67 @@
     </veui-tabs>
     <veui-button @click="tabs4 = tabs5">Change</veui-button>
   </section>
+  <section>
+    <veui-button @click="compact = !compact">toggle</veui-button>
+    <veui-tabs :active.sync="active7">
+      <template v-if="!compact">
+        <veui-tab
+          key="answers"
+          label="回答问题"
+          name="answers"
+        />
+        <veui-tab
+          key="articles"
+          label="文章评论"
+          name="articles"
+        />
+      </template>
+      <template v-else>
+        <veui-tab
+          key="articles"
+          label="文章评论"
+          name="articles"
+        />
+        <veui-tab
+          key="answers"
+          label="回答问题"
+          name="answers"
+        />
+      </template>
+      <veui-tab
+        label="分享朋友圈"
+        name="shares"
+      />
+    </veui-tabs>
+    <veui-tabs :active.sync="active7">
+      <veui-tab
+        v-if="!compact || active7 === 'answers'"
+        key="answers"
+        label="回答问题"
+        name="answers"
+      />
+      <veui-tab
+        v-if="!compact || active7 === 'articles'"
+        key="articles"
+        label="文章评论"
+        name="articles"
+      />
+      <veui-tab
+        v-if="!compact || active7 === 'shares'"
+        key="shares"
+        label="分享朋友圈"
+        name="shares"
+      />
+      <veui-tab
+        v-if="compact"
+        key="rest"
+      >
+        <template #item>
+          <veui-button>...</veui-button>
+        </template>
+      </veui-tab>
+    </veui-tabs>
+  </section>
 </article>
 </template>
 
@@ -503,6 +564,8 @@ export default {
       label3: '分享朋友圈',
       totalTabs0: 15,
       totalTabs1: 20,
+      compact: false,
+      active7: null,
       tabs0: [
         { label: '弄一个很长的在第一个试试', name: '默认1' },
         { label: '默认2', name: '默认2', status: 'success' },

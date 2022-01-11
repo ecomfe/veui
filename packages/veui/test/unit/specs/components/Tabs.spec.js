@@ -952,4 +952,146 @@ describe('components/Tabs', () => {
 
     wrapper.destroy()
   })
+
+  it('should render correctly on adjusting the order of tabs', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+        <veui-tabs>
+          <template v-if="!reorder">
+            <veui-tab
+              key="answers"
+              label="回答问题"
+              name="answers"
+            />
+            <veui-tab
+              key="articles"
+              label="文章评论"
+              name="articles"
+            />
+          </template>
+          <template v-else>
+            <veui-tab
+              key="articles"
+              label="文章评论"
+              name="articles"
+            />
+            <veui-tab
+              key="answers"
+              label="回答问题"
+              name="answers"
+            />
+          </template>
+          <veui-tab
+            label="分享朋友圈"
+            name="shares"
+          />
+        </veui-tabs>`,
+        data () {
+          return {
+            reorder: false
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await wait(0)
+
+    let tabs = wrapper.findAll('.veui-tabs-item-label-content')
+    expect(tabs.at(0).text()).to.equal('回答问题')
+    expect(tabs.at(1).text()).to.equal('文章评论')
+    expect(tabs.at(2).text()).to.equal('分享朋友圈')
+
+    vm.reorder = true
+    await wait(0)
+
+    tabs = wrapper.findAll('.veui-tabs-item-label-content')
+    expect(tabs.at(0).text()).to.equal('文章评论')
+    expect(tabs.at(1).text()).to.equal('回答问题')
+    expect(tabs.at(2).text()).to.equal('分享朋友圈')
+
+    wrapper.destroy()
+  })
+
+  it('should render correctly on swicthing tab dynamically', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+        <veui-tabs :active.sync="active">
+          <veui-tab
+            v-if="!switched || active === 'answers'"
+            key="answers"
+            label="回答问题"
+            name="answers"
+          />
+          <veui-tab
+            v-if="!switched || active === 'articles'"
+            key="articles"
+            label="文章评论"
+            name="articles"
+          />
+          <veui-tab
+            v-if="!switched || active === 'shares'"
+            key="shares"
+            label="分享朋友圈"
+            name="shares"
+          />
+          <veui-tab
+            v-if="switched"
+            label="rest"
+            name="shares"
+          />
+        </veui-tabs>`,
+        data () {
+          return {
+            switched: false,
+            active: 'answers'
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await wait(0)
+
+    let tabs = wrapper.findAll('.veui-tabs-item-label-content')
+    expect(tabs.at(0).text()).to.equal('回答问题')
+    expect(tabs.at(1).text()).to.equal('文章评论')
+    expect(tabs.at(2).text()).to.equal('分享朋友圈')
+
+    vm.active = 'articles'
+    vm.switched = true
+    await wait(0)
+    tabs = wrapper.findAll('.veui-tabs-item-label-content')
+    expect(tabs.at(0).text()).to.equal('文章评论')
+    expect(tabs.at(1).text(), '#1').to.equal('rest')
+
+    vm.switched = false
+    await wait(0)
+
+    vm.active = 'shares'
+    vm.switched = true
+    await wait(0)
+    tabs = wrapper.findAll('.veui-tabs-item-label-content')
+    expect(tabs.at(0).text()).to.equal('分享朋友圈')
+    expect(tabs.at(1).text()).to.equal('rest')
+    wrapper.destroy()
+  })
 })

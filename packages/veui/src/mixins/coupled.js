@@ -10,50 +10,80 @@ export function useParent (
     uiTypes: [type],
     data () {
       return {
-        __coupled_children__: []
+        coupled_children__: [],
+        sorted_children__: []
       }
     },
     computed: {
       [childrenKey] () {
-        return this.$data.__coupled_children__.map(({ coupledProxy }) => ({
+        const sorted = this.sorted_children__.length
+          ? this.sorted_children__
+          : this.coupled_children__
+        return sorted.map(({ coupledProxy }) => ({
           ...coupledProxy
         }))
       }
     },
     methods: {
-      addChild (index, child) {
-        let length = this.$data.__coupled_children__.length
-        if (index >= length) {
-          this.$data.__coupled_children__.push(child)
-        } else {
-          this.$data.__coupled_children__.splice(index, 0, child)
-        }
+      addChild (child) {
+        this.coupled_children__.push(child)
       },
       removeChildById (id) {
         let index = this.findChildIndexById(id)
+        if (typeof this[onBeforeRemoveChild] === 'function') {
+          this[onBeforeRemoveChild](id)
+        }
         this.removeChildByIndex(index)
         return index
       },
       removeChildByIndex (index) {
-        if (typeof this[onBeforeRemoveChild] === 'function') {
-          this[onBeforeRemoveChild](index)
-        }
-        this.$data.__coupled_children__.splice(index, 1)
+        this.coupled_children__.splice(index, 1)
       },
       findChildById (id) {
-        return this.$data.__coupled_children__[this.findChildIndexById(id)]
+        return this.coupled_children__[this.findChildIndexById(id)]
       },
       findChildIndexById (id) {
-        return findIndex(
-          this.$data.__coupled_children__,
-          child => child.childId === id
-        )
+        return findIndex(this.coupled_children__, child => child.childId === id)
+      },
+      getSortedItems () {
+        let items = this.coupled_children__
+          .slice()
+          .reduce((acc, child, index) => {
+            let realIndex = getIndexOfType(child, this)
+            if (realIndex === -1) {
+              // 因为 slot 重新渲染会更新 $slot.default, 但是可能还没有导致子组件重新，所以子组件 vm.$vnode 还是引用老的vnode
+              // 此时会找到 -1, 不知道在 updated 中会不会遇到这种情况，统一处理下，保留上次的顺序吧
+              const prevIndex = (this._prevSorted || []).indexOf(child)
+              realIndex = prevIndex >= 0 ? prevIndex : index
+            }
+            acc[realIndex] = child
+            return acc
+          }, [])
+        this._prevSorted = items
+        return items
+      }
+    },
+    updated () {
+      const prevSorted = this._prevSorted || []
+      const newSorted = this.getSortedItems()
+      // 判断是否存在顺序不一致，没有则不要设置，否则死循环
+      if (isDiff(prevSorted, newSorted)) {
+        this.sorted_children__ = newSorted
       }
     },
     beforeDestroy () {
       this.__coupled_destroying__ = true
     }
   }
+}
+
+function isDiff (prevSorted, newSorted) {
+  return (
+    prevSorted.length !== newSorted.length ||
+    newSorted.some(
+      ({ childId }, index) => childId !== prevSorted[index].childId
+    )
+  )
 }
 
 /*
@@ -117,10 +147,7 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
       }
 
       this.childId = uniqueId(`veui-${type}-`)
-
-      let index = getIndexOfType(this, parentType)
-
-      parent.addChild(index, this)
+      parent.addChild(this)
     },
     destroyed () {
       let parent = this[parentKey]
@@ -128,9 +155,7 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
         return
       }
 
-      let index = parent.findChildIndexById(this.childId)
-
-      parent.removeChildByIndex(index)
+      parent.removeChildById(this.childId)
     }
   }
 }

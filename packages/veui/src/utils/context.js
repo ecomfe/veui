@@ -75,12 +75,14 @@ export function getVnodes (ref, context) {
 /**
  * 获取与当前组件最接近的给定类型的祖先组件中，当前组件在其第几个直接子节点的位置
  * @param {Vue} current 查找的组件实例
- * @param {string} parentType 父级类型
+ * @param {string|Vue} parentType 父级类型
  * @returns {number} 该实例所在位置的索引，找不到返回 -1
  */
 export function getIndexOfType (current, parentType) {
   let parent = parentType
-    ? getTypedAncestor(current, parentType)
+    ? typeof parentType === 'string'
+      ? getTypedAncestor(current, parentType)
+      : parentType
     : current.$parent
 
   if (parentType && !parent) {
