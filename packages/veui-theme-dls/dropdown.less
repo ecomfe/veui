@@ -94,7 +94,10 @@
 ._veui-dropdown-button {
   & &-button {
     width: auto;
-    .padding(_, @dls-button-padding-m);
+
+    .@{veui-prefix}-button-native {
+      .padding(_, @dls-button-padding-m);
+    }
   }
 
   &-label {
