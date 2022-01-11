@@ -151,7 +151,6 @@ describe('components/Button', () => {
     expect(button.attributes('type')).to.equal('submit')
     expect(button.attributes('name')).to.equal('foo')
 
-    button.trigger('click')
     Btn.trigger('click')
     await vm.$nextTick()
     expect(count).to.equal(1)
@@ -190,7 +189,6 @@ describe('components/Button', () => {
     vm.disabled = true
     await vm.$nextTick()
 
-    button.trigger('click')
     Btn.trigger('click')
     await vm.$nextTick()
     expect(count).to.equal(3)

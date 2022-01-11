@@ -86,19 +86,25 @@ export default {
       }
 
       if (this.active && e.key === ' ') {
-        this.$refs.button.click()
+        this.clickNativeButton()
         this.active = false
       }
     },
     handleKeypress (e) {
       if (this.activatable && e.key === 'Enter') {
-        this.$refs.button.click()
+        this.clickNativeButton()
       } else if (e.key === ' ') {
         e.preventDefault() // prevent page scroll
       }
     },
     handleBlur () {
       this.active = false
+    },
+    handleClick () {
+      this.clickNativeButton()
+    },
+    clickNativeButton () {
+      this.$refs.button.dispatchEvent(new MouseEvent('click'))
     }
   },
   render () {
@@ -118,6 +124,7 @@ export default {
         onKeyup={this.handleKeyup}
         onKeypress={this.handleKeypress}
         onBlur={this.handleBlur}
+        onClick={this.handleClick}
         {...{
           attrs: this.attrs.root,
           on: this.listeners

@@ -8,24 +8,22 @@
   line-height: 2;
   cursor: pointer;
   .veui-button-transition();
+  justify-content: center;
+  align-items: center;
+  .veui-stub();
 
   &-native {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
     border: none;
     white-space: nowrap;
     background: none;
     color: inherit;
     font: inherit;
-    border-radius: inherit;
     cursor: inherit;
-    .veui-stub();
-
-    &:disabled {
-      pointer-events: none;
-    }
+    padding: 0;
+    pointer-events: none;
   }
 
   .make-metrics(@size) {
@@ -36,12 +34,9 @@
     height: @@height;
     border-radius: @@radius;
     font-size: @@font-size;
+    .padding(0, @@padding);
 
-    .@{veui-prefix}-button-native {
-      .padding(0, @@padding);
-    }
-
-    &[ui~="square"] .@{veui-prefix}-button-native {
+    &[ui~="square"] {
       width: @@height;
       padding: 0;
     }
@@ -260,10 +255,7 @@
     line-height: inherit;
     background-color: @dls-button-background-color-text;
     color: @dls-button-font-color-text;
-
-    .@{veui-prefix}-button-native {
-      padding: 0;
-    }
+    padding: 0;
 
     &::after {
       content: "";
