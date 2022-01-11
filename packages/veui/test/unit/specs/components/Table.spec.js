@@ -2243,4 +2243,158 @@ describe('components/Table', () => {
     ).to.equal('level')
     wrapper.destroy()
   })
+
+  it('should render correctly on adjusting the order of columns', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-column': Column
+        },
+        template: `
+        <veui-table :data="data">
+          <template v-if="!reorder">
+            <veui-column
+              key="answers"
+              field="answers"
+              title="answers"
+            />
+            <veui-column
+              key="articles"
+              field="articles"
+              title="articles"
+            />
+          </template>
+          <template v-else>
+            <veui-column
+              key="articles"
+              field="articles"
+              title="articles"
+            />
+            <veui-column
+              key="answers"
+              field="answers"
+              title="answers"
+            />
+          </template>
+          <veui-column
+            field="shares"
+            title="shares"
+          />
+        </veui-table>`,
+        data () {
+          return {
+            data: [
+              {
+                answers: 1,
+                articles: 1,
+                shares: 1
+              }
+            ],
+            reorder: false
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await wait(0)
+    let cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(cols.at(0).text()).to.equal('answers')
+    expect(cols.at(1).text()).to.equal('articles')
+    expect(cols.at(2).text()).to.equal('shares')
+
+    vm.reorder = true
+    await wait(0)
+    cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(cols.at(0).text()).to.equal('articles')
+    expect(cols.at(1).text()).to.equal('answers')
+    expect(cols.at(2).text()).to.equal('shares')
+
+    wrapper.destroy()
+  })
+
+  it('should render correctly on swicthing column dynamically', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-column': Column
+        },
+        template: `
+        <veui-table :data="data">
+          <veui-column
+            v-if="!switched || active === 'answers'"
+            key="answers"
+            field="answers"
+            title="answers"
+          />
+          <veui-column
+            v-if="!switched || active === 'articles'"
+            key="articles"
+            field="articles"
+            title="articles"
+          />
+          <veui-column
+            v-if="!switched || active === 'shares'"
+            key="shares"
+            field="shares"
+            title="shares"
+          />
+          <veui-column
+            v-if="switched"
+            field="rest"
+            title="rest"
+          />
+        </veui-table>`,
+        data () {
+          return {
+            switched: false,
+            data: [
+              {
+                answers: 1,
+                articles: 1,
+                shares: 1,
+                rest: 1
+              }
+            ],
+            active: 'answers'
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await wait(0)
+    let cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(cols.at(0).text()).to.equal('answers')
+    expect(cols.at(1).text()).to.equal('articles')
+    expect(cols.at(2).text()).to.equal('shares')
+
+    vm.active = 'articles'
+    vm.switched = true
+    await wait(0)
+    cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(cols.at(0).text()).to.equal('articles')
+    expect(cols.at(1).text(), '#1').to.equal('rest')
+
+    vm.switched = false
+    await wait(0)
+
+    vm.active = 'shares'
+    vm.switched = true
+    await wait(0)
+    cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(cols.at(0).text()).to.equal('shares')
+    expect(cols.at(1).text()).to.equal('rest')
+    wrapper.destroy()
+  })
 })
