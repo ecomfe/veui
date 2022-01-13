@@ -87,6 +87,7 @@
     @afteropen="$refs.cal.scrollToCurrentYear()"
   >
     <div
+      v-outside:button,inputs="close"
       :ui="realUi"
       :class="$c('date-picker-overlay-content')"
     >
@@ -110,7 +111,6 @@
         :id="dropdownId"
         ref="cal"
         v-model="realSelected"
-        v-outside:button,inputs="close"
         role="dialog"
         :class="$c('date-picker-calendar')"
         v-bind="calendarProps"
