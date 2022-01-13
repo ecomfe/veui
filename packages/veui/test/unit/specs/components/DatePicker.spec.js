@@ -327,6 +327,8 @@ describe('components/DatePicker', () => {
   })
 
   it('should support shortcuts correctly.', async () => {
+    let testToggle = false
+    let selected = null
     let wrapper = mount({
       data () {
         return {
@@ -360,17 +362,27 @@ describe('components/DatePicker', () => {
       components: {
         'veui-date-picker': DatePicker
       },
-      template: `<veui-date-picker v-model="selected" range :shortcuts="shortcuts"/>`
+      methods: {
+        handleToggle () {
+          if (testToggle) {
+            selected = this.selected
+            testToggle = false
+          }
+        }
+      },
+      template: `<veui-date-picker v-model="selected" range :shortcuts="shortcuts" @toggle="handleToggle"/>`
     })
 
     let { vm } = wrapper
     wrapper.find('.veui-date-picker-trigger').trigger('click')
     await vm.$nextTick()
     let shortcuts = wrapper.findAll('.veui-date-picker-shortcuts button')
+    testToggle = true
     shortcuts.at(1).trigger('click')
 
     await vm.$nextTick()
     expect(vm.selected[1] - vm.selected[0]).to.equal(6 * 1000 * 60 * 60 * 24)
+    expect(selected[1] - selected[0]).to.equal(6 * 1000 * 60 * 60 * 24)
 
     wrapper.destroy()
   })
