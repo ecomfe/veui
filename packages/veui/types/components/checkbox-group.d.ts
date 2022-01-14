@@ -7,13 +7,13 @@ export type Item = RadioItem & {
 }
 
 type Props<T extends Item, Empty> = ({
-  emptyValue?: undefined,
+  emptyValue?: undefined
   value?: Array<T['value']>
 } | {
-  emptyValue: Empty,
-  value?: Array<T['value']> | [Empty],
+  emptyValue: Empty
+  value?: Array<T['value']> | [Empty]
 }) & {
-  items?: Array<T>,
+  items?: Array<T>
   keyField?: string
 }
 
@@ -24,7 +24,7 @@ type Mixins = [UiMixin, InputMixin, ControllableMixin<{
 }>]
 
 type Slots = {
-  item(item: LooseObject<Item> & { index: number }): unknown,
+  item(item: LooseObject<Item> & { index: number }): unknown
   desc(item: LooseObject<Item>): unknown
 }
 

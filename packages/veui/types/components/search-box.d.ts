@@ -7,25 +7,25 @@ type Trigger = 'focus' | 'input' | 'submit'
 type SHARED_PROPS = 'placeholder' | 'value' | 'selectOnFocus' | 'composition' | 'clearable'
 
 type Item = string | {
-  label: string,
-  value: string,
+  label: string
+  value: string
   options?: Array<Item> | null
 }
 
 type Props<T extends Item> = Pick<InputProps, SHARED_PROPS> & {
-  suggestions?: Array<T>,
-  autofocus?: boolean,
-  autocomplete?: boolean,
-  replaceOnSelect?: boolean | string,
+  suggestions?: Array<T>
+  autofocus?: boolean
+  autocomplete?: boolean
+  replaceOnSelect?: boolean | string
   suggestTrigger?: Trigger | Array<Trigger>
 } & SearchableProps<Normalized<'options', T>>
 
 type NormalizedItem = Normalized<'options', Item, true>
 
 type Emits = {
-  suggest(value: string): unknown,
-  select(item: NormalizedItem): unknown,
-  clear(): unknown,
+  suggest(value: string): unknown
+  select(item: NormalizedItem): unknown
+  clear(): unknown
   search(value: string, e: Event): unknown
 }
 
@@ -37,11 +37,11 @@ type NormalizedGroup = RequiredKey<NormalizedItem, 'options'>
 type NormalizedLeaf = SafeOmit<NormalizedItem, 'options'>
 
 type Slots = {
-  'suggestions-before'(): unknown,
-  'suggestions-after'(): unknown,
-  suggestions(slotProps: { suggestions: Array<NormalizedItem>, select: (suggestion: NormalizedItem) => unknown }): unknown,
-  'group-label'(slotProps: { item: NormalizedGroup }): unknown,
-  suggestion(slotProps: { item: NormalizedLeaf }): unknown,
+  'suggestions-before'(): unknown
+  'suggestions-after'(): unknown
+  suggestions(slotProps: { suggestions: Array<NormalizedItem>, select: (suggestion: NormalizedItem) => unknown }): unknown
+  'group-label'(slotProps: { item: NormalizedGroup }): unknown
+  suggestion(slotProps: { item: NormalizedLeaf }): unknown
   'option-label'(slotProps: { item: NormalizedLeaf }): unknown
 }
 

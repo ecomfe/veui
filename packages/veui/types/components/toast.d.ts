@@ -2,16 +2,16 @@ import { VeuiDefineInstance} from '../common/context'
 import { UiMixin } from '../common/mixins'
 
 type Props = {
-  type?: 'success' | 'warning' | 'info' | 'error',
-  title?: string,
-  closable?: boolean,
-  message?: string,
-  open?: boolean,
+  type?: 'success' | 'warning' | 'info' | 'error'
+  title?: string
+  closable?: boolean
+  message?: string
+  open?: boolean
   duration?: number
 }
 
 type Emits = {
-  close(): unknown,
+  close(): unknown
   ready(el: HTMLElement): unknown
 }
 
@@ -22,8 +22,8 @@ type SlotProps = {
 }
 
 type Slots = {
-  title(slotProps: SlotProps): unknown,
-  default(slotProps: SlotProps): unknown,
+  title(slotProps: SlotProps): unknown
+  default(slotProps: SlotProps): unknown
 }
 
 type Toast = {

@@ -3,7 +3,7 @@ import { UiMixin, OverlayMixin } from '../common/mixins'
 import { Props as DialogProps, Emits, Slots } from './dialog'
 
 type Props = Omit<DialogProps, 'draggable'> & {
-  placement?: 'top' | 'right' | 'bottom' | 'left',
+  placement?: 'top' | 'right' | 'bottom' | 'left'
 }
 
 type Mixins = [UiMixin, OverlayMixin]

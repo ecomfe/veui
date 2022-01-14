@@ -3,28 +3,28 @@ import { UiMixin } from '../common/mixins'
 import { Matches, TabItem, Slots as TabSlots } from './tab'
 
 type Props = {
-  active?: string,
-  matches?: Matches,
-  addable?: boolean,
-  max?: number,
-  tip?: string,
-  eager?: boolean,
+  active?: string
+  matches?: Matches
+  addable?: boolean
+  max?: number
+  tip?: string
+  eager?: boolean
   addLabel?: string
 }
 
 type Emits = {
-  change(item: TabItem): unknown,
-  remove(item: TabItem): unknown,
+  change(item: TabItem): unknown
+  remove(item: TabItem): unknown
   add(): unknown
 }
 
 type Mixins = UiMixin
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
   'tab-item': TabSlots['item']
-  'tab-label': TabSlots['label'],
-  panel(): unknown,
+  'tab-label': TabSlots['label']
+  panel(): unknown
   extra(): unknown
 }
 

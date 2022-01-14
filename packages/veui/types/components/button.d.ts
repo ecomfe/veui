@@ -2,10 +2,10 @@ import { VeuiDefineInstance } from '../common/context'
 import { UiMixin, FocusableMixin } from '../common/mixins'
 
 type Props = {
-  disabled?: boolean,
-  name?: string,
-  type?: string,
-  value?: string,
+  disabled?: boolean
+  name?: string
+  type?: string
+  value?: string
   loading?: boolean
 }
 

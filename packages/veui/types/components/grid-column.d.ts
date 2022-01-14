@@ -1,9 +1,9 @@
 import { VeuiDefineInstance } from '../common/context'
 
 type Props = {
-  span?: number,
-  offset?: number,
-  pull?: number,
+  span?: number
+  offset?: number
+  pull?: number
   push?: number
 }
 
@@ -12,7 +12,7 @@ type Emits = {}
 type Mixins = []
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
 }
 
 type GridColumn = {

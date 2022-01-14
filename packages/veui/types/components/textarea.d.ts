@@ -2,16 +2,16 @@ import { VeuiDefineInstance } from '../common/context'
 import { UiMixin, InputMixin, ActivatableMixin, ControllableMixin } from '../common/mixins'
 
 type Props = {
-  placeholder?: string,
-  value?: string,
-  lineNumber?: boolean,
-  rows?: number | string,
-  selectOnFocus?: boolean,
-  composition?: boolean,
-  autoresize?: boolean,
-  resizable?: boolean,
-  maxlength?: number,
-  getLength?: (val: string) => number,
+  placeholder?: string
+  value?: string
+  lineNumber?: boolean
+  rows?: number | string
+  selectOnFocus?: boolean
+  composition?: boolean
+  autoresize?: boolean
+  resizable?: boolean
+  maxlength?: number
+  getLength?: (val: string) => number
   strict?: boolean
 }
 

@@ -9,7 +9,7 @@ type Emits = {}
 type Mixins = []
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
 }
 
 type ConfigProvider = {

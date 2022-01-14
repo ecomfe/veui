@@ -5,22 +5,22 @@ import { Props as CalendarProps, Day } from './calendar'
 type PickedKeys = 'type' | 'weekStart' | 'fillMonth' | 'today' | 'disabledDate' | 'dateClass'
 
 type Props = ({
-  range: true,
-  selected?: [Date, Date],
+  range: true
+  selected?: [Date, Date]
   placeholder?: [string, string]
 } | {
-  range?: false,
-  selected?: Date,
+  range?: false
+  selected?: Date
   placeholder?: string
 }) & {
-  clearable?: boolean,
-  format?: string | ((date: Date) => string),
-  parse?: (date: string) => Date,
+  clearable?: boolean
+  format?: string | ((date: Date) => string)
+  parse?: (date: string) => Date
   shortcuts?: Array<{label: string, from?: number | Record<any, any>, to?: number | Record<any, any>}>
 } & Pick<CalendarProps, PickedKeys>
 
 type Emits = {
-  selectstart(picking: Date): unknown,
+  selectstart(picking: Date): unknown
   selectprogress(picking: [Date, Date]): unknown
 }
 
@@ -29,7 +29,7 @@ type Mixins = [UiMixin, InputMixin, DropdownMixin, ControllableMixin<{
 }>]
 
 type Slots = {
-  date(date: Day): unknown,
+  date(date: Day): unknown
 }
 
 type DatePicker = {

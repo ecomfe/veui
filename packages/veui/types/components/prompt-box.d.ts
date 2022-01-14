@@ -4,14 +4,14 @@ import { Props as DialogProps } from './dialog'
 
 type Props = Pick<DialogProps, 'open' | 'title' | 'beforeClose' | 'loading' | 'disabled' | 'okLabel' | 'cancelLabel'>
   & {
-    content?: string,
-    value?: string,
+    content?: string
+    value?: string
     invalid?: boolean
   }
 
 type Emits = {
-  ok(value: string): unknown,
-  cancel(value: string): unknown,
+  ok(value: string): unknown
+  cancel(value: string): unknown
   afterclose(): unknown
 }
 
@@ -20,8 +20,8 @@ type Mixins = [UiMixin, OverlayMixin, ControllableMixin<{
 }>]
 
 type Slots = {
-  default(): unknown,
-  title(): unknown,
+  default(): unknown
+  title(): unknown
   foot(): unknown
 }
 

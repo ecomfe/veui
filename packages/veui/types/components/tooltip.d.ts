@@ -3,13 +3,13 @@ import { UiMixin, OverlayMixin, ControllableMixin } from '../common/mixins'
 import { TargetType } from './overlay'
 
 type Props = {
-  target: TargetType,
-  position?: string,
-  trigger?: string,
-  hideDelay?: number,
-  open?: boolean,
-  interactive?: boolean,
-  autofocus?: boolean,
+  target: TargetType
+  position?: string
+  trigger?: string
+  hideDelay?: number
+  open?: boolean
+  interactive?: boolean
+  autofocus?: boolean
   aimCenter?: boolean
 }
 
@@ -20,7 +20,7 @@ type Mixins = [UiMixin, OverlayMixin, ControllableMixin<{
 }>]
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
 }
 
 type Tooltip = {

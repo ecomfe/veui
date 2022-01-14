@@ -56,7 +56,7 @@ export type VeuiDefineComponent<T> = T & PublicProps
 
 // 不写成 mixin，因为 mixin 无法在 new() => instance 中捕获泛型
 export type SearchableProps<T = unknown> = {
-  match?: (item: T, keyword: string | undefined, context: { ancestors: Array<T> }) => boolean | Array<[number, number]>,
+  match?: (item: T, keyword: string | undefined, context: { ancestors: Array<T> }) => boolean | Array<[number, number]>
   filter?: (item: T, keyword: string | undefined, context: { ancestors: Array<T>, offsets: Array<[number, number]> }) => boolean
 }
 
@@ -75,7 +75,7 @@ export type SafeOmit<T, Keys> = {
 export type RemoveNil<T> = T extends null | undefined | infer S ? S : T
 
 type BaseNormalizedItem<ChildrenKey extends string> = string | ({
-  label?: unknown,
+  label?: unknown
   value?: unknown
 } & {
   [K in ChildrenKey]?: Array<BaseNormalizedItem<ChildrenKey>> | null

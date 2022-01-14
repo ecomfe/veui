@@ -1,9 +1,9 @@
 import { VeuiDefineInstance } from '../common/context'
 
 type Props = {
-  width?: number,
-  columns?: number,
-  gutter?: number,
+  width?: number
+  columns?: number
+  gutter?: number
   margin?: number
 }
 

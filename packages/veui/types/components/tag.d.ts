@@ -2,11 +2,11 @@ import { VeuiDefineInstance } from '../common/context'
 import { UiMixin, FocusableMixin } from '../common/mixins'
 
 type Props = {
-    type?: string,
-    selectable?: boolean,
-    selected?: boolean,
-    removable?: boolean,
-    removed?: boolean,
+    type?: string
+    selectable?: boolean
+    selected?: boolean
+    removable?: boolean
+    removed?: boolean
     disabled?: boolean
 }
 
@@ -17,7 +17,7 @@ type Emits = {
 type Mixins = [UiMixin, FocusableMixin]
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
 }
 
 type Tag = {

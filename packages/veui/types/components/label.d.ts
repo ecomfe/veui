@@ -11,7 +11,7 @@ type Emits = {}
 type Mixins = UiMixin
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
 }
 
 type Label = {
