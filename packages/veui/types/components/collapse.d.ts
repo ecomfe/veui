@@ -2,10 +2,10 @@ import { VeuiDefineInstance } from '../common/context'
 import { UiMixin } from '../common/mixins'
 
 type Props = {
-  label?: string,
-  expanded?: boolean,
-  togglePosition?: 'start' | 'end' | 'none',
-  disabled?: boolean,
+  label?: string
+  expanded?: boolean
+  togglePosition?: 'start' | 'end' | 'none'
+  disabled?: boolean
   name?: string | number
 }
 
@@ -16,8 +16,8 @@ type Emits = {
 type Mixins = UiMixin
 
 type Slots = {
-  default(): unknown,
-  title(): unknown,
+  default(): unknown
+  title(): unknown
   titleAfter(): unknown
 }
 

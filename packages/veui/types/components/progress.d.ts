@@ -2,16 +2,16 @@ import { VeuiDefineInstance } from '../common/context'
 import { UiMixin } from '../common/mixins'
 
 type Props = {
-  type?: string,
-  radius?: number,
-  strokeWidth?: number,
-  indeterminate?: boolean,
-  desc?: boolean,
-  value?: number,
-  decimalPlace?: number,
-  min?: number,
-  max?: number,
-  status?: string,
+  type?: string
+  radius?: number
+  strokeWidth?: number
+  indeterminate?: boolean
+  desc?: boolean
+  value?: number
+  decimalPlace?: number
+  min?: number
+  max?: number
+  status?: string
   autosucceed?: boolean | number
 }
 
@@ -26,7 +26,7 @@ type SlotProps = {
 }
 
 type Slots = {
-  default(slotProps: SlotProps): unknown,
+  default(slotProps: SlotProps): unknown
   after(slotProps: SlotProps): unknown
 }
 

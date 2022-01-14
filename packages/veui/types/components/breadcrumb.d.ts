@@ -3,9 +3,9 @@ import { UiMixin } from '../common/mixins'
 import { RawLocation } from 'vue-router'
 
 export type Item = {
-  label: string,
-  type?: 'text' | 'link',
-  to?: string | RawLocation,
+  label: string
+  type?: 'text' | 'link'
+  to?: string | RawLocation
   native?: boolean
 }
 
@@ -20,8 +20,8 @@ type Emits = {
 type Mixins = UiMixin
 
 type Slots = {
-  default(): unknown,
-  item(scope: { route: LooseObject<Item>, index: number } & LooseObject<Item>): unknown,
+  default(): unknown
+  item(scope: { route: LooseObject<Item>, index: number } & LooseObject<Item>): unknown
   separator(): unknown
 }
 

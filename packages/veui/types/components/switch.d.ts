@@ -2,17 +2,17 @@ import { VeuiDefineInstance } from '../common/context'
 import { UiMixin } from '../common/mixins'
 
 type Props = {
-  loading?: boolean,
-  trueValue?: unknown,
-  falseValue?: unknown,
-  model?: unknown,
-  checked?: boolean,
-  onLabel?: string,
+  loading?: boolean
+  trueValue?: unknown
+  falseValue?: unknown
+  model?: unknown
+  checked?: boolean
+  onLabel?: string
   offLabel?: string
 }
 
 type Emits = {
-  input(value: unknown): unknown,
+  input(value: unknown): unknown
   change(checked: boolean): unknown
 }
 

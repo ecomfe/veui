@@ -1,8 +1,8 @@
 import { VeuiDefineInstance } from '../common/context'
 
 type Props = {
-  name: string | Record<keyof any, unknown>,
-  label?: string,
+  name: string | Record<keyof any, unknown>
+  label?: string
   spin?: boolean
 }
 

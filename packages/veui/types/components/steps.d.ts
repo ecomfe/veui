@@ -4,8 +4,8 @@ import { Props as LinkProps } from './link'
 
 type Item = {
   to: LinkProps['to']
-  status?: string,
-  label?: string,
+  status?: string
+  label?: string
   desc?: string
 }
 
@@ -23,9 +23,9 @@ type Mixins = UiMixin
 type SlotScope = LooseObject<Item> & { index: number }
 
 type Slots = {
-  default(slotProps: SlotScope): unknown,
-  index(slotProps: SlotScope): unknown,
-  label(slotProps: SlotScope): unknown,
+  default(slotProps: SlotScope): unknown
+  index(slotProps: SlotScope): unknown
+  label(slotProps: SlotScope): unknown
   desc(slotProps: SlotScope): unknown
 }
 

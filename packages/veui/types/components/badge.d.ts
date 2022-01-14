@@ -4,9 +4,9 @@ import { UiMixin } from '../common/mixins'
 type DlsBadgeType = 'info' | 'success' | 'warning' | 'error' | 'aux'
 
 type Props = {
-  value?: number | string,
-  max?: number,
-  hidden?: boolean,
+  value?: number | string
+  max?: number
+  hidden?: boolean
   type?: DlsBadgeType
 }
 

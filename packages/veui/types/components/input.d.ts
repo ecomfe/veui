@@ -4,21 +4,21 @@ import { UiMixin, ActivatableMixin, InputMixin, ControllableMixin } from '../com
 type InputType = 'text' | 'password' | 'hidden'
 
 export type Props = {
-  type?: InputType,
-  value?: string | number,
-  placeholder?: string,
-  selectOnFocus?: boolean,
-  composition?: boolean,
-  clearable?: boolean,
-  maxlength?: number,
-  getLength?: (value: string) => number,
-  strict?: boolean,
+  type?: InputType
+  value?: string | number
+  placeholder?: string
+  selectOnFocus?: boolean
+  composition?: boolean
+  clearable?: boolean
+  maxlength?: number
+  getLength?: (value: string) => number
+  strict?: boolean
   trim?: boolean
 }
 
 type Emits = {
-  input(value: string): unknown,
-  clear(): unknown,
+  input(value: string): unknown
+  clear(): unknown
   autofill(): unknown
 }
 
@@ -27,8 +27,8 @@ type Mixins = [UiMixin, ActivatableMixin, InputMixin, ControllableMixin<{
 }>]
 
 type Slots = {
-  before(): unknown,
-  placeholder(): unknown,
+  before(): unknown
+  placeholder(): unknown
   after(): unknown
 }
 

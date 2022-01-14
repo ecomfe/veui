@@ -5,12 +5,12 @@ import { RawLocation } from 'vue-router'
 export type To = string | RawLocation
 
 export type Props = {
-  to: To,
-  native?: boolean,
-  replace?: boolean,
-  fallback?: string,
-  disabled?: boolean,
-  rel?: string,
+  to: To
+  native?: boolean
+  replace?: boolean
+  fallback?: string
+  disabled?: boolean
+  rel?: string
   target?: string
 }
 

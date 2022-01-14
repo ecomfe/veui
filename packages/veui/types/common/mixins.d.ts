@@ -40,9 +40,9 @@ export type TreeMixinWithIndeterminate = {
 }
 
 export type Mix = {
-  props?: Record<string, unknown>,
-  methods?: Record<string, Function>,
-  emits?: Record<string, Function>,
+  props?: Record<string, unknown>
+  methods?: Record<string, Function>
+  emits?: Record<string, Function>
 }
 
 export type MultiMixin<
@@ -50,8 +50,8 @@ export type MultiMixin<
   RealMix = T extends Mix ? [T] : T
 > = RealMix extends []
   ? {
-    props: {},
-    methods: {},
+    props: {}
+    methods: {}
     emits: {}
   }
   : RealMix extends [infer first, ...infer rest]
@@ -81,9 +81,9 @@ export type DropdownMixin = MultiMixin<[
 export type InputMixin = MultiMixin<[
   {
     props: {
-      name?: string,
-      readonly?: boolean,
-      disabled?: boolean,
+      name?: string
+      readonly?: boolean
+      disabled?: boolean
       invalid?: boolean
     }
   },

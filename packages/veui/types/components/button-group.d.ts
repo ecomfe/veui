@@ -2,14 +2,14 @@ import { VeuiDefineInstance, LooseObject } from '../common/context'
 import { UiMixin, FocusableMixin } from '../common/mixins'
 
 type Item = {
-  label?: string, // 覆盖 item slot 可以不传 label
-  value?: unknown,
+  label?: string // 覆盖 item slot 可以不传 label
+  value?: unknown
   disabled?: boolean
 }
 
 type Props<T extends Item> = {
-  items?: Array<T>,
-  keyField?: string,
+  items?: Array<T>
+  keyField?: string
   disabled?: boolean
 }
 

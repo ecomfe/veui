@@ -2,13 +2,13 @@ import { VeuiDefineInstance } from '../common/context'
 import { UiMixin } from '../common/mixins'
 
 type Props<T = number> = {
-  value?: T,
-  secondaryProgress?: number | Array<number>,
-  min?: number,
-  max?: number,
-  step?: number,
-  mark?: boolean,
-  parse?: (val: T) => number,
+  value?: T
+  secondaryProgress?: number | Array<number>
+  min?: number
+  max?: number
+  step?: number
+  mark?: boolean
+  parse?: (val: T) => number
   format?: (val: number) => T
 }
 

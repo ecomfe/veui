@@ -3,24 +3,24 @@ import { UiMixin, OverlayMixin } from '../common/mixins'
 import { TargetType } from './overlay'
 
 type Props = {
-  target: TargetType,
-  title?: string,
-  open?: boolean,
-  foot?: boolean,
-  okLabel?: string,
+  target: TargetType
+  title?: string
+  open?: boolean
+  foot?: boolean
+  okLabel?: string
   cancelLabel?: string
 }
 
 type Emits = {
-  ok(): unknown,
+  ok(): unknown
   cancel(): unknown
 }
 
 type Mixins = [UiMixin, OverlayMixin]
 
 type Slots = {
-  default(): unknown,
-  title(): unknown,
+  default(): unknown
+  title(): unknown
   foot(): unknown
 }
 

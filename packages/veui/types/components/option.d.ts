@@ -4,10 +4,10 @@ import { UiMixin } from '../common/mixins'
 export type Tag = string
 
 type Props = {
-  label?: string | number,
-  value?: unknown,
-  disabled?: boolean,
-  hidden?: boolean,
+  label?: string | number
+  value?: unknown
+  disabled?: boolean
+  hidden?: boolean
   tag?: Tag
 }
 
@@ -18,7 +18,7 @@ type Emits = {
 type Mixins = UiMixin
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
   label(): unknown
 }
 

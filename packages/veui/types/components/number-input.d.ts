@@ -2,12 +2,12 @@ import { VeuiDefineInstance } from '../common/context'
 import { UiMixin, InputMixin, ActivatableMixin, ControllableMixin } from '../common/mixins'
 
 type Props = {
-  value?: number,
-  step?: number,
-  decimalPlace?: number,
-  max?: number,
-  min?: number,
-  format?: (val: number, defaultFormattedValue: string) => string,
+  value?: number
+  step?: number
+  decimalPlace?: number
+  max?: number
+  min?: number
+  format?: (val: number, defaultFormattedValue: string) => string
   parse?: (val: string) => number
 }
 
@@ -20,7 +20,7 @@ type Mixins = [UiMixin, InputMixin, ActivatableMixin, ControllableMixin<{
 }>]
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
 }
 
 type NumberInput = {

@@ -1,7 +1,7 @@
 import { VeuiDefineInstance } from '../common/context'
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
 }
 
 type Span = {
