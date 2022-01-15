@@ -1,3 +1,11 @@
+## 2.4.4
+
+### 🐞 问题修复
+
+- [^] 修正了 `Tabs` / `Tab` / `Table` / `Column` / `Accordion` / `Collapse` 组件通过内联子组件方式使用时，动态切换子组件时可能顺序错乱的问题。<!-- #Tabs #Tab #Table #Column #Accordion #Collapse -->
+- [^] 修正了 `DatePicker` 组件在快捷选项区域点击空白处会触发下拉面板关闭的问题。<!-- #DatePicker -->
+- [^] 调整了 `Button` 组件的样式实现方式，以修复 v2.4.2 重构时引入的部分样式问题。<!-- #Button #Uploader #Dropdown #Sidebar -->
+
 ## 2.4.3
 
 ### 🐞 问题修复
