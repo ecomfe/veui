@@ -1,20 +1,14 @@
-import { VeuiDefineInstance } from '../common/context'
-import { To } from './link'
-import { Route } from 'vue-router'
-
-type STATUS_LIST = 'success' | 'warning' | 'info' | 'error'
-
-export type Matches = (route: Route, to: Route) => boolean
+import { VeuiDefineInstance, Status, RouteMatches, LinkTo } from '../common'
 
 type Props = {
   label?: string
   name?: string
   disabled?: boolean
-  to?: To
-  matches?: Matches, // 没有 $route 这个函数也不会调用的
+  to?: LinkTo
+  matches?: RouteMatches, // 没有 $route 这个函数也不会调用的
   native?: boolean
   removable?: boolean
-  status?: STATUS_LIST
+  status?: Status
 }
 
 type Emits = {}

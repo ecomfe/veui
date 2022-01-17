@@ -103,6 +103,14 @@ module.exports = {
       globals: {
         expect: true
       }
+    },
+    {
+      files: ['*.ts'],
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        sourceType: "module"
+      },
+      plugins: ['@typescript-eslint']
     }
   ]
 }

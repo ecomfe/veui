@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, LooseObject } from '../common/context'
-import { UiMixin, FocusableMixin } from '../common/mixins'
+import { VeuiDefineInstance, LooseObject, UiMixin, FocusableMixin } from '../common'
 
 type Item = {
   label?: string // 覆盖 item slot 可以不传 label
@@ -14,7 +13,7 @@ type Props<T extends Item> = {
 }
 
 type Emits = {
-  click(item: LooseObject<Item>, index: number, e: MouseEvent): unknown
+  click(item: LooseObject<Item>, index: number, e: MouseEvent): void
 }
 
 type Mixins = [UiMixin, FocusableMixin]

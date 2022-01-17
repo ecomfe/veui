@@ -1,15 +1,16 @@
-import { getKey } from './context'
+import { KeyType } from './utils'
+import { OverlayClassAndStyle } from './shared'
 
 export type UiMixin = {
   props: { ui?: string }
 }
 
 export type FocusableMixin = {
-  methods: { focus(): unknown }
+  methods: { focus(): void }
 }
 
 export type ActivatableMixin = {
-  methods: { activate(): unknown }
+  methods: { activate(): void }
 }
 
 export type ControllableMixin<Emits extends Record<any, Function>> = {
@@ -17,11 +18,7 @@ export type ControllableMixin<Emits extends Record<any, Function>> = {
 }
 
 export type OverlayMixin = {
-  props: {
-    overlayClass?: unknown
-    overlayStyle?: unknown
-    // overlayOptions?: object?
-  }
+  props: OverlayClassAndStyle
 }
 
 type MergeChecked = 'keep-all' | 'upwards' | 'downwards'
@@ -54,12 +51,12 @@ export type MultiMixin<
     methods: {}
     emits: {}
   }
-  : RealMix extends [infer first, ...infer rest]
-    ? rest extends Array<Mix>
+  : RealMix extends [infer First, ...infer Rest]
+    ? Rest extends Array<Mix>
       ? {
-        props: getKey<first, 'props'> & getKey<MultiMixin<rest>, 'props'>
-        methods: getKey<first, 'methods'> & getKey<MultiMixin<rest>, 'methods'>
-        emits: getKey<first, 'emits'> & getKey<MultiMixin<rest>, 'emits'>
+        props: KeyType<First, 'props'> & KeyType<MultiMixin<Rest>, 'props'>
+        methods: KeyType<First, 'methods'> & KeyType<MultiMixin<Rest>, 'methods'>
+        emits: KeyType<First, 'emits'> & KeyType<MultiMixin<Rest>, 'emits'>
       } : never
     : never
 
@@ -74,7 +71,7 @@ export type DropdownMixin = MultiMixin<[
   OverlayMixin,
   ActivatableMixin,
   ControllableMixin<{
-    toggle(expanded: boolean): unknown
+    toggle(expanded: boolean): void
   }>
 ]>
 

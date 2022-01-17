@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin } from '../common'
 
 type Validities = boolean | undefined | Record<any, unknown>
 
@@ -21,8 +20,8 @@ type Props = {
 }
 
 type Emits = {
-  submit(data: Record<any, unknown>, evt: Event): unknown
-  invalid(errors: Record<any, unknown>): unknown
+  submit(data: Record<any, unknown>, evt: Event): void
+  invalid(errors: Record<any, unknown>): void
 }
 
 type Mixins = UiMixin

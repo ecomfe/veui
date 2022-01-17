@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, InputMixin, TreeMixin, ControllableMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, InputMixin, TreeMixin, ControllableMixin } from '../common'
 import { SlotProps as TreeSlotProps, LooseTreeItem } from './tree'
 
 type Item = {
@@ -26,7 +25,7 @@ type Props<T extends Item> = {
 type Emits = {}
 
 type Mixins = [UiMixin, InputMixin, TreeMixin, ControllableMixin<{
-  select(value: Array<unknown>): unknown
+  select(value: Array<unknown>): void
 }>]
 
 type SlotProps = { count: number }

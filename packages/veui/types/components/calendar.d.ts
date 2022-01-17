@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, InputMixin, ControllableMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, InputMixin, ControllableMixin } from '../common'
 
 type Selected = Date | Array<Date>
 
@@ -29,19 +28,19 @@ export type Day = {
 }
 
 type Emits = {
-  viewchange(monthInfo: Pick<Day, 'year' | 'month'> & { index: number }): unknown
-  selectstart(selected: Date): unknown
-  selectprogress(picking: [Date, Date] | Array<[Date, Date]>): unknown
+  viewchange(monthInfo: Pick<Day, 'year' | 'month'> & { index: number }): void
+  selectstart(selected: Date): void
+  selectprogress(picking: [Date, Date] | Array<[Date, Date]>): void
 }
 
 type Mixins = [UiMixin, InputMixin, ControllableMixin<{
-  select(selected: Selected): unknown
+  select(selected: Selected): void
 }>]
 
 type Slots = {
-  default(): unknown
+  before(): unknown
   date(day: Day): unknown
-  default(): unknown
+  after(): unknown
 }
 
 type Calendar = {

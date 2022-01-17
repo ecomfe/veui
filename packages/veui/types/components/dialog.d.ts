@@ -1,28 +1,27 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, OverlayMixin, FocusableMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, OverlayMixin, FocusableMixin, BeforeClose } from '../common'
 
 export type Props = {
-    modal?: boolean
-    title?: string
-    open?: boolean
-    closable?: boolean
-    escapable?: boolean
-    inline?: boolean
-    outsideClosable?: boolean
-    draggable?: boolean
-    priority?: number
-    beforeClose?: (type: 'ok' | 'cancel') => Promise<boolean | undefined> | boolean | undefined
-    footless?: boolean
-    disabled?: boolean
-    loading?: boolean
-    okLabel?: string
-    cancelLabel?: string
+  modal?: boolean
+  title?: string
+  open?: boolean
+  closable?: boolean
+  escapable?: boolean
+  inline?: boolean
+  outsideClosable?: boolean
+  draggable?: boolean
+  priority?: number
+  beforeClose?: BeforeClose
+  footless?: boolean
+  disabled?: boolean
+  loading?: boolean
+  okLabel?: string
+  cancelLabel?: string
 }
 
 export type Emits = {
-  afterclose(): unknown
-  ok(): unknown
-  cancel(): unknown
+  afterclose(): void
+  ok(): void
+  cancel(): void
 }
 
 export type Mixins = [UiMixin, OverlayMixin, FocusableMixin]

@@ -1,13 +1,12 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, Status } from '../common'
 
-type DlsBadgeType = 'info' | 'success' | 'warning' | 'error' | 'aux'
+type BadgeType = Status | 'aux'
 
 type Props = {
   value?: number | string
   max?: number
   hidden?: boolean
-  type?: DlsBadgeType
+  type?: BadgeType
 }
 
 type Emits = {}

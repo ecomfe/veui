@@ -1,5 +1,4 @@
-import { LooseObject, VeuiDefineInstance } from '../common/context'
-import { UiMixin, InputMixin } from '../common/mixins'
+import { LooseObject, VeuiDefineInstance, UiMixin, InputMixin } from '../common'
 import { PreviewOptions } from './lightbox'
 
 type Item = {
@@ -9,13 +8,6 @@ type Item = {
 
 type Validity = LooseObject<{ valid: true } | { valid: false, message?: string }>
 
-type CustomCallbacks = {
-  onload: (result: UploadResult) => unknown
-  onprogress: (progress: { loaded: number, total: number }) => unknown
-  oncancel: () => unknown
-  onerror: (error: { message: string }) => unknown
-}
-
 type UploadResult = LooseObject<{
   success: true
   name: string
@@ -24,6 +16,13 @@ type UploadResult = LooseObject<{
   success: false
   message: string
 }>
+
+type CustomCallbacks = {
+  onload: (result: UploadResult) => void
+  onprogress: (progress: { loaded: number, total: number }) => void
+  oncancel: () => void
+  onerror: (error: { message: string }) => void
+}
 
 type CancelFn = () => void
 
@@ -95,13 +94,13 @@ type ErrorInfo = {
 }
 
 type Emits = {
-  change(value: LooseItem | Array<LooseItem>): unknown
-  invalid(error: ErrorInfo): unknown
-  progress(file: FileInfo, index: number, event: ProgressEvent): unknown
-  remove(file: FileInfo, index: number): unknown
-  success(file: FileInfo, index: number): unknown
-  failure(file: FileInfo, index: number): unknown
-  statuschange(status: 'empty' | 'uploading' | 'failure' | 'success'): unknown
+  change(value: LooseItem | Array<LooseItem>): void
+  invalid(error: ErrorInfo): void
+  progress(file: FileInfo, index: number, event: ProgressEvent): void
+  remove(file: FileInfo, index: number): void
+  success(file: FileInfo, index: number): void
+  failure(file: FileInfo, index: number): void
+  statuschange(status: 'empty' | 'uploading' | 'failure' | 'success'): void
 }
 
 type Mixins = [UiMixin, InputMixin]

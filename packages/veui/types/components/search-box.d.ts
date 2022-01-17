@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, SearchableProps, RequiredKey, SafeOmit, Normalized } from '../common/context'
-import { UiMixin, InputMixin, DropdownMixin, FocusableMixin, ControllableMixin } from '../common/mixins'
+import { VeuiDefineInstance, SearchableProps, RequiredKey, SafeOmit, Normalized, UiMixin, InputMixin, DropdownMixin, FocusableMixin, ControllableMixin } from '../common'
 import { Props as InputProps } from './input'
 
 type Trigger = 'focus' | 'input' | 'submit'
@@ -23,14 +22,14 @@ type Props<T extends Item> = Pick<InputProps, SHARED_PROPS> & {
 type NormalizedItem = Normalized<'options', Item, true>
 
 type Emits = {
-  suggest(value: string): unknown
-  select(item: NormalizedItem): unknown
-  clear(): unknown
-  search(value: string, e: Event): unknown
+  suggest(value: string): void
+  select(item: NormalizedItem): void
+  clear(): void
+  search(value: string, e: Event): void
 }
 
 type Mixins = [UiMixin, InputMixin, DropdownMixin, FocusableMixin, ControllableMixin<{
-  input(value: string): unknown
+  input(value: string): void
 }>]
 
 type NormalizedGroup = RequiredKey<NormalizedItem, 'options'>

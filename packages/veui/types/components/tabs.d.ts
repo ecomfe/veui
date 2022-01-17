@@ -1,10 +1,9 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
-import { Matches, TabItem, Slots as TabSlots } from './tab'
+import { VeuiDefineInstance, UiMixin, RouteMatches } from '../common'
+import { TabItem, Slots as TabSlots } from './tab'
 
 type Props = {
   active?: string
-  matches?: Matches
+  matches?: RouteMatches
   addable?: boolean
   max?: number
   tip?: string
@@ -13,9 +12,9 @@ type Props = {
 }
 
 type Emits = {
-  change(item: TabItem): unknown
-  remove(item: TabItem): unknown
-  add(): unknown
+  change(item: TabItem): void
+  remove(item: TabItem): void
+  add(): void
 }
 
 type Mixins = UiMixin

@@ -3,8 +3,6 @@
 // 1. makeDefaultOptional 中的 Omit 导致 { foo: true, bar: number } | { foo: false, bar: string } 失效
 // 2. 从 PropsOption 推导 PropType 很多都推导不出来？
 
-// required 每个组件自己标吧
-
 import {
   VNodeProps,
   CreateComponentPublicInstance,
@@ -15,18 +13,9 @@ import {
   EmitsOptions
 } from '@vue/runtime-dom'
 import { MultiMixin, Mix } from './mixins';
-
-export type getKey<O, K> = K extends keyof O ? O[K] : {}
+import { KeyType, NullableProp } from './utils'
 
 type PublicProps = VNodeProps & AllowedComponentProps & ComponentCustomProps;
-
-type NullableProp<Props> = {
-  [K in keyof Props]: Props[K] extends boolean ? Props[K] : Props[K] | null
-}
-
-export type LooseObject<T extends object> = T & {
-  [key: keyof any]: unknown
-}
 
 /**
  * 定义 veui 组件：
@@ -40,9 +29,9 @@ export type VeuiDefineInstance<
     Method extends MethodOptions = {},
     Computed extends ComputedOptions = {},
     MergedMixin = MultiMixin<Mixin>,
-    RealProps = NullableProp<Props & getKey<MergedMixin, 'props'>>,
-    RealEmit = Emit & getKey<MergedMixin, 'emits'>,
-    RealMethod = Method & getKey<MergedMixin, 'methods'>,
+    RealProps = NullableProp<Props & KeyType<MergedMixin, 'props'>>,
+    RealEmit = Emit & KeyType<MergedMixin, 'emits'>,
+    RealMethod = Method & KeyType<MergedMixin, 'methods'>,
 > = CreateComponentPublicInstance<
   RealProps, {}, {}, Computed,
   RealMethod extends MethodOptions ? RealMethod : never,
@@ -60,22 +49,8 @@ export type SearchableProps<T = unknown> = {
   filter?: (item: T, keyword: string | undefined, context: { ancestors: Array<T>, offsets: Array<[number, number]> }) => boolean
 }
 
-// index
-export type RequiredKey<T, ChildrenKey extends string = 'children'> = {
-  [K in keyof T as (K extends ChildrenKey ? never : K)]: T[K]
-} & {
-  [K in keyof T as (K extends ChildrenKey ? K : never)]-?: RemoveNil<T[K]>
-}
-
-// Omit 遇到 [k: string] 这种 key 会有问题
-export type SafeOmit<T, Keys> = {
-  [K in keyof T as (K extends Keys ? never : K)]: T[K]
-}
-
-export type RemoveNil<T> = T extends null | undefined | infer S ? S : T
-
 type BaseNormalizedItem<ChildrenKey extends string> = string | ({
-  label?: unknown
+  label?: string
   value?: unknown
 } & {
   [K in ChildrenKey]?: Array<BaseNormalizedItem<ChildrenKey>> | null
@@ -95,7 +70,7 @@ export type Normalized<
         ? Array<Normalized<ChildrenKey, T, Loose>> | null
         : T[K]
     } & (
-      getKey<T, 'label'> extends string ? {} : { label: getKey<T, 'value'> }
+      KeyType<T, 'label'> extends string ? {} : { label: KeyType<T, 'value'> }
     ) & (
       Loose extends true ? { [k in any]: unknown } : {}
     ) & Extra

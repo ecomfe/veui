@@ -1,16 +1,17 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin } from '../common'
+
+export type TogglePosition = 'start' | 'end' | 'none'
 
 type Props = {
   label?: string
   expanded?: boolean
-  togglePosition?: 'start' | 'end' | 'none'
+  togglePosition?: TogglePosition
   disabled?: boolean
   name?: string | number
 }
 
 type Emits = {
-  toggle(expanded: boolean): unknown
+  toggle(expanded: boolean): void
 }
 
 type Mixins = UiMixin

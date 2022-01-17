@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, RequiredKey, SafeOmit, Normalized } from '../common/context'
-import { UiMixin, ControllableMixin, OverlayMixin } from '../common/mixins'
+import { VeuiDefineInstance, RequiredKey, SafeOmit, Normalized, UiMixin, ControllableMixin, OverlayMixin } from '../common'
 import { Tag } from './option'
 
 export type Item<Position extends boolean = true> = {
@@ -21,11 +20,11 @@ type Props<T extends Item> = {
 }
 
 type Emits = {
-  afteropen(): unknown
+  afteropen(): void
 }
 
 type Mixins = [UiMixin, OverlayMixin, ControllableMixin<{
-  toggle(expanded: boolean): unknown
+  toggle(expanded: boolean): void
 }>]
 
 export type LooseOptionItem<Position extends boolean = true> = Normalized<'options', Item<Position>, true>

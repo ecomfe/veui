@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, SearchableProps, Normalized } from '../common/context'
-import { UiMixin, InputMixin, DropdownMixin,ControllableMixin } from '../common/mixins'
+import { VeuiDefineInstance, SearchableProps, Normalized, UiMixin, InputMixin, DropdownMixin, ControllableMixin } from '../common'
 import { Item, LooseOptionLeaf, LooseOptionParent } from './option-group'
 
 export { Item }
@@ -20,13 +19,13 @@ type Props<T extends Item> = MultipleAndValue<T> & {
 } & SearchableProps<T>
 
 type Emits = {
-  clear(): unknown
-  input(val: string): unknown
-  afteropen(): unknown
+  clear(): void
+  input(val: string): void
+  afteropen(): void
 }
 
 type Mixins = [UiMixin, InputMixin, DropdownMixin, ControllableMixin<{
-  change(value: unknown): unknown
+  change(value: unknown): void
 }>]
 
 type SlotProps = {

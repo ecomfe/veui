@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, LooseObject } from '../common/context'
-import { CarouselMixin } from '../common/mixins'
+import { VeuiDefineInstance, LooseObject, CarouselMixin } from '../common'
 
 export type Item = {
   src: string
@@ -8,11 +7,11 @@ export type Item = {
   type?: 'video' | 'image'
 }
 
-export type CarouselCommonProps<T extends Item> =   {
+export type CarouselCommonProps<T extends Item> = {
   datasource?: Array<T>
   index?: number
   wrap?: boolean
-  lazy?: boolean // | object?
+  lazy?: boolean | { preload: number }
 }
 
 type Props<T extends Item> = CarouselCommonProps<T> & {
@@ -32,14 +31,14 @@ type Props<T extends Item> = CarouselCommonProps<T> & {
   vertical?: boolean
   slideAspectRatio?: string | number
   options?: {
-      video?: {
-          muted?: boolean
-          autoplay?: boolean
-          controls?: boolean
-          loop?: boolean
-          [key: keyof any]: unknown
-      }
+    video?: {
+      muted?: boolean
+      autoplay?: boolean
+      controls?: boolean
+      loop?: boolean
       [key: keyof any]: unknown
+    }
+    [key: keyof any]: unknown
   }
 }
 
@@ -52,7 +51,12 @@ type Slots = {
 }
 
 type Carousel = {
-  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Carousel

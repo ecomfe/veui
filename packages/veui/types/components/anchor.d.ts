@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, LooseObject } from '../common/context'
-import { UiMixin } from '../common/mixins'
+import { VeuiDefineInstance, LooseObject, UiMixin } from '../common'
 
 type Item = {
   label: string

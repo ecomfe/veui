@@ -1,29 +1,23 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, FocusableMixin } from '../common/mixins'
-import { ComponentPublicInstance } from '@vue/runtime-dom'
-
-export type TargetType = string | HTMLElement | ComponentPublicInstance | any // $refs.xxx 好像不能识别
+import { VeuiDefineInstance, UiMixin, FocusableMixin, OverlayPosition, OverlayTarget, OverlayClassAndStyle } from '../common'
 
 type Props = {
-  position?: string
-  overlayClass?: unknown
-  overlayStyle?: unknown
+  position?: OverlayPosition
   open?: boolean
   inline?: boolean
-  target?: TargetType
+  target?: OverlayTarget
   options?: Record<keyof any, unknown>
   priority?: number
   autofocus?: boolean
   modal?: boolean
   matchWidth?: boolean
   local?: boolean
-}
+} & OverlayClassAndStyle
 
 type Emits = {
-  afteropen(): unknown
-  afterclose(): unknown
-  orderchange(order: number): unknown
-  locate(): unknown
+  afteropen(): void
+  afterclose(): void
+  orderchange(order: number): void
+  locate(): void
 }
 
 type Mixins = [UiMixin, FocusableMixin]

@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, LooseObject } from '../common/context'
+import { VeuiDefineInstance, LooseObject } from '../common'
 import { Slots as SelectSlots } from './select'
 
 export type AllowedOrders = Array<false | 'desc' | 'asc'>
@@ -21,7 +21,7 @@ type Props = {
 }
 
 type Emits = {
-  filterchange(val: unknown): unknown
+  filterchange(val: unknown): void
 }
 
 type Mixins = {}

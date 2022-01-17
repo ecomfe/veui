@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, OverlayMixin, ControllableMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, OverlayMixin, ControllableMixin } from '../common'
 import { Props as DialogProps } from './dialog'
 
 type Props = Pick<DialogProps, 'open' | 'title' | 'beforeClose' | 'loading' | 'disabled' | 'okLabel' | 'cancelLabel'>
@@ -10,13 +9,13 @@ type Props = Pick<DialogProps, 'open' | 'title' | 'beforeClose' | 'loading' | 'd
   }
 
 type Emits = {
-  ok(value: string): unknown
-  cancel(value: string): unknown
-  afterclose(): unknown
+  ok(value: string): void
+  cancel(value: string): void
+  afterclose(): void
 }
 
 type Mixins = [UiMixin, OverlayMixin, ControllableMixin<{
-  input(value: string): unknown
+  input(value: string): void
 }>]
 
 type Slots = {
