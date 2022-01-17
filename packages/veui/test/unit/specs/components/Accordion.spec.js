@@ -228,4 +228,67 @@ describe('components/Accordion', () => {
 
     wrapper.destroy()
   })
+
+  it("should pass `toggle-position` to internal collapses if they don't have any", async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-accordion': Accordion,
+          'veui-collapse': Collapse
+        },
+        template: `
+          <veui-accordion toggle-position="none">
+            <veui-collapse label="标题一" toggle-position="start">Content</veui-collapse>
+            <veui-collapse label="标题二" toggle-position="end">Content</veui-collapse>
+            <veui-collapse label="标题三">Content</veui-collapse>
+          </veui-accordion>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    await wrapper.vm.$nextTick()
+
+    let collapses = wrapper.findAll(Collapse)
+
+    expect(
+      collapses
+        .at(0)
+        .find('.veui-collapse-toggle')
+        .exists()
+    ).to.equal(true)
+    expect(
+      collapses
+        .at(0)
+        .find('.veui-collapse-toggle-end')
+        .exists()
+    ).to.equal(false)
+
+    expect(
+      collapses
+        .at(1)
+        .find('.veui-collapse-toggle')
+        .exists()
+    ).to.equal(true)
+    expect(
+      collapses
+        .at(1)
+        .find('.veui-collapse-toggle-end')
+        .exists()
+    ).to.equal(true)
+
+    expect(
+      collapses
+        .at(2)
+        .find('.veui-collapse-toggle')
+        .exists()
+    ).to.equal(false)
+    expect(
+      collapses
+        .at(2)
+        .find('.veui-collapse-toggle-end')
+        .exists()
+    ).to.equal(false)
+  })
 })
