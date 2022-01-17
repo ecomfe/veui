@@ -1,4 +1,11 @@
-import { VeuiDefineInstance, UiMixin, ActivatableMixin, InputMixin, ControllableMixin, InputTrim } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  ActivatableMixin,
+  InputMixin,
+  ControllableMixin,
+  InputTrim
+} from '../common'
 
 type InputType = 'text' | 'password' | 'hidden'
 
@@ -21,9 +28,14 @@ type Emits = {
   autofill(): void
 }
 
-type Mixins = [UiMixin, ActivatableMixin, InputMixin, ControllableMixin<{
-  input(value: string): void
-}>]
+type Mixins = [
+  UiMixin,
+  ActivatableMixin,
+  InputMixin,
+  ControllableMixin<{
+    input(value: string): void
+  }>
+]
 
 type Slots = {
   before(): unknown

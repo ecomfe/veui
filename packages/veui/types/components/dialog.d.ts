@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, UiMixin, OverlayMixin, FocusableMixin, BeforeClose } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  OverlayMixin,
+  FocusableMixin,
+  BeforeClose
+} from '../common'
 
 export type Props = {
   modal?: boolean

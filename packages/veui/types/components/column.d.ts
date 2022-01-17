@@ -9,7 +9,7 @@ type Props = {
   width?: string | number
   sortable?: boolean
   align?: 'left' | 'right' | 'center'
-  span?: (index: number, rowData: unknown) => ({row?: number, col?: number})
+  span?: (index: number, rowData: unknown) => { row?: number; col?: number }
   fixed?: boolean | 'left' | 'right'
   allowedOrders?: AllowedOrders
   desc?: string
@@ -30,9 +30,9 @@ type Slots = {
   default(): unknown
   head(): unknown
   foot(): unknown
-  desc(scope: {close: () => unknown}): unknown
+  desc(scope: { close: () => unknown }): unknown
   filter: SelectSlots['before']
-  subRow(scope: LooseObject<{ item: unknown, index: number }>): unknown
+  subRow(scope: LooseObject<{ item: unknown; index: number }>): unknown
 }
 
 type Column = {

@@ -1,4 +1,11 @@
-import { VeuiDefineInstance, Normalized, SearchableProps, UiMixin, DropdownMixin, FocusableMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  Normalized,
+  SearchableProps,
+  UiMixin,
+  DropdownMixin,
+  FocusableMixin
+} from '../common'
 import { Item, LooseOptionLeaf, LooseOptionParent } from './option-group'
 
 type Props<T extends Item> = {
@@ -35,7 +42,12 @@ type Slots = {
 }
 
 type Dropdown = {
-  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Dropdown

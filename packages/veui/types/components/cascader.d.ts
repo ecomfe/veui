@@ -36,9 +36,15 @@ type Emits = {
   input(keyword: string): void
 }
 
-type Mixins = [UiMixin, InputMixin, DropdownMixin, TreeMixinWithIndeterminate, ControllableMixin<{
-  select(value: unknown): void
-}>]
+type Mixins = [
+  UiMixin,
+  InputMixin,
+  DropdownMixin,
+  TreeMixinWithIndeterminate,
+  ControllableMixin<{
+    select(value: unknown): void
+  }>
+]
 
 type LooseOptionItem = Normalized<'options', Item, true, CheckedState>
 type LooseOptionParent = RequiredKey<LooseOptionItem, 'options'>
@@ -69,11 +75,18 @@ type Slots = {
   label(slotProps: { selected: SlotProps['value'] } | LooseOptionItem): unknown
   'option-label'(slotProps: LooseOptionLeaf): unknown
   option(slotProps: LooseOptionLeaf): unknown
-  selected(slotProps: { selected: SlotProps['value'] } | LooseOptionItem): unknown
+  selected(
+    slotProps: { selected: SlotProps['value'] } | LooseOptionItem
+  ): unknown
 }
 
 type Cascader = {
-  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Cascader

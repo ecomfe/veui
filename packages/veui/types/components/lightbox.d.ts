@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, LooseObject, UiMixin, BeforeClose } from '../common'
+import {
+  VeuiDefineInstance,
+  LooseObject,
+  UiMixin,
+  BeforeClose
+} from '../common'
 import { Emits as DialogEmits } from './dialog'
 import { CarouselCommonProps, Item } from './carousel'
 
@@ -32,7 +37,12 @@ type Slots = {
 }
 
 type Lightbox = {
-  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Lightbox

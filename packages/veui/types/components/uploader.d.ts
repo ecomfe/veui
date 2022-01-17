@@ -6,20 +6,25 @@ type Item = {
   src: string
 }
 
-type Validity = LooseObject<{ valid: true } | { valid: false, message?: string }>
+type Validity = LooseObject<
+  { valid: true } | { valid: false; message?: string }
+>
 
-type UploadResult = LooseObject<{
-  success: true
-  name: string
-  src: string
-} | {
-  success: false
-  message: string
-}>
+type UploadResult = LooseObject<
+  | {
+      success: true
+      name: string
+      src: string
+    }
+  | {
+      success: false
+      message: string
+    }
+>
 
 type CustomCallbacks = {
   onload: (result: UploadResult) => void
-  onprogress: (progress: { loaded: number, total: number }) => void
+  onprogress: (progress: { loaded: number; total: number }) => void
   oncancel: () => void
   onerror: (error: { message: string }) => void
 }
@@ -39,22 +44,28 @@ type FileInfo = LooseObject<{
   status: string
 }>
 
-type WithKeyField<T, KeyField extends string, UseArray extends boolean> = KeyField extends keyof T
+type WithKeyField<
+  T,
+  KeyField extends string,
+  UseArray extends boolean
+> = KeyField extends keyof T
   ? T[KeyField] extends string
-    ? UseArray extends true ? Array<T> : T
+    ? UseArray extends true
+      ? Array<T>
+      : T
     : never
   : never
 
-type Props<
-  T extends Item,
-  KeyField extends string
-> = ({
-  multiple: true
-  value?: WithKeyField<T, KeyField, true>
-} | {
-  multiple?: false
-  value?: WithKeyField<T, KeyField, false>
-}) & {
+type Props<T extends Item, KeyField extends string> = (
+  | {
+      multiple: true
+      value?: WithKeyField<T, KeyField, true>
+    }
+  | {
+      multiple?: false
+      value?: WithKeyField<T, KeyField, false>
+    }
+) & {
   name?: string
   type?: 'file' | 'media' | 'image' | 'video'
   action?: string
@@ -65,7 +76,7 @@ type Props<
   callbackNamespace?: string
   dataType?: 'json' | 'text'
   accept?: string
-  validator?: (file: File)=> Validity | Promise<Validity>
+  validator?: (file: File) => Validity | Promise<Validity>
   maxCount?: number
   maxSize?: number | string
   payload?: Record<string, unknown>
@@ -74,9 +85,13 @@ type Props<
   sortable?: boolean
   pickerPosition?: 'before' | 'after'
   keyField?: KeyField
-  convertResponse?: ((data: unknown) => UploadResult) & ((data: null | undefined, err: Error) => UploadResult)
+  convertResponse?: ((data: unknown) => UploadResult) &
+    ((data: null | undefined, err: Error) => UploadResult)
   upload?: (file: File, callbacks: CustomCallbacks) => CancelFn
-  controls?: (file: FileInfo, controls: Array<ControlItem>) => Array<ControlItem>
+  controls?: (
+    file: FileInfo,
+    controls: Array<ControlItem>
+  ) => Array<ControlItem>
   entries?: (controls: Array<ControlItem>) => Array<ControlItem>
   afterPick?: (files: Array<File>) => void
   previewOptions?: PreviewOptions
@@ -85,7 +100,7 @@ type Props<
 type LooseItem = LooseObject<Item>
 
 type ErrorInfo = {
-  file?: FileInfo, // 超过 max-count 这个字段为空。
+  file?: FileInfo // 超过 max-count 这个字段为空。
   errors: Array<{
     type: string
     value: unknown
@@ -119,7 +134,9 @@ type Slots = {
 }
 
 type Uploader = {
-  new <T extends Item = Item, KeyField extends string = 'key'>(...args: any[]): VeuiDefineInstance<Props<T, KeyField>, Emits, Slots, Mixins>
+  new <T extends Item = Item, KeyField extends string = 'key'>(
+    ...args: any[]
+  ): VeuiDefineInstance<Props<T, KeyField>, Emits, Slots, Mixins>
 }
 
 export default Uploader

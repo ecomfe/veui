@@ -19,12 +19,19 @@ type Mixins = UiMixin
 
 type Slots = {
   default(): unknown
-  item(scope: { route: LooseObject<Item>, index: number } & LooseObject<Item>): unknown
+  item(
+    scope: { route: LooseObject<Item>; index: number } & LooseObject<Item>
+  ): unknown
   separator(): unknown
 }
 
 type Breadcrumb = {
-  new <T extends Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Breadcrumb

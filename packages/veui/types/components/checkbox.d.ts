@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, InputMixin, FocusableMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  InputMixin,
+  FocusableMixin
+} from '../common'
 
 type Props = {
   value: unknown

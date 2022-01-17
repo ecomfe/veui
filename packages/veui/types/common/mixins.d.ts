@@ -47,52 +47,59 @@ export type MultiMixin<
   RealMix = T extends Mix ? [T] : T
 > = RealMix extends []
   ? {
-    props: {}
-    methods: {}
-    emits: {}
-  }
+      props: {}
+      methods: {}
+      emits: {}
+    }
   : RealMix extends [infer First, ...infer Rest]
-    ? Rest extends Array<Mix>
-      ? {
+  ? Rest extends Array<Mix>
+    ? {
         props: KeyType<First, 'props'> & KeyType<MultiMixin<Rest>, 'props'>
-        methods: KeyType<First, 'methods'> & KeyType<MultiMixin<Rest>, 'methods'>
+        methods: KeyType<First, 'methods'> &
+          KeyType<MultiMixin<Rest>, 'methods'>
         emits: KeyType<First, 'emits'> & KeyType<MultiMixin<Rest>, 'emits'>
-      } : never
+      }
     : never
+  : never
 
+export type DropdownMixin = MultiMixin<
+  [
+    {
+      props: {
+        overlayPriority?: number
+        expanded?: boolean
+      }
+    },
+    OverlayMixin,
+    ActivatableMixin,
+    ControllableMixin<{
+      toggle(expanded: boolean): void
+    }>
+  ]
+>
 
-export type DropdownMixin = MultiMixin<[
-  {
-    props: {
-      overlayPriority?: number
-      expanded?: boolean
-    }
-  },
-  OverlayMixin,
-  ActivatableMixin,
-  ControllableMixin<{
-    toggle(expanded: boolean): void
-  }>
-]>
+export type InputMixin = MultiMixin<
+  [
+    {
+      props: {
+        name?: string
+        readonly?: boolean
+        disabled?: boolean
+        invalid?: boolean
+      }
+    },
+    FocusableMixin
+  ]
+>
 
-export type InputMixin = MultiMixin<[
-  {
-    props: {
-      name?: string
-      readonly?: boolean
-      disabled?: boolean
-      invalid?: boolean
-    }
-  },
-  FocusableMixin
-]>
-
-export type CarouselMixin = MultiMixin<[
-  {
-    // props 要泛型
-    emits: {
-      change(to: number, from: number): unknown
-    }
-  },
-  UiMixin
-]>
+export type CarouselMixin = MultiMixin<
+  [
+    {
+      // props 要泛型
+      emits: {
+        change(to: number, from: number): unknown
+      }
+    },
+    UiMixin
+  ]
+>

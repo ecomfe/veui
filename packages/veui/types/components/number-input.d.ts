@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, UiMixin, InputMixin, ActivatableMixin, ControllableMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  InputMixin,
+  ActivatableMixin,
+  ControllableMixin
+} from '../common'
 
 type Props = {
   value?: number
@@ -14,9 +20,14 @@ type Emits = {
   change(val: number, evt: Event): void
 }
 
-type Mixins = [UiMixin, InputMixin, ActivatableMixin, ControllableMixin<{
-  input(val: number): void
-}>]
+type Mixins = [
+  UiMixin,
+  InputMixin,
+  ActivatableMixin,
+  ControllableMixin<{
+    input(val: number): void
+  }>
+]
 
 type Slots = {
   default(): unknown
