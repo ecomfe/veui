@@ -1,7 +1,16 @@
 import { VeuiDefineInstance, UiMixin, OverlayMixin } from '../common'
 import { Props as DialogProps, Slots } from './dialog'
 
-type Props = Pick<DialogProps, 'open' | 'title' | 'beforeClose' | 'loading' | 'disabled' | 'okLabel' | 'cancelLabel'>
+type Props = Pick<
+  DialogProps,
+  | 'open'
+  | 'title'
+  | 'beforeClose'
+  | 'loading'
+  | 'disabled'
+  | 'okLabel'
+  | 'cancelLabel'
+>
 
 type Emits = {
   ok(): void

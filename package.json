@@ -28,7 +28,7 @@
     "micromatch": "^4.0.2",
     "postcss-html": "^1.2.0",
     "postcss-less": "^5.0.0",
-    "prettier": "^1.16.4",
+    "prettier": "^2.5.1",
     "stylelint": "^14.0.1",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-standard": "^23.0.0"

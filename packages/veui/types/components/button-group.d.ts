@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, LooseObject, UiMixin, FocusableMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  LooseObject,
+  UiMixin,
+  FocusableMixin
+} from '../common'
 
 type Item = {
   label?: string // 覆盖 item slot 可以不传 label
@@ -19,12 +24,17 @@ type Emits = {
 type Mixins = [UiMixin, FocusableMixin]
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
   item(item: LooseObject<Item>): unknown
 }
 
 type ButtonGroup = {
-  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default ButtonGroup

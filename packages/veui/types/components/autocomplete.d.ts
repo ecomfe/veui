@@ -1,11 +1,21 @@
 import {
-  VeuiDefineInstance, Normalized, SearchableProps, UiMixin, InputMixin, OverlayMixin, DropdownMixin, InputTrim } from '../common'
+  VeuiDefineInstance,
+  Normalized,
+  SearchableProps,
+  UiMixin,
+  InputMixin,
+  OverlayMixin,
+  DropdownMixin,
+  InputTrim
+} from '../common'
 
-type Item = string | {
-  label?: string
-  value: string
-  children?: Array<Item> | null
-}
+type Item =
+  | string
+  | {
+      label?: string
+      value: string
+      children?: Array<Item> | null
+    }
 
 type Props<T extends Item> = {
   datasource?: Array<T>
@@ -41,12 +51,24 @@ type NormalizedItem = Normalized<'children', ObjectItem, true>
 type Mixins = [UiMixin, InputMixin, OverlayMixin, DropdownMixin]
 
 type Slots = {
-  suggestions(slotProps: { datasource: Array<NormalizedItem>, keyword: string }): unknown
-  optionLabel(slotProps: { label: string, value: string, matches: { text: string, matched: boolean } }): unknown
+  suggestions(slotProps: {
+    datasource: Array<NormalizedItem>
+    keyword: string
+  }): unknown
+  optionLabel(slotProps: {
+    label: string
+    value: string
+    matches: { text: string; matched: boolean }
+  }): unknown
 }
 
 type Autocomplete = {
-  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Autocomplete

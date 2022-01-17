@@ -1,4 +1,11 @@
-import { VeuiDefineInstance, UiMixin, OverlayMixin, ControllableMixin, OverlayTarget, OverlayPosition } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  OverlayMixin,
+  ControllableMixin,
+  OverlayTarget,
+  OverlayPosition
+} from '../common'
 
 type Props = {
   target: OverlayTarget
@@ -13,9 +20,13 @@ type Props = {
 
 type Emits = {}
 
-type Mixins = [UiMixin, OverlayMixin, ControllableMixin<{
-  toggle(open: boolean): void
-}>]
+type Mixins = [
+  UiMixin,
+  OverlayMixin,
+  ControllableMixin<{
+    toggle(open: boolean): void
+  }>
+]
 
 type Slots = {
   default(): unknown

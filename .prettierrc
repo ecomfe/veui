@@ -8,6 +8,12 @@
         "parser": "less",
         "singleQuote": false
       }
+    },
+    {
+      "files": "*.ts",
+      "options": {
+        "parser": "typescript"
+      }
     }
   ]
 }

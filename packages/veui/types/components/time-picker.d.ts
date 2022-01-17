@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, UiMixin, InputMixin, DropdownMixin, ControllableMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  InputMixin,
+  DropdownMixin,
+  ControllableMixin
+} from '../common'
 
 type Mode = 'hour' | 'minute' | 'second'
 
@@ -20,12 +26,22 @@ type Emits = {
   change(value: string): void
 }
 
-type Mixins = [UiMixin, InputMixin, DropdownMixin, ControllableMixin<{
-  input(value: string): void
-}>]
+type Mixins = [
+  UiMixin,
+  InputMixin,
+  DropdownMixin,
+  ControllableMixin<{
+    input(value: string): void
+  }>
+]
 
 type Slots = {
-  option(slotProps: { label: string, value: number, disabled?: boolean, part: Mode }): unknown
+  option(slotProps: {
+    label: string
+    value: number
+    disabled?: boolean
+    part: Mode
+  }): unknown
 }
 
 type TimePicker = {

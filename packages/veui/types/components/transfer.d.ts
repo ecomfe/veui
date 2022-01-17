@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, UiMixin, InputMixin, TreeMixin, ControllableMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  InputMixin,
+  TreeMixin,
+  ControllableMixin
+} from '../common'
 import { SlotProps as TreeSlotProps, LooseTreeItem } from './tree'
 
 type Item = {
@@ -24,9 +30,14 @@ type Props<T extends Item> = {
 
 type Emits = {}
 
-type Mixins = [UiMixin, InputMixin, TreeMixin, ControllableMixin<{
-  select(value: Array<unknown>): void
-}>]
+type Mixins = [
+  UiMixin,
+  InputMixin,
+  TreeMixin,
+  ControllableMixin<{
+    select(value: Array<unknown>): void
+  }>
+]
 
 type SlotProps = { count: number }
 
@@ -35,7 +46,9 @@ type Slots = {
   'candidate-title'(slotScope: SlotProps): unknown
   'candidate-no-data'(): unknown
   'candidate-item'(slotScope: TreeSlotProps): unknown
-  'candidate-item-label'(slotScope: TreeSlotProps & { keyword: string }): unknown
+  'candidate-item-label'(
+    slotScope: TreeSlotProps & { keyword: string }
+  ): unknown
   'selected-head'(slotScope: SlotProps): unknown
   'selected-title'(slotScope: SlotProps): unknown
   'selected-no-data'(): unknown
@@ -46,7 +59,12 @@ type Slots = {
 }
 
 type Transfer = {
-  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Transfer

@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, OverlayMixin, OverlayTarget } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  OverlayMixin,
+  OverlayTarget
+} from '../common'
 
 type Props = {
   target: OverlayTarget

@@ -13,7 +13,7 @@ type Emits = {}
 type Mixins = [UiMixin, FocusableMixin]
 
 type Slots = {
-  default(): unknown,
+  default(): unknown
 }
 
 type Button = {

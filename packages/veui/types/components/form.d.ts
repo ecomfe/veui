@@ -33,7 +33,9 @@ type Slots = {
 
 type Methods = {
   submit(): void
-  validate(fieldNames?: Array<string> | null): Promise<boolean | Record<string, Record<any, unknown>>>
+  validate(
+    fieldNames?: Array<string> | null
+  ): Promise<boolean | Record<string, Record<any, unknown>>>
 }
 
 type Form = {

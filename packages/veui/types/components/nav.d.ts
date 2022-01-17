@@ -1,12 +1,22 @@
-import { VeuiDefineInstance, Normalized, RouteMatches, LinkTo, UiMixin, OverlayMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  Normalized,
+  RouteMatches,
+  LinkTo,
+  UiMixin,
+  OverlayMixin
+} from '../common'
 
-export type NavItem = ({
-  name: string
-  to?: LinkTo
-} | {
-  name?: string
-  to: LinkTo
-}) & {
+export type NavItem = (
+  | {
+      name: string
+      to?: LinkTo
+    }
+  | {
+      name?: string
+      to: LinkTo
+    }
+) & {
   label: string
   children?: Array<NavItem>
 }
@@ -36,7 +46,12 @@ type Slots = {
 }
 
 type Nav = {
-  new <T extends NavItem = NavItem>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends NavItem = NavItem>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Nav

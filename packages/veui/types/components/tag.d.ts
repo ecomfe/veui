@@ -1,12 +1,12 @@
 import { VeuiDefineInstance, UiMixin, FocusableMixin } from '../common'
 
 type Props = {
-    type?: string
-    selectable?: boolean
-    selected?: boolean
-    removable?: boolean
-    removed?: boolean
-    disabled?: boolean
+  type?: string
+  selectable?: boolean
+  selected?: boolean
+  removable?: boolean
+  removed?: boolean
+  disabled?: boolean
 }
 
 type Emits = {

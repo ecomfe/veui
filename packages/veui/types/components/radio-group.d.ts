@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, LooseObject, UiMixin, InputMixin, ControllableMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  LooseObject,
+  UiMixin,
+  InputMixin,
+  ControllableMixin
+} from '../common'
 
 type Item = {
   label?: string // 覆盖 slot 可以不写 label？
@@ -15,9 +21,13 @@ type Props<T extends Item> = {
 
 type Emits = {}
 
-type Mixins = [UiMixin, InputMixin, ControllableMixin<{
-  change(value: unknown): void
-}>]
+type Mixins = [
+  UiMixin,
+  InputMixin,
+  ControllableMixin<{
+    change(value: unknown): void
+  }>
+]
 
 type Slots = {
   item(item: LooseObject<Item> & { index: number }): unknown
@@ -25,7 +35,12 @@ type Slots = {
 }
 
 type RadioGroup = {
-  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default RadioGroup

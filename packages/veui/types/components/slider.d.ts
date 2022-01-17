@@ -19,13 +19,27 @@ type Mixins = UiMixin
 
 type Slots = {
   track(): unknown
-  thumb(slotProps: { index: number, focus: boolean, hover: boolean, dragging: boolean }): unknown
-  tip(slotProps: { target: HTMLElement, open: boolean, activeIndex: number }): unknown
+  thumb(slotProps: {
+    index: number
+    focus: boolean
+    hover: boolean
+    dragging: boolean
+  }): unknown
+  tip(slotProps: {
+    target: HTMLElement
+    open: boolean
+    activeIndex: number
+  }): unknown
   tipLabel(): unknown
 }
 
 type Slider = {
-  new <T = number>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T = number>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Slider

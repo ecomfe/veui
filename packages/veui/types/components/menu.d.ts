@@ -25,7 +25,12 @@ type Slots = {
 }
 
 type Menu = {
-  new <T extends NavItem = NavItem>(...args: any[]): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
+  new <T extends NavItem = NavItem>(...args: any[]): VeuiDefineInstance<
+    Props<T>,
+    Emits,
+    Slots,
+    Mixins
+  >
 }
 
 export default Menu

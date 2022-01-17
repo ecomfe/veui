@@ -1,14 +1,21 @@
-import { VeuiDefineInstance, UiMixin, InputMixin, ControllableMixin } from '../common'
+import {
+  VeuiDefineInstance,
+  UiMixin,
+  InputMixin,
+  ControllableMixin
+} from '../common'
 
 type Selected = Date | Array<Date>
 
-type SelectedAndMultiple = ({
-  multiple: true
-  selected?: Array<Date>
-} | {
-  multiple?: false
-  selected?: Date
-})
+type SelectedAndMultiple =
+  | {
+      multiple: true
+      selected?: Array<Date>
+    }
+  | {
+      multiple?: false
+      selected?: Date
+    }
 
 export type Props = SelectedAndMultiple & {
   type?: 'date' | 'month' | 'year'
@@ -33,9 +40,13 @@ type Emits = {
   selectprogress(picking: [Date, Date] | Array<[Date, Date]>): void
 }
 
-type Mixins = [UiMixin, InputMixin, ControllableMixin<{
-  select(selected: Selected): void
-}>]
+type Mixins = [
+  UiMixin,
+  InputMixin,
+  ControllableMixin<{
+    select(selected: Selected): void
+  }>
+]
 
 type Slots = {
   before(): unknown
