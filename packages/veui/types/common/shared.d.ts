@@ -1,5 +1,8 @@
 import { Promisify } from './utils'
-import { ComponentPublicInstance, AllowedComponentProps } from '@vue/runtime-dom'
+import {
+  ComponentPublicInstance,
+  AllowedComponentProps
+} from '@vue/runtime-dom'
 import { Route, RawLocation } from 'vue-router'
 
 export type BeforeClose = (type: 'ok' | 'cancel') => Promisify<boolean | void>
@@ -22,6 +25,3 @@ export type RouteMatches = (route: Route, to: Route) => boolean
 export type LinkTo = string | RawLocation
 
 export type InputTrim = boolean | 'start' | 'end' | 'both'
-
-
-
