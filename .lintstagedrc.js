@@ -2,7 +2,7 @@ const micromatch = require('micromatch')
 const { relative } = require('path')
 
 const SCRIPT_PATTERNS = [
-  'packages/{babel-plugin-veui,veui,veui-loader,veui-theme-dls}/**/*.{js,vue}'
+  'packages/{babel-plugin-veui,veui,veui-loader,veui-theme-dls}/**/*.{js,ts,vue}'
 ]
 
 const STYLE_PATTERNS = [

@@ -1,140 +1,140 @@
 import { VeuiDefineComponent } from './common/context'
-import Accordion from './components/accordion'
-import Alert from './components/alert'
-import AlertBox from './components/alert-box'
-import Anchor from './components/anchor'
-import Autocomplete from './components/autocomplete'
-import Badge from './components/badge'
-import Breadcrumb from './components/breadcrumb'
-import BreadcrumbItem from './components/breadcrumb-item'
-import Button from './components/button'
-import ButtonGroup from './components/button-group'
-import Calendar from './components/calendar'
-import Carousel from './components/carousel'
-import Cascader from './components/cascader'
-import CheckButtonGroup from './components/check-button-group'
-import Checkbox from './components/checkbox'
-import CheckboxGroup from './components/checkbox-group'
-import Collapse from './components/collapse'
-import Column from './components/column'
-import ConfigProvider from './components/config-provider'
-import ConfirmBox from './components/confirm-box'
-import DatePicker from './components/date-picker'
-import Dialog from './components/dialog'
-import Drawer from './components/drawer'
-import Dropdown from './components/dropdown'
-import FilterPanel from './components/filter-panel'
-import Field from './components/field'
-import Fieldset from './components/fieldset'
-import Form from './components/form'
-import GridColumn from './components/grid-column'
-import GridContainer from './components/grid-container'
-import GridRow from './components/grid-row'
-import Icon from './components/icon'
-import Input from './components/input'
-import InputGroup from './components/input-group'
-import Label from './components/label'
-import Lightbox from './components/lightbox'
-import Link from './components/link'
-import Loading from './components/loading'
-import Menu from './components/menu'
-import Nav from './components/nav'
-import NumberInput from './components/number-input'
-import Option from './components/option'
-import OptionGroup from './components/option-group'
-import Overlay from './components/overlay'
-import Pagination from './components/pagination'
-import Popover from './components/popover'
-import Progress from './components/progress'
-import PromptBox from './components/prompt-box'
-import Radio from './components/radio'
-import RadioButtonGroup from './components/radio-button-group'
-import RadioGroup from './components/radio-group'
-import SearchBox from './components/search-box'
-import Select from './components/select'
-import Slider from './components/slider'
-import Span from './components/span'
-import Steps from './components/steps'
-import Switch from './components/switch'
-import Tab from './components/tab'
-import Table from './components/table'
-import Tabs from './components/tabs'
-import Tag from './components/tag'
-import Textarea from './components/textarea'
-import TimePicker from './components/time-picker'
-import Toast from './components/toast'
-import ToastList from './components/toast-list'
-import Tooltip from './components/tooltip'
-import Transfer from './components/transfer'
-import Tree from './components/tree'
-import Uploader from './components/uploader'
+import AccordionType from './components/accordion'
+import AlertType from './components/alert'
+import AlertBoxType from './components/alert-box'
+import AnchorType from './components/anchor'
+import AutocompleteType from './components/autocomplete'
+import BadgeType from './components/badge'
+import BreadcrumbType from './components/breadcrumb'
+import BreadcrumbItemType from './components/breadcrumb-item'
+import ButtonType from './components/button'
+import ButtonGroupType from './components/button-group'
+import CalendarType from './components/calendar'
+import CarouselType from './components/carousel'
+import CascaderType from './components/cascader'
+import CheckButtonGroupType from './components/check-button-group'
+import CheckboxType from './components/checkbox'
+import CheckboxGroupType from './components/checkbox-group'
+import CollapseType from './components/collapse'
+import ColumnType from './components/column'
+import ConfigProviderType from './components/config-provider'
+import ConfirmBoxType from './components/confirm-box'
+import DatePickerType from './components/date-picker'
+import DialogType from './components/dialog'
+import DrawerType from './components/drawer'
+import DropdownType from './components/dropdown'
+import FilterPanelType from './components/filter-panel'
+import FieldType from './components/field'
+import FieldsetType from './components/fieldset'
+import FormType from './components/form'
+import GridColumnType from './components/grid-column'
+import GridContainerType from './components/grid-container'
+import GridRowType from './components/grid-row'
+import IconType from './components/icon'
+import InputType from './components/input'
+import InputGroupType from './components/input-group'
+import LabelType from './components/label'
+import LightboxType from './components/lightbox'
+import LinkType from './components/link'
+import LoadingType from './components/loading'
+import MenuType from './components/menu'
+import NavType from './components/nav'
+import NumberInputType from './components/number-input'
+import OptionType from './components/option'
+import OptionGroupType from './components/option-group'
+import OverlayType from './components/overlay'
+import PaginationType from './components/pagination'
+import PopoverType from './components/popover'
+import ProgressType from './components/progress'
+import PromptBoxType from './components/prompt-box'
+import RadioType from './components/radio'
+import RadioButtonGroupType from './components/radio-button-group'
+import RadioGroupType from './components/radio-group'
+import SearchBoxType from './components/search-box'
+import SelectType from './components/select'
+import SliderType from './components/slider'
+import SpanType from './components/span'
+import StepsType from './components/steps'
+import SwitchType from './components/switch'
+import TabType from './components/tab'
+import TableType from './components/table'
+import TabsType from './components/tabs'
+import TagType from './components/tag'
+import TextareaType from './components/textarea'
+import TimePickerType from './components/time-picker'
+import ToastType from './components/toast'
+import ToastListType from './components/toast-list'
+import TooltipType from './components/tooltip'
+import TransferType from './components/transfer'
+import TreeType from './components/tree'
+import UploaderType from './components/uploader'
 
-export const Accordion: VeuiDefineComponent<Accordion>
-export const Alert: VeuiDefineComponent<Alert>
-export const AlertBox: VeuiDefineComponent<AlertBox>
-export const Anchor: VeuiDefineComponent<Anchor>
-export const Autocomplete: VeuiDefineComponent<Autocomplete>
-export const Badge: VeuiDefineComponent<Badge>
-export const Breadcrumb: VeuiDefineComponent<Breadcrumb>
-export const BreadcrumbItem: VeuiDefineComponent<BreadcrumbItem>
-export const Button: VeuiDefineComponent<Button>
-export const ButtonGroup: VeuiDefineComponent<ButtonGroup>
-export const Calendar: VeuiDefineComponent<Calendar>
-export const Carousel: VeuiDefineComponent<Carousel>
-export const Cascader: VeuiDefineComponent<Cascader>
-export const CheckButtonGroup: VeuiDefineComponent<CheckButtonGroup>
-export const Checkbox: VeuiDefineComponent<Checkbox>
-export const CheckboxGroup: VeuiDefineComponent<CheckboxGroup>
-export const Collapse: VeuiDefineComponent<Collapse>
-export const Column: VeuiDefineComponent<Column>
-export const ConfigProvider: VeuiDefineComponent<ConfigProvider>
-export const ConfirmBox: VeuiDefineComponent<ConfirmBox>
-export const DatePicker: VeuiDefineComponent<DatePicker>
-export const Dialog: VeuiDefineComponent<Dialog>
-export const Drawer: VeuiDefineComponent<Drawer>
-export const Dropdown: VeuiDefineComponent<Dropdown>
-export const Field: VeuiDefineComponent<Field>
-export const Fieldset: VeuiDefineComponent<Fieldset>
-export const FilterPanel: VeuiDefineComponent<FilterPanel>
-export const Form: VeuiDefineComponent<Form>
-export const GridColumn: VeuiDefineComponent<GridColumn>
-export const GridContainer: VeuiDefineComponent<GridContainer>
-export const GridRow: VeuiDefineComponent<GridRow>
-export const Icon: VeuiDefineComponent<Icon>
-export const Input: VeuiDefineComponent<Input>
-export const InputGroup: VeuiDefineComponent<InputGroup>
-export const Label: VeuiDefineComponent<Label>
-export const Lightbox: VeuiDefineComponent<Lightbox>
-export const Link: VeuiDefineComponent<Link>
-export const Loading: VeuiDefineComponent<Loading>
-export const Menu: VeuiDefineComponent<Menu>
-export const Nav: VeuiDefineComponent<Nav>
-export const NumberInput: VeuiDefineComponent<NumberInput>
-export const Option: VeuiDefineComponent<Option>
-export const OptionGroup: VeuiDefineComponent<OptionGroup>
-export const Overlay: VeuiDefineComponent<Overlay>
-export const Pagination: VeuiDefineComponent<Pagination>
-export const Popover: VeuiDefineComponent<Popover>
-export const Progress: VeuiDefineComponent<Progress>
-export const PromptBox: VeuiDefineComponent<PromptBox>
-export const Radio: VeuiDefineComponent<Radio>
-export const RadioButtonGroup: VeuiDefineComponent<RadioButtonGroup>
-export const RadioGroup: VeuiDefineComponent<RadioGroup>
-export const SearchBox: VeuiDefineComponent<SearchBox>
-export const Select: VeuiDefineComponent<Select>
-export const Slider: VeuiDefineComponent<Slider>
-export const Span: VeuiDefineComponent<Span>
-export const Steps: VeuiDefineComponent<Steps>
-export const Switch: VeuiDefineComponent<Switch>
-export const Tab: VeuiDefineComponent<Tab>
-export const Table: VeuiDefineComponent<Table>
-export const Tabs: VeuiDefineComponent<Tabs>
-export const Tag: VeuiDefineComponent<Tag>
-export const Textarea: VeuiDefineComponent<Textarea>
-export const TimePicker: VeuiDefineComponent<TimePicker>
-export const Toast: VeuiDefineComponent<Toast>
-export const ToastList: VeuiDefineComponent<ToastList>
-export const Tooltip: VeuiDefineComponent<Tooltip>
-export const Transfer: VeuiDefineComponent<Transfer>
-export const Tree: VeuiDefineComponent<Tree>
-export const Uploader: VeuiDefineComponent<Uploader>
+export declare const Accordion: VeuiDefineComponent<AccordionType>
+export declare const Alert: VeuiDefineComponent<AlertType>
+export declare const AlertBox: VeuiDefineComponent<AlertBoxType>
+export declare const Anchor: VeuiDefineComponent<AnchorType>
+export declare const Autocomplete: VeuiDefineComponent<AutocompleteType>
+export declare const Badge: VeuiDefineComponent<BadgeType>
+export declare const Breadcrumb: VeuiDefineComponent<BreadcrumbType>
+export declare const BreadcrumbItem: VeuiDefineComponent<BreadcrumbItemType>
+export declare const Button: VeuiDefineComponent<ButtonType>
+export declare const ButtonGroup: VeuiDefineComponent<ButtonGroupType>
+export declare const Calendar: VeuiDefineComponent<CalendarType>
+export declare const Carousel: VeuiDefineComponent<CarouselType>
+export declare const Cascader: VeuiDefineComponent<CascaderType>
+export declare const CheckButtonGroup: VeuiDefineComponent<CheckButtonGroupType>
+export declare const Checkbox: VeuiDefineComponent<CheckboxType>
+export declare const CheckboxGroup: VeuiDefineComponent<CheckboxGroupType>
+export declare const Collapse: VeuiDefineComponent<CollapseType>
+export declare const Column: VeuiDefineComponent<ColumnType>
+export declare const ConfigProvider: VeuiDefineComponent<ConfigProviderType>
+export declare const ConfirmBox: VeuiDefineComponent<ConfirmBoxType>
+export declare const DatePicker: VeuiDefineComponent<DatePickerType>
+export declare const Dialog: VeuiDefineComponent<DialogType>
+export declare const Drawer: VeuiDefineComponent<DrawerType>
+export declare const Dropdown: VeuiDefineComponent<DropdownType>
+export declare const Field: VeuiDefineComponent<FieldType>
+export declare const Fieldset: VeuiDefineComponent<FieldsetType>
+export declare const FilterPanel: VeuiDefineComponent<FilterPanelType>
+export declare const Form: VeuiDefineComponent<FormType>
+export declare const GridColumn: VeuiDefineComponent<GridColumnType>
+export declare const GridContainer: VeuiDefineComponent<GridContainerType>
+export declare const GridRow: VeuiDefineComponent<GridRowType>
+export declare const Icon: VeuiDefineComponent<IconType>
+export declare const Input: VeuiDefineComponent<InputType>
+export declare const InputGroup: VeuiDefineComponent<InputGroupType>
+export declare const Label: VeuiDefineComponent<LabelType>
+export declare const Lightbox: VeuiDefineComponent<LightboxType>
+export declare const Link: VeuiDefineComponent<LinkType>
+export declare const Loading: VeuiDefineComponent<LoadingType>
+export declare const Menu: VeuiDefineComponent<MenuType>
+export declare const Nav: VeuiDefineComponent<NavType>
+export declare const NumberInput: VeuiDefineComponent<NumberInputType>
+export declare const Option: VeuiDefineComponent<OptionType>
+export declare const OptionGroup: VeuiDefineComponent<OptionGroupType>
+export declare const Overlay: VeuiDefineComponent<OverlayType>
+export declare const Pagination: VeuiDefineComponent<PaginationType>
+export declare const Popover: VeuiDefineComponent<PopoverType>
+export declare const Progress: VeuiDefineComponent<ProgressType>
+export declare const PromptBox: VeuiDefineComponent<PromptBoxType>
+export declare const Radio: VeuiDefineComponent<RadioType>
+export declare const RadioButtonGroup: VeuiDefineComponent<RadioButtonGroupType>
+export declare const RadioGroup: VeuiDefineComponent<RadioGroupType>
+export declare const SearchBox: VeuiDefineComponent<SearchBoxType>
+export declare const Select: VeuiDefineComponent<SelectType>
+export declare const Slider: VeuiDefineComponent<SliderType>
+export declare const Span: VeuiDefineComponent<SpanType>
+export declare const Steps: VeuiDefineComponent<StepsType>
+export declare const Switch: VeuiDefineComponent<SwitchType>
+export declare const Tab: VeuiDefineComponent<TabType>
+export declare const Table: VeuiDefineComponent<TableType>
+export declare const Tabs: VeuiDefineComponent<TabsType>
+export declare const Tag: VeuiDefineComponent<TagType>
+export declare const Textarea: VeuiDefineComponent<TextareaType>
+export declare const TimePicker: VeuiDefineComponent<TimePickerType>
+export declare const Toast: VeuiDefineComponent<ToastType>
+export declare const ToastList: VeuiDefineComponent<ToastListType>
+export declare const Tooltip: VeuiDefineComponent<TooltipType>
+export declare const Transfer: VeuiDefineComponent<TransferType>
+export declare const Tree: VeuiDefineComponent<TreeType>
+export declare const Uploader: VeuiDefineComponent<UploaderType>
