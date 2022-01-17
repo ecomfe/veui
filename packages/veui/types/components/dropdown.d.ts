@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, Normalized, SearchableProps } from '../common/context'
-import { UiMixin, DropdownMixin, FocusableMixin } from '../common/mixins'
+import { VeuiDefineInstance, Normalized, SearchableProps, UiMixin, DropdownMixin, FocusableMixin } from '../common'
 import { Item, LooseOptionLeaf, LooseOptionParent } from './option-group'
 
 type Props<T extends Item> = {
@@ -13,7 +12,7 @@ type Props<T extends Item> = {
 } & SearchableProps<Normalized<'options', T>>
 
 type Emits = {
-  click(value?: unknown): unknown
+  click(value?: unknown): void
 }
 
 type Mixins = [UiMixin, DropdownMixin, FocusableMixin]

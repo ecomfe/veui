@@ -1,7 +1,15 @@
-import { VeuiDefineInstance, SearchableProps, Normalized, RequiredKey, SafeOmit } from '../common/context'
-import { UiMixin, ControllableMixin, InputMixin,
-  DropdownMixin, TreeMixinWithIndeterminate
-} from '../common/mixins'
+import {
+  VeuiDefineInstance,
+  SearchableProps,
+  Normalized,
+  RequiredKey,
+  SafeOmit,
+  UiMixin,
+  ControllableMixin,
+  InputMixin,
+  DropdownMixin,
+  TreeMixinWithIndeterminate
+} from '../common'
 import { MultipleAndValue } from './select'
 import { Item } from './option-group'
 import { CheckedState } from './tree'
@@ -23,13 +31,13 @@ type Props<T extends Item> = MultipleAndValue<T> & {
 } & SearchableProps<Normalized<'options', T, false, CheckedState>>
 
 type Emits = {
-  afteropen(): unknown
-  afterclose(): unknown
-  input(keyword: string): unknown
+  afteropen(): void
+  afterclose(): void
+  input(keyword: string): void
 }
 
 type Mixins = [UiMixin, InputMixin, DropdownMixin, TreeMixinWithIndeterminate, ControllableMixin<{
-  select(value: unknown): unknown
+  select(value: unknown): void
 }>]
 
 type LooseOptionItem = Normalized<'options', Item, true, CheckedState>
@@ -53,7 +61,7 @@ type SlotProps = {
 
 type Slots = {
   trigger(slotProps: SlotProps): unknown
-  before(): unknown // doc error
+  before(): unknown
   after(): unknown
   pane(slotProps: SlotProps): unknown
   'column-before'(slotProps: { parent: LooseOptionParent }): unknown

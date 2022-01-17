@@ -1,4 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
+import { VeuiDefineInstance } from '../common'
 
 type Props = {
   value: Record<string, unknown>

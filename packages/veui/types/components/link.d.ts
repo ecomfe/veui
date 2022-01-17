@@ -1,21 +1,18 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
-import { RawLocation } from 'vue-router'
-
-export type To = string | RawLocation
+import { VeuiDefineInstance, UiMixin, LinkTo } from '../common'
+import { AnchorHTMLAttributes } from '@vue/runtime-dom'
 
 export type Props = {
-  to: To
+  to: LinkTo
   native?: boolean
   replace?: boolean
   fallback?: string
   disabled?: boolean
-  rel?: string
-  target?: string
+  rel?: AnchorHTMLAttributes['rel']
+  target?: AnchorHTMLAttributes['target']
 }
 
 type Emits = {
-  click(e: MouseEvent): unknown
+  click(e: MouseEvent): void
 }
 
 type Mixins = UiMixin

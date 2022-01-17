@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, FocusableMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, FocusableMixin } from '../common'
 
 type Props = {
     type?: string
@@ -11,7 +10,7 @@ type Props = {
 }
 
 type Emits = {
-  remove(): unknown
+  remove(): void
 }
 
 type Mixins = [UiMixin, FocusableMixin]

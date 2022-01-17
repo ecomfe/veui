@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, LooseObject, Normalized, SearchableProps, RequiredKey } from '../common/context'
-import { UiMixin, ControllableMixin, TreeMixinWithIndeterminate } from '../common/mixins'
+import { VeuiDefineInstance, LooseObject, Normalized, SearchableProps, RequiredKey, UiMixin, ControllableMixin, TreeMixinWithIndeterminate } from '../common'
 
 type BaseItem = {
   label: string
@@ -42,13 +41,13 @@ export type LooseTreeItem = LooseObject<{
 export type LooseTreeParent = RequiredKey<LooseTreeItem>
 
 type Emits = {
-  click(item: LooseTreeItem, parents: Array<LooseTreeParent> | null | undefined, index: number, depth: number): unknown
-  collapse(item: LooseTreeParent, index: number, depth: number): unknown
-  expand(item: LooseTreeParent, index: number, depth: number): unknown
+  click(item: LooseTreeItem, parents: Array<LooseTreeParent> | null | undefined, index: number, depth: number): void
+  collapse(item: LooseTreeParent, index: number, depth: number): void
+  expand(item: LooseTreeParent, index: number, depth: number): void
 }
 
 type Mixins = [UiMixin, TreeMixinWithIndeterminate, ControllableMixin<{
-  check(checked: Array<unknown>): unknown
+  check(checked: Array<unknown>): void
 }>]
 
 export type SlotProps = {

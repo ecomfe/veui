@@ -1,20 +1,19 @@
-import { VeuiDefineInstance } from '../common/context'
-import { Matches } from './tab'
+import { VeuiDefineInstance, RouteMatches } from '../common'
 import { NavItem, Mixins, NormalizedNavItem } from './nav'
 
 type Props<T extends NavItem> = {
-    active?: string
-    items?: Array<T>
-    matches?: Matches
-    keyField?: string
-    collapsible?: boolean
-    collapsed?: boolean
-    expanded?: Array<string> // TODO name 自动生成
+  active?: string
+  items?: Array<T>
+  matches?: RouteMatches
+  keyField?: string
+  collapsible?: boolean
+  collapsed?: boolean
+  expanded?: Array<string>
 }
 
 type Emits = {
-  activate(item: NormalizedNavItem): unknown
-  click(item: NormalizedNavItem): unknown
+  activate(item: NormalizedNavItem): void
+  click(item: NormalizedNavItem): void
 }
 
 type Slots = {

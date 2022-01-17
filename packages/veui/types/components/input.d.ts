@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, ActivatableMixin, InputMixin, ControllableMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, ActivatableMixin, InputMixin, ControllableMixin, InputTrim } from '../common'
 
 type InputType = 'text' | 'password' | 'hidden'
 
@@ -13,17 +12,17 @@ export type Props = {
   maxlength?: number
   getLength?: (value: string) => number
   strict?: boolean
-  trim?: boolean
+  trim?: InputTrim
 }
 
 type Emits = {
-  input(value: string): unknown
-  clear(): unknown
-  autofill(): unknown
+  input(value: string): void
+  clear(): void
+  autofill(): void
 }
 
 type Mixins = [UiMixin, ActivatableMixin, InputMixin, ControllableMixin<{
-  input(value: string): unknown
+  input(value: string): void
 }>]
 
 type Slots = {

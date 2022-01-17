@@ -1,9 +1,7 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, OverlayMixin } from '../common/mixins'
-import { TargetType } from './overlay'
+import { VeuiDefineInstance, UiMixin, OverlayMixin, OverlayTarget } from '../common'
 
 type Props = {
-  target: TargetType
+  target: OverlayTarget
   title?: string
   open?: boolean
   foot?: boolean
@@ -12,8 +10,8 @@ type Props = {
 }
 
 type Emits = {
-  ok(): unknown
-  cancel(): unknown
+  ok(): void
+  cancel(): void
 }
 
 type Mixins = [UiMixin, OverlayMixin]

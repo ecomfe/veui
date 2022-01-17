@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin } from '../common'
 
 type Props = {
   type?: string

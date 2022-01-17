@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, OverlayMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, OverlayMixin } from '../common'
 import { Props as DialogProps, Emits, Slots } from './dialog'
 
 type Props = Omit<DialogProps, 'draggable'> & {

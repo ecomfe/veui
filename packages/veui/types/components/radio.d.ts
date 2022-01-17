@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin, InputMixin, ActivatableMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, InputMixin, ActivatableMixin } from '../common'
 
 type Props = {
   value?: unknown
@@ -8,8 +7,8 @@ type Props = {
 }
 
 type Emits = {
-  input(value: unknown): unknown
-  change(checked: true): unknown
+  input(value: unknown): void
+  change(checked: true): void
 }
 
 type Mixins = [UiMixin, InputMixin, ActivatableMixin]

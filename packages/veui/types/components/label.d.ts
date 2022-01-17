@@ -1,9 +1,7 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
-import { ComponentPublicInstance } from '@vue/runtime-dom'
+import { VeuiDefineInstance, UiMixin, OverlayTarget } from '../common'
 
 type Props = {
-  for?: string | ComponentPublicInstance | HTMLElement | any // $refs.xxx 好像识别不了
+  for?: OverlayTarget
 }
 
 type Emits = {}

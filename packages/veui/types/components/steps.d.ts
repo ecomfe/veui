@@ -1,9 +1,7 @@
-import { VeuiDefineInstance, LooseObject } from '../common/context'
-import { UiMixin } from '../common/mixins'
-import { Props as LinkProps } from './link'
+import { VeuiDefineInstance, LooseObject, UiMixin, LinkTo } from '../common'
 
 type Item = {
-  to: LinkProps['to']
+  to: LinkTo
   status?: string
   label?: string
   desc?: string
@@ -15,7 +13,7 @@ type Props<T extends Item> = {
 }
 
 type Emits = {
-  click(index: number, e: MouseEvent): unknown
+  click(index: number, e: MouseEvent): void
 }
 
 type Mixins = UiMixin

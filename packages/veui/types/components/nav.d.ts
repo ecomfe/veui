@@ -1,14 +1,11 @@
-import { VeuiDefineInstance, Normalized } from '../common/context'
-import { UiMixin, OverlayMixin } from '../common/mixins'
-import { To } from './link'
-import { Matches } from './tab'
+import { VeuiDefineInstance, Normalized, RouteMatches, LinkTo, UiMixin, OverlayMixin } from '../common'
 
 export type NavItem = ({
   name: string
-  to?: To
+  to?: LinkTo
 } | {
   name?: string
-  to: To
+  to: LinkTo
 }) & {
   label: string
   children?: Array<NavItem>
@@ -17,13 +14,13 @@ export type NavItem = ({
 type Props<T extends NavItem> = {
   active?: string
   items?: Array<T>
-  matches?: Matches
+  matches?: RouteMatches
 }
 
 export type NormalizedNavItem = Normalized<'children', NavItem, true>
 
 type Emits = {
-  click(item: NormalizedNavItem): unknown
+  click(item: NormalizedNavItem): void
 }
 
 export type Mixins = [UiMixin, OverlayMixin]

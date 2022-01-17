@@ -1,8 +1,7 @@
-import { VeuiDefineInstance} from '../common/context'
-import { UiMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, Status } from '../common'
 
 type Props = {
-  type?: 'success' | 'warning' | 'info' | 'error'
+  type?: Status
   title?: string
   closable?: boolean
   message?: string
@@ -11,8 +10,8 @@ type Props = {
 }
 
 type Emits = {
-  close(): unknown
-  ready(el: HTMLElement): unknown
+  close(): void
+  ready(el: HTMLElement): void
 }
 
 type Mixins = UiMixin

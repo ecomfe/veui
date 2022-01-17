@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin } from '../common'
 
 type Props = {
   loading?: boolean
@@ -7,16 +6,22 @@ type Props = {
   falseValue?: unknown
   model?: unknown
   checked?: boolean
+  /**
+   * @deprecated
+   */
   onLabel?: string
+  /**
+   * @deprecated
+   */
   offLabel?: string
 }
 
 type Emits = {
-  input(value: unknown): unknown
-  change(checked: boolean): unknown
+  input(value: unknown): void
+  change(checked: boolean): void
 }
 
-type Mixins =  UiMixin
+type Mixins = UiMixin
 
 type Slots = {
   default(): unknown

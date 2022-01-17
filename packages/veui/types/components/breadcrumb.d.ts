@@ -1,11 +1,9 @@
-import { VeuiDefineInstance, LooseObject } from '../common/context'
-import { UiMixin } from '../common/mixins'
-import { RawLocation } from 'vue-router'
+import { VeuiDefineInstance, LooseObject, UiMixin, LinkTo } from '../common'
 
 export type Item = {
   label: string
   type?: 'text' | 'link'
-  to?: string | RawLocation
+  to?: LinkTo
   native?: boolean
 }
 
@@ -14,7 +12,7 @@ type Props<T extends Item = Item> = {
 }
 
 type Emits = {
-  redirect(event: MouseEvent, item: LooseObject<Item>, index: number): unknown
+  redirect(event: MouseEvent, item: LooseObject<Item>, index: number): void
 }
 
 type Mixins = UiMixin

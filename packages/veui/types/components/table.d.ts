@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin } from '../common'
 import { AllowedOrders } from './column'
 
 type Props<T extends Record<any, unknown>, KeyField extends string | undefined = undefined> = ({
@@ -24,8 +23,8 @@ type Props<T extends Record<any, unknown>, KeyField extends string | undefined =
 }
 
 type Emits = {
-  sort(field: string, order: AllowedOrders[number]): unknown
-  select(selected: Array<unknown>, item: Record<any, any>, selectedItems: Array<Record<any, any>>): unknown
+  sort(field: string, order: AllowedOrders[number]): void
+  select(selected: Array<unknown>, item: Record<any, any>, selectedItems: Array<Record<any, any>>): void
 }
 
 type Mixins = UiMixin

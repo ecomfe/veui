@@ -1,5 +1,5 @@
-import { VeuiDefineInstance, Normalized, SearchableProps } from '../common/context'
-import { UiMixin, InputMixin, OverlayMixin, DropdownMixin } from '../common/mixins'
+import {
+  VeuiDefineInstance, Normalized, SearchableProps, UiMixin, InputMixin, OverlayMixin, DropdownMixin, InputTrim } from '../common'
 
 type Item = string | {
   label?: string
@@ -10,7 +10,7 @@ type Item = string | {
 type Props<T extends Item> = {
   datasource?: Array<T>
   value?: string
-  suggestTrigger?: string | Array<string>
+  suggestTrigger?: 'input' | 'focus' | Array<'input' | 'focus'>
   autofocus?: boolean
   placeholder?: string
   selectOnFocus?: boolean
@@ -19,14 +19,14 @@ type Props<T extends Item> = {
   maxlength?: number | string
   getLength?: (str: string) => number
   strict?: boolean
-  trim?: boolean
+  trim?: InputTrim
 } & SearchableProps<Normalized<'children', T>>
 
 type Emits = {
-  input(value?: string): unknown
-  select(value: string): unknown
-  toggle(expanded: boolean): unknown
-  clear(): unknown
+  input(value: string): void
+  select(value: string): void
+  toggle(expanded: boolean): void
+  clear(): void
 }
 
 type ObjectItem = {

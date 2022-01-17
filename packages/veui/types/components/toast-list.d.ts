@@ -1,5 +1,4 @@
-import { VeuiDefineInstance } from '../common/context'
-import { OverlayMixin } from '../common/mixins'
+import { VeuiDefineInstance, OverlayMixin } from '../common'
 
 type Props = {}
 

@@ -1,21 +1,18 @@
-import { VeuiDefineInstance } from '../common/context'
-import { UiMixin } from '../common/mixins'
-
-type AlertBoxType = 'success' | 'error' | 'info' | 'warning'
+import { VeuiDefineInstance, UiMixin, BeforeClose, Status } from '../common'
 
 type Props = {
-  type?: AlertBoxType
+  type?: Status
   open?: boolean
   title?: string
-  beforeClose?: (type: 'ok' | 'cancel') => boolean | Promise<boolean>
+  beforeClose?: BeforeClose
   loading?: boolean
   disabled?: boolean
   okLabel?: string
 }
 
 type Emits = {
-  ok(): unknown
-  afterclose(): unknown
+  ok(): void
+  afterclose(): void
 }
 
 type Mixins = UiMixin

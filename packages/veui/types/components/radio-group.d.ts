@@ -1,7 +1,6 @@
-import { VeuiDefineInstance, LooseObject } from '../common/context'
-import { UiMixin, InputMixin, ControllableMixin } from '../common/mixins'
+import { VeuiDefineInstance, LooseObject, UiMixin, InputMixin, ControllableMixin } from '../common'
 
-export type Item = {
+type Item = {
   label?: string // 覆盖 slot 可以不写 label？
   value: unknown
   disabled?: boolean
@@ -17,7 +16,7 @@ type Props<T extends Item> = {
 type Emits = {}
 
 type Mixins = [UiMixin, InputMixin, ControllableMixin<{
-  change(value: unknown): unknown
+  change(value: unknown): void
 }>]
 
 type Slots = {

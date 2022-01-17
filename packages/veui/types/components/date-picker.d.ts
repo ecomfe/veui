@@ -1,5 +1,4 @@
-import { VeuiDefineInstance, } from '../common/context'
-import { UiMixin, ControllableMixin, InputMixin, DropdownMixin } from '../common/mixins'
+import { VeuiDefineInstance, UiMixin, ControllableMixin, InputMixin, DropdownMixin } from '../common'
 import { Props as CalendarProps, Day } from './calendar'
 
 type PickedKeys = 'type' | 'weekStart' | 'fillMonth' | 'today' | 'disabledDate' | 'dateClass'
@@ -20,12 +19,12 @@ type Props = ({
 } & Pick<CalendarProps, PickedKeys>
 
 type Emits = {
-  selectstart(picking: Date): unknown
-  selectprogress(picking: [Date, Date]): unknown
+  selectstart(picking: Date): void
+  selectprogress(picking: [Date, Date]): void
 }
 
 type Mixins = [UiMixin, InputMixin, DropdownMixin, ControllableMixin<{
-  select(value: Date | [Date, Date]): unknown
+  select(value: Date | [Date, Date]): void
 }>]
 
 type Slots = {
