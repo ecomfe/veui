@@ -1,24 +1,25 @@
-<template>
-<transition
-  :name="realName"
-  v-bind="$attrs"
->
-  <slot/>
-</transition>
-</template>
-
 <script>
 import { prefixify } from '../mixins/prefix'
 
 const BUILTIN_TRANSITIONS = [
-  'fade',
-  'fade-scale',
-  'fade-scale-x',
-  'fade-scale-y',
-  'translate',
+  'fade-in',
+  'scale-fade-in',
+  'slide-in',
+  'slide-fade-in',
+  'slide-scale-fade-in',
   'move',
-  'fade-translate-scale'
+  'fade-out',
+  'scale-fade-out',
+  'slide-out',
+  'slide-fade-out',
+  'slide-scale-fade-out'
 ]
+
+const Wrapper = {
+  render () {
+    return this.$slots.default
+  }
+}
 
 export default {
   name: 'veui-transition',
@@ -34,7 +35,49 @@ export default {
   computed: {
     realName () {
       return prefixify(`transition-${this.name}`)
+    },
+    customListeners () {
+      return {
+        transitionstart: e => {
+          this.$emit('before-move', e.target)
+          this.$emit('move', e.target)
+        },
+        transitionend: e => {
+          this.$emit('after-move', e.target)
+        },
+        transitioncancel: e => {
+          this.$emit('move-cancelled', e.target)
+        }
+      }
     }
+  },
+  render () {
+    if (this.name === 'move') {
+      // wrap 目的：加class/style/nativeOn 方便，不用 cloneVnode 了
+      return (
+        <Wrapper
+          class={this.realName}
+          {...{
+            attrs: { ...this.$attrs },
+            nativeOn: this.customListeners
+          }}
+        >
+          {this.$slots.default}
+        </Wrapper>
+      )
+    }
+
+    return (
+      <transition
+        name={this.realName}
+        {...{
+          attrs: { ...this.$attrs },
+          on: this.$listeners
+        }}
+      >
+        {this.$slots.default}
+      </transition>
+    )
   }
 }
 </script>
