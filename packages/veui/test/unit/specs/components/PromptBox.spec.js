@@ -85,7 +85,9 @@ describe('components/PromptBox', function () {
     wrapper.destroy()
   })
 
-  it('should handle event correctly when click ok/cancel button', async () => {
+  it('should handle event correctly when click ok/cancel button', async function () {
+    this.timeout(3000)
+
     let okMock = sinon.spy()
     let cancelMock = sinon.spy()
     let afterCloseMock = sinon.spy()

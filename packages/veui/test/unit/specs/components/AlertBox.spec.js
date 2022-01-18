@@ -69,7 +69,8 @@ describe('components/AlertBox', function () {
     wrapper.destroy()
   })
 
-  it('should handle close event correctly by AlertBox', async () => {
+  it('should handle close event correctly by AlertBox', async function () {
+    this.timeout(3000)
     let count = 0
     let wrapper = mount(
       {
