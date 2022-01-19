@@ -1,6 +1,6 @@
 {
   "name": "veui-loader",
-  "version": "2.4.4",
+  "version": "2.5.0",
   "description": "webpack loader for VEUI.",
   "main": "lib/index.js",
   "repository": "ecomfe/veui",
@@ -32,8 +32,8 @@
     "ava": "^3.10.1",
     "esm": "^3.2.25",
     "raw-loader": "^0.5.1",
-    "veui": "^2.4.4",
-    "veui-theme-dls": "^2.4.4",
+    "veui": "^2.5.0",
+    "veui-theme-dls": "^2.5.0",
     "webpack": "^4.43.0"
   },
   "ava": {
