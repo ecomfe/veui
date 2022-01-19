@@ -1,3 +1,13 @@
+## 2.5.0 "🤸 Person Cartwheeling" (2022-01-19)
+
+### 💡 主要变更
+
+- [+] 为 VEUI 的所有组件增加了类型描述文件，可以配合 [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) 在模板中得到属性/事件/插槽类型的自动提示。<!-- #TypeScript -->
+
+### 🐞 问题修复
+
+- [^] 修正了 `Accordion` 组件的 `toggle-position` 属性没有正确生效的问题。<!-- #Accordion -->
+
 ## 2.4.4 (2022-01-15)
 
 ### 🐞 问题修复
