@@ -379,7 +379,6 @@
     <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
     <veui-form
       ref="form2"
-      :readonly="isValidating"
       :data="storeData4"
       :validators="validators"
       :before-validate="beforeValidate"
@@ -521,7 +520,7 @@
         >我已阅读并同意工作协议</veui-checkbox>
       </veui-field>
 
-      <template slot="actions">
+      <template #actions="{ isValidating }">
         <veui-button
           ui="primary"
           :loading="isValidating"
@@ -585,7 +584,7 @@
         >删除</veui-button>
       </veui-fieldset>
 
-      <template #actions>
+      <template #actions="{ isValidating }">
         <veui-button
           ui="primary"
           :loading="isValidating"
