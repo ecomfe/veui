@@ -44,7 +44,9 @@ export type VeuiDefineInstance<
   $scopedSlots: Slots
 }
 
-export type VeuiDefineComponent<T> = T & PublicProps
+export type VeuiDefineComponent<T> = T &
+  PublicProps &
+  ((resolve: (component: any) => void, reject: () => void) => void) // hack for vca's defineComponent
 
 // 不写成 mixin，因为 mixin 无法在 new() => instance 中捕获泛型
 export type SearchableProps<T = unknown> = {
