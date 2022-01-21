@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   OverlayMixin,
@@ -27,8 +28,8 @@ type Slots = {
   foot(): unknown
 }
 
-type Popover = {
+type Popover = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Popover

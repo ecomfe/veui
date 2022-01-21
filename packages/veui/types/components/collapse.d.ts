@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 export type TogglePosition = 'start' | 'end' | 'none'
 
@@ -22,8 +22,8 @@ type Slots = {
   titleAfter(): unknown
 }
 
-type Collapse = {
+type Collapse = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Collapse

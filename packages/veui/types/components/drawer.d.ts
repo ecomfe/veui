@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, OverlayMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  OverlayMixin
+} from '../common'
 import { Props as DialogProps, Emits, Slots } from './dialog'
 
 type Props = Omit<DialogProps, 'draggable'> & {
@@ -7,8 +12,8 @@ type Props = Omit<DialogProps, 'draggable'> & {
 
 type Mixins = [UiMixin, OverlayMixin]
 
-type Drawer = {
+type Drawer = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Drawer

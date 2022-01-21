@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, Status } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  Status
+} from '../common'
 
 type BadgeType = Status | 'aux'
 
@@ -17,8 +22,8 @@ type Slots = {
   default(): unknown
 }
 
-type Badge = {
+type Badge = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Badge

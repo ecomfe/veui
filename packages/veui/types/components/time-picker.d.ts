@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   InputMixin,
@@ -44,8 +45,8 @@ type Slots = {
   }): unknown
 }
 
-type TimePicker = {
+type TimePicker = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default TimePicker

@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, Status } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  Status
+} from '../common'
 
 type Props = {
   type?: Status
@@ -25,8 +30,8 @@ type Slots = {
   default(slotProps: SlotProps): unknown
 }
 
-type Toast = {
+type Toast = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Toast

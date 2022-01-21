@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   InputMixin,
@@ -22,8 +23,8 @@ type Slots = {
   default(): unknown
 }
 
-type Radio = {
+type Radio = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Radio

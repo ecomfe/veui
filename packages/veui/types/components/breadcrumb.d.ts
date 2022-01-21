@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, LooseObject, UiMixin, LinkTo } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  LooseObject,
+  UiMixin,
+  LinkTo
+} from '../common'
 
 export type Item = {
   label: string
@@ -25,13 +31,13 @@ type Slots = {
   separator(): unknown
 }
 
-type Breadcrumb = {
+type Breadcrumb = VeuiDefineComponent<{
   new <T extends Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Breadcrumb

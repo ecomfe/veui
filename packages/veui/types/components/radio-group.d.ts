@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   LooseObject,
   UiMixin,
@@ -34,13 +35,13 @@ type Slots = {
   desc(item: LooseObject<Item>): unknown
 }
 
-type RadioGroup = {
+type RadioGroup = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default RadioGroup

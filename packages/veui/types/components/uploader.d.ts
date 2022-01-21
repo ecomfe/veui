@@ -1,4 +1,10 @@
-import { LooseObject, VeuiDefineInstance, UiMixin, InputMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  LooseObject,
+  VeuiDefineInstance,
+  UiMixin,
+  InputMixin
+} from '../common'
 import { PreviewOptions } from './lightbox'
 
 type Item = {
@@ -133,10 +139,10 @@ type Slots = {
   failure(slotProps: SlotProps): unknown
 }
 
-type Uploader = {
+type Uploader = VeuiDefineComponent<{
   new <T extends Item = Item, KeyField extends string = 'key'>(
     ...args: any[]
   ): VeuiDefineInstance<Props<T, KeyField>, Emits, Slots, Mixins>
-}
+}>
 
 export default Uploader

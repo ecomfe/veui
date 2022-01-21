@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, LooseObject, CarouselMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  LooseObject,
+  CarouselMixin
+} from '../common'
 
 export type Item = {
   src: string
@@ -50,13 +55,13 @@ type Slots = {
   item(slotProps: { item: LooseObject<Item> }): unknown
 }
 
-type Carousel = {
+type Carousel = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Carousel

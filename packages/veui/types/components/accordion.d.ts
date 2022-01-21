@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 import { TogglePosition } from './collapse'
 
 type ExpandedType = number | string | Array<number | string>
@@ -20,8 +20,8 @@ type Slots = {
 
 type Mixins = UiMixin
 
-type Accordion = {
+type Accordion = VeuiDefineComponent<{
   new (): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Accordion

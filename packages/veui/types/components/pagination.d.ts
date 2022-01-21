@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, LinkTo, UiMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  LinkTo,
+  UiMixin
+} from '../common'
 
 type Props = {
   page?: number
@@ -25,8 +30,8 @@ type Mixins = UiMixin
 
 type Slots = {}
 
-type Pagination = {
+type Pagination = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Pagination

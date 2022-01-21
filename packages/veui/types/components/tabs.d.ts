@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, RouteMatches } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  RouteMatches
+} from '../common'
 import { TabItem, Slots as TabSlots } from './tab'
 
 type Props = {
@@ -27,8 +32,8 @@ type Slots = {
   extra(): unknown
 }
 
-type Tabs = {
+type Tabs = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Tabs

@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   Normalized,
   SearchableProps,
@@ -41,13 +42,13 @@ type Slots = {
   'group-label'(slotProps: LooseOptionParent): unknown
 }
 
-type Dropdown = {
+type Dropdown = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Dropdown

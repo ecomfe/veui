@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, LooseObject, UiMixin, LinkTo } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  LooseObject,
+  UiMixin,
+  LinkTo
+} from '../common'
 
 type Item = {
   to: LinkTo
@@ -27,13 +33,13 @@ type Slots = {
   desc(slotProps: SlotScope): unknown
 }
 
-type Steps = {
+type Steps = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Steps

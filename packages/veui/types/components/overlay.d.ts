@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   FocusableMixin,
@@ -33,8 +34,8 @@ type Slots = {
   default(): unknown
 }
 
-type Overlay = {
+type Overlay = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Overlay

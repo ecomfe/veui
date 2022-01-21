@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   Normalized,
   RouteMatches,
@@ -45,13 +46,13 @@ type Slots = {
   // 'title-icon'(slotProps: NormalizedNavItem): unknown
 }
 
-type Nav = {
+type Nav = VeuiDefineComponent<{
   new <T extends NavItem = NavItem>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Nav

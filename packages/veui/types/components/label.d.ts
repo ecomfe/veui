@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, OverlayTarget } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  OverlayTarget
+} from '../common'
 
 type Props = {
   for?: OverlayTarget
@@ -12,8 +17,8 @@ type Slots = {
   default(): unknown
 }
 
-type Label = {
+type Label = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Label

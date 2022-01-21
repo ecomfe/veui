@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   OverlayMixin,
@@ -32,8 +33,8 @@ type Slots = {
   default(): unknown
 }
 
-type Tooltip = {
+type Tooltip = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Tooltip

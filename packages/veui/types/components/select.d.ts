@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   SearchableProps,
   Normalized,
@@ -81,13 +82,13 @@ export type Slots = {
   ): unknown
 }
 
-type Select = {
+type Select = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Select

@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 import { AllowedOrders } from './column'
 
 type Props<
@@ -45,13 +45,13 @@ type Slots = {
   foot(): unknown
 }
 
-type Table = {
+type Table = VeuiDefineComponent<{
   new <
     T extends Record<any, unknown> = {},
     KeyField extends string | undefined = undefined
   >(
     ...args: any[]
   ): VeuiDefineInstance<Props<T, KeyField>, Emits, Slots, Mixins>
-}
+}>
 
 export default Table

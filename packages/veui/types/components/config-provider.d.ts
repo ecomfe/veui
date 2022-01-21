@@ -1,4 +1,4 @@
-import { VeuiDefineInstance } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance } from '../common'
 
 type Props = {
   value: Record<string, unknown>
@@ -12,8 +12,8 @@ type Slots = {
   default(): unknown
 }
 
-type ConfigProvider = {
+type ConfigProvider = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default ConfigProvider

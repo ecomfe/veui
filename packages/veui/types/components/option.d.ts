@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 export type Tag = string
 
@@ -21,8 +21,8 @@ type Slots = {
   label(): unknown
 }
 
-type Option = {
+type Option = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Option

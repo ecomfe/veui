@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   InputMixin,
@@ -58,13 +59,13 @@ type Slots = {
   selected(slotScope: { datasource: LooseTreeItem }): unknown
 }
 
-type Transfer = {
+type Transfer = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Transfer

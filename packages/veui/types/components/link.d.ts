@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, LinkTo } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  LinkTo
+} from '../common'
 import { AnchorHTMLAttributes } from '@vue/runtime-dom'
 
 export type Props = {
@@ -21,8 +26,8 @@ type Slots = {
   default(): unknown
 }
 
-type Link = {
+type Link = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Link

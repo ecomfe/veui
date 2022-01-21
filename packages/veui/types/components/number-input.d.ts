@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   InputMixin,
@@ -33,8 +34,8 @@ type Slots = {
   default(): unknown
 }
 
-type NumberInput = {
+type NumberInput = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default NumberInput

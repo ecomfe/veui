@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 type RuleItem = {
   name: string
@@ -34,8 +34,8 @@ type Slots = {
   tip(): unknown
 }
 
-type Field = {
+type Field = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Field

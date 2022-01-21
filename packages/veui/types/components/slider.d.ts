@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 type Props<T = number> = {
   value?: T
@@ -33,13 +33,13 @@ type Slots = {
   tipLabel(): unknown
 }
 
-type Slider = {
+type Slider = VeuiDefineComponent<{
   new <T = number>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Slider

@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 type Props = {
   name?: string
@@ -19,8 +19,8 @@ type Slots = {
   label(): unknown
 }
 
-type Fieldset = {
+type Fieldset = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Fieldset

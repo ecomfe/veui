@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   RequiredKey,
   SafeOmit,
@@ -63,13 +64,13 @@ type Slots = {
   default(): unknown
 }
 
-type OptionGroup = {
+type OptionGroup = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default OptionGroup

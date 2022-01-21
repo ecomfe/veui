@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, OverlayMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  OverlayMixin
+} from '../common'
 import { Props as DialogProps, Slots } from './dialog'
 
 type Props = Pick<
@@ -20,8 +25,8 @@ type Emits = {
 
 type Mixins = [UiMixin, OverlayMixin]
 
-type ConfirmBox = {
+type ConfirmBox = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default ConfirmBox
