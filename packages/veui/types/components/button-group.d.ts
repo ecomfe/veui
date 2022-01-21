@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   LooseObject,
   UiMixin,
@@ -28,13 +29,13 @@ type Slots = {
   item(item: LooseObject<Item>): unknown
 }
 
-type ButtonGroup = {
+type ButtonGroup = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default ButtonGroup

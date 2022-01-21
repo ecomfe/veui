@@ -63,6 +63,7 @@ export default {
     if (typeof name !== 'string') {
       // fallback to VueAwesome's register
       register(name)
+      return
     }
 
     icons[name] = icon

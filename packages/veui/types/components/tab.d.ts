@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, Status, RouteMatches, LinkTo } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  Status,
+  RouteMatches,
+  LinkTo
+} from '../common'
 
 type Props = {
   label?: string
@@ -30,8 +36,8 @@ export type Slots = {
   label(slotProps: SlotProps): unknown
 }
 
-type Tab = {
+type Tab = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Tab

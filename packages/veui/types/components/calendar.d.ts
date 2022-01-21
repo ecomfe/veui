@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   InputMixin,
@@ -54,8 +55,8 @@ type Slots = {
   after(): unknown
 }
 
-type Calendar = {
+type Calendar = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Calendar

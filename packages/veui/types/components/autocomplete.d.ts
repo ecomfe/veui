@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   Normalized,
   SearchableProps,
@@ -62,13 +63,13 @@ type Slots = {
   }): unknown
 }
 
-type Autocomplete = {
+type Autocomplete = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Autocomplete

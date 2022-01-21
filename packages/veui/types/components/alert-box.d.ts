@@ -1,4 +1,10 @@
-import { VeuiDefineInstance, UiMixin, BeforeClose, Status } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  BeforeClose,
+  Status
+} from '../common'
 
 type Props = {
   type?: Status
@@ -23,8 +29,8 @@ type Slots = {
   foot(): unknown
 }
 
-type AlertBox = {
+type AlertBox = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default AlertBox

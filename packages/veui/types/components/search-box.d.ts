@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   SearchableProps,
   RequiredKey,
@@ -71,13 +72,13 @@ type Slots = {
   'option-label'(slotProps: { item: NormalizedLeaf }): unknown
 }
 
-type SearchBox = {
+type SearchBox = VeuiDefineComponent<{
   new <T extends string | Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default SearchBox

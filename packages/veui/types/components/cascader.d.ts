@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   SearchableProps,
   Normalized,
@@ -80,13 +81,13 @@ type Slots = {
   ): unknown
 }
 
-type Cascader = {
+type Cascader = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Cascader

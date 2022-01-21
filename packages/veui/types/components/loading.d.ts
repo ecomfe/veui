@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 type Props = {
   loading?: boolean
@@ -13,8 +13,8 @@ type Slots = {
   spinner(): unknown
 }
 
-type Loading = {
+type Loading = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Loading

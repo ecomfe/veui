@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   ControllableMixin,
@@ -55,8 +56,8 @@ type Slots = {
   date(date: Day): unknown
 }
 
-type DatePicker = {
+type DatePicker = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default DatePicker

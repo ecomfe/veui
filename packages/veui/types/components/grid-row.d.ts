@@ -1,4 +1,4 @@
-import { VeuiDefineInstance } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance } from '../common'
 
 type Props = {}
 
@@ -10,8 +10,8 @@ type Slots = {
   default(): unknown
 }
 
-type GridRow = {
+type GridRow = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default GridRow

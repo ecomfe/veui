@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, LooseObject, UiMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  LooseObject,
+  UiMixin
+} from '../common'
 
 type Props<T extends Record<any, unknown>> = (
   | {
@@ -32,10 +37,10 @@ type Slots = {
   noData(slotProps: SlotProps): unknown
 }
 
-type FilterPanel = {
+type FilterPanel = VeuiDefineComponent<{
   new <T extends Record<any, unknown> = { label: string }>(
     ...args: any[]
   ): VeuiDefineInstance<Props<T>, Emits, Slots, Mixins>
-}
+}>
 
 export default FilterPanel

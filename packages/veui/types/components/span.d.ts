@@ -1,11 +1,11 @@
-import { VeuiDefineInstance } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance } from '../common'
 
 type Slots = {
   default(): unknown
 }
 
-type Span = {
+type Span = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<{}, {}, Slots, {}>
-}
+}>
 
 export default Span

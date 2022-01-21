@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, LooseObject, UiMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  LooseObject,
+  UiMixin
+} from '../common'
 
 type Item = {
   label: string
@@ -24,13 +29,13 @@ type Slots = {
   itemLabel(slotProps: { item: LooseObject<Item> }): unknown
 }
 
-type Anchor = {
+type Anchor = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Anchor

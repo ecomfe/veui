@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, LooseObject } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, LooseObject } from '../common'
 import { Slots as SelectSlots } from './select'
 
 export type AllowedOrders = Array<false | 'desc' | 'asc'>
@@ -35,8 +35,8 @@ type Slots = {
   subRow(scope: LooseObject<{ item: unknown; index: number }>): unknown
 }
 
-type Column = {
+type Column = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Column

@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   LooseObject,
   UiMixin,
@@ -36,13 +37,13 @@ type Slots = {
   desc(slotProps: SlotScope): unknown
 }
 
-type Lightbox = {
+type Lightbox = VeuiDefineComponent<{
   new <T extends Item = Item>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Lightbox

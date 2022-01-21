@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   LooseObject,
   UiMixin,
@@ -43,10 +44,10 @@ type Slots = {
   desc(item: LooseObject<Item>): unknown
 }
 
-type CheckboxGroup = {
+type CheckboxGroup = VeuiDefineComponent<{
   new <T extends Item = Item, Empty = undefined>(
     ...args: any[]
   ): VeuiDefineInstance<Props<T, Empty>, Emits, Slots, Mixins>
-}
+}>
 
 export default CheckboxGroup

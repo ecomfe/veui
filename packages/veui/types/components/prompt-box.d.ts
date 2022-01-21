@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   OverlayMixin,
@@ -41,8 +42,8 @@ type Slots = {
   foot(): unknown
 }
 
-type PromptBox = {
+type PromptBox = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default PromptBox

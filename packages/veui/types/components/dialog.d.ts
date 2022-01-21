@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
   OverlayMixin,
@@ -42,8 +43,8 @@ export type Slots = {
   foot(slotProps: SlotProps): unknown
 }
 
-type Dialog = {
+type Dialog = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Dialog

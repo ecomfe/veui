@@ -1,4 +1,5 @@
 import {
+  VeuiDefineComponent,
   VeuiDefineInstance,
   LooseObject,
   Normalized,
@@ -91,13 +92,13 @@ type Slots = {
   'item-after'(slotProps: SlotProps): unknown
 }
 
-type Tree = {
+type Tree = VeuiDefineComponent<{
   new <T extends TreeItem = TreeItem>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Tree

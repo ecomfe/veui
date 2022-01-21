@@ -1,4 +1,9 @@
-import { VeuiDefineInstance, UiMixin, FocusableMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  FocusableMixin
+} from '../common'
 
 type Props = {
   disabled?: boolean
@@ -16,8 +21,8 @@ type Slots = {
   default(): unknown
 }
 
-type Button = {
+type Button = VeuiDefineComponent<{
   new (...args: any): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Button

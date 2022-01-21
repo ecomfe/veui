@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 type Props = {
   loading?: boolean
@@ -28,8 +28,8 @@ type Slots = {
   content(slotProps: { on: boolean }): unknown
 }
 
-type Switch = {
+type Switch = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
-}
+}>
 
 export default Switch

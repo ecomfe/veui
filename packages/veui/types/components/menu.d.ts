@@ -1,4 +1,8 @@
-import { VeuiDefineInstance, RouteMatches } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  RouteMatches
+} from '../common'
 import { NavItem, Mixins, NormalizedNavItem } from './nav'
 
 type Props<T extends NavItem> = {
@@ -24,13 +28,13 @@ type Slots = {
   icon(slotProps: NormalizedNavItem): unknown
 }
 
-type Menu = {
+type Menu = VeuiDefineComponent<{
   new <T extends NavItem = NavItem>(...args: any[]): VeuiDefineInstance<
     Props<T>,
     Emits,
     Slots,
     Mixins
   >
-}
+}>
 
 export default Menu

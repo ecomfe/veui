@@ -1,4 +1,4 @@
-import { VeuiDefineInstance, UiMixin } from '../common'
+import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 type Validities = boolean | undefined | Record<any, unknown>
 
@@ -38,8 +38,8 @@ type Methods = {
   ): Promise<boolean | Record<string, Record<any, unknown>>>
 }
 
-type Form = {
+type Form = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins, Methods>
-}
+}>
 
 export default Form
