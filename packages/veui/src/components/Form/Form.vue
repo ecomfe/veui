@@ -5,14 +5,14 @@
   @submit.prevent="handleSubmit"
   @reset.prevent="reset(null)"
 >
-  <slot/>
+  <slot v-bind="{ submit, validating: isValidating }"/>
   <div
     v-if="hasActions()"
     :class="$c('form-actions')"
   >
     <slot
       name="actions"
-      v-bind="{ submit, isValidating }"
+      v-bind="{ submit, validating: isValidating }"
     />
   </div>
 </form>
@@ -126,11 +126,11 @@ export default {
       this.handleSubmit(null)
     },
     handleSubmit (e) {
-      // 把 field 上边 disabled 的项去掉
       if (this.submissionValidating) {
         return this.validationPromise
       }
 
+      // 把 field 上边 disabled 的项去掉
       this.submissionValidating = true
       let data = omit(
         this.data,
@@ -224,7 +224,7 @@ export default {
     startValidator (validatorName) {
       const key = uniqueId('validator-')
       this.$set(this.interactiveValidationRecord, validatorName, key)
-      return key
+      return () => this.endValidator(validatorName, key)
     },
     endValidator (validatorName, key) {
       const keyInRecord = this.interactiveValidationRecord[validatorName]
@@ -238,13 +238,12 @@ export default {
         this,
         targets.map((target) => target && target.getFieldValue())
       )
-      const validatorName = `validator:${fields.join(',')}`
-      const key = this.startValidator(validatorName)
 
       // 本来可以统一成 Promise 的，但是为了同步校验时不要闪 Loading，需要尽量保证同步校验
-      if (validities && validities.then) {
+      if (validities && isFunction(validities.then)) {
+        const end = this.startValidator(`validator:${fields.join(',')}`)
         return validities.then((validities) => {
-          this.endValidator(validatorName, key)
+          end()
 
           // TODO 不是最后一个如何处理validities
           this.handleValidities(validities, fields)
@@ -252,7 +251,6 @@ export default {
         })
       }
 
-      this.endValidator(validatorName, key)
       this.handleValidities(validities, fields)
       return validities
     },

@@ -11,7 +11,7 @@ let slot = `
 `
 function genSimpleForm (propsData = {}, defaultSlot = slot, actions = false) {
   actions = actions
-    ? '<template #actions="{ isValidating }"><span class="test-actions">{{isValidating}}</span></template>'
+    ? '<template #actions="{ validating }"><span class="test-actions">{{String(validating)}}</span></template>'
     : ''
   let wrapper = mount(
     {
