@@ -7,9 +7,7 @@
     <veui-button
       ui="primary"
       @click="append"
-    >
-      添加
-    </veui-button>
+    > 添加 </veui-button>
     <veui-button @click="toggle">切换数据</veui-button>
     <veui-button @click="toggleLoading">切换加载</veui-button>
     <veui-button @click="filtered = null">清空筛选</veui-button>
@@ -144,9 +142,7 @@
             >优惠</veui-checkbox>
           </div>
         </template> -->
-        <template slot="desc">
-          这是一条带有 slot 的提示
-        </template>
+        <template slot="desc"> 这是一条带有 slot 的提示 </template>
         <template slot="head">
           价格
           <i>(每 1000g)</i>
@@ -511,6 +507,27 @@
     <veui-button
       @click="toggled = !toggled"
     >toggle type and origin</veui-button>
+    <veui-table
+      key-field="id"
+      :data="items"
+    >
+      <template v-if="!toggled">
+        <veui-table-column
+          field="id"
+          title="id1"
+          sortable
+        />
+        <veui-table-column
+          field="type"
+          title="type2"
+        />
+      </template>
+      <origin-and-level v-if="toggled"/>
+      <veui-table-column
+        field="name"
+        title="name"
+      />
+    </veui-table>
   </section>
 </article>
 </template>
@@ -534,8 +551,7 @@ import { tooltip } from 'veui/directives'
 const tableData = [
   {
     id: '3154',
-    desc:
-      '数据描述1-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
+    desc: '数据描述1-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
     price: 1024,
     updateDate: '20131117',
     group: '1577',
@@ -587,8 +603,7 @@ const tableData = [
   },
   {
     id: '3156',
-    desc:
-      '数据描述3-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
+    desc: '数据描述3-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
     price: 820,
     updateDate: '20170610',
     group: '1578',
@@ -614,8 +629,7 @@ const tableData = [
   },
   {
     id: '3157',
-    desc:
-      '数据描述4-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
+    desc: '数据描述4-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!',
     price: 736,
     updateDate: '20180109',
     group: '1578',
@@ -706,7 +720,18 @@ export default {
     'veui-link': Link,
     'veui-checkboxgroup': CheckboxGroup,
     'veui-number-input': NumberInput,
-    'veui-label': Label
+    'veui-label': Label,
+    OriginAndLevel: {
+      render () {
+        // 先支持这种写法吧
+        return (
+          <div>
+            <Column field="origin" title="origin3" />
+            <Column field="level" title="level4" />
+          </div>
+        )
+      }
+    }
   },
   directives: {
     tooltip
@@ -840,7 +865,7 @@ export default {
       ]
     },
     switchAll () {
-      this.items = this.items.map(i => ({
+      this.items = this.items.map((i) => ({
         ...i,
         disabled: !i.disabled
       }))
