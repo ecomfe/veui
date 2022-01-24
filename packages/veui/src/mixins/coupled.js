@@ -1,6 +1,7 @@
 import { uniqueId, findIndex, camelCase } from 'lodash'
 import { getTypedAncestor } from '../utils/helper'
 import { getIndexOfType } from '../utils/context'
+import { walk } from '../utils/datasource'
 
 export function useParent (
   type,
@@ -43,24 +44,24 @@ export function useParent (
         return this.coupled_children__[this.findChildIndexById(id)]
       },
       findChildIndexById (id) {
-        return findIndex(this.coupled_children__, child => child.childId === id)
+        return findIndex(
+          this.coupled_children__,
+          (child) => child.childId === id
+        )
       },
       getSortedItems () {
-        let items = this.coupled_children__
-          .slice()
-          .reduce((acc, child, index) => {
-            let realIndex = getIndexOfType(child, this)
-            if (realIndex === -1) {
-              // 因为 slot 重新渲染会更新 $slot.default, 但是可能还没有导致子组件重新，所以子组件 vm.$vnode 还是引用老的vnode
-              // 此时会找到 -1, 不知道在 updated 中会不会遇到这种情况，统一处理下，保留上次的顺序吧
-              const prevIndex = (this._prevSorted || []).indexOf(child)
-              realIndex = prevIndex >= 0 ? prevIndex : index
-            }
-            acc[realIndex] = child
-            return acc
-          }, [])
-        this._prevSorted = items
-        return items
+        const columns = this.coupled_children__
+        // 因为 slot 重新渲染会更新 $slot.default, 但是可能还没有导致子组件重新，所以子组件 vm.$vnode 还是引用老的vnode
+        // 此时会找到 -1, 那么可以直接跳过本次，后续的 updated 再来排序
+        if (columns[0] && getIndexOfType(columns[0], this) === -1) {
+          return this.coupled_children__
+        }
+
+        let sorted = []
+        // 深度优先遍历，按找到 Column 的顺序直接 push 到 sorted 数组中去即可
+        walk(this.$slots.default, createVnodeWalker(sorted, columns))
+        this._prevSorted = sorted
+        return sorted
       }
     },
     updated () {
@@ -79,11 +80,34 @@ export function useParent (
 
 function isDiff (prevSorted, newSorted) {
   return (
-    prevSorted.length !== newSorted.length ||
-    newSorted.some(
-      ({ childId }, index) => childId !== prevSorted[index].childId
-    )
+    prevSorted !== newSorted &&
+    (prevSorted.length !== newSorted.length ||
+      newSorted.some(
+        ({ childId }, index) => childId !== prevSorted[index].childId
+      ))
   )
+}
+
+function createVnodeWalker (sorted, columns) {
+  const callback = (vnode) => {
+    const { tag, componentInstance } = vnode
+    if (tag) {
+      if (columns.indexOf(componentInstance) >= 0) {
+        sorted.push(componentInstance)
+      } else if (componentInstance) {
+        // 只能用 _vnode 了，且必须用数组包起来，因为 _vnode 可能还是组件，而没有 children，不能直接 walk
+        // 穿透非 Column 的组件去继续找
+        walk([componentInstance._vnode], callback)
+      } else {
+        // keep walking children
+        return true
+      }
+    }
+    // skip children
+    return false
+  }
+
+  return callback
 }
 
 /*

@@ -126,7 +126,7 @@ describe('components/Table', () => {
     wrapper.destroy()
   })
 
-  it('should emit `select` event before `update:selected` event.', done => {
+  it('should emit `select` event before `update:selected` event.', (done) => {
     let wrapper = mount(
       {
         components: {
@@ -165,10 +165,7 @@ describe('components/Table', () => {
       }
     )
 
-    wrapper
-      .findAll('td input[type="checkbox"]')
-      .at(0)
-      .trigger('change')
+    wrapper.findAll('td input[type="checkbox"]').at(0).trigger('change')
   })
 
   it('should expand the sub rows correctly.', async () => {
@@ -287,32 +284,23 @@ describe('components/Table', () => {
     )
 
     let { vm } = wrapper
-    expect(
-      wrapper
-        .findAll('.veui-table-sorter')
-        .at(0)
-        .classes()
-    ).to.include('veui-table-sorter-desc')
+    expect(wrapper.findAll('.veui-table-sorter').at(0).classes()).to.include(
+      'veui-table-sorter-desc'
+    )
 
     wrapper.find('.veui-table-sorter').trigger('click')
     await vm.$nextTick()
     expect(vm.order).to.equal('asc')
-    expect(
-      wrapper
-        .findAll('.veui-table-sorter')
-        .at(0)
-        .classes()
-    ).to.include('veui-table-sorter-asc')
+    expect(wrapper.findAll('.veui-table-sorter').at(0).classes()).to.include(
+      'veui-table-sorter-asc'
+    )
 
     wrapper.find('.veui-table-sorter').trigger('click')
     await vm.$nextTick()
     expect(vm.order).to.equal(false)
-    expect(
-      wrapper
-        .findAll('.veui-table-sorter')
-        .at(0)
-        .classes()
-    ).to.include('veui-table-sorter-unordered')
+    expect(wrapper.findAll('.veui-table-sorter').at(0).classes()).to.include(
+      'veui-table-sorter-unordered'
+    )
 
     wrapper.destroy()
   })
@@ -759,12 +747,9 @@ describe('components/Table', () => {
       }
     )
 
-    expect(
-      wrapper
-        .findAll('tbody td')
-        .at(1)
-        .attributes('rowspan')
-    ).to.equal('2')
+    expect(wrapper.findAll('tbody td').at(1).attributes('rowspan')).to.equal(
+      '2'
+    )
     wrapper.destroy()
   })
 
@@ -2201,46 +2186,16 @@ describe('components/Table', () => {
     const { vm } = wrapper
     await wait(0)
     let cols = wrapper.findAll('th .veui-table-cell-content')
-    expect(
-      cols
-        .at(0)
-        .text()
-        .trim()
-    ).to.equal('id')
-    expect(
-      cols
-        .at(1)
-        .text()
-        .trim()
-    ).to.equal('type')
-    expect(
-      cols
-        .at(2)
-        .text()
-        .trim()
-    ).to.equal('level')
+    expect(cols.at(0).text().trim()).to.equal('id')
+    expect(cols.at(1).text().trim()).to.equal('type')
+    expect(cols.at(2).text().trim()).to.equal('level')
 
     vm.toggled = true
     await wait(0)
     cols = wrapper.findAll('th .veui-table-cell-content')
-    expect(
-      cols
-        .at(0)
-        .text()
-        .trim()
-    ).to.equal('id')
-    expect(
-      cols
-        .at(1)
-        .text()
-        .trim()
-    ).to.equal('origin')
-    expect(
-      cols
-        .at(2)
-        .text()
-        .trim()
-    ).to.equal('level')
+    expect(cols.at(0).text().trim()).to.equal('id')
+    expect(cols.at(1).text().trim()).to.equal('origin')
+    expect(cols.at(2).text().trim()).to.equal('level')
     wrapper.destroy()
   })
 
@@ -2318,7 +2273,7 @@ describe('components/Table', () => {
     wrapper.destroy()
   })
 
-  it('should render correctly on swicthing column dynamically', async () => {
+  it('should render correctly on switching column dynamically', async () => {
     let wrapper = mount(
       {
         components: {
@@ -2395,6 +2350,75 @@ describe('components/Table', () => {
     cols = wrapper.findAll('th .veui-table-cell-content')
     expect(cols.at(0).text()).to.equal('shares')
     expect(cols.at(1).text()).to.equal('rest')
+    wrapper.destroy()
+  })
+
+  it('should render multiple-column wrappers correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-column': Column,
+          OriginAndLevel: {
+            render () {
+              return (
+                <div>
+                  <Column field="origin" title="origin3" />
+                  <Column field="level" title="level4" />
+                </div>
+              )
+            }
+          }
+        },
+        template: `
+        <veui-table :data="[]">
+          <template
+            v-if="!toggled"
+          >
+            <veui-column
+              field="id"
+              title="id1"
+              sortable
+            />
+            <veui-column
+              field="type"
+              title="type2"
+            />
+          </template>
+          <origin-and-level
+            v-if="toggled"
+          />
+          <veui-column
+            field="name"
+            title="name"
+          />
+        </veui-table>`,
+        data () {
+          return {
+            toggled: false
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await wait(0)
+    let cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(cols.at(0).text(), '#1').to.equal('id1')
+    expect(cols.at(1).text()).to.equal('type2')
+    expect(cols.at(2).text()).to.equal('name')
+
+    vm.toggled = true
+    await wait(0)
+    cols = wrapper.findAll('th .veui-table-cell-content')
+    expect(cols.at(0).text(), '#11').to.equal('origin3')
+    expect(cols.at(1).text()).to.equal('level4')
+    expect(cols.at(2).text()).to.equal('name')
+
     wrapper.destroy()
   })
 })
