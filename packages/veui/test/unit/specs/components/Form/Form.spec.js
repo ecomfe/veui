@@ -9,7 +9,10 @@ let slot = `
   <veui-field name="gender" field="gender"><veui-input class="gender-input"/></veui-field>
   <veui-field name="age" field="age" disabled><veui-input class="age-input"/></veui-field>
 `
-function genSimpleForm (propsData = {}, defaultSlot = slot) {
+function genSimpleForm (propsData = {}, defaultSlot = slot, actions = false) {
+  actions = actions
+    ? '<template #actions="{ validating }"><span class="test-actions">{{String(validating)}}</span></template>'
+    : ''
   let wrapper = mount(
     {
       components: {
@@ -21,7 +24,7 @@ function genSimpleForm (propsData = {}, defaultSlot = slot) {
       data () {
         return { propsData }
       },
-      template: `<veui-form ref="form" v-bind="propsData">${defaultSlot}</veui-form>`
+      template: `<veui-form ref="form" v-bind="propsData">${defaultSlot}${actions}</veui-form>`
     },
     {
       sync: false,
@@ -36,7 +39,7 @@ describe('components/Form/Form', () => {
     let { wrapper } = genSimpleForm({ disabled: true })
     let isDisabled = wrapper
       .findAll('input')
-      .wrappers.every(item => item.element.disabled)
+      .wrappers.every((item) => item.element.disabled)
 
     expect(isDisabled).to.equal(true)
     expect(wrapper.findAll('.veui-disabled').wrappers.length).to.equal(2)
@@ -47,7 +50,7 @@ describe('components/Form/Form', () => {
     let { wrapper } = genSimpleForm({ readonly: true })
     let isReadonly = wrapper
       .findAll('input')
-      .wrappers.every(item => item.element.readOnly)
+      .wrappers.every((item) => item.element.readOnly)
 
     expect(isReadonly).to.equal(true)
     expect(wrapper.findAll('.veui-readonly').wrappers.length).to.equal(2)
@@ -80,7 +83,7 @@ describe('components/Form/Form', () => {
       validators: [
         {
           fields: ['age', 'gender'],
-          handler: data => {
+          handler: (data) => {
             arr.push(2)
             return undefined
           }
@@ -108,7 +111,7 @@ describe('components/Form/Form', () => {
       validators: [
         {
           fields: ['age', 'gender'],
-          handler: data => {
+          handler: (data) => {
             message = "validators won't be called"
             return true
           }
@@ -136,7 +139,7 @@ describe('components/Form/Form', () => {
       validators: [
         {
           fields: ['age', 'gender'],
-          handler: data => {
+          handler: (data) => {
             message = 'validators failed'
             return false
           }
@@ -164,7 +167,7 @@ describe('components/Form/Form', () => {
       validators: [
         {
           fields: ['age', 'gender'],
-          handler: data => {
+          handler: (data) => {
             message = 'validators successed'
             return undefined
           }
@@ -194,7 +197,7 @@ describe('components/Form/Form', () => {
       }
     })
 
-    form.$on('submit', data => {
+    form.$on('submit', (data) => {
       expect(data).include({ gender: 'male' })
       expect(data).not.include({ age: '18' })
       wrapper.destroy()
@@ -300,7 +303,7 @@ describe('components/Form/Form', () => {
       <veui-field name="gender" field="gender"><veui-input class="gender-input"/></veui-field>
       <veui-field name="age" field="age"><veui-input class="age-input"/></veui-field>
     `
-    let pro = new Promise(resolve => {
+    let pro = new Promise((resolve) => {
       wrapper = genSimpleForm(
         {
           validators: [
@@ -340,7 +343,7 @@ describe('components/Form/Form', () => {
       genderWrapper.find('input').trigger('input')
       expect(counter).to.equal(0)
     })
-    let message = await pro.then(val => val)
+    let message = await pro.then((val) => val)
     expect(counter).to.equal(1)
     expect(message).to.equal('gender validator had been fired')
     wrapper.destroy()
@@ -362,6 +365,45 @@ describe('components/Form/Form', () => {
     wrapper.trigger('reset')
     expect(data.gender).to.equal('male')
     expect(data.age).to.equal('18')
+    wrapper.destroy()
+  })
+
+  it('should handle `validating` state correctly', async () => {
+    let finishValidation = null
+    let { wrapper } = genSimpleForm(
+      {
+        data: {
+          gender: 'male',
+          age: '18'
+        },
+        validators: [
+          {
+            fields: ['age', 'gender'],
+            handler: (data) => {
+              return new Promise((resolve) => {
+                finishValidation = resolve
+              })
+            }
+          }
+        ]
+      },
+      undefined,
+      true
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+    let testValidating = wrapper.find('.test-actions')
+    expect(testValidating.text().trim()).to.equal('false')
+    wrapper.trigger('submit')
+    await vm.$nextTick()
+    testValidating = wrapper.find('.test-actions')
+    expect(testValidating.text().trim()).to.equal('true')
+
+    finishValidation()
+    await wait(0)
+    testValidating = wrapper.find('.test-actions')
+    expect(testValidating.text().trim()).to.equal('false')
     wrapper.destroy()
   })
 })

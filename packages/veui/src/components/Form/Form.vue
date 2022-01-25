@@ -5,14 +5,14 @@
   @submit.prevent="handleSubmit"
   @reset.prevent="reset(null)"
 >
-  <slot/>
+  <slot v-bind="{ submit, validating: isValidating }"/>
   <div
-    v-if="hasActions"
+    v-if="hasActions()"
     :class="$c('form-actions')"
   >
     <slot
       name="actions"
-      v-bind="{ submit }"
+      v-bind="{ submit, validating: isValidating }"
     />
   </div>
 </form>
@@ -29,7 +29,8 @@ import {
   map,
   uniq,
   fill,
-  omit
+  omit,
+  uniqueId
 } from 'lodash'
 import { getVnodes } from '../../utils/context'
 import prefix from '../../mixins/prefix'
@@ -66,15 +67,20 @@ export default {
   data () {
     return {
       fields: [],
-      errorMap: {}
+      errorMap: {},
+      submissionValidating: false,
+      interactiveValidationRecord: {} // 能够构造出提交校验时出交互事件，所以分开标记
     }
   },
   computed: {
-    hasActions () {
-      return this.$slots.actions || this.$scopedSlots.actions
+    interactiveValidating () {
+      return !!Object.keys(this.interactiveValidationRecord).length
+    },
+    isValidating () {
+      return this.submissionValidating || this.interactiveValidating
     },
     fieldsMap () {
-      let targets = this.fields.filter(target => target.name)
+      let targets = this.fields.filter((target) => target.name)
       return zipObject(map(targets, 'name'), targets)
     },
     normalizedValidators () {
@@ -100,7 +106,9 @@ export default {
         fields.forEach((field, index) => {
           acc[field] = acc[field] || []
           acc[field] = uniq(
-            acc[field].concat(triggers[index].filter(item => item !== 'submit'))
+            acc[field].concat(
+              triggers[index].filter((item) => item !== 'submit')
+            )
           )
         })
         return acc
@@ -111,27 +119,35 @@ export default {
     this.$on('interact', this.handleInteract)
   },
   methods: {
+    hasActions () {
+      return this.$slots.actions || this.$scopedSlots.actions
+    },
     submit () {
       this.handleSubmit(null)
     },
     handleSubmit (e) {
+      if (this.submissionValidating) {
+        return this.validationPromise
+      }
+
       // 把 field 上边 disabled 的项去掉
+      this.submissionValidating = true
       let data = omit(
         this.data,
         this.fields
-          .filter(field => field.realDisabled)
+          .filter((field) => field.realDisabled)
           .map(({ realField }) => realField)
       )
-      return new Promise(resolve =>
+      this.validationPromise = new Promise((resolve) =>
         // 处理 beforeValidate 返回 Promise 的情况，通过 resolve 直接把返回值传递到下层
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(getVnodes(this)[0].context, data))
           : resolve()
       )
-        .then(res => (this.isValid(res) ? this.validate() : res))
-        .then(res =>
+        .then((res) => (this.isValid(res) ? this.validate() : res))
+        .then((res) =>
           this.isValid(res)
-            ? new Promise(resolve =>
+            ? new Promise((resolve) =>
             // 处理 afterValidate 返回 Promise 的情况，通过 resolve 直接把返回值传递到下层
               isFunction(this.afterValidate)
                 ? resolve(
@@ -141,33 +157,35 @@ export default {
             )
             : res
         )
-        .then(res => {
+        .then((res) => {
+          this.submissionValidating = false
           if (this.isValid(res)) {
             this.$emit('submit', data, e)
           } else {
             this.$emit('invalid', res)
           }
         })
+      return this.validationPromise
     },
     validate (names) {
       // fieldset 可以有 name，但是不会有 field 属性，也不要校验 disabled 的
       let targets = (this.fields || []).filter(
-        item => item.realField && !item.realDisabled
+        (item) => item.realField && !item.realDisabled
       )
       let validators = this.validators || []
       if (Array.isArray(names) && names.length) {
         targets = targets.filter(
-          target => includes(names, target.name) && !target.realDisabled
+          (target) => includes(names, target.name) && !target.realDisabled
         )
         validators = validators.filter(
-          validator =>
+          (validator) =>
             validator.fields &&
-            validator.fields.some(fieldName => includes(names, fieldName))
+            validator.fields.some((fieldName) => includes(names, fieldName))
         )
       }
 
       return Promise.all([
-        ...targets.map(target => {
+        ...targets.map((target) => {
           let validity = target.validate()
           // utils/Validator 是同步的，检查一下不是 true 就好，返回其他的都当成错误信息
           if (!isBoolean(validity) || !validity) {
@@ -195,26 +213,40 @@ export default {
           // TODO: 补个warn？
           return Promise.resolve(true)
         })
-      ]).then(allRes => {
-        return allRes.every(mixed => this.isValid(mixed))
+      ]).then((allRes) => {
+        return allRes.every((mixed) => this.isValid(mixed))
           ? Promise.resolve(true)
           : Promise.resolve(
-            assign({}, ...allRes.filter(mixed => !this.isValid(mixed)))
+            assign({}, ...allRes.filter((mixed) => !this.isValid(mixed)))
           )
       })
     },
+    startValidator (validatorName) {
+      const key = uniqueId('validator-')
+      this.$set(this.interactiveValidationRecord, validatorName, key)
+      return () => {
+        const keyInRecord = this.interactiveValidationRecord[validatorName]
+        if (keyInRecord && keyInRecord === key) {
+          this.$delete(this.interactiveValidationRecord, validatorName)
+        }
+      }
+    },
     execValidator (validate, fields) {
-      let targets = fields.map(name => this.fieldsMap[name])
+      let targets = fields.map((name) => this.fieldsMap[name])
       let validities = validate.apply(
         this,
-        targets.map(target => target && target.getFieldValue())
+        targets.map((target) => target && target.getFieldValue())
       )
 
-      // 异步校验，详细返回值说明请看prop.validators
+      // 本来可以统一成 Promise 的，但是为了同步校验时不要闪 Loading，需要尽量保证同步校验
       if (validities && isFunction(validities.then)) {
-        return validities.then(res => {
-          this.handleValidities(res, fields)
-          return this.isValid(res) || res
+        const end = this.startValidator(`validator:${fields.join(',')}`)
+        return validities.then((validities) => {
+          end()
+
+          // TODO 不是最后一个如何处理validities
+          this.handleValidities(validities, fields)
+          return this.isValid(validities) || validities
         })
       }
 
@@ -239,12 +271,12 @@ export default {
       // 加个前缀避免单 field 冲突
       let validityName = `validator:${fields.join(',')}`
       if (this.isValid(validities)) {
-        fields.forEach(name => {
+        fields.forEach((name) => {
           // 找到真正显示错误的地方
           let vectors = this.errorMap[validityName]
 
           if (vectors && vectors.length) {
-            vectors.forEach(vector => {
+            vectors.forEach((vector) => {
               let target = this.fieldsMap[vector]
               target && target.hideValidity(validityName)
             })
@@ -252,7 +284,7 @@ export default {
           }
         })
       } else {
-        Object.keys(validities).forEach(name => {
+        Object.keys(validities).forEach((name) => {
           let vectors = this.errorMap[validityName] || []
           let target = this.fieldsMap[name]
 
@@ -265,7 +297,7 @@ export default {
           if (
             target &&
             !target.validities.some(
-              validity => validity.fields === validityName
+              (validity) => validity.fields === validityName
             )
           ) {
             target.validities.unshift(validity)
@@ -281,7 +313,7 @@ export default {
             this.$set(target, 'validities', [
               validity,
               ...target.validities.filter(
-                validity => validity.fields === validityName
+                (validity) => validity.fields === validityName
               )
             ])
           }
@@ -293,9 +325,9 @@ export default {
     },
     reset (names) {
       let fields = names
-        ? this.fields.filter(field => includes(names, field.name))
+        ? this.fields.filter((field) => includes(names, field.name))
         : this.fields
-      fields.forEach(target => {
+      fields.forEach((target) => {
         target.resetValue()
       })
     }
@@ -317,7 +349,7 @@ function normalizeTriggers (triggers, length) {
       '[veui-form] The triggers of validators must be an Array or a string.'
     )
   }
-  return triggers.map(item => {
+  return triggers.map((item) => {
     return typeof item === 'string' ? item.split(/\s*,\s*/) : item
   })
 }
