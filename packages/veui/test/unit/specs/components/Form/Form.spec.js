@@ -368,7 +368,7 @@ describe('components/Form/Form', () => {
     wrapper.destroy()
   })
 
-  it('handle `isValidating` state correctly.', async () => {
+  it('should handle `validating` state correctly', async () => {
     let finishValidation = null
     let { wrapper } = genSimpleForm(
       {
@@ -394,16 +394,16 @@ describe('components/Form/Form', () => {
     const { vm } = wrapper
     await vm.$nextTick()
     let testValidating = wrapper.find('.test-actions')
-    expect(testValidating.text().trim(), '#1').to.equal('false')
+    expect(testValidating.text().trim()).to.equal('false')
     wrapper.trigger('submit')
     await vm.$nextTick()
     testValidating = wrapper.find('.test-actions')
-    expect(testValidating.text().trim(), '#2').to.equal('true')
+    expect(testValidating.text().trim()).to.equal('true')
 
     finishValidation()
     await wait(0)
     testValidating = wrapper.find('.test-actions')
-    expect(testValidating.text().trim(), '#3').to.equal('false')
+    expect(testValidating.text().trim()).to.equal('false')
     wrapper.destroy()
   })
 })
