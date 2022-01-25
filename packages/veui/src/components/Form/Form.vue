@@ -288,6 +288,10 @@ export default {
           let vectors = this.errorMap[validityName] || []
           let target = this.fieldsMap[name]
 
+          if (!target) {
+            return
+          }
+
           let validity = {
             valid: false,
             message: validities[target.name],
@@ -295,7 +299,6 @@ export default {
           }
           // 看下是否之前这个校验规则出过错，没出过错就直接塞进去
           if (
-            target &&
             !target.validities.some(
               (validity) => validity.fields === validityName
             )
