@@ -5,22 +5,19 @@ import { walk } from '../utils/datasource'
 
 export function useParent (
   type,
+  childrenType,
   { childrenKey = 'items', onBeforeRemoveChild } = {}
 ) {
   return {
     uiTypes: [type],
     data () {
       return {
-        coupled_children__: [],
-        sorted_children__: []
+        coupled_children__: []
       }
     },
     computed: {
       [childrenKey] () {
-        const sorted = this.sorted_children__.length
-          ? this.sorted_children__
-          : this.coupled_children__
-        return sorted.map(({ coupledProxy }) => ({
+        return this.coupled_children__.map(({ coupledProxy }) => ({
           ...coupledProxy
         }))
       }
@@ -54,22 +51,21 @@ export function useParent (
         // 因为 slot 重新渲染会更新 $slot.default, 但是可能还没有导致子组件重新，所以子组件 vm.$vnode 还是引用老的vnode
         // 此时会找到 -1, 那么可以直接跳过本次，后续的 updated 再来排序
         if (columns[0] && getIndexOfType(columns[0], this) === -1) {
-          return this.coupled_children__
+          return columns
         }
 
         let sorted = []
         // 深度优先遍历，按找到 Column 的顺序直接 push 到 sorted 数组中去即可
-        walk(this.$slots.default, createVnodeWalker(sorted, columns))
-        this._prevSorted = sorted
+        walk(this.$slots.default, createVnodeWalker(sorted, childrenType))
         return sorted
       }
     },
     updated () {
-      const prevSorted = this._prevSorted || []
+      const prevSorted = this.coupled_children__
       const newSorted = this.getSortedItems()
       // 判断是否存在顺序不一致，没有则不要设置，否则死循环
       if (isDiff(prevSorted, newSorted)) {
-        this.sorted_children__ = newSorted
+        this.coupled_children__ = newSorted
       }
     },
     beforeDestroy () {
@@ -88,23 +84,22 @@ function isDiff (prevSorted, newSorted) {
   )
 }
 
-function createVnodeWalker (sorted, columns) {
+function createVnodeWalker (sorted, childrenType) {
   const callback = (vnode) => {
-    const { tag, componentInstance } = vnode
-    if (tag) {
-      if (columns.indexOf(componentInstance) >= 0) {
-        sorted.push(componentInstance)
-      } else if (componentInstance) {
+    const { tag, componentInstance: vm } = vnode
+    if (vm) {
+      const { uiTypes } = vm.$options
+      if (uiTypes && uiTypes.indexOf(childrenType) >= 0) {
+        sorted.push(vm)
+      } else {
         // 只能用 _vnode 了，且必须用数组包起来，因为 _vnode 可能还是组件，而没有 children，不能直接 walk
         // 穿透非 Column 的组件去继续找
-        walk([componentInstance._vnode], callback)
-      } else {
-        // keep walking children
-        return true
+        walk([vm._vnode], callback)
       }
+      // skip children
+      return false
     }
-    // skip children
-    return false
+    return !!tag
   }
 
   return callback

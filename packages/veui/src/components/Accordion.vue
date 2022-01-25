@@ -16,7 +16,9 @@ import { clone } from 'lodash'
 import { togglePositionProp } from './Collapse'
 import '../common/global'
 
-let accordion = useParent('accordion', { childrenKeys: 'items' })
+let accordion = useParent('accordion', 'accordion-item', {
+  childrenKeys: 'items'
+})
 
 export default {
   name: 'veui-accordion',
