@@ -14,7 +14,7 @@ import '../../common/global'
 import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle, pick } from 'lodash'
 
-let tabs = useParent('tabs', {
+let tabs = useParent('tabs', 'tab', {
   childrenKey: 'items',
   onBeforeRemoveChild: 'handleRemoveChild'
 })
@@ -106,7 +106,7 @@ export default {
       )
     },
     activeIndex () {
-      return findIndex(this.items, tab => tab === this.activeTab)
+      return findIndex(this.items, (tab) => tab === this.activeTab)
     },
     matchedTab () {
       if (!this.$route || !this.hasRouteItem) {
@@ -179,7 +179,7 @@ export default {
       this.listOverflow =
         items.length === 0 ? false : list.scrollWidth > list.clientWidth
 
-      this.stops = items.map(el => [
+      this.stops = items.map((el) => [
         el.offsetLeft,
         el.offsetLeft + el.offsetWidth
       ])
@@ -266,7 +266,7 @@ export default {
   },
   render () {
     const renderTabItem = this.$scopedSlots['tab-item']
-    const renderTabContent = props => (
+    const renderTabContent = (props) => (
       <div class={this.$c('tabs-item-label-content')}>
         {renderItem(
           [props.renderLabel, this.$scopedSlots['tab-label']],
@@ -284,7 +284,7 @@ export default {
       </div>
     )
 
-    const renderTabPanel = props => {
+    const renderTabPanel = (props) => {
       const tabPanel = props.renderPanel({
         ...pickFields(props),
         index: props.index,
@@ -402,7 +402,7 @@ export default {
                     class={this.$c('tabs-item-remove')}
                     ui={this.uiParts.remove}
                     aria-label={this.t('remove', { label: tab.label })}
-                    onClick={e => this.handleRemove(tab, e)}
+                    onClick={(e) => this.handleRemove(tab, e)}
                     onFocus={() => {
                       this.focusedTab = tab
                     }}
