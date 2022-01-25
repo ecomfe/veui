@@ -224,12 +224,11 @@ export default {
     startValidator (validatorName) {
       const key = uniqueId('validator-')
       this.$set(this.interactiveValidationRecord, validatorName, key)
-      return () => this.endValidator(validatorName, key)
-    },
-    endValidator (validatorName, key) {
-      const keyInRecord = this.interactiveValidationRecord[validatorName]
-      if (keyInRecord && keyInRecord === key) {
-        this.$delete(this.interactiveValidationRecord, validatorName)
+      return () => {
+        const keyInRecord = this.interactiveValidationRecord[validatorName]
+        if (keyInRecord && keyInRecord === key) {
+          this.$delete(this.interactiveValidationRecord, validatorName)
+        }
       }
     },
     execValidator (validate, fields) {

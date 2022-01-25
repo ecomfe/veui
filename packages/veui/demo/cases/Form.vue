@@ -111,7 +111,7 @@
           />
         </veui-field>
 
-        <veui-field style="margin-left: 4px;">
+        <veui-field style="margin-left: 4px">
           <veui-input
             v-model="storeData2.firstName"
             ui="large"
@@ -128,7 +128,7 @@
           />
         </veui-field>
 
-        <veui-field style="margin-left: 4px;">
+        <veui-field style="margin-left: 4px">
           <veui-input
             v-model="storeData2.phone"
             placeholder="名"
@@ -143,7 +143,7 @@
         <veui-field>
           <veui-input v-model="storeData2.start"/>
         </veui-field>
-        <veui-span style="margin: 0 4px;">-</veui-span>
+        <veui-span style="margin: 0 4px">-</veui-span>
         <veui-field>
           <veui-input v-model="storeData2.end"/>
         </veui-field>
@@ -164,9 +164,9 @@
           :min="1"
           :max="10"
           :step="0.5"
-          style="width: 300px;"
+          style="width: 300px"
         />
-        <veui-span style="margin-left: 8px;">
+        <veui-span style="margin-left: 8px">
           {{ storeData2.salary[0].toFixed(1) }}~{{
             storeData2.salary[1].toFixed(1)
           }}万
@@ -448,7 +448,7 @@
         </veui-field>
 
         <veui-field
-          style="margin-left: 4px;"
+          style="margin-left: 4px"
           field="phone"
           name="phone"
           :rules="numRequiredRule"
@@ -485,7 +485,7 @@
         >
           <veui-input v-model="storeData4.start"/>
         </veui-field>
-        <veui-span style="margin: 0 4px;">-</veui-span>
+        <veui-span style="margin: 0 4px">-</veui-span>
         <veui-field
           field="end"
           name="end"
@@ -520,14 +520,14 @@
         >我已阅读并同意工作协议</veui-checkbox>
       </veui-field>
 
-      <template #actions="{ isValidating }">
+      <template #actions="{ validating }">
         <veui-button
           ui="primary"
-          :loading="isValidating"
+          :loading="validating"
           type="submit"
         >提交</veui-button>
         <veui-button
-          :disabled="isValidating"
+          :disabled="validating"
           @click="() => this.$refs.form2.reset()"
         >重置</veui-button>
       </template>
@@ -568,7 +568,7 @@
           />
         </veui-field>
         <veui-field
-          style="margin-left: 4px;"
+          style="margin-left: 4px"
           :field="`scheduleInfo[${index}].range`"
           :name="`schedule${index + 1}`"
           :rules="requiredRule"
@@ -579,15 +579,15 @@
           />
         </veui-field>
         <veui-button
-          style="margin-left: 4px;"
+          style="margin-left: 4px"
           @click="dynamicDelete(index)"
         >删除</veui-button>
       </veui-fieldset>
 
-      <template #actions="{ isValidating }">
+      <template #actions="{ validating }">
         <veui-button
           ui="primary"
-          :loading="isValidating"
+          :loading="validating"
           type="submit"
         >提交</veui-button>
         <veui-button @click="dynamicAdd">新增项目及排期</veui-button>
@@ -2828,12 +2828,7 @@ export default {
             value: 4
           }
         ],
-        range: [
-          moment().toDate(),
-          moment()
-            .add(3, 'month')
-            .toDate()
-        ]
+        range: [moment().toDate(), moment().add(3, 'month').toDate()]
       },
       storeData4: {
         name: 'liyunteng1',
@@ -2965,12 +2960,7 @@ export default {
         scheduleInfo: [
           {
             project: 'vuejs',
-            range: [
-              moment().toDate(),
-              moment()
-                .add(3, 'month')
-                .toDate()
-            ]
+            range: [moment().toDate(), moment().add(3, 'month').toDate()]
           }
         ]
       },
