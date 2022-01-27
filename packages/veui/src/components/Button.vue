@@ -65,6 +65,16 @@ export default {
 
       let { click, ...listeners } = this.$listeners
       return listeners
+    },
+    realListeners () {
+      return {
+        ...this.listeners,
+        keydown: this.handleKeydown,
+        keyup: this.handleKeyup,
+        keypress: this.handleKeypress,
+        blur: this.handleBlur,
+        click: this.handleClick
+      }
     }
   },
   methods: {
@@ -72,6 +82,7 @@ export default {
       this.$el.focus()
     },
     handleKeydown (e) {
+      this.$emit('keydown', e)
       if (!this.activatable) {
         return
       }
@@ -81,6 +92,7 @@ export default {
       }
     },
     handleKeyup (e) {
+      this.$emit('keyup', e)
       if (!this.activatable) {
         return
       }
@@ -91,16 +103,22 @@ export default {
       }
     },
     handleKeypress (e) {
+      this.$emit('keypress', e)
       if (this.activatable && e.key === 'Enter') {
         this.$el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
       } else if (e.key === ' ') {
         e.preventDefault() // prevent page scroll
       }
     },
-    handleBlur () {
+    handleBlur (e) {
+      this.$emit('blur', e)
       this.active = false
     },
-    handleClick () {
+    handleClick (e) {
+      if (!this.activatable) {
+        return
+      }
+      this.$emit('click', e)
       this.$refs.button.dispatchEvent(new MouseEvent('click'))
     }
   },
@@ -117,14 +135,9 @@ export default {
         }}
         aria-disabled={this.disabled ? 'true' : null}
         ui={this.realUi}
-        onKeydown={this.handleKeydown}
-        onKeyup={this.handleKeyup}
-        onKeypress={this.handleKeypress}
-        onBlur={this.handleBlur}
-        onClick={this.handleClick}
         {...{
           attrs: this.attrs.root,
-          on: this.listeners
+          on: this.realListeners
         }}
       >
         <button
