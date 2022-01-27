@@ -257,4 +257,42 @@ describe('components/Button', () => {
 
     ui.set('button.icons', {})
   })
+
+  it('should handle keyboard `Space` and `Enter`', async () => {
+    let count = 0
+    const wrapper = mount({
+      components: {
+        'veui-button': Button
+      },
+      methods: {
+        handleClick () {
+          count++
+        }
+      },
+      data () {
+        return {
+          hasClick: false
+        }
+      },
+      template: '<veui-button @click="handleClick" ui="primary" />'
+    })
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+
+    wrapper.trigger('keypress', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(count).to.equal(1)
+
+    wrapper.trigger('keydown', { key: ' ' })
+    wrapper.trigger('keyup', { key: ' ' })
+    await vm.$nextTick()
+    expect(count).to.equal(2)
+
+    wrapper.trigger('click')
+    await vm.$nextTick()
+    expect(count).to.equal(3)
+
+    wrapper.destroy()
+  })
 })
