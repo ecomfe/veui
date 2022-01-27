@@ -111,6 +111,7 @@ describe('components/Button', () => {
 
   it('should support emulate native button', async () => {
     let count = 0
+    let clickCount = 0
     const wrapper = mount(
       {
         components: {
@@ -123,6 +124,7 @@ describe('components/Button', () => {
             name="foo"
             :disabled="disabled"
             type="submit"
+            @click="handleClick"
           />
         </form>`,
         data () {
@@ -134,6 +136,9 @@ describe('components/Button', () => {
           handleSubmit (e) {
             count++
             e.preventDefault()
+          },
+          handleClick () {
+            clickCount++
           }
         }
       },
@@ -154,29 +159,35 @@ describe('components/Button', () => {
     Btn.trigger('click')
     await vm.$nextTick()
     expect(count).to.equal(1)
+    expect(clickCount).to.equal(1)
 
     Btn.trigger('keypress', { key: 'Enter' })
     await vm.$nextTick()
     expect(count).to.equal(2)
+    expect(clickCount).to.equal(2)
 
     Btn.trigger('keypress', { key: ' ' })
     await vm.$nextTick()
     expect(count).to.equal(2)
+    expect(clickCount).to.equal(2)
 
     Btn.trigger('keydown', { key: ' ' })
     Btn.trigger('keyup', { key: ' ' })
     await vm.$nextTick()
     expect(count).to.equal(3)
+    expect(clickCount).to.equal(3)
 
     Btn.trigger('keydown', { key: ' ' })
     Btn.trigger('blur')
     Btn.trigger('keyup', { key: ' ' })
     await vm.$nextTick()
     expect(count).to.equal(3)
+    expect(clickCount).to.equal(3)
 
     Btn.trigger('keyup', { key: ' ' })
     await vm.$nextTick()
     expect(count).to.equal(3)
+    expect(clickCount).to.equal(3)
 
     Btn.trigger('keydown', { key: 'A' })
     await vm.$nextTick()
@@ -256,43 +267,5 @@ describe('components/Button', () => {
     expect(wrapper.find('.veui-icon').exists()).to.equal(true)
 
     ui.set('button.icons', {})
-  })
-
-  it('should handle keyboard `Space` and `Enter`', async () => {
-    let count = 0
-    const wrapper = mount({
-      components: {
-        'veui-button': Button
-      },
-      methods: {
-        handleClick () {
-          count++
-        }
-      },
-      data () {
-        return {
-          hasClick: false
-        }
-      },
-      template: '<veui-button @click="handleClick" ui="primary" />'
-    })
-
-    const { vm } = wrapper
-    await vm.$nextTick()
-
-    wrapper.trigger('keypress', { key: 'Enter' })
-    await vm.$nextTick()
-    expect(count).to.equal(1)
-
-    wrapper.trigger('keydown', { key: ' ' })
-    wrapper.trigger('keyup', { key: ' ' })
-    await vm.$nextTick()
-    expect(count).to.equal(2)
-
-    wrapper.trigger('click')
-    await vm.$nextTick()
-    expect(count).to.equal(3)
-
-    wrapper.destroy()
   })
 })
