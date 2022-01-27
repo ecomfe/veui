@@ -197,7 +197,7 @@ describe('components/DatePicker', () => {
   it('should support disabled-date correctly.', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
-        disabledDate: date => {
+        disabledDate: (date) => {
           return date.getDay() === 6
         }
       }
@@ -207,11 +207,7 @@ describe('components/DatePicker', () => {
     wrapper.find('.veui-date-picker-trigger').trigger('click')
     await vm.$nextTick()
 
-    let button = wrapper
-      .findAll('tbody tr')
-      .at(2)
-      .findAll('td button')
-      .at(5)
+    let button = wrapper.findAll('tbody tr').at(2).findAll('td button').at(5)
 
     expect(button.attributes('disabled')).to.equal('disabled')
 
@@ -305,7 +301,7 @@ describe('components/DatePicker', () => {
       data () {
         return {
           selected: null,
-          format: 'MM/DD/YYYY'
+          format: 'MM/dd/yyyy'
         }
       },
       components: {

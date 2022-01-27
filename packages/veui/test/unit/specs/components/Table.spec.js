@@ -959,13 +959,13 @@ describe('components/Table', () => {
         },
         template: `
           <veui-table style="width: 600px;" :data="data" :scroll="{ x: 1200 }">
-            <veui-table-column fixed="right" title="meta">
-              <veui-table-column field="id" title="id"/>
-              <veui-table-column field="type" title="type"/>
+            <veui-table-column fixed="right" title="meta" :width="120">
+              <veui-table-column field="id" title="id" :width="120"/>
+              <veui-table-column field="type" title="type" :width="120"/>
             </veui-table-column>
-            <veui-table-column fixed field="name" title="name"/>
-            <veui-table-column fixed="left" field="origin" title="origin"/>
-            <veui-table-column field="level" title="level"/>
+            <veui-table-column fixed field="name" title="name" :width="120"/>
+            <veui-table-column fixed="left" field="origin" title="origin" :width="120"/>
+            <veui-table-column field="level" title="level" :width="120"/>
           </veui-table>`
       },
       {

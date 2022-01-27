@@ -38,10 +38,7 @@ describe('components/Tabs', () => {
     let panel = wrapper.find('.veui-tabs-panel')
     expect(panel.text()).to.equal('ONE')
 
-    tabs
-      .at(2)
-      .find('button')
-      .trigger('click')
+    tabs.at(2).find('button').trigger('click')
 
     await vm.$nextTick()
 
@@ -104,10 +101,7 @@ describe('components/Tabs', () => {
     panel = wrapper.find('.veui-tabs-panel')
     expect(panel.text()).to.equal('TWO')
 
-    tabs
-      .at(0)
-      .find('button')
-      .trigger('click')
+    tabs.at(0).find('button').trigger('click')
 
     await vm.$nextTick()
 
@@ -117,10 +111,7 @@ describe('components/Tabs', () => {
     panel = wrapper.find('.veui-tabs-panel')
     expect(panel.text()).to.equal('TWO')
 
-    tabs
-      .at(2)
-      .find('button')
-      .trigger('click')
+    tabs.at(2).find('button').trigger('click')
 
     await vm.$nextTick()
 
@@ -176,10 +167,7 @@ describe('components/Tabs', () => {
     panel = wrapper.find('.veui-tabs-panel')
     expect(panel.text()).to.equal('TWO')
 
-    tabs
-      .at(0)
-      .find('button')
-      .trigger('click')
+    tabs.at(0).find('button').trigger('click')
 
     await vm.$nextTick()
 
@@ -223,10 +211,7 @@ describe('components/Tabs', () => {
     expect(panels.length).to.equal(3)
     expect(panels.at(0).isVisible()).to.equal(true)
 
-    tabs
-      .at(2)
-      .find('button')
-      .trigger('click')
+    tabs.at(2).find('button').trigger('click')
 
     await vm.$nextTick()
 
@@ -282,7 +267,7 @@ describe('components/Tabs', () => {
           },
           handleRemove ({ name }) {
             this.tabs.splice(
-              findIndex(this.tabs, tab => tab.name === name),
+              findIndex(this.tabs, (tab) => tab.name === name),
               1
             )
           }
@@ -556,24 +541,9 @@ describe('components/Tabs', () => {
 
     let tabs = wrapper.findAll('.veui-tabs-item')
     expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
-    expect(
-      tabs
-        .at(0)
-        .find('.foo-label')
-        .exists()
-    ).to.equal(false)
-    expect(
-      tabs
-        .at(1)
-        .find('.bar-btn')
-        .exists()
-    ).to.equal(true)
-    expect(
-      tabs
-        .at(2)
-        .find('.foo-btn')
-        .exists()
-    ).to.equal(true)
+    expect(tabs.at(0).find('.foo-label').exists()).to.equal(false)
+    expect(tabs.at(1).find('.bar-btn').exists()).to.equal(true)
+    expect(tabs.at(2).find('.foo-btn').exists()).to.equal(true)
 
     let btns = tabs.at(2).find('.foo-btn')
     expect(btns.exists()).to.equal(true)
@@ -620,24 +590,9 @@ describe('components/Tabs', () => {
     await vm.$nextTick()
 
     let tabs = wrapper.findAll('.veui-tabs-item')
-    expect(
-      tabs
-        .at(0)
-        .find('.foo-label')
-        .exists()
-    ).to.equal(true)
-    expect(
-      tabs
-        .at(1)
-        .find('.bar-label')
-        .exists()
-    ).to.equal(true)
-    expect(
-      tabs
-        .at(2)
-        .find('.bar-label')
-        .exists()
-    ).to.equal(true)
+    expect(tabs.at(0).find('.foo-label').exists()).to.equal(true)
+    expect(tabs.at(1).find('.bar-label').exists()).to.equal(true)
+    expect(tabs.at(2).find('.bar-label').exists()).to.equal(true)
 
     wrapper.destroy()
   })
@@ -672,18 +627,12 @@ describe('components/Tabs', () => {
     expect(wrapper.find('.veui-tabs-panel').text()).to.equal('PANEL CONTENT')
 
     let tabs = wrapper.findAll('.veui-tabs-item')
-    tabs
-      .at(1)
-      .find('button')
-      .trigger('click')
+    tabs.at(1).find('button').trigger('click')
 
     await vm.$nextTick()
     expect(wrapper.find('.veui-tabs-panel').text()).to.equal('PANEL CONTENT')
 
-    tabs
-      .at(2)
-      .find('button')
-      .trigger('click')
+    tabs.at(2).find('button').trigger('click')
 
     await vm.$nextTick()
     expect(wrapper.find('.veui-tabs-panel').text()).to.equal('THREE')
@@ -716,18 +665,12 @@ describe('components/Tabs', () => {
     await vm.$nextTick()
 
     let tabs = wrapper.findAll('.veui-tabs-item')
-    expect(
-      tabs
-        .at(0)
-        .find('.veui-tabs-item-status-error')
-        .exists()
-    ).to.equal(true)
-    expect(
-      tabs
-        .at(2)
-        .find('.veui-tabs-item-status-success')
-        .exists()
-    ).to.equal(true)
+    expect(tabs.at(0).find('.veui-tabs-item-status-error').exists()).to.equal(
+      true
+    )
+    expect(tabs.at(2).find('.veui-tabs-item-status-success').exists()).to.equal(
+      true
+    )
 
     wrapper.destroy()
   })
@@ -779,7 +722,13 @@ describe('components/Tabs', () => {
     next.trigger('click')
 
     await wait(400)
-    expect(list.scrollLeft + list.clientWidth).to.equal(list.scrollWidth)
+
+    expect(
+      list.scrollLeft + list.clientWidth,
+      `${prev.element.clientWidth},${getComputedStyle(prev.element).font},${
+        list.scrollLeft
+      }+${list.clientWidth}`
+    ).to.equal(list.scrollWidth)
     expectDisabled(prev, false)
     expectDisabled(next)
 
@@ -794,7 +743,13 @@ describe('components/Tabs', () => {
     btns.at(2).trigger('click')
 
     await wait(400)
-    expect(list.scrollLeft + list.clientWidth).to.equal(list.scrollWidth)
+
+    expect(
+      list.scrollLeft + list.clientWidth,
+      `${prev.element.clientWidth},${getComputedStyle(prev.element).font},${
+        list.scrollLeft
+      }+${list.clientWidth}`
+    ).to.equal(list.scrollWidth)
     expectDisabled(prev, false)
     expectDisabled(next)
 
