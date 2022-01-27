@@ -45,7 +45,7 @@ export default {
       const button = {}
       const root = {}
 
-      Object.keys(this.$attrs).forEach(key => {
+      Object.keys(this.$attrs).forEach((key) => {
         if (BUTTON_ATTRS.has(key)) {
           button[key] = this.$attrs[key]
         } else {
@@ -86,13 +86,13 @@ export default {
       }
 
       if (this.active && e.key === ' ') {
-        this.clickNativeButton()
+        this.$el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
         this.active = false
       }
     },
     handleKeypress (e) {
       if (this.activatable && e.key === 'Enter') {
-        this.clickNativeButton()
+        this.$el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
       } else if (e.key === ' ') {
         e.preventDefault() // prevent page scroll
       }
@@ -101,9 +101,6 @@ export default {
       this.active = false
     },
     handleClick () {
-      this.clickNativeButton()
-    },
-    clickNativeButton () {
       this.$refs.button.dispatchEvent(new MouseEvent('click'))
     }
   },
@@ -153,7 +150,7 @@ export default {
           {(this.$scopedSlots.default
             ? this.$scopedSlots.default()
             : this.$slots.default || []
-          ).map(vnode =>
+          ).map((vnode) =>
             !vnode.tag && (vnode.text || '').trim() ? (
               <span>{vnode}</span>
             ) : (
