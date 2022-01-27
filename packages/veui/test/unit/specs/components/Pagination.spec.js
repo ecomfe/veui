@@ -23,23 +23,10 @@ describe('components/Pagination', () => {
       .findAll('.veui-option')
     expect(options.length).to.equal(2)
     expect(
-      options
-        .at(0)
-        .find('.veui-option')
-        .classes('veui-option-selected')
+      options.at(0).find('.veui-option').classes('veui-option-selected')
     ).to.equal(true)
-    expect(
-      options
-        .at(0)
-        .find('.veui-option-label')
-        .text()
-    ).to.equal('20 条/页')
-    expect(
-      options
-        .at(1)
-        .find('.veui-option-label')
-        .text()
-    ).to.equal('40 条/页')
+    expect(options.at(0).find('.veui-option-label').text()).to.equal('20 条/页')
+    expect(options.at(1).find('.veui-option-label').text()).to.equal('40 条/页')
 
     // pages is: 1, 2
     let pages = wrapper.findAll('.veui-pagination-page')
@@ -67,73 +54,23 @@ describe('components/Pagination', () => {
     let { vm } = wrapper
     // pages is: 1, ..., 5, 6, 7, ..., 15
     let pages = wrapper.findAll('.veui-pagination-page')
-    expect(
-      pages
-        .at(0)
-        .find('.veui-link')
-        .text()
-    ).to.equal('1')
-    expect(
-      pages
-        .at(1)
-        .find('.veui-link')
-        .text()
-    ).to.equal('')
-    expect(
-      pages
-        .at(2)
-        .find('.veui-link')
-        .text()
-    ).to.equal('5')
+    expect(pages.at(0).find('.veui-link').text()).to.equal('1')
+    expect(pages.at(1).find('.veui-link').text()).to.equal('')
+    expect(pages.at(2).find('.veui-link').text()).to.equal('5')
 
-    expect(
-      pages
-        .at(4)
-        .find('.veui-link')
-        .text()
-    ).to.equal('7')
-    expect(
-      pages
-        .at(5)
-        .find('.veui-link')
-        .text()
-    ).to.equal('')
-    expect(
-      pages
-        .at(6)
-        .find('.veui-link')
-        .text()
-    ).to.equal('15')
+    expect(pages.at(4).find('.veui-link').text()).to.equal('7')
+    expect(pages.at(5).find('.veui-link').text()).to.equal('')
+    expect(pages.at(6).find('.veui-link').text()).to.equal('15')
 
     wrapper.setProps({ page: 12 })
     await vm.$nextTick()
 
     // pages are: 1，...，11, 12, 13, 14, 15
     pages = wrapper.findAll('.veui-pagination-page')
-    expect(
-      pages
-        .at(0)
-        .find('.veui-link')
-        .text()
-    ).to.equal('1')
-    expect(
-      pages
-        .at(1)
-        .find('.veui-link')
-        .text()
-    ).to.equal('')
-    expect(
-      pages
-        .at(2)
-        .find('.veui-link')
-        .text()
-    ).to.equal('11')
-    expect(
-      pages
-        .at(5)
-        .find('.veui-link')
-        .text()
-    ).to.equal('14')
+    expect(pages.at(0).find('.veui-link').text()).to.equal('1')
+    expect(pages.at(1).find('.veui-link').text()).to.equal('')
+    expect(pages.at(2).find('.veui-link').text()).to.equal('11')
+    expect(pages.at(5).find('.veui-link').text()).to.equal('14')
 
     wrapper.destroy()
   })
@@ -147,7 +84,7 @@ describe('components/Pagination', () => {
       sync: false
     })
 
-    wrapper.vm.$on('redirect', page => {
+    wrapper.vm.$on('redirect', (page) => {
       expect(page).to.equal(5)
     })
 
@@ -161,13 +98,13 @@ describe('components/Pagination', () => {
       propsData: {
         page: 4,
         total: 300,
-        goto: true
+        showGoto: true
       },
       sync: false
     })
 
     let pages = []
-    wrapper.vm.$on('redirect', page => {
+    wrapper.vm.$on('redirect', (page) => {
       pages.push(page)
 
       if (pages.length === 2) {

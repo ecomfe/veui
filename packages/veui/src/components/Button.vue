@@ -118,8 +118,9 @@ export default {
       if (!this.activatable) {
         return
       }
-      this.$emit('click', e)
+
       this.$refs.button.dispatchEvent(new MouseEvent('click'))
+      this.$emit('click', e) // 后触发比较和之前行为一致
     }
   },
   render () {

@@ -27,14 +27,12 @@ describe('managers/prompt', () => {
     input.value = '123'
     input.dispatchEvent(new InputEvent('input'))
     await component.$nextTick()
-    let buttons = getEl('.veui-dialog-content-foot').querySelectorAll(
-      '.veui-button'
-    )
+    let buttons = getButtons()
     buttons[0].dispatchEvent(new MouseEvent('click'))
     await component.$nextTick()
 
     expect(isOk).to.equal(true)
-
+    buttons = getButtons()
     buttons[1].dispatchEvent(new MouseEvent('click'))
     await component.$nextTick()
 
@@ -56,7 +54,7 @@ describe('managers/prompt', () => {
           isCancel = true
         }
       })
-      .then(value => {
+      .then((value) => {
         expect(value).to.equal('123')
       })
     await wait(0)
@@ -68,14 +66,13 @@ describe('managers/prompt', () => {
     input.value = '123'
     input.dispatchEvent(new InputEvent('input'))
     await wait(0)
-    let buttons = getEl('.veui-dialog-content-foot').querySelectorAll(
-      '.veui-button'
-    )
+    let buttons = getButtons()
     buttons[0].dispatchEvent(new MouseEvent('click'))
     await wait(0)
 
     expect(isOk).to.equal(true)
 
+    buttons = getButtons()
     buttons[1].dispatchEvent(new MouseEvent('click'))
     await wait(0)
 
@@ -96,15 +93,14 @@ describe('managers/prompt', () => {
       }
     })
     await wait(0)
-    let buttons = getEl('.veui-dialog-content-foot').querySelectorAll(
-      '.veui-button'
-    )
+    let buttons = getButtons()
     buttons[0].dispatchEvent(new MouseEvent('click'))
 
     await wait(500)
 
     expect(getEl('.veui-dialog-content-foot')).to.not.equal(null)
     prevent = false
+    buttons = getButtons()
     buttons[0].dispatchEvent(new MouseEvent('click'))
 
     await wait(500)
@@ -115,4 +111,8 @@ describe('managers/prompt', () => {
 
 function getEl (selector) {
   return document.querySelector(selector)
+}
+
+function getButtons () {
+  return getEl('.veui-dialog-content-foot').querySelectorAll('.veui-button')
 }

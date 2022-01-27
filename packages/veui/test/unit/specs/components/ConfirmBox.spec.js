@@ -30,6 +30,8 @@ describe('components/ConfirmBox', function () {
     await vm.$nextTick()
     expect(vm.open).to.equal(false)
     vm.open = true
+    await vm.$nextTick()
+    buttons = wrapper.findAll('.veui-button')
     buttons.at(1).trigger('click')
     await vm.$nextTick()
     expect(vm.open).to.equal(false)
@@ -96,6 +98,7 @@ describe('components/ConfirmBox', function () {
     expect(okHandler.calledOnce).to.equal(true)
     wrapper.vm.open = true
     await wrapper.vm.$nextTick()
+    buttons = wrapper.findAll('.veui-button')
     buttons.at(1).trigger('click')
     await wait(600)
     expect(cancelHandler.calledOnce).to.equal(true)
