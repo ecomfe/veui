@@ -75,7 +75,7 @@ describe('components/PromptBox', function () {
     })
     let { vm } = wrapper
     let input = wrapper.find('input')
-    vm.$on('ok', value => {
+    vm.$on('ok', (value) => {
       returnedValue = value
     })
     input.setValue('18')
@@ -129,6 +129,7 @@ describe('components/PromptBox', function () {
     expect(wrapper.vm.open, '#1').to.equal(false)
     wrapper.vm.open = true
     await wrapper.vm.$nextTick()
+    buttons = wrapper.findAll('.veui-button')
     buttons.at(1).trigger('click')
     await wait(600)
     expect(wrapper.vm.open, '#2').to.equal(false)

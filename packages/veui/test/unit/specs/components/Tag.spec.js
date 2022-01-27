@@ -52,31 +52,38 @@ describe('components/Tag', () => {
   })
 
   it('should remove the tag correctly', async () => {
-    let wrapper = mount({
-      components: {
-        'veui-tag': Tag
-      },
-      data () {
-        return {
-          removed: false
-        }
-      },
-      methods: {
-        handleRemove () {
-          this.removed = true
-        }
-      },
-      template: `
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tag': Tag
+        },
+        data () {
+          return {
+            removed: false
+          }
+        },
+        methods: {
+          handleRemove () {
+            this.removed = true
+          }
+        },
+        template: `
         <veui-tag
           removable
           @remove="handleRemove"
         >
           removable tag
         </veui-tag>`
-    })
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
     let removeBtn = wrapper.find('.veui-tag-remove')
     expect(removeBtn.exists()).to.equal(true)
-
+    // mounted 之后才有 $refs
+    await wrapper.vm.$nextTick()
     removeBtn.trigger('click')
     await wrapper.vm.$nextTick()
 
@@ -251,7 +258,8 @@ describe('components/Tag', () => {
           selected: true
         }
       },
-      template: '<veui-tag selectable :selected="selected">small tag</veui-tag>'
+      template:
+        '<veui-tag selectable :selected="selected">small tag</veui-tag>'
     })
     let { vm } = wrapper
     wrapper.trigger('click')

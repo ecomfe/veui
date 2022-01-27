@@ -424,7 +424,8 @@ describe('components/Select/Select', () => {
             value: null
           }
         },
-        template: '<veui-select v-model="value" :options="options" searchable/>'
+        template:
+          '<veui-select v-model="value" :options="options" searchable/>'
       },
       {
         sync: false,
@@ -507,6 +508,7 @@ describe('components/Select/Select', () => {
     vm.multiple = true
     vm.value = ['2-1', '1-1']
     await vm.$nextTick()
+    clear = wrapper.find('.veui-select-clear')
     clear.trigger('click')
     await vm.$nextTick()
     expect(vm.value).to.deep.equal([])
@@ -837,7 +839,7 @@ describe('components/Select/Select', () => {
     let { vm } = wrapper
     await vm.$nextTick()
     expect(wrapper.findAll('em').length).to.equal(2)
-    expect(wrapper.findAll('em').wrappers.map(w => w.text())).to.eql([
+    expect(wrapper.findAll('em').wrappers.map((w) => w.text())).to.eql([
       '子选项1-1',
       '子选项2-1'
     ])
@@ -853,7 +855,7 @@ describe('components/Select/Select', () => {
     vm.value = ['1-1', '2-1']
     await vm.$nextTick()
     expect(wrapper.findAll('em').length).to.equal(2)
-    expect(wrapper.findAll('em').wrappers.map(w => w.text())).to.eql([
+    expect(wrapper.findAll('em').wrappers.map((w) => w.text())).to.eql([
       '子选项1-1',
       '子选项2-1'
     ])
@@ -953,7 +955,7 @@ describe('components/Select/Select', () => {
     let { vm } = wrapper
     await vm.$nextTick()
     expect(wrapper.findAll('em').length).to.equal(2)
-    expect(wrapper.findAll('em').wrappers.map(w => w.text())).to.eql([
+    expect(wrapper.findAll('em').wrappers.map((w) => w.text())).to.eql([
       '子选项1-1',
       '子选项2-1'
     ])
@@ -969,7 +971,7 @@ describe('components/Select/Select', () => {
     vm.value = ['1-1', '2-1']
     await vm.$nextTick()
     expect(wrapper.findAll('em').length).to.equal(2)
-    expect(wrapper.findAll('em').wrappers.map(w => w.text())).to.eql([
+    expect(wrapper.findAll('em').wrappers.map((w) => w.text())).to.eql([
       '子选项1-1',
       '子选项2-1'
     ])

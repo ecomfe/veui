@@ -61,8 +61,15 @@ export default {
   mounted () {
     this.scrollToAlign(this.initial - this.start, '50%')
   },
+  beforeDestroy () {
+    this.__destroying = true
+  },
   methods: {
     handleScroll () {
+      if (this.__destroying) {
+        return
+      }
+
       let { scrollTop, scrollHeight, clientHeight } = this.$el
       let max = scrollHeight - clientHeight
       if (!scrollTop) {
