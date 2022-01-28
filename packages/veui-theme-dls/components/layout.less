@@ -4,10 +4,12 @@
   display: flex;
   flex: auto;
   background-color: @dls-layout-background-color;
+  min-height: 100%;
+  min-width: @dls-layout-min-width;
 
-  &:not(& &) {
-    min-height: 100%;
-    min-width: @dls-layout-min-width;
+  & & {
+    min-height: auto;
+    min-width: auto;
   }
 
   &-column {
