@@ -2,7 +2,7 @@
 import { scrollToAlign } from '../../utils/dom'
 
 export default {
-  name: 'veui-infinte-scroll',
+  name: 'veui-infinite-scroll',
   props: {
     // 表示一个典型的起点，如 (notable=1901, row=50, col=3) 表示 [1901, 2050]是一个区间，其他任何年份可以通过该区间翻页得到
     // 保证多列布局时每个年份的位置时可以定制的（如1901, 1904, ...一直在第一列）

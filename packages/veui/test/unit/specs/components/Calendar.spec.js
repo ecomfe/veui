@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils'
 import Calendar from '@/components/Calendar'
-import { expectDisabled } from '../../../utils'
+import { expectDisabled, wait } from '../../../utils'
 
 describe('components/Calendar', () => {
-  it('should handle selected prop with `null` value.', done => {
+  it('should handle selected prop with `null` value.', (done) => {
     const wrapper = mount(Calendar, {
       propsData: {
         selected: null
@@ -11,7 +11,7 @@ describe('components/Calendar', () => {
       attachToDocument: true
     })
 
-    wrapper.vm.$on('select', val => {
+    wrapper.vm.$on('select', (val) => {
       expect(val).to.be.an.instanceof(Date)
 
       wrapper.destroy()
@@ -21,7 +21,7 @@ describe('components/Calendar', () => {
     wrapper.find('.veui-calendar-day button').trigger('click')
   })
 
-  it('should select year correctly.', done => {
+  it('should select year correctly.', async () => {
     const wrapper = mount(Calendar, {
       propsData: {
         type: 'year'
@@ -29,17 +29,18 @@ describe('components/Calendar', () => {
       attachToDocument: true
     })
 
-    wrapper.vm.$on('select', val => {
+    wrapper.vm.$on('select', (val) => {
       expect(val).to.be.an.instanceof(Date)
-
-      wrapper.destroy()
-      done()
     })
 
     wrapper.find('.veui-calendar-year button').trigger('click')
+
+    await wait(350) // select year lead to scroll
+
+    wrapper.destroy()
   })
 
-  it('should select month correctly.', done => {
+  it('should select month correctly.', (done) => {
     const wrapper = mount(Calendar, {
       propsData: {
         type: 'month'
@@ -47,7 +48,7 @@ describe('components/Calendar', () => {
       attachToDocument: true
     })
 
-    wrapper.vm.$on('select', val => {
+    wrapper.vm.$on('select', (val) => {
       expect(val).to.be.an.instanceof(Date)
 
       wrapper.destroy()
@@ -201,7 +202,7 @@ describe('components/Calendar', () => {
   it('should support disabled-date correctly.', () => {
     const wrapper = mount(Calendar, {
       propsData: {
-        disabledDate: date => {
+        disabledDate: (date) => {
           return date.getDay() === 6
         }
       },
@@ -296,21 +297,18 @@ describe('components/Calendar', () => {
   it('should support date slot correctly.', () => {
     const wrapper = mount(Calendar, {
       scopedSlots: {
-        date:
-          '<template slot-scope="{year, month,date}">{{ year }}-{{ month + 1 }}-{{ date }}</template>'
+        date: '<template slot-scope="{year, month,date}">{{ year }}-{{ month + 1 }}-{{ date }}</template>'
       },
       attachToDocument: true
     })
 
     const date = new Date()
-    const target = `${date.getFullYear()}-${date.getMonth() +
-      1}-${date.getDate()}`
-    expect(
-      wrapper
-        .find('.veui-calendar-today button')
-        .text()
-        .trim()
-    ).to.equal(target)
+    const target = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()}`
+    expect(wrapper.find('.veui-calendar-today button').text().trim()).to.equal(
+      target
+    )
 
     wrapper.destroy()
   })
@@ -654,6 +652,8 @@ describe('components/Calendar', () => {
     isVisible(container, wrapper.find('.veui-calendar-today').element)
 
     container.scrollTop = 10
+    await wait(350)
+
     let target = wrapper.find('[data-index="3"] button')
     target.trigger('click')
     await vm.$nextTick()
