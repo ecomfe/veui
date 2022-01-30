@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import sinon from 'sinon'
 import { wait, mount } from '../../../utils'
 import Pagination from '@/components/Pagination'
 
@@ -94,14 +96,23 @@ describe('components/Pagination', () => {
   })
 
   it('should support goto feature correctly', () => {
+    const spy = sinon.spy(Vue.util, 'warn')
+
     let wrapper = mount(Pagination, {
       propsData: {
         page: 4,
         total: 300,
+        goto: false,
         showGoto: true
       },
       sync: false
     })
+
+    expect(
+      spy.calledWith(
+        '[veui-pagination] The `goto` prop is deprecated and will be removed in future versions. Please use the `show-goto` prop instead.'
+      )
+    ).to.equal(true)
 
     let pages = []
     wrapper.vm.$on('redirect', (page) => {
