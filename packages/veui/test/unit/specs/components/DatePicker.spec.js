@@ -1,4 +1,4 @@
-import { mount } from '../../../utils'
+import { mount, wait } from '../../../utils'
 import DatePicker from '@/components/DatePicker'
 
 const debugInBrowser = {
@@ -34,10 +34,13 @@ describe('components/DatePicker', () => {
     })
 
     let { vm } = wrapper
+
     wrapper.find('.veui-date-picker-trigger').trigger('click')
     await vm.$nextTick()
     wrapper.find('.veui-calendar-year button').trigger('click')
     expect(vm.selected instanceof Date).to.equal(true)
+    await wait(350) // wait year scroller
+
     wrapper.destroy()
   })
 
@@ -59,6 +62,8 @@ describe('components/DatePicker', () => {
     await vm.$nextTick()
     wrapper.find('.veui-calendar-year button').trigger('click')
     expect(vm.selected instanceof Date).to.equal(true)
+    await wait(350) // wait year scroller
+
     wrapper.destroy()
   })
 
