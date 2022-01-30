@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import sinon from 'sinon'
 import { cloneDeep, isEqual } from 'lodash'
 import Popover from '@/components/Popover'
 import Table from '@/components/Table'
@@ -168,7 +170,110 @@ describe('components/Table', () => {
     wrapper.findAll('td input[type="checkbox"]').at(0).trigger('change')
   })
 
-  it('should expand the sub rows correctly.', async () => {
+  it('should support hero sub rows', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [{ id: 1 }],
+            selectable: false
+          }
+        },
+        template: `
+        <veui-table key-field="id" :expanded="[1]" :data="data" :selectable="selectable" expandable>
+          <veui-table-column title="ID" field="id"/>
+          <template #sub-row="{ id, index }">
+            <div class="sub-id">{{ id }}</div>
+            <div class="sub-index">{{ index }}</div>
+          </template>
+        </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+
+    expect(wrapper.find('.sub-id').text()).to.equal('1')
+    expect(wrapper.find('.sub-index').text()).to.equal('0')
+    expect(
+      wrapper.find('.veui-table-cell-hero').attributes('colspan')
+    ).to.equal('2')
+
+    vm.selectable = true
+    await vm.$nextTick()
+    expect(
+      wrapper.find('.veui-table-cell-hero').attributes('colspan')
+    ).to.equal('3')
+
+    wrapper.destroy()
+  })
+
+  it('should show hero row for `no-data` and `footer`', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            selectable: false,
+            expandable: false
+          }
+        },
+        template: `
+        <veui-table key-field="id" :selectable="selectable" :expandable="expandable">
+          <veui-table-column title="Meta" field="meta">
+            <veui-table-column title="ID" field="id"/>
+            <veui-table-column title="Type" field="type"/>
+          </veui-table-column>
+          <template #foot>Hey</template>
+        </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+
+    expect(wrapper.find('tfoot').text()).to.equal('Hey')
+    expect(wrapper.find('tfoot th').attributes('colspan')).to.equal('2')
+    expect(wrapper.find('.veui-table-no-data').attributes('colspan')).to.equal(
+      '2'
+    )
+
+    vm.selectable = true
+    await vm.$nextTick()
+    expect(wrapper.find('tfoot th').attributes('colspan')).to.equal('3')
+    expect(wrapper.find('.veui-table-no-data').attributes('colspan')).to.equal(
+      '3'
+    )
+
+    vm.expandable = true
+    await vm.$nextTick()
+    expect(wrapper.find('tfoot th').attributes('colspan')).to.equal('4')
+    expect(wrapper.find('.veui-table-no-data').attributes('colspan')).to.equal(
+      '4'
+    )
+
+    vm.selectable = false
+    await vm.$nextTick()
+    expect(wrapper.find('tfoot th').attributes('colspan')).to.equal('3')
+    expect(wrapper.find('.veui-table-no-data').attributes('colspan')).to.equal(
+      '3'
+    )
+
+    wrapper.destroy()
+  })
+
+  it('should expand the sub rows correctly when controlled.', async () => {
     let syncExpanded = true
     let wrapper = mount(
       {
@@ -228,13 +333,81 @@ describe('components/Table', () => {
     let totalRows = wrapper.findAll('tbody tr')
     expect(totalRows.length).to.equal(3)
 
-    // fully controlled
     vm.expanded = []
     syncExpanded = false
     await vm.$nextTick()
     btn.trigger('click')
     await vm.$nextTick()
     expect(wrapper.findAll('tbody tr').length).to.equal(2)
+
+    vm.expanded = null
+    syncExpanded = true
+    await vm.$nextTick()
+    btn.trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.findAll('tbody tr').length).to.equal(3)
+
+    btn.trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.findAll('tbody tr').length).to.equal(2)
+
+    await vm.$nextTick()
+
+    wrapper.destroy()
+  })
+
+  it('should expand the sub rows correctly when not controlled.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              {
+                field1: 'apple',
+                field2: 11
+              },
+              {
+                field1: 'banana',
+                field2: 22,
+                children: [
+                  {
+                    field3: 'red',
+                    field4: 222
+                  }
+                ]
+              }
+            ],
+            expanded: []
+          }
+        },
+        template: `
+          <veui-table :data="data" expandable>
+            <veui-table-column field="field1" title="field1">
+              <template #sub-row="{ field3 }">{{ field3 }}</template>
+            </veui-table-column>
+            <veui-table-column field="field2" title="field2">
+              <template #sub-row="{ field4 }">{{ field4 }}</template>
+            </veui-table-column>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let rows = wrapper.findAll('tbody tr')
+    expect(rows.length).to.equal(2)
+    let btn = wrapper.find('td .veui-button')
+    btn.trigger('click')
+    await vm.$nextTick()
+    let totalRows = wrapper.findAll('tbody tr')
+    expect(totalRows.length).to.equal(3)
+
     wrapper.destroy()
   })
 
@@ -673,6 +846,82 @@ describe('components/Table', () => {
     wrapper.destroy()
   })
 
+  it('should select rows correctly when the select mode is multiple.', async () => {
+    let syncSelected = true
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: [
+              {
+                field1: 'apple',
+                field2: 11
+              },
+              {
+                field1: 'banana',
+                field2: 22
+              },
+              {
+                field1: 'pineapple',
+                field2: 33
+              }
+            ],
+            selected: null
+          }
+        },
+        methods: {
+          updateSelected (selected) {
+            if (syncSelected) {
+              this.selected = selected
+            }
+          }
+        },
+        template: `
+          <veui-table :data="data" key-field="field2" selectable :selected="selected" @update:selected="updateSelected" select-mode="multiple">
+            <veui-table-column field="field1" title="field1"/>
+            <veui-table-column field="field2" title="field2" align="left">
+              <template slot="foot">总计</template>
+            </veui-table-column>
+          </veui-table>`
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    let list = wrapper.findAll('td input[type="checkbox"]')
+
+    list.at(0).element.checked = true
+    list.at(0).trigger('change')
+
+    await vm.$nextTick()
+
+    expect(wrapper.vm.selected).to.eql([11])
+
+    list.at(1).element.checked = true
+    list.at(1).trigger('change')
+
+    await vm.$nextTick()
+
+    expect(wrapper.vm.selected).to.eql([11, 22])
+
+    // fully controlled
+    vm.selected = null
+    syncSelected = false
+    await vm.$nextTick()
+    list.at(0).element.checked = true
+    list.at(0).trigger('change')
+    await vm.$nextTick()
+    expect(list.at(0).element.checked).to.equal(false)
+
+    wrapper.destroy()
+  })
+
   it('should present correctly when data is not provided.', () => {
     let wrapper = mount(
       {
@@ -694,6 +943,55 @@ describe('components/Table', () => {
     expect(wrapper.findAll('tbody tr').length).to.equal(1)
     expect(wrapper.findAll('td.veui-table-no-data').length).to.equal(1)
 
+    wrapper.destroy()
+  })
+
+  it('should warn when selected value is not correct according to multiple prop.', async () => {
+    const spy = sinon.spy(Vue.util, 'warn')
+
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        template: `
+          <veui-table key-field="field1" selectable :data="data" :selected="selected" :select-mode="mode">
+            <veui-table-column field="field1" title="field1"/>
+            <veui-table-column field="field2" title="field2"/>
+          </veui-table>`,
+        data () {
+          return {
+            selected: ['1'],
+            mode: 'single',
+            data: [{ field1: '1' }]
+          }
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    expect(
+      spy.calledWith(
+        '`selected` should not be an array when `select-mode` is `single`.'
+      )
+    ).to.equal(true)
+
+    let { vm } = wrapper
+
+    vm.mode = 'multiple'
+    vm.selected = 1
+
+    await vm.$nextTick()
+    expect(
+      spy.calledWith(
+        '`selected` should be an array when `select-mode` is `multiple`.'
+      )
+    ).to.equal(true)
+
+    spy.restore()
     wrapper.destroy()
   })
 
@@ -917,6 +1215,8 @@ describe('components/Table', () => {
   })
 
   it('should support fixed columns', () => {
+    const spy = sinon.spy(Vue.util, 'warn')
+
     let wrapper = mount(
       {
         components: {
@@ -929,6 +1229,8 @@ describe('components/Table', () => {
               {
                 id: 1,
                 type: 'fruits',
+                id2: 12,
+                type2: 'fruits2',
                 name: 'apple',
                 origin: 'Japan',
                 level: 'A'
@@ -936,6 +1238,8 @@ describe('components/Table', () => {
               {
                 id: 2,
                 type: 'fruits',
+                id2: 22,
+                type2: 'fruits2',
                 name: 'cherry',
                 origin: 'Chile',
                 level: 'A'
@@ -943,6 +1247,8 @@ describe('components/Table', () => {
               {
                 id: 3,
                 type: 'veggie',
+                id2: 32,
+                type2: 'veggie2',
                 name: 'tomato',
                 origin: 'China',
                 level: 'A'
@@ -950,6 +1256,8 @@ describe('components/Table', () => {
               {
                 id: 4,
                 type: 'veggie',
+                id2: 42,
+                type2: 'veggie2',
                 name: 'potato',
                 origin: 'China',
                 level: 'A'
@@ -959,58 +1267,138 @@ describe('components/Table', () => {
         },
         template: `
           <veui-table style="width: 600px;" :data="data" :scroll="{ x: 1200 }">
-            <veui-table-column fixed="right" title="meta" :width="120">
+            <veui-table-column fixed="left" title="meta2">
+              <veui-table-column field="id2" title="id2" :width="120"/>
+              <veui-table-column field="type2" title="type2" :width="120"/>
+            </veui-table-column>
+            <veui-table-column fixed="right" title="meta">
               <veui-table-column field="id" title="id" :width="120"/>
-              <veui-table-column field="type" title="type" :width="120"/>
+              <veui-table-column field="type" title="type"/>
             </veui-table-column>
             <veui-table-column fixed field="name" title="name" :width="120"/>
-            <veui-table-column fixed="left" field="origin" title="origin" :width="120"/>
-            <veui-table-column field="level" title="level" :width="120"/>
+            <veui-table-column field="level" title="level"/>
+            <veui-table-column fixed="left" field="origin" title="origin"/>
           </veui-table>`
       },
-      {
-        sync: false
-      }
+      { sync: false }
     )
 
     let ths = wrapper.findAll('th')
 
-    expect(ths.at(0).text()).to.equal('name')
+    expect(ths.at(0).text()).to.equal('meta2')
     expect(ths.at(0).classes()).to.include('veui-table-cell-sticky-left')
+    expect(ths.at(0).attributes('colspan')).to.equal('2')
 
-    expect(ths.at(1).text()).to.equal('origin')
+    expect(ths.at(1).text()).to.equal('name')
     expect(ths.at(1).classes()).to.include('veui-table-cell-sticky-left')
 
-    expect(ths.at(2).text()).to.equal('level')
-    expect(ths.at(2).classes()).to.not.include('veui-table-cell-sticky-left')
-    expect(ths.at(2).classes()).to.not.include('veui-table-cell-sticky-right')
+    expect(ths.at(2).text()).to.equal('origin')
+    expect(ths.at(2).classes()).to.include('veui-table-cell-sticky-left')
 
-    expect(ths.at(3).text()).to.equal('meta')
-    expect(ths.at(3).classes()).to.include('veui-table-cell-sticky-right')
+    expect(ths.at(3).text()).to.equal('level')
+    expect(ths.at(3).classes()).to.not.include('veui-table-cell-sticky-left')
+    expect(ths.at(3).classes()).to.not.include('veui-table-cell-sticky-right')
 
-    expect(ths.at(4).text()).to.equal('id')
+    expect(ths.at(4).text()).to.equal('meta')
     expect(ths.at(4).classes()).to.include('veui-table-cell-sticky-right')
+    expect(ths.at(4).attributes('colspan')).to.equal('2')
 
-    expect(ths.at(5).text()).to.equal('type')
-    expect(ths.at(5).classes()).to.include('veui-table-cell-sticky-right')
+    expect(ths.at(5).text()).to.equal('id2')
+    expect(ths.at(5).classes()).to.include('veui-table-cell-sticky-left')
+
+    expect(ths.at(6).text()).to.equal('type2')
+    expect(ths.at(6).classes()).to.include('veui-table-cell-sticky-left')
+
+    expect(ths.at(7).text()).to.equal('id')
+    expect(ths.at(7).classes()).to.include('veui-table-cell-sticky-right')
+
+    expect(ths.at(8).text()).to.equal('type')
+    expect(ths.at(8).classes()).to.include('veui-table-cell-sticky-right')
 
     let tds = wrapper.findAll('td')
 
-    expect(tds.at(0).text()).to.equal('apple')
+    expect(tds.at(0).text()).to.equal('12')
     expect(tds.at(0).classes()).to.include('veui-table-cell-sticky-left')
 
-    expect(tds.at(1).text()).to.equal('Japan')
+    expect(tds.at(1).text()).to.equal('fruits2')
     expect(tds.at(1).classes()).to.include('veui-table-cell-sticky-left')
 
-    expect(tds.at(2).text()).to.equal('A')
-    expect(ths.at(2).classes()).to.not.include('veui-table-cell-sticky-left')
-    expect(ths.at(2).classes()).to.not.include('veui-table-cell-sticky-right')
+    expect(tds.at(2).text()).to.equal('apple')
+    expect(tds.at(2).classes()).to.include('veui-table-cell-sticky-left')
 
-    expect(tds.at(3).text()).to.equal('1')
-    expect(tds.at(3).classes()).to.include('veui-table-cell-sticky-right')
+    expect(tds.at(3).text()).to.equal('Japan')
+    expect(tds.at(3).classes()).to.include('veui-table-cell-sticky-left')
 
-    expect(tds.at(4).text()).to.equal('fruits')
-    expect(tds.at(4).classes()).to.include('veui-table-cell-sticky-right')
+    expect(tds.at(4).text()).to.equal('A')
+    expect(tds.at(4).classes()).to.not.include('veui-table-cell-sticky-left')
+    expect(tds.at(4).classes()).to.not.include('veui-table-cell-sticky-right')
+
+    expect(tds.at(5).text()).to.equal('1')
+    expect(tds.at(5).classes()).to.include('veui-table-cell-sticky-right')
+
+    expect(tds.at(6).text()).to.equal('fruits')
+    expect(tds.at(6).classes()).to.include('veui-table-cell-sticky-right')
+
+    expect(spy.callCount).to.equal(2)
+    spy.restore()
+
+    wrapper.destroy()
+  })
+
+  it('should support scroll y options', () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: Array.from({ length: 10 }).map((_, i) => ({ id: i }))
+          }
+        },
+        template: `
+          <veui-table style="width: 600px;" :data="data" :scroll="200">
+            <veui-table-column field="id" title="id"/>
+          </veui-table>`
+      },
+      { sync: false, attachToDocument: true }
+    )
+
+    expect(
+      getComputedStyle(wrapper.find('.veui-table-main').element).maxHeight
+    ).to.equal('200px')
+
+    wrapper.destroy()
+  })
+
+  it('should support scroll x and y options', () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: Array.from({ length: 10 }).map((_, i) => ({ id: i }))
+          }
+        },
+        template: `
+          <veui-table style="width: 600px;" :data="data" :scroll="{ x: 800, y: 200 }">
+            <veui-table-column field="id" title="id"/>
+          </veui-table>`
+      },
+      { sync: false, attachToDocument: true }
+    )
+
+    expect(
+      getComputedStyle(wrapper.find('.veui-table-main > table').element)
+        .minWidth
+    ).to.equal('800px')
+    expect(
+      getComputedStyle(wrapper.find('.veui-table-main').element).maxHeight
+    ).to.equal('200px')
 
     wrapper.destroy()
   })
@@ -1099,6 +1487,7 @@ describe('components/Table', () => {
     )
     let { vm } = wrapper
     let boxes = wrapper.findAll('td .veui-checkbox')
+    let selectAll = wrapper.find('th input[type="checkbox"]')
     await vm.$nextTick()
     expect(boxes.at(0).props('disabled')).to.equal(true)
     expect(boxes.at(1).props('disabled')).to.equal(false)
@@ -1111,9 +1500,23 @@ describe('components/Table', () => {
     expect(boxes.at(0).props('disabled')).to.equal(false)
     expect(boxes.at(1).props('disabled')).to.equal(true)
 
-    wrapper.find('th input[type="checkbox"]').trigger('change')
+    selectAll.checked = true
+    selectAll.trigger('change')
     await vm.$nextTick()
     expect(vm.selected).to.eql([1])
+
+    vm.selected = [1, 2]
+    await vm.$nextTick()
+    selectAll.checked = false
+    selectAll.trigger('change')
+    await vm.$nextTick()
+    expect(vm.selected).to.eql([2])
+
+    selectAll.checked = true
+    selectAll.trigger('change')
+    await vm.$nextTick()
+    expect(vm.selected).to.eql([1, 2])
+
     wrapper.destroy()
   })
 

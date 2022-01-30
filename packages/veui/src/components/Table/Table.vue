@@ -163,6 +163,7 @@ export default {
           let cur = this.isControlled('expanded')
             ? this.expanded
             : this.realExpanded
+          /* istanbul ignore else */
           if (!isEqualSet(val, cur)) {
             commit(val)
           }
@@ -182,7 +183,9 @@ export default {
           let cur = this.isControlled('selected')
             ? normalizeArray(this.selected)
             : this.realSelected
+          /* istanbul ignore else */
           if (this.isMultiple) {
+            /* istanbul ignore else */
             if (!isEqualSet(val, cur)) {
               commit(val)
             }
@@ -341,7 +344,7 @@ export default {
       )
 
       let colCount = rows[0].length
-      rows.forEach(row => {
+      rows.forEach((row) => {
         for (let i = 0; i < colCount; i++) {
           let prev = row[i - 1]
           let cell = row[i]
@@ -372,7 +375,7 @@ export default {
       return rows
     },
     headerRows () {
-      return this.headerGrid.map(row =>
+      return this.headerGrid.map((row) =>
         row.filter(({ placeholder }) => !placeholder)
       )
     },
@@ -423,13 +426,13 @@ export default {
       return this.getSpecificItems(this.realSelected)
     },
     enabledData () {
-      return filter(this.data, i => i.disabled !== true)
+      return filter(this.data, (i) => i.disabled !== true)
     },
     disabledSelectedKeys () {
-      return filter(this.realSelected, key => {
+      return filter(this.realSelected, (key) => {
         let items = this.getItems(key)
         return Array.isArray(items)
-          ? items.some(i => !!i.disabled)
+          ? items.some((i) => !!i.disabled)
           : !!(items || {}).disabled
       })
     },
@@ -448,7 +451,7 @@ export default {
       return (
         this.$scopedSlots.foot ||
         this.$slots.foot ||
-        this.filteredColumns.some(col => col.hasFoot())
+        this.filteredColumns.some((col) => col.hasFoot())
       )
     },
     scrollableX () {
@@ -488,13 +491,15 @@ export default {
     }
   },
   mounted () {
+    /* istanbul ignore else */
     if (this.supportSticky === null) {
+      /* istanbul ignore else */
       if (supportSticky === null) {
         supportSticky = cssSupports('position', 'sticky')
       }
       this.supportSticky = supportSticky
     }
-    ;['scrollableX', 'scrollableY'].forEach(state => {
+    ;['scrollableX', 'scrollableY'].forEach((state) => {
       this.$watch(
         state,
         () => {
@@ -573,7 +578,7 @@ export default {
         find(this.realColumns, ({ field }) => field === this.keyField) || {}
       if (typeof span === 'function') {
         return Object.keys(data)
-          .map(index => {
+          .map((index) => {
             return {
               index,
               span: span(index)
@@ -600,7 +605,7 @@ export default {
     },
     getItems (key) {
       if (this.keyField) {
-        let items = this.data.filter(item => item[this.keyField] === key)
+        let items = this.data.filter((item) => item[this.keyField] === key)
         return items.length === 1 ? items[0] : items
       }
       return this.data[this.realKeys.indexOf(key)]
@@ -608,17 +613,14 @@ export default {
     sort (field, order) {
       this.$emit('sort', field, order)
     },
-    validateSelected (val = this.selected) {
-      if (this.selectMode === 'single' && Array.isArray(this.selected)) {
+    validateSelected (val) {
+      if (this.selectMode === 'single' && Array.isArray(val)) {
         warn(
           '`selected` should not be an array when `select-mode` is `single`.',
           this
         )
         return false
-      } else if (
-        this.selectMode === 'multiple' &&
-        !Array.isArray(this.selected)
-      ) {
+      } else if (this.selectMode === 'multiple' && !Array.isArray(val)) {
         warn(
           '`selected` should be an array when `select-mode` is `multiple`.',
           this
@@ -680,7 +682,7 @@ export default {
     },
     filterColumns (columns) {
       let cols = []
-      columns.forEach(col => {
+      columns.forEach((col) => {
         let c = omit(col, 'columns')
         c.columns = this.filterColumns(col.columns)
         if (
@@ -708,7 +710,7 @@ function getLeaves (col) {
   let leaves = []
   walk(
     col.columns,
-    column => {
+    (column) => {
       if (column.columns.length === 0) {
         leaves.push(column)
       }
@@ -733,7 +735,7 @@ function getDepth (cols) {
 }
 
 function sumWidths (widths) {
-  let normalized = widths.map(normalizeLength).filter(w => w)
+  let normalized = widths.map(normalizeLength).filter((w) => w)
   return normalized.length === 0
     ? 0
     : normalized.length === 1
