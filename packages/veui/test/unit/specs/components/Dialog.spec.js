@@ -1,6 +1,9 @@
+import { config } from '@vue/test-utils'
 import Dialog from '@/components/Dialog'
 import Button from '@/components/Button'
 import { wait, mount } from '../../../utils'
+
+config.stubs.transition = false
 
 describe('components/Dialog', () => {
   it('should support `sync` modifier for prop `open`.', async () => {
@@ -43,9 +46,33 @@ describe('components/Dialog', () => {
     await vm.$nextTick()
     expect(vm.open).to.equal(false)
 
-    vm.open = true
+    wrapper.destroy()
+  })
+
+  it('should respect `escapable`', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-dialog': Dialog
+      },
+      data () {
+        return {
+          open: true,
+          escapable: false
+        }
+      },
+      template: '<veui-dialog :open.sync="open" :escapable="escapable"/>'
+    })
+
+    let { vm } = wrapper
+
+    wrapper.find('.veui-dialog-content').trigger('keydown.esc')
 
     await vm.$nextTick()
+    expect(vm.open).to.equal(true)
+    vm.escapable = true
+
+    await vm.$nextTick()
+    expect(vm.open).to.equal(true)
     wrapper.find('.veui-dialog-content').trigger('keydown.esc')
 
     await vm.$nextTick()
@@ -66,7 +93,7 @@ describe('components/Dialog', () => {
             if (type !== 'ok') {
               return
             }
-            return new Promise(resolve => {
+            return new Promise((resolve) => {
               setTimeout(() => resolve(), 300)
             })
           }
@@ -290,6 +317,85 @@ describe('components/Dialog', () => {
     let btns = wrapper.findAll('.veui-dialog-content-foot .veui-button')
     expect(btns.at(0).text()).to.equal('👍')
     expect(btns.at(1).text()).to.equal('👎')
+
+    wrapper.destroy()
+  })
+
+  it('should respect `outside-closable` prop and `afteropen`/`afterclose` event', (done) => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-dialog': Dialog
+        },
+        template: `
+        <veui-dialog :open.sync="open" @afteropen="handleOpen" @afterclose="handleClose" outside-closable>
+          <div id="foo">foo</div>
+        </veui-dialog>`,
+        data () {
+          return {
+            open: false
+          }
+        },
+        methods: {
+          async handleOpen () {
+            expect(wrapper.find('#foo').text()).to.equal('foo')
+
+            document.body.dispatchEvent(new MouseEvent('click'))
+          },
+          async handleClose () {
+            expect(document.querySelector('#foo') === null).to.not.equal(true)
+
+            await wait(350)
+            wrapper.destroy()
+            done()
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    vm.open = true
+  })
+
+  it('should handle autofocus correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-dialog': Dialog
+        },
+        template:
+          '<veui-dialog :open="open"><button :autofocus="autofocus">FOO</button></veui-dialog>',
+        data () {
+          return {
+            autofocus: true,
+            open: true
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    await wait(100)
+    expect(document.activeElement.textContent.trim()).to.equal('FOO')
+    wrapper.vm.open = false
+    wrapper.vm.autofocus = false
+
+    await wait(350)
+    wrapper.vm.open = true
+
+    await wait(100)
+    expect(document.activeElement.textContent.trim()).to.equal('取消')
+
+    wrapper.find('.veui-dialog-box').trigger('mousedown')
+    await wait(100)
+    expect(
+      document.activeElement.classList.contains('veui-dialog-content')
+    ).to.equal(true)
 
     wrapper.destroy()
   })
