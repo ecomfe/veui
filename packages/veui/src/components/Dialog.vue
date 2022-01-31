@@ -17,6 +17,7 @@
   :modal="modal"
   :priority="priority"
   @mousedown="focusContent"
+  @afteropen="handleAfterOpen"
   @afterclose="handleAfterClose"
 >
   <div
@@ -28,9 +29,9 @@
       ready: dragReady
     }"
     v-outside="outside"
+    v-bind="attrs"
     :class="$c('dialog-content')"
     tabindex="-1"
-    v-bind="attrs"
     @mousedown="focus"
     @keydown.esc="handleEscape"
   >
@@ -224,7 +225,7 @@ export default {
         type = 'cancel'
       }
       if (typeof this.beforeClose === 'function') {
-        Promise.resolve(this.beforeClose(type)).then(result => {
+        Promise.resolve(this.beforeClose(type)).then((result) => {
           if (result !== false) {
             this.commit('open', false)
           }
@@ -251,6 +252,9 @@ export default {
     handleAfterClose () {
       this.closeModal()
       this.$emit('afterclose')
+    },
+    handleAfterOpen () {
+      this.$emit('afteropen')
     }
   }
 }
