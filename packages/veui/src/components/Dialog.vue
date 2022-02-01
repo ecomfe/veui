@@ -16,8 +16,8 @@
   :inline="inline"
   :modal="modal"
   :priority="priority"
+  v-on="listeners"
   @mousedown="focusContent"
-  @afteropen="handleAfterOpen"
   @afterclose="handleAfterClose"
 >
   <div
@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import { pick } from 'lodash'
 import Overlay from './Overlay'
 import Button from './Button'
 import prefix from '../mixins/prefix'
@@ -164,6 +165,9 @@ export default {
     cancelLabel: String
   },
   computed: {
+    listeners () {
+      return pick(this.$listeners, ['afteropen'])
+    },
     realOkLabel () {
       return this.okLabel || this.t('ok')
     },
@@ -252,9 +256,6 @@ export default {
     handleAfterClose () {
       this.closeModal()
       this.$emit('afterclose')
-    },
-    handleAfterOpen () {
-      this.$emit('afteropen')
     }
   }
 }
