@@ -13,9 +13,8 @@
   :ok-label="okLabel"
   :cancel-label="cancelLabel"
   role="alertdialog"
+  v-on="listeners"
   @ok="ok"
-  @cancel="cancel"
-  @afterclose="$emit('afterclose')"
 >
   <template slot="title">
     <slot name="title">{{ title }}</slot>
@@ -95,6 +94,9 @@ export default {
     invalid: Boolean
   },
   computed: {
+    listeners () {
+      return pick(this.$listeners, ['cancel', 'afteropen', 'afterclose'])
+    },
     priority () {
       return this.config['promptbox.priority']
     }
@@ -114,9 +116,6 @@ export default {
     },
     ok () {
       this.$emit('ok', this.realValue)
-    },
-    cancel () {
-      this.$emit('cancel', this.realValue)
     }
   }
 }

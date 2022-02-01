@@ -26,6 +26,7 @@ export type Props = {
 }
 
 export type Emits = {
+  afteropen(): void
   afterclose(): void
   ok(): void
   cancel(): void

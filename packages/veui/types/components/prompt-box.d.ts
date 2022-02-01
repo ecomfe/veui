@@ -24,7 +24,8 @@ type Props = Pick<
 
 type Emits = {
   ok(value: string): void
-  cancel(value: string): void
+  cancel(): void
+  afteropen(): void
   afterclose(): void
 }
 

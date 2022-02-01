@@ -18,6 +18,7 @@ type Props = {
 
 type Emits = {
   ok(): void
+  afteropen(): void
   afterclose(): void
 }
 

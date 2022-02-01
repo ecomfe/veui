@@ -12,9 +12,7 @@
   :ok-label="okLabel"
   :cancel-label="cancelLabel"
   role="alertdialog"
-  @ok="$emit('ok')"
-  @cancel="$emit('cancel')"
-  @afterclose="$emit('afterclose')"
+  v-on="listeners"
 >
   <template
     v-if="title || $slots.title"
@@ -81,6 +79,9 @@ export default {
     }
   },
   computed: {
+    listeners () {
+      return pick(this.$listeners, ['ok', 'cancel', 'afteropen', 'afterclose'])
+    },
     priority () {
       return this.config['confirmbox.priority']
     }

@@ -15,8 +15,7 @@
   :priority="priority"
   :before-close="beforeClose"
   role="alertdialog"
-  @ok="$emit('ok')"
-  @afterclose="$emit('afterclose')"
+  v-on="listeners"
 >
   <div :class="$c('alert-box-icon-wrapper')">
     <veui-icon
@@ -107,6 +106,9 @@ export default {
     }
   },
   computed: {
+    listeners () {
+      return pick(this.$listeners, ['ok', 'afteropen', 'afterclose'])
+    },
     realOkLabel () {
       return this.okLabel || this.t('ok')
     },
