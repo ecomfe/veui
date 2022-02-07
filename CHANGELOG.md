@@ -1,3 +1,13 @@
+## 2.5.3 (2022-02-07)
+
+### 💡 主要变更
+
+- [+] 为 `Dialog` / `Drawer` / `AlertBox` / `ConfirmBox` / `PromptBox` 等组件新增 `afteropen` 事件。<!-- #Dialog #AlertBox #ConfirmBox #PromptBox -->
+
+### 🐞 问题修复
+
+- [^] 修正了 `Button` 组件键盘交互某些情况下没有正确触发的问题。<!-- #Button -->
+
 ## 2.5.2 (2022-01-25)
 
 ### 💡 主要变更
