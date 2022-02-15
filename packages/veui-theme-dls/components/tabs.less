@@ -29,13 +29,16 @@
     max-width: 100%;
     flex-shrink: 1;
     align-self: stretch;
-    overflow: hidden;
 
     button {
       background: none;
       border: none;
       padding: 0;
     }
+  }
+
+  &-overflow &-list {
+    overflow: hidden;
   }
 
   &-extra {
@@ -351,20 +354,42 @@
 
         &::before,
         &::after {
-          content: none;
+          content: "";
+          .absolute(auto, auto, 0);
+          background-color: inherit !important;
+          width: @dls-tab-border-radius-strong-m;
+          height: @dls-tab-border-radius-strong-m;
+          transition: none !important;
+        }
+
+        @r: unit(@dls-tab-border-radius-strong-m);
+
+        &::before {
+          right: 100%;
+          clip-path: path(
+            "M @{r} 0 A @{r} @{r}, 0, 0, 1, 0 @{r} L @{r} @{r} Z"
+          );
+        }
+
+        &::after {
+          left: 100%;
+          clip-path: path("M 0 0 A @{r} @{r}, 0, 0, 0, @{r} @{r} L 0 @{r} Z");
         }
 
         &:hover {
+          z-index: 1;
           background-color: @dls-tab-background-color-strong-hover;
           color: @dls-tab-font-color-strong-hover;
         }
 
         &[data-focus-visible-added] {
+          z-index: 1;
           background-color: @dls-tab-background-color-strong-focus;
           color: @dls-tab-font-color-strong-focus;
         }
 
         &:active {
+          z-index: 1;
           background-color: @dls-tab-background-color-strong-active;
           color: @dls-tab-font-color-strong-active;
         }
@@ -381,6 +406,7 @@
       }
 
       &-remove {
+        z-index: 2;
         @offset: dls-sum(
           @dls-tab-padding-x-strong-m,
           calc(@dls-tab-content-spacing * -0.5),
@@ -406,6 +432,7 @@
 
     &-item-active {
       .@{veui-prefix}-tabs-item-label {
+        z-index: 2;
         background-color: @dls-tab-background-color-strong-current;
         color: @dls-tab-font-color-strong-current;
 
@@ -430,6 +457,13 @@
       .clearfix();
       border: 1px solid @dls-tab-container-border-color-strong;
       border-top-style: none;
+    }
+  }
+
+  &-overflow[ui~="strong"] .@{veui-prefix}-tabs-item {
+    &:first-child .@{veui-prefix}-tabs-item-label::before,
+    &:last-child .@{veui-prefix}-tabs-item-label::after {
+      content: none !important;
     }
   }
 }

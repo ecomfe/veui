@@ -12,7 +12,7 @@ import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
 import '../../common/global'
 import { scrollTo } from '../../utils/dom'
-import { find, findIndex, throttle, pick } from 'lodash'
+import { find, findIndex, throttle, pick, noop } from 'lodash'
 
 let tabs = useParent('tabs', 'tab', {
   childrenKey: 'items',
@@ -83,7 +83,7 @@ export default {
       return this.matches == null ? this.config['tabs.matches'] : this.matches
     },
     tabAttrs () {
-      return this.items.map(({ id, name, attrs }, index) => {
+      return this.items.map(({ id, attrs }, index) => {
         return {
           role: 'tab',
           'aria-selected': this.activeTab && id === this.activeTab.id,
@@ -172,12 +172,27 @@ export default {
     handleAdd () {
       this.$emit('add')
     },
-    updateLayout () {
+    isOverflow () {
       let { list, items = [] } = this.$refs
 
+      if (items.length === 0) {
+        return false
+      }
+
+      let first = items[0]
+      let last = items[items.length - 1]
+
+      return (
+        last.getBoundingClientRect().right -
+          first.getBoundingClientRect().left >
+        list.getBoundingClientRect().width
+      )
+    },
+    updateLayout () {
+      let { items = [] } = this.$refs
+
       // no items means no need to scroll
-      this.listOverflow =
-        items.length === 0 ? false : list.scrollWidth > list.clientWidth
+      this.listOverflow = this.isOverflow()
 
       this.stops = items.map((el) => [
         el.offsetLeft,
@@ -249,6 +264,14 @@ export default {
         start: list.scrollLeft === 0,
         end: list.scrollLeft + list.clientWidth >= list.scrollWidth
       }
+    },
+    handleWheelScroll (e) {
+      let { deltaX, deltaY } = e
+      let delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY
+
+      this.$refs.list.scrollLeft += delta
+
+      e.preventDefault()
     },
     handleRemoveChild (id) {
       if (!this.activeTab || id !== this.activeTab.id) {
@@ -324,7 +347,8 @@ export default {
       <div
         class={{
           [this.$c('tabs')]: true,
-          [this.$c('tabs-empty')]: this.items.length === 0
+          [this.$c('tabs-empty')]: this.items.length === 0,
+          [this.$c('tabs-overflow')]: this.listOverflow
         }}
         ui={this.realUi}
       >
@@ -346,6 +370,7 @@ export default {
             class={this.$c('tabs-list')}
             role="tablist"
             onScroll={this.updateScrollState}
+            onMousewheel={this.listOverflow ? this.handleWheelScroll : noop}
             {...{ directives }}
           >
             {this.items.map((tab, index) => (
