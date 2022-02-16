@@ -70,7 +70,7 @@ export default {
   data () {
     return {
       focusedTab: null,
-      listOverflow: false,
+      menuOverflow: false,
       stops: null,
       hit: {
         start: true,
@@ -172,11 +172,15 @@ export default {
     handleAdd () {
       this.$emit('add')
     },
-    isOverflow () {
-      let { list, items = [] } = this.$refs
+    isMenuOverflow () {
+      let { menu, list, items = [] } = this.$refs
 
       if (items.length === 0) {
         return false
+      }
+
+      if (menu.scrollWidth > menu.clientWidth) {
+        return true
       }
 
       let first = items[0]
@@ -192,7 +196,7 @@ export default {
       let { items = [] } = this.$refs
 
       // no items means no need to scroll
-      this.listOverflow = this.isOverflow()
+      this.menuOverflow = this.isMenuOverflow()
 
       this.stops = items.map((el) => [
         el.offsetLeft,
@@ -271,6 +275,10 @@ export default {
 
       this.$refs.list.scrollLeft += delta
 
+      if ((this.hit.start && delta < 0) || (this.hit.end && delta > 0)) {
+        return
+      }
+
       e.preventDefault()
     },
     handleRemoveChild (id) {
@@ -348,13 +356,13 @@ export default {
         class={{
           [this.$c('tabs')]: true,
           [this.$c('tabs-empty')]: this.items.length === 0,
-          [this.$c('tabs-overflow')]: this.listOverflow
+          [this.$c('tabs-overflow')]: this.menuOverflow
         }}
         ui={this.realUi}
       >
         {this.$slots.default}
-        <div class={this.$c('tabs-menu')}>
-          {this.listOverflow ? (
+        <div ref="menu" class={this.$c('tabs-menu')}>
+          {this.menuOverflow ? (
             <Button
               key="__tabs_prev__"
               class={this.$c('tabs-prev')}
@@ -370,7 +378,7 @@ export default {
             class={this.$c('tabs-list')}
             role="tablist"
             onScroll={this.updateScrollState}
-            onMousewheel={this.listOverflow ? this.handleWheelScroll : noop}
+            onMousewheel={this.menuOverflow ? this.handleWheelScroll : noop}
             {...{ directives }}
           >
             {this.items.map((tab, index) => (
@@ -441,7 +449,7 @@ export default {
               </div>
             ))}
           </div>
-          {this.listOverflow ? (
+          {this.menuOverflow ? (
             <Button
               key="__tabs_next__"
               class={this.$c('tabs-next')}
