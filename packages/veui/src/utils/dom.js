@@ -34,7 +34,7 @@ function testIndeterminate () {
   checkbox.type = 'checkbox'
   checkbox.indeterminate = true
   document.body.appendChild(checkbox)
-  checkbox.addEventListener('click', event => event.stopPropagation())
+  checkbox.addEventListener('click', (event) => event.stopPropagation())
   checkbox.click()
   let needPatch = !checkbox.checked
   checkbox.parentNode.removeChild(checkbox)
@@ -70,7 +70,7 @@ export function patchIndeterminate (element) {
       ...document.querySelectorAll(`label[for="${element.id}"]`)
     ]
   }
-  targets.forEach(target => {
+  targets.forEach((target) => {
     target.addEventListener('mousedown', function () {
       indeterminate = element.indeterminate
     })
@@ -331,7 +331,7 @@ export function focusIn (elem, index = 0, ignoreAutofocus) {
  */
 function focusNav (elem, step) {
   let focusable = getFocusable(document.body)
-  let index = findIndex(focusable, el => el === elem)
+  let index = findIndex(focusable, (el) => el === elem)
   if (index !== -1) {
     let next = focusable[index + step]
     if (next) {
@@ -419,7 +419,7 @@ export function toggleClass (el, className, force) {
 
   let klass = el.getAttribute('class')
   let klasses = uniq(klass.trim().split(/\s+/))
-  let index = findIndex(klasses, k => k === className)
+  let index = findIndex(klasses, (k) => k === className)
   if (index !== -1) {
     if (force === true) {
       return
@@ -449,7 +449,7 @@ export function hasClass (el, className) {
 
   let klass = el.getAttribute('class')
   let klasses = klass.trim().split(/\s+/)
-  return klasses.some(k => k === className)
+  return klasses.some((k) => k === className)
 }
 
 const NORMAL_LINE_HEIGHT = 1.4
@@ -493,9 +493,10 @@ export const FOCUS_EVENTS = ['focus', 'blur', 'focusin', 'focusout']
 export const VALUE_EVENTS = ['input', 'change']
 
 let realRaf
-export const raf = cb => {
+export const raf = (cb) => {
   if (!realRaf) {
-    realRaf = window.requestAnimationFrame || (cb => setTimeout(cb, 1000 / 60))
+    realRaf =
+      window.requestAnimationFrame || ((cb) => setTimeout(cb, 1000 / 60))
   }
   return realRaf(cb)
 }
@@ -992,4 +993,44 @@ export function appendTemporaryStyle (el, style) {
       el.setAttribute('style', originalStyle)
     }
   }
+}
+
+let hasDragOffsetDeviation = null
+let __offsetY__ = 0
+function testDrag (e) {
+  __offsetY__ = e.offsetY
+}
+
+/**
+ * Checks whether the browser triggers https://crbug.com/1297990
+ * @returns {boolean} true if we are unfortunate
+ */
+export function checkDragOffsetDeviation () {
+  if (hasDragOffsetDeviation != null) {
+    return hasDragOffsetDeviation
+  }
+
+  const el = document.createElement('div')
+  const distanceToViewport = 1
+  el.style = `position:fixed;top:${distanceToViewport}px`
+
+  document.body.appendChild(el)
+
+  el.addEventListener('dragstart', testDrag)
+
+  el.dispatchEvent(
+    new DragEvent('dragstart', {
+      clientX: 0,
+      clientY: 0
+    })
+  )
+
+  el.removeEventListener('dragstart', testDrag)
+
+  el.parentNode.removeChild(el)
+
+  hasDragOffsetDeviation =
+    __offsetY__ === -window.devicePixelRatio * distanceToViewport
+
+  return hasDragOffsetDeviation
 }

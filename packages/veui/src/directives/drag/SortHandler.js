@@ -14,7 +14,8 @@ import { prefixify } from '../../mixins/prefix'
 import {
   isInsideTransformedContainer,
   getStableBoundingClientRect,
-  appendTemporaryStyle
+  appendTemporaryStyle,
+  checkDragOffsetDeviation
 } from '../../utils/dom'
 import { isSafari as checkIsSafari } from '../../utils/bom'
 import BaseHandler from './BaseHandler'
@@ -22,7 +23,7 @@ import BaseHandler from './BaseHandler'
 const isSafari = checkIsSafari()
 
 const defaultDragSortInsertAlign = 'middle'
-const preventDragOverDefault = evt => evt.preventDefault()
+const preventDragOverDefault = (evt) => evt.preventDefault()
 
 const datasetDragSortKey = camelCase(prefixify('drag-sort'))
 const datasetDragSortHandleKey = camelCase(prefixify('drag-sort-handle'))
@@ -88,9 +89,13 @@ export default class SortHandler extends BaseHandler {
   start (...args) {
     super.start(...args)
     let { event } = args[0]
-    let { offsetX, offsetY } = event
+    let { clientX, clientY } = event
     let { target } = this.options
     let { offsetWidth, offsetHeight } = target
+    let { top, left } = target.getBoundingClientRect()
+    let offsetX = clientX - left
+    let offsetY = clientY - top
+
     // 算光标到元素中心的偏移量
     this.fixMouseoffset = [
       offsetWidth / 2 - offsetX,
@@ -119,7 +124,7 @@ export default class SortHandler extends BaseHandler {
     // 对比了 react-dnd, sortable.js 等其它使用原生 DnD 接口的拖动库，都存在上述问题。
     // 经过实验发现，通过主动设置 drag image (setDragImage) 可以在 firefox 上解决偏移问题
     // 再额外增加 safari 且被拖动元素处于 transformed 容器内的兼容处理————克隆被拖动元素且保证在视口内使得safari可以正常生成 snapshot
-    setDragSnapshotImage(target, event)
+    setDragSnapshotImage(target, event, { offsetX, offsetY })
 
     // 下一帧再加上 ghost 样式，避免拖动的 snapshot 也是 ghost 样式
     requestAnimationFrame(() => {
@@ -257,7 +262,7 @@ function getHotRects (elements, container, axis, target, dragElementIndex) {
 
   // `getStableBoundingClientRect` is used here as it will ignore interpolated
   // values during transition
-  const elementRects = [...elements].map(el =>
+  const elementRects = [...elements].map((el) =>
     getStableBoundingClientRect(el, container)
   )
   const currentRect = getStableBoundingClientRect(target, container)
@@ -288,7 +293,7 @@ function getHotRects (elements, container, axis, target, dragElementIndex) {
       rows.push(elementRects.slice(breakIndices[i], breakIndex))
       return rows
     }, [])
-    .map(rects => {
+    .map((rects) => {
       // 此时 rect 为 元素的边界
       let rowCount = rects.length
       let first = rects[0]
@@ -411,11 +416,10 @@ function getHtmlElement (el) {
 }
 
 function calculatePoints (points, calc) {
-  return zip(...points).map(values => calc(...values))
+  return zip(...points).map((values) => calc(...values))
 }
 
-function setDragSnapshotImage (el, event) {
-  let { offsetX, offsetY } = event
+function setDragSnapshotImage (el, event, { offsetX, offsetY }) {
   let newEl
   if (isSafari && isInsideTransformedContainer(el)) {
     newEl = cloneElement(el)
@@ -430,6 +434,7 @@ function setDragSnapshotImage (el, event) {
     requestAnimationFrame(() => document.body.removeChild(newEl))
   }
   if (event.dataTransfer.setDragImage) {
-    event.dataTransfer.setDragImage(newEl || el, offsetX, offsetY)
+    const r = checkDragOffsetDeviation() ? window.devicePixelRatio : 1
+    event.dataTransfer.setDragImage(newEl || el, offsetX * r, offsetY * r)
   }
 }
