@@ -1049,4 +1049,77 @@ describe('components/Tabs', () => {
     expect(tabs.at(1).text()).to.equal('rest')
     wrapper.destroy()
   })
+
+  it('should handle wheel scroll correctly', async function () {
+    this.timeout(3000)
+
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        template: `
+          <veui-tabs style="width: 220px;">
+            <veui-tab label="#1"/>
+            <veui-tab label="#2"/>
+            <veui-tab label="#3"/>
+            <template #tab-item="tab">
+              <button
+                type="button"
+                class="foo-btn"
+                :disabled="tab.disabled"
+                v-bind="tab.attrs"
+                @click="tab.activate"
+                style="width: 60px;"
+              >
+                {{ tab.label }}
+              </button>
+            </template>
+          </veui-tabs>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let list = wrapper.find('.veui-tabs-list')
+
+    list.element.scrollLeft = 0
+
+    wheel(list, 10, -20)
+    await wait(0)
+    expect(list.element.scrollLeft).to.equal(0)
+
+    wheel(list, 10, 20)
+    await wait(0)
+    expect(list.element.scrollLeft).to.equal(20)
+
+    wheel(list, 30, 10)
+    await wait(0)
+    expect(list.element.scrollLeft).to.equal(50)
+
+    await wait(400)
+    list.element.scrollLeft = 2000
+
+    const maxScrollLeft = list.element.scrollLeft
+
+    wheel(list, 20, -10)
+    expect(list.element.scrollLeft).to.equal(maxScrollLeft)
+
+    wheel(list, -20, 10)
+    await wait(0)
+    expect(list.element.scrollLeft).to.equal(maxScrollLeft - 20)
+
+    await wait(400)
+    wrapper.destroy()
+  })
 })
+
+function wheel (wrapper, x, y) {
+  wrapper.trigger('wheel', {
+    deltaX: x,
+    deltaY: y
+  })
+}

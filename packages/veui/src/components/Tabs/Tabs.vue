@@ -275,10 +275,6 @@ export default {
 
       this.$refs.list.scrollLeft += delta
 
-      if ((this.hit.start && delta < 0) || (this.hit.end && delta > 0)) {
-        return
-      }
-
       e.preventDefault()
     },
     handleRemoveChild (id) {
@@ -378,7 +374,7 @@ export default {
             class={this.$c('tabs-list')}
             role="tablist"
             onScroll={this.updateScrollState}
-            onMousewheel={this.menuOverflow ? this.handleWheelScroll : noop}
+            onWheel={this.menuOverflow ? this.handleWheelScroll : noop}
             {...{ directives }}
           >
             {this.items.map((tab, index) => (
