@@ -37,13 +37,10 @@ module.exports = {
     /[/\\]node_modules[/\\]vue-awesome[/\\]/,
     /[/\\]node_modules[/\\]resize-detector[/\\]/
   ],
-  chainWebpack: config => {
-    config
-      .entry('app')
-      .clear()
-      .add('./demo/main.js')
+  chainWebpack: (config) => {
+    config.entry('app').clear().add('./demo/main.js')
 
-    config.plugin('html').tap(args => {
+    config.plugin('html').tap((args) => {
       args[0].template = './demo/index.html'
       return args
     })
@@ -66,7 +63,7 @@ module.exports = {
     config.module
       .rule('vue')
       .use('vue-loader')
-      .tap(options => ({
+      .tap((options) => ({
         ...options,
         compilerOptions: {
           ...options.compilerOptions,
@@ -92,6 +89,10 @@ module.exports = {
       .use('veui-loader')
       .loader('veui-loader')
       .tap(() => veuiLoaderOptions)
+
+    config.module.rules.delete('scss')
+
+    config.module.rules.delete('sass')
 
     config
       .plugin('context-replacement')
