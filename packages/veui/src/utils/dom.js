@@ -783,10 +783,10 @@ export function preventBackForward (el) {
     }
   }
 
-  el.addEventListener('mousewheel', handleWheel)
+  el.addEventListener('wheel', handleWheel)
 
   return () => {
-    el.removeEventListener('mousewheel', handleWheel)
+    el.removeEventListener('wheel', handleWheel)
   }
 }
 
