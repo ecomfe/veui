@@ -9,11 +9,13 @@
   &-items {
     margin-top: -@dls-checkbox-group-line-spacing;
     border-radius: inherit;
+    pointer-events: none;
   }
 
   .@{veui-prefix}-button {
     &:extend(._veui-grouped-button all);
     margin-top: @dls-checkbox-group-line-spacing;
+    pointer-events: all;
   }
 
   .@{veui-prefix}-button &-checkmark {
