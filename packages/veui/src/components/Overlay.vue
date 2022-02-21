@@ -99,8 +99,9 @@ export default {
   },
   watch: {
     realOpen (val) {
+      this.leaving = !val
+
       if (val) {
-        this.leaving = false
         this.handleAfterOpen()
       }
 
@@ -189,7 +190,7 @@ export default {
         this.overlayNode = overlay.createNode({
           parentId: this.findParentOverlayId(),
           priority: this.priority,
-          orderChangeCallback: order => {
+          orderChangeCallback: (order) => {
             // 第一次会在 createNode 函数调用中触发，即 createNode 还没返回（肯定无 this.overlayNode），就会设置zIndex
             // 可能会导致 realOpen 变化，在测试环境中很多渲染都没有改成 sync: false, 会导致 realOpen watcher 同步触发
             // 又会进入 updateOverlayNode ，因为都是同步的（createNode 还没返回），会再次创建 createNode
@@ -360,12 +361,12 @@ export default {
         this.$emit('afteropen')
       })
     },
-    handleLeave () {
-      this.leaving = true
-    },
     handleAfterClose () {
       this.leaving = false
       this.$emit('afterclose')
+    },
+    handleLeaveCancelled () {
+      this.leaving = false
     }
   },
   render () {
@@ -394,8 +395,8 @@ export default {
         <transition
           name={this.$c('overlay')}
           appear
-          onLeave={this.handleLeave}
           onAfterLeave={this.handleAfterClose}
+          onLeaveCancelled={this.handleLeaveCancelled}
         >
           {box}
         </transition>
