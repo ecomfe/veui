@@ -13,6 +13,18 @@
     background-color: @dls-lightbox-backdrop-color;
     overflow: hidden;
     transform: none;
+
+    &-closable > * {
+      pointer-events: none;
+    }
+  }
+
+  &-mask &-indicator-numbers,
+  &-mask &-control,
+  &-mask &-item-content *,
+  &-mask &-item-desc,
+  &-mask &-head-close {
+    pointer-events: auto;
   }
 
   &-head {
@@ -39,7 +51,6 @@
   &-content {
     display: flex;
     flex-grow: 1;
-    pointer-events: auto;
   }
 
   &-viewport {
@@ -78,6 +89,7 @@
       flex-direction: column;
       outline: none;
       justify-content: center;
+      align-items: center;
       width: 100%;
       max-height: 100%;
       flex: 1 0 auto;
@@ -119,7 +131,6 @@
 
     &-desc {
       display: inline-block;
-      width: 100%;
       margin-top: @dls-lightbox-content-spacing-y;
       font-size: @dls-font-size-1;
       text-align: center;
@@ -166,6 +177,7 @@
     &-numbers {
       font-variant-numeric: tabular-nums;
       cursor: default;
+      display: inline-block;
     }
   }
 }

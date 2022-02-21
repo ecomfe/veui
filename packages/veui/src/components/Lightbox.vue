@@ -4,7 +4,8 @@
   :overlay-class="
     mergeOverlayClass({
       [$c('lightbox')]: true,
-      [$c('lightbox-mask')]: true
+      [$c('lightbox-mask')]: true,
+      [$c('lightbox-mask-closable')]: maskClosable
     })
   "
   :overlay-style="overlayStyle"
@@ -13,6 +14,7 @@
   modal
   :priority="priority"
   @afterclose="handleAfterClose"
+  @click="handleClick"
 >
   <div :class="$c('lightbox-head')">
     <div
@@ -171,6 +173,10 @@ export default {
       type: Boolean,
       default: true
     },
+    maskClosable: {
+      type: Boolean,
+      default: true
+    },
     escapable: {
       type: Boolean,
       default: true
@@ -222,12 +228,17 @@ export default {
     this.closeModal()
   },
   methods: {
+    handleClick ({ currentTarget, target }) {
+      if (currentTarget === target && this.maskClosable) {
+        this.close()
+      }
+    },
     close (type) {
       if (typeof type !== 'string') {
         type = 'cancel'
       }
       if (typeof this.beforeClose === 'function') {
-        Promise.resolve(this.beforeClose(type)).then(result => {
+        Promise.resolve(this.beforeClose(type)).then((result) => {
           if (result !== false) {
             this.commit('open', false)
           }
