@@ -110,7 +110,7 @@
       <veui-calendar
         :id="dropdownId"
         ref="cal"
-        v-model="realSelected"
+        :selected="realSelected"
         role="dialog"
         :class="$c('date-picker-calendar')"
         v-bind="calendarProps"
@@ -435,7 +435,7 @@ export default {
     },
     getFormatted (value) {
       return Array.isArray(value)
-        ? value.map(date => this.formatDate(date))
+        ? value.map((date) => this.formatDate(date))
         : this.formatDate(value)
     },
     handleInput (index, val) {
@@ -518,7 +518,7 @@ export default {
       if (this.picking[0] && this.picking[1]) {
         this.picking.sort((a, b) => a - b)
       }
-      this.localInputValue = this.picking.map(date => this.formatDate(date))
+      this.localInputValue = this.picking.map((date) => this.formatDate(date))
     },
     handleViewChange () {
       this.$nextTick(() => {
