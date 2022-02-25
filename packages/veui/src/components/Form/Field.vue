@@ -3,13 +3,15 @@
   :ui="realUi"
   :class="{
     [$c('field')]: true,
-    [$c('invalid')]: !validity.valid,
-    [$c('field-no-label')]: !label && !$slots.label,
+    [$c('invalid')]: invalid,
+    [$c('field-abstract')]: realAbstract,
+    [$c(`field-validity-display-${validityDisplay}`)]: !realAbstract,
+    [$c('field-no-label')]: !realAbstract && !label && !$slots.label,
     [$c('field-required')]: isRequired
   }"
 >
   <div
-    v-if="label || $slots.label"
+    v-if="(!realAbstract && label) || $slots.label"
     :class="$c('field-label')"
   >
     <slot name="label">
@@ -32,14 +34,47 @@
       </veui-tooltip>
     </div>
   </div>
-  <div :class="$c('field-content')">
-    <slot/>
+  <div :class="$c('field-main')">
+    <div :class="$c('field-content')">
+      <slot
+        :listeners="interactiveListeners"
+        :invalid="invalid"
+        :validities="validities"
+        :readonly="realReadonly"
+        :disabled="realDisabled"
+      />
+    </div>
     <div
-      v-if="!validity.valid && !!validity.message"
-      :class="$c('field-error')"
-      :title="validity.message"
+      v-if="!realAbstract"
+      :class="$c('field-validity-wrapper')"
     >
-      {{ validity.message }}
+      <veui-loading
+        v-if="validating"
+        :loading="validating"
+      />
+      <template v-if="validityDisplay === 'icon' && !validating">
+        <veui-icon
+          v-if="validationStatus !== 'success'"
+          ref="icon"
+          :class="{
+            [$c(`field-validity-${validationStatus}`)]: true,
+            [$c('field-validity-icon')]: true
+          }"
+          :name="icons.popup"
+        />
+        <veui-popover
+          v-if="
+            !!renderableValidities.length && validationStatus !== 'success'
+          "
+          target="icon"
+        >
+          <veui-field-messages :messages="renderableValidities"/>
+        </veui-popover>
+      </template>
+      <veui-field-messages
+        v-if="validityDisplay !== 'icon'"
+        :messages="renderableValidities"
+      />
     </div>
   </div>
 </div>
@@ -47,19 +82,67 @@
 
 <script>
 import Label from '../Label'
+import Popover from '../Popover'
+import Loading from '../Loading'
 import type from '../../managers/type'
-import rule from '../../managers/rule'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import { isBoolean, get, last, includes, uniq } from 'lodash'
-import { getTypedAncestorTracker } from '../../utils/helper'
+import { pull, get, last, find, uniq } from 'lodash'
+import { getVnodes } from '../../utils/context'
 import Icon from '../Icon'
 import Tooltip from '../Tooltip'
 import Vue from 'vue'
 import '../../common/global'
+import { useCoupled, cacheShape } from './_shaped'
+import useRule from './_useRule'
+import FieldMessages from './_FieldMessages'
+import { asFormChild } from './Form'
+import { ValidityType } from './_ValidityManager'
 
-const { computed: form } = getTypedAncestorTracker('form')
-const { computed: fieldset } = getTypedAncestorTracker('fieldset')
+const { asParent: asFieldParent, asChild: asFieldChild } =
+  useCoupled('form-field')
+
+const { ERROR, WARNING, SUCCESS } = ValidityType
+
+export { asFieldChild }
+
+const makeShape = cacheShape((vm) => ({
+  // auto bind vm?
+  isDisabled: () => (vm.withholdValidity ? false : vm.realDisabled),
+  isReadonly: () => (vm.withholdValidity ? false : vm.realReadonly),
+  isInvalid: () => (vm.withholdValidity ? false : vm.invalid),
+  getInteractiveListeners: () =>
+    vm.withholdValidity ? {} : vm.interactiveListeners,
+  isFieldset: () => vm.isFieldset,
+  isAbstract: () => vm.realAbstract,
+  validate: vm.validate,
+  getName: () => vm.realName,
+  getFieldValue: vm.getFieldValue,
+  resetValue: vm.resetValue,
+  getAbstractFieldNames: () => vm.abstractFieldNames,
+  addPrimaryInput (input) {
+    vm.inputs.push(input)
+    return () => pull(vm.inputs, input)
+  },
+  updateIntrinsicValidities (...args) {
+    vm.assertForm()
+    return vm.form.updateIntrinsicValidities(vm.realName, ...args)
+  },
+  addField (shape) {
+    vm.fields.push(shape)
+    let cancel = null
+    if (vm.form) {
+      cancel = vm.form.addField(shape)
+    }
+
+    return () => {
+      pull(vm.fields, shape)
+      if (typeof cancel === 'function') {
+        cancel()
+      }
+    }
+  }
+}))
 
 export default {
   name: 'veui-field',
@@ -67,9 +150,25 @@ export default {
   components: {
     'veui-icon': Icon,
     'veui-label': Label,
-    'veui-tooltip': Tooltip
+    'veui-tooltip': Tooltip,
+    'veui-loading': Loading,
+    'veui-popover': Popover,
+    'veui-field-messages': FieldMessages
   },
-  mixins: [prefix, ui],
+  mixins: [
+    prefix,
+    ui,
+    asFormChild('form', (vm) => vm.form && vm.form.addField(makeShape(vm))),
+    asFieldParent(makeShape),
+    asFieldChild(
+      'parentField',
+      (vm) => vm.parentField && vm.parentField.addField(makeShape(vm))
+    ),
+    useRule('rule', {
+      getRules: (vm) => vm.rules,
+      getFieldValue: (vm) => vm.getFieldValue()
+    })
+  ],
   props: {
     label: String,
     name: String,
@@ -77,7 +176,9 @@ export default {
     disabled: Boolean,
     readonly: Boolean,
     rules: [String, Array],
-    field: String
+    field: String,
+    abstract: Boolean, // 无label（无margin），不展示错误信息
+    withholdValidity: Boolean // 不自动invalid，不自动listener，不自动得到validity??
   },
   data () {
     return {
@@ -96,97 +197,92 @@ export default {
        *
        * @type {Array<fields, message, valid>}
        */
-      validities: [],
-      initialData: null
+      initialData: null,
+      fields: []
     }
   },
   computed: {
-    validity () {
-      return (
-        this.validities[0] || {
-          valid: true
-        }
-      )
+    realDisabled () {
+      return this.disabled || (!!this.form && this.form.isDisabled())
     },
-    realRules () {
-      if (!this.rules) {
-        return null
+    realReadonly () {
+      return this.readonly || (!!this.form && this.form.isReadonly())
+    },
+    validating () {
+      return this.form.isValidating(this.validityKeys)
+    },
+    primaryInput () {
+      const { inputs, realName } = this
+      let primary
+      if (inputs.length !== 1) {
+        primary = find(inputs, (input) => input.getDeclaredName() === realName)
       }
 
-      let rules
-      if (Array.isArray(this.rules)) {
-        rules = type.clone(this.rules)
-      } else {
-        rules = this.rules
-          .trim()
-          .split(/\s+/)
-          .map(perRule => ({
-            name: perRule,
-            value: true
-          }))
-      }
-      rule.initRules(rules)
-      return rules
+      return primary || inputs[0]
+    },
+    isFieldset () {
+      const uiTypes = getVnodes(this)[0].context.$options.uiTypes || []
+      return uiTypes.indexOf('fieldset') >= 0
+    },
+    inFieldset () {
+      return this.parentField ? this.parentField.isFieldset() : false
+    },
+    validities () {
+      return this.form ? this.form.getValiditiesOfFields(this.validityKeys) : []
+    },
+    validityKeys () {
+      return this.realAbstract ? [] : this.abstractFieldNames
+    },
+    abstractFieldNames () {
+      return this.fields.reduce(
+        (acc, ch) => {
+          return ch.isAbstract() ? acc.concat(ch.getAbstractFieldNames()) : acc
+        },
+        this.realName ? [this.realName] : []
+      )
+    },
+    renderableValidities () {
+      return this.validities.filter(
+        ({ message, renderError }) => !!message || !!renderError
+      )
+    },
+    invalid () {
+      return !!this.errors.length
+    },
+    errors () {
+      return this.validities.filter((va) => va.type === ERROR)
+    },
+    validationStatus () {
+      let result = SUCCESS
+      this.validities.some(({ type }) => {
+        const isError = type === ERROR
+        if (isError || type === WARNING) {
+          result = type
+        }
+        return isError
+      })
+      return result
+    },
+    realAbstract () {
+      return this.abstract || this.inFieldset
     },
     isRequired () {
-      return (
-        this.realRules &&
-        this.realRules.some(perRule => perRule.name === 'required')
-      )
-    },
-    interactiveRulesMap () {
-      let map = {}
-      if (this.realRules) {
-        this.realRules.forEach(({ triggers, name, message, value }) => {
-          if (triggers) {
-            if (typeof triggers === 'string') {
-              triggers = triggers.split(',')
-            }
-
-            triggers.forEach(eventName => {
-              if (eventName !== 'submit') {
-                map[eventName] = map[eventName] || []
-                map[eventName].push({
-                  value,
-                  name,
-                  message
-                })
-              }
-            })
-          }
-        })
-      }
-      return map
+      return this.rule.getRules().some((perRule) => perRule.name === 'required')
     },
     interactiveListeners () {
       let allEvents = []
-      if (this.form) {
-        let events = this.form.fieldEvents[this.realName]
+      const { form, realName, rule, handleInteract } = this
+      if (form) {
+        let events = form.getInteractiveEvents()[realName]
         if (events) {
           allEvents = allEvents.concat(events)
         }
       }
-      allEvents = allEvents.concat(Object.keys(this.interactiveRulesMap))
+      allEvents = allEvents.concat(Object.keys(rule.getInteractiveRuleRecord()))
       return uniq(allEvents).reduce((acc, eventName) => {
-        acc[eventName] = () => this.handleInteract(eventName)
+        acc[eventName] = () => handleInteract(eventName)
         return acc
       }, {})
-    },
-    realDisabled () {
-      let { disabled, fieldset, form } = this
-      return (
-        disabled ||
-        (fieldset && fieldset.realDisabled) ||
-        (form && form.disabled)
-      )
-    },
-    realReadonly () {
-      let { readonly, fieldset, form } = this
-      return (
-        readonly ||
-        (fieldset && fieldset.realReadonly) ||
-        (form && form.readonly)
-      )
     },
     realField () {
       return this.field || this.name
@@ -194,36 +290,37 @@ export default {
     realName () {
       return this.name || this.field
     },
-    ...form,
-    ...fieldset
+    validityDisplay () {
+      if (this.form) {
+        return this.form.getValidityDisplay()
+      }
+      return 'default'
+    }
   },
   created () {
-    this.form.fields.push(this)
     // 如果是 fieldset 或者没写 field，初始值和校验都没有意义
     if (!this.realField) {
       return
     }
 
     this.initialData = type.clone(this.getFieldValue())
-    this.$on('interact', this.handleInteract)
-  },
-  beforeDestroy () {
-    if (!this.realField) {
-      return
-    }
-
-    this.form.fields.splice(this.form.fields.indexOf(this), 1)
   },
   methods: {
     getFieldValue () {
-      return get(this.form.data, this.realField)
+      this.assertForm()
+      return get(this.form.getFormData(), this.realField)
     },
+    // @deprecrated
     resetValue () {
-      // 清空错误消息，为什么要先做，因为有可能是个fieldset，可以清错误，但是没有值
-      this.validities = []
-
       if (!this.realField) {
         return
+      }
+
+      this.assertForm()
+      // 清空错误消息，为什么要先做，因为有可能是个fieldset，可以清错误，但是没有值
+      if (this.realName) {
+        // 后代清除吗？
+        this.form.clearValiditiesOfField(this.realName)
       }
 
       let path = this.realField.split('.')
@@ -238,71 +335,53 @@ export default {
       }
 
       let parentValue = parentPath.length
-        ? get(this.form.data, parentPath.join('.'))
-        : this.form.data
+        ? get(this.form.getFormData(), parentPath.join('.'))
+        : this.form.getFormData()
       Vue.set(parentValue, name, type.clone(this.initialData))
     },
-    validate (rules) {
-      let res = rule.validate(
-        this.getFieldValue(),
-        rules || this.realRules,
-        this.form.data
-      )
-      // 分两种调用
-      // 1. 交互式，只清涉及的 rule
-      // 2. 完整提交检查，全清
-      this.hideValidity(rules ? rules.map(rule => `native:${rule.name}`) : [])
-
-      if (!isBoolean(res) || !res) {
-        this.validities.unshift(
-          // 去掉一些自定义格式不对的 rule，容易排查
-          ...res
-            .filter(({ name }) => name)
-            .map(({ message, name }) => ({
-              valid: false,
-              message,
-              fields: `native:${name}`
-            }))
-        )
+    assertForm () {
+      const { form } = this
+      if (!form) {
+        throw new Error('veui fields should be used in a form scope.')
       }
-      return res
+    },
+    validate (rules) {
+      if (this.isFieldset) {
+        return
+      }
+
+      this.assertForm()
+      const { form, realName, primaryInput, rule } = this
+      const result = rule.validate(form.getFormData(), rules)
+
+      // TODO 1. 确定下前缀是否需要， 2. 更新验证状态统一提到 form中去？
+      const ruleNames = rules
+        ? rules.map((rule) => `native:${rule.name}`)
+        : null
+      form.updateRuleValidities(realName, ruleNames, result)
+
+      // 整体都校验时，输入组件的内置校验也校验下
+      if (!rules && primaryInput) {
+        // TODO 从 validity manager 引入 isValid, 2. 内置错误也要返回？
+        primaryInput.validate()
+      }
+      return result
     },
     handleInteract (eventName) {
       // 需要让对应的 data 更新完值之后，再去 validate，都要 nextTick 来保证
       this.$nextTick(() => {
-        if (this.interactiveRulesMap[eventName]) {
-          this.validate(this.interactiveRulesMap[eventName])
-        }
+        this.assertForm()
+        const { form, rule, realName } = this
+        const result = rule.validateForEvent(form.getFormData(), eventName)
+        const ruleNames = Array.isArray(result)
+          ? result.map((res) => `native:${res.name}`)
+          : null
+        form.updateRuleValidities(realName, ruleNames, result)
 
-        if (
-          this.form &&
-          this.realName &&
-          includes(this.form.fieldEvents[this.realName], eventName)
-        ) {
-          this.form.$emit('interact', eventName, this.realName)
-        }
+        form.validateForEvent(eventName, this.realField)
       })
-    },
-    hideValidity (fields) {
-      if (!fields || !fields.length) {
-        this.validities = []
-      } else {
-        let validities = this.validities
-        // 提供一个仅清除本地检查的方法
-        if (fields === 'native:*') {
-          validities = validities.filter(
-            validity => !includes(validity.fields, 'native:')
-          )
-        } else {
-          validities = validities.filter(validity =>
-            Array.isArray(fields)
-              ? !includes(fields, validity.fields)
-              : fields !== validity.fields
-          )
-        }
-        this.$set(this, 'validities', validities)
-      }
     }
+    // TODO 原来有 hideValidity 方法
   }
 }
 </script>

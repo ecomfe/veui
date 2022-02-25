@@ -1,14 +1,28 @@
 import { mergeWith, forEach } from 'lodash'
-import {
-  getTypedAncestorTracker,
-  isTopMostOfType,
-  wrapListeners
-} from '../utils/helper'
+import { isTopMostOfType, wrapListeners } from '../utils/helper'
 import focusable from './focusable'
+import { asFormChild } from '../components/Form/Form'
+import { asFieldChild } from '../components/Form/Field'
+
+const getInputShape = (vm) => {
+  return {
+    getDeclaredName: () => vm.name,
+    // 内置校验
+    validate: () => {
+      return typeof vm.validate === 'function' ? vm.validate() : undefined
+    }
+  }
+}
 
 export default {
   uiTypes: ['input'],
-  mixins: [focusable],
+  mixins: [
+    focusable,
+    asFormChild('form'),
+    asFieldChild('field', (vm) => {
+      return vm.field && vm.field.addPrimaryInput(getInputShape(vm))
+    })
+  ],
   props: {
     name: String,
     readonly: Boolean,
@@ -23,56 +37,53 @@ export default {
   },
   computed: {
     realName () {
-      return (this.formField && this.formField.name) || this.name
+      return (this.field && this.field.getName()) || this.name
     },
     realDisabled () {
       return Boolean(
-        this.disabled || (this.formField && this.formField.realDisabled)
+        this.disabled ||
+          (this.field && this.field.isDisabled()) ||
+          (this.form && this.form.isDisabled()) // 可能不在 field 中，而直接在 form 中
       )
     },
     realReadonly () {
       return Boolean(
-        this.readonly || (this.formField && this.formField.realReadonly)
+        this.readonly ||
+          (this.field && this.field.isReadonly()) ||
+          (this.form && this.form.isReadonly()) // 可能不在 field 中，而直接在 form 中
       )
     },
     realInvalid () {
       return Boolean(
         this.invalid ||
-          (this.formField &&
-            !this.formField.validity.valid &&
-            this.isTopMostInput)
+          (this.field && this.field.isInvalid() && this.isTopMostInput)
       )
     },
     isUnderField () {
-      return this.formField && this.formField.realField && this.isTopMostInput
+      return this.field && this.field.getName() && this.isTopMostInput
+    },
+    listenersFromField () {
+      return this.field.getInteractiveListeners()
     },
     listenersWithValidations () {
       // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归
       let listeners = wrapListeners(this.$listeners)
-      if (
-        this.isUnderField &&
-        Object.keys(this.formField.interactiveListeners).length
-      ) {
-        return mergeWith(
-          listeners,
-          this.formField.interactiveListeners || {},
-          (a, b) => [].concat(a || [], b || [])
+      if (this.isUnderField && Object.keys(this.listenersFromField).length) {
+        return mergeWith(listeners, this.listenersFromField, (a, b) =>
+          [].concat(a || [], b || [])
         )
       }
       return listeners
-    },
-    ...getTypedAncestorTracker('form-field').computed
+    }
   },
   created () {
     if (!this.isUnderField) {
       return
     }
 
-    this.$watch(
-      () => this.formField.interactiveListeners,
-      this.applyValidationListeners,
-      { immediate: true }
-    )
+    this.$watch(() => this.listenersFromField, this.applyValidationListeners, {
+      immediate: true
+    })
   },
   methods: {
     applyValidationListeners (val = {}, prev = {}) {

@@ -1,31 +1,29 @@
 <template>
-<transition :name="$c('loading-fade')">
-  <div
-    v-if="loading"
-    :ui="realUi"
-    :class="$c('loading')"
-  >
-    <div :class="$c('loading-spinner')">
-      <slot name="spinner">
-        <veui-icon
-          v-if="icons.loading"
-          :name="icons.loading"
-          spin
-        />
-        <svg
-          v-bind="attrs"
-          v-html="contents"
-        />
-      </slot>
-    </div>
-    <div
-      v-if="$slots.default"
-      :class="$c('loading-text')"
-    >
-      <slot/>
-    </div>
+<div
+  v-if="loading"
+  :ui="realUi"
+  :class="$c('loading')"
+>
+  <div :class="$c('loading-spinner')">
+    <slot name="spinner">
+      <veui-icon
+        v-if="icons.loading"
+        :name="icons.loading"
+        spin
+      />
+      <svg
+        v-bind="attrs"
+        v-html="contents"
+      />
+    </slot>
   </div>
-</transition>
+  <div
+    v-if="$slots.default"
+    :class="$c('loading-text')"
+  >
+    <slot/>
+  </div>
+</div>
 </template>
 <script>
 import Icon from './Icon'
