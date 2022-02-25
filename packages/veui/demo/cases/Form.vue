@@ -378,12 +378,18 @@
   </section>
   <section>
     <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
+    <p>
+      <veui-checkbox v-model="iconDisplay">
+        <span>紧凑展示错误</span>
+      </veui-checkbox>
+    </p>
     <veui-form
       ref="form2"
       :data="storeData4"
       :validators="validators"
       :before-validate="beforeValidate"
       :after-validate="afterValidate"
+      :validity-display="iconDisplay ? 'icon' : undefined"
       @submit="submit"
       @invalid="handleInvalid"
     >
@@ -407,6 +413,19 @@
           v-model="storeData4.name1"
           disabled
           placeholder="长度不能短于2"
+        />
+      </veui-field>
+
+      <veui-field
+        field="name3"
+        name="name3"
+        label="别名"
+        tip="有内置错误"
+      >
+        <veui-input
+          v-model="storeData4.name3"
+          maxlength="4"
+          placeholder="长度不能大于4"
         />
       </veui-field>
 
@@ -2763,6 +2782,7 @@ export default {
     ]
     return {
       regions: REGIONS_BRAND,
+      iconDisplay: false,
       storeData1: {
         regions: [],
         nickName: '李云腾',
@@ -2844,6 +2864,7 @@ export default {
       storeData4: {
         name: 'liyunteng1',
         name1: 'liyunteng2',
+        name3: '',
         age: null,
         desc: '',
         hobby,
@@ -2948,7 +2969,7 @@ export default {
                 let res
                 if (phone === '18888888888') {
                   res = {
-                    phone: '该手机已被注册'
+                    phone: ['该手机已被注册', '芭比q了']
                   }
                 }
                 return resolve(res)
@@ -2956,16 +2977,28 @@ export default {
             })
           },
           triggers: ['input']
+        },
+        {
+          fields: ['floor'],
+          validate (floor) {
+            if (floor == null) {
+              return true
+            }
+            return new Promise(function (resolve) {
+              setTimeout(function () {
+                let res
+                if (floor <= 1000) {
+                  res = {
+                    floor: '请提高下限'
+                  }
+                }
+                return resolve(res)
+              }, 3000)
+            })
+          },
+          triggers: ['change']
         }
       ],
-      beforeValidate () {
-        bus.$emit('log', 'beforeValidate')
-        this.isValidating = true
-      },
-      afterValidate () {
-        bus.$emit('log', 'afterValidate')
-        this.isValidating = false
-      },
       storeData5: {
         qindian: 'Evan You',
         scheduleInfo: [
@@ -3007,6 +3040,14 @@ export default {
         project: null,
         range: null
       })
+    },
+    beforeValidate () {
+      bus.$emit('log', 'beforeValidate')
+      this.isValidating = true
+    },
+    afterValidate () {
+      bus.$emit('log', 'afterValidate')
+      this.isValidating = false
     },
     dynamicDelete (index) {
       this.storeData5.scheduleInfo.splice(index, 1)

@@ -83,6 +83,7 @@ import { normalizeInt } from '../utils/helper'
 import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 import warn from '../utils/warn'
 import '../common/global'
+import Message from './Form/Message'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
 
@@ -212,6 +213,23 @@ export default {
         strict: this.strict,
         getLength: this.getLength
       }
+    },
+    errorRenderer () {
+      const context = this
+      return function () {
+        const { type, message } = this.$attrs.validity
+        return (
+          <Message type={type}>
+            {message}
+            <Button
+              ui="text strong"
+              onClick={() => context.$refs.input.focus()}
+            >
+              查看
+            </Button>
+          </Message>
+        )
+      }
     }
   },
   watch: {
@@ -260,6 +278,7 @@ export default {
       let val = this.trimValue(e.target.value)
       this.updateValue(val)
       this.$emit('change', val, e)
+      this.validate()
     },
     handleMousedown (e) {
       setTimeout(() => {
@@ -278,6 +297,19 @@ export default {
         this.updateValue(e.target.value, e)
       }
       this.composing = false
+    },
+    validate () {
+      let result = true
+      if (this.realMaxlength != null && this.length > this.realMaxlength) {
+        // TODO
+        result = {
+          type: 'error',
+          message: 'maxlength error',
+          renderError: this.errorRenderer
+        }
+        this.field.updateIntrinsicValidities(result)
+      }
+      return result
     },
     trimValue (val) {
       if (!this.trim) {

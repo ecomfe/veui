@@ -28,7 +28,7 @@ export function createContext (name, defaultValue) {
     inject: {
       [contextId]: {
         from: contextId,
-        default: () => () => {}
+        default: () => () => undefined
       }
     },
     provide () {
@@ -54,7 +54,7 @@ export function createContext (name, defaultValue) {
     render: (h, context) => wrapChildren(h, context, RealProviderImpl)
   }
 
-  let useConsumer = injectionKey => {
+  let useConsumer = (injectionKey) => {
     return {
       inject: {
         [contextId]: {
@@ -88,7 +88,7 @@ export function createContext (name, defaultValue) {
 
 function wrapChildren (h, { data, children }, Provider) {
   const value = data.attrs ? data.attrs.value : undefined
-  return children.map(child =>
+  return children.map((child) =>
     h(
       Provider,
       {

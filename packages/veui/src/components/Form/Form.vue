@@ -5,14 +5,14 @@
   @submit.prevent="handleSubmit"
   @reset.prevent="reset(null)"
 >
-  <slot v-bind="{ submit, validating: isValidating }"/>
+  <slot v-bind="{ submit, validating: isValidating, validities }"/>
   <div
     v-if="hasActions()"
     :class="$c('form-actions')"
   >
     <slot
       name="actions"
-      v-bind="{ submit, validating: isValidating }"
+      v-bind="{ submit, validating: isValidating, validities }"
     />
   </div>
 </form>
@@ -20,27 +20,64 @@
 
 <script>
 import {
-  isBoolean,
   isUndefined,
   isFunction,
   includes,
   assign,
   zipObject,
   map,
-  uniq,
-  fill,
-  omit,
-  uniqueId
+  pull,
+  omit
 } from 'lodash'
-import { getVnodes } from '../../utils/context'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
+import { getValidityManager } from './_ValidityManager'
+import useValidator from './_useValidator'
+import { useCoupled, cacheShape } from './_shaped'
+
+const { asParent: asFormParent, asChild: asFormChild } = useCoupled('form')
+
+export { asFormChild }
+
+const makeShape = cacheShape((vm) => ({
+  // 全写成函数目的：惰性响应式
+  isDisabled: () => vm.disabled,
+  isReadonly: () => vm.readonly,
+  getFormData: () => vm.data,
+  getValidityDisplay: () => vm.validityDisplay,
+  isValidating: (...args) => vm.validator.isAnyValidating(...args),
+  addField (field) {
+    vm.fields.push(field)
+    return () => {
+      pull(vm.fields, field)
+    }
+  },
+  getValiditiesOfFields: vm.validityManager.getValiditiesOfFields,
+  updateRuleValidities: vm.validityManager.updateRuleValidities,
+  clearValiditiesOfField: vm.validityManager.clearValiditiesOfField,
+  updateIntrinsicValidities: vm.validityManager.updateIntrinsicValidities,
+  validateForEvent: vm.validateForEvent,
+  getInteractiveEvents: vm.validator.getInteractiveEvents
+}))
 
 export default {
   name: 'veui-form',
-  uiTypes: ['form', 'form-container'],
-  mixins: [prefix, ui],
+  uiTypes: ['form-container'],
+  mixins: [
+    prefix,
+    ui,
+    asFormParent(makeShape),
+    useValidator('validator', {
+      getValidators: (vm) => vm.validators,
+      getValidatorName: (vm, validator) => vm.getValidatorName(validator),
+      getFieldValue: (vm, fieldName) => {
+        if (vm.fieldsMap[fieldName]) {
+          return vm.fieldsMap[fieldName].getFieldValue()
+        }
+      }
+    })
+  ],
   props: {
     /**
      * 假设 validator 的 fields 为 ['a','b','c']，triggers 如下，最后生成的结果如下
@@ -60,6 +97,13 @@ export default {
     afterValidate: Function,
     disabled: Boolean,
     readonly: Boolean,
+    validityDisplay: {
+      type: String,
+      default: 'default',
+      validator (val) {
+        return ['default', 'icon'].indexOf(val) >= 0
+      }
+    },
     /* eslint-disable vue/require-prop-types */
     data: {}
     /* eslint-enable vue/require-prop-types */
@@ -67,58 +111,33 @@ export default {
   data () {
     return {
       fields: [],
-      errorMap: {},
-      submissionValidating: false,
-      interactiveValidationRecord: {} // 能够构造出提交校验时出交互事件，所以分开标记
+      submissionValidating: false
     }
   },
   computed: {
-    interactiveValidating () {
-      return !!Object.keys(this.interactiveValidationRecord).length
-    },
     isValidating () {
-      return this.submissionValidating || this.interactiveValidating
+      return (
+        this.submissionValidating || this.validator.isInteractiveValidating()
+      )
+    },
+    validityManager () {
+      return getValidityManager()
+    },
+    validities () {
+      return this.validityManager.getValidities()
     },
     fieldsMap () {
-      let targets = this.fields.filter((target) => target.name)
-      return zipObject(map(targets, 'name'), targets)
-    },
-    normalizedValidators () {
-      return (this.validators || [])
-        .filter(
-          ({ validate, handler, fields }) =>
-            fields && isFunction(validate || handler)
-        )
-        .map(({ validate, handler, fields, triggers }) => {
-          fields = Array.isArray(fields) ? fields : [fields]
-          // triggers 和 fields 数组长度一致了
-          triggers = normalizeTriggers(triggers, fields.length)
-          const fn = validate || handler
-          return {
-            validate: fn,
-            fields, // string[]
-            triggers // string[][]
-          }
-        })
-    },
-    fieldEvents () {
-      return this.normalizedValidators.reduce((acc, { fields, triggers }) => {
-        fields.forEach((field, index) => {
-          acc[field] = acc[field] || []
-          acc[field] = uniq(
-            acc[field].concat(
-              triggers[index].filter((item) => item !== 'submit')
-            )
-          )
-        })
-        return acc
-      }, {})
+      let targets = this.fields.filter((target) => target.getName())
+      return zipObject(
+        map(targets, (t) => t.getName()),
+        targets
+      )
     }
   },
-  created () {
-    this.$on('interact', this.handleInteract)
-  },
   methods: {
+    getValidatorName ({ fields }) {
+      return `validator:${fields.join(',')}`
+    },
     hasActions () {
       return this.$slots.actions || this.$scopedSlots.actions
     },
@@ -130,36 +149,31 @@ export default {
         return this.validationPromise
       }
 
-      // 把 field 上边 disabled 的项去掉
       this.submissionValidating = true
+      // 把 field 上边 disabled 的项去掉
       let data = omit(
         this.data,
         this.fields
-          .filter((field) => field.realDisabled)
+          .filter((field) => field.isDisabled())
           .map(({ realField }) => realField)
       )
       this.validationPromise = new Promise((resolve) =>
-        // 处理 beforeValidate 返回 Promise 的情况，通过 resolve 直接把返回值传递到下层
         isFunction(this.beforeValidate)
-          ? resolve(this.beforeValidate.call(getVnodes(this)[0].context, data))
+          ? resolve(this.beforeValidate.call(undefined, data))
           : resolve()
       )
-        .then((res) => (this.isValid(res) ? this.validate() : res))
-        .then((res) =>
-          this.isValid(res)
-            ? new Promise((resolve) =>
-            // 处理 afterValidate 返回 Promise 的情况，通过 resolve 直接把返回值传递到下层
-              isFunction(this.afterValidate)
-                ? resolve(
-                  this.afterValidate.call(getVnodes(this)[0].context, data)
-                )
-                : resolve()
-            )
-            : res
-        )
+        .then((res) => (isValid(res) ? this.validate() : res))
+        .then((res) => {
+          if (isValid(res)) {
+            return isFunction(this.afterValidate)
+              ? this.afterValidate.call(undefined, data)
+              : undefined
+          }
+          return res
+        })
         .then((res) => {
           this.submissionValidating = false
-          if (this.isValid(res)) {
+          if (isValid(res)) {
             this.$emit('submit', data, e)
           } else {
             this.$emit('invalid', res)
@@ -167,193 +181,61 @@ export default {
         })
       return this.validationPromise
     },
-    validate (names) {
-      // fieldset 可以有 name，但是不会有 field 属性，也不要校验 disabled 的
-      let targets = (this.fields || []).filter(
-        (item) => item.realField && !item.realDisabled
+    ruleValidate (fieldNames) {
+      const hasNames = Array.isArray(fieldNames) && fieldNames.length
+      const fields = this.fields.filter((field) => {
+        const name = field.getName()
+        const inNames = hasNames ? includes(fieldNames, name) : true
+        return name && !field.isDisabled() && !field.isFieldset() && inNames
+      })
+      return fields.map((field) => field.validate())
+    },
+    validatorValidate (fieldNames) {
+      return Promise.resolve(this.validator.validate(fieldNames)).then(
+        this.updateValidatorValidities
       )
-      let validators = this.validators || []
-      if (Array.isArray(names) && names.length) {
-        targets = targets.filter(
-          (target) => includes(names, target.name) && !target.realDisabled
+    },
+    validateForEvent (eventName, fieldName) {
+      return Promise.resolve(
+        this.validator.validateForEvent(eventName, fieldName)
+      ).then(this.updateValidatorValidities)
+    },
+    updateValidatorValidities (validityResult) {
+      return validityResult.map(({ validator, validities }) => {
+        const validatorName = this.getValidatorName(validator)
+        this.validityManager.updateValidatorValidities(
+          validatorName,
+          validities
         )
-        validators = validators.filter(
-          (validator) =>
-            validator.fields &&
-            validator.fields.some((fieldName) => includes(names, fieldName))
-        )
-      }
-
+        return validities
+      })
+    },
+    validate (fieldNames) {
       return Promise.all([
-        ...targets.map((target) => {
-          let validity = target.validate()
-          // utils/Validator 是同步的，检查一下不是 true 就好，返回其他的都当成错误信息
-          if (!isBoolean(validity) || !validity) {
-            // 没有name的无法描述，invalid的时候就不抛了
-            return Promise.resolve(
-              target.name ? { [target.name]: validity } : {}
-            )
-          }
-          return Promise.resolve(true)
-        }),
-        ...validators.map(({ validate, handler, fields }) => {
-          let fn = validate || handler
-          if (isFunction(fn) && fields) {
-            let validities = this.execValidator(fn, fields)
-
-            // 异步校验交给返回的 Promise，对于同步校验，true 代表校验通过，false 代表不通过但是没有出错信息，其他当成 { fieldName1: errMsg, ... } 处理
-            // 异步校验
-            if (validities && isFunction(validities.then)) {
-              return validities
-            }
-
-            return Promise.resolve(validities)
-          }
-          // 没有回调或者校验项
-          // TODO: 补个warn？
-          return Promise.resolve(true)
-        })
-      ]).then((allRes) => {
-        return allRes.every((mixed) => this.isValid(mixed))
-          ? Promise.resolve(true)
-          : Promise.resolve(
-            assign({}, ...allRes.filter((mixed) => !this.isValid(mixed)))
-          )
+        this.ruleValidate(fieldNames),
+        this.validatorValidate(fieldNames)
+      ]).then(([ruleResult, valiResult]) => {
+        let result = [...ruleResult, ...valiResult]
+        result = result.filter((mixed) => !isValid(mixed))
+        return result.length ? assign({}, ...result) : true
       })
     },
-    startValidator (validatorName) {
-      const key = uniqueId('validator-')
-      this.$set(this.interactiveValidationRecord, validatorName, key)
-      return () => {
-        const keyInRecord = this.interactiveValidationRecord[validatorName]
-        if (keyInRecord && keyInRecord === key) {
-          this.$delete(this.interactiveValidationRecord, validatorName)
-        }
-      }
-    },
-    execValidator (validate, fields) {
-      let targets = fields.map((name) => this.fieldsMap[name])
-      let validities = validate.apply(
-        this,
-        targets.map((target) => target && target.getFieldValue())
-      )
-
-      // 本来可以统一成 Promise 的，但是为了同步校验时不要闪 Loading，需要尽量保证同步校验
-      if (validities && isFunction(validities.then)) {
-        const end = this.startValidator(`validator:${fields.join(',')}`)
-        return validities.then((validities) => {
-          end()
-
-          // TODO 不是最后一个如何处理validities
-          this.handleValidities(validities, fields)
-          return this.isValid(validities) || validities
-        })
-      }
-
-      this.handleValidities(validities, fields)
-      return validities
-    },
-    handleInteract (eventName, fieldName) {
-      this.normalizedValidators.forEach(({ fields, triggers, validate }) => {
-        const fIndex = fields.indexOf(fieldName)
-        if (fIndex >= 0 && triggers[fIndex].indexOf(eventName) >= 0) {
-          this.execValidator(validate, fields)
-        }
-      })
-    },
-    /**
-     * 处理validator产生的校验信息
-     *
-     * @param  {Boolean|Object} validities true或者出错的Object
-     * @param  {Array} [fields] 校验的 field 的 name 集合，可能是fieldset
-     */
-    handleValidities (validities, fields) {
-      // 加个前缀避免单 field 冲突
-      let validityName = `validator:${fields.join(',')}`
-      if (this.isValid(validities)) {
-        fields.forEach((name) => {
-          // 找到真正显示错误的地方
-          let vectors = this.errorMap[validityName]
-
-          if (vectors && vectors.length) {
-            vectors.forEach((vector) => {
-              let target = this.fieldsMap[vector]
-              target && target.hideValidity(validityName)
-            })
-            delete this.errorMap[validityName]
-          }
-        })
-      } else {
-        Object.keys(validities).forEach((name) => {
-          let vectors = this.errorMap[validityName] || []
-          let target = this.fieldsMap[name]
-
-          if (!target) {
-            return
-          }
-
-          let validity = {
-            valid: false,
-            message: validities[target.name],
-            fields: validityName
-          }
-          // 看下是否之前这个校验规则出过错，没出过错就直接塞进去
-          if (
-            !target.validities.some(
-              (validity) => validity.fields === validityName
-            )
-          ) {
-            target.validities.unshift(validity)
-            // 防止使用 fieldset 定位错误之后，上边找不到，所以都要记住
-            if (!includes(vectors, target.name)) {
-              this.errorMap[validityName] = [
-                ...(this.errorMap[validityName] || []),
-                target.name
-              ]
-            }
-          } else {
-            // 之前出过错，要把这个 validities 更新一下
-            this.$set(target, 'validities', [
-              validity,
-              ...target.validities.filter(
-                (validity) => validity.fields === validityName
-              )
-            ])
-          }
-        })
-      }
-    },
-    isValid (res) {
-      return isUndefined(res) || res === true
-    },
+    // @deprecrated
     reset (names) {
-      let fields = names
-        ? this.fields.filter((field) => includes(names, field.name))
-        : this.fields
-      fields.forEach((target) => {
-        target.resetValue()
-      })
+      if (!names) {
+        this.validityManager.clearValidities()
+      } else {
+        this.fields
+          .filter((field) => includes(names, field.getName()))
+          .forEach((target) => {
+            target.resetValue()
+          })
+      }
     }
   }
 }
 
-function normalizeTriggers (triggers, length) {
-  triggers = triggers || 'submit'
-  if (typeof triggers === 'string') {
-    triggers = fill(Array(length), triggers)
-  } else if (Array.isArray(triggers)) {
-    let len = triggers.length
-    triggers =
-      len < length
-        ? triggers.concat(fill(Array(length - len), triggers))
-        : triggers.slice(0, length)
-  } else {
-    throw new Error(
-      '[veui-form] The triggers of validators must be an Array or a string.'
-    )
-  }
-  return triggers.map((item) => {
-    return typeof item === 'string' ? item.split(/\s*,\s*/) : item
-  })
+function isValid (res) {
+  return isUndefined(res) || res === true
 }
 </script>
