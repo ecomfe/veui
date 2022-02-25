@@ -1,6 +1,6 @@
 <template>
 <article>
-  <h1><code>&lt;veui-lightbox></code></h1>
+  <h1><code>&lt;veui-lightbox&gt;</code></h1>
   <section>
     <veui-check-button-group
       v-model="features"
@@ -14,7 +14,7 @@
     :datasource="items"
     :index.sync="index"
     indicator="number"
-    :mask-closable="maskClosable"
+    :outside-closable="outsideClosable"
     wrap
     :overlay-style="{
       '--dls-dropdown-max-display-items': 8
@@ -27,7 +27,7 @@
     :datasource="items"
     :index.sync="index"
     indicator="number"
-    :mask-closable="maskClosable"
+    :outside-closable="outsideClosable"
     :wrap="false"
   />
   <h2>没有头部页码</h2>
@@ -36,7 +36,7 @@
     :open.sync="openList[2]"
     :datasource="items"
     :index.sync="index"
-    :mask-closable="maskClosable"
+    :outside-closable="outsideClosable"
     indicator="none"
     wrap
   />
@@ -59,8 +59,8 @@ export default {
       features: [],
       featureItems: [
         {
-          label: 'maskClosable',
-          value: 'maskClosable'
+          label: 'outsideClosable',
+          value: 'outsideClosable'
         }
       ],
       items: [
@@ -106,8 +106,8 @@ export default {
     }
   },
   computed: {
-    maskClosable () {
-      return this.features.indexOf('maskClosable') >= 0
+    outsideClosable () {
+      return this.features.indexOf('outsideClosable') >= 0
     }
   },
   methods: {

@@ -5,7 +5,7 @@
     mergeOverlayClass({
       [$c('lightbox')]: true,
       [$c('lightbox-mask')]: true,
-      [$c('lightbox-mask-closable')]: maskClosable
+      [$c('lightbox-outside-closable')]: outsideClosable
     })
   "
   :overlay-style="overlayStyle"
@@ -35,7 +35,7 @@
       :ui="uiParts.close"
       :class="$c('lightbox-head-close')"
       :aria-label="t('close')"
-      @click="cancel"
+      @click="close"
     >
       <veui-icon :name="icons.close"/>
     </veui-button>
@@ -173,7 +173,7 @@ export default {
       type: Boolean,
       default: true
     },
-    maskClosable: {
+    outsideClosable: {
       type: Boolean,
       default: true
     },
@@ -229,16 +229,13 @@ export default {
   },
   methods: {
     handleClick ({ currentTarget, target }) {
-      if (currentTarget === target && this.maskClosable) {
+      if (currentTarget === target && this.outsideClosable) {
         this.close()
       }
     },
-    close (type) {
-      if (typeof type !== 'string') {
-        type = 'cancel'
-      }
+    close () {
       if (typeof this.beforeClose === 'function') {
-        Promise.resolve(this.beforeClose(type)).then((result) => {
+        Promise.resolve(this.beforeClose()).then((result) => {
           if (result !== false) {
             this.commit('open', false)
           }
@@ -246,15 +243,11 @@ export default {
       } else {
         this.commit('open', false)
       }
-      this.$emit(type)
-    },
-    cancel () {
-      this.close('cancel')
     },
     handleEscape (e) {
       if (this.escapable) {
         e.stopPropagation()
-        this.cancel()
+        this.close()
       }
     },
     handleAfterClose () {

@@ -3,10 +3,11 @@ import {
   VeuiDefineInstance,
   LooseObject,
   UiMixin,
-  BeforeClose
+  Promisify
 } from '../common'
-import { Emits as DialogEmits } from './dialog'
 import { CarouselCommonProps, Item } from './carousel'
+
+export type BeforeClose = () => Promisify<boolean | void>
 
 export type PreviewOptions = LooseObject<{
   video?: LooseObject<{
@@ -26,7 +27,9 @@ type Props<T extends Item> = CarouselCommonProps<T> & {
   options?: PreviewOptions
 }
 
-type Emits = DialogEmits
+type Emits = {
+  afterclose(): void
+}
 
 type Mixins = UiMixin
 
