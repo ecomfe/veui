@@ -35,13 +35,13 @@ export default async function (content) {
       new MagicString(content),
       component,
       loaderOptions,
-      path => {
-        return new Promise(resolve => {
+      (path) => {
+        return new Promise((resolve) => {
           try {
             this.resolve(
               this.rootContext || this.options.context,
               path,
-              err => {
+              (err) => {
                 if (err) {
                   resolve(false)
                   return
@@ -100,7 +100,7 @@ async function patchComponent (content, component, options, resolve) {
   let parts = getParts(component, options)
 
   await Promise.all(
-    [...parts.script, ...parts.style].map(async module => {
+    [...parts.script, ...parts.style].map(async (module) => {
       module.valid = await assurePath(module.path, resolve)
     })
   )
@@ -120,7 +120,7 @@ function patchComponentSync (content, component, options, resolveSync) {
   let parts = getParts(component, options)
   let modules = [...parts.script, ...parts.style]
 
-  modules.forEach(module => {
+  modules.forEach((module) => {
     module.valid = assurePathSync(module.path, resolveSync)
   })
 
@@ -158,9 +158,9 @@ function getParts (component, options) {
     if (!Array.isArray(locale)) {
       locale = [locale]
     }
-    locale = locale.filter(l => typeof l === 'string')
+    locale = locale.filter((l) => typeof l === 'string')
     modules = locale
-      .map(l => {
+      .map((l) => {
         return {
           package: alias,
           path: `locale/${l}`,
@@ -171,10 +171,10 @@ function getParts (component, options) {
       .concat(modules)
 
     global = locale
-      .map(l => {
+      .map((l) => {
         return { path: `${alias}/locale/${l}/common.js` }
       })
-      .concat(global.map(path => ({ path })))
+      .concat(global.map((path) => ({ path })))
   }
 
   return modules.reduce(
@@ -210,7 +210,7 @@ function getParts (component, options) {
  * @returns {MagicString} Patched content
  */
 function patchContent (content, parts) {
-  Object.keys(parts).forEach(type => {
+  Object.keys(parts).forEach((type) => {
     let paths = parts[type].filter(({ valid }) => valid).map(({ path }) => path)
     return patchType(content, type, paths)
   })
@@ -225,7 +225,7 @@ function patchContent (content, parts) {
  */
 function pushPart (parts, file) {
   let ext = getExtname(file.path)
-  let type = Object.keys(EXT_TYPES).find(key => {
+  let type = Object.keys(EXT_TYPES).find((key) => {
     return EXT_TYPES[key].includes(ext)
   })
   parts[type.toLowerCase()].push(file)
@@ -237,10 +237,7 @@ function pushPart (parts, file) {
  * @returns {string} File extension
  */
 function getExtname (file) {
-  return path
-    .extname(file)
-    .replace(/\./g, '')
-    .toLowerCase()
+  return path.extname(file).replace(/\./g, '').toLowerCase()
 }
 
 const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
@@ -254,10 +251,10 @@ const RE_SCRIPT = /<script(?:\s+[^>]*)?>/i
  */
 function patchType (content, type, peerPaths) {
   const code = content.toString()
-  let normalizedPaths = peerPaths.map(path => slash(normalize(path)))
+  let normalizedPaths = peerPaths.map((path) => slash(normalize(path)))
   switch (type) {
     case 'script':
-      let scriptImports = normalizedPaths.map(path => `import '${path}'\n`)
+      let scriptImports = normalizedPaths.map((path) => `import '${path}'\n`)
       code.replace(RE_SCRIPT, (match, offset) => {
         const replacement = `${match}\n${scriptImports.join('')}`
         content.overwrite(offset, offset + match.length, replacement)
@@ -265,7 +262,7 @@ function patchType (content, type, peerPaths) {
       })
       break
     case 'style':
-      let styleImports = normalizedPaths.map(path => {
+      let styleImports = normalizedPaths.map((path) => {
         let langStr = ''
         let ext = getExtname(path)
         if (ext !== 'css') {
@@ -380,8 +377,7 @@ function resolveComponent (file, options) {
     // not VEUI package
     !isVEUI ||
     // is dep but dep name isn't correct
-    (isVEUI &&
-      path.basename(path.dirname(pkg)) === 'node_modules' &&
+    (path.basename(path.dirname(pkg)) === 'node_modules' &&
       path.basename(pkg) !== alias)
   ) {
     return null
