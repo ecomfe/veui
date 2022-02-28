@@ -301,13 +301,15 @@ export default {
     validate () {
       let result = true
       if (this.realMaxlength != null && this.length > this.realMaxlength) {
-        // TODO
+        // TODO type 常量，message from locale
         result = {
           type: 'error',
           message: 'maxlength error',
           renderError: this.errorRenderer
         }
-        this.field.updateIntrinsicValidities(result)
+        if (this.field) {
+          this.field.updateIntrinsicValidities(result)
+        }
       }
       return result
     },

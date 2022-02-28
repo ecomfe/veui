@@ -3,8 +3,9 @@ import { isTopMostOfType, wrapListeners } from '../utils/helper'
 import focusable from './focusable'
 import { asFormChild } from '../components/Form/Form'
 import { asFieldChild } from '../components/Form/Field'
+import { cacheShape } from '../components/Form/_shaped'
 
-const getInputShape = (vm) => {
+const makeShape = cacheShape((vm) => {
   return {
     getDeclaredName: () => vm.name,
     // 内置校验
@@ -12,16 +13,17 @@ const getInputShape = (vm) => {
       return typeof vm.validate === 'function' ? vm.validate() : undefined
     }
   }
-}
+})
 
 export default {
   uiTypes: ['input'],
   mixins: [
     focusable,
     asFormChild('form'),
-    asFieldChild('field', (vm) => {
-      return vm.field && vm.field.addPrimaryInput(getInputShape(vm))
-    })
+    asFieldChild(
+      'field',
+      (vm) => vm.field && vm.field.addPrimaryInput(makeShape(vm))
+    )
   ],
   props: {
     name: String,

@@ -175,3 +175,7 @@ export function getValidityManager () {
     }
   })
 }
+
+export function isValid (value) {
+  return value === true || value == null
+}

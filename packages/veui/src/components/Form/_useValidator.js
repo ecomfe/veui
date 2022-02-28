@@ -1,5 +1,5 @@
 import { isFunction, uniq, uniqueId, includes, fill } from 'lodash'
-import { ValidityType } from './_ValidityManager'
+import { ValidityType, isValid } from './_ValidityManager'
 
 export default function useValidator (
   namespace,
@@ -77,11 +77,8 @@ export default function useValidator (
           )
         }
         return false
-        // console.log(Object.keys(this.interactiveValidatingRecord), fieldName)
-        // const a = some(this.interactiveValidatingRecord, ([triggerField]) => triggerField === fieldName)
       },
       _validateForEvent (eventName, fieldName) {
-        debugger
         const validators = this._realValidators.filter((validator) => {
           const { fields, triggers } = validator
           const fIndex = fields.indexOf(fieldName)
@@ -115,7 +112,6 @@ export default function useValidator (
       },
       _execValidator (validator, triggerField) {
         const { validate, fields } = validator
-        // let targets = fields.map((name) => this.fieldsMap[name])
         const validities = validate.apply(
           this,
           fields.map((fieldName) => getFieldValue(this, fieldName))
@@ -132,13 +128,9 @@ export default function useValidator (
           return validities.then((validities) => {
             endValidator && endValidator()
             return normalizeValidatorResult(validities)
-            // this.handleValidities(validities, fields)
-            // return isValid(validities) || validities
           })
         }
         return normalizeValidatorResult(validities)
-        // this.handleValidities(validities, fields)
-        // return validities
       },
       _startValidator (validatorName, triggerField) {
         const unique = uniqueId()
@@ -179,7 +171,7 @@ function normalizeTriggers (triggers, length) {
  * @return {true | { field1: {type, message? }}}
  */
 function normalizeValidatorResult (result) {
-  if (result == null || result === true) {
+  if (isValid(result)) {
     return true
   }
   if (typeof result !== 'object') {
@@ -188,10 +180,10 @@ function normalizeValidatorResult (result) {
 
   return Object.keys(result).reduce((acc, fieldName) => {
     const validities = result[fieldName]
-    // foo: true 直接忽略掉
-    if (validities !== true) {
+    // foo: true/null 直接忽略掉
+    if (!isValid(validities)) {
       acc[fieldName] = Array.isArray(validities)
-        ? validities.map(toValidity)
+        ? validities.filter((val) => !isValid(val)).map(toValidity)
         : [toValidity(validities)]
     }
     return acc
@@ -199,19 +191,11 @@ function normalizeValidatorResult (result) {
 }
 
 function toValidity (val) {
-  let validity
-  if (val === false || typeof val === 'string') {
-    validity = {
+  if (typeof val !== 'object') {
+    return {
+      type: ValidityType.ERROR,
       message: val || ''
     }
   }
-  // TODO 先 fix scanDeep
-  if (!val || typeof val !== 'object') {
-    throw new Error('the validation result is required.')
-  }
-
-  if (!validity.type) {
-    validity.type = ValidityType.ERROR
-  }
-  return validity
+  return val
 }

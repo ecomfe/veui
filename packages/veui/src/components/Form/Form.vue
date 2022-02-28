@@ -20,7 +20,6 @@
 
 <script>
 import {
-  isUndefined,
   isFunction,
   includes,
   assign,
@@ -32,7 +31,7 @@ import {
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
-import { getValidityManager } from './_ValidityManager'
+import { getValidityManager, isValid } from './_ValidityManager'
 import useValidator from './_useValidator'
 import { useCoupled, cacheShape } from './_shaped'
 
@@ -155,7 +154,7 @@ export default {
         this.data,
         this.fields
           .filter((field) => field.isDisabled())
-          .map(({ realField }) => realField)
+          .map((field) => field.getField())
       )
       this.validationPromise = new Promise((resolve) =>
         isFunction(this.beforeValidate)
@@ -222,20 +221,14 @@ export default {
     },
     // @deprecrated
     reset (names) {
-      if (!names) {
-        this.validityManager.clearValidities()
-      } else {
-        this.fields
-          .filter((field) => includes(names, field.getName()))
-          .forEach((target) => {
-            target.resetValue()
-          })
+      let fields = this.fields
+      if (names) {
+        fields = fields.filter((field) => includes(names, field.getName()))
       }
+      fields.forEach((target) => {
+        target.resetValue()
+      })
     }
   }
-}
-
-function isValid (res) {
-  return isUndefined(res) || res === true
 }
 </script>
