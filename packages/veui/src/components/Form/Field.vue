@@ -52,29 +52,28 @@
         v-if="validating"
         :loading="validating"
       />
-      <template v-if="validityDisplay === 'icon' && !validating">
-        <veui-icon
-          v-if="validationStatus !== 'success'"
-          ref="icon"
-          :class="{
-            [$c(`field-validity-${validationStatus}`)]: true,
-            [$c('field-validity-icon')]: true
-          }"
-          :name="icons.popup"
+      <template v-else-if="validationStatus !== 'success'">
+        <template v-if="validityDisplay === 'icon'">
+          <veui-icon
+            ref="icon"
+            :class="{
+              [$c(`field-validity-${validationStatus}`)]: true,
+              [$c('field-validity-icon')]: true
+            }"
+            :name="icons.popup"
+          />
+          <veui-popover
+            v-if="!!renderableValidities.length"
+            target="icon"
+          >
+            <veui-field-messages :messages="renderableValidities"/>
+          </veui-popover>
+        </template>
+        <veui-field-messages
+          v-else
+          :messages="renderableValidities"
         />
-        <veui-popover
-          v-if="
-            !!renderableValidities.length && validationStatus !== 'success'
-          "
-          target="icon"
-        >
-          <veui-field-messages :messages="renderableValidities"/>
-        </veui-popover>
       </template>
-      <veui-field-messages
-        v-if="validityDisplay !== 'icon'"
-        :messages="renderableValidities"
-      />
     </div>
   </div>
 </div>
@@ -102,9 +101,9 @@ import { ValidityType } from './_ValidityManager'
 const { asParent: asFieldParent, asChild: asFieldChild } =
   useCoupled('form-field')
 
-const { ERROR, WARNING, SUCCESS } = ValidityType
-
 export { asFieldChild }
+
+const { ERROR, WARNING, SUCCESS } = ValidityType
 
 const makeShape = cacheShape((vm) => ({
   // auto bind vm?
@@ -117,6 +116,7 @@ const makeShape = cacheShape((vm) => ({
   isAbstract: () => vm.realAbstract,
   validate: vm.validate,
   getName: () => vm.realName,
+  getField: () => vm.realField,
   getFieldValue: vm.getFieldValue,
   resetValue: vm.resetValue,
   getAbstractFieldNames: () => vm.abstractFieldNames,
