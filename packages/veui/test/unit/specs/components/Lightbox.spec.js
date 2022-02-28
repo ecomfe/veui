@@ -1,47 +1,41 @@
 import Lightbox from '@/components/Lightbox'
-import { mount } from '../../../utils'
+import { mount, wait } from '../../../utils'
 
 let items = [
   {
-    src:
-      'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
+    src: 'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
     alt: 'A cute kitty looking at you with its greenish eyes.',
     label: '猫',
     type: 'image'
   },
   {
-    src:
-      'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
+    src: 'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
     alt: 'A common kingfisher flying above river.',
     label: '翠鸟',
     type: 'image'
   },
   {
-    src:
-      'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
+    src: 'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
     alt: 'A white and gray dolphin in blue water.',
     label: '海豚',
     type: 'image'
   },
   {
-    src:
-      'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
+    src: 'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
     alt: 'A white and gray dolphin in blue water.',
     label: '海豚',
     type: 'image'
   },
   {
     name: '330206454.sd.mp4',
-    src:
-      'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
+    src: 'https://player.vimeo.com/external/330206454.sd.mp4?s=243f3d7497ba5d1c7f7ee57071e947540484a89a&profile_id=164&oauth2_token_id=57447761',
     poster:
       'https://images.pexels.com/videos/2156021/free-video-2156021.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     type: 'video'
   },
   {
     name: '380082136.sd.mp4',
-    src:
-      'https://player.vimeo.com/external/380082136.sd.mp4?s=930b81a8bf84310005cdb7f3d0c6489b777d7032&profile_id=139&oauth2_token_id=57447761',
+    src: 'https://player.vimeo.com/external/380082136.sd.mp4?s=930b81a8bf84310005cdb7f3d0c6489b777d7032&profile_id=139&oauth2_token_id=57447761',
     type: 'video'
   }
 ]
@@ -142,30 +136,21 @@ describe('components/Lightbox', () => {
     let next = wrapper.find('.veui-lightbox-control-next')
     let prev = wrapper.find('.veui-lightbox-control-prev')
 
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(0)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(0).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
     prev.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(0)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(0).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
     next.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(1).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
 
     wrapper.destroy()
   })
@@ -197,31 +182,22 @@ describe('components/Lightbox', () => {
     let { vm } = wrapper
     let next = wrapper.find('.veui-lightbox-control-next')
 
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(3)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(3).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
     next.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(4)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(4).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
     expect(vm.index).to.equal(4)
     vm.index = 1
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(1).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
 
     wrapper.destroy()
   })
@@ -261,39 +237,27 @@ describe('components/Lightbox', () => {
     let { vm } = wrapper
     let next = wrapper.find('.veui-lightbox-control-next')
 
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(1).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
     next.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(1).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
     vm.index = 2
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(2)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(2).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
     next.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(3)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(3).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
     expect(vm.index).to.equal(3)
 
     wrapper.destroy()
@@ -372,12 +336,9 @@ describe('components/Lightbox', () => {
     prev.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(0)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(0).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
 
     vm.wrap = true
 
@@ -385,12 +346,9 @@ describe('components/Lightbox', () => {
     prev.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-lightbox-item')
-        .at(5)
-        .classes()
-    ).to.include('veui-lightbox-item-current')
+    expect(wrapper.findAll('.veui-lightbox-item').at(5).classes()).to.include(
+      'veui-lightbox-item-current'
+    )
 
     wrapper.destroy()
   })
@@ -442,6 +400,43 @@ describe('components/Lightbox', () => {
     expect(wrapper.find('.veui-lightbox-indicator-numbers').exists()).to.equal(
       false
     )
+
+    wrapper.destroy()
+  })
+
+  it('should handle `maskClosable` correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-lightbox': Lightbox
+        },
+        template: `
+          <veui-lightbox
+            :datasource="items"
+            mask-closable
+            :open.sync="open"
+          />`,
+        data () {
+          return {
+            items: items.slice(0, 1),
+            open: true
+          }
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+    await wait()
+    wrapper.find('.veui-lightbox-item-desc').trigger('click')
+    await wait()
+    expect(vm.open).to.equal(true)
+
+    wrapper.find('.veui-lightbox-mask').trigger('click')
+    await wait()
+    expect(vm.open).to.equal(false)
 
     wrapper.destroy()
   })

@@ -4,7 +4,8 @@
   :overlay-class="
     mergeOverlayClass({
       [$c('lightbox')]: true,
-      [$c('lightbox-mask')]: true
+      [$c('lightbox-mask')]: true,
+      [$c('lightbox-outside-closable')]: outsideClosable
     })
   "
   :overlay-style="overlayStyle"
@@ -13,6 +14,7 @@
   modal
   :priority="priority"
   @afterclose="handleAfterClose"
+  @click="handleClick"
 >
   <div :class="$c('lightbox-head')">
     <div
@@ -33,7 +35,7 @@
       :ui="uiParts.close"
       :class="$c('lightbox-head-close')"
       :aria-label="t('close')"
-      @click="cancel"
+      @click="close"
     >
       <veui-icon :name="icons.close"/>
     </veui-button>
@@ -171,6 +173,10 @@ export default {
       type: Boolean,
       default: true
     },
+    outsideClosable: {
+      type: Boolean,
+      default: true
+    },
     escapable: {
       type: Boolean,
       default: true
@@ -222,12 +228,14 @@ export default {
     this.closeModal()
   },
   methods: {
-    close (type) {
-      if (typeof type !== 'string') {
-        type = 'cancel'
+    handleClick ({ currentTarget, target }) {
+      if (currentTarget === target && this.outsideClosable) {
+        this.close()
       }
+    },
+    close () {
       if (typeof this.beforeClose === 'function') {
-        Promise.resolve(this.beforeClose(type)).then(result => {
+        Promise.resolve(this.beforeClose()).then((result) => {
           if (result !== false) {
             this.commit('open', false)
           }
@@ -235,15 +243,11 @@ export default {
       } else {
         this.commit('open', false)
       }
-      this.$emit(type)
-    },
-    cancel () {
-      this.close('cancel')
     },
     handleEscape (e) {
       if (this.escapable) {
         e.stopPropagation()
-        this.cancel()
+        this.close()
       }
     },
     handleAfterClose () {

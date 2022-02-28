@@ -1,6 +1,12 @@
 <template>
 <article>
-  <h1><code>&lt;veui-lightbox></code></h1>
+  <h1><code>&lt;veui-lightbox&gt;</code></h1>
+  <section>
+    <veui-check-button-group
+      v-model="features"
+      :items="featureItems"
+    />
+  </section>
   <h2>wrap模式</h2>
   <veui-button @click="handleClick(0)">打开</veui-button>
   <veui-lightbox
@@ -8,6 +14,7 @@
     :datasource="items"
     :index.sync="index"
     indicator="number"
+    :outside-closable="outsideClosable"
     wrap
     :overlay-style="{
       '--dls-dropdown-max-display-items': 8
@@ -20,6 +27,7 @@
     :datasource="items"
     :index.sync="index"
     indicator="number"
+    :outside-closable="outsideClosable"
     :wrap="false"
   />
   <h2>没有头部页码</h2>
@@ -28,6 +36,7 @@
     :open.sync="openList[2]"
     :datasource="items"
     :index.sync="index"
+    :outside-closable="outsideClosable"
     indicator="none"
     wrap
   />
@@ -35,37 +44,42 @@
 </template>
 
 <script>
-import { Lightbox, Button } from 'veui'
+import { Lightbox, Button, CheckButtonGroup } from 'veui'
 
 export default {
   name: 'lightbox-demo',
   components: {
     'veui-lightbox': Lightbox,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-check-button-group': CheckButtonGroup
   },
   data () {
     return {
       index: 0,
+      features: [],
+      featureItems: [
+        {
+          label: 'outsideClosable',
+          value: 'outsideClosable'
+        }
+      ],
       items: [
         {
-          src:
-            'https://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
+          src: 'https://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
           alt: 'A cute kitty looking at you with its greenish eyes.',
           name: '猫',
           type: 'image',
           desc: 'hahahahahhahaha'.repeat(10)
         },
         {
-          src:
-            'https://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
+          src: 'https://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
           alt: 'A common kingfisher flying above river.',
           name: '翠鸟',
           type: 'image',
           desc: 'hahahahahhahaha1'
         },
         {
-          src:
-            'https://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
+          src: 'https://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
           alt: 'A white and gray dolphin in blue water.',
           name: '海豚',
           type: 'image',
@@ -79,8 +93,7 @@ export default {
           desc: 'hahahahahhahaha3'
         },
         {
-          src:
-            'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm',
+          src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm',
           alt: 'flower video',
           name: '花',
           type: 'video',
@@ -90,6 +103,11 @@ export default {
       open: true,
       indicator: 'none',
       openList: []
+    }
+  },
+  computed: {
+    outsideClosable () {
+      return this.features.indexOf('outsideClosable') >= 0
     }
   },
   methods: {
