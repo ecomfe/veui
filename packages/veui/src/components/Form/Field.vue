@@ -5,7 +5,7 @@
     [$c('field')]: true,
     [$c('invalid')]: invalid,
     [$c('field-abstract')]: realAbstract,
-    [$c(`field-validity-display-${validityDisplay}`)]: !realAbstract,
+    [$c(`field-message-display-${validityDisplay}`)]: !realAbstract,
     [$c('field-no-label')]: !realAbstract && !label && !$slots.label,
     [$c('field-required')]: isRequired
   }"
@@ -46,19 +46,21 @@
     </div>
     <div
       v-if="!realAbstract"
-      :class="$c('field-validity-wrapper')"
+      :class="$c('field-message-wrapper')"
     >
       <veui-loading
         v-if="validating"
         :loading="validating"
-      />
+      >{{
+        t('validating')
+      }}</veui-loading>
       <template v-else-if="validationStatus !== 'success'">
         <template v-if="validityDisplay === 'icon'">
           <veui-icon
             ref="icon"
             :class="{
-              [$c(`field-validity-${validationStatus}`)]: true,
-              [$c('field-validity-icon')]: true
+              [$c(`field-message-${validationStatus}`)]: true,
+              [$c('field-message-icon')]: true
             }"
             :name="icons.popup"
           />
@@ -86,17 +88,18 @@ import Loading from '../Loading'
 import type from '../../managers/type'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
+import i18n from '../../mixins/i18n'
 import { pull, get, last, find, uniq } from 'lodash'
 import { getVnodes } from '../../utils/context'
 import Icon from '../Icon'
 import Tooltip from '../Tooltip'
 import Vue from 'vue'
 import '../../common/global'
-import { useCoupled, cacheShape } from './_shaped'
+import { useCoupled, cacheFacade } from './_facade'
 import useRule from './_useRule'
 import FieldMessages from './_FieldMessages'
 import { asFormChild } from './Form'
-import { ValidityType } from './_ValidityManager'
+import { ValidityType } from './_useValidity'
 
 const { asParent: asFieldParent, asChild: asFieldChild } =
   useCoupled('form-field')
@@ -105,7 +108,7 @@ export { asFieldChild }
 
 const { ERROR, WARNING, SUCCESS } = ValidityType
 
-const makeShape = cacheShape((vm) => ({
+const createFacade = cacheFacade((vm) => ({
   // auto bind vm?
   isDisabled: () => (vm.withholdValidity ? false : vm.realDisabled),
   isReadonly: () => (vm.withholdValidity ? false : vm.realReadonly),
@@ -120,7 +123,7 @@ const makeShape = cacheShape((vm) => ({
   getFieldValue: vm.getFieldValue,
   resetValue: vm.resetValue,
   getAbstractFieldNames: () => vm.abstractFieldNames,
-  addPrimaryInput (input) {
+  addInput (input) {
     vm.inputs.push(input)
     return () => pull(vm.inputs, input)
   },
@@ -158,11 +161,11 @@ export default {
   mixins: [
     prefix,
     ui,
-    asFormChild('form', (vm) => vm.form && vm.form.addField(makeShape(vm))),
-    asFieldParent(makeShape),
-    asFieldChild(
-      'parentField',
-      (vm) => vm.parentField && vm.parentField.addField(makeShape(vm))
+    i18n,
+    asFormChild('form', (vm) => vm.form.addField(createFacade(vm))),
+    asFieldParent(createFacade),
+    asFieldChild('parentField', (vm) =>
+      vm.parentField.addField(createFacade(vm))
     ),
     useRule('rule', {
       getRules: (vm) => vm.rules,
@@ -231,7 +234,11 @@ export default {
       return this.form ? this.form.getValiditiesOfFields(this.validityKeys) : []
     },
     validityKeys () {
-      return this.realAbstract ? [] : this.abstractFieldNames
+      return this.realAbstract
+        ? this.realName
+          ? [this.realName]
+          : []
+        : this.abstractFieldNames
     },
     abstractFieldNames () {
       return this.fields.reduce(

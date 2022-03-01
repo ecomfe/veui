@@ -83,7 +83,8 @@ import { normalizeInt } from '../utils/helper'
 import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 import warn from '../utils/warn'
 import '../common/global'
-import Message from './Form/Message'
+import { ValidityType } from './Form/_useValidity'
+import i18nManager from '../managers/i18n'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
 
@@ -213,23 +214,6 @@ export default {
         strict: this.strict,
         getLength: this.getLength
       }
-    },
-    errorRenderer () {
-      const context = this
-      return function () {
-        const { type, message } = this.$attrs.validity
-        return (
-          <Message type={type}>
-            {message}
-            <Button
-              ui="text strong"
-              onClick={() => context.$refs.input.focus()}
-            >
-              查看
-            </Button>
-          </Message>
-        )
-      }
     }
   },
   watch: {
@@ -278,7 +262,6 @@ export default {
       let val = this.trimValue(e.target.value)
       this.updateValue(val)
       this.$emit('change', val, e)
-      this.validate()
     },
     handleMousedown (e) {
       setTimeout(() => {
@@ -300,13 +283,16 @@ export default {
     },
     validate () {
       let result = true
-      if (this.realMaxlength != null && this.length > this.realMaxlength) {
-        // TODO type 常量，message from locale
-        result = {
-          type: 'error',
-          message: 'maxlength error',
-          renderError: this.errorRenderer
+      if (this.realMaxlength != null) {
+        if (this.length > this.realMaxlength) {
+          result = {
+            type: ValidityType.ERROR,
+            message: i18nManager.get('rules.maxLength', {
+              ruleValue: this.realMaxlength
+            })
+          }
         }
+
         if (this.field) {
           this.field.updateIntrinsicValidities(result)
         }
@@ -330,6 +316,7 @@ export default {
         if (input && this.realValue !== input.value) {
           input.value = this.realValue
         }
+        this.validate()
       })
     },
     handleFocus (e) {

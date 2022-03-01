@@ -22,24 +22,27 @@
 import {
   isFunction,
   includes,
-  assign,
   zipObject,
   map,
   pull,
-  omit
+  omit,
+  mergeWith
 } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
-import { getValidityManager, isValid } from './_ValidityManager'
+import useValidity, {
+  isAllValid,
+  normalizeValiditiesOfFields
+} from './_useValidity'
 import useValidator from './_useValidator'
-import { useCoupled, cacheShape } from './_shaped'
+import { useCoupled, cacheFacade } from './_facade'
 
 const { asParent: asFormParent, asChild: asFormChild } = useCoupled('form')
 
 export { asFormChild }
 
-const makeShape = cacheShape((vm) => ({
+const createFacade = cacheFacade((vm) => ({
   // 全写成函数目的：惰性响应式
   isDisabled: () => vm.disabled,
   isReadonly: () => vm.readonly,
@@ -66,7 +69,8 @@ export default {
   mixins: [
     prefix,
     ui,
-    asFormParent(makeShape),
+    asFormParent(createFacade),
+    useValidity('validityManager'),
     useValidator('validator', {
       getValidators: (vm) => vm.validators,
       getValidatorName: (vm, validator) => vm.getValidatorName(validator),
@@ -119,9 +123,6 @@ export default {
         this.submissionValidating || this.validator.isInteractiveValidating()
       )
     },
-    validityManager () {
-      return getValidityManager()
-    },
     validities () {
       return this.validityManager.getValidities()
     },
@@ -156,28 +157,42 @@ export default {
           .filter((field) => field.isDisabled())
           .map((field) => field.getField())
       )
+
+      let invalid = false
+      const markAndCheckValid = (result) => (invalid = isAllValid(result))
       this.validationPromise = new Promise((resolve) =>
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(undefined, data))
           : resolve()
       )
-        .then((res) => (isValid(res) ? this.validate() : res))
-        .then((res) => {
-          if (isValid(res)) {
+        .then((result) => {
+          result = normalizeValiditiesOfFields(result)
+          return markAndCheckValid(result) ? this.validate() : result
+        })
+        .then((result) => {
+          if (invalid) {
+            return result
+          }
+
+          result = normalizeValiditiesOfFields(result)
+          if (markAndCheckValid(result)) {
             return isFunction(this.afterValidate)
               ? this.afterValidate.call(undefined, data)
-              : undefined
+              : result
           }
-          return res
         })
-        .then((res) => {
+        .then((result) => {
           this.submissionValidating = false
-          if (isValid(res)) {
-            this.$emit('submit', data, e)
-          } else {
-            this.$emit('invalid', res)
+          if (!invalid) {
+            result = normalizeValiditiesOfFields(result)
+            if (isAllValid(result)) {
+              this.$emit('submit', data, e)
+              return
+            }
           }
+          this.$emit('invalid', result)
         })
+
       return this.validationPromise
     },
     ruleValidate (fieldNames) {
@@ -187,7 +202,13 @@ export default {
         const inNames = hasNames ? includes(fieldNames, name) : true
         return name && !field.isDisabled() && !field.isFieldset() && inNames
       })
-      return fields.map((field) => field.validate())
+      return fields.reduce((acc, field) => {
+        const result = field.validate()
+        if (result !== true) {
+          acc[field.getName()] = result
+        }
+        return acc
+      }, {})
     },
     validatorValidate (fieldNames) {
       return Promise.resolve(this.validator.validate(fieldNames)).then(
@@ -214,9 +235,7 @@ export default {
         this.ruleValidate(fieldNames),
         this.validatorValidate(fieldNames)
       ]).then(([ruleResult, valiResult]) => {
-        let result = [...ruleResult, ...valiResult]
-        result = result.filter((mixed) => !isValid(mixed))
-        return result.length ? assign({}, ...result) : true
+        return mergeWith({}, ruleResult, ...valiResult, mergeValidities)
       })
     },
     // @deprecrated
@@ -230,5 +249,9 @@ export default {
       })
     }
   }
+}
+
+function mergeValidities (dest, src) {
+  return [].concat(dest || []).concat(src || [])
 }
 </script>

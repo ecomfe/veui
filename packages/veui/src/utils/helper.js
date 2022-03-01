@@ -143,11 +143,11 @@ export function isEmpty (val) {
 export function normalizeClass (klasses) {
   let klassObj = {}
   if (isString(klasses)) {
-    klasses.split(/\s+/).forEach(klass => {
+    klasses.split(/\s+/).forEach((klass) => {
       klassObj[klass] = true
     })
   } else if (Array.isArray(klasses)) {
-    klasses.forEach(klass => {
+    klasses.forEach((klass) => {
       assign(klassObj, normalizeClass(klass))
     })
   } else if (isObject(klasses)) {
@@ -172,10 +172,10 @@ const RE_INDEX = /\d+/
 export function deepSet (obj, path, val) {
   let segments = path
     .split(/[[\].]/)
-    .map(s => {
+    .map((s) => {
       return s.match(RE_INDEX) ? Number(s) : s
     })
-    .filter(s => s !== '')
+    .filter((s) => s !== '')
   let context = obj
   segments.forEach((s, index) => {
     if (index === segments.length - 1) {
@@ -255,7 +255,7 @@ export function resolveOffset (val, base) {
 
 export function ignoreElements (names) {
   names = [].concat(names)
-  names.forEach(name => {
+  names.forEach((name) => {
     if (Vue.config.ignoredElements.indexOf(name) === -1) {
       Vue.config.ignoredElements.push(name)
     }
@@ -264,14 +264,14 @@ export function ignoreElements (names) {
 
 function getScopeAttrs (el) {
   return [...el.attributes]
-    .map(attr => attr.nodeName)
-    .filter(name => name.indexOf('data-v-') === 0)
+    .map((attr) => attr.nodeName)
+    .filter((name) => name.indexOf('data-v-') === 0)
 }
 
 export function inheritScopeAttrs (el, parent) {
   let attrs = getScopeAttrs(parent)
   let patched = []
-  attrs.forEach(attr => {
+  attrs.forEach((attr) => {
     if (!el.hasAttribute(attr)) {
       el.setAttribute(attr, '')
       patched.push(attr)
@@ -279,7 +279,7 @@ export function inheritScopeAttrs (el, parent) {
   })
 
   return function removeInheritedScopeAttrs () {
-    patched.forEach(attr => el.removeAttribute(attr))
+    patched.forEach((attr) => el.removeAttribute(attr))
   }
 }
 
@@ -313,7 +313,7 @@ export function renderSlot (vm, name, props = {}) {
 }
 
 export const Void = {
-  render: h => h()
+  render: (h) => h()
 }
 
 export function forwardSlots (slots, vm) {
@@ -324,7 +324,7 @@ export function forwardSlots (slots, vm) {
       if ($slots[from]) {
         result.slots.push(h('template', { slot: to }, $slots[from]))
       } else if ($scopedSlots[from]) {
-        result.scopedSlots[to] = props => $scopedSlots[from](props)
+        result.scopedSlots[to] = (props) => $scopedSlots[from](props)
       }
       return result
     },
@@ -359,4 +359,14 @@ export function wrapListeners (listeners) {
     },
     {}
   )
+}
+
+export function resolveInterpolation (message, data, compat) {
+  const re = compat ? /\$?\{(\w+)\}/g : /\{(\w+)\}/g
+  return String(message).replace(re, (match, key) => {
+    if (data[key] != null) {
+      return data[key]
+    }
+    return match
+  })
 }

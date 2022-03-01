@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import Autocomplete from '@/components/Autocomplete/Autocomplete'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
+import { expectFieldError } from '../../../utils'
 
 const INPUT = '.veui-input'
 const NATIVE_INPUT = '.veui-input input'
@@ -382,7 +383,7 @@ describe('components/Autocomplete', function () {
     const validators = [
       {
         fields: ['gender'],
-        validate: gender => {
+        validate: (gender) => {
           return !gender
             ? {
               gender: valiErr
@@ -421,32 +422,32 @@ describe('components/Autocomplete', function () {
     const { vm } = wrapper
     await vm.$nextTick()
     await blurWithValue(null)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await blurWithValue(1)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await blurWithValue(null)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await blurWithValue('1')
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     await changeTrigger('input')
 
     await inputWithValue(null)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await inputWithValue('1')
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await inputWithValue(null)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await inputWithValue('1')
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     wrapper.destroy()
 
@@ -470,14 +471,6 @@ describe('components/Autocomplete', function () {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
       await vm.$nextTick()
-    }
-
-    function hasError (err) {
-      if (err) {
-        expect(wrapper.find('.veui-field-error').text()).to.contains(err)
-      } else {
-        expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
-      }
     }
   })
 })
