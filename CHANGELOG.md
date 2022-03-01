@@ -1,3 +1,17 @@
+## 2.5.4 (2022-03-01)
+
+### 💡 主要变更
+
+- [+] `Tabs` 组件现在在标签页标题横向溢出滚动时，支持使用滚轮进行左右滚动。<!-- #Tabs -->
+- [+] `Lightbox` 组件新增 `outside-closable` 属性，用于指定是否可以在内容外部点击关闭。<!-- #Lightbox -->
+
+### 🐞 问题修复
+
+- [^] 修正了 `DatePicker` 的 `select` 事件重复触发的问题。<!-- #DatePicker -->
+- [^] 优化了 `Overlay` 组件的关闭逻辑，消除了部分组件关闭过程中会发生肉眼可见的闪烁的问题。<!-- #Overlay -->
+- [^] 修正了 `RadioGroup` / `CheckboxGroup` / `RadioButtonGroup` / `CheckboxButtonGroup` 组件可能遮挡左侧组件点击区域的问题。<!-- #RadioGroup #CheckboxGroup #RadioButtonGroup #CheckboxButtonGroup -->
+- [^] 为 `v-drag.sort` 指令新增了对 Chrome 关于拖动图片生成坐标相关 bug 的兼容性处理。<!-- #v-drag -->
+
 ## 2.5.3 (2022-02-07)
 
 ### 💡 主要变更
