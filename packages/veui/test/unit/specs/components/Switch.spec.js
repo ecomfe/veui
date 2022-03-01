@@ -3,16 +3,17 @@ import Switch from '@/components/Switch'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
 import sinon from 'sinon'
+import { expectFieldError } from '../../../utils'
 
 describe('components/Switch', () => {
-  it('should handle checked prop with `null` value.', done => {
+  it('should handle checked prop with `null` value.', (done) => {
     let wrapper = mount(Switch, {
       propsData: {
         checked: null
       }
     })
 
-    wrapper.vm.$on('change', val => {
+    wrapper.vm.$on('change', (val) => {
       expect(val).to.equal(true)
 
       wrapper.destroy()
@@ -22,7 +23,7 @@ describe('components/Switch', () => {
     wrapper.find('input').trigger('change')
   })
 
-  it('should update checked/model value before change event is fired.', done => {
+  it('should update checked/model value before change event is fired.', (done) => {
     let wrapper = mount({
       components: {
         'veui-switch': Switch
@@ -48,7 +49,7 @@ describe('components/Switch', () => {
     wrapper.find('input').trigger('change')
   })
 
-  it('should handle disabled prop correctly.', done => {
+  it('should handle disabled prop correctly.', (done) => {
     let wrapper = mount(Switch, {
       propsData: {
         disabled: true
@@ -247,7 +248,7 @@ describe('components/Switch', () => {
       }
     )
 
-    wrapper.vm.$on('change', val => {
+    wrapper.vm.$on('change', (val) => {
       expect(val).to.equal(true)
     })
 
@@ -354,7 +355,7 @@ describe('components/Switch', () => {
     const validators = [
       {
         fields: ['gender'],
-        validate: gender => {
+        validate: (gender) => {
           return !gender
             ? {
               gender: valiErr
@@ -400,32 +401,32 @@ describe('components/Switch', () => {
     const { vm } = wrapper
     await vm.$nextTick()
     await blurWithValue(false)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await blurWithValue(true)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await blurWithValue(false)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await blurWithValue(true)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     await changeTrigger('input')
 
     await inputWithValue(false)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await inputWithValue(true)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await inputWithValue(false)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await inputWithValue(true)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     wrapper.destroy()
 
@@ -449,14 +450,6 @@ describe('components/Switch', () => {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
       await vm.$nextTick()
-    }
-
-    function hasError (err) {
-      if (err) {
-        expect(wrapper.find('.veui-field-error').text()).to.contains(err)
-      } else {
-        expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
-      }
     }
   })
 })

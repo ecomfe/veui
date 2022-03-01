@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
 import ruleManager from '@/managers/rule'
+import { expectFieldError } from '../../../../utils'
 
 ruleManager.addRule('custom-validator', {
   validate (value, ruleValue) {
@@ -134,16 +135,14 @@ describe('components/Form/Field', () => {
     let fieldWrapper = wrapper.find('.veui-field')
     let inputWrapper = wrapper.find('.veui-input-input')
     form.$on('invalid', () => {
-      let { message, valid } = fieldWrapper.vm.validity
-      expect(valid).to.equal(false)
-      expect(message).to.equal('custom validator failed')
+      expectFieldError(fieldWrapper, 'custom validator failed')
 
       inputWrapper.setValue('123')
       formData.test = '123'
       wrapper.find('form').trigger('submit')
     })
     form.$on('submit', () => {
-      expect(fieldWrapper.vm.validity.valid).to.equal(true)
+      expectFieldError(fieldWrapper, true)
       wrapper.destroy()
     })
     inputWrapper.setValue('123456')

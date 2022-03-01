@@ -61,23 +61,22 @@
 
   &-content {
     display: flex;
-    // flex-direction: column;
     align-items: center;
     flex: 1 0 auto;
     position: relative;
   }
 
-  &-validity-wrapper {
+  &-message-wrapper {
     margin-bottom: -@dls-form-field-spacing-vertical;
     min-height: @dls-form-field-spacing-vertical;
     padding-top: @dls-form-field-error-spacing-before-vertical;
   }
 
-  &-validity-display-icon &-main {
+  &-message-display-icon &-main {
     flex-direction: row;
   }
 
-  &-validity-display-icon &-validity-wrapper {
+  &-message-display-icon &-message-wrapper {
     margin-bottom: 0;
     padding-top: 0;
     margin-left: 8px;
@@ -86,26 +85,19 @@
     align-items: center;
   }
 
-  &-validity-success {
+  &-message-success {
     color: @dls-dialog-icon-color-success;
   }
 
-  &-validity-error {
+  &-message-error {
     cursor: pointer;
     color: @dls-dialog-icon-color-error;
   }
 
-  &-validity-warning {
+  &-message-warning {
     cursor: pointer;
     color: @dls-dialog-icon-color-warning;
   }
-
-  // &-error {
-  //   position: absolute;
-  //   left: 0;
-  //   top: dls-sum(100%, @dls-form-field-error-spacing-before-vertical);
-  //   color: @dls-form-field-error-font-color;
-  // }
 
   .make-ui(@font-size, @min-height) {
     font-size: @font-size;

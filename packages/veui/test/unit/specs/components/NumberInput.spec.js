@@ -4,6 +4,7 @@ import Input from '@/components/Input'
 import NumberInput from '@/components/NumberInput'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
+import { expectFieldError } from '../../../utils'
 
 describe('components/NumberInput', () => {
   it('should handle value prop with `null` value.', async () => {
@@ -161,12 +162,12 @@ describe('components/NumberInput', () => {
     expect(input.element.value).to.equal('2.33')
   })
 
-  it('should handle change event', done => {
+  it('should handle change event', (done) => {
     let wrapper = mount(NumberInput, {
       sync: false
     })
 
-    wrapper.vm.$on('change', val => {
+    wrapper.vm.$on('change', (val) => {
       expect(val).equal(1)
       wrapper.destroy()
       done()
@@ -249,7 +250,7 @@ describe('components/NumberInput', () => {
     const validators = [
       {
         fields: ['gender'],
-        validate: gender => {
+        validate: (gender) => {
           return !gender
             ? {
               gender: valiErr
@@ -288,32 +289,32 @@ describe('components/NumberInput', () => {
     const { vm } = wrapper
     await vm.$nextTick()
     await blurWithValue(null)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await blurWithValue(1)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await blurWithValue(null)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await blurWithValue(1)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     await changeTrigger('input')
 
     await inputWithValue(null)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await inputWithValue(1)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await inputWithValue(null)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await inputWithValue(1)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     wrapper.destroy()
 
@@ -337,14 +338,6 @@ describe('components/NumberInput', () => {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
       await vm.$nextTick()
-    }
-
-    function hasError (err) {
-      if (err) {
-        expect(wrapper.find('.veui-field-error').text()).to.contains(err)
-      } else {
-        expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
-      }
     }
   })
 })

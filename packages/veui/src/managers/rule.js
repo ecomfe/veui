@@ -7,16 +7,8 @@ import max from './rules/max'
 import min from './rules/min'
 import numeric from './rules/numeric'
 import pattern from './rules/pattern'
+import { resolveInterpolation } from '../utils/helper'
 import type from './type'
-
-/**
- * 变量匹配正则
- *
- * @type {RegExp}
- */
-const ruleValueRe = /\$?\{ruleValue\}/g
-
-const valueRe = /\$?\{value\}/g
 
 export class Rule {
   constructor () {
@@ -40,17 +32,19 @@ export class Rule {
 
     rules = Array.isArray(rules) ? rules : [rules]
     let contextData = type.clone(context)
-    let results = rules.map(rule => {
-      let validator = this.ruleValidators[rule.name]
-      if (!validator.validate(val, rule.value, contextData)) {
-        let realMessage = rule.message || validator.message
+    let results = rules.map(({ name, value: ruleValue, message }) => {
+      let validator = this.ruleValidators[name]
+      if (!validator.validate(val, ruleValue, contextData)) {
+        let realMessage = message || validator.message
         return {
-          name: rule.name,
+          name: name,
           message: isFunction(realMessage)
-            ? realMessage(val, rule.value)
-            : (realMessage + '')
-              .replace(ruleValueRe, rule.value)
-              .replace(valueRe, val)
+            ? realMessage(val, ruleValue)
+            : resolveInterpolation(
+              realMessage,
+              { ruleValue, value: val },
+              true
+            )
         }
       }
       // 代表没错
@@ -58,7 +52,7 @@ export class Rule {
     })
 
     // 只返回出错的就好
-    results = results.filter(res => isObject(res))
+    results = results.filter((res) => isObject(res))
     return results.length ? results : true
   }
 

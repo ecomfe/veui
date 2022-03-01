@@ -74,3 +74,13 @@ export function expectDisabled (wrapper, force = true) {
 export function unorderedEqual (a, b) {
   expect(a).to.have.members(b).and.to.have.lengthOf(b.length)
 }
+
+export function expectFieldError (wrapper, err) {
+  if (err) {
+    expect(wrapper.find('.veui-invalid').exists()).to.eql(true)
+    expect(wrapper.find('.veui-message-content').text()).to.contains(err)
+  } else {
+    expect(wrapper.find('.veui-invalid').exists()).to.eql(false)
+    expect(wrapper.find('.veui-message-content').exists()).to.eql(false)
+  }
+}

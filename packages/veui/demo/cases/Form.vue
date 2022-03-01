@@ -548,7 +548,7 @@
         >提交</veui-button>
         <veui-button
           :disabled="validating"
-          @click="() => this.$refs.form2.reset()"
+          @click="() => $refs.form2.reset()"
         >重置</veui-button>
       </template>
     </veui-form>
@@ -2989,7 +2989,10 @@ export default {
                 let res
                 if (floor <= 1000) {
                   res = {
-                    floor: '请提高下限'
+                    floor: {
+                      type: 'warning',
+                      message: '请提高下限'
+                    }
                   }
                 }
                 return resolve(res)

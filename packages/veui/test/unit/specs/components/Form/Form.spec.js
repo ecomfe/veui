@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import Button from '@/components/Button'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
-import { wait } from '../../../../utils'
+import { wait, expectFieldError } from '../../../../utils'
 
 let slot = `
   <veui-field name="gender" field="gender"><veui-input class="gender-input"/></veui-field>
@@ -141,7 +141,7 @@ describe('components/Form/Form', () => {
           fields: ['age', 'gender'],
           handler: (data) => {
             message = 'validators failed'
-            return false
+            return { age: 'validators failed' }
           }
         }
       ]
@@ -224,13 +224,11 @@ describe('components/Form/Form', () => {
     wrapper.trigger('submit')
     let ageWrapper = wrapper.findAll('.veui-field').wrappers[1]
     form.$on('invalid', () => {
-      expect(ageWrapper.vm.validity.valid).to.equal(false)
-      expect(ageWrapper.vm.validity.message).to.equal('出错啦')
-
+      expectFieldError(ageWrapper, '出错啦')
       wrapper.trigger('submit')
     })
     form.$on('submit', () => {
-      expect(ageWrapper.vm.validity.valid).to.equal(true)
+      expectFieldError(ageWrapper, false)
       wrapper.destroy()
     })
   })
@@ -259,10 +257,8 @@ describe('components/Form/Form', () => {
     )
     let [genderWrapper, ageWrapper] = wrapper.findAll('.veui-field').wrappers
     form.$on('invalid', () => {
-      expect(genderWrapper.vm.validity.valid).to.equal(false)
-      expect(genderWrapper.vm.validity.message).to.equal('gender出错啦')
-      expect(ageWrapper.vm.validity.valid).to.equal(false)
-      expect(ageWrapper.vm.validity.message).to.equal('age出错啦')
+      expectFieldError(genderWrapper, 'gender出错啦')
+      expectFieldError(ageWrapper, 'age出错啦')
       wrapper.destroy()
     })
     wrapper.trigger('submit')

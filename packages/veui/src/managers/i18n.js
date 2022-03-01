@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { isString, isFunction, get } from 'lodash'
-import { deepSet } from '../utils/helper'
+import { deepSet, resolveInterpolation } from '../utils/helper'
 import warn from '../utils/warn'
 
 export class I18nManager {
@@ -27,17 +27,12 @@ export class I18nManager {
           return message
         }
 
-        return message.replace(/\{(\w+)\}/g, (match, key) => {
-          if (data[key] != null) {
-            return data[key]
-          }
-          return match
-        })
+        return resolveInterpolation(message, data)
       },
       watch (path, callback, locale) {
         return this.$watch(
           () => this.get(path, locale),
-          val => {
+          (val) => {
             if (isFunction(callback)) {
               callback(val)
             }
@@ -45,9 +40,9 @@ export class I18nManager {
         )
       }
     }
-  });
+  })
 
-  _locale = 'zh-Hans';
+  _locale = 'zh-Hans'
 
   get locale () {
     return this.store.locale

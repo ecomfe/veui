@@ -2,10 +2,10 @@ import { mount } from '@vue/test-utils'
 import Textarea from '@/components/Textarea'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
-import { wait } from '../../../utils'
+import { wait, expectFieldError } from '../../../utils'
 
 describe('components/Textarea', () => {
-  it('should handle value prop with `null` value', done => {
+  it('should handle value prop with `null` value', (done) => {
     let wrapper = mount(
       Textarea,
       {
@@ -19,7 +19,7 @@ describe('components/Textarea', () => {
       }
     )
 
-    wrapper.vm.$on('input', val => {
+    wrapper.vm.$on('input', (val) => {
       expect(val).to.equal('')
 
       wrapper.destroy()
@@ -140,7 +140,7 @@ describe('components/Textarea', () => {
     expect(input.element.value).to.equal('foo')
   })
 
-  it('should pass event object on input', done => {
+  it('should pass event object on input', (done) => {
     let wrapper = mount(Textarea, {
       propsData: {
         value: 'foo'
@@ -246,7 +246,7 @@ describe('components/Textarea', () => {
     const validators = [
       {
         fields: ['gender'],
-        validate: gender => {
+        validate: (gender) => {
           return !gender
             ? {
               gender: valiErr
@@ -285,32 +285,32 @@ describe('components/Textarea', () => {
     const { vm } = wrapper
     await vm.$nextTick()
     await blurWithValue(null)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await blurWithValue('1')
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await blurWithValue(null)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await blurWithValue('1')
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     await changeTrigger('input')
 
     await inputWithValue(null)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await inputWithValue('1')
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await inputWithValue(null)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await inputWithValue('1')
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     wrapper.destroy()
 
@@ -334,14 +334,6 @@ describe('components/Textarea', () => {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
       await vm.$nextTick()
-    }
-
-    function hasError (err) {
-      if (err) {
-        expect(wrapper.find('.veui-field-error').text()).to.contains(err)
-      } else {
-        expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
-      }
     }
   })
 })

@@ -3,9 +3,9 @@ import { isTopMostOfType, wrapListeners } from '../utils/helper'
 import focusable from './focusable'
 import { asFormChild } from '../components/Form/Form'
 import { asFieldChild } from '../components/Form/Field'
-import { cacheShape } from '../components/Form/_shaped'
+import { cacheFacade } from '../components/Form/_facade'
 
-const makeShape = cacheShape((vm) => {
+const createFacade = cacheFacade((vm) => {
   return {
     getDeclaredName: () => vm.name,
     // 内置校验
@@ -20,10 +20,7 @@ export default {
   mixins: [
     focusable,
     asFormChild('form'),
-    asFieldChild(
-      'field',
-      (vm) => vm.field && vm.field.addPrimaryInput(makeShape(vm))
-    )
+    asFieldChild('field', (vm) => vm.field.addInput(createFacade(vm)))
   ],
   props: {
     name: String,

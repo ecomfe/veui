@@ -2,16 +2,17 @@ import { mount } from '@vue/test-utils'
 import Radio from '@/components/Radio'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
+import { expectFieldError } from '../../../utils'
 
 describe('components/Radio', () => {
-  it('should handle value prop with `null` value.', done => {
+  it('should handle value prop with `null` value.', (done) => {
     let wrapper = mount(Radio, {
       propsData: {
         value: null
       }
     })
 
-    wrapper.vm.$on('input', val => {
+    wrapper.vm.$on('input', (val) => {
       expect(val).to.equal(null)
 
       wrapper.destroy()
@@ -22,7 +23,7 @@ describe('components/Radio', () => {
     wrapper.find('input').trigger('change')
   })
 
-  it('should update checked/model value before change event is fired.', done => {
+  it('should update checked/model value before change event is fired.', (done) => {
     let wrapper = mount({
       components: {
         'veui-radio': Radio
@@ -166,7 +167,7 @@ describe('components/Radio', () => {
       expect([vm.c1, vm.c2, vm.c5]).to.eql(values)
     }
     function expectChecked (values) {
-      expect(radios.wrappers.map(wrapper => wrapper.element.checked)).to.eql(
+      expect(radios.wrappers.map((wrapper) => wrapper.element.checked)).to.eql(
         values
       )
     }
@@ -243,7 +244,7 @@ describe('components/Radio', () => {
     const validators = [
       {
         fields: ['gender'],
-        validate: gender => {
+        validate: (gender) => {
           return !gender
             ? {
               gender: valiErr
@@ -289,32 +290,32 @@ describe('components/Radio', () => {
     const { vm } = wrapper
     await vm.$nextTick()
     await blurWithValue(false)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await blurWithValue(true)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await blurWithValue(false)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await blurWithValue(true)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     await changeTrigger('input')
 
     await inputWithValue(false)
-    hasError(valiErr)
+    expectFieldError(wrapper, valiErr)
 
     await inputWithValue(true)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     vm.validators = null
     await inputWithValue(false)
-    hasError(ruleErr)
+    expectFieldError(wrapper, ruleErr)
 
     await inputWithValue(true)
-    hasError(false)
+    expectFieldError(wrapper, false)
 
     wrapper.destroy()
 
@@ -338,14 +339,6 @@ describe('components/Radio', () => {
       vm.rules = [{ ...vm.rules[0], triggers }]
       vm.validators = [{ ...validators[0], triggers }]
       await vm.$nextTick()
-    }
-
-    function hasError (err) {
-      if (err) {
-        expect(wrapper.find('.veui-field-error').text()).to.contains(err)
-      } else {
-        expect(wrapper.find('.veui-field-error').exists()).to.eql(false)
-      }
     }
   })
 })
