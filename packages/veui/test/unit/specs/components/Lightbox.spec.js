@@ -404,7 +404,8 @@ describe('components/Lightbox', () => {
     wrapper.destroy()
   })
 
-  it('should handle `maskClosable` correctly', async () => {
+  it('should handle `outsideClosable` correctly', async () => {
+    let closed = false
     let wrapper = mount(
       {
         components: {
@@ -413,13 +414,20 @@ describe('components/Lightbox', () => {
         template: `
           <veui-lightbox
             :datasource="items"
-            mask-closable
+            :outside-closable="outClosable"
             :open.sync="open"
+            @close="handleClose"
           />`,
         data () {
           return {
             items: items.slice(0, 1),
-            open: true
+            open: true,
+            outClosable: true
+          }
+        },
+        methods: {
+          handleClose () {
+            closed = true
           }
         }
       },
@@ -437,7 +445,14 @@ describe('components/Lightbox', () => {
     wrapper.find('.veui-lightbox-mask').trigger('click')
     await wait()
     expect(vm.open).to.equal(false)
+    expect(closed).to.equal(true)
 
+    vm.outClosable = false
+    vm.open = true
+    await wait()
+    wrapper.find('.veui-lightbox-mask').trigger('click')
+    await wait()
+    expect(vm.open).to.equal(true)
     wrapper.destroy()
   })
 })

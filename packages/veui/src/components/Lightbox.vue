@@ -237,11 +237,11 @@ export default {
       if (typeof this.beforeClose === 'function') {
         Promise.resolve(this.beforeClose()).then((result) => {
           if (result !== false) {
-            this.commit('open', false)
+            this.doClose()
           }
         })
       } else {
-        this.commit('open', false)
+        this.doClose()
       }
     },
     handleEscape (e) {
@@ -249,6 +249,10 @@ export default {
         e.stopPropagation()
         this.close()
       }
+    },
+    doClose () {
+      this.commit('open', false)
+      this.$emit('close')
     },
     handleAfterClose () {
       this.closeModal()
