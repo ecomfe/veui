@@ -289,7 +289,7 @@ export default {
           ? this.exactActiveItem.name === name
           : false,
         [this.$c('menu-item-active')]: this.activeItems.some(
-          i => i.name === name
+          (i) => i.name === name
         )
       }
     },
@@ -302,7 +302,7 @@ export default {
       this.hoverItem = null
     },
     showActiveItems () {
-      let names = this.activeItems.map(i => i.name)
+      let names = this.activeItems.map((i) => i.name)
       if (names) {
         this.commit('expanded', uniq([...this.realExpanded, ...names]))
       }
@@ -331,7 +331,7 @@ export default {
         this.$nextTick(() => {
           if (this.realCollapsed) {
             let els = this.$el.querySelectorAll(this.getFocusSelector())
-            forEach(els, el => {
+            forEach(els, (el) => {
               el.tabIndex = -1
             })
             // 切换到 collapsed 状态，将 tabIndex=0 还原到第一层
@@ -339,10 +339,11 @@ export default {
               this.normalizedItems,
               ({ tabIndex }) => tabIndex === '0'
             )
-            if (first) {
-              this.$refs[first.name].querySelector(
-                `.${this.$c('menu-link')}`
-              ).tabIndex = 0
+            first = first && this.$refs[first.name]
+            const firstLink =
+              first && first.querySelector(`.${this.$c('menu-link')}`)
+            if (firstLink) {
+              firstLink.tabIndex = 0
             }
           }
         })
