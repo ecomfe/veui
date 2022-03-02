@@ -28,6 +28,7 @@ type Props<T extends Item> = CarouselCommonProps<T> & {
 }
 
 type Emits = {
+  close(): void
   afterclose(): void
 }
 
