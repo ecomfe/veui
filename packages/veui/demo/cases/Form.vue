@@ -620,7 +620,7 @@ import {
   Slider,
   NumberInput
 } from 'veui'
-import moment from 'moment'
+import addMonths from 'date-fns/addMonths'
 import bus from '../bus'
 import 'vue-awesome/icons/indent'
 
@@ -2828,7 +2828,7 @@ export default {
             value: 4
           }
         ],
-        range: [moment().toDate(), moment().add(3, 'month').toDate()]
+        range: [new Date(), addMonths(new Date(), 3)]
       },
       storeData4: {
         name: 'liyunteng1',
@@ -2960,7 +2960,7 @@ export default {
         scheduleInfo: [
           {
             project: 'vuejs',
-            range: [moment().toDate(), moment().add(3, 'month').toDate()]
+            range: [new Date(), addMonths(new Date(), 3)]
           }
         ]
       },
