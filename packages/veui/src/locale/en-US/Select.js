@@ -5,7 +5,8 @@ i18n.register(
   {
     placeholder: 'Select',
     clear: 'Clear',
-    noData: 'No result'
+    noData: 'No result',
+    selectAll: 'Select all'
   },
   {
     ns: 'select'

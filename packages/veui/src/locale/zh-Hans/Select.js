@@ -5,7 +5,8 @@ i18n.register(
   {
     placeholder: '请选择',
     clear: '清除',
-    noData: '无搜索结果'
+    noData: '无搜索结果',
+    selectAll: '全选'
   },
   {
     ns: 'select'

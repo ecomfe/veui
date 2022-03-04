@@ -68,13 +68,10 @@ export default {
   },
   computed: {
     selected () {
-      if (!this.select || this.value == null || this.select.realValue == null) {
-        return false
+      if (this.select && typeof this.select.isSelected === 'function') {
+        return this.select.isSelected(this.value)
       }
-      let selectValue = this.select.realValue
-      return Array.isArray(selectValue)
-        ? selectValue.indexOf(this.value) !== -1
-        : selectValue === this.value
+      return false
     },
     role () {
       return isType(this.select, 'input') ? 'option' : 'menuitem'

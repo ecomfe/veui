@@ -1,7 +1,7 @@
 import Select from 'veui/components/Select'
 import OptionGroup from 'veui/components/OptionGroup'
 import Option from 'veui/components/Option'
-import { mount } from '../../../../utils'
+import { mount, unorderedEqual } from '../../../../utils'
 
 const datasource = [
   {
@@ -980,6 +980,53 @@ describe('components/Select/Select', () => {
     await vm.$nextTick()
     expect(wrapper.findAll('em').length).to.equal(2)
 
+    wrapper.destroy()
+  })
+
+  it('should handle select-all correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-select': Select
+        },
+        data () {
+          return {
+            value: ['1-1', '2-1'],
+            options: datasource
+          }
+        },
+        template: `
+        <veui-select
+          v-model="value"
+          multiple
+          show-select-all
+          :options="options"
+          expanded
+        />`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    wrapper.find('.veui-option').trigger('click')
+    await vm.$nextTick()
+    expect(vm.value.length).to.equal(0)
+
+    wrapper.find('.veui-option').trigger('click')
+    await vm.$nextTick()
+    unorderedEqual(vm.value, ['1-1', '2-1', '2-2', '2-3', '3'])
+
+    vm.value = ['1-2']
+    await vm.$nextTick()
+    wrapper.find('.veui-option').trigger('click')
+    unorderedEqual(vm.value, ['1-1', '1-2', '2-1', '2-2', '2-3', '3'])
+    await vm.$nextTick()
+    wrapper.find('.veui-option').trigger('click')
+    unorderedEqual(vm.value, ['1-2'])
     wrapper.destroy()
   })
 })

@@ -10,13 +10,13 @@ export function mount (component, options = {}) {
 }
 
 export function wait (timeout) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, timeout)
   })
 }
 
 export function nextFrame () {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     requestAnimationFrame(resolve)
   })
 }
@@ -69,4 +69,8 @@ export function expectDisabled (wrapper, force = true) {
     wrapper.attributes('disabled') === 'disabled' ||
     wrapper.attributes('aria-disabled') === 'true'
   expect(disabled).to.equal(force)
+}
+
+export function unorderedEqual (a, b) {
+  expect(a).to.have.members(b).and.to.have.lengthOf(b.length)
 }
