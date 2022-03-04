@@ -254,7 +254,7 @@ export default {
       )
     },
     invalid () {
-      return !!this.errors.length
+      return !this.validating && !!this.errors.length
     },
     errors () {
       return this.validities.filter((va) => va.type === ERROR)

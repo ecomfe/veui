@@ -159,7 +159,7 @@ export default {
       )
 
       let invalid = false
-      const markAndCheckValid = (result) => (invalid = isAllValid(result))
+      const markAndCheckValid = (result) => (invalid = !isAllValid(result))
       this.validationPromise = new Promise((resolve) =>
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(undefined, data))
