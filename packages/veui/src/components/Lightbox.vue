@@ -237,22 +237,19 @@ export default {
       if (typeof this.beforeClose === 'function') {
         Promise.resolve(this.beforeClose()).then((result) => {
           if (result !== false) {
-            this.doClose()
+            this.commit('open', false)
           }
         })
       } else {
-        this.doClose()
+        this.commit('open', false)
       }
+      this.$emit('close')
     },
     handleEscape (e) {
       if (this.escapable) {
         e.stopPropagation()
         this.close()
       }
-    },
-    doClose () {
-      this.commit('open', false)
-      this.$emit('close')
     },
     handleAfterClose () {
       this.closeModal()
