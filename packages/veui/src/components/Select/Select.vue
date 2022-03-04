@@ -16,7 +16,7 @@ import useSearchable from '../../mixins/searchable'
 import { useKeySelect } from '../../mixins/key-select'
 import useControllable from '../../mixins/controllable'
 import i18n from '../../mixins/i18n'
-import { find } from '../../utils/datasource'
+import { find, walk } from '../../utils/datasource'
 import { uniqueId, omit } from 'lodash'
 import { contains, focusIn } from '../../utils/dom'
 import { renderSlot } from '../../utils/helper'
@@ -29,6 +29,8 @@ config.defaults(
   },
   'select'
 )
+
+const SELECT_ALL_VALUE = Symbol('select_all')
 
 export default {
   name: 'veui-select',
@@ -81,6 +83,11 @@ export default {
     searchable: Boolean,
     options: Array,
     multiple: Boolean,
+    showSelectAll: Boolean,
+    composition: {
+      type: Boolean,
+      default: true
+    },
     max: Number
   },
   data () {
@@ -99,7 +106,7 @@ export default {
 
       if (this.multiple) {
         return this.realValue
-          .map(val => findOptionByValue(this.realOptions, val))
+          .map((val) => findOptionByValue(this.realOptions, val))
           .filter(Boolean)
       }
 
@@ -122,6 +129,9 @@ export default {
         : this.searchable
           ? this.label
           : ''
+    },
+    realShowSelectAll () {
+      return this.multiple && !this.max && this.showSelectAll
     },
     label () {
       return this.selected ? this.selected.label : ''
@@ -148,7 +158,47 @@ export default {
       return null
     },
     realOptions () {
+      // this.t('selectAll')
       return this.options ? this.options.map(normalizeItem) : this.inlineOptions
+    },
+    optionsWithSelectAll () {
+      if (this.realShowSelectAll) {
+        return [this.selectAllOption, ...this.realOptions]
+      }
+      return this.realOptions
+    },
+    selectAllData () {
+      let selectable = []
+      let deselectable = []
+      let allSelected = true
+      let allIndeterminate = false
+      walk(
+        this.realOptions,
+        (option) => {
+          const { disabled, value, options } = option
+          const isLeaf = !options || !options.length
+
+          if (isLeaf) {
+            const checked = this.realValue.indexOf(value) >= 0
+            allSelected = allSelected && checked
+            allIndeterminate = allIndeterminate || checked
+            if (!disabled && value != null) {
+              const container =
+                this.realValue.indexOf(value) >= 0 ? deselectable : selectable
+              container.push(value)
+            }
+          }
+
+          return !disabled
+        },
+        'options'
+      )
+      return {
+        selectable,
+        deselectable,
+        selected: allSelected && allIndeterminate, // && 目的：空的时候返回false
+        indeterminate: allIndeterminate && !allSelected
+      }
     },
     isFiltered () {
       return !!(this.searchable && this.inputValue)
@@ -161,7 +211,7 @@ export default {
     isMultiLevel () {
       return this.realOptions
         ? this.realOptions.some(
-          option =>
+          (option) =>
             option.options &&
               option.options.length > 0 &&
               option.position === 'popup'
@@ -197,7 +247,7 @@ export default {
         expanded: this.realExpanded,
         value: this.realValue,
         toggle: this.toggleExpanded,
-        select: val => this.commit('value', val),
+        select: (val) => this.commit('value', val),
         close: this.close
       }
     },
@@ -208,6 +258,14 @@ export default {
         (!this.hasLabelSlot || this.realExpanded) &&
         !this.hasSelectedSlot
       )
+    },
+    selectAllOption () {
+      return {
+        label: this.t('selectAll'),
+        value: SELECT_ALL_VALUE,
+        selected: this.selectAllData.isAllSelected,
+        disabled: this.realDisabled
+      }
     }
   },
   watch: {
@@ -227,7 +285,7 @@ export default {
     clear (e) {
       if (this.multiple) {
         let disabledValues = this.realValue
-          .map(value => findOptionByValue(this.realOptions, value))
+          .map((value) => findOptionByValue(this.realOptions, value))
           .filter(({ disabled } = {}) => disabled)
           .map(({ value }) => value)
         this.commit('value', disabledValues)
@@ -259,6 +317,11 @@ export default {
         this.commit('expanded', false)
         this.commit('value', val)
         return
+      }
+
+      // 全选
+      if (SELECT_ALL_VALUE === val) {
+        return this.handleSelectAll()
       }
 
       let index = this.realValue.indexOf(val)
@@ -399,6 +462,28 @@ export default {
       } else {
         focusIn(root)
       }
+    },
+    isSelected (value) {
+      if (value == null || this.realValue == null) {
+        return false
+      } else if (value === SELECT_ALL_VALUE) {
+        return this.selectAllData.selected
+      }
+      let selectValue = this.realValue
+      return Array.isArray(selectValue)
+        ? selectValue.indexOf(value) !== -1
+        : selectValue === value
+    },
+    handleSelectAll () {
+      const { selectable, deselectable } = this.selectAllData
+      if (deselectable.length) {
+        this.commit(
+          'value',
+          this.realValue.filter((val) => deselectable.indexOf(val) === -1)
+        )
+      } else if (selectable.length) {
+        this.commit('value', this.realValue.concat(selectable))
+      }
     }
   },
   render () {
@@ -424,14 +509,18 @@ export default {
       : null
 
     let option = this.multiple
-      ? option => {
+      ? (option) => {
+        const isSelecteAllOption = option.value === SELECT_ALL_VALUE
+        const { selected, indeterminate } = this.selectAllData
+        // checked={!!option.selected} 这里有问题，待排查
         return (
           <Checkbox
             tabindex="-1"
             ui={this.uiParts.checkbox}
-            checked={!!option.selected}
+            checked={isSelecteAllOption ? selected : !!option.selected}
             disabled={!!option.disabled}
-            onClick={e => e.preventDefault()}
+            indeterminate={isSelecteAllOption ? indeterminate : false}
+            onClick={(e) => e.preventDefault()}
           >
             {option.renderLabel
               ? option.renderLabel(omit(option, ['renderLabel']))
@@ -464,7 +553,7 @@ export default {
       </Tag>
     ))
 
-    let renderCustomLabel = props => {
+    let renderCustomLabel = (props) => {
       let customLabel = renderSlot(this, 'label', props)
       if (!customLabel) {
         return null
@@ -473,7 +562,7 @@ export default {
       return <div class={this.$c('select-custom-label')}>{customLabel}</div>
     }
 
-    let renderCustomSelected = props => {
+    let renderCustomSelected = (props) => {
       let customSelected = renderSlot(this, 'selected', props)
       if (!customSelected) {
         return null
@@ -484,7 +573,7 @@ export default {
       )
     }
 
-    let renderLabelOrSelected = props =>
+    let renderLabelOrSelected = (props) =>
       renderCustomLabel(props) || renderCustomSelected(props)
 
     let multiBeforeSlot = this.multiple ? (
@@ -591,7 +680,7 @@ export default {
             onBlur={this.handleInputBlur}
             onInput={this.handleTriggerInput}
             autocomplete="off"
-            composition
+            composition={this.composition}
           >
             {!this.multiple &&
             this.searchable &&
@@ -679,7 +768,9 @@ export default {
             >
               {renderSlot(this, 'before', this.slotProps)}
               {renderGroup(
-                this.isFiltered ? this.filteredOptions : this.realOptions,
+                this.isFiltered
+                  ? this.filteredOptions
+                  : this.optionsWithSelectAll,
                 this.isFiltered && !this.filteredOptions.length ? (
                   <div class={this.$c('select-options-no-data')}>
                     {renderSlot(this, 'no-data', {
@@ -703,7 +794,7 @@ function stopPropagation (e) {
 }
 
 function findOptionByValue (options, value) {
-  return find(options, item => item.value === value, 'options')
+  return find(options, (item) => item.value === value, 'options')
 }
 
 function normalizeItem (item) {

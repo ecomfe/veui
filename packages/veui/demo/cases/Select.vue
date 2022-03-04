@@ -47,12 +47,13 @@
     <veui-button>OK</veui-button>
   </section>
   <section>
-    <h2>多选样式：s (自定义 tag slot)</h2>
+    <h2>多选样式：s (自定义 tag slot, 全选)</h2>
     <veui-select
       v-model="defaultMultiValue"
       ui="s"
       v-bind="attrs"
       placeholder="全部"
+      show-select-all
       clearable
       multiple
     >
@@ -164,12 +165,13 @@
     <veui-button>OK</veui-button>
   </section>
   <section>
-    <h2>可搜索多选Select：</h2>
+    <h2>可搜索多选Select：(全选)</h2>
     <veui-select
       v-model="defaultSearchMultiValue"
       v-bind="attrs"
       searchable
       multiple
+      show-select-all
     />
     <veui-button>OK</veui-button>
   </section>
@@ -588,12 +590,13 @@
       <veui-button>OK</veui-button>
     </section>
   </section>
-  <section style="margin-top:500px;">
+  <section style="margin-top: 500px">
     <h2>可搜索分组样式：</h2>
     <veui-select
       v-model="defaultValue5"
       v-bind="optGroupAttrs"
       searchable
+      multiple
       :overlay-options="{ local: true }"
     />
     <veui-button>OK</veui-button>
@@ -934,7 +937,7 @@ export default {
     groupedOpts () {
       return type
         .clone(this.optGroupAttrs.options)
-        .map(group => {
+        .map((group) => {
           delete group.label
           delete group.position
           return group
@@ -947,7 +950,7 @@ export default {
     complexResult () {
       return this.searchResult
         ? (this.complex || [])
-          .map(v => ({
+          .map((v) => ({
             label: v + '**',
             value: v
           }))
@@ -956,7 +959,7 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach(child => {
+    this.$children.forEach((child) => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })

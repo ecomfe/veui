@@ -15,6 +15,14 @@ export type MultipleAndValue<T extends Item> =
   | {
       multiple: true
       value?: Array<T['value']>
+      showSelectAll?: false
+      max?: number
+    }
+  | {
+      multiple: true
+      value?: Array<T['value']>
+      showSelectAll: true
+      max: undefined
     }
   | {
       multiple?: false
@@ -26,7 +34,7 @@ type Props<T extends Item> = MultipleAndValue<T> & {
   placeholder?: string
   clearable?: boolean
   searchable?: boolean
-  max?: number
+  composition?: boolean
 } & SearchableProps<T>
 
 type Emits = {
