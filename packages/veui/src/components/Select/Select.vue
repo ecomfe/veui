@@ -84,10 +84,7 @@ export default {
     options: Array,
     multiple: Boolean,
     showSelectAll: Boolean,
-    composition: {
-      type: Boolean,
-      default: true
-    },
+    composition: Boolean,
     max: Number
   },
   data () {
@@ -158,7 +155,6 @@ export default {
       return null
     },
     realOptions () {
-      // this.t('selectAll')
       return this.options ? this.options.map(normalizeItem) : this.inlineOptions
     },
     optionsWithSelectAll () {
@@ -512,7 +508,6 @@ export default {
       ? (option) => {
         const isSelecteAllOption = option.value === SELECT_ALL_VALUE
         const { selected, indeterminate } = this.selectAllData
-        // checked={!!option.selected} 这里有问题，待排查
         return (
           <Checkbox
             tabindex="-1"
