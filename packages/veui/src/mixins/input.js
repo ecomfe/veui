@@ -3,24 +3,21 @@ import { isTopMostOfType, wrapListeners } from '../utils/helper'
 import focusable from './focusable'
 import { asFormChild } from '../components/Form/Form'
 import { asFieldChild } from '../components/Form/Field'
-import { cacheFacade } from '../components/Form/_facade'
-
-const createFacade = cacheFacade((vm) => {
-  return {
-    getDeclaredName: () => vm.name,
-    // 内置校验
-    validate: () => {
-      return typeof vm.validate === 'function' ? vm.validate() : undefined
-    }
-  }
-})
+import { useFacade } from '../components/Form/_facade'
 
 export default {
   uiTypes: ['input'],
   mixins: [
     focusable,
+    useFacade((vm) => ({
+      getDeclaredName: () => vm.name,
+      // 内置校验
+      validate: () => {
+        return typeof vm.validate === 'function' ? vm.validate() : undefined
+      }
+    })),
     asFormChild('form'),
-    asFieldChild('field', (vm) => vm.field.addInput(createFacade(vm)))
+    asFieldChild('field', (vm) => vm.field.addInput(vm.getFacade()))
   ],
   props: {
     name: String,

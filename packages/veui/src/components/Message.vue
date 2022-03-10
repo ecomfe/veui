@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import prefix from '../../mixins/prefix'
-import ui from '../../mixins/ui'
+import prefix from '../mixins/prefix'
+import ui from '../mixins/ui'
 import { includes } from 'lodash'
-import Icon from '../Icon'
+import Icon from './Icon'
 
 export default {
   name: 'veui-message',

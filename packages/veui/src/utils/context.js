@@ -37,7 +37,7 @@ export function isValidNodesResolver (v) {
  */
 export function getNodes (ref, context) {
   let vnodes = getVnodes(ref, context)
-  return vnodes.map(item => {
+  return vnodes.map((item) => {
     if (isVnode(item)) {
       return item.elm
     }
@@ -57,10 +57,10 @@ export function getVnodes (ref, context) {
     } else {
       vnodes = Array.isArray(vnodes) ? vnodes : [vnodes]
     }
-    vnodes = vnodes.filter(Boolean).map(item => item.$vnode || item)
+    vnodes = vnodes.filter(Boolean).map((item) => item.$vnode || item)
   } else {
     ref = Array.isArray(ref) ? ref : [ref]
-    vnodes = ref.map(item => {
+    vnodes = ref.map((item) => {
       if (item.$vnode) {
         return item.$vnode
       } else if (isVnode(item) || item.nodeType === 1 || item.nodeType === 3) {
@@ -91,9 +91,8 @@ export function getIndexOfType (current, parentType) {
 
   let parentVnodes = parent.$slots.default
   if (parentVnodes) {
-    parentVnodes = (Array.isArray(parentVnodes)
-      ? parentVnodes
-      : [parentVnodes]
+    parentVnodes = (
+      Array.isArray(parentVnodes) ? parentVnodes : [parentVnodes]
     ).filter(({ tag }) => !!tag)
   }
 
@@ -104,7 +103,7 @@ export function getIndexOfType (current, parentType) {
   let currentVnode = getVnodes(current)[0]
 
   // 只是用于每次渲染时插入到当前位置的顺序
-  return findIndex(parentVnodes, vnode => vnode === currentVnode)
+  return findIndex(parentVnodes, (vnode) => vnode === currentVnode)
 }
 
 /**
@@ -116,7 +115,7 @@ export function getIndexOfType (current, parentType) {
 export function findComponent (context, predicate) {
   let comp = null
   function walkChildren (children) {
-    return children.some(i => {
+    return children.some((i) => {
       let match = predicate(i)
       if (match) {
         comp = i
@@ -128,4 +127,14 @@ export function findComponent (context, predicate) {
   }
   walkChildren(context.$children || [])
   return comp
+}
+
+export function bindVm (targets, vm) {
+  return Object.keys(targets).reduce((acc, depName) => {
+    acc[depName] =
+      typeof targets[depName] === 'function'
+        ? (...args) => targets[depName](vm, ...args)
+        : targets[depName]
+    return acc
+  }, {})
 }
