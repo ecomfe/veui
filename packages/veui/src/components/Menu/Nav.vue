@@ -57,12 +57,17 @@
           @click="handleItemClick(item)"
           @keydown="handleKeydown($event, item)"
         >
-          <slot
-            name="item-label"
-            v-bind="item"
+          <span
+            :ref="`label-${item.name}`"
+            :class="$c('nav-item-label-wrapper')"
           >
-            {{ item.label }}
-          </slot>
+            <slot
+              name="item-label"
+              v-bind="item"
+            >
+              {{ item.label }}
+            </slot>
+          </span>
           <slot
             v-if="hasChildren(item)"
             name="item-icon"
@@ -77,7 +82,10 @@
       </slot>
       <veui-overlay
         v-if="!!item.children"
-        :overlay-class="$c('nav-overlay')"
+        :overlay-class="{
+          [$c('nav-overlay')]: true,
+          [$c('nav-more-overlay')]: isMoreBtn(item)
+        }"
         :open="isOpen(item.name)"
         :target="item.name"
         position="bottom-center"
@@ -227,14 +235,14 @@
                     handleGroupLabelClick(group.option, group.closeMenu)
                   "
                 >
-                  <slot
-                    name="item-label"
-                    v-bind="group"
-                  >
-                    <span :class="$c('nav-item-label-wrapper')">{{
-                      group.label
-                    }}</span>
-                  </slot>
+                  <span :class="$c('nav-item-label-wrapper')">
+                    <slot
+                      name="item-label"
+                      v-bind="group"
+                    >
+                      {{ group.label }}
+                    </slot>
+                  </span>
                 </veui-link>
               </slot>
             </template>
@@ -242,6 +250,17 @@
         </div>
       </veui-overlay>
     </li>
+    <li
+      :class="{
+        [$c('nav-indicator')]: true,
+        [hoverIndicatorClass]: true
+      }"
+      :style="
+        hoverIndicatorPosition != null
+          ? `transform: translateX(${hoverIndicatorPosition}px)`
+          : null
+      "
+    />
   </ul>
 </div>
 </template>
@@ -263,6 +282,8 @@ export default {
   data () {
     return {
       hoverItem: null,
+      hoverIndicatorPosition: null,
+      hoverIndicatorClass: '',
       moreBtnPosition: (this.items || []).length
     }
   },
@@ -284,7 +305,7 @@ export default {
         ...items,
         {
           name: 'more',
-          tabIndex: items.some(i => i.tabIndex === 0) ? -1 : 0,
+          tabIndex: items.some((i) => i.tabIndex === 0) ? -1 : 0,
           children: this.restItems
         }
       ]
@@ -316,7 +337,7 @@ export default {
     itemClass (item) {
       if (this.isMoreBtn(item)) {
         return {
-          [this.$c('nav-item-active')]: this.activeItems.some(i =>
+          [this.$c('nav-item-active')]: this.activeItems.some((i) =>
             this.restItems.some(({ name }) => i.name === name)
           )
         }
@@ -328,7 +349,7 @@ export default {
           ? this.exactActiveItem.name === name
           : false,
         [this.$c('nav-item-active')]: this.activeItems.some(
-          i => i.name === name
+          (i) => i.name === name
         )
       }
     },
@@ -363,6 +384,7 @@ export default {
         }
       }
       this.hoverItem = null
+      this.hoverIndicatorClass = ''
     },
     updateLayout () {
       let { clientWidth, scrollWidth } = this.$refs.body
@@ -379,7 +401,20 @@ export default {
     },
     handleItemHover (item) {
       this.hoverItem = item
-      this.hover = true
+      if (this.isMoreBtn(item) || item.disabled) {
+        this.hoverIndicatorClass = ''
+        return
+      }
+      const label = this.$refs[`label-${item.name}`]
+      if (label && label[0]) {
+        const { left: bodyLeft } = this.$refs.body.getBoundingClientRect()
+        const { left, width } = label[0].getBoundingClientRect()
+        this.hoverIndicatorClass = this.hoverIndicatorClass
+          ? this.$c('nav-indicator-move')
+          : this.$c('nav-indicator-hover')
+        // 不要清空 hoverIndicatorPosition 因为要原地消失
+        this.hoverIndicatorPosition = left - bodyLeft + width / 2
+      }
     },
     handleItemClick (item) {
       let { disabled } = item
@@ -445,6 +480,7 @@ export default {
         case 'ArrowDown':
           if (!root) {
             this.hoverItem = item
+            // this.handleItemHover(item)
           } else {
             items = getFocusable(this.$refs[`dropdown-${root.name}`][0])
             this.navigate(e.target, items, true, false)
