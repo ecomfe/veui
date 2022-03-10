@@ -63,6 +63,14 @@
     }
   }
 
+  &.@{veui-prefix}-readonly &-trigger {
+    border-color: @dls-input-border-color-read-only;
+  }
+
+  &.@{veui-prefix}-disabled &-trigger {
+    border-color: @dls-input-border-color-disabled;
+  }
+
   &:not(.@{veui-prefix}-disabled):not(.@{veui-prefix}-invalid) &-trigger {
     &:hover {
       border-color: @dls-input-border-color-hover;
