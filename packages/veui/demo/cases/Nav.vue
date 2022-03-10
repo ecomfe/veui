@@ -125,6 +125,13 @@ export default {
         label: 'Navigation Three',
         name: 'nav-three',
         icon: 'file',
+        children: [
+          {
+            label: 'Link2',
+            name: 'Link2',
+            to: '/nav/link2'
+          }
+        ],
         disabled: true
       },
       {
@@ -167,14 +174,14 @@ export default {
         icon: 'file',
         children: [
           {
-            label: 'Progress',
-            to: '/nav/progress'
-          },
-          {
             label: 'Radio',
             to: '/nav/radio'
           }
         ]
+      },
+      {
+        label: 'Progress',
+        to: '/nav/progress'
       }
     ]
     let nameItems = [

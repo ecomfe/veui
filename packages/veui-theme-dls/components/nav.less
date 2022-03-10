@@ -1,6 +1,9 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
+@dls-nav-item-font-size: @dls-font-size-1;
+// @dls-nav-more-dropdown-spacing: @dls-padding-unit * 6;
+
 .@{veui-prefix}-nav {
   line-height: @dls-line-height-1;
 
@@ -9,7 +12,6 @@
     margin: 0;
     display: flex;
     position: relative;
-    border-bottom: 1px solid @dls-menu-border-color-horizontal;
   }
 
   &-body,
@@ -30,10 +32,44 @@
     }
   }
 
+  &-indicator {
+    .absolute(_, _, 0, 0);
+
+    &::after {
+      content: "";
+      .size(0, @dls-nav-indicator-stroke-width);
+      border-radius: @dls-nav-indicator-border-radius;
+      opacity: 0;
+      display: block;
+      .veui-transition(background-color, box-shadow, opacity, width, transform, margin-left);
+    }
+  }
+
+  &-indicator-hover,
+  &-indicator-move {
+    &::after {
+      .size(@dls-nav-indicator-width-hover, _);
+      opacity: 1;
+      margin-left: -6px;
+      background-color: @dls-nav-indicator-color;
+      box-shadow: @dls-menu-item-shadow-horizontal-current;
+    }
+  }
+
+  &-indicator-move {
+    .veui-transition(transform);
+  }
+
   &-item-label-wrapper,
   &-overlay .@{veui-prefix}-option-group-label,
   &-body &-item {
     position: relative;
+  }
+
+  &-body &-item-label-wrapper {
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
   }
 
   // top level normal item style
@@ -49,42 +85,58 @@
     cursor: pointer;
 
     &:not(.@{veui-prefix}-disabled) {
-      color: @dls-menu-item-font-color-horizontal;
       background-color: @dls-menu-item-background-color-horizontal;
 
-      &::after {
-        content: "";
-        .absolute(_, 0, -1px, 0);
-        .size(auto, @dls-menu-indicator-width);
-        opacity: 0;
-        .veui-transition(background-color, box-shadow, opacity);
+      .@{veui-prefix}-nav-item-label-wrapper {
+        color: @dls-nav-item-font-color;
+
+        // 因为 :active 在每个 item 上，实现 hover -> click 的动画先实现个 hover 样式
+        &::after {
+          content: "";
+          .absolute(_, _, 0, 50%);
+          .size(@dls-nav-indicator-width-hover, @dls-nav-indicator-stroke-width);
+          transform: translateX(-50%);
+          border-radius: @dls-nav-indicator-border-radius;
+          opacity: 0;
+          .veui-transition(background-color, box-shadow, opacity, width);
+        }
       }
 
       &.@{veui-prefix}-nav-item-open {
-        color: @dls-menu-item-font-color-horizontal-hover;
         background-color: @dls-menu-item-background-color-horizontal-hover;
-
-        &::after {
-          background-color: @dls-menu-indicator-color-hover;
-          box-shadow: @dls-menu-item-shadow-horizontal-current;
-          opacity: 1;
+        .@{veui-prefix}-nav-item-label-wrapper {
+          color: @dls-nav-item-font-color-hover;
         }
       }
 
       &[data-focus-visible-added] {
-        color: @dls-menu-item-font-color-horizontal-focus;
         background-color: @dls-menu-item-background-color-horizontal-focus;
+        .@{veui-prefix}-nav-item-label-wrapper {
+          color: @dls-nav-item-font-color-focus;
+        }
       }
 
       &:not(.@{veui-prefix}-nav-more):active {
         color: @dls-menu-item-font-color-horizontal-active;
         background-color: @dls-menu-item-background-color-horizontal-active;
+        .@{veui-prefix}-nav-item-label-wrapper {
+          color: @dls-nav-item-font-color-active;
+        }
+
+        .@{veui-prefix}-nav-item-label-wrapper::after {
+          background-color: @dls-nav-indicator-color-active;
+          box-shadow: @dls-menu-item-shadow-horizontal-current;
+          width: @dls-nav-indicator-width-active;
+          opacity: 1;
+        }
       }
     }
 
     &.@{veui-prefix}-disabled {
       background-color: @dls-menu-item-background-color-horizontal-disabled;
-      color: @dls-menu-item-font-color-horizontal-disabled;
+      .@{veui-prefix}-nav-item-label-wrapper {
+        color: @dls-nav-item-font-color-disabled;
+      }
     }
   }
 
@@ -105,9 +157,10 @@
       font-weight: @dls-menu-item-font-weight-current;
 
       // indicator
-      &::after {
-        background-color: @dls-menu-indicator-color;
+      .@{veui-prefix}-nav-item-label-wrapper::after {
+        background-color: @dls-nav-indicator-color-active;
         box-shadow: @dls-menu-item-shadow-horizontal-current;
+        width: @dls-nav-indicator-width;
         opacity: 1;
       }
 
@@ -115,7 +168,7 @@
         color: @dls-menu-item-font-color-horizontal-current-hover;
         background-color: @dls-menu-item-background-color-horizontal-hover;
 
-        &::after {
+        .@{veui-prefix}-nav-item-label-wrapper::after {
           background-color: @dls-menu-indicator-color-hover;
         }
       }
@@ -124,8 +177,8 @@
         color: @dls-menu-item-font-color-horizontal-current-focus;
         background-color: @dls-menu-item-background-color-horizontal-focus;
 
-        &::after {
-          background-color: @dls-menu-indicator-color-focus;
+        .@{veui-prefix}-nav-item-label-wrapper::after {
+          background-color: @dls-nav-indicator-color-focus;
         }
       }
 
@@ -133,8 +186,9 @@
         color: @dls-menu-item-font-color-horizontal-current-active;
         background-color: @dls-menu-item-background-color-horizontal-active;
 
-        &::after {
-          background-color: @dls-menu-indicator-color-active;
+        .@{veui-prefix}-nav-item-label-wrapper::after {
+          background-color: @dls-nav-indicator-color-active;
+          width: @dls-nav-indicator-width-active;
         }
       }
     }
@@ -144,7 +198,8 @@
   &-expand-icon {
     .size(@dls-menu-item-icon-size-aux);
     margin-left: @dls-menu-card-target-spacing;
-    color: inherit;
+    color: @dls-nav-item-font-color;
+    fill: @dls-nav-item-icon-color-aux;
     .veui-transition(transform, color);
   }
 
@@ -162,6 +217,19 @@
   &-dropdown &-card {
     &:extend(._veui-dropdown-overlay all);
   }
+
+  // 更多下拉的调整
+  // TODO 无 tokens
+  // &-more-overlay &-dropdown > .@{veui-prefix}-option-group {
+  //   padding-top: @dls-nav-more-dropdown-spacing;
+  //   padding-bottom: @dls-nav-more-dropdown-spacing;
+
+  //   .@{veui-prefix}-option-group-label,
+  //   .@{veui-prefix}-option .@{veui-prefix}-nav-item {
+  //     padding-left: @dls-nav-more-dropdown-spacing;
+  //     padding-right: @dls-nav-more-dropdown-spacing;
+  //   }
+  // }
 
   // card
   &-overlay &-card {
