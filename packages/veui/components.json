@@ -221,7 +221,7 @@
   },
   {
     "name": "Message",
-    "path": "Form/Message.vue"
+    "path": "Message.vue"
   },
   {
     "name": "Field",

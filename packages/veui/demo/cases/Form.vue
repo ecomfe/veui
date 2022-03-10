@@ -378,18 +378,12 @@
   </section>
   <section>
     <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
-    <p>
-      <veui-checkbox v-model="iconDisplay">
-        <span>紧凑展示错误</span>
-      </veui-checkbox>
-    </p>
     <veui-form
       ref="form2"
       :data="storeData4"
       :validators="validators"
       :before-validate="beforeValidate"
       :after-validate="afterValidate"
-      :validity-display="iconDisplay ? 'icon' : undefined"
       @submit="submit"
       @invalid="handleInvalid"
     >
@@ -2782,7 +2776,6 @@ export default {
     ]
     return {
       regions: REGIONS_BRAND,
-      iconDisplay: false,
       storeData1: {
         regions: [],
         nickName: '李云腾',

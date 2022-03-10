@@ -31,37 +31,13 @@ import {
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
-import useValidity, {
-  isAllValid,
-  normalizeValiditiesOfFields
-} from './_useValidity'
+import useValidity, { isAllValid, isSimpleValid } from './_useValidity'
 import useValidator from './_useValidator'
-import { useCoupled, cacheFacade } from './_facade'
+import { useCoupled, useFacade } from './_facade'
 
 const { asParent: asFormParent, asChild: asFormChild } = useCoupled('form')
 
 export { asFormChild }
-
-const createFacade = cacheFacade((vm) => ({
-  // 全写成函数目的：惰性响应式
-  isDisabled: () => vm.disabled,
-  isReadonly: () => vm.readonly,
-  getFormData: () => vm.data,
-  getValidityDisplay: () => vm.validityDisplay,
-  isValidating: (...args) => vm.validator.isAnyValidating(...args),
-  addField (field) {
-    vm.fields.push(field)
-    return () => {
-      pull(vm.fields, field)
-    }
-  },
-  getValiditiesOfFields: vm.validityManager.getValiditiesOfFields,
-  updateRuleValidities: vm.validityManager.updateRuleValidities,
-  clearValiditiesOfField: vm.validityManager.clearValiditiesOfField,
-  updateIntrinsicValidities: vm.validityManager.updateIntrinsicValidities,
-  validateForEvent: vm.validateForEvent,
-  getInteractiveEvents: vm.validator.getInteractiveEvents
-}))
 
 export default {
   name: 'veui-form',
@@ -69,7 +45,26 @@ export default {
   mixins: [
     prefix,
     ui,
-    asFormParent(createFacade),
+    useFacade((vm) => ({
+      // 全写成函数目的：惰性响应式
+      isDisabled: () => vm.disabled,
+      isReadonly: () => vm.readonly,
+      getFormData: () => vm.data,
+      isValidating: (...args) => vm.validator.isAnyValidating(...args),
+      addField (field) {
+        vm.fields.push(field)
+        return () => {
+          pull(vm.fields, field)
+        }
+      },
+      getValiditiesOfFields: vm.validityManager.getValiditiesOfFields,
+      updateRuleValidities: vm.validityManager.updateRuleValidities,
+      clearValiditiesOfField: vm.validityManager.clearValiditiesOfField,
+      updateIntrinsicValidities: vm.validityManager.updateIntrinsicValidities,
+      validateForEvent: vm.validateForEvent,
+      getInteractiveEvents: vm.validator.getInteractiveEvents
+    })),
+    asFormParent((vm) => vm.getFacade()),
     useValidity('validityManager'),
     useValidator('validator', {
       getValidators: (vm) => vm.validators,
@@ -100,13 +95,6 @@ export default {
     afterValidate: Function,
     disabled: Boolean,
     readonly: Boolean,
-    validityDisplay: {
-      type: String,
-      default: 'default',
-      validator (val) {
-        return ['default', 'icon'].indexOf(val) >= 0
-      }
-    },
     /* eslint-disable vue/require-prop-types */
     data: {}
     /* eslint-enable vue/require-prop-types */
@@ -158,37 +146,31 @@ export default {
           .map((field) => field.getField())
       )
 
-      let invalid = false
-      const markAndCheckValid = (result) => (invalid = !isAllValid(result))
+      let valid = true
+      const markAndCheckValid = (result, isSimple) =>
+        (valid = isSimple ? isSimpleValid(result) : isAllValid(result))
       this.validationPromise = new Promise((resolve) =>
         isFunction(this.beforeValidate)
           ? resolve(this.beforeValidate.call(undefined, data))
           : resolve()
       )
         .then((result) => {
-          result = normalizeValiditiesOfFields(result)
-          return markAndCheckValid(result) ? this.validate() : result
+          return markAndCheckValid(result, true) ? this.validate() : result
         })
         .then((result) => {
-          if (invalid) {
-            return result
+          if (
+            valid &&
+            markAndCheckValid(result, false) &&
+            isFunction(this.afterValidate)
+          ) {
+            return this.afterValidate.call(undefined, data)
           }
-
-          result = normalizeValiditiesOfFields(result)
-          if (markAndCheckValid(result)) {
-            return isFunction(this.afterValidate)
-              ? this.afterValidate.call(undefined, data)
-              : result
-          }
+          return result
         })
         .then((result) => {
           this.submissionValidating = false
-          if (!invalid) {
-            result = normalizeValiditiesOfFields(result)
-            if (isAllValid(result)) {
-              this.$emit('submit', data, e)
-              return
-            }
+          if (valid && isSimpleValid(result)) {
+            return this.$emit('submit', data, e)
           }
           this.$emit('invalid', result)
         })
@@ -210,33 +192,32 @@ export default {
         return acc
       }, {})
     },
-    validatorValidate (fieldNames) {
-      return Promise.resolve(this.validator.validate(fieldNames)).then(
-        this.updateValidatorValidities
-      )
-    },
-    validateForEvent (eventName, fieldName) {
+    validatorValidate (fieldNames, ruleResult) {
       return Promise.resolve(
-        this.validator.validateForEvent(eventName, fieldName)
+        this.validator.validate(fieldNames, ruleResult)
+      ).then(this.updateValidatorValidities)
+    },
+    validateForEvent (eventName, fieldName, ruleResult) {
+      return Promise.resolve(
+        this.validator.validateForEvent(eventName, fieldName, ruleResult)
       ).then(this.updateValidatorValidities)
     },
     updateValidatorValidities (validityResult) {
       return validityResult.map(({ validator, validities }) => {
-        const validatorName = this.getValidatorName(validator)
         this.validityManager.updateValidatorValidities(
-          validatorName,
+          this.getValidatorName(validator),
           validities
         )
         return validities
       })
     },
     validate (fieldNames) {
-      return Promise.all([
-        this.ruleValidate(fieldNames),
-        this.validatorValidate(fieldNames)
-      ]).then(([ruleResult, valiResult]) => {
-        return mergeWith({}, ruleResult, ...valiResult, mergeValidities)
-      })
+      const ruleResult = this.ruleValidate(fieldNames)
+      return this.validatorValidate(fieldNames, ruleResult).then(
+        (valiResult) => {
+          return mergeWith({}, ruleResult, ...valiResult, mergeValidities)
+        }
+      )
     },
     // @deprecrated
     reset (names) {

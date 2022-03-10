@@ -83,7 +83,6 @@ import { normalizeInt } from '../utils/helper'
 import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 import warn from '../utils/warn'
 import '../common/global'
-import { ValidityType } from './Form/_useValidity'
 import i18nManager from '../managers/i18n'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
@@ -285,12 +284,9 @@ export default {
       let result = true
       if (this.realMaxlength != null) {
         if (this.length > this.realMaxlength) {
-          result = {
-            type: ValidityType.ERROR,
-            message: i18nManager.get('rules.maxLength', {
-              ruleValue: this.realMaxlength
-            })
-          }
+          result = i18nManager.get('rules.maxLength', {
+            ruleValue: this.realMaxlength
+          })
         }
 
         if (this.field) {

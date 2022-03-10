@@ -23,7 +23,7 @@
 <script>
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import Message from './Message'
+import Message from '../Message'
 
 export default {
   name: 'veui-field-messages',
