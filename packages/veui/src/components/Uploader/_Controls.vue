@@ -2,7 +2,11 @@
 <div :class="$c('uploader-controls')">
   <template v-for="(control, controlIndex) in items">
     <veui-dropdown
-      v-if="control.children && control.children.length"
+      v-if="
+        control.children &&
+          control.children.length &&
+          !(control.disabled != null ? control.disabled : disabled)
+      "
       :key="`${control.label}-${controlIndex}`"
       :class="$c('control-item')"
       :options="control.children"
@@ -18,9 +22,6 @@
         <veui-button
           :key="control.name"
           :ui="buttonUi"
-          :disabled="
-            control.disabled !== undefined ? control.disabled : disabled
-          "
           :aria-label="control.label"
           v-bind="props"
           v-on="handlers"
@@ -31,10 +32,9 @@
       </template>
     </veui-dropdown>
     <veui-button
-      v-else
+      v-else-if="!(control.disabled != null ? control.disabled : disabled)"
       :key="control.name"
       :ui="buttonUi"
-      :disabled="control.disabled !== undefined ? control.disabled : disabled"
       :class="$c('control-item')"
       :aria-label="control.label"
       @click="handleButtonClick(control.name)"

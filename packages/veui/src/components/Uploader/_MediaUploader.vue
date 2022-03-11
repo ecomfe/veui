@@ -160,7 +160,7 @@
       :class="{
         [`${listClass}-item`]: true,
         [`${listClass}-item-upload`]: true,
-        [`${listClass}-item-hidden`]: !addable
+        [`${listClass}-item-hidden`]: !disabled && !addable
       }"
     >
       <slot name="upload">
@@ -168,9 +168,8 @@
           :class="{
             [$c('uploader-list-media-container')]: true,
             [$c('uploader-list-media-container-upload')]: true,
-            [$c(
-              'uploader-list-media-item-entry-dropdown-open'
-            )]: expandedEntryDropdown
+            [$c('uploader-list-media-item-entry-dropdown-open')]:
+              expandedEntryDropdown
           }"
         >
           <label
@@ -299,7 +298,7 @@ export default {
         ? this.controls({ ...file.value, status: file.status }, defaultControls)
         : defaultControls
 
-      return controls.map(control => {
+      return controls.map((control) => {
         return {
           ...control,
           children: normalizeDropdownDatasource(control.children)
@@ -319,7 +318,7 @@ export default {
 
       let entries = this.entries ? this.entries(defaultEntries) : defaultEntries
 
-      return entries.map(entry => {
+      return entries.map((entry) => {
         return {
           ...entry,
           children: normalizeDropdownDatasource(entry.children)
@@ -359,7 +358,7 @@ function normalizeDropdownDatasource (items) {
   if (!items) {
     return []
   }
-  return items.map(item => {
+  return items.map((item) => {
     return {
       ...item,
       value: item.name,

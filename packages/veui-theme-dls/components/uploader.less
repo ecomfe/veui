@@ -12,7 +12,7 @@
   .@{veui-prefix}-disabled {
     .@{veui-prefix}-icon,
     .dls-icon {
-      color: currentColor;
+      color: currentcolor;
     }
   }
 
@@ -189,7 +189,9 @@
       }
 
       &:hover {
-        .@{veui-prefix}-uploader-entries-container {
+        &
+          > .@{veui-prefix}-uploader-input-label-media:not(.@{veui-prefix}-disabled)
+          + .@{veui-prefix}-uploader-entries-container {
           opacity: 1;
         }
       }
