@@ -16,15 +16,20 @@
       <veui-tab
         :label="label1"
         name="answers"
+        removable
       >
         {{ count }}
       </veui-tab>
-      <veui-tab name="articles">
+      <veui-tab
+        name="articles"
+        removable
+      >
         <template #label>{{ label2 }}</template>
       </veui-tab>
       <veui-tab
         :label="label3"
         name="shares"
+        removable
       />
       <template #extra>
         <div class="extra">
@@ -53,6 +58,7 @@
       <veui-tab
         label="回答问题"
         name="answers"
+        removable
       />
       <veui-tab
         label="文章评论"
@@ -61,6 +67,7 @@
       <veui-tab
         label="分享朋友圈"
         name="shares"
+        removable
       />
     </veui-tabs>
 
@@ -71,15 +78,18 @@
       <veui-tab
         label="回答问题"
         name="answers"
+        removable
       />
       <veui-tab
         label="文章评论"
         name="articles"
+        removable
       />
       <veui-tab
         label="分享朋友圈"
         name="shares"
         status="success"
+        removable
       />
     </veui-tabs>
   </section>
@@ -263,7 +273,7 @@
         label="Progress"
         to="/tabs/progress"
       >
-        <div style="border: 1px solid red; padding: 5px;">
+        <div style="border: 1px solid red; padding: 5px">
           <h3>包一点内容</h3>
           <router-view/>
         </div>
@@ -647,25 +657,25 @@ export default {
       })
     },
     removeTab0 ({ name }) {
-      let index = findIndex(this.tabs0, tab => tab.name === name)
+      let index = findIndex(this.tabs0, (tab) => tab.name === name)
       if (index !== -1) {
         this.tabs0.splice(index, 1)
       }
     },
     removeTab1 ({ name }) {
-      let index = findIndex(this.tabs1, tab => tab.name === name)
+      let index = findIndex(this.tabs1, (tab) => tab.name === name)
       if (index !== -1) {
         this.tabs1.splice(index, 1)
       }
     },
     removeTab2 ({ name }) {
-      let index = findIndex(this.tabs2, tab => tab.name === name)
+      let index = findIndex(this.tabs2, (tab) => tab.name === name)
       if (index !== -1) {
         this.tabs2.splice(index, 1)
       }
     },
     removeTab3 ({ name }) {
-      let index = findIndex(this.tabs3, tab => tab.name === name)
+      let index = findIndex(this.tabs3, (tab) => tab.name === name)
       if (index !== -1) {
         this.tabs3.splice(index, 1)
       }
