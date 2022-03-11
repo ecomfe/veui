@@ -295,10 +295,12 @@ export default {
     const renderTabItem = this.$scopedSlots['tab-item']
     const renderTabContent = (props) => (
       <div class={this.$c('tabs-item-label-content')}>
-        {renderItem(
-          [props.renderLabel, this.$scopedSlots['tab-label']],
-          props
-        ) || props.label}
+        <div>
+          {renderItem(
+            [props.renderLabel, this.$scopedSlots['tab-label']],
+            props
+          ) || props.label}
+        </div>
         {props.status ? (
           <Icon
             class={[

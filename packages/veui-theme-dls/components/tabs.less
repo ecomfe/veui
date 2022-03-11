@@ -3,7 +3,6 @@
 .@{veui-prefix}-tabs {
   @remove-icon-size: @dls-tab-icon-size-aux;
 
-  .make-margin-left(@dls-tab-spacing-x-m);
   position: relative;
   font-size: @dls-tab-font-size-m;
   line-height: @dls-line-height-1;
@@ -14,6 +13,7 @@
     align-items: center;
     white-space: nowrap;
     height: @dls-tab-height-m;
+    margin: 0 @dls-tab-menu-padding-normal;
 
     &::before {
       content: "";
@@ -47,27 +47,54 @@
     align-items: center;
   }
 
-  .make-margin-left(@margin) {
-    &-item {
-      & + & {
-        margin-left: @margin;
-      }
+  .make-item-spacing(@variant, @size) {
+    @spacing-name: ~"dls-tab-spacing-@{variant}-@{size}";
+    @spacing: @@spacing-name;
+    @padding-name: ~"dls-tab-padding-@{variant}-@{size}";
+    @padding: @@padding-name;
+    @min-width-name: ~"dls-tab-min-width-@{variant}-@{size}";
+    @min-width: @@min-width-name;
+    @max-width-name: ~"dls-tab-max-width-@{variant}-@{size}";
+    @max-width: @@max-width-name;
+    @half_spacing: @spacing / 2;
+    @nav-spacing-name: ~"dls-tab-nav-spacing-@{variant}-@{size}";
+    @nav-spacing: @@nav-spacing-name;
+
+    &-item-label {
+      margin: 0 @half_spacing;
+      padding-left: @padding;
+      padding-right: @padding;
+      min-width: @min-width;
+      max-width: @max-width;
+    }
+
+    &-item:first-child .@{veui-prefix}-tabs-item-label {
+      margin-left: 0;
+    }
+
+    &-item-remove {
+      .absolute(50%, calc(@half_spacing - @dls-tab-remove-spacing - @remove-icon-size), _, _);
     }
 
     &-tip,
     &:not(&-empty) &-add {
-      margin-left: @margin;
+      margin-left: @half_spacing;
+    }
+
+    &-prev,
+    &-next {
+      .margin(_, @nav-spacing);
     }
   }
 
   &-prev,
   &-next {
-    .margin(_, @dls-tab-nav-spacing-m);
-
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-tab-icon-size-aux);
     }
   }
+
+  .make-item-spacing(normal, m);
 
   &-item {
     position: relative;
@@ -83,7 +110,6 @@
     & > &-label {
       display: flex;
       align-items: center;
-      padding: 0 @dls-tab-padding-x-m;
       text-decoration: none;
       outline: none;
       position: relative;
@@ -165,32 +191,21 @@
     &-label-content {
       display: flex;
       align-items: center;
+      max-width: 100%;
       .veui-transition(transform);
 
       .@{veui-prefix}-icon,
       .dls-icon {
         .dls-icon-size(@dls-tab-icon-size);
       }
-    }
 
-    &-removable&-remove-focus &-label-content,
-    &-removable &-label[data-focus-visible-added] &-label-content,
-    &-removable:hover &-label-content {
-      @offset: dls-sum(
-        calc(@dls-tab-content-spacing * -0.5),
-        calc(@remove-icon-size * -0.5)
-      );
-
-      transform: ~"translateX(@{offset})";
+      > * {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     &-remove {
-      @offset: dls-sum(
-        @dls-tab-padding-x-m,
-        calc(@dls-tab-content-spacing * -0.5),
-        calc(@remove-icon-size * -0.5)
-      );
-      .absolute(50%, @offset, _, _);
       transform: translateY(-50%) scale(0.5);
       opacity: 0;
       .veui-transition(transform, opacity);
@@ -239,7 +254,19 @@
   &-add.@{veui-prefix}-button {
     flex: 0 0 auto;
     align-self: center;
-    color: @dls-tab-font-color;
+    color: @dls-foreground-color-neutral-highlightable;
+
+    &:hover {
+      color: @dls-foreground-color-neutral-highlightable-hover;
+    }
+
+    &:active {
+      color: @dls-foreground-color-neutral-highlightable-active;
+    }
+
+    &.@{veui-prefix}-disabled {
+      color: @dls-foreground-color-neutral-highlightable-disabled;
+    }
   }
 
   &-tip {
@@ -247,46 +274,32 @@
   }
 
   &[ui~="l"] {
-    .make-margin-left(@dls-tab-spacing-x-l);
     font-size: @dls-tab-font-size-l;
   }
 
   &[ui~="l"] & {
+    .make-item-spacing(normal, l);
+
     &-menu {
       height: @dls-tab-height-l;
-    }
-
-    &-item-label {
-      padding: 0 @dls-tab-padding-x-l;
-    }
-
-    &-prev,
-    &-next {
-      .margin(_, @dls-tab-nav-spacing-l);
     }
   }
 
   &[ui~="s"] {
-    .make-margin-left(@dls-tab-spacing-x-s);
     font-size: @dls-tab-font-size-s;
   }
 
   &[ui~="s"] & {
+    .make-item-spacing(normal, s);
+
     &-menu {
       height: @dls-tab-height-s;
-    }
-
-    &-item-label {
-      padding: 0 @dls-tab-padding-x-s;
-    }
-
-    &-prev,
-    &-next {
-      .margin(_, @dls-tab-nav-spacing-s);
     }
   }
 
   &[ui~="simple"] & {
+    .make-item-spacing(simple, s);
+
     &-menu {
       height: auto;
 
@@ -320,12 +333,20 @@
     }
   }
 
+  &[ui~="simple"][ui~="s"] & {
+    .make-item-spacing(simple, s);
+  }
+
+  &[ui~="simple"][ui~="l"] & {
+    .make-item-spacing(simple, l);
+  }
+
   &[ui~="strong"] & {
     &-menu {
       height: @dls-tab-menu-height-strong-m;
       .padding(
         dls-sum(@dls-tab-menu-height-strong-m, -@dls-tab-height-m),
-        @dls-tab-menu-padding-x-strong-m,
+        @dls-tab-menu-padding-strong-m,
         _
       );
       background-color: @dls-tab-menu-background-color-strong;
@@ -337,15 +358,16 @@
       }
     }
 
+    &-extra {
+      margin-left: @dls-tab-nav-spacing-extra-strong-m;
+    }
+
     &-item {
       height: @dls-tab-height-m;
 
-      & + .@{veui-prefix}-tabs-item {
-        margin-left: @dls-tab-spacing-x-strong-m;
-      }
-
       &-label {
-        padding: 0 @dls-tab-padding-x-strong-m;
+        margin: @dls-tab-spacing-strong-m;
+        padding: 0 @dls-tab-padding-strong-m;
         background-color: @dls-tab-background-color-strong;
         color: @dls-tab-font-color-strong;
         .border-top-radius(@dls-tab-border-radius-strong-m);
@@ -408,25 +430,30 @@
       &-remove {
         z-index: 2;
         @offset: dls-sum(
-          @dls-tab-padding-x-strong-m,
+          @dls-tab-padding-strong-m,
           calc(@dls-tab-content-spacing * -0.5),
-          calc(@remove-icon-size * -0.5)
+          calc(@remove-icon-size * -1)
         );
         right: @offset;
       }
     }
 
+    &-prev,
+    &-next {
+      .margin(_, @dls-tab-nav-spacing-strong-m);
+    }
+
     &-prev {
       margin-left: dls-sum(
-        @dls-tab-nav-spacing-m,
-        @dls-tab-menu-padding-x-strong-m * -1
+        @dls-tab-nav-spacing-strong-m,
+        @dls-tab-menu-padding-strong-m * -1
       );
     }
 
     &-next:last-child {
       margin-right: dls-sum(
-        @dls-tab-nav-spacing-m,
-        @dls-tab-menu-padding-x-strong-m * -1
+        @dls-tab-nav-spacing-strong-m,
+        @dls-tab-menu-padding-strong-m * -1
       );
     }
 

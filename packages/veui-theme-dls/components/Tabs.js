@@ -2,7 +2,7 @@ import {
   IconTimes,
   IconChevronLeft,
   IconChevronRight,
-  IconPlus,
+  IconPlusSquare,
   IconCheckCircle,
   IconExclamationCircle,
   IconInfoCircle,
@@ -14,7 +14,7 @@ ui.defaults(
   {
     icons: {
       remove: IconTimes,
-      add: IconPlus,
+      add: IconPlusSquare,
       prev: IconChevronLeft,
       next: IconChevronRight,
       success: IconCheckCircle,
