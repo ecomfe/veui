@@ -17,7 +17,10 @@ export default {
       }
     })),
     asFormChild('form'),
-    asFieldChild('field', (vm) => vm.field.addInput(vm.getFacade()))
+    asFieldChild(
+      'field',
+      (vm) => vm.isTopMostInput && vm.field.addInput(vm.getFacade())
+    )
   ],
   props: {
     name: String,
@@ -52,14 +55,16 @@ export default {
     realInvalid () {
       return Boolean(
         this.invalid ||
-          (this.field && this.field.isInvalid() && this.isTopMostInput)
+          (this.field &&
+            this.field.isInvalid(this.getFacade()) &&
+            this.isTopMostInput)
       )
     },
     isUnderField () {
       return this.field && this.field.getName() && this.isTopMostInput
     },
     listenersFromField () {
-      return this.field.getInteractiveListeners()
+      return this.field.getInteractiveListeners(this.getFacade())
     },
     listenersWithValidations () {
       // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归

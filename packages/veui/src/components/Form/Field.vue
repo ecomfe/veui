@@ -71,6 +71,7 @@ import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import { pull, get, last, find, uniq } from 'lodash'
 import { getVnodes } from '../../utils/context'
+import { getTypedAncestor } from '../../utils/helper'
 import Icon from '../Icon'
 import Tooltip from '../Tooltip'
 import Vue from 'vue'
@@ -106,35 +107,28 @@ export default {
     useFacade((vm) => ({
       isDisabled: () => (vm.withholdValidity ? false : vm.realDisabled),
       isReadonly: () => (vm.withholdValidity ? false : vm.realReadonly),
-      isInvalid: () => (vm.withholdValidity ? false : vm.invalid),
-      getInteractiveListeners: () =>
-        vm.withholdValidity ? {} : vm.interactiveListeners,
+      isInvalid: (input) => (vm.isPassThrough(input) ? vm.invalid : false),
+      getInteractiveListeners: (input) =>
+        vm.isPassThrough(input) ? vm.interactiveListeners : {},
       isFieldset: () => vm.isFieldset,
       isAbstract: () => vm.realAbstract,
       getAbstractFieldNames: () => vm.abstractFieldNames,
-      validate: vm.validate,
       getName: () => vm.realName,
       getField: () => vm.realField,
       getFieldValue: vm.getFieldValue,
       resetValue: vm.resetValue,
+      validate: vm.validate,
+      updateIntrinsicValidities: vm.updateIntrinsicValidities,
+      // this 和 parentField 之间没有 input 即返回 true, 调用方保证 parentField 和 vm 的父子关系
+      isDirectSubField: (parentField) =>
+        !getTypedAncestor(vm, 'input', parentField),
       addInput (input) {
         vm.inputs.push(input)
         return () => pull(vm.inputs, input)
       },
-      updateIntrinsicValidities: vm.updateIntrinsicValidities,
-      addField (shape) {
-        vm.fields.push(shape)
-        let cancel = null
-        if (vm.form) {
-          cancel = vm.form.addField(shape)
-        }
-
-        return () => {
-          pull(vm.fields, shape)
-          if (typeof cancel === 'function') {
-            cancel()
-          }
-        }
+      addField (field) {
+        vm.fields.push(field)
+        return () => pull(vm.fields, field)
       }
     })),
     asFieldParent((vm) => vm.getFacade()),
@@ -156,7 +150,7 @@ export default {
     rules: [String, Array],
     field: String,
     abstract: Boolean, // 无label（无margin），不展示错误信息
-    withholdValidity: Boolean // 不自动invalid，不自动listener，不自动得到validity??
+    withholdValidity: Boolean // 不自动invalid，不自动listener，不自动 disabled 和 readonly
   },
   data () {
     return {
@@ -181,10 +175,18 @@ export default {
   },
   computed: {
     realDisabled () {
-      return this.disabled || (!!this.form && this.form.isDisabled())
+      return (
+        this.disabled ||
+        (!!this.parentField && this.parentField.isDisabled()) ||
+        (!!this.form && this.form.isDisabled())
+      )
     },
     realReadonly () {
-      return this.readonly || (!!this.form && this.form.isReadonly())
+      return (
+        this.readonly ||
+        (!!this.parentField && this.parentField.isReadonly()) ||
+        (!!this.form && this.form.isReadonly())
+      )
     },
     validating () {
       return this.form.isValidating(this.validityKeys)
@@ -204,6 +206,13 @@ export default {
     },
     inFieldset () {
       return this.parentField ? this.parentField.isFieldset() : false
+    },
+    hasDirectSubField () {
+      return this.fields.some((field) => field.isDirectSubField(this))
+    },
+    // 不自动和 input 联动，当 Field 下面直接嵌套 Field 那么所有自动绑定都会取消
+    realWithhold () {
+      return this.withholdValidity || this.isFieldset || this.hasDirectSubField
     },
     validities () {
       return this.form ? this.form.getValiditiesOfFields(this.validityKeys) : []
@@ -225,7 +234,7 @@ export default {
     },
     renderableValidities () {
       return this.validities.filter(
-        ({ message, renderError }) => !!message || !!renderError
+        ({ message, render }) => !!message || !!render
       )
     },
     invalid () {
@@ -292,6 +301,15 @@ export default {
         throw new Error('veui fields should be used in a form scope.')
       }
     },
+    isPassThrough (input) {
+      const fieldsetLike = this.isFieldset || this.hasDirectSubField
+      return (
+        !this.withholdValidity &&
+        !fieldsetLike &&
+        input &&
+        input === this.primaryInput
+      )
+    },
     updateIntrinsicValidities (validities) {
       this.assertForm()
       this.form.updateIntrinsicValidities(
@@ -319,7 +337,7 @@ export default {
       ) {
         const inputResult = normalizeValidities(primaryInput.validate())
         if (inputResult !== true) {
-          return (result !== true ? [] : result).concat(inputResult)
+          return (result === true ? [] : result).concat(inputResult)
         }
       }
       return result

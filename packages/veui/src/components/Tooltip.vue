@@ -146,7 +146,6 @@ export default {
       return getNodes(this.target, this.$vnode.context)[0]
     },
     openHandler () {
-      debugger
       this.commit('open', true)
     },
     closeHandler () {

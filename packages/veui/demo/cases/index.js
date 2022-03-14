@@ -8,6 +8,7 @@ import Breadcrumb from './Breadcrumb'
 import Input from './Input'
 import InputGroup from './InputGroup'
 import Form from './Form'
+import FormValidation from './FormValidation'
 import Calendar from './Calendar'
 import DatePicker from './DatePicker'
 import Select from './Select'
@@ -180,6 +181,11 @@ export default [
     path: '/form',
     name: 'Form',
     component: Form
+  },
+  {
+    path: '/form-validation',
+    name: 'FormValidation',
+    component: FormValidation
   },
   {
     path: '/grid',
