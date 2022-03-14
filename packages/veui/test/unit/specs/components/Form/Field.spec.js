@@ -142,7 +142,7 @@ describe('components/Form/Field', () => {
       wrapper.find('form').trigger('submit')
     })
     form.$on('submit', () => {
-      expectFieldError(fieldWrapper, true)
+      expectFieldError(fieldWrapper, false)
       wrapper.destroy()
     })
     inputWrapper.setValue('123456')

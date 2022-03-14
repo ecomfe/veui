@@ -169,10 +169,20 @@ export default {
         })
         .then((result) => {
           this.submissionValidating = false
-          if (valid && isSimpleValid(result)) {
+          // before/after 返回一般仅仅支持 boolean?
+          if (
+            valid &&
+            markAndCheckValid(result, isFunction(this.afterValidate))
+          ) {
             return this.$emit('submit', data, e)
           }
           this.$emit('invalid', result)
+        })
+        // 如果发生 hooks 中发生错误，最后也保证下重置 submissionValidating
+        .finally(() => {
+          if (this.submissionValidating) {
+            this.submissionValidating = false
+          }
         })
 
       return this.validationPromise

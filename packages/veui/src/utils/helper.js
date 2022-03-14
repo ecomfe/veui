@@ -25,7 +25,9 @@ export function getTypedAncestor (component, type, direct) {
     if (isType(current, type)) {
       return current
     }
-    if (direct) {
+    // direct 是 boolean，那么只往上找一级
+    // direct 若是 vm，那么表示在这个 vm 下找
+    if (direct === true || current === direct) {
       break
     }
     current = current.$parent
