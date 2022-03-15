@@ -5,14 +5,10 @@
     <veui-checkbox>未绑定数据</veui-checkbox>
   </section>
   <section>
-    <veui-checkbox :checked="false">
-      受控checked：永远为false
-    </veui-checkbox>
+    <veui-checkbox :checked="false"> 受控checked：永远为false </veui-checkbox>
   </section>
   <section>
-    <veui-checkbox :checked="true">
-      受控checked：永远为true
-    </veui-checkbox>
+    <veui-checkbox :checked="true"> 受控checked：永远为true </veui-checkbox>
   </section>
   <section>
     <veui-checkbox
@@ -25,30 +21,22 @@
     {{ current }}
   </section>
   <section>
-    <veui-checkbox v-model="checked1">
-      正常状态
-    </veui-checkbox>
+    <veui-checkbox v-model="checked1"> 正常状态 </veui-checkbox>
   </section>
   <section>
     <veui-checkbox
       v-model="checked2"
       ui="s"
-    >
-      正常状态
-    </veui-checkbox>
+    > 正常状态 </veui-checkbox>
   </section>
   <section>
-    <veui-checkbox v-model="checked3">
-      选中状态
-    </veui-checkbox>
+    <veui-checkbox v-model="checked3"> 选中状态 </veui-checkbox>
   </section>
   <section>
     <veui-checkbox
       v-model="checked4"
       ui="s"
-    >
-      选中状态
-    </veui-checkbox>
+    > 选中状态 </veui-checkbox>
   </section>
   <section>
     <veui-checkbox
@@ -73,9 +61,7 @@
     <veui-checkbox
       v-model="checked7"
       disabled
-    >
-      选中无效状态
-    </veui-checkbox>
+    > 选中无效状态 </veui-checkbox>
   </section>
   <section>
     <veui-checkbox
@@ -90,9 +76,7 @@
     <veui-checkbox
       v-model="checked9"
       disabled
-    >
-      未选无效状态
-    </veui-checkbox>
+    > 未选无效状态 </veui-checkbox>
   </section>
   <section>
     <veui-checkbox
@@ -147,6 +131,19 @@
       Toggle
     </veui-button>
   </section>
+  <section style="width: 200px">
+    <h4>换行样式</h4>
+    <section>
+      <veui-checkbox>
+        这是一句很长很长很长很长很长很长很长很长很长的文案
+      </veui-checkbox>
+    </section>
+    <section>
+      <veui-checkbox ui="s">
+        这是一句很长很长很长很长很长很长很长很长很长的文案
+      </veui-checkbox>
+    </section>
+  </section>
   <section>
     <h4>复选框组</h4>
     <p>
@@ -162,21 +159,15 @@
       <veui-checkbox
         v-model="group"
         value="A"
-      >
-        A
-      </veui-checkbox>
+      > A </veui-checkbox>
       <veui-checkbox
         v-model="group"
         value="B"
-      >
-        B
-      </veui-checkbox>
+      > B </veui-checkbox>
       <veui-checkbox
         v-model="group"
         value="C"
-      >
-        C
-      </veui-checkbox>
+      > C </veui-checkbox>
     </p>
     <p>{{ group }}</p>
   </section>
