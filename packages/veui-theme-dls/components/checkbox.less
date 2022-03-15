@@ -6,11 +6,11 @@
   position: relative;
   color: @dls-checkbox-font-color;
   cursor: pointer;
-  .make-size(@dls-checkbox-font-size-m);
 
   .make-size(@font-size) {
+    @lh: dls-even(dls-line-height(@dls-line-height-1, @font-size));
     font-size: @font-size;
-    line-height: dls-even(dls-line-height(@dls-line-height-1, @font-size));
+    line-height: @lh;
   }
 
   input {
@@ -27,9 +27,9 @@
   &-box {
     position: relative;
     display: flex;
+    align-self: flex-start;
     flex-grow: 0;
     flex-shrink: 0;
-    .size(@dls-checkbox-size-m);
     margin-right: @dls-checkbox-spacing;
     border: 1px solid @dls-checkbox-border-color;
     background-color: @dls-checkbox-background-color;
@@ -47,7 +47,7 @@
       path {
         transform: scale(0.8);
         transform-origin: 50% 50%;
-        stroke: currentColor;
+        stroke: currentcolor;
         stroke-width: 1px;
       }
     }
@@ -121,11 +121,21 @@
     color: @dls-checkbox-font-color-disabled;
   }
 
+  &[ui~="m"] {
+    .make-size(@dls-checkbox-font-size-m);
+
+    .@{veui-prefix}-checkbox-box {
+      .size(@dls-checkbox-size-m);
+      margin-top: dls-sum(@lh / 2, -@dls-checkbox-size-m / 2);
+    }
+  }
+
   &[ui~="s"] {
     .make-size(@dls-checkbox-font-size-s);
 
     .@{veui-prefix}-checkbox-box {
       .size(@dls-checkbox-size-s);
+      margin-top: dls-sum(@lh / 2, -@dls-checkbox-size-s / 2);
     }
   }
 }
