@@ -2,16 +2,10 @@
 
 .@{veui-prefix}-checkbox {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   position: relative;
   color: @dls-checkbox-font-color;
   cursor: pointer;
-
-  .make-size(@font-size) {
-    @lh: dls-even(dls-line-height(@dls-line-height-1, @font-size));
-    font-size: @font-size;
-    line-height: @lh;
-  }
 
   input {
     position: absolute;
@@ -19,18 +13,11 @@
     cursor: inherit;
   }
 
-  &-label,
-  &-box {
-    .veui-transition(color);
-  }
-
   &-box {
     position: relative;
     display: flex;
-    align-self: flex-start;
     flex-grow: 0;
     flex-shrink: 0;
-    margin-right: @dls-checkbox-spacing;
     border: 1px solid @dls-checkbox-border-color;
     background-color: @dls-checkbox-background-color;
     color: @dls-checkbox-foreground-color;
@@ -51,6 +38,11 @@
         stroke-width: 1px;
       }
     }
+  }
+
+  &-label {
+    margin-left: @dls-checkbox-spacing;
+    .veui-transition(color);
   }
 
   &-icon-enter,
@@ -121,21 +113,27 @@
     color: @dls-checkbox-font-color-disabled;
   }
 
-  &[ui~="m"] {
-    .make-size(@dls-checkbox-font-size-m);
+  .make-size(@size) {
+    @s: ~"dls-checkbox-size-@{size}";
+    @fs: ~"dls-checkbox-font-size-@{size}";
+
+    font-size: @@fs;
+    line-height: dls-even(dls-line-height(@dls-line-height-1, @@fs));
 
     .@{veui-prefix}-checkbox-box {
-      .size(@dls-checkbox-size-m);
-      margin-top: dls-sum(@lh / 2, -@dls-checkbox-size-m / 2);
+      .size(@@s);
+
+      // Baseline is around 0.1414em above bottom line for macOS's system font
+      // see https://jsbin.com/yimugoxina/edit?html,css,js,output
+      top: dls-sum(@@s / 2, -@@fs / 2, 0.1414em);
     }
   }
 
-  &[ui~="s"] {
-    .make-size(@dls-checkbox-font-size-s);
+  &[ui~="m"] {
+    .make-size(m);
+  }
 
-    .@{veui-prefix}-checkbox-box {
-      .size(@dls-checkbox-size-s);
-      margin-top: dls-sum(@lh / 2, -@dls-checkbox-size-s / 2);
-    }
+  &[ui~="s"] {
+    .make-size(s);
   }
 }

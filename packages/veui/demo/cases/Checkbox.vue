@@ -145,6 +145,12 @@
     </section>
   </section>
   <section>
+    <h4>无文字</h4>
+    <section>
+      <veui-checkbox/>
+    </section>
+  </section>
+  <section>
     <h4>复选框组</h4>
     <p>
       <veui-checkbox
