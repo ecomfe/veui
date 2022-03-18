@@ -1,6 +1,6 @@
 @import "../lib.less";
 @import "./button-group.less";
-@import (reference) "../grouped-button.less";
+@import "../grouped-button.less";
 
 .@{veui-prefix}-radio-button-group {
   // --dls-radio-button-min-width 默认不定义
@@ -12,7 +12,7 @@
   }
 
   .@{veui-prefix}-button {
-    &:extend(._veui-grouped-button all);
+    .veui-grouped-button();
     margin-top: @dls-radio-group-line-spacing;
     pointer-events: auto;
   }

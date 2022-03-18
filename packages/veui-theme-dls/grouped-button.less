@@ -1,6 +1,6 @@
 @import "./lib.less";
 
-._veui-grouped-button {
+.veui-grouped-button() {
   &.@{veui-prefix}-button-selected {
     &,
     &.@{veui-prefix}-disabled {
@@ -17,6 +17,7 @@
     color: @dls-button-font-color-selected;
 
     &:hover {
+      border-color: @dls-button-border-color-selected;
       background-color: @dls-button-background-color-selected-hover;
     }
 

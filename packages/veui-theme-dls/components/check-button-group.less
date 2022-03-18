@@ -1,6 +1,6 @@
 @import "../lib.less";
 @import "./button-group.less";
-@import (reference) "../grouped-button.less";
+@import "../grouped-button.less";
 
 .@{veui-prefix}-check-button-group {
   // --dls-checkbox-button-min-width 默认不定义
@@ -13,7 +13,7 @@
   }
 
   .@{veui-prefix}-button {
-    &:extend(._veui-grouped-button all);
+    .veui-grouped-button();
     margin-top: @dls-checkbox-group-line-spacing;
     pointer-events: auto;
   }
