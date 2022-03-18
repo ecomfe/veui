@@ -2,16 +2,10 @@
 
 .@{veui-prefix}-radio {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   position: relative;
   color: @dls-radio-font-color;
   cursor: pointer;
-  .make-size(@dls-radio-font-size-m);
-
-  .make-size(@font-size) {
-    font-size: @font-size;
-    line-height: dls-even(dls-line-height(@dls-line-height-1, @font-size));
-  }
 
   input {
     position: absolute;
@@ -20,15 +14,13 @@
   }
 
   &-box {
+    position: relative;
     display: flex;
     flex-grow: 0;
     flex-shrink: 0;
-    .size(@dls-radio-size-m);
-    margin-right: @dls-radio-spacing;
     border: 1px solid @dls-radio-border-color;
     background-color: @dls-radio-background-color;
     border-radius: 50%;
-    font-size: @dls-font-size-1;
     .veui-transition(border-color, background-color, box-shadow);
 
     .@{veui-prefix}-icon {
@@ -37,13 +29,17 @@
 
     &::before {
       content: "";
-      margin: auto;
-      .size(@dls-radio-dot-size-m);
+      .absolute(50%, _, _, 50%);
       background-color: @dls-radio-dot-color;
       border-radius: 50%;
-      transform: scale(0);
+      transform: translate(-50%, -50%) scale(0);
       .veui-transition(background-color, transform);
     }
+  }
+
+  &-label {
+    margin-left: @dls-radio-spacing;
+    .veui-transition(color);
   }
 
   & :checked + &-box {
@@ -51,7 +47,7 @@
     background-color: @dls-radio-background-color-checked;
 
     &::before {
-      transform: scale(1);
+      transform: translate(-50%, -50%) scale(1);
     }
   }
 
@@ -120,16 +116,32 @@
     background-color: @dls-radio-background-color-checked-disabled;
   }
 
-  &[ui~="s"] {
-    font-size: @dls-radio-font-size-s;
+  .make-size(@size) {
+    @s: ~"dls-radio-size-@{size}";
+    @fs: ~"dls-radio-font-size-@{size}";
+    @ds: ~"dls-radio-dot-size-@{size}";
+
+    font-size: @@fs;
+    line-height: dls-even(dls-line-height(@dls-line-height-1, @@fs));
+
+    .@{veui-prefix}-radio-box {
+      .size(@@s);
+
+      // Baseline is around 0.1414em above bottom line for macOS's system font
+      // see https://jsbin.com/yimugoxina/edit?html,css,js,output
+      top: dls-sum(@@s / 2, -@@fs / 2, 0.1414em);
+
+      &::before {
+        .size(@@ds);
+      }
+    }
   }
 
-  &[ui~="s"] &-box {
-    .size(@dls-radio-size-s);
-    .make-size(@dls-radio-font-size-s);
+  &[ui~="m"] {
+    .make-size(m);
+  }
 
-    &::before {
-      .size(@dls-radio-dot-size-s);
-    }
+  &[ui~="s"] {
+    .make-size(s);
   }
 }
