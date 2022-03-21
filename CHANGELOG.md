@@ -1,3 +1,21 @@
+## 2.5.5 (2022-03-21)
+
+### ⚠️ 非兼容性变更
+
+- [^] `Lightbox` 组件在关闭时的 `cancel` 事件修改成 `close` 事件。<!-- #Lightbox -->
+
+### 💡 主要变更
+
+- [+] 优化了 `Radio` / `Checkbox` 组件在垂直方向的对齐方式。<!-- #Radio #Checkbox -->
+- [+] `Select` 组件新增 `show-select-all` 属性，支持全选的功能。<!-- #Select -->
+
+### 🐞 问题修复
+
+- [^] 修正了 `DatePicker` / `Button` 禁用样式的问题。<!-- #DatePicker #Button -->
+- [^] 修正了 `Uploader` 媒体上传项目在禁用状态下的样式问题。<!-- #Uploader -->
+- [^] 修正了 `Menu` 覆盖 `item` 插槽会导致报错的问题。<!-- #Menu -->
+- [^] 修正了 `Cascader` 选中文本超长溢出的样式问题。<!-- #Cascader -->
+
 ## 2.5.4 (2022-03-01)
 
 ### 💡 主要变更
