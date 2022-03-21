@@ -2,7 +2,8 @@ import postcss from 'rollup-plugin-postcss'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import replace from '@rollup/plugin-replace'
-import LessTildeFileManager from './build/LessTildeFileManager'
+import varPlugin from './build/less/varPlugin'
+import filePlugin from './build/less/filePlugin'
 
 function transformVeuiConfig (veuiId) {
   return {
@@ -32,14 +33,7 @@ const commonPlugins = [
     minimize: true,
     use: {
       less: {
-        plugins: [
-          {
-            install (less, pluginManager) {
-              pluginManager.addFileManager(new LessTildeFileManager())
-            },
-            minVersion: [3, 0, 0]
-          }
-        ],
+        plugins: [varPlugin(), filePlugin()],
         javascriptEnabled: true,
         math: 'always'
       }
@@ -60,7 +54,7 @@ export default [
       }
     },
     plugins: [transformVeuiConfig('veui'), ...commonPlugins],
-    external: id => externals.indexOf(id) >= 0
+    external: (id) => externals.indexOf(id) >= 0
   },
   {
     input: 'index.js',
@@ -69,6 +63,6 @@ export default [
       format: 'esm'
     },
     plugins: [transformVeuiConfig('veui/dist/veui.esm'), ...commonPlugins],
-    external: id => externals.indexOf(id) >= 0
+    external: (id) => externals.indexOf(id) >= 0
   }
 ]
