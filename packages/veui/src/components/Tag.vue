@@ -88,6 +88,7 @@ export default {
             disabled={this.disabled}
             onClick={this.remove}
             aria-label={this.t('remove')}
+            tabindex={this.disabled ? '-1' : null}
           >
             <veui-icon name={this.icons.remove} />
           </veui-button>
