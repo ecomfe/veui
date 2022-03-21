@@ -1,38 +1,3 @@
-# Alert
-# Used with variable interpolation
-@dls-alert-background-color-info
-@dls-alert-background-color-success
-@dls-alert-background-color-warning
-@dls-alert-background-color-error
-@dls-alert-border-color-info
-@dls-alert-border-color-success
-@dls-alert-border-color-warning
-@dls-alert-border-color-error
-@dls-alert-icon-color-info
-@dls-alert-icon-color-success
-@dls-alert-icon-color-warning
-@dls-alert-icon-color-error
-
-# Button
-# Used with variable interpolation
-@dls-button-font-size-xs
-@dls-button-font-size-s
-@dls-button-font-size-m
-@dls-button-font-size-l
-@dls-button-font-size-xl
-@dls-button-height-xs
-@dls-button-height-s
-@dls-button-height-m
-@dls-button-height-l
-@dls-button-height-xl
-@dls-button-padding-xs
-@dls-button-padding-s
-@dls-button-padding-l
-@dls-button-padding-xl
-@dls-button-border-radius-xs
-@dls-button-border-radius-l
-@dls-button-border-radius-xl
-
 # Dialog
 # Indirectedly referenced via @dls-dialog-max-height
 @dls-dialog-spacing-y
@@ -51,110 +16,10 @@
 # Pagination
 # Indirectedly referenced via @dls-pagination-goto-input-width
 @dls-pagination-goto-input-digits
-# Used with variable interpolation
-@dls-pagination-page-item-min-width-xs
-@dls-pagination-page-item-min-width-s
-@dls-pagination-page-item-min-width-m
 
 # Progress
 # Used with JavaScript variable
 @dls-progress-size-circular
-
-# Select
-# Used with variable interpolation
-@dls-select-tag-height-xs
-@dls-select-tag-height-s
-@dls-select-tag-height-m
-@dls-select-tag-height-l
-
-# Steps
-# Used with variable interpolation
-@dls-steps-marker-background-color-incomplete
-@dls-steps-marker-border-color-incomplete
-@dls-steps-marker-foreground-color-incomplete
-@dls-steps-marker-background-color-completed
-@dls-steps-marker-border-color-completed
-@dls-steps-marker-foreground-color-completed
-@dls-steps-marker-background-color-error
-@dls-steps-marker-border-color-error
-@dls-steps-marker-foreground-color-error
-@dls-steps-marker-background-color-current
-@dls-steps-marker-border-color-current
-@dls-steps-marker-foreground-color-current
-@dls-steps-marker-background-color-error-current
-@dls-steps-marker-border-color-error-current
-@dls-steps-marker-foreground-color-error-current
-
-# Switch
-# Used with variable interpolation
-@dls-switch-width-xs
-@dls-switch-width-s
-@dls-switch-width-m
-@dls-switch-height-xs
-@dls-switch-height-s
-@dls-switch-height-m
-@dls-switch-thumb-size-xs
-@dls-switch-thumb-size-s
-@dls-switch-thumb-size-m
-@dls-switch-padding-xs
-@dls-switch-padding-s
-@dls-switch-padding-m
-
-# Tag
-# Used with variable interpolation
-@dls-tag-height-s
-@dls-tag-height-m
-@dls-tag-border-radius-s
-@dls-tag-border-radius-m
-@dls-tag-font-size-s
-@dls-tag-font-size-m
-
-@dls-tag-color-info
-@dls-tag-color-success
-@dls-tag-color-warning
-@dls-tag-color-error
-@dls-tag-font-color-info
-@dls-tag-border-color-info
-@dls-tag-background-color-info
-@dls-tag-font-color-info-disabled
-@dls-tag-border-color-info-disabled
-@dls-tag-background-color-info-reversed
-@dls-tag-background-color-info-reversed-disabled
-@dls-tag-font-color-success
-@dls-tag-border-color-success
-@dls-tag-background-color-success
-@dls-tag-font-color-success-disabled
-@dls-tag-border-color-success-disabled
-@dls-tag-background-color-success-reversed
-@dls-tag-background-color-success-reversed-disabled
-@dls-tag-font-color-warning
-@dls-tag-border-color-warning
-@dls-tag-background-color-warning
-@dls-tag-font-color-warning-disabled
-@dls-tag-border-color-warning-disabled
-@dls-tag-background-color-warning-reversed
-@dls-tag-background-color-warning-reversed-disabled
-@dls-tag-font-color-error
-@dls-tag-border-color-error
-@dls-tag-background-color-error
-@dls-tag-font-color-error-disabled
-@dls-tag-border-color-error-disabled
-@dls-tag-background-color-error-reversed
-@dls-tag-background-color-error-reversed-disabled
-
-@dls-tag-color-selected
-@dls-tag-font-color-selected
-@dls-tag-font-color-reverse
-@dls-tag-font-opacity-selected-disabled
-@dls-tag-font-opacity-reverse-disabled
-@dls-tag-background-opacity-selected
-@dls-tag-background-opacity-selected-hover
-@dls-tag-background-opacity-selected-active
-@dls-tag-background-opacity-selected-disabled
-@dls-tag-background-opacity-reverse
-@dls-tag-background-opacity-reverse-hover
-@dls-tag-background-opacity-reverse-active
-@dls-tag-background-opacity-reverse-disabled
 
 # Textarea
 # Indirectedly referenced via @dls-textarea-height-*
@@ -164,9 +29,114 @@
 # Used content hack to implement this
 @dls-time-picker-option-content-min-width
 
-# Toast
-# Used with variable interpolation
-@dls-toast-icon-color-info
+### Auto Generated ###
+@dls-button-padding-xs
+@dls-button-height-xs
+@dls-button-border-radius-xs
+@dls-button-font-size-xs
+@dls-button-padding-s
+@dls-button-height-s
+@dls-button-border-radius-s
+@dls-button-font-size-s
+@dls-button-padding-m
+@dls-button-height-m
+@dls-button-border-radius-m
+@dls-button-font-size-m
+@dls-button-padding-l
+@dls-button-height-l
+@dls-button-border-radius-l
+@dls-button-font-size-l
+@dls-button-padding-xl
+@dls-button-height-xl
+@dls-button-border-radius-xl
+@dls-button-font-size-xl
+@dls-alert-background-color-success
+@dls-alert-border-color-success
+@dls-alert-icon-color-success
+@dls-alert-background-color-warning
+@dls-alert-border-color-warning
+@dls-alert-icon-color-warning
+@dls-alert-background-color-info
+@dls-alert-border-color-info
+@dls-alert-icon-color-info
+@dls-alert-background-color-error
+@dls-alert-border-color-error
+@dls-alert-icon-color-error
+@dls-checkbox-font-size-m
+@dls-checkbox-size-m
+@dls-checkbox-font-size-s
+@dls-checkbox-size-s
+@dls-option-height-l
+@dls-option-height-m
+@dls-option-height-s
+@dls-option-height-xs
+@dls-radio-font-size-m
+@dls-radio-size-m
+@dls-radio-dot-size-m
+@dls-radio-font-size-s
+@dls-radio-size-s
+@dls-radio-dot-size-s
+@dls-select-tag-height-m
+@dls-tag-height-m
+@dls-tag-border-radius-m
+@dls-tag-font-size-m
+@dls-tag-color-info
+@dls-tag-font-color-selected
+@dls-tag-background-opacity-selected
+@dls-tag-background-opacity-selected-hover
+@dls-tag-background-opacity-selected-active
+@dls-tag-background-opacity-selected-disabled
+@dls-tag-font-opacity-selected-disabled
+@dls-tag-font-color-reverse
+@dls-tag-background-opacity-reverse
+@dls-tag-background-opacity-reverse-hover
+@dls-tag-background-opacity-reverse-active
+@dls-tag-background-opacity-reverse-disabled
+@dls-tag-font-opacity-reverse-disabled
+@dls-tag-color-success
+@dls-tag-color-warning
+@dls-tag-color-error
+@dls-tag-height-s
+@dls-tag-border-radius-s
+@dls-tag-font-size-s
+@dls-pagination-page-item-min-width-m
+@dls-pagination-page-item-min-width-xs
+@dls-pagination-page-item-min-width-s
+@dls-select-tag-height-xs
+@dls-select-tag-height-s
+@dls-select-tag-height-l
+@dls-steps-marker-border-color-completed
+@dls-steps-marker-foreground-color-completed
+@dls-steps-marker-background-color-completed
+@dls-steps-marker-border-color-current
+@dls-steps-marker-foreground-color-current
+@dls-steps-marker-background-color-current
+@dls-steps-marker-border-color-incomplete
+@dls-steps-marker-foreground-color-incomplete
+@dls-steps-marker-background-color-incomplete
+@dls-steps-marker-border-color-error
+@dls-steps-marker-foreground-color-error
+@dls-steps-marker-background-color-error
+@dls-steps-marker-border-color-error-current
+@dls-steps-marker-foreground-color-error-current
+@dls-steps-marker-background-color-error-current
+@dls-foreground-color-success-primary
+@dls-foreground-color-warning-primary
+@dls-foreground-color-info-primary
+@dls-foreground-color-error-primary
+@dls-switch-width-m
+@dls-switch-height-m
+@dls-switch-padding-m
+@dls-switch-thumb-size-m
+@dls-switch-width-xs
+@dls-switch-height-xs
+@dls-switch-padding-xs
+@dls-switch-thumb-size-xs
+@dls-switch-width-s
+@dls-switch-height-s
+@dls-switch-padding-s
+@dls-switch-thumb-size-s
 @dls-toast-icon-color-success
 @dls-toast-icon-color-warning
+@dls-toast-icon-color-info
 @dls-toast-icon-color-error
