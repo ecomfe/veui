@@ -283,14 +283,14 @@ export default {
     validate () {
       let result = true
       if (this.realMaxlength != null) {
-        if (this.length > this.realMaxlength) {
+        if (this.lengthOverflow) {
           result = i18nManager.get('rules.maxLength', {
             ruleValue: this.realMaxlength
           })
         }
 
         if (this.field) {
-          this.field.updateIntrinsicValidities(result)
+          this.field.updateInputValidities(result)
         }
       }
       return result

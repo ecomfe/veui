@@ -35,9 +35,9 @@ import useValidity, { isAllValid, isSimpleValid } from './_useValidity'
 import useValidator from './_useValidator'
 import { useCoupled, useFacade } from './_facade'
 
-const { asParent: asFormParent, asChild: asFormChild } = useCoupled('form')
+const { useParent: useFormParent, useChild: useFormChild } = useCoupled('form')
 
-export { asFormChild }
+export { useFormChild }
 
 export default {
   name: 'veui-form',
@@ -57,18 +57,18 @@ export default {
           pull(vm.fields, field)
         }
       },
-      getValiditiesOfFields: vm.validityManager.getValiditiesOfFields,
+      getValiditiesOf: vm.validityManager.getValiditiesOf,
       updateRuleValidities: vm.validityManager.updateRuleValidities,
       clearValiditiesOfField: vm.validityManager.clearValiditiesOfField,
-      updateIntrinsicValidities: vm.validityManager.updateIntrinsicValidities,
+      updateInputValidities: vm.validityManager.updateInputValidities,
       validateForEvent: vm.validateForEvent,
       getInteractiveEvents: vm.validator.getInteractiveEvents
     })),
-    asFormParent((vm) => vm.getFacade()),
+    useFormParent((vm) => vm.getFacade()),
     useValidity('validityManager'),
     useValidator('validator', {
       getValidators: (vm) => vm.validators,
-      getValidatorName: (vm, validator) => vm.getValidatorName(validator),
+      getValidatorName: (_, validator) => getValidatorName(validator),
       getFieldValue: (vm, fieldName) => {
         if (vm.fieldsMap[fieldName]) {
           return vm.fieldsMap[fieldName].getFieldValue()
@@ -123,9 +123,6 @@ export default {
     }
   },
   methods: {
-    getValidatorName ({ fields }) {
-      return `validator:${fields.join(',')}`
-    },
     hasActions () {
       return this.$slots.actions || this.$scopedSlots.actions
     },
@@ -178,7 +175,7 @@ export default {
           }
           this.$emit('invalid', result)
         })
-        // 如果发生 hooks 中发生错误，最后也保证下重置 submissionValidating
+        // 如果在 hooks 中发生错误，最后也保证下重置 submissionValidating
         .finally(() => {
           if (this.submissionValidating) {
             this.submissionValidating = false
@@ -215,7 +212,7 @@ export default {
     updateValidatorValidities (validityResult) {
       return validityResult.map(({ validator, validities }) => {
         this.validityManager.updateValidatorValidities(
-          this.getValidatorName(validator),
+          getValidatorName(validator),
           validities
         )
         return validities
@@ -229,7 +226,6 @@ export default {
         }
       )
     },
-    // @deprecrated
     reset (names) {
       let fields = this.fields
       if (names) {
@@ -244,5 +240,9 @@ export default {
 
 function mergeValidities (dest, src) {
   return [].concat(dest || []).concat(src || [])
+}
+
+function getValidatorName ({ fields }) {
+  return `validator:${fields.join(',')}`
 }
 </script>

@@ -91,13 +91,15 @@
       </table-foot>
     </table>
   </div>
-  <veui-loading
-    :class="$c('table-loading')"
-    :loading="loading"
-    :ui="uiParts.loading"
-  >
-    {{ t('loading') }}
-  </veui-loading>
+  <transition :name="$c('table-loading-fade')">
+    <veui-loading
+      :class="$c('table-loading')"
+      :loading="loading"
+      :ui="uiParts.loading"
+    >
+      {{ t('loading') }}
+    </veui-loading>
+  </transition>
 </div>
 </template>
 

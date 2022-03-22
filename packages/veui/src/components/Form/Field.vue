@@ -79,15 +79,15 @@ import '../../common/global'
 import { useCoupled, useFacade } from './_facade'
 import useRule from './_useRule'
 import FieldMessages from './_FieldMessages'
-import { asFormChild } from './Form'
-import { ValidityType, normalizeValidities } from './_useValidity'
+import { useFormChild } from './Form'
+import { ValidityStatus, normalizeValidities } from './_useValidity'
 
-const { asParent: asFieldParent, asChild: asFieldChild } =
+const { useParent: useFieldParent, useChild: useFieldChild } =
   useCoupled('form-field')
 
-export { asFieldChild }
+export { useFieldChild }
 
-const { ERROR, WARNING, SUCCESS } = ValidityType
+const { ERROR, WARNING, SUCCESS } = ValidityStatus
 
 export default {
   name: 'veui-field',
@@ -118,7 +118,7 @@ export default {
       getFieldValue: vm.getFieldValue,
       resetValue: vm.resetValue,
       validate: vm.validate,
-      updateIntrinsicValidities: vm.updateIntrinsicValidities,
+      updateInputValidities: vm.updateInputValidities,
       // this 和 parentField 之间没有 input 即返回 true, 调用方保证 parentField 和 vm 的父子关系
       isDirectSubField: (parentField) =>
         !getTypedAncestor(vm, 'input', parentField),
@@ -131,9 +131,9 @@ export default {
         return () => pull(vm.fields, field)
       }
     })),
-    asFieldParent((vm) => vm.getFacade()),
-    asFormChild('form', (vm) => vm.form.addField(vm.getFacade())),
-    asFieldChild('parentField', (vm) =>
+    useFieldParent((vm) => vm.getFacade()),
+    useFormChild('form', (vm) => vm.form.addField(vm.getFacade())),
+    useFieldChild('parentField', (vm) =>
       vm.parentField.addField(vm.getFacade())
     ),
     useRule('rule', {
@@ -215,7 +215,7 @@ export default {
       return this.withholdValidity || this.isFieldset || this.hasDirectSubField
     },
     validities () {
-      return this.form ? this.form.getValiditiesOfFields(this.validityKeys) : []
+      return this.form ? this.form.getValiditiesOf(this.validityKeys) : []
     },
     validityKeys () {
       return this.realAbstract
@@ -241,14 +241,14 @@ export default {
       return !this.validating && !!this.errors.length
     },
     errors () {
-      return this.validities.filter((va) => va.type === ERROR)
+      return this.validities.filter(({ status }) => status === ERROR)
     },
     validationStatus () {
       let result = SUCCESS
-      this.validities.some(({ type }) => {
-        const isError = type === ERROR
-        if (isError || type === WARNING) {
-          result = type
+      this.validities.some(({ status }) => {
+        const isError = status === ERROR
+        if (isError || status === WARNING) {
+          result = status
         }
         return isError
       })
@@ -310,9 +310,9 @@ export default {
         input === this.primaryInput
       )
     },
-    updateIntrinsicValidities (validities) {
+    updateInputValidities (validities) {
       this.assertForm()
-      this.form.updateIntrinsicValidities(
+      this.form.updateInputValidities(
         this.realName,
         normalizeValidities(validities)
       )
@@ -355,7 +355,6 @@ export default {
         form.validateForEvent(eventName, this.realName, result)
       })
     },
-    // @deprecrated
     resetValue () {
       if (!this.realField) {
         return

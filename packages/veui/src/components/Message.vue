@@ -2,13 +2,13 @@
 <div
   :class="{
     [$c('message')]: true,
-    [$c(`message-${type}`)]: true
+    [$c(`message-${status}`)]: true
   }"
 >
   <veui-icon
-    v-if="icons[type] && icon"
+    v-if="icons[status] && icon"
     :class="$c('message-icon')"
-    :name="icons[type]"
+    :name="icons[status]"
   />
   <div :class="$c('message-content')"><slot/></div>
 </div>
@@ -27,10 +27,10 @@ export default {
   },
   mixins: [prefix, ui],
   props: {
-    type: {
+    status: {
       type: String,
       validator (val) {
-        return includes(['success', 'error', 'info', 'warning'], val)
+        return includes(['success', 'error', 'info', 'warning', 'aux'], val)
       },
       default: 'success'
     },

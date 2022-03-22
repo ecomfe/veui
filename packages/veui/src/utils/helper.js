@@ -363,7 +363,7 @@ export function wrapListeners (listeners) {
   )
 }
 
-export function resolveInterpolation (message, data, compat) {
+export function renderTpl (message, data, compat) {
   const re = compat ? /\$?\{(\w+)\}/g : /\{(\w+)\}/g
   return String(message).replace(re, (match, key) => {
     if (data[key] != null) {

@@ -1,19 +1,10 @@
-import {
-  IconQuestionCircle,
-  IconCheckCircle,
-  IconExclamationCircle,
-  IconTimesCircle
-} from 'dls-icons-vue'
+import { IconQuestionCircle } from 'dls-icons-vue'
 import ui from 'veui/managers/ui'
 
 ui.defaults(
   {
     icons: {
-      tip: IconQuestionCircle,
-      success: IconCheckCircle,
-      error: IconTimesCircle,
-      warning: IconExclamationCircle,
-      popup: IconExclamationCircle
+      tip: IconQuestionCircle
     },
     ui: {
       size: {

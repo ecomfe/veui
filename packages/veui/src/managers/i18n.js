@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { isString, isFunction, get } from 'lodash'
-import { deepSet, resolveInterpolation } from '../utils/helper'
+import { deepSet, renderTpl } from '../utils/helper'
 import warn from '../utils/warn'
 
 export class I18nManager {
@@ -27,7 +27,7 @@ export class I18nManager {
           return message
         }
 
-        return resolveInterpolation(message, data)
+        return renderTpl(message, data)
       },
       watch (path, callback, locale) {
         return this.$watch(

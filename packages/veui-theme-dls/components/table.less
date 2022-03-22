@@ -595,6 +595,11 @@
     }
   }
 
+  &-loading-fade-enter,
+  &-loading-fade-leave-to {
+    opacity: 0;
+  }
+
   &[ui~="loose"] {
     [role="columnheader"] {
       .padding(@dls-table-header-padding-y-loose, _);
