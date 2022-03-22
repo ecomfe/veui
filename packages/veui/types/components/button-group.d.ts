@@ -14,7 +14,7 @@ type Item = {
 
 type Props<T extends Item> = {
   items?: Array<T>
-  keyField?: string
+  // keyField?: string
   disabled?: boolean
 }
 

@@ -19,7 +19,7 @@ type Mixins = UiMixin
 type Slots = {
   default(): unknown
   title(): unknown
-  titleAfter(): unknown
+  'title-after'(): unknown
 }
 
 type Collapse = VeuiDefineComponent<{

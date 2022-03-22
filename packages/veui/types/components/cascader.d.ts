@@ -28,7 +28,7 @@ type Props<T extends Item> = MultipleAndValue<T> & {
   valueDisplay?: 'complete' | 'simple'
   inline?: boolean
   max?: number
-  keyField?: string
+  // keyField?: string
 } & SearchableProps<Normalized<'options', T, false, CheckedState>>
 
 type Emits = {

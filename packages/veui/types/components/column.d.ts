@@ -32,7 +32,7 @@ type Slots = {
   foot(): unknown
   desc(scope: { close: () => unknown }): unknown
   filter: SelectSlots['before']
-  subRow(scope: LooseObject<{ item: unknown; index: number }>): unknown
+  'sub-row'(scope: LooseObject<{ item: unknown; index: number }>): unknown
 }
 
 type Column = VeuiDefineComponent<{

@@ -30,7 +30,7 @@ type Slots = {
     open: boolean
     activeIndex: number
   }): unknown
-  tipLabel(): unknown
+  'tip-label'(): unknown
 }
 
 type Slider = VeuiDefineComponent<{

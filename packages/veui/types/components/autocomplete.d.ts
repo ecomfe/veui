@@ -56,7 +56,7 @@ type Slots = {
     datasource: Array<NormalizedItem>
     keyword: string
   }): unknown
-  optionLabel(slotProps: {
+  'option-label'(slotProps: {
     label: string
     value: string
     matches: { text: string; matched: boolean }

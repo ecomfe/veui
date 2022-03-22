@@ -13,6 +13,8 @@ type Props = {
   decimalPlace?: number
   max?: number
   min?: number
+  placeholder?: string
+  selectOnFocus?: boolean
   format?: (val: number, defaultFormattedValue: string) => string
   parse?: (val: string) => number
 }
@@ -32,6 +34,8 @@ type Mixins = [
 
 type Slots = {
   default(): unknown
+  before(): unknown
+  after(): unknown
 }
 
 type NumberInput = VeuiDefineComponent<{

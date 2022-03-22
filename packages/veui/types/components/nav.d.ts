@@ -32,6 +32,7 @@ export type NormalizedNavItem = Normalized<'children', NavItem, true>
 
 type Emits = {
   click(item: NormalizedNavItem): void
+  activate(item: NormalizedNavItem): void
 }
 
 export type Mixins = [UiMixin, OverlayMixin]

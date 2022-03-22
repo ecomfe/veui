@@ -10,7 +10,9 @@ type Emits = {}
 
 type Mixins = {}
 
-type Slots = {}
+type Slots = {
+  default(): unknown
+}
 
 type Icon = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>

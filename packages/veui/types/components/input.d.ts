@@ -27,6 +27,7 @@ type Emits = {
   input(value: string): void
   clear(): void
   autofill(): void
+  change(value: string, event: Event): void
 }
 
 type Mixins = [

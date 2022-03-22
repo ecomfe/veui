@@ -17,7 +17,7 @@ type Props<T extends Item> = {
   container?: string | HTMLElement | Window
   targetOffset?: string | number
   stickyOffset?: string | number
-  keyField?: string
+  // keyField?: string
 }
 
 type Emits = {}
@@ -26,7 +26,7 @@ type Mixins = UiMixin
 
 type Slots = {
   item(slotProps: { item: LooseObject<Item> }): unknown
-  itemLabel(slotProps: { item: LooseObject<Item> }): unknown
+  'item-label'(slotProps: { item: LooseObject<Item> }): unknown
 }
 
 type Anchor = VeuiDefineComponent<{

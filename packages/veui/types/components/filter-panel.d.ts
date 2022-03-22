@@ -34,7 +34,7 @@ type SlotProps = {
 type Slots = {
   head(slotProps: SlotProps): unknown
   default(slotProps: SlotProps): unknown
-  noData(slotProps: SlotProps): unknown
+  'no-data'(slotProps: SlotProps): unknown
 }
 
 type FilterPanel = VeuiDefineComponent<{
