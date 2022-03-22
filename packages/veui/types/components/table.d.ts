@@ -1,4 +1,9 @@
-import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  LooseObject
+} from '../common'
 import { AllowedOrders } from './column'
 
 type Props<
@@ -41,7 +46,8 @@ type Mixins = UiMixin
 
 type Slots = {
   default(): unknown
-  noData(): unknown
+  'no-data'(): unknown
+  'sub-row'(scope: LooseObject<{ item: unknown; index: number }>): unknown
   foot(): unknown
 }
 

@@ -25,6 +25,7 @@ type Props<T extends Item> = CarouselCommonProps<T> & {
   priority?: number
   indicator?: 'number' | 'none'
   options?: PreviewOptions
+  outsideClosable?: boolean
 }
 
 type Emits = {

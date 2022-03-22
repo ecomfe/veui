@@ -2,6 +2,7 @@ import {
   VeuiDefineComponent,
   VeuiDefineInstance,
   UiMixin,
+  OverlayMixin,
   BeforeClose,
   Status
 } from '../common'
@@ -22,7 +23,7 @@ type Emits = {
   afterclose(): void
 }
 
-type Mixins = UiMixin
+type Mixins = [UiMixin, OverlayMixin]
 
 type Slots = {
   default(): unknown

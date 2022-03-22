@@ -26,7 +26,7 @@ type Props<T extends Item> = CarouselCommonProps<T> & {
   controlsPosition?: 'inside' | 'outside'
   controls?: boolean
   switchTrigger?: 'hover' | 'click'
-  keyField?: string
+  // keyField?: string
   autoplay?: boolean
   pauseOnHover?: boolean
   interval?: number

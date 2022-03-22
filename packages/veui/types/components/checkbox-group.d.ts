@@ -26,7 +26,7 @@ type Props<T extends Item, Empty> = (
     }
 ) & {
   items?: Array<T>
-  keyField?: string
+  // keyField?: string
 }
 
 type Emits = {}

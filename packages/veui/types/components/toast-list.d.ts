@@ -10,13 +10,7 @@ type Emits = {}
 
 type Mixins = OverlayMixin
 
-type SlotProps = {
-  close(): void
-}
-
-type Slots = {
-  default(slotProps: SlotProps): unknown
-}
+type Slots = {}
 
 type ToastList = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>

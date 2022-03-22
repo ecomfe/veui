@@ -1,4 +1,9 @@
-import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
+import {
+  VeuiDefineComponent,
+  VeuiDefineInstance,
+  UiMixin,
+  InputMixin
+} from '../common'
 
 type Props = {
   loading?: boolean
@@ -21,7 +26,7 @@ type Emits = {
   change(checked: boolean): void
 }
 
-type Mixins = UiMixin
+type Mixins = [UiMixin, InputMixin]
 
 type Slots = {
   default(): unknown

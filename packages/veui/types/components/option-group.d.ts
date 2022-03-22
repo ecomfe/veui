@@ -23,7 +23,7 @@ type Props<T extends Item> = {
   options?: Array<T>
   disabled?: boolean
   expanded?: boolean
-  keyField?: string
+  // keyField?: string
   position?: 'inline' | 'popup'
   optionTag?: string | ((option: T) => Tag)
 }
