@@ -295,7 +295,7 @@ export default {
     const renderTabItem = this.$scopedSlots['tab-item']
     const renderTabContent = (props) => (
       <div class={this.$c('tabs-item-label-content')}>
-        <div>
+        <div class={this.$c('tabs-item-label-ellipsis')}>
           {renderItem(
             [props.renderLabel, this.$scopedSlots['tab-label']],
             props

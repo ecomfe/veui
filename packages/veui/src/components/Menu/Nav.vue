@@ -255,6 +255,7 @@
         [$c('nav-indicator')]: true,
         [hoverIndicatorClass]: true
       }"
+      aria-hidden="true"
       :style="
         hoverIndicatorPosition != null
           ? `transform: translateX(${hoverIndicatorPosition}px)`
