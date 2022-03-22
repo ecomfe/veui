@@ -24,9 +24,11 @@ export function useFacade (defineFacade) {
   }
 }
 
+// TODO 后面和 mixins/coupled 整合一下吧
+
 export function useCoupled (parentType) {
   const bridgeKey = `__${parentType}Bridge`
-  function asParent (defineParent) {
+  function useParent (defineParent) {
     return {
       uiTypes: [parentType],
       computed: {
@@ -37,7 +39,7 @@ export function useCoupled (parentType) {
     }
   }
 
-  function asChild (parentName, register) {
+  function useChild (parentName, register) {
     let mixin = {
       uiTypes: [`${parentType}-child`],
       computed: {
@@ -66,5 +68,5 @@ export function useCoupled (parentType) {
     return mixin
   }
 
-  return { asParent, asChild }
+  return { useParent, useChild }
 }

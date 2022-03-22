@@ -420,7 +420,7 @@ export default {
                 if (floor <= 1000) {
                   res = {
                     floor: {
-                      type: 'warning',
+                      status: 'warning',
                       message: '请提高下限'
                     }
                   }

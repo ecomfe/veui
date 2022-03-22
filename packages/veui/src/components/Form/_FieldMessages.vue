@@ -2,8 +2,8 @@
 <div :class="$c('field-messages')">
   <template v-for="(validity, index) in messages">
     <component
-      :is="{ render: validity.renderError }"
-      v-if="validity.renderError"
+      :is="{ render: validity.render }"
+      v-if="validity.render"
       :key="index"
       :validity="validity"
     />
@@ -11,7 +11,7 @@
       v-else
       :key="index"
       :title="validity.message"
-      :type="validity.type"
+      :status="validity.status"
       :icon="icon"
     >
       <span>{{ validity.message }}</span>

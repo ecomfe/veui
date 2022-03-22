@@ -7,7 +7,7 @@ import max from './rules/max'
 import min from './rules/min'
 import numeric from './rules/numeric'
 import pattern from './rules/pattern'
-import { resolveInterpolation } from '../utils/helper'
+import { renderTpl } from '../utils/helper'
 import type from './type'
 
 export class Rule {
@@ -40,11 +40,7 @@ export class Rule {
           name: name,
           message: isFunction(realMessage)
             ? realMessage(val, ruleValue)
-            : resolveInterpolation(
-              realMessage,
-              { ruleValue, value: val },
-              true
-            )
+            : renderTpl(realMessage, { ruleValue, value: val }, true)
         }
       }
       // 代表没错

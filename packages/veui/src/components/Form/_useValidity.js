@@ -1,25 +1,25 @@
 import { reduce, forEach, isPlainObject } from 'lodash'
 import Vue from 'vue'
 
-export const ValidityType = {
+export const ValidityStatus = {
   SUCCESS: 'success',
   WARNING: 'warning',
   ERROR: 'error'
 }
 
-const ValidityTypeOrder = {
-  [ValidityType.SUCCESS]: 3,
-  [ValidityType.WARNING]: 2,
-  [ValidityType.ERROR]: 1
+const ValidityStatusOrder = {
+  [ValidityStatus.SUCCESS]: 3,
+  [ValidityStatus.WARNING]: 2,
+  [ValidityStatus.ERROR]: 1
 }
 
 function createValidityMixinImpl () {
   return new Vue({
     data () {
       return {
-        ruleValidities: {}, // Record<fieldName, Array<{type, name: ruleName, message}>>
+        ruleValidities: {}, // Record<fieldName, Array<{status, name: ruleName, message}>>
         validatorValidities: {}, // Record<validatorName, {fieldName1: message, fieldName2: message2}>
-        intrinsicValidities: {} // Record<fieldName, Array<{type, message}>>
+        inputValidities: {} // Record<fieldName, Array<{status, message}>>
       }
     },
     computed: {
@@ -27,7 +27,7 @@ function createValidityMixinImpl () {
         // => Record<fieldName, {message}>
         let result = reduce(
           this.validatorValidities,
-          (acc, validities, validatorName) => {
+          (acc, validities) => {
             forEach(validities, (fieldValidities, fieldName) => {
               acc[fieldName] = (acc[fieldName] || []).concat(fieldValidities)
             })
@@ -37,7 +37,7 @@ function createValidityMixinImpl () {
         )
 
         result = mergeValidities(result, this.ruleValidities)
-        return sortValidities(mergeValidities(result, this.intrinsicValidities))
+        return sortValidities(mergeValidities(result, this.inputValidities))
       }
     },
     methods: {
@@ -47,12 +47,14 @@ function createValidityMixinImpl () {
        * @param {Array<string> | string} fields 指定字段
        * @return Array<Validity>
        */
-      getValiditiesOfFields (fields) {
+      getValidities (fields) {
         fields = Array.isArray(fields) ? fields : [fields]
         return fields.reduce((acc, name) => {
-          const fv = this.validities[name]
-          if (fv) {
-            return acc.concat(fv.map((item) => ({ ...item, fieldName: name })))
+          const validity = this.validities[name]
+          if (validity) {
+            return acc.concat(
+              validity.map((item) => ({ ...item, fieldName: name }))
+            )
           }
           return acc
         }, [])
@@ -62,9 +64,9 @@ function createValidityMixinImpl () {
       },
       /**
        * 更新 rule 校验结果
-       * @param {Array<string> | string} fieldName
-       * @param {true | undefined | Array<string>} ruleNames
-       * @param {true | undefined | Array<Validity>} validities
+       * @param {Array<string> | string} fieldName 指定字段
+       * @param {undefined | Array<string>} ruleNames undefined 表示要更新该字段的所有 rules
+       * @param {true | undefined | Array<Validity>} validities true 和 undefined 表示校验成功
        */
       updateRuleValidities (fieldName, ruleNames, validities) {
         if (ruleNames && ruleNames.length) {
@@ -92,20 +94,20 @@ function createValidityMixinImpl () {
           this.$delete(this.validatorValidities, validatorName)
         }
       },
-      updateIntrinsicValidities (fieldName, validities) {
+      updateInputValidities (fieldName, validities) {
         if (isPlainObject(validities)) {
           validities = [validities]
         }
         if (Array.isArray(validities)) {
-          this.$set(this.intrinsicValidities, fieldName, validities)
-        } else if (this.intrinsicValidities[fieldName] != null) {
-          this.$delete(this.intrinsicValidities, fieldName)
+          this.$set(this.inputValidities, fieldName, validities)
+        } else if (this.inputValidities[fieldName] != null) {
+          this.$delete(this.inputValidities, fieldName)
         }
       },
       // 删掉指定 field 的指定 validity
       clearValiditiesOfField (fieldName) {
         this.$delete(this.ruleValidities, fieldName)
-        this.$delete(this.intrinsicValidities, fieldName)
+        this.$delete(this.inputValidities, fieldName)
         Object.keys(this.validatorValidities).forEach((validatorName) => {
           let validity = this.validatorValidities[validatorName]
           if (validity[fieldName]) {
@@ -128,11 +130,11 @@ export default function useValidity (namespace) {
         const impl = createValidityMixinImpl()
         return {
           getValidities: () => impl.validities,
-          getValiditiesOfFields: impl.getValiditiesOfFields,
+          getValiditiesOf: impl.getValidities,
           clearValiditiesOfField: impl.clearValiditiesOfField,
           updateRuleValidities: impl.updateRuleValidities,
           updateValidatorValidities: impl.updateValidatorValidities,
-          updateIntrinsicValidities: impl.updateIntrinsicValidities
+          updateInputValidities: impl.updateInputValidities
         }
       }
     }
@@ -153,7 +155,7 @@ function mergeValidities (dest, validities) {
 function sortValidities (validities) {
   forEach(validities, (fieldValidities) => {
     fieldValidities.sort(
-      (a, b) => ValidityTypeOrder[a.type] - ValidityTypeOrder[b.type]
+      (a, b) => ValidityStatusOrder[a.status] - ValidityStatusOrder[b.status]
     )
   })
   return validities
@@ -161,7 +163,7 @@ function sortValidities (validities) {
 
 /*
  * type SimpleSuccess = true | null | undefined
- * type RuleResultSingle = SimpleSuccess | string | {type: ValidityType, message?: string}
+ * type RuleResultSingle = SimpleSuccess | string | {status: ValidityStatus, message?: string}
  * type RuleResult = RuleResultSingle | Array<RuleResultSingle>
  * type ValidatorResult = SimpleSuccess | Record<fieldNameString, RuleResult>
  */
@@ -179,14 +181,14 @@ function normalize (value) {
   if (!isPlainObject(value)) {
     result = { message: value || '' }
   }
-  result.type = result.type || ValidityType.ERROR
+  result.status = result.status || ValidityStatus.ERROR
   return result
 }
 
 /**
  * normalize 一个 field 的校验结果
  * @param {RuleResult} value 校验结果
- * @return true | Array<{type: ValidityType, message?: string}>
+ * @return true | Array<{status: ValidityStatus, message?: string}>
  */
 export function normalizeValidities (value) {
   if (Array.isArray(value)) {
@@ -224,7 +226,7 @@ export function isValid (normalizedValidities) {
   }
 
   if (isPlainObject(normalizedValidities)) {
-    return normalizedValidities.type !== ValidityType.ERROR
+    return normalizedValidities.status !== ValidityStatus.ERROR
   }
   // never
 }

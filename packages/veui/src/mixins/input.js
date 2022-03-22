@@ -1,8 +1,8 @@
 import { mergeWith, forEach } from 'lodash'
 import { isTopMostOfType, wrapListeners } from '../utils/helper'
 import focusable from './focusable'
-import { asFormChild } from '../components/Form/Form'
-import { asFieldChild } from '../components/Form/Field'
+import { useFormChild } from '../components/Form/Form'
+import { useFieldChild } from '../components/Form/Field'
 import { useFacade } from '../components/Form/_facade'
 
 export default {
@@ -16,11 +16,12 @@ export default {
         return typeof vm.validate === 'function' ? vm.validate() : undefined
       }
     })),
-    asFormChild('form'),
-    asFieldChild(
-      'field',
-      (vm) => vm.isTopMostInput && vm.field.addInput(vm.getFacade())
-    )
+    useFormChild('form'),
+    useFieldChild('field', (vm) => {
+      if (vm.isTopMostInput) {
+        return vm.field.addInput(vm.getFacade())
+      }
+    })
   ],
   props: {
     name: String,

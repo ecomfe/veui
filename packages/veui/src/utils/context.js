@@ -129,6 +129,13 @@ export function findComponent (context, predicate) {
   return comp
 }
 
+/**
+ * 给 targets 中的每个函数的第一个参数绑定为 vm，一般用于给 mixin 传递依赖时使用
+ *
+ * @param {object} targets 需要被绑定的对象
+ * @param {Vue} vm vm实例
+ * @return object 绑定后的新对象
+ */
 export function bindVm (targets, vm) {
   return Object.keys(targets).reduce((acc, depName) => {
     acc[depName] =
