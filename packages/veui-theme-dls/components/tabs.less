@@ -56,12 +56,12 @@
     @min-width: @@min-width-name;
     @max-width-name: ~"dls-tab-max-width-@{variant}-@{size}";
     @max-width: @@max-width-name;
-    @half_spacing: @spacing / 2;
+    @half-spacing: @spacing / 2;
     @nav-spacing-name: ~"dls-tab-nav-spacing-@{variant}-@{size}";
     @nav-spacing: @@nav-spacing-name;
 
     &-item-label {
-      margin: 0 @half_spacing;
+      margin: 0 @half-spacing;
       padding-left: @padding;
       padding-right: @padding;
       min-width: @min-width;
@@ -73,12 +73,12 @@
     }
 
     &-item-remove {
-      .absolute(50%, calc(@half_spacing - @dls-tab-remove-spacing - @remove-icon-size), _, _);
+      .absolute(50%, calc(@half-spacing - @dls-tab-remove-spacing - @remove-icon-size), _, _);
     }
 
     &-tip,
     &:not(&-empty) &-add {
-      margin-left: @half_spacing;
+      margin-left: @half-spacing;
     }
 
     &-prev,
@@ -198,11 +198,11 @@
       .dls-icon {
         .dls-icon-size(@dls-tab-icon-size);
       }
+    }
 
-      > * {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+    &-label-ellipsis {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &-remove {
@@ -251,6 +251,7 @@
     }
   }
 
+  // TODO Button 加个 ui variant
   &-add.@{veui-prefix}-button {
     flex: 0 0 auto;
     align-self: center;

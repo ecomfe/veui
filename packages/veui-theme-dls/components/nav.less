@@ -1,7 +1,6 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
-@dls-nav-item-font-size: @dls-font-size-1;
 // @dls-nav-more-dropdown-spacing: @dls-padding-unit * 6;
 
 .@{veui-prefix}-nav {
@@ -22,7 +21,7 @@
 
   // all menu items
   &-item {
-    font-size: @dls-menu-font-size-horizontal-m;
+    font-size: @dls-nav-item-font-size;
 
     &,
     &:hover,
@@ -50,7 +49,7 @@
     &::after {
       .size(@dls-nav-indicator-width-hover, _);
       opacity: 1;
-      margin-left: -6px;
+      margin-left: -@dls-nav-indicator-width-hover / 2;
       background-color: @dls-nav-indicator-color;
       box-shadow: @dls-menu-item-shadow-horizontal-current;
     }
@@ -74,8 +73,9 @@
 
   // top level normal item style
   &-body &-item {
-    padding: 0 @dls-menu-item-padding-x-horizontal;
-    height: @dls-menu-item-height-horizontal-m;
+    margin: 0 @dls-nav-item-spacing / 2;
+    padding: @dls-nav-item-padding;
+    height: @dls-nav-item-height;
     flex: none;
     display: flex;
     align-items: center;
@@ -117,7 +117,7 @@
       }
 
       &:not(.@{veui-prefix}-nav-more):active {
-        color: @dls-menu-item-font-color-horizontal-active;
+        color: @dls-nav-item-font-color-active;
         background-color: @dls-menu-item-background-color-horizontal-active;
         .@{veui-prefix}-nav-item-label-wrapper {
           color: @dls-nav-item-font-color-active;
@@ -142,6 +142,8 @@
 
   // more button
   &-more {
+    padding: 0 @dls-nav-item-padding-more;
+
     &-hidden {
       visibility: hidden;
       position: absolute;
@@ -152,7 +154,7 @@
   &-body &-item-exact-active,
   &-body &-item-active {
     &:not(.@{veui-prefix}-disabled) {
-      color: @dls-menu-item-font-color-horizontal-current;
+      color: @dls-nav-item-font-color-current;
       background-color: @dls-menu-item-background-color-horizontal-current;
       font-weight: @dls-menu-item-font-weight-current;
 
@@ -165,16 +167,16 @@
       }
 
       &.@{veui-prefix}-nav-item-open {
-        color: @dls-menu-item-font-color-horizontal-current-hover;
+        color: @dls-nav-item-font-color-current-hover;
         background-color: @dls-menu-item-background-color-horizontal-hover;
 
         .@{veui-prefix}-nav-item-label-wrapper::after {
-          background-color: @dls-menu-indicator-color-hover;
+          background-color: @dls-nav-indicator-color-hover;
         }
       }
 
       &[data-focus-visible-added] {
-        color: @dls-menu-item-font-color-horizontal-current-focus;
+        color: @dls-nav-item-font-color-current-focus;
         background-color: @dls-menu-item-background-color-horizontal-focus;
 
         .@{veui-prefix}-nav-item-label-wrapper::after {
@@ -183,7 +185,7 @@
       }
 
       &:not(.@{veui-prefix}-nav-more):active {
-        color: @dls-menu-item-font-color-horizontal-current-active;
+        color: @dls-nav-item-font-color-current-active;
         background-color: @dls-menu-item-background-color-horizontal-active;
 
         .@{veui-prefix}-nav-item-label-wrapper::after {
@@ -197,7 +199,7 @@
   // expand icon in top level items
   &-expand-icon {
     .size(@dls-menu-item-icon-size-aux);
-    margin-left: @dls-menu-card-target-spacing;
+    margin-left: @dls-nav-item-content-spacing;
     color: @dls-nav-item-font-color;
     fill: @dls-nav-item-icon-color-aux;
     .veui-transition(transform, color);
@@ -208,9 +210,9 @@
   }
 
   // top level expandable items
-  &-body &-expandable {
-    padding: 0 @dls-menu-item-spacing 0 @dls-menu-item-padding-x-horizontal;
-  }
+  // &-body &-expandable {
+  //   padding: 0 @dls-menu-item-spacing 0 @dls-menu-item-padding-x-horizontal;
+  // }
 
   // dropdown: apply overlay shadow styles
   &-dropdown > .@{veui-prefix}-option-group,
@@ -250,32 +252,32 @@
     align-items: center;
 
     &:hover {
-      color: @dls-menu-item-font-color-horizontal-hover;
+      color: @dls-nav-item-font-color-hover;
       background-color: @dls-menu-item-background-color-horizontal-hover;
     }
 
     &[data-focus-visible-added] {
-      color: @dls-menu-item-font-color-horizontal-focus;
+      color: @dls-nav-item-font-color-focus;
       background-color: @dls-menu-item-background-color-horizontal-focus;
     }
 
     &.@{veui-prefix}-nav-item-exact-active {
       font-weight: @dls-menu-item-font-weight-current;
-      color: @dls-menu-item-font-color-horizontal-current;
+      color: @dls-nav-item-font-color-current;
       background-color: @dls-menu-item-background-color-horizontal-current;
 
       &:hover {
-        color: @dls-menu-item-font-color-horizontal-current-hover;
+        color: @dls-nav-item-font-color-current-hover;
         background-color: @dls-menu-item-background-color-horizontal-current-hover;
       }
 
       &[data-focus-visible-added] {
-        color: @dls-menu-item-font-color-horizontal-current-focus;
+        color: @dls-nav-item-font-color-current-focus;
         background-color: @dls-menu-item-background-color-horizontal-current-focus;
       }
 
       &:active {
-        color: @dls-menu-item-font-color-horizontal-current-active;
+        color: @dls-nav-item-font-color-current-active;
         background-color: @dls-menu-item-background-color-horizontal-current-active;
       }
     }
@@ -338,7 +340,7 @@
     &[data-focus-visible-added] {
       &,
       & + .@{veui-prefix}-option-group-expandable {
-        color: @dls-menu-item-font-color-horizontal-focus;
+        color: @dls-nav-item-font-color-focus;
       }
 
       &::before {
@@ -349,7 +351,7 @@
     &:active {
       &,
       & + .@{veui-prefix}-option-group-expandable {
-        color: @dls-menu-item-font-color-horizontal-active;
+        color: @dls-nav-item-font-color-active;
       }
 
       &::before {
@@ -362,7 +364,7 @@
       &,
       & + .@{veui-prefix}-option-group-expandable {
         font-weight: @dls-menu-item-font-weight-current;
-        color: @dls-menu-item-font-color-horizontal-current;
+        color: @dls-nav-item-font-color-current;
       }
     }
 
@@ -374,7 +376,7 @@
       &:hover {
         &,
         & + .@{veui-prefix}-option-group-expandable {
-          color: @dls-menu-item-font-color-horizontal-current-hover;
+          color: @dls-nav-item-font-color-current-hover;
         }
 
         &::before {
@@ -385,7 +387,7 @@
       &[data-focus-visible-added] {
         &,
         & + .@{veui-prefix}-option-group-expandable {
-          color: @dls-menu-item-font-color-horizontal-current-focus;
+          color: @dls-nav-item-font-color-current-focus;
         }
 
         &::before {
@@ -396,7 +398,7 @@
       &:active {
         &,
         & + .@{veui-prefix}-option-group-expandable {
-          color: @dls-menu-item-font-color-horizontal-current-active;
+          color: @dls-nav-item-font-color-current-active;
         }
 
         &::before {
@@ -419,37 +421,37 @@
       align-items: center;
 
       &:hover {
-        color: @dls-menu-item-font-color-horizontal-hover;
+        color: @dls-nav-item-font-color-hover;
         background-color: @dls-menu-item-background-color-horizontal-hover;
       }
 
       &[data-focus-visible-added] {
-        color: @dls-menu-item-font-color-horizontal-focus;
+        color: @dls-nav-item-font-color-focus;
         background-color: @dls-menu-item-background-color-horizontal-focus;
       }
 
       &:active {
-        color: @dls-menu-item-font-color-horizontal-active;
+        color: @dls-nav-item-font-color-active;
         background-color: @dls-menu-item-background-color-horizontal-active;
       }
 
       &.@{veui-prefix}-nav-item-exact-active {
         font-weight: @dls-menu-item-font-weight-current;
-        color: @dls-menu-item-font-color-horizontal-current;
+        color: @dls-nav-item-font-color-current;
         background-color: @dls-menu-item-background-color-horizontal-current;
 
         &:hover {
-          color: @dls-menu-item-font-color-horizontal-current-hover;
+          color: @dls-nav-item-font-color-current-hover;
           background-color: @dls-menu-item-background-color-horizontal-current-hover;
         }
 
         &[data-focus-visible-added] {
-          color: @dls-menu-item-font-color-horizontal-current-focus;
+          color: @dls-nav-item-font-color-current-focus;
           background-color: @dls-menu-item-background-color-horizontal-current-focus;
         }
 
         &:active {
-          color: @dls-menu-item-font-color-horizontal-current-active;
+          color: @dls-nav-item-font-color-current-active;
           background-color: @dls-menu-item-background-color-horizontal-current-active;
         }
       }
