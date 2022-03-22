@@ -8,7 +8,13 @@ function resolve (dir) {
 }
 
 const VEUI_PREFIX = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
-const vars = {}
+const vars = {
+  '@dls-height-xs': '28px',
+  '@dls-height-s': '32px',
+  '@dls-height-m': '36px',
+  '@dls-height-l': '40px',
+  '@dls-height-xl': '44px'
+}
 
 module.exports = {
   lintOnSave: false,
