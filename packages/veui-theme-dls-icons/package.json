@@ -20,7 +20,7 @@
     "dls-icons-vue": "~2.5.0"
   },
   "peerDependencies": {
-    "veui": "2.5.4"
+    "veui": "2.5.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
