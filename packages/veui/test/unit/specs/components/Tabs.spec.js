@@ -689,13 +689,11 @@ describe('components/Tabs', () => {
             <veui-tab label="#1"/>
             <veui-tab label="#2"/>
             <veui-tab label="#3"/>
-            <template #tab-item="tab">
+            <template #tab-label="tab">
               <button
                 type="button"
                 class="foo-btn"
-                :disabled="tab.disabled"
-                v-bind="tab.attrs"
-                @click="tab.activate"
+
                 style="width: 60px;"
               >
                 {{ tab.label }}
@@ -722,46 +720,41 @@ describe('components/Tabs', () => {
     next.trigger('click')
 
     await wait(400)
-
+    let btns = wrapper.findAll('.foo-btn')
     expect(
-      list.scrollLeft + list.clientWidth,
-      `${prev.element.clientWidth},${getComputedStyle(prev.element).font},${
-        list.scrollLeft
-      }+${list.clientWidth}`
-    ).to.equal(list.scrollWidth)
+      btns.at(1).element.getBoundingClientRect().left,
+      '左侧对齐'
+    ).to.equal(list.getBoundingClientRect().left)
     expectDisabled(prev, false)
-    expectDisabled(next)
-
-    prev.trigger('click')
-
-    await wait(400)
-    expect(list.scrollLeft).to.equal(0)
-    expectDisabled(prev)
     expectDisabled(next, false)
 
-    let btns = wrapper.findAll('.foo-btn')
-    btns.at(2).trigger('click')
+    const expectScrollLeft = list.scrollLeft + 60 - list.clientWidth
+    prev.trigger('click')
+    await wait(400)
+    expect(list.scrollLeft, '左侧滚动clientWidth').to.equal(expectScrollLeft)
+    expectDisabled(prev, expectScrollLeft === 0)
+    expectDisabled(next, false)
 
+    btns.at(2).trigger('click')
     await wait(400)
 
-    expect(
-      list.scrollLeft + list.clientWidth,
-      `${prev.element.clientWidth},${getComputedStyle(prev.element).font},${
-        list.scrollLeft
-      }+${list.clientWidth}`
-    ).to.equal(list.scrollWidth)
+    const btn2 = wrapper.findAll('.veui-tabs-item').at(2).element
+    expect(btn2.offsetLeft + btn2.clientWidth, '右侧对齐').to.equal(
+      list.scrollLeft + list.clientWidth
+    )
     expectDisabled(prev, false)
-    expectDisabled(next)
+    expectDisabled(
+      next,
+      list.scrollLeft + list.clientWidth === list.scrollWidth
+    )
 
     btns.at(0).trigger('click')
-
     await wait(400)
     expect(list.scrollLeft).to.equal(0)
     expectDisabled(prev)
     expectDisabled(next, false)
 
-    wrapper.find('.veui-tabs').element.style.width = '300px'
-
+    wrapper.find('.veui-tabs').element.style.width = '400px'
     await wait(400)
     expect(wrapper.find('.veui-tabs-prev').exists()).to.equal(false)
     expect(wrapper.find('.veui-tabs-next').exists()).to.equal(false)

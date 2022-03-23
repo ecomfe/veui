@@ -401,6 +401,10 @@ export default {
       return item
     },
     handleItemHover (item) {
+      if (item.disabled) {
+        return
+      }
+
       this.hoverItem = item
       if (this.isMoreBtn(item) || item.disabled) {
         this.hoverIndicatorClass = ''

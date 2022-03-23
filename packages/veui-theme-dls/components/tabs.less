@@ -60,7 +60,7 @@
     @nav-spacing-name: ~"dls-tab-nav-spacing-@{variant}-@{size}";
     @nav-spacing: @@nav-spacing-name;
 
-    &-item-label {
+    &-item {
       margin: 0 @half-spacing;
       padding-left: @padding;
       padding-right: @padding;
@@ -68,12 +68,24 @@
       max-width: @max-width;
     }
 
-    &-item:first-child .@{veui-prefix}-tabs-item-label {
+    &-item + .@{veui-prefix}-tabs-item when (@variant = simple) {
+      margin-left: calc(@half-spacing + 1px);
+
+      &::before {
+        content: "";
+        .absolute(50%, _, _, calc(-@half-spacing - 1px));
+        transform: translateY(-50%);
+        .size(1px, @dls-tab-separator-height-simple);
+        background-color: @dls-tab-separator-color;
+      }
+    }
+
+    &-item:first-child {
       margin-left: 0;
     }
 
     &-item-remove {
-      .absolute(50%, calc(@half-spacing - @dls-tab-remove-spacing - @remove-icon-size), _, _);
+      .absolute(50%, calc(-@dls-tab-remove-spacing - @remove-icon-size), _, _);
     }
 
     &-tip,
@@ -113,6 +125,7 @@
       text-decoration: none;
       outline: none;
       position: relative;
+      overflow: hidden;
 
       &::before {
         content: "";
@@ -312,18 +325,9 @@
     &-item {
       & + .@{veui-prefix}-tabs-item {
         position: relative;
-        margin-left: 1px;
         .centered-line(
           dls-even(dls-line-height(@dls-line-height-1, @dls-font-size-1))
         );
-
-        &::before {
-          content: "";
-          .absolute(50%, _, _, -1px);
-          transform: translateY(-50%);
-          .size(1px, @dls-tab-separator-height-simple);
-          background-color: @dls-tab-separator-color;
-        }
       }
 
       &-label {
@@ -365,6 +369,7 @@
 
     &-item {
       height: @dls-tab-height-m;
+      margin: 0;
 
       &-label {
         margin: @dls-tab-spacing-strong-m;
