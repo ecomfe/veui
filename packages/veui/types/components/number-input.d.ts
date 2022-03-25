@@ -33,7 +33,6 @@ type Mixins = [
 ]
 
 type Slots = {
-  default(): unknown
   before(): unknown
   after(): unknown
 }

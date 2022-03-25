@@ -164,7 +164,6 @@ import { pick, without, includes, map } from 'lodash'
 import '../common/global'
 
 const SHARED_PROPS = [
-  'autocomplete',
   'placeholder',
   'value',
   'autofocus',
@@ -230,7 +229,7 @@ export default {
       validator (val) {
         return []
           .concat(val)
-          .every(trigger => includes(['focus', 'input', 'submit'], trigger))
+          .every((trigger) => includes(['focus', 'input', 'submit'], trigger))
       }
     },
     ...pick(Input.props, SHARED_PROPS)
@@ -261,7 +260,7 @@ export default {
       return this.replaceOnSelect
     },
     realSuggestions () {
-      return map(this.suggestions, item =>
+      return map(this.suggestions, (item) =>
         typeof item === 'string' ? { label: item, value: item } : item
       )
     },
@@ -415,7 +414,7 @@ function findSuggestion (suggestions, val) {
     return null
   }
   let result = null
-  suggestions.some(suggestion => {
+  suggestions.some((suggestion) => {
     if (!suggestion.options) {
       if (suggestion.value === val) {
         result = suggestion

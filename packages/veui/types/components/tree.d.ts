@@ -2,8 +2,6 @@ import {
   VeuiDefineComponent,
   VeuiDefineInstance,
   LooseObject,
-  Normalized,
-  SearchableProps,
   RequiredKey,
   UiMixin,
   ControllableMixin,
@@ -46,7 +44,7 @@ type Props<
   expanded?: Array<NameOrValue>
   selectable?: boolean
   selected?: NameOrValue
-} & SearchableProps<Normalized<'children', T, false, CheckedState>>
+}
 
 export type LooseTreeItem = LooseObject<
   {
