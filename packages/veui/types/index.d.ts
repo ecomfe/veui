@@ -69,3 +69,8 @@ export declare const Tooltip: Components.Tooltip
 export declare const Transfer: Components.Transfer
 export declare const Tree: Components.Tree
 export declare const Uploader: Components.Uploader
+export declare const Content: Components.Content
+export declare const Footer: Components.Footer
+export declare const Header: Components.Header
+export declare const Layout: Components.Layout
+export declare const Sidebar: Components.Sidebar

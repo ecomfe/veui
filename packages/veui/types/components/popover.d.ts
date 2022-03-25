@@ -3,7 +3,8 @@ import {
   VeuiDefineInstance,
   UiMixin,
   OverlayMixin,
-  OverlayTarget
+  OverlayTarget,
+  OverlayPosition
 } from '../common'
 
 type Props = {
@@ -11,6 +12,9 @@ type Props = {
   title?: string
   open?: boolean
   foot?: boolean
+  position?: OverlayPosition
+  trigger?: string
+  hideDelay?: number
   okLabel?: string
   cancelLabel?: string
 }

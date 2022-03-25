@@ -33,7 +33,6 @@ type Item =
 type Props<T extends Item> = Pick<InputProps, SHARED_PROPS> & {
   suggestions?: Array<T>
   autofocus?: boolean
-  autocomplete?: boolean
   replaceOnSelect?: boolean | string
   suggestTrigger?: Trigger | Array<Trigger>
 } & SearchableProps<Normalized<'options', T>>
