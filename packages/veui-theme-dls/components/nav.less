@@ -329,44 +329,46 @@
       position: relative;
     }
 
-    &[data-focus-visible-added] {
-      &,
-      & + .@{veui-prefix}-option-group-expandable {
-        color: @dls-nav-item-font-color-focus;
-      }
-
-      &::before {
-        background-color: @dls-nav-item-background-color-focus;
-      }
-    }
-
-    &:active {
-      &,
-      & + .@{veui-prefix}-option-group-expandable {
-        color: @dls-nav-item-font-color-active;
-      }
-    }
-
-    &.@{veui-prefix}-nav-item-active,
-    &.@{veui-prefix}-nav-item-exact-active {
-      &,
-      & + .@{veui-prefix}-option-group-expandable {
-        color: @dls-nav-item-font-color-current;
-      }
-    }
-
-    &.@{veui-prefix}-nav-item-exact-active {
-      &:hover {
-        &,
-        & + .@{veui-prefix}-option-group-expandable {
-          color: @dls-nav-item-font-color-current-hover;
-        }
-      }
-
+    &:not(.@{veui-prefix}-disabled) {
       &[data-focus-visible-added] {
         &,
         & + .@{veui-prefix}-option-group-expandable {
-          color: @dls-nav-item-font-color-current-focus;
+          color: @dls-nav-item-font-color-focus;
+        }
+
+        &::before {
+          background-color: @dls-nav-item-background-color-focus;
+        }
+      }
+
+      &:active {
+        &,
+        & + .@{veui-prefix}-option-group-expandable {
+          color: @dls-nav-item-font-color-active;
+        }
+      }
+
+      &.@{veui-prefix}-nav-item-active,
+      &.@{veui-prefix}-nav-item-exact-active {
+        &,
+        & + .@{veui-prefix}-option-group-expandable {
+          color: @dls-nav-item-font-color-current;
+        }
+      }
+
+      &.@{veui-prefix}-nav-item-exact-active {
+        &:hover {
+          &,
+          & + .@{veui-prefix}-option-group-expandable {
+            color: @dls-nav-item-font-color-current-hover;
+          }
+        }
+
+        &[data-focus-visible-added] {
+          &,
+          & + .@{veui-prefix}-option-group-expandable {
+            color: @dls-nav-item-font-color-current-focus;
+          }
         }
       }
     }
@@ -384,32 +386,34 @@
       display: flex;
       align-items: center;
 
-      &:hover {
-        color: @dls-nav-item-font-color-hover;
-      }
-
-      &[data-focus-visible-added] {
-        color: @dls-nav-item-font-color-focus;
-        background-color: @dls-nav-item-background-color-focus;
-      }
-
-      &:active {
-        color: @dls-nav-item-font-color-active;
-      }
-
-      &.@{veui-prefix}-nav-item-exact-active {
-        color: @dls-nav-item-font-color-current;
-
+      &:not(.@{veui-prefix}-disabled) {
         &:hover {
-          color: @dls-nav-item-font-color-current-hover;
+          color: @dls-nav-item-font-color-hover;
         }
 
         &[data-focus-visible-added] {
-          color: @dls-nav-item-font-color-current-focus;
+          color: @dls-nav-item-font-color-focus;
+          background-color: @dls-nav-item-background-color-focus;
         }
 
         &:active {
-          color: @dls-nav-item-font-color-current-active;
+          color: @dls-nav-item-font-color-active;
+        }
+
+        &.@{veui-prefix}-nav-item-exact-active {
+          color: @dls-nav-item-font-color-current;
+
+          &:hover {
+            color: @dls-nav-item-font-color-current-hover;
+          }
+
+          &[data-focus-visible-added] {
+            color: @dls-nav-item-font-color-current-focus;
+          }
+
+          &:active {
+            color: @dls-nav-item-font-color-current-active;
+          }
         }
       }
     }

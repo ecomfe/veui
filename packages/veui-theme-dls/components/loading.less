@@ -1,5 +1,7 @@
 @import "../lib.less";
 
+@dls-loading-spacing-vertical: @dls-padding-unit * 2;
+
 .@{veui-prefix}-loading {
   line-height: 1;
   align-items: center;
@@ -30,7 +32,7 @@
 
   &-text {
     color: @dls-loading-font-color-normal;
-    margin-left: @dls-loading-content-spacing;
+    margin-left: @dls-loading-content-spacing-m;
 
     .@{veui-prefix}-loading[ui~="strong"] & {
       color: @dls-loading-font-color-strong;
@@ -38,6 +40,14 @@
 
     .@{veui-prefix}-loading[ui~="reverse"] & {
       color: @dls-loading-font-color-reverse;
+    }
+
+    .@{veui-prefix}-loading[ui~="s"] & {
+      margin-left: @dls-loading-content-spacing-s;
+    }
+
+    .@{veui-prefix}-loading[ui~="l"] & {
+      margin-left: @dls-loading-content-spacing-l;
     }
   }
 
@@ -76,7 +86,7 @@
     }
 
     .@{veui-prefix}-loading[ui~="vertical"] & {
-      margin-bottom: @dls-loading-padding;
+      margin-bottom: @dls-loading-spacing-vertical;
     }
   }
 
