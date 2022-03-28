@@ -1,7 +1,6 @@
 @import "../lib.less";
 
-// will be removed
-@dls-form-field-spacing-after-horizontal: @dls-padding-unit * 2;
+@dls-form-field-help-spacing: @dls-padding-unit * 2;
 
 .@{veui-prefix}-field {
   position: relative;
@@ -70,6 +69,10 @@
     margin-bottom: -@dls-form-field-spacing-vertical;
     min-height: @dls-form-field-spacing-vertical;
     padding-top: @dls-form-field-error-spacing-before-vertical;
+  }
+
+  &-help-content-right {
+    margin-left: @dls-form-field-help-spacing;
   }
 
   .make-ui(@font-size, @min-height) {

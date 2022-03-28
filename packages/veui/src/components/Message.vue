@@ -2,15 +2,26 @@
 <div
   :class="{
     [$c('message')]: true,
-    [$c(`message-${status}`)]: true
+    [$c(`message-${status}`)]: true,
+    [$c(`message-${display}`)]: true
   }"
+  :ui="realUi"
 >
   <veui-icon
-    v-if="icons[status] && icon"
+    v-if="icons[status] && display !== 'simple'"
+    ref="icon"
     :class="$c('message-icon')"
     :name="icons[status]"
   />
-  <div :class="$c('message-content')"><slot/></div>
+  <veui-popover
+    v-if="display === 'popup'"
+    target="icon"
+    position="right"
+  ><slot/></veui-popover>
+  <div
+    v-else
+    :class="$c('message-content')"
+  ><slot/></div>
 </div>
 </template>
 
@@ -19,11 +30,13 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import { includes } from 'lodash'
 import Icon from './Icon'
+import Popover from './Popover'
 
 export default {
   name: 'veui-message',
   components: {
-    'veui-icon': Icon
+    'veui-icon': Icon,
+    'veui-popover': Popover
   },
   mixins: [prefix, ui],
   props: {
@@ -34,7 +47,13 @@ export default {
       },
       default: 'success'
     },
-    icon: Boolean
+    display: {
+      type: String,
+      validator (val) {
+        return includes(['normal', 'popup', 'simple', 'standalone'], val)
+      },
+      default: 'normal'
+    }
   }
 }
 </script>

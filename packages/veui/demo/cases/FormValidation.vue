@@ -42,6 +42,7 @@
         name="name3"
         label="别名"
         tip="有内置错误"
+        help="辅助文案"
       >
         <veui-input
           v-model="storeData4.name3"
@@ -55,11 +56,16 @@
         name="age1"
         :rules="ageRule"
         label="年龄"
+        help-position="bottom"
       >
         <veui-input
           v-model="storeData4.age"
           placeholder="错误提示优先出在右侧, 长度不能超过3"
         />
+        <template #help>
+          <p>辅助文案插槽1</p>
+          <p>辅助文案插槽2</p>
+        </template>
       </veui-field>
 
       <veui-field
@@ -77,6 +83,8 @@
         name="phoneSet"
         label="电话"
         :required="true"
+        help="辅助文案"
+        help-position="bottom"
       >
         <veui-field
           field="phoneType"
@@ -103,6 +111,8 @@
         name="phoneSet2"
         label="电话2"
         :required="true"
+        help="辅助文案"
+        help-position="bottom"
       >
         <veui-field
           field="phoneType2"
@@ -458,10 +468,16 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~veui-theme-dls/lib.less";
 
 .veui-form-demo {
+  margin-bottom: 50px;
+
+  p {
+    margin: 0;
+  }
+
   h2 {
     margin-bottom: 40px;
   }
@@ -469,8 +485,6 @@ export default {
   section + section {
     margin-top: 50px;
   }
-
-  margin-bottom: 50px;
 
   .veui-form[ui~="inline"] + .veui-form[ui~="inline"] {
     margin-top: 30px;

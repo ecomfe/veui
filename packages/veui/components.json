@@ -36,6 +36,38 @@
     "path": "AlertBox.vue"
   },
   {
+    "name": "Form",
+    "path": "Form/Form.vue"
+  },
+  {
+    "name": "Form",
+    "path": "Form"
+  },
+  {
+    "name": "Form",
+    "path": "Form/index.js"
+  },
+  {
+    "name": "Label",
+    "path": "Label.vue"
+  },
+  {
+    "name": "Tooltip",
+    "path": "Tooltip.vue"
+  },
+  {
+    "name": "Message",
+    "path": "Message.vue"
+  },
+  {
+    "name": "Field",
+    "path": "Field.js"
+  },
+  {
+    "name": "Field",
+    "path": "Form/Field.vue"
+  },
+  {
     "name": "Checkbox",
     "path": "Checkbox.vue"
   },
@@ -148,10 +180,6 @@
     "path": "Cascader/index.js"
   },
   {
-    "name": "Tooltip",
-    "path": "Tooltip.vue"
-  },
-  {
     "name": "Popover",
     "path": "Popover.vue"
   },
@@ -216,22 +244,6 @@
     "path": "Embedded.vue"
   },
   {
-    "name": "Label",
-    "path": "Label.vue"
-  },
-  {
-    "name": "Message",
-    "path": "Message.vue"
-  },
-  {
-    "name": "Field",
-    "path": "Field.js"
-  },
-  {
-    "name": "Field",
-    "path": "Form/Field.vue"
-  },
-  {
     "name": "Fieldset",
     "path": "Fieldset.js"
   },
@@ -250,18 +262,6 @@
   {
     "name": "Footer",
     "path": "Layout/Footer.vue"
-  },
-  {
-    "name": "Form",
-    "path": "Form/Form.vue"
-  },
-  {
-    "name": "Form",
-    "path": "Form"
-  },
-  {
-    "name": "Form",
-    "path": "Form/index.js"
   },
   {
     "name": "GridColumn",
@@ -449,15 +449,15 @@
   },
   {
     "name": "Transfer",
+    "path": "Transfer/Transfer.vue"
+  },
+  {
+    "name": "Transfer",
     "path": "Transfer"
   },
   {
     "name": "Transfer",
     "path": "Transfer/index.js"
-  },
-  {
-    "name": "Transfer",
-    "path": "Transfer/Transfer.vue"
   },
   {
     "name": "Uploader",
