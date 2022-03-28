@@ -59,6 +59,7 @@ import Plugins from './Plugins'
 import Cascader from './Cascader'
 import ConfigProvider from './ConfigProvider'
 import Layout from './Layout'
+import Transition from './Transition'
 
 export default [
   {
@@ -75,6 +76,11 @@ export default [
     path: '/alert',
     name: 'Alert',
     component: Alert
+  },
+  {
+    path: '/transition',
+    name: 'Transition',
+    component: Transition
   },
   {
     path: '/alert-box',
