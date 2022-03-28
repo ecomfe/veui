@@ -59,6 +59,7 @@ import Plugins from './Plugins'
 import Cascader from './Cascader'
 import ConfigProvider from './ConfigProvider'
 import Layout from './Layout'
+import Message from './Message'
 
 export default [
   {
@@ -264,6 +265,11 @@ export default [
         component: Schedule
       }
     ]
+  },
+  {
+    path: '/message',
+    name: 'Message',
+    component: Message
   },
   {
     path: '/nav',

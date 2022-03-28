@@ -7,7 +7,7 @@
     [$c('field-required')]: required
   }"
   role="group"
-  v-bind="attrs"
+  v-bind="$attrs"
 >
   <template slot="label"><slot name="label"/></template>
   <slot/>
@@ -20,7 +20,6 @@
  * fieldset 和 field 的区别是 fieldset 只能用来做 ui 上的排列和显示 tip，合并显示 error
  */
 import Field from './Field'
-import { omit } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
@@ -32,19 +31,10 @@ export default {
     'veui-field': Field
   },
   mixins: [prefix, ui],
+  inheritAttrs: false,
   props: {
-    label: String,
-    name: String,
-    tip: String,
-    disabled: Boolean,
-    readonly: Boolean,
     // 因为会出现一行里边有必填和非必填共存，交给使用者决定显不显示星号
     required: Boolean
-  },
-  computed: {
-    attrs () {
-      return omit(this.$props, ['required'])
-    }
   }
 }
 </script>

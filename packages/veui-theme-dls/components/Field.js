@@ -13,7 +13,8 @@ ui.defaults(
       }
     },
     parts: {
-      tip: 'alt'
+      tip: 'alt',
+      message: 's'
     }
   },
   'field'

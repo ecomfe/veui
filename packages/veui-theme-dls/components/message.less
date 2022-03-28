@@ -1,33 +1,45 @@
 @import "../lib.less";
 
+// TODO tokens
 .@{veui-prefix}-message {
   display: flex;
   align-items: center;
+  font-size: @dls-font-size-1;
 
   &-icon {
-    // TODO token
-    margin-right: @dls-padding-unit * 2;
+    margin-right: @dls-padding-unit * 1;
   }
 
-  &-info {
-    // TODO token
+  &-popup &-icon {
+    cursor: pointer;
+  }
+
+  &-info&-standalone &-icon,
+  &-info:not(&-standalone) {
     color: @dls-dialog-icon-color-info;
   }
 
-  &-success {
+  &-success&-standalone &-icon,
+  &-success:not(&-standalone) {
     color: @dls-dialog-icon-color-success;
   }
 
-  &-error {
+  &-error&-standalone &-icon,
+  &-error:not(&-standalone) {
     color: @dls-dialog-icon-color-error;
   }
 
-  &-warning {
+  &-warning&-standalone &-icon,
+  &-warning:not(&-standalone) {
     color: @dls-dialog-icon-color-warning;
   }
 
-  // TODO token
-  // &-aux {
-  //   color: @dls-dialog-icon-color-aux;
-  // }
+  &-aux&-standalone &-icon,
+  &-aux:not(&-standalone) {
+    color: @dls-color-gray-7;
+  }
+
+  &[ui~="s"] {
+    font-size: @dls-font-size-0;
+  }
 }

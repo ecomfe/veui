@@ -53,18 +53,56 @@
       >{{
         t('validating')
       }}</veui-loading>
-      <veui-field-messages
+      <div
         v-else-if="validationStatus !== 'success'"
-        :messages="renderableValidities"
-      />
+        :class="$c('field-messages')"
+      >
+        <template v-for="(validity, index) in renderableValidities">
+          <component
+            :is="{ render: validity.render }"
+            v-if="validity.render"
+            :key="index"
+            :validity="validity"
+          />
+          <veui-message
+            v-else
+            :key="index"
+            :ui="uiParts.message"
+            :title="validity.message"
+            :status="validity.status"
+            display="simple"
+          >
+            <span>{{ validity.message }}</span>
+          </veui-message>
+        </template>
+      </div>
+      <veui-message
+        v-if="(help || $scopedSlots.help) && helpPosition === 'bottom'"
+        :ui="uiParts.message"
+        status="aux"
+        display="simple"
+        :class="$c(`field-help-content-${helpPosition}`)"
+      >
+        <slot name="help">{{ help }}</slot>
+      </veui-message>
     </div>
   </div>
+  <veui-message
+    v-if="(help || $scopedSlots.help) && helpPosition === 'right'"
+    :ui="uiParts.message"
+    status="aux"
+    display="simple"
+    :class="$c(`field-help-content-${helpPosition}`)"
+  >
+    <slot name="help">{{ help }}</slot>
+  </veui-message>
 </div>
 </template>
 
 <script>
 import Label from '../Label'
 import Loading from '../Loading'
+import Message from '../Message'
 import type from '../../managers/type'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
@@ -78,7 +116,6 @@ import Vue from 'vue'
 import '../../common/global'
 import { useCoupled, useFacade } from './_facade'
 import useRule from './_useRule'
-import FieldMessages from './_FieldMessages'
 import { useFormChild } from './Form'
 import { ValidityStatus, normalizeValidities } from './_useValidity'
 
@@ -97,7 +134,7 @@ export default {
     'veui-label': Label,
     'veui-tooltip': Tooltip,
     'veui-loading': Loading,
-    'veui-field-messages': FieldMessages
+    'veui-message': Message
   },
   mixins: [
     prefix,
@@ -149,6 +186,14 @@ export default {
     readonly: Boolean,
     rules: [String, Array],
     field: String,
+    help: String,
+    helpPosition: {
+      type: String,
+      default: 'right',
+      validator (value) {
+        return ['bottom', 'right'].indexOf(value) >= 0
+      }
+    },
     abstract: Boolean, // 无label（无margin），不展示错误信息
     withholdValidity: Boolean // 不自动invalid，不自动listener，不自动 disabled 和 readonly
   },
