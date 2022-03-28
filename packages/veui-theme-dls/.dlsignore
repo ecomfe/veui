@@ -30,6 +30,10 @@
 @dls-time-picker-option-content-min-width
 
 ### Auto Generated ###
+@dls-checkbox-font-size-m
+@dls-checkbox-size-m
+@dls-checkbox-font-size-s
+@dls-checkbox-size-s
 @dls-button-padding-xs
 @dls-button-height-xs
 @dls-button-border-radius-xs
@@ -62,21 +66,10 @@
 @dls-alert-background-color-error
 @dls-alert-border-color-error
 @dls-alert-icon-color-error
-@dls-checkbox-font-size-m
-@dls-checkbox-size-m
-@dls-checkbox-font-size-s
-@dls-checkbox-size-s
 @dls-option-height-l
 @dls-option-height-m
 @dls-option-height-s
 @dls-option-height-xs
-@dls-radio-font-size-m
-@dls-radio-size-m
-@dls-radio-dot-size-m
-@dls-radio-font-size-s
-@dls-radio-size-s
-@dls-radio-dot-size-s
-@dls-select-tag-height-m
 @dls-tag-height-m
 @dls-tag-border-radius-m
 @dls-tag-font-size-m
@@ -99,12 +92,19 @@
 @dls-tag-height-s
 @dls-tag-border-radius-s
 @dls-tag-font-size-s
-@dls-pagination-page-item-min-width-m
-@dls-pagination-page-item-min-width-xs
-@dls-pagination-page-item-min-width-s
+@dls-select-tag-height-m
+@dls-radio-font-size-m
+@dls-radio-size-m
+@dls-radio-dot-size-m
+@dls-radio-font-size-s
+@dls-radio-size-s
+@dls-radio-dot-size-s
 @dls-select-tag-height-xs
 @dls-select-tag-height-s
 @dls-select-tag-height-l
+@dls-pagination-page-item-min-width-m
+@dls-pagination-page-item-min-width-xs
+@dls-pagination-page-item-min-width-s
 @dls-steps-marker-border-color-completed
 @dls-steps-marker-foreground-color-completed
 @dls-steps-marker-background-color-completed
@@ -120,10 +120,6 @@
 @dls-steps-marker-border-color-error-current
 @dls-steps-marker-foreground-color-error-current
 @dls-steps-marker-background-color-error-current
-@dls-foreground-color-success-primary
-@dls-foreground-color-warning-primary
-@dls-foreground-color-info-primary
-@dls-foreground-color-error-primary
 @dls-switch-width-m
 @dls-switch-height-m
 @dls-switch-padding-m
@@ -136,6 +132,10 @@
 @dls-switch-height-s
 @dls-switch-padding-s
 @dls-switch-thumb-size-s
+@dls-foreground-color-success-primary
+@dls-foreground-color-warning-primary
+@dls-foreground-color-info-primary
+@dls-foreground-color-error-primary
 @dls-toast-icon-color-success
 @dls-toast-icon-color-warning
 @dls-toast-icon-color-info
