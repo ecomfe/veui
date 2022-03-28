@@ -175,7 +175,8 @@ export default {
         children: [
           {
             label: 'Radio',
-            to: '/nav/radio'
+            to: '/nav/radio',
+            disabled: true
           }
         ]
       },

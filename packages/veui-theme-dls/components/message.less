@@ -1,45 +1,65 @@
 @import "../lib.less";
 
-// TODO tokens
 .@{veui-prefix}-message {
   display: flex;
   align-items: center;
-  font-size: @dls-font-size-1;
+  font-size: @dls-message-font-size-m;
+  line-height: @dls-message-line-height;
 
   &-icon {
-    margin-right: @dls-padding-unit * 1;
+    .dls-icon-size(@dls-message-icon-size);
+    margin-right: @dls-message-content-spacing;
   }
 
   &-popup &-icon {
     cursor: pointer;
   }
 
-  &-info&-standalone &-icon,
-  &-info:not(&-standalone) {
-    color: @dls-dialog-icon-color-info;
+  &-info {
+    color: @dls-message-font-color-info;
   }
 
-  &-success&-standalone &-icon,
-  &-success:not(&-standalone) {
-    color: @dls-dialog-icon-color-success;
+  &-info &-icon {
+    color: @dls-message-icon-color-info;
   }
 
-  &-error&-standalone &-icon,
-  &-error:not(&-standalone) {
-    color: @dls-dialog-icon-color-error;
+  &-success {
+    color: @dls-message-font-color-success;
   }
 
-  &-warning&-standalone &-icon,
-  &-warning:not(&-standalone) {
-    color: @dls-dialog-icon-color-warning;
+  &-success &-icon {
+    color: @dls-message-icon-color-success;
   }
 
-  &-aux&-standalone &-icon,
-  &-aux:not(&-standalone) {
-    color: @dls-color-gray-7;
+  &-error {
+    color: @dls-message-font-color-error;
+  }
+
+  &-error &-icon {
+    color: @dls-message-icon-color-error;
+  }
+
+  &-warning {
+    color: @dls-message-font-color-warning;
+  }
+
+  &-warning &-icon {
+    color: @dls-message-icon-color-warning;
+  }
+
+  &-aux {
+    color: @dls-message-font-color-aux;
+  }
+
+  &-aux &-icon {
+    color: @dls-message-icon-color-aux;
+  }
+
+  &-standalone {
+    color: @dls-message-font-color-standalone;
   }
 
   &[ui~="s"] {
-    font-size: @dls-font-size-0;
+    font-size: @dls-message-font-size-s;
   }
 }
