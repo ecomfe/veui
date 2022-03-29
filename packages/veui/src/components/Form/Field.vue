@@ -45,7 +45,7 @@
     </div>
     <div
       v-if="!realAbstract"
-      :class="$c('field-message-wrapper')"
+      :class="$c('field-messages')"
     >
       <veui-loading
         v-if="validating"
@@ -53,10 +53,7 @@
       >{{
         t('validating')
       }}</veui-loading>
-      <div
-        v-else-if="validationStatus !== 'success'"
-        :class="$c('field-messages')"
-      >
+      <template v-else-if="validationStatus !== 'success'">
         <template v-for="(validity, index) in renderableValidities">
           <component
             :is="{ render: validity.render }"
@@ -75,7 +72,7 @@
             <span>{{ validity.message }}</span>
           </veui-message>
         </template>
-      </div>
+      </template>
       <veui-message
         v-if="(help || $scopedSlots.help) && helpPosition === 'bottom'"
         :ui="uiParts.message"
@@ -88,7 +85,7 @@
     </div>
   </div>
   <veui-message
-    v-if="(help || $scopedSlots.help) && helpPosition === 'right'"
+    v-if="(help || $scopedSlots.help) && helpPosition === 'side'"
     :ui="uiParts.message"
     status="aux"
     display="simple"
@@ -189,9 +186,9 @@ export default {
     help: String,
     helpPosition: {
       type: String,
-      default: 'right',
+      default: 'side',
       validator (value) {
-        return ['bottom', 'right'].indexOf(value) >= 0
+        return ['bottom', 'side'].indexOf(value) >= 0
       }
     },
     abstract: Boolean, // 无label（无margin），不展示错误信息

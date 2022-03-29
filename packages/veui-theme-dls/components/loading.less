@@ -32,7 +32,6 @@
 
   &-text {
     color: @dls-loading-font-color-normal;
-    margin-left: @dls-loading-content-spacing-m;
 
     .@{veui-prefix}-loading[ui~="strong"] & {
       color: @dls-loading-font-color-strong;
@@ -40,6 +39,10 @@
 
     .@{veui-prefix}-loading[ui~="reverse"] & {
       color: @dls-loading-font-color-reverse;
+    }
+
+    .@{veui-prefix}-loading[ui~="m"] & {
+      margin-left: @dls-loading-content-spacing-m;
     }
 
     .@{veui-prefix}-loading[ui~="s"] & {

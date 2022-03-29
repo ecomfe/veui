@@ -69,10 +69,6 @@ section {
   .message-label {
     min-width: 120px;
   }
-
-  .veui-message {
-    margin-left: 8px;
-  }
 }
 
 .veui-radio-button-group {

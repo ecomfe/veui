@@ -1,8 +1,7 @@
 @import "../lib.less";
 
 @dls-form-field-help-spacing: @dls-padding-unit * 2;
-
-// TODO dls-form-label-spacing-after-horizontal 修成 0.5P
+@dls-form-field-message-spacing: @dls-padding-unit * 1;
 
 .@{veui-prefix}-field {
   position: relative;
@@ -67,13 +66,17 @@
     position: relative;
   }
 
-  &-message-wrapper {
+  &-messages {
     margin-bottom: -@dls-form-field-spacing-vertical;
     min-height: @dls-form-field-spacing-vertical;
     padding-top: @dls-form-field-error-spacing-before-vertical;
+
+    .@{veui-prefix}-message + .@{veui-prefix}-message {
+      margin-top: @dls-form-field-message-spacing;
+    }
   }
 
-  &-help-content-right {
+  &-help-content-side {
     margin-left: @dls-form-field-help-spacing;
   }
 
