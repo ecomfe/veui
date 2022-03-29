@@ -26,6 +26,7 @@ type Props = {
   helpPosition?: 'bottom' | 'side'
   abstract?: boolean
   withholdValidity?: boolean
+  validityDisplay?: 'normal' | 'simple'
 }
 
 type Emits = {}

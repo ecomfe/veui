@@ -180,6 +180,7 @@
         label="收入下限"
         field="floor"
         name="floor"
+        validity-display="normal"
         :rules="[
           { name: 'required', value: true },
           { name: 'min', value: 3500, message: '最低收入不小于 3500' }
@@ -188,17 +189,23 @@
         <veui-number-input v-model="storeData4.floor"/>
       </veui-field>
 
-      <veui-field
-        field="protocol"
-        name="protocol"
-        :rules="protocolRequiredRule"
-        label="协议"
+      <veui-config-provider
+        :value="{
+          'field.validityDisplay': 'normal'
+        }"
       >
-        <veui-checkbox
-          v-model="storeData4.protocol"
-          false-value
-        >我已阅读并同意工作协议</veui-checkbox>
-      </veui-field>
+        <veui-field
+          field="protocol"
+          name="protocol"
+          :rules="protocolRequiredRule"
+          label="协议"
+        >
+          <veui-checkbox
+            v-model="storeData4.protocol"
+            false-value
+          >我已阅读并同意工作协议</veui-checkbox>
+        </veui-field>
+      </veui-config-provider>
 
       <template #actions="{ validating }">
         <veui-button
@@ -228,14 +235,14 @@ import {
   Textarea,
   Checkbox,
   CheckboxGroup,
-  NumberInput
+  NumberInput,
+  ConfigProvider
 } from 'veui'
 import bus from '../bus'
 import 'vue-awesome/icons/indent'
 
 export default {
   name: 'demo-form',
-
   components: {
     'veui-span': Span,
     'veui-input': Input,
@@ -247,9 +254,9 @@ export default {
     'veui-select': Select,
     'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup,
-    'veui-textarea': Textarea
+    'veui-textarea': Textarea,
+    'veui-config-provider': ConfigProvider
   },
-
   data () {
     let hobby = ['🏸']
     let hobbyItems = [
