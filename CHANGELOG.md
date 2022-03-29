@@ -1,11 +1,22 @@
-## 2.6.0 (2022-03-29)
+## 2.6.0 "🌻 Sunflower" (2022-03-30)
+
+### ⚠️ 非兼容性变更
+
+- [^] 限定了 `Tabs` 组件单个标签页标题的宽度，对于超出最大宽度的内容会被省略。<!-- #Tabs -->
+- [^] 移除了 `Nav` 组件的 `s` / `l` 两个尺寸变体，现在 `Nav` 组件只支持 `m` 尺寸。<!-- #Nav -->
 
 ### 💡 主要变更
 
-- [+] 新增 `Message` 组件。<!-- #Message -->
-- [+] `Tabs` 样式升级，对于超出最大宽度的文本会被省略。<!-- #Tabs -->
-- [+] `Nav` 样式升级，新增悬浮和点击动效，去掉了 `s` / `l` 变体。<!-- #Nav -->
-- [+] 重构 `Form`，`Fieldset` 和 `Field` 组件，升级了校验信息样式并新增了属性 `validityDisplay` 来控制是否显示校验信息图标；新增了 `abstract` 和 `withholdValidity` 属性来支持微调校验流程；新增了 `help`，`helpPosition` 属性和 `help` 插槽来支持辅助文本。<!-- #Form #Fieldset  #Field -->
+- [+] 新增 `Message` 组件，提供统一的内联消息提示。<!-- #Message -->
+- [^] 优化 `Tabs` 组件样式。<!-- #Tabs -->
+- [^] 优化 `Nav` 组件样式，新增悬浮和点击动效。<!-- #Nav -->
+- [+] 表单相关功能进行了大幅优化，升级了校验信息样式。`Field` 组件新增了 `help` / `help-position` 属性与 `help` 插槽来支持配置辅助说明。新增了 `abstract` / `withhold-validity` 属性来支持微调校验流程，新增了 `validity-display` 属性来控制校验信息展示样式，校验结果支持配置 `status` 以展示更丰富的校验状态。<!-- #Form #Fieldset  #Field -->
+- [^] `Field` 内如果有多个输入类组件，可以通过将输入组件的 `name` 属性设置为与 `Field` 相同来标记“主要”输入组件，自动绑定校验逻辑与相关反馈。<!-- #Field -->
+
+### 🐞 问题修复
+
+- [^] 为布局相关组件补充了缺失的接口类型声明。<!-- #Layout #Header #Content #Footer #Sidebar -->
+- [^] 修正了 `Radio` 与 `Checkbox` 组件在没有标签文本时的对齐样式。<!-- #Radio #Checkbox -->
 
 ## 2.5.5 (2022-03-23)
 
