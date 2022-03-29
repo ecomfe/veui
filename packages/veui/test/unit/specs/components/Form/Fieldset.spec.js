@@ -91,7 +91,7 @@ describe('components/Form/Fieldset', () => {
     // should set ui correctly
     expect(fieldsetWrapper.attributes().ui).to.equal('tiny')
     // should set name correctly
-    expect(fieldsetWrapper.vm.name).to.equal('test')
+    expect(fieldsetWrapper.vm.$refs.field.name).to.equal('test')
     wrapper.destroy()
   })
 
