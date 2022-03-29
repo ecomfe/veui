@@ -1079,6 +1079,8 @@ describe('components/Tabs', () => {
 
     let list = wrapper.find('.veui-tabs-list')
 
+    // 先让 activeTab 滚动完成再开始测试
+    await wait(200)
     list.element.scrollLeft = 0
 
     wheel(list, 10, -20)

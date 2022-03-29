@@ -39,6 +39,7 @@ export declare const Lightbox: Components.Lightbox
 export declare const Link: Components.Link
 export declare const Loading: Components.Loading
 export declare const Menu: Components.Menu
+export declare const Message: Components.Message
 export declare const Nav: Components.Nav
 export declare const NumberInput: Components.NumberInput
 export declare const Option: Components.Option

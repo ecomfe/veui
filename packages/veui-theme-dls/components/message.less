@@ -3,7 +3,6 @@
 .@{veui-prefix}-message {
   display: flex;
   align-items: center;
-  font-size: @dls-message-font-size-m;
   line-height: @dls-message-line-height;
 
   &-icon {
@@ -13,6 +12,7 @@
 
   &-popup &-icon {
     cursor: pointer;
+    margin-right: 0;
   }
 
   &-info {
@@ -57,6 +57,10 @@
 
   &-standalone {
     color: @dls-message-font-color-standalone;
+  }
+
+  &[ui~="m"] {
+    font-size: @dls-message-font-size-m;
   }
 
   &[ui~="s"] {

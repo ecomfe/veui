@@ -28,7 +28,6 @@
 <script>
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
-import { includes } from 'lodash'
 import Icon from './Icon'
 import Popover from './Popover'
 
@@ -43,14 +42,14 @@ export default {
     status: {
       type: String,
       validator (val) {
-        return includes(['success', 'error', 'info', 'warning', 'aux'], val)
+        return ['success', 'error', 'info', 'warning', 'aux'].indexOf(val) >= 0
       },
-      default: 'success'
+      default: 'info'
     },
     display: {
       type: String,
       validator (val) {
-        return includes(['normal', 'popup', 'simple', 'standalone'], val)
+        return ['normal', 'popup', 'simple', 'standalone'].indexOf(val) >= 0
       },
       default: 'normal'
     }

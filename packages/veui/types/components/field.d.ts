@@ -22,6 +22,10 @@ type Props = {
   disabled?: boolean
   readonly?: boolean
   rules?: string | Array<string | RuleItem>
+  help?: string
+  helpPosition?: 'bottom' | 'side'
+  abstract?: boolean
+  withholdValidity?: boolean
 }
 
 type Emits = {}
@@ -32,6 +36,7 @@ type Slots = {
   default(): unknown
   label(): unknown
   tip(): unknown
+  help(): unknown
 }
 
 type Field = VeuiDefineComponent<{

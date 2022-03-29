@@ -485,7 +485,6 @@ export default {
         case 'ArrowDown':
           if (!root) {
             this.hoverItem = item
-            // this.handleItemHover(item)
           } else {
             items = getFocusable(this.$refs[`dropdown-${root.name}`][0])
             this.navigate(e.target, items, true, false)
