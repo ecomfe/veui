@@ -18,7 +18,12 @@
     @veui:uncheck="handleUncheck"
     @click.stop
   >
-  <span :class="$c('radio-box')"/>
+  <span
+    :class="{
+      [$c('radio-box')]: true,
+      [$c('radio-box-labelled')]: !!$slots.default
+    }"
+  />
   <span
     v-if="$slots.default"
     :class="$c('radio-label')"
@@ -182,7 +187,7 @@ export default {
       let siblings = form
         ? form.querySelectorAll(`input[name="${name}"][type="radio"]`)
         : orphans.get(name)
-      ;[...(siblings || [])].forEach(sibling => {
+      ;[...(siblings || [])].forEach((sibling) => {
         if (radio !== sibling) {
           triggerCustom(sibling, event)
         }

@@ -127,9 +127,11 @@
     .@{veui-prefix}-radio-box {
       .size(@@s);
 
-      // Baseline is around 0.1414em above bottom line for macOS's system font
-      // see https://jsbin.com/yimugoxina/edit?html,css,js,output
-      top: dls-sum(@@s / 2, -@@fs / 2, 0.1414em);
+      &-labelled {
+        // Baseline is around 0.1414em above bottom line for macOS's system font
+        // see https://jsbin.com/yimugoxina/edit?html,css,js,output
+        top: dls-sum(@@s / 2, -@@fs / 2, 0.1414em);
+      }
 
       &::before {
         .size(@@ds);

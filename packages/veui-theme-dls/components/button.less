@@ -344,6 +344,8 @@
   &[ui~="icon"] {
     &::after {
       .size(calc(@dls-icon-size-normal + @dls-button-padding-text * 2));
+      .absolute(50%, auto, auto, 50%);
+      transform: translate(-50%, -50%);
     }
   }
 

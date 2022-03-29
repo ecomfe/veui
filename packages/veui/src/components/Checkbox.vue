@@ -17,7 +17,12 @@
     @change="handleChange"
     @click.stop
   >
-  <span :class="$c('checkbox-box')">
+  <span
+    :class="{
+      [$c('checkbox-box')]: true,
+      [$c('checkbox-box-labelled')]: !!$slots.default
+    }"
+  >
     <transition :name="$c('checkbox-icon')">
       <veui-icon
         v-if="indeterminate"
