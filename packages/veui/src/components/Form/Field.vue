@@ -67,7 +67,7 @@
             :ui="uiParts.message"
             :title="validity.message"
             :status="validity.status"
-            display="simple"
+            :display="realValidityDisplay"
           >
             <span>{{ validity.message }}</span>
           </veui-message>
@@ -104,6 +104,8 @@ import type from '../../managers/type'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
+import useConfig from '../../mixins/config'
+import config from '../../managers/config'
 import { pull, get, last, find, uniq } from 'lodash'
 import { getVnodes } from '../../utils/context'
 import { getTypedAncestor } from '../../utils/helper'
@@ -123,6 +125,13 @@ export { useFieldChild }
 
 const { ERROR, WARNING, SUCCESS } = ValidityStatus
 
+config.defaults(
+  {
+    validityDisplay: 'simple'
+  },
+  'field'
+)
+
 export default {
   name: 'veui-field',
   uiTypes: ['form-field', 'form-container'],
@@ -137,6 +146,7 @@ export default {
     prefix,
     ui,
     i18n,
+    useConfig('config', 'field'),
     // 直接用 decorator 在方法上标更好？
     useFacade((vm) => ({
       isDisabled: () => (vm.withholdValidity ? false : vm.realDisabled),
@@ -191,6 +201,12 @@ export default {
         return ['bottom', 'side'].indexOf(value) >= 0
       }
     },
+    validityDisplay: {
+      type: String,
+      validator (value) {
+        return ['normal', 'simple'].indexOf(value) >= 0
+      }
+    },
     abstract: Boolean, // 无label（无margin），不展示错误信息
     withholdValidity: Boolean // 不自动invalid，不自动listener，不自动 disabled 和 readonly
   },
@@ -229,6 +245,9 @@ export default {
         (!!this.parentField && this.parentField.isReadonly()) ||
         (!!this.form && this.form.isReadonly())
       )
+    },
+    realValidityDisplay () {
+      return this.validityDisplay || this.config['field.validityDisplay']
     },
     validating () {
       return this.form.isValidating(this.validityKeys)

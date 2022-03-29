@@ -5,7 +5,7 @@
 - [+] 新增 `Message` 组件。<!-- #Message -->
 - [+] `Tabs` 样式升级，对于超出最大宽度的文本会被省略。<!-- #Tabs -->
 - [+] `Nav` 样式升级，新增悬浮和点击动效，去掉了 `s` / `l` 变体。<!-- #Nav -->
-- [+] 重构 `Form`，`Fieldset` 和 `Field` 组件，升级了校验信息样式，新增了 `abstract` 和 `withholdValidity` 属性来支持微调校验流程，新增了 `help`，`helpPosition` 属性和 `help` 插槽来支持辅助文本。<!-- #Form #Fieldset  #Field -->
+- [+] 重构 `Form`，`Fieldset` 和 `Field` 组件，升级了校验信息样式并新增了属性 `validityDisplay` 来控制是否显示校验信息图标；新增了 `abstract` 和 `withholdValidity` 属性来支持微调校验流程；新增了 `help`，`helpPosition` 属性和 `help` 插槽来支持辅助文本。<!-- #Form #Fieldset  #Field -->
 
 ## 2.5.5 (2022-03-23)
 
