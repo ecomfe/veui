@@ -63,7 +63,7 @@
           placeholder="错误提示优先出在右侧, 长度不能超过3"
         />
         <template #help>
-          <p>辅助文案插槽1</p>
+          <p class="age-help">辅助文案插槽1</p>
           <p>辅助文案插槽2</p>
         </template>
       </veui-field>
@@ -189,6 +189,65 @@
         <veui-number-input v-model="storeData4.floor"/>
       </veui-field>
 
+      <veui-field
+        label="门店："
+        name="store"
+        :rules="[
+          {
+            name: 'required',
+            message: `请选择门店`,
+            triggers: 'select'
+          }
+        ]"
+        tip="抽象表单项"
+      >
+        <veui-transfer
+          v-model="storeData4.store"
+          :datasource="storeList"
+        >
+          <template #selected-item-label="{ label, value }">
+            <div class="selected-store">
+              <span class="store-label">{{ label }}</span>
+              <veui-field
+                :key="`storeCounts.${value}`"
+                :name="`storeCounts.${value}`"
+                :rules="[
+                  {
+                    name: 'required',
+                    message: `请填写${label}的数量`,
+                    triggers: 'change,blur'
+                  }
+                ]"
+                abstract
+              >
+                <veui-number-input
+                  v-model="storeData4.storeCounts[value]"
+                  class="store-number"
+                  ui="s"
+                  :min="1"
+                />
+              </veui-field>
+            </div>
+          </template>
+        </veui-transfer>
+      </veui-field>
+
+      <veui-field
+        label="原生输入框："
+        name="nativeInput"
+        :rules="[{ name: 'required', triggers: 'input,blur' }]"
+      >
+        <template #default="{ invalid, listeners }">
+          <input
+            v-model="storeData4.nativeInput"
+            :class="{
+              'demo-invalid': invalid
+            }"
+            v-on="listeners"
+          >
+        </template>
+      </veui-field>
+
       <veui-config-provider
         :value="{
           'field.validityDisplay': 'normal'
@@ -236,6 +295,7 @@ import {
   Checkbox,
   CheckboxGroup,
   NumberInput,
+  Transfer,
   ConfigProvider
 } from 'veui'
 import bus from '../bus'
@@ -255,6 +315,7 @@ export default {
     'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup,
     'veui-textarea': Textarea,
+    'veui-transfer': Transfer,
     'veui-config-provider': ConfigProvider
   },
   data () {
@@ -303,8 +364,17 @@ export default {
         start: null,
         end: null,
         protocol: '',
-        floor: 3500
+        floor: 3500,
+        store: [],
+        storeCounts: {},
+        nativeInput: ''
       },
+      storeList: [
+        { label: '门店1', value: '1' },
+        { label: '门店2', value: '2' },
+        { label: '门店3', value: '3' },
+        { label: '门店4', value: '4' }
+      ],
       storeData4Options: {
         hobbyItems,
         phoneTypeOptions
@@ -485,6 +555,10 @@ export default {
     margin: 0;
   }
 
+  .age-help {
+    margin-bottom: 4px;
+  }
+
   h2 {
     margin-bottom: 40px;
   }
@@ -554,6 +628,19 @@ export default {
     [class*="veui"]:first-child {
       margin-left: 0;
     }
+  }
+
+  .selected-store {
+    display: flex;
+    align-items: center;
+
+    .store-label {
+      min-width: 60px;
+    }
+  }
+
+  .demo-invalid {
+    border: 1px solid #cc1800;
   }
 }
 </style>
