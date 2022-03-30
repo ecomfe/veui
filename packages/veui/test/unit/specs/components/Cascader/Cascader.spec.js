@@ -86,14 +86,11 @@ describe('components/Cascader/Cascader', () => {
     options = wrapper.findAll(OPTION)
     expect(options.length).to.equal(4)
 
-    options
-      .at(0)
-      .find('.veui-button')
-      .trigger('click')
+    options.at(0).find('.veui-button').trigger('click')
     await vm.$nextTick()
     expect(wrapper.findAll(`${SECOND_MENU} ${DISABLED}`).length).to.equal(2)
 
-    vm.options = casOptions.map(i => ({ ...i, position: 'inline' }))
+    vm.options = casOptions.map((i) => ({ ...i, position: 'inline' }))
     await vm.$nextTick()
     options = wrapper.findAll(OPTION)
     expect(options.length).to.equal(9)
@@ -286,6 +283,7 @@ describe('components/Cascader/Cascader', () => {
 
     vm.multiple = false
     await vm.$nextTick()
+    labels = wrapper.findAll('.veui-cascader-pane-option-label')
     expect(labels.at(0).text()).to.equal('浙江')
     wrapper.destroy()
   })
@@ -595,7 +593,7 @@ describe('components/Cascader/Cascader', () => {
       data () {
         return {
           value: ['上海', '徐州'],
-          options: casOptions.map(i => ({ ...i, position: 'inline' }))
+          options: casOptions.map((i) => ({ ...i, position: 'inline' }))
         }
       },
       template:
