@@ -2,7 +2,9 @@
 
 ### 🐞 问题修复
 
-- [^] 修复了没有正确地销毁表单项的问题。<!-- #Field -->
+- [^] 修复 `veui-theme-dls` 打包版本没有正确引入 `Message` 组件的问题。<!-- #veui-theme-dls -->
+- [^] 修复 `Field` 组件销毁时没有正确清除对应校验信息的问题。<!-- #Field -->
+- [^] 修复树相关组件项目 `key` 与唯一 `value` 不对应的问题。<!-- #Cascader #CascaderPane #Tree #Menu -->
 
 ## 2.6.0 "🌻 Sunflower" (2022-03-30)
 

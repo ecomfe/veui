@@ -1,8 +1,8 @@
 import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 type Props = {
-  status: 'success' | 'error' | 'info' | 'warning' | 'aux'
-  display: 'normal' | 'popup' | 'simple' | 'standalone'
+  status?: 'success' | 'error' | 'info' | 'warning' | 'aux'
+  display?: 'normal' | 'popup' | 'simple' | 'standalone'
 }
 
 type Emits = {}
