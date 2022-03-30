@@ -19,18 +19,11 @@
 </template>
 
 <script>
-import {
-  isFunction,
-  includes,
-  zipObject,
-  map,
-  pull,
-  omit,
-  mergeWith
-} from 'lodash'
+import { isFunction, includes, zipObject, map, omit, mergeWith } from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
+import { pull } from '../../utils/helper'
 import useValidity, { isAllValid, isSimpleValid } from './_useValidity'
 import useValidator from './_useValidator'
 import { useCoupled, useFacade } from './_facade'
@@ -55,6 +48,7 @@ export default {
         vm.fields.push(field)
         return () => {
           pull(vm.fields, field)
+          vm.validityManager.clearValiditiesOfField(field.getName())
         }
       },
       getValiditiesOf: vm.validityManager.getValiditiesOf,

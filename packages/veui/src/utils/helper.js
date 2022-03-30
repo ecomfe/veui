@@ -372,3 +372,10 @@ export function renderTpl (message, data, compat) {
     return match
   })
 }
+
+export function pull (array, target) {
+  const index = array.indexOf(target)
+  if (index >= 0) {
+    array.splice(index, 1)
+  }
+}
