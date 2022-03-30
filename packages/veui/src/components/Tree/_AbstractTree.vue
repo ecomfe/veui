@@ -5,7 +5,7 @@
 >
   <li
     v-for="(item, index) in items"
-    :key="index"
+    :key="getKey(item, index)"
     role="treeitem"
     :class="$c('abstract-tree-item-wrapper')"
   >
@@ -105,12 +105,17 @@ export default {
       return typeof this.expand === 'function'
         ? this.expand(item, this.expanded)
         : includesItem(this.expanded, item)
+    },
+    getKey ({ value }, fallback) {
+      return ['string', 'number'].indexOf(typeof value) >= 0
+        ? value
+        : `__tree_key_${fallback}__`
     }
   }
 }
 
 export function includesItem (collection, { name, value }) {
-  return (collection || []).some(i => {
+  return (collection || []).some((i) => {
     return name != null ? i === name : value != null ? i === value : false
   })
 }
