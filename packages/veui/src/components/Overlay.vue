@@ -118,7 +118,6 @@ export default {
         if (node) {
           node.toTop()
         }
-        this.initFocus()
       } else {
         this.destroyFocus()
       }
@@ -213,7 +212,6 @@ export default {
       }
 
       if (this.realOpen) {
-        this.initFocus()
         this.updateWidth()
       }
 
@@ -319,13 +317,10 @@ export default {
       if (!this.autofocus) {
         return
       }
-      // nextTick 是为了保证本次 open 后 DOM 渲染出来再Lock focus。
-      this.$nextTick(() => {
-        // 如果 nextTick 关闭了，就不会创建 focusContext
-        if (this.realOpen && this.$refs.box) {
-          this.createFocusContext()
-        }
-      })
+
+      if (this.realOpen && this.$refs.box) {
+        this.createFocusContext()
+      }
     },
     createFocusContext () {
       if (!this.focusContext) {
@@ -358,6 +353,7 @@ export default {
     },
     handleAfterOpen () {
       this.$nextTick(() => {
+        this.initFocus()
         this.$emit('afteropen')
       })
     },
