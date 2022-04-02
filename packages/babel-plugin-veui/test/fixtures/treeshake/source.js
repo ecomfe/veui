@@ -1,6 +1,7 @@
 import Button from './Button'
 import { default as Select, foo } from './Select'
 import { Input } from 'veui'
+import { useTooltip } from 'veui'
 import { Form, Field, Icon as VeuiIcon, default as veui } from 'veui'
 import * as all from 'veui'
 import ui from 'veui-next'

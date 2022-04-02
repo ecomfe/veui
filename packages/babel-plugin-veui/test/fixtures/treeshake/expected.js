@@ -1,6 +1,7 @@
 import Button from './Button'
 import { default as Select, foo } from './Select'
 import Input from 'veui/components/Input.vue'
+import { useTooltip } from 'veui'
 import Form from 'veui/components/Form/Form.vue'
 import Field from 'veui/components/Field.js'
 import VeuiIcon from 'veui/components/Icon.vue'
