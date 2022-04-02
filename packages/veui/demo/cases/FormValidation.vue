@@ -15,75 +15,37 @@
       @invalid="handleInvalid"
     >
       <veui-field
-        disabled
         field="name"
-        name="name1"
+        name="name"
         label="姓名"
-        tip="disabled 值提交时会过滤"
+        rules="required"
+        help="不支持特殊字符"
       >
         <veui-input v-model="storeData4.name"/>
       </veui-field>
 
       <veui-field
-        field="name1"
-        name="name2"
-        label="姓名1"
-        tip="在 field 上边 disabled，提交时才会过滤掉，该项在 input 上 disalbed"
-      >
-        <veui-input
-          v-model="storeData4.name1"
-          disabled
-          placeholder="长度不能短于2"
-        />
-      </veui-field>
-
-      <veui-field
-        field="name3"
-        name="name3"
+        field="alias"
+        name="alias"
         label="别名"
         tip="有内置错误"
-        help="辅助文案"
-      >
-        <veui-input
-          v-model="storeData4.name3"
-          maxlength="4"
-          placeholder="长度不能大于4"
-        />
-      </veui-field>
-
-      <veui-field
-        field="age"
-        name="age1"
-        :rules="ageRule"
-        label="年龄"
         help-position="bottom"
       >
         <veui-input
-          v-model="storeData4.age"
-          placeholder="错误提示优先出在右侧, 长度不能超过3"
+          v-model="storeData4.alias"
+          maxlength="4"
+          placeholder="长度不能大于4"
         />
         <template #help>
-          <p class="age-help">辅助文案插槽1</p>
-          <p>辅助文案插槽2</p>
+          <p class="age-help">非必须字段</p>
+          <p>可以重复</p>
         </template>
       </veui-field>
-
-      <veui-field
-        name="desc"
-        rules="required"
-        label="介绍"
-      >
-        <veui-textarea
-          v-model="storeData4.desc"
-          rows="3"
-        />
-      </veui-field>
-
       <veui-fieldset
         name="phoneSet"
         label="电话"
         :required="true"
-        help="辅助文案"
+        help="请输入日常联系方式"
         help-position="bottom"
       >
         <veui-field
@@ -92,6 +54,7 @@
         >
           <veui-select
             v-model="storeData4.phoneType"
+            class="phone-type"
             :options="storeData4Options.phoneTypeOptions"
           />
         </veui-field>
@@ -104,15 +67,13 @@
         >
           <veui-input v-model="storeData4.phone"/>
         </veui-field>
-        <veui-input placeholder="不会继承 fieldset 的 invalid"/>
+        <!-- <veui-input placeholder="不会继承 fieldset 的 invalid"/> -->
       </veui-fieldset>
 
       <veui-field
         name="phoneSet2"
-        label="电话2"
+        label="电话备份"
         :required="true"
-        help="辅助文案"
-        help-position="bottom"
       >
         <veui-field
           field="phoneType2"
@@ -121,6 +82,7 @@
         >
           <veui-select
             v-model="storeData4.phoneType2"
+            class="phone-type"
             :options="storeData4Options.phoneTypeOptions"
           />
         </veui-field>
@@ -134,7 +96,7 @@
         >
           <veui-input v-model="storeData4.phone2"/>
         </veui-field>
-        <veui-input placeholder="不会继承 field 的 invalid"/>
+        <!-- <veui-input placeholder="不会继承 field 的 invalid"/> -->
       </veui-field>
 
       <veui-field
@@ -181,6 +143,7 @@
         field="floor"
         name="floor"
         validity-display="normal"
+        tip="低于 4000 将会得到警告"
         :rules="[
           { name: 'required', value: true },
           { name: 'min', value: 3500, message: '最低收入不小于 3500' }
@@ -291,7 +254,6 @@ import {
   Input,
   Button,
   Select,
-  Textarea,
   Checkbox,
   CheckboxGroup,
   NumberInput,
@@ -299,7 +261,6 @@ import {
   ConfigProvider
 } from 'veui'
 import bus from '../bus'
-import 'vue-awesome/icons/indent'
 
 export default {
   name: 'demo-form',
@@ -314,7 +275,6 @@ export default {
     'veui-select': Select,
     'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup,
-    'veui-textarea': Textarea,
     'veui-transfer': Transfer,
     'veui-config-provider': ConfigProvider
   },
@@ -352,10 +312,8 @@ export default {
     return {
       storeData4: {
         name: 'liyunteng1',
-        name1: 'liyunteng2',
-        name3: '',
+        alias: '',
         age: null,
-        desc: '',
         hobby,
         phone: '18888888888',
         phoneType,
@@ -469,7 +427,7 @@ export default {
                 let res
                 if (phone === '18888888888') {
                   res = {
-                    phone: ['该手机已被注册', '芭比q了']
+                    phone: ['该手机已被注册', '建议重新输入']
                   }
                 }
                 return resolve(res)
@@ -486,7 +444,7 @@ export default {
                 let res
                 if (phone === '18888888888') {
                   res = {
-                    phone2: ['该手机已被注册', '芭比q了']
+                    phone2: ['该手机已被注册']
                   }
                 }
                 return resolve(res)
@@ -504,11 +462,11 @@ export default {
             return new Promise(function (resolve) {
               setTimeout(function () {
                 let res
-                if (floor <= 1000) {
+                if (floor <= 4000) {
                   res = {
                     floor: {
                       status: 'warning',
-                      message: '请提高下限'
+                      message: '请提高预期收入下限'
                     }
                   }
                 }
@@ -641,6 +599,10 @@ export default {
 
   .demo-invalid {
     border: 1px solid #cc1800;
+  }
+
+  .phone-type {
+    max-width: 100px;
   }
 }
 </style>

@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils'
 import Button from '@/components/Button'
 import ui from '@/managers/ui'
+import { wait } from '../../../utils'
 
 describe('components/Button', () => {
   it('should create a button component with `primary` ui', () => {
@@ -267,5 +268,36 @@ describe('components/Button', () => {
     expect(wrapper.find('.veui-icon').exists()).to.equal(true)
 
     ui.set('button.icons', {})
+  })
+
+  it('should emit click before native form submit triggering.', async () => {
+    let order = []
+    const wrapper = mount(
+      {
+        components: {
+          'veui-button': Button
+        },
+        methods: {
+          handleClick () {
+            order.push(1)
+          },
+          handleNativeSubmit (e) {
+            e.preventDefault()
+            order.push(2)
+          }
+        },
+        template: `<form @submit="handleNativeSubmit">
+        <veui-button @click="handleClick" type="submit"/>
+      </form>`
+      },
+      {
+        attachToDocument: true, // in case of form submission canceled
+        sync: false
+      }
+    )
+    wrapper.find('.veui-button').trigger('click')
+    await wait(0)
+    expect(order).to.deep.equal([1, 2])
+    wrapper.destroy()
   })
 })

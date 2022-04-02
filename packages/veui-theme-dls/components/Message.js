@@ -1,5 +1,5 @@
 import {
-  IconCheckCircle,
+  IconCheckCircleSolid,
   IconExclamationTriangleSolid,
   IconExclamationCircleSolid,
   IconInfoCircle,
@@ -10,7 +10,7 @@ import ui from 'veui/managers/ui'
 ui.defaults(
   {
     icons: {
-      success: IconCheckCircle,
+      success: IconCheckCircleSolid,
       error: IconExclamationCircleSolid,
       warning: IconExclamationTriangleSolid,
       info: IconInfoCircleSolid,

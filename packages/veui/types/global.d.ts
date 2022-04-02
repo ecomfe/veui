@@ -40,6 +40,7 @@ declare module '@vue/runtime-core' {
     VeuiLink: Components.Link
     VeuiLoading: Components.Loading
     VeuiMenu: Components.Menu
+    VeuiMessage: Components.Message
     VeuiNav: Components.Nav
     VeuiNumberInput: Components.NumberInput
     VeuiOption: Components.Option
