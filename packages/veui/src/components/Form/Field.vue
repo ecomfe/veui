@@ -27,6 +27,7 @@
       <veui-tooltip
         :ui="uiParts.tip"
         target="tip"
+        aim-center
         position="top-start"
       >
         <slot name="tip">{{ tip }}</slot>
@@ -65,7 +66,6 @@
             v-else
             :key="index"
             :ui="uiParts.message"
-            :title="validity.message"
             :status="validity.status"
             :display="realValidityDisplay"
           >
