@@ -295,4 +295,44 @@ describe('components/Overlay', () => {
     ).to.equal('1')
     wrapper.destroy()
   })
+
+  it('should not gain focus until `afteropen`', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            open: false
+          }
+        },
+        methods: {
+          async handleOpen () {
+            await wait(0)
+            expect(document.activeElement).to.equal(
+              wrapper.find('input').element
+            )
+
+            wrapper.destroy()
+          }
+        },
+        render () {
+          return (
+            <Overlay open={this.open} onAfteropen={this.handleOpen} autofocus>
+              <input autofocus />
+            </Overlay>
+          )
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    vm.open = true
+
+    await vm.$nextTick()
+
+    expect(document.activeElement).equal(document.body)
+  })
 })
