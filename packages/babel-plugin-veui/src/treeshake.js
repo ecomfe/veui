@@ -62,7 +62,7 @@ export default function ({ types: t }) {
   }
 }
 
-const VAR_PATTERN = /(?:V(?:eui)?)?([A-Z][a-zA-Z]*)/
+const VAR_PATTERN = /^(?:V(?:eui)?)?([A-Z][a-zA-Z]*)/
 
 function getComponentName (importedName) {
   let [, name] = importedName.match(VAR_PATTERN) || []
