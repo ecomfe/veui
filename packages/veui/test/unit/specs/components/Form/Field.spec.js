@@ -86,6 +86,7 @@ describe('components/Form/Field', () => {
     let fieldWrapper = wrapper.find('.veui-field')
     // should set label & tip correctly
     expect(wrapper.find('.veui-label').text()).to.equal('测试label')
+    await wrapper.vm.$nextTick()
     wrapper.find('.veui-field-tip .veui-icon').trigger('mouseenter')
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.veui-tooltip').text()).to.equal('测试tip')
@@ -104,6 +105,7 @@ describe('components/Form/Field', () => {
     expect(wrapper.find('.test-slot-label').text()).to.equal(
       '通过slot设置label'
     )
+    await wrapper.vm.$nextTick()
     wrapper.find('.veui-field-tip .veui-icon').trigger('mouseenter')
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.test-slot-tip').text()).to.equal('通过slot设置tip')

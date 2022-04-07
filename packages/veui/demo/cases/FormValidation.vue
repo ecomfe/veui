@@ -18,7 +18,8 @@
         field="name"
         name="name"
         label="姓名"
-        rules="required"
+        :rules="requiredRule"
+        tip="rule validator: required"
         help="不支持特殊字符"
       >
         <veui-input v-model="storeData4.name"/>
@@ -28,75 +29,18 @@
         field="alias"
         name="alias"
         label="别名"
-        tip="有内置错误"
+        tip="有内置错误, 包含 before 将触发前置校验"
         help-position="bottom"
       >
         <veui-input
           v-model="storeData4.alias"
-          maxlength="4"
-          placeholder="长度不能大于4"
+          maxlength="6"
+          placeholder="长度不能大于6"
         />
         <template #help>
           <p class="age-help">非必须字段</p>
           <p>可以重复</p>
         </template>
-      </veui-field>
-      <veui-fieldset
-        name="phoneSet"
-        label="电话"
-        :required="true"
-        help="请输入日常联系方式"
-        help-position="bottom"
-      >
-        <veui-field
-          field="phoneType"
-          name="phoneType"
-        >
-          <veui-select
-            v-model="storeData4.phoneType"
-            class="phone-type"
-            :options="storeData4Options.phoneTypeOptions"
-          />
-        </veui-field>
-
-        <veui-field
-          style="margin-left: 4px"
-          field="phone"
-          name="phone"
-          :rules="numRequiredRule"
-        >
-          <veui-input v-model="storeData4.phone"/>
-        </veui-field>
-        <!-- <veui-input placeholder="不会继承 fieldset 的 invalid"/> -->
-      </veui-fieldset>
-
-      <veui-field
-        name="phoneSet2"
-        label="电话备份"
-        :required="true"
-      >
-        <veui-field
-          field="phoneType2"
-          name="phoneType2"
-          abstract
-        >
-          <veui-select
-            v-model="storeData4.phoneType2"
-            class="phone-type"
-            :options="storeData4Options.phoneTypeOptions"
-          />
-        </veui-field>
-
-        <veui-field
-          style="margin-left: 4px"
-          field="phone2"
-          name="phone2"
-          :rules="numRequiredRule"
-          abstract
-        >
-          <veui-input v-model="storeData4.phone2"/>
-        </veui-field>
-        <!-- <veui-input placeholder="不会继承 field 的 invalid"/> -->
       </veui-field>
 
       <veui-field
@@ -104,7 +48,7 @@
         name="hobby"
         :rules="hobbyRule"
         label="爱好"
-        tip="选择则至少选三个"
+        tip="rule-validator: 选择则至少选三个"
       >
         <veui-checkboxgroup
           v-model="storeData4.hobby"
@@ -113,10 +57,33 @@
         />
       </veui-field>
 
+      <veui-field
+        :key="storeData4.phoneType"
+        name="phone"
+        label="电话"
+        help="请输入日常联系方式"
+        help-position="bottom"
+        tip="多个输入型组件: 校验名称和 Field 名称一致的输入组件"
+        :rules="phoneRule"
+      >
+        <veui-select
+          v-model="storeData4.phoneType"
+          class="phone-type"
+          :options="storeData4Options.phoneTypeOptions"
+          @change="storeData4.phone = ''"
+        />
+
+        <veui-input
+          v-model="storeData4.phone"
+          name="phone"
+          autocomplete="off"
+        />
+      </veui-field>
+
       <veui-fieldset
         label="预期收入"
         class="salary"
-        tip="联合校验，下限必须小于上限"
+        tip="异步联合校验，下限必须小于上限"
         :required="true"
       >
         <veui-field
@@ -143,7 +110,7 @@
         field="floor"
         name="floor"
         validity-display="normal"
-        tip="低于 4000 将会得到警告"
+        tip="异步警告：低于 4000 将会得到警告"
         :rules="[
           { name: 'required', value: true },
           { name: 'min', value: 3500, message: '最低收入不小于 3500' }
@@ -221,6 +188,7 @@
           name="protocol"
           :rules="protocolRequiredRule"
           label="协议"
+          tip="用 field.validityDisplay 来控制"
         >
           <veui-checkbox
             v-model="storeData4.protocol"
@@ -260,6 +228,7 @@ import {
   Transfer,
   ConfigProvider
 } from 'veui'
+import confirmManager from 'veui/managers/confirm'
 import bus from '../bus'
 
 export default {
@@ -311,14 +280,12 @@ export default {
     ]
     return {
       storeData4: {
-        name: 'liyunteng1',
+        name: '曹达华',
         alias: '',
         age: null,
         hobby,
         phone: '18888888888',
         phoneType,
-        phone2: '18888888888',
-        phoneType2: phoneType,
         start: null,
         end: null,
         protocol: '',
@@ -364,33 +331,13 @@ export default {
           triggers: 'change'
         }
       ],
-      dynamicNameRule: [
+      phoneRule: [
+        { name: 'required', triggers: 'change,input,blur' },
         {
-          name: 'required',
-          value: true,
-          triggers: 'blur,input'
-        },
-        {
-          name: 'minLength',
-          value: 2
-        }
-      ],
-      ageRule: [
-        {
-          name: 'required',
-          message: 'required from rule.',
-          value: true,
+          name: 'pattern',
+          value: /^1\d{10}$/,
+          message: '请输入正确的手机号',
           triggers: 'blur'
-        },
-        {
-          name: 'numeric',
-          value: true,
-          triggers: 'input'
-        },
-        {
-          name: 'maxLength',
-          value: 3,
-          triggers: 'change'
         }
       ],
       hobbyRule: [
@@ -410,48 +357,18 @@ export default {
               return true
             }
 
-            if (parseInt(start, 10) >= parseInt(end, 10)) {
-              return {
-                start: '下限必须小于上限'
-              }
-            }
-            return true
+            return new Promise(function (resolve) {
+              setTimeout(function () {
+                if (parseInt(start, 10) >= parseInt(end, 10)) {
+                  return resolve({
+                    start: '下限必须小于上限'
+                  })
+                }
+                return resolve(true)
+              }, 2000)
+            })
           },
           triggers: ['change', 'submit,input']
-        },
-        {
-          fields: ['phone'],
-          validate (phone) {
-            return new Promise(function (resolve) {
-              setTimeout(function () {
-                let res
-                if (phone === '18888888888') {
-                  res = {
-                    phone: ['该手机已被注册', '建议重新输入']
-                  }
-                }
-                return resolve(res)
-              }, 3000)
-            })
-          },
-          triggers: ['input']
-        },
-        {
-          fields: ['phone2'],
-          validate (phone) {
-            return new Promise(function (resolve) {
-              setTimeout(function () {
-                let res
-                if (phone === '18888888888') {
-                  res = {
-                    phone2: ['该手机已被注册']
-                  }
-                }
-                return resolve(res)
-              }, 3000)
-            })
-          },
-          triggers: ['input']
         },
         {
           fields: ['floor'],
@@ -491,13 +408,21 @@ export default {
     beforeValidate () {
       bus.$emit('log', 'beforeValidate')
       this.isValidating = true
+      if (this.storeData4.alias.indexOf('before') >= 0) {
+        return new Promise((resolve) => {
+          confirmManager
+            .warn('您要继续校验吗？', '确认', {
+              ok: () => {}
+            })
+            .then((ok) => {
+              resolve(ok)
+            })
+        })
+      }
     },
     afterValidate () {
       bus.$emit('log', 'afterValidate')
       this.isValidating = false
-    },
-    dynamicDelete (index) {
-      this.storeData5.scheduleInfo.splice(index, 1)
     }
   }
 }
@@ -603,6 +528,7 @@ export default {
 
   .phone-type {
     max-width: 100px;
+    margin-right: 8px;
   }
 }
 </style>
