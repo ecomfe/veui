@@ -24,14 +24,14 @@
         ref="tip"
         :name="icons.tip"
       />
-      <veui-tooltip
+      <veui-popover
         :ui="uiParts.tip"
         target="tip"
         aim-center
         position="top-start"
       >
         <slot name="tip">{{ tip }}</slot>
-      </veui-tooltip>
+      </veui-popover>
     </div>
   </div>
   <div :class="$c('field-main')">
@@ -110,7 +110,7 @@ import { get, last, find, uniq } from 'lodash'
 import { getVnodes } from '../../utils/context'
 import { getTypedAncestor, pull } from '../../utils/helper'
 import Icon from '../Icon'
-import Tooltip from '../Tooltip'
+import Popover from '../Popover'
 import Vue from 'vue'
 import '../../common/global'
 import { useCoupled, useFacade } from './_facade'
@@ -138,7 +138,7 @@ export default {
   components: {
     'veui-icon': Icon,
     'veui-label': Label,
-    'veui-tooltip': Tooltip,
+    'veui-popover': Popover,
     'veui-loading': Loading,
     'veui-message': Message
   },

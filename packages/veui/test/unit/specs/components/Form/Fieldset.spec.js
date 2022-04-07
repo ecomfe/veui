@@ -85,6 +85,7 @@ describe('components/Form/Fieldset', () => {
     expect(fieldsetWrapper.find('.veui-field-label').text()).to.equal(
       '测试label'
     )
+    await wrapper.vm.$nextTick()
     wrapper.find('.veui-field-tip .veui-icon').trigger('mouseenter')
     await wrapper.vm.$nextTick()
     expect(fieldsetWrapper.find('.veui-tooltip').text()).to.equal('测试tip')
@@ -99,6 +100,7 @@ describe('components/Form/Fieldset', () => {
     let template = genTemplate('', slot)
     let wrapper = genWrapper(template)
     // label & tip
+    await wrapper.vm.$nextTick()
     wrapper.find('.veui-field-tip .veui-icon').trigger('mouseenter')
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.test-slot-label').text()).to.equal(
