@@ -1,3 +1,14 @@
+## 2.6.2 (2022-04-08)
+
+### 🐞 问题修复
+
+- [^] 修正 `babel-plugin-veui` 转换包含组件名后缀的具名导出时误识别为组件的问题。<!-- #babel-plugin-veui -->
+- [^] 修正 `status` 为 `success` 的 `Message` 组件图标使用不正确的问题。<!-- #Message -->
+- [^] 修正复选的 `Cascader` 已选状态触发区样式布局错误的问题。<!-- #Cascader -->
+- [^] 修正 `Field` 组件的 `tip` 属性通过 `Tooltip` 而非 `Popover` 展示的问题。<!-- #Field -->
+- [^] 调整了 `Overlay` 组件开启 `autofocus` 时获取焦点的时机，以避免获取焦点时尚未展示完毕从而导致的页面滚动。<!-- #Overlay -->
+- [^] 修正了全局类型声明没有包含 `Message` 组件的问题（将影响使用诸如 `unplugin-vue-components` 插件的场景）。<!-- #Message -->
+
 ## 2.6.1 (2022-03-30)
 
 ### 🐞 问题修复
