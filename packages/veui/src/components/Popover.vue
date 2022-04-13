@@ -55,6 +55,7 @@ export default {
           [this.$c('popover-box')]: true
         })}
         overlayStyle={this.overlayStyle}
+        overlayOptions={this.realOverlayOptions}
         open={this.isControlled('open') ? this.realOpen : undefined}
         interactive={true} // Popovers are always interactive
         {...{
