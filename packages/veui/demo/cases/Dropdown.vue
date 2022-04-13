@@ -182,6 +182,9 @@
         split
         label="汽车类型"
         :options="multiLevelOptions"
+        :overlay-style="{
+          '--dls-dropdown-max-width': '300px'
+        }"
       />
       <veui-dropdown
         ui="l"
@@ -473,8 +476,8 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach(child => {
-      child.$on('click', val => {
+    this.$children.forEach((child) => {
+      child.$on('click', (val) => {
         bus.$emit('log', val)
       })
     })

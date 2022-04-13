@@ -519,7 +519,8 @@
         searchable
         :options="complexResult"
         :overlay-style="{
-          '--dls-dropdown-max-display-items': 2
+          '--dls-dropdown-max-display-items': 2,
+          '--dls-dropdown-max-width': '200px'
         }"
         @input="handleSearch"
       >
