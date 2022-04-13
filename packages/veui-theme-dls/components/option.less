@@ -3,4 +3,10 @@
 
 .@{veui-prefix}-option {
   &:extend(._veui-dropdown-option all);
+
+  &-label {
+    flex: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
