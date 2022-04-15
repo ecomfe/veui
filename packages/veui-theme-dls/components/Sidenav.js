@@ -1,9 +1,10 @@
-import { IconChevronRight } from 'dls-icons-vue'
+import { IconChevronRight, IconHamburger } from 'dls-icons-vue'
 import ui from 'veui/managers/ui'
 
 ui.defaults(
   {
     icons: {
+      toggle: IconHamburger,
       expand: IconChevronRight,
       collapse: IconChevronRight
     },
@@ -18,5 +19,5 @@ ui.defaults(
       toggle: 'icon aux'
     }
   },
-  'menu'
+  'sidenav'
 )

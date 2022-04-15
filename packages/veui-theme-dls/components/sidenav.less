@@ -1,8 +1,13 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
+@dls-menu-level-indent-special: 24px;
+@dls-menu-spacing: 8px;
+@dls-menu-padding-x: 16px;
+@dls-menu-item-icon-spacing: 8px;
+@dls-menu-item-border-radius: 6px;
+
 .@{veui-prefix}-menu {
-  border-right: 1px solid @dls-menu-border-color;
   display: flex;
   flex-direction: column;
   width: @dls-menu-width;
@@ -46,7 +51,6 @@
     align-items: center;
     border-top: 1px solid @dls-menu-separator-color;
     height: @dls-menu-footer-height-m;
-    padding-right: @dls-menu-padding-x;
   }
 
   &-link {
@@ -61,10 +65,6 @@
       content: "";
       .absolute(_, 0);
       height: inherit;
-
-      .@{veui-prefix}-menu-tree-item & {
-        border-right: 1px solid @dls-menu-border-color;
-      }
     }
   }
 
@@ -87,6 +87,7 @@
 
         &::before {
           background-color: @dls-menu-item-background-color-hover;
+          border-radius: @dls-menu-item-border-radius;
         }
       }
 
@@ -117,15 +118,13 @@
     .absolute(_, 0);
     height: inherit;
     background-color: @dls-menu-item-background-color;
-    border-right: 1px solid @dls-menu-border-color;
   }
 
   // tree
   &-tree-wrapper {
     overflow: auto;
     flex: auto;
-    padding-right: 1px;
-    margin-right: -1px;
+    margin: 0 @dls-menu-spacing;
 
     // 盖住：当 tree 收起时可能会看到 active 样式溢出到 tree 外面
     &::after {
@@ -134,14 +133,15 @@
       flex: auto;
       background: @dls-menu-item-background-color;
       position: relative;
-      border-right: 1px solid @dls-menu-border-color;
-      margin-right: -1px;
     }
+  }
+
+  &-collapsed &-tree-wrapper {
+    margin: 0;
   }
 
   &-tree {
     position: relative;
-    margin-right: -1px;
     padding: @dls-menu-padding-y @dls-menu-padding-x;
     // 盖住：tree 顶部的 padding 间隙
     &::before {
@@ -149,8 +149,12 @@
       .absolute(0, 0, _, 0);
       height: @dls-menu-item-spacing;
       background-color: @dls-menu-item-background-color;
-      border-right: 1px solid @dls-menu-border-color;
       display: block;
+    }
+
+    &-wrapper > &,
+    &-wrapper > & > li > .@{veui-prefix}-abstract-tree {
+      padding-left: @dls-menu-level-indent-special;
     }
 
     &-item {
@@ -162,7 +166,6 @@
         .absolute(_, 0);
         height: @dls-menu-item-spacing;
         background-color: @dls-menu-item-background-color;
-        border-right: 1px solid @dls-menu-border-color;
         transform: translateY(100%);
         align-self: flex-end;
         width: auto;
@@ -174,14 +177,6 @@
     & > li:first-child > &-item {
       margin-top: 0;
     }
-
-    // 第二级缩进
-    &-has-icon > li > ul.@{veui-prefix}-abstract-tree-item-group {
-      padding-left: dls-sum(
-        @dls-menu-item-icon-size,
-        @dls-menu-item-content-spacing
-      );
-    }
   }
 
   &-overlay .@{veui-prefix}-option-group-expandable,
@@ -192,7 +187,7 @@
   }
 
   &-item-icon {
-    margin-right: @dls-menu-item-content-spacing;
+    margin-right: @dls-menu-item-icon-spacing;
     display: flex;
     align-items: center;
     .dls-icon-size(@dls-menu-item-icon-size, true);
@@ -262,6 +257,7 @@
 
     .@{veui-prefix}-menu-link {
       &::before {
+        border-radius: @dls-menu-item-border-radius;
         background-color: @dls-menu-item-background-color-current;
         .veui-transition(background-color);
       }
@@ -272,21 +268,6 @@
 
       &:active::before {
         background-color: @dls-menu-item-background-color-current-active;
-      }
-
-      &::after {
-        content: "";
-        .absolute(_, 0, _, _);
-        .size(@dls-menu-indicator-width, inherit);
-        background: @dls-menu-indicator-color;
-      }
-
-      &[data-focus-visible-added]::after {
-        background-color: @dls-menu-indicator-color-focus;
-      }
-
-      &:active::after {
-        background-color: @dls-menu-indicator-color-active;
       }
     }
   }
@@ -305,38 +286,37 @@
     outline: none;
     cursor: pointer;
     color: @dls-icon-color-aux;
-    .veui-transition(transform);
+  }
+
+  &-toggle.@{veui-prefix}-button {
+    margin-right: @dls-menu-spacing;
+    padding-right: @dls-menu-padding-x;
+  }
+
+  &-collapsed &-toggle {
+    padding-right: 0;
+    transform: translateX(50%);
+    margin-right: @dls-menu-width-collapsed / 2;
   }
 
   &-item-toggle {
     position: relative;
     margin-left: @dls-menu-item-content-spacing;
     transform: rotateZ(90deg);
+    .veui-transition(transform);
   }
 
   &-item-expanded &-item-toggle {
     transform: rotateZ(-90deg);
   }
 
-  &-toggle {
-    transform: rotateZ(180deg);
-  }
-
-  // collapsed
-  &-collapsed &-toggle {
-    transform: rotateZ(0);
-  }
-
   &-collapsed &-tree {
     padding: @dls-menu-padding-y 0;
   }
 
-  &-collapsed &-tree &-link {
-    justify-content: center;
-  }
-
   &-collapsed &-item-icon {
-    margin: 0;
+    margin-left: @dls-menu-width-collapsed / 2;
+    transform: translateX(-50%);
   }
 
   &-overlay {
