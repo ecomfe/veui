@@ -71,5 +71,11 @@ declare module '@vue/runtime-core' {
     VeuiTransfer: Components.Transfer
     VeuiTree: Components.Tree
     VeuiUploader: Components.Uploader
+    VeuiContent: Components.Content
+    VeuiFooter: Components.Footer
+    VeuiHeader: Components.Header
+    VeuiLayout: Components.Layout
+    VeuiSidebar: Components.Sidebar
+    VeuiSidenav: Components.Sidenav
   }
 }

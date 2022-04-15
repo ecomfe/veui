@@ -199,7 +199,7 @@
     >
       <veui-icon
         :class="$c('menu-toggle-icon')"
-        :name="realCollapsed ? icons.expand : icons.collapse"
+        :name="icons.toggle"
       />
     </veui-button>
   </div>
@@ -220,7 +220,7 @@ import { closest, getFocusable } from '../../utils/dom'
 import '../../common/global'
 
 export default {
-  name: 'veui-menu',
+  name: 'veui-sidenav',
   components: {
     AbstractTree,
     'veui-link': Link,

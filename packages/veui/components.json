@@ -56,6 +56,10 @@
     "path": "Tooltip.vue"
   },
   {
+    "name": "Popover",
+    "path": "Popover.vue"
+  },
+  {
     "name": "Message",
     "path": "Message.vue"
   },
@@ -178,10 +182,6 @@
   {
     "name": "Cascader",
     "path": "Cascader/index.js"
-  },
-  {
-    "name": "Popover",
-    "path": "Popover.vue"
   },
   {
     "name": "CheckButtonGroup",
@@ -316,12 +316,16 @@
     "path": "Lightbox.vue"
   },
   {
-    "name": "Menu",
-    "path": "Menu.js"
+    "name": "Sidenav",
+    "path": "Sidenav.js"
+  },
+  {
+    "name": "Sidenav",
+    "path": "Menu/Sidenav.vue"
   },
   {
     "name": "Menu",
-    "path": "Menu/Menu.vue"
+    "path": "Menu.js"
   },
   {
     "name": "Nav",
@@ -413,15 +417,15 @@
   },
   {
     "name": "Tabs",
-    "path": "Tabs/Tabs.vue"
-  },
-  {
-    "name": "Tabs",
     "path": "Tabs"
   },
   {
     "name": "Tabs",
     "path": "Tabs/index.js"
+  },
+  {
+    "name": "Tabs",
+    "path": "Tabs/Tabs.vue"
   },
   {
     "name": "Textarea",
