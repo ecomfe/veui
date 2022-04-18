@@ -115,6 +115,7 @@ describe('components/AlertBox', function () {
   })
 
   it('should make `open` prop fully controlled', async () => {
+    this.timeout(3000)
     let wrapper = mount(
       {
         components: {
@@ -148,7 +149,8 @@ describe('components/AlertBox', function () {
           loading: false
         }
       },
-      template: '<veui-alert-box open :disabled="disabled" :loading="loading"/>'
+      template:
+        '<veui-alert-box open :disabled="disabled" :loading="loading"/>'
     })
 
     let { vm } = wrapper

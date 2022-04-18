@@ -41,8 +41,13 @@ import useControllable from '../../mixins/controllable'
 import Button from '../Button'
 import Icon from '../Icon'
 import { throttle } from 'lodash'
+import { useCoupled } from '../Form/_facade' // TODO
 
 const MIN_WIDTH = 1248
+
+const { useParent, useChild: useSidebarChild } = useCoupled('sidebar')
+
+export { useSidebarChild }
 
 export default {
   name: 'veui-sidebar',
@@ -50,7 +55,14 @@ export default {
     'veui-button': Button,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, useControllable('collapsed')],
+  mixins: [
+    prefix,
+    ui,
+    useControllable('collapsed'),
+    useParent((vm) => ({
+      collapsed: !!vm.realCollapsed
+    }))
+  ],
   props: {
     collapsible: {
       type: Boolean,
