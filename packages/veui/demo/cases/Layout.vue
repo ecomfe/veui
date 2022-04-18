@@ -10,7 +10,7 @@ import {
   Overlay,
   Button,
   Nav,
-  Menu
+  Sidenav
 } from 'veui'
 import 'veui-theme-dls-icons/calendar'
 
@@ -189,7 +189,7 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach(child => {
+    this.$children.forEach((child) => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })
@@ -202,35 +202,35 @@ export default {
           <CheckButtonGroup
             value={this.feature}
             items={this.features}
-            onChange={e => {
+            onChange={(e) => {
               this.feature = e
             }}
           />
           <CheckButtonGroup
             value={this.header}
             items={this.headerFeatures}
-            onChange={e => {
+            onChange={(e) => {
               this.header = e
             }}
           />
           <CheckButtonGroup
             value={this.sidebar}
             items={this.sidebarFeatures}
-            onChange={e => {
+            onChange={(e) => {
               this.sidebar = e
             }}
           />
           <CheckButtonGroup
             value={this.outerFooter}
             items={this.outerFooterFeatures}
-            onChange={e => {
+            onChange={(e) => {
               this.outerFooter = e
             }}
           />
           <CheckButtonGroup
             value={this.innerFooter}
             items={this.innerFooterFeatures}
-            onChange={e => {
+            onChange={(e) => {
               this.innerFooter = e
             }}
           />
@@ -277,7 +277,7 @@ export default {
               autocollapse={this.sidebar.includes('autocollapse')}
               {...{
                 on: {
-                  'update:collapsed': val => {
+                  'update:collapsed': (val) => {
                     this.collapsed = val
                   }
                 }
@@ -285,14 +285,7 @@ export default {
             >
               <div class="demo-sidebar-content">
                 {this.isTongding && <div class="demo-header-logo" />}
-                <Menu
-                  items={navItems}
-                  collapsible={
-                    this.sidebar.includes('slim') &&
-                    this.sidebar.includes('collapsible')
-                  }
-                  collapsed={this.collapsed}
-                />
+                <Sidenav items={navItems} />
               </div>
             </Sidebar>
           )
@@ -308,8 +301,8 @@ export default {
             </Footer>
           )
         case 'Layout':
-          const hasHeader = current.children.some(i => i === 'Header')
-          const hasFooter = current.children.some(i => i === 'Footer')
+          const hasHeader = current.children.some((i) => i === 'Header')
+          const hasFooter = current.children.some((i) => i === 'Footer')
           return (
             <Layout
               style={{
@@ -323,7 +316,7 @@ export default {
       }
     },
     renderList (list) {
-      return list.map(item => this.renderItem(item))
+      return list.map((item) => this.renderItem(item))
     }
   },
   render () {

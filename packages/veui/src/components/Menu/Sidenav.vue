@@ -202,6 +202,7 @@ import useControllable from '../../mixins/controllable'
 import mixin from './_mixin'
 import { closest, getFocusable } from '../../utils/dom'
 import '../../common/global'
+import { useSidebarChild } from '../Layout/Sidebar'
 
 export default {
   name: 'veui-sidenav',
@@ -217,15 +218,13 @@ export default {
     mixin,
     useControllable([
       {
-        prop: 'collapsed'
-      },
-      {
         prop: 'expanded',
         get (val) {
           return this.realCollapsed ? [] : val || []
         }
       }
-    ])
+    ]),
+    useSidebarChild('sidebar')
   ],
   props: {
     collapsed: Boolean,
@@ -243,6 +242,14 @@ export default {
   computed: {
     hasIcon () {
       return !!some(this.items, ({ icon }) => !!icon)
+    },
+    // 内部不再需要修改 collapsed 了，不需要 localCollapsed。
+    realCollapsed () {
+      return this.isControlled('collapsed')
+        ? this.collapsed
+        : this.sidebar
+          ? this.sidebar.collapsed
+          : false
     },
     treeMatches () {
       return (val, item) => val === item.name
