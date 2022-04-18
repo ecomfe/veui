@@ -1,57 +1,59 @@
 <template>
-<article class="veui-menu-demo">
-  <h1><code>&lt;veui-menu&gt;</code></h1>
+<article class="veui-sidenav-demo">
+  <h1><code>&lt;veui-sidenav&gt;</code></h1>
   <div>expanded: {{ expanded }}</div>
   <div>active: {{ active1 }}</div>
-  <button @click="$router.push('/menu/input')">input</button>
-  <button @click="$router.push('/menu/button')">button</button>
+  <veui-button
+    @click="$router.push('/sidenav/input')"
+  >跳转到 input</veui-button>
+  <veui-button @click="collapsed = !collapsed">切换展开</veui-button>
   <section>
-    <h3>small collapsible menu</h3>
-    <veui-menu
-      class="small-menu"
+    <h3>small collapsible sidenav</h3>
+    <veui-sidenav
+      class="small-sidenav"
       ui="s"
       :items="items"
       :expanded.sync="expanded"
-      collapsible
-    />
-  </section>
-  <section>
-    <h3>medium collapsible menu</h3>
-    <veui-menu
-      :items="items"
-      :active.sync="active1"
-      :expanded.sync="expanded"
-      collapsible
       :collapsed.sync="collapsed"
     />
   </section>
   <section>
-    <h3>large menu</h3>
-    <veui-menu
+    <h3>medium collapsible sidenav</h3>
+    <veui-sidenav
+      :items="items"
+      :active.sync="active1"
+      :expanded.sync="expanded"
+      :collapsed.sync="collapsed"
+    />
+  </section>
+  <section>
+    <h3>large sidenav</h3>
+    <veui-sidenav
       ui="l"
       :items="items2"
       :active.sync="active2"
+      :collapsed.sync="collapsed"
     />
   </section>
   <section>
     <h3>自定义 icon slot</h3>
-    <veui-menu
+    <veui-sidenav
       ui="s"
-      collapsible
+      :collapsed.sync="collapsed"
       :items="items"
     >
       <veui-icon
         slot="icon"
         name="baidu"
       />
-    </veui-menu>
+    </veui-sidenav>
   </section>
   <section><router-view/></section>
 </article>
 </template>
 
 <script>
-import { Menu, Icon } from 'veui'
+import { Sidenav, Button, Icon } from 'veui'
 import { omit } from 'lodash'
 import 'veui-theme-dls-icons/clock'
 import 'veui-theme-dls-icons/envelope'
@@ -59,10 +61,11 @@ import 'veui-theme-dls-icons/eye'
 import 'veui-theme-dls-icons/file'
 
 export default {
-  name: 'veui-menu-demo',
+  name: 'veui-sidenav-demo',
   components: {
-    'veui-menu': Menu,
-    'veui-icon': Icon
+    'veui-sidenav': Sidenav,
+    'veui-icon': Icon,
+    'veui-button': Button
   },
   data () {
     let items = [
@@ -79,21 +82,21 @@ export default {
             children: [
               {
                 label: 'Input',
-                to: '/menu/input'
+                to: '/sidenav/input'
               }
             ]
           },
           {
             label: 'Loading',
             name: 'Loading',
-            to: '/menu/loading'
+            to: '/sidenav/loading'
           }
         ]
       },
       {
         label: 'Button',
         name: 'Button',
-        to: '/menu/button',
+        to: '/sidenav/button',
         icon: 'eye',
         children: [
           {
@@ -104,7 +107,7 @@ export default {
               {
                 label: 'Link',
                 name: 'Link',
-                to: '/menu/link'
+                to: '/sidenav/link'
               }
             ]
           }
@@ -127,7 +130,7 @@ export default {
             children: [
               {
                 label: 'Switch',
-                to: '/menu/switch'
+                to: '/sidenav/switch'
               }
             ]
           },
@@ -138,11 +141,11 @@ export default {
               {
                 label: 'NumberInput',
                 name: 'menu-number-input',
-                to: '/menu/number-input',
+                to: '/sidenav/number-input',
                 children: [
                   {
                     label: 'Schedule',
-                    to: '/menu/schedule'
+                    to: '/sidenav/schedule'
                   }
                 ]
               }
@@ -157,16 +160,16 @@ export default {
         children: [
           {
             label: 'Progress',
-            to: '/menu/progress'
+            to: '/sidenav/progress'
           },
           {
             label: 'Radio',
-            to: '/menu/radio'
+            to: '/sidenav/radio'
           }
         ]
       }
     ]
-    let items2 = items.map(i => omit(i, 'icon'))
+    let items2 = items.map((i) => omit(i, 'icon'))
     return {
       expanded: [],
       active1: null,
@@ -179,10 +182,14 @@ export default {
 }
 </script>
 
-<style lang="less">
-.veui-menu-demo {
-  .small-menu {
+<style lang="less" scoped>
+.veui-sidenav-demo {
+  .small-sidenav {
     height: 300px;
+  }
+
+  .veui-button + .veui-button {
+    margin-left: 8px;
   }
 }
 </style>

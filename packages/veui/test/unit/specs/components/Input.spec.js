@@ -131,8 +131,10 @@ describe('components/Input', () => {
             expect(this.value).to.equal('')
             expect(this.$refs.input.localValue).to.equal('')
 
-            wrapper.destroy()
-            done()
+            this.$nextTick(() => {
+              wrapper.destroy()
+              done()
+            })
           }
         },
         template:

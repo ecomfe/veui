@@ -9,8 +9,6 @@ type Props<T extends NavItem> = {
   active?: string
   items?: Array<T>
   matches?: RouteMatches
-  // keyField?: string
-  collapsible?: boolean
   collapsed?: boolean
   expanded?: Array<string>
 }

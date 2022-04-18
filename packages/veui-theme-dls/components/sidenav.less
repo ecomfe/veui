@@ -43,16 +43,6 @@
     }
   }
 
-  // footer
-  &-footer {
-    flex: none;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    border-top: 1px solid @dls-menu-separator-color;
-    height: @dls-menu-footer-height-m;
-  }
-
   &-link {
     flex: auto;
     display: flex;
@@ -277,8 +267,7 @@
     color: @dls-menu-item-font-color-disabled;
   }
 
-  &-item-toggle,
-  &-toggle {
+  &-item-toggle {
     display: flex;
     background: none;
     border: none;
@@ -286,20 +275,6 @@
     outline: none;
     cursor: pointer;
     color: @dls-icon-color-aux;
-  }
-
-  &-toggle.@{veui-prefix}-button {
-    margin-right: @dls-menu-spacing;
-    padding-right: @dls-menu-padding-x;
-  }
-
-  &-collapsed &-toggle {
-    padding-right: 0;
-    transform: translateX(50%);
-    margin-right: @dls-menu-width-collapsed / 2;
-  }
-
-  &-item-toggle {
     position: relative;
     margin-left: @dls-menu-item-content-spacing;
     transform: rotateZ(90deg);
@@ -365,10 +340,6 @@
     height: @dls-menu-item-height-s;
   }
 
-  &[ui~="s"] &-footer {
-    height: @dls-menu-footer-height-s;
-  }
-
   &[ui~="l"],
   &[ui~="l"] &-tree,
   &-overlay[ui~="l"] {
@@ -377,9 +348,5 @@
 
   &[ui~="l"] &-tree &-item {
     height: @dls-menu-item-height-l;
-  }
-
-  &[ui~="l"] &-footer {
-    height: @dls-menu-footer-height-l;
   }
 }
