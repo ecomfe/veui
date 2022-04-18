@@ -187,22 +187,6 @@
     </abstract-tree>
     <slot name="after"/>
   </div>
-  <div
-    v-if="collapsible"
-    :class="$c('menu-footer')"
-  >
-    <veui-button
-      :ui="uiParts.toggle"
-      :class="$c('menu-toggle')"
-      :tabindex="-1"
-      @click="toggleCollapsed"
-    >
-      <veui-icon
-        :class="$c('menu-toggle-icon')"
-        :name="icons.toggle"
-      />
-    </veui-button>
-  </div>
 </div>
 </template>
 
@@ -213,7 +197,7 @@ import Link from '../Link'
 import Button from '../Button'
 import OptionGroup from '../OptionGroup'
 import Overlay from '../Overlay'
-import { some, uniq, includes, forEach, find } from 'lodash'
+import { some, uniq, includes } from 'lodash'
 import useControllable from '../../mixins/controllable'
 import mixin from './_mixin'
 import { closest, getFocusable } from '../../utils/dom'
@@ -233,10 +217,7 @@ export default {
     mixin,
     useControllable([
       {
-        prop: 'collapsed',
-        get (val) {
-          return this.collapsible ? val : false
-        }
+        prop: 'collapsed'
       },
       {
         prop: 'expanded',
@@ -247,7 +228,6 @@ export default {
     ])
   ],
   props: {
-    collapsible: Boolean,
     collapsed: Boolean,
     expanded: AbstractTree.props.expanded
   },
@@ -322,32 +302,6 @@ export default {
         expanded.splice(index, 1)
       }
       this.commit('expanded', expanded)
-    },
-    toggleCollapsed () {
-      let oldCollapsed = this.realCollapsed
-      this.commit('collapsed', !this.realCollapsed)
-      // 原来是展开的，那么如果最终折叠了就要调整下 tabIndex
-      if (!oldCollapsed) {
-        this.$nextTick(() => {
-          if (this.realCollapsed) {
-            let els = this.$el.querySelectorAll(this.getFocusSelector())
-            forEach(els, (el) => {
-              el.tabIndex = -1
-            })
-            // 切换到 collapsed 状态，将 tabIndex=0 还原到第一层
-            let first = find(
-              this.normalizedItems,
-              ({ tabIndex }) => tabIndex === '0'
-            )
-            first = first && this.$refs[first.name]
-            const firstLink =
-              first && first.querySelector(`.${this.$c('menu-link')}`)
-            if (firstLink) {
-              firstLink.tabIndex = 0
-            }
-          }
-        })
-      }
     },
     postNormalize (item) {
       if (item.children) {

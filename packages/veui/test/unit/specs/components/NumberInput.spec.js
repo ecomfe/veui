@@ -162,18 +162,20 @@ describe('components/NumberInput', () => {
     expect(input.element.value).to.equal('2.33')
   })
 
-  it('should handle change event', (done) => {
+  it('should handle change event', async () => {
     let wrapper = mount(NumberInput, {
       sync: false
     })
 
+    let value = null
     wrapper.vm.$on('change', (val) => {
-      expect(val).equal(1)
-      wrapper.destroy()
-      done()
+      value = val
     })
 
     wrapper.find('.veui-number-input-step-up').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(value).equal(1)
+    wrapper.destroy()
   })
 
   it('should make prop `value` fully controlled and violate `decimal-place` for respecting prop `value`', async () => {
@@ -192,6 +194,7 @@ describe('components/NumberInput', () => {
     wrapper.find('input').trigger('change')
     await wrapper.vm.$nextTick()
     expect(input.element.value).to.equal('2.123')
+    wrapper.destroy()
   })
 
   it('should step value from a invalid value correctly', async () => {

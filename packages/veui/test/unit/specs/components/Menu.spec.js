@@ -65,13 +65,13 @@ const options = {
 }
 
 describe('components/Menu', () => {
-  it('should handle ui prop & collapsible prop correctly', () => {
+  it('should handle ui prop correctly', () => {
     let wrapper = mount(
       {
         ...options,
         template: `<div>
           <veui-menu class="small-menu" ui="s" :items="items"/>
-          <veui-menu class="large-menu" ui="l" :items="items" collapsible/>
+          <veui-menu class="large-menu" ui="l" :items="items"/>
         </div>`
       },
       {
@@ -98,11 +98,6 @@ describe('components/Menu', () => {
     expect(largeMenuTreeUI).to.include('l')
     expect(largeMenuLinkUI).to.include('l')
 
-    let collapseSwitcher = wrapper.find('.small-menu .veui-menu-toggle')
-    expect(collapseSwitcher.exists()).to.equal(false)
-
-    let largeCollapseSwitcher = wrapper.find('.large-menu .veui-menu-toggle')
-    expect(largeCollapseSwitcher.exists()).to.equal(true)
     wrapper.destroy()
   })
 
@@ -110,8 +105,7 @@ describe('components/Menu', () => {
     let wrapper = mount(
       {
         ...options,
-        template:
-          '<veui-menu collapsible :collapsed.sync="collapsed" :items="items"/>'
+        template: '<veui-menu :collapsed.sync="collapsed" :items="items"/>'
       },
       {
         sync: false,
@@ -127,10 +121,6 @@ describe('components/Menu', () => {
     await vm.$nextTick()
     expect(menu.classes('veui-menu-collapsed')).to.equal(false)
 
-    wrapper.find('.veui-menu-toggle').trigger('click')
-    await vm.$nextTick()
-    expect(menu.classes('veui-menu-collapsed')).to.equal(true)
-    expect(vm.collapsed).to.equal(true)
     wrapper.destroy()
   })
 
@@ -215,7 +205,7 @@ describe('components/Menu', () => {
       {
         ...options,
         template:
-          '<veui-menu collapsible :collapsed.sync="collapsed2" :active.sync="active" :items="items"/>'
+          '<veui-menu :collapsed.sync="collapsed2" :active.sync="active" :items="items"/>'
       },
       {
         sync: false,
@@ -269,11 +259,6 @@ describe('components/Menu', () => {
     await vm.$nextTick()
     expect(links.at(0).attributes().tabindex).to.equal('-1')
     expect(links.at(endIndex).attributes().tabindex).to.equal('0')
-
-    wrapper.find('.veui-menu-toggle').trigger('click')
-    await vm.$nextTick()
-    expect(links.at(0).attributes().tabindex).to.equal('0')
-    expect(links.at(endIndex).attributes().tabindex).to.equal('-1')
     wrapper.destroy()
   })
 
@@ -301,35 +286,10 @@ describe('components/Menu', () => {
     )
 
     const menus = wrapper.findAll(Menu)
-    expect(
-      menus
-        .at(0)
-        .find('.veui-menu-item-label')
-        .exists()
-    ).to.equal(false)
-    expect(
-      menus
-        .at(0)
-        .find('.veui-menu-item')
-        .exists()
-    ).to.equal(false)
-    expect(
-      menus
-        .at(0)
-        .find('.my-item')
-        .exists()
-    ).to.equal(true)
-    expect(
-      menus
-        .at(1)
-        .find('.veui-menu-item-label')
-        .exists()
-    ).to.equal(true)
-    expect(
-      menus
-        .at(1)
-        .find('.veui-menu-item')
-        .exists()
-    ).to.equal(true)
+    expect(menus.at(0).find('.veui-menu-item-label').exists()).to.equal(false)
+    expect(menus.at(0).find('.veui-menu-item').exists()).to.equal(false)
+    expect(menus.at(0).find('.my-item').exists()).to.equal(true)
+    expect(menus.at(1).find('.veui-menu-item-label').exists()).to.equal(true)
+    expect(menus.at(1).find('.veui-menu-item').exists()).to.equal(true)
   })
 })

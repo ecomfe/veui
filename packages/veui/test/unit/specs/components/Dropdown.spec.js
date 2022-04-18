@@ -185,7 +185,7 @@ describe('components/Dropdown', () => {
     wrapper.destroy()
   })
 
-  it('should trigger click event with a value', () => {
+  it('should trigger click event with a value', async () => {
     let wrapper = mount(Dropdown, {
       propsData: {
         split: true,
@@ -196,18 +196,20 @@ describe('components/Dropdown', () => {
       sync: false,
       attachToDocument: true
     })
-
-    wrapper.vm.$on('click', val => {
-      expect(val).to.equal('male')
-      wrapper.destroy()
+    let value = null
+    wrapper.vm.$on('click', (val) => {
+      value = val
     })
 
     let menuWrapper = wrapper.find('.test-overlay-class')
-
+    await wrapper.vm.$nextTick()
     menuWrapper.find('.veui-option').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(value).to.equal('male')
+    wrapper.destroy()
   })
 
-  it('should trigger click event without a value', () => {
+  it('should trigger click event without a value', async () => {
     let wrapper = mount(Dropdown, {
       propsData: {
         split: true,
@@ -216,13 +218,16 @@ describe('components/Dropdown', () => {
       sync: false,
       attachToDocument: true
     })
-
-    wrapper.vm.$on('click', val => {
-      expect(val).to.equal(undefined)
-      wrapper.destroy()
+    let value = null
+    wrapper.vm.$on('click', (val) => {
+      value = val
     })
 
+    await wrapper.vm.$nextTick()
     wrapper.find('.veui-dropdown-command').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(value).to.equal(undefined)
+    wrapper.destroy()
   })
 
   it('should close the dropdown menu if `esc` is pressed', async () => {
@@ -239,7 +244,7 @@ describe('components/Dropdown', () => {
     // for coverage
     wrapper.vm.focus()
     expect(document.activeElement).to.satisfy(
-      item => item === document.querySelector('.veui-dropdown-command')
+      (item) => item === document.querySelector('.veui-dropdown-command')
     )
 
     const { $nextTick } = wrapper.vm
