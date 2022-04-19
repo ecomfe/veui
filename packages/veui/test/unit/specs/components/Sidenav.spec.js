@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
-import Menu from '@/components/Menu'
+import Sidenav from '@/components/Sidenav'
+import Sidebar from '@/components/Sidebar'
 import 'veui-theme-dls-icons/eye'
 
 const fullPathMatches = (route, item) => {
@@ -8,7 +9,8 @@ const fullPathMatches = (route, item) => {
 
 const options = {
   components: {
-    'veui-menu': Menu
+    'veui-sidenav': Sidenav,
+    'veui-sidebar': Sidebar
   },
   data () {
     return {
@@ -64,14 +66,14 @@ const options = {
   }
 }
 
-describe('components/Menu', () => {
+describe('components/Sidenav', () => {
   it('should handle ui prop correctly', () => {
     let wrapper = mount(
       {
         ...options,
         template: `<div>
-          <veui-menu class="small-menu" ui="s" :items="items"/>
-          <veui-menu class="large-menu" ui="l" :items="items"/>
+          <veui-sidenav class="small-menu" ui="s" :items="items"/>
+          <veui-sidenav class="large-menu" ui="l" :items="items"/>
         </div>`
       },
       {
@@ -105,7 +107,7 @@ describe('components/Menu', () => {
     let wrapper = mount(
       {
         ...options,
-        template: '<veui-menu :collapsed.sync="collapsed" :items="items"/>'
+        template: '<veui-sidenav :collapsed.sync="collapsed" :items="items"/>'
       },
       {
         sync: false,
@@ -128,7 +130,7 @@ describe('components/Menu', () => {
     let wrapper = mount(
       {
         ...options,
-        template: '<veui-menu :expanded.sync="expanded" :items="items"/>'
+        template: '<veui-sidenav :expanded.sync="expanded" :items="items"/>'
       },
       {
         sync: false,
@@ -156,7 +158,7 @@ describe('components/Menu', () => {
       {
         ...options,
         template:
-          '<veui-menu :active.sync="active" :items="items" :matches="fullPathMatches"/>'
+          '<veui-sidenav :active.sync="active" :items="items" :matches="fullPathMatches"/>'
       },
       {
         sync: false,
@@ -184,7 +186,7 @@ describe('components/Menu', () => {
       {
         ...options,
         template:
-          '<veui-menu :active.sync="active" :expanded.sync="expanded" :items="items"/>'
+          '<veui-sidenav :active.sync="active" :expanded.sync="expanded" :items="items"/>'
       },
       {
         sync: false,
@@ -205,7 +207,7 @@ describe('components/Menu', () => {
       {
         ...options,
         template:
-          '<veui-menu :collapsed.sync="collapsed2" :active.sync="active" :items="items"/>'
+          '<veui-sidenav :collapsed.sync="collapsed2" :active.sync="active" :items="items"/>'
       },
       {
         sync: false,
@@ -268,16 +270,16 @@ describe('components/Menu', () => {
         ...options,
         template: `
           <div>
-            <veui-menu :items="items">
+            <veui-sidenav :items="items">
               <template #item="{ label }">
                 <span class="my-item">{{ label }}</span>
               </template>
-            </veui-menu>
-            <veui-menu :items="items">
+            </veui-sidenav>
+            <veui-sidenav :items="items">
               <template #item-label="{ label }">
                 😀 {{ label }}
               </template>
-            </veui-menu>
+            </veui-sidenav>
           </div>`
       },
       {
@@ -285,11 +287,33 @@ describe('components/Menu', () => {
       }
     )
 
-    const menus = wrapper.findAll(Menu)
+    const menus = wrapper.findAll(Sidenav)
     expect(menus.at(0).find('.veui-menu-item-label').exists()).to.equal(false)
     expect(menus.at(0).find('.veui-menu-item').exists()).to.equal(false)
     expect(menus.at(0).find('.my-item').exists()).to.equal(true)
     expect(menus.at(1).find('.veui-menu-item-label').exists()).to.equal(true)
     expect(menus.at(1).find('.veui-menu-item').exists()).to.equal(true)
+  })
+
+  it('should handle collapsed prop from the containing sidebar correctly', async () => {
+    let wrapper = mount(
+      {
+        ...options,
+        template: `
+          <veui-sidebar :collapsed="collapsed">
+            <veui-sidenav :items="items"/>
+          </veui-sidebar>`
+      },
+      {
+        sync: false
+      }
+    )
+    const { vm } = wrapper
+    const sidenav = wrapper.find('.veui-menu')
+    expect(sidenav.classes()).to.contains('veui-menu-collapsed')
+    vm.collapsed = false
+    await vm.$nextTick()
+    expect(sidenav.classes()).to.not.contains('veui-menu-collapsed')
+    wrapper.destroy()
   })
 })
