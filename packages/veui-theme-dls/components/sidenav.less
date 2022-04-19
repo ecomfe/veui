@@ -1,22 +1,21 @@
 @import "../lib.less";
 @import (reference) "../dropdown.less";
 
-@dls-menu-level-indent-special: 24px;
-@dls-menu-spacing: 8px;
-@dls-menu-padding-x: 16px;
-@dls-menu-item-icon-spacing: 8px;
-@dls-menu-item-border-radius: 6px;
+@dls-sidenav-item-border-radius: @dls-border-radius-2;
+@dls-sidenav-width: @dls-menu-width;
+@dls-sidenav-width-collapsed: @dls-menu-width-collapsed;
+@dls-sidenav-item-group-label-font-color-popout: @dls-foreground-color-neutral-weak;
 
 .@{veui-prefix}-menu {
   display: flex;
   flex-direction: column;
-  width: @dls-menu-width;
+  width: @dls-sidenav-width;
   will-change: width;
-  line-height: @dls-line-height-1;
+  line-height: @dls-sidenav-item-height;
   .veui-transition(width);
 
   &-collapsed {
-    width: @dls-menu-width-collapsed;
+    width: @dls-sidenav-width-collapsed;
   }
 
   .@{veui-prefix}-abstract-tree {
@@ -31,7 +30,7 @@
     }
 
     &-item-group {
-      padding-left: @dls-menu-level-indent;
+      padding-left: @dls-sidenav-item-level-indent;
     }
   }
 
@@ -66,36 +65,36 @@
     align-items: center;
     outline: none;
     max-width: 100%;
-    font-size: @dls-menu-font-size-m;
+    font-size: @dls-sidenav-item-font-size;
     height: inherit;
 
     &:not(.@{veui-prefix}-disabled) {
       // hover toggle 也让有 hover link 的效果（toggle 不在 link 里面）
       &.@{veui-prefix}-menu-link:hover,
       &:hover .@{veui-prefix}-menu-link {
-        color: @dls-menu-item-font-color-hover;
+        color: @dls-sidenav-item-font-color-hover;
 
         &::before {
-          background-color: @dls-menu-item-background-color-hover;
-          border-radius: @dls-menu-item-border-radius;
+          background-color: @dls-sidenav-item-background-color-hover;
+          border-radius: @dls-sidenav-item-border-radius;
         }
       }
 
       &.@{veui-prefix}-menu-link,
       .@{veui-prefix}-menu-link {
         &[data-focus-visible-added] {
-          color: @dls-menu-item-font-color-focus;
+          color: @dls-sidenav-item-font-color-focus;
 
           &::before {
-            background-color: @dls-menu-item-background-color-focus;
+            background-color: @dls-sidenav-item-background-color-focus;
           }
         }
 
         &:active {
-          color: @dls-menu-item-font-color-active;
+          color: @dls-sidenav-item-font-color-active;
 
           &::before {
-            background-color: @dls-menu-item-background-color-active;
+            background-color: @dls-sidenav-item-background-color-active;
           }
         }
       }
@@ -107,55 +106,55 @@
     content: "";
     .absolute(_, 0);
     height: inherit;
-    background-color: @dls-menu-item-background-color;
+    background-color: @dls-sidenav-item-background-color;
   }
 
   // tree
   &-tree-wrapper {
     overflow: auto;
     flex: auto;
-    margin: 0 @dls-menu-spacing;
+    padding: 0 @dls-sidenav-padding-x;
 
     // 盖住：当 tree 收起时可能会看到 active 样式溢出到 tree 外面
     &::after {
       content: "";
       display: block;
       flex: auto;
-      background: @dls-menu-item-background-color;
+      background: @dls-sidenav-item-background-color;
       position: relative;
     }
   }
 
   &-collapsed &-tree-wrapper {
-    margin: 0;
+    padding: 0;
   }
 
   &-tree {
     position: relative;
-    padding: @dls-menu-padding-y @dls-menu-padding-x;
+    padding: @dls-sidenav-padding-y @dls-sidenav-item-level-indent;
     // 盖住：tree 顶部的 padding 间隙
     &::before {
       content: "";
       .absolute(0, 0, _, 0);
-      height: @dls-menu-item-spacing;
-      background-color: @dls-menu-item-background-color;
+      height: @dls-sidenav-padding-y;
+      background-color: @dls-sidenav-item-background-color;
       display: block;
     }
 
     &-wrapper > &,
     &-wrapper > & > li > .@{veui-prefix}-abstract-tree {
-      padding-left: @dls-menu-level-indent-special;
+      padding-left: @dls-sidenav-item-padding-start;
     }
 
     &-item {
-      margin-top: @dls-menu-item-spacing;
-      height: @dls-menu-item-height-m;
+      margin-top: @dls-sidenav-item-spacing;
+      height: @dls-sidenav-item-height;
       // 盖住：active 样式在 expand 过渡时从 margin-top 露出来的部分
       &::after {
         content: "";
         .absolute(_, 0);
-        height: @dls-menu-item-spacing;
-        background-color: @dls-menu-item-background-color;
+        height: @dls-sidenav-item-spacing;
+        background-color: @dls-sidenav-item-background-color;
         transform: translateY(100%);
         align-self: flex-end;
         width: auto;
@@ -177,10 +176,10 @@
   }
 
   &-item-icon {
-    margin-right: @dls-menu-item-icon-spacing;
+    margin-right: @dls-sidenav-item-content-spacing;
     display: flex;
     align-items: center;
-    .dls-icon-size(@dls-menu-item-icon-size, true);
+    .dls-icon-size(@dls-sidenav-item-icon-size, true);
   }
 
   &-item-label {
@@ -190,11 +189,11 @@
   }
 
   &-tree > li > &-item &-item-label {
-    font-weight: @dls-menu-item-group-label-font-weight;
+    font-weight: @dls-sidenav-item-group-font-weight;
   }
 
   .@{veui-prefix}-button &-toggle-icon {
-    .size(@dls-menu-item-icon-size-aux);
+    .size(@dls-sidenav-item-icon-size-aux);
   }
 
   &-item-active:not(.@{veui-prefix}-disabled),
@@ -203,7 +202,7 @@
     &:hover .@{veui-prefix}-menu-link {
       &,
       & + .@{veui-prefix}-option-group-expandable {
-        color: @dls-menu-item-font-color-current-hover;
+        color: @dls-sidenav-item-font-color-current-hover;
       }
     }
 
@@ -211,22 +210,21 @@
     .@{veui-prefix}-menu-link {
       &,
       & + .@{veui-prefix}-option-group-expandable {
-        color: @dls-menu-item-font-color-current;
-        font-weight: @dls-menu-item-font-weight-current;
+        color: @dls-sidenav-item-font-color-current;
         .veui-transition(color);
       }
 
       &[data-focus-visible-added] {
         &,
         & + .@{veui-prefix}-option-group-expandable {
-          color: @dls-menu-item-font-color-current-focus;
+          color: @dls-sidenav-item-font-color-current-focus;
         }
       }
 
       &:active {
         &,
         & + .@{veui-prefix}-option-group-expandable {
-          color: @dls-menu-item-font-color-current-active;
+          color: @dls-sidenav-item-font-color-current-active;
         }
       }
     }
@@ -237,34 +235,30 @@
   &-tree &-item-exact-active:not(.@{veui-prefix}-disabled) {
     &:hover .@{veui-prefix}-menu-link {
       &::before {
-        background-color: @dls-menu-item-background-color-current-hover;
-      }
-
-      &::after {
-        background-color: @dls-menu-indicator-color-hover;
+        background-color: @dls-sidenav-item-background-color-current-hover;
       }
     }
 
     .@{veui-prefix}-menu-link {
       &::before {
-        border-radius: @dls-menu-item-border-radius;
-        background-color: @dls-menu-item-background-color-current;
+        border-radius: @dls-sidenav-item-border-radius;
+        background-color: @dls-sidenav-item-background-color-current;
         .veui-transition(background-color);
       }
 
       &[data-focus-visible-added]::before {
-        background-color: @dls-menu-item-background-color-current-focus;
+        background-color: @dls-sidenav-item-background-color-current-focus;
       }
 
       &:active::before {
-        background-color: @dls-menu-item-background-color-current-active;
+        background-color: @dls-sidenav-item-background-color-current-active;
       }
     }
   }
 
   &-item.@{veui-prefix}-disabled &-item-icon,
   &-item.@{veui-prefix}-disabled &-link {
-    color: @dls-menu-item-font-color-disabled;
+    color: @dls-sidenav-item-font-color-disabled;
   }
 
   &-item-toggle {
@@ -274,9 +268,9 @@
     padding: 0;
     outline: none;
     cursor: pointer;
-    color: @dls-icon-color-aux;
+    color: @dls-sidenav-item-icon-color-aux;
     position: relative;
-    margin-left: @dls-menu-item-content-spacing;
+    margin-left: @dls-sidenav-item-content-spacing;
     transform: rotateZ(90deg);
     .veui-transition(transform);
   }
@@ -286,11 +280,11 @@
   }
 
   &-collapsed &-tree {
-    padding: @dls-menu-padding-y 0;
+    padding: @dls-sidenav-padding-y 0;
   }
 
   &-collapsed &-item-icon {
-    margin-left: @dls-menu-width-collapsed / 2;
+    margin-left: @dls-sidenav-width-collapsed / 2;
     transform: translateX(-50%);
   }
 
@@ -317,8 +311,7 @@
       @dls-option-padding-m,
       @dls-option-group-label-padding-y
     );
-    color: @dls-menu-item-group-label-font-color;
-    font-weight: @dls-menu-item-group-label-font-weight;
+    color: @dls-sidenav-item-group-label-font-color-popout;
   }
 
   &-overlay.@{veui-prefix}-overlay-enter,
