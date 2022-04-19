@@ -43,7 +43,7 @@
         >
           {{
             realCompleteDisplay && name === 'selected'
-              ? backfillOption.chains.map(i => i.label).join(' > ')
+              ? backfillOption.chains.map((i) => i.label).join(' > ')
               : null
           }}
         </slot>
@@ -276,13 +276,23 @@ export default {
     realOptions () {
       let options = mapDatasource(
         this.options,
-        (item, { parentIndices, index }) => {
-          // 没有 name/value 直接用 ${label}${depth} 来生成 name 更稳定一点，反正 datasource 变化 uniqueId 也是在变化
-          if (getKey(item) == null) {
-            let { label } = item
-            return {
-              ...item,
-              name: `veui-${label}-${parentIndices.concat(index).join('-')}`
+        (item, { parentIndices, index, parents }) => {
+          const parent = parents[parents.length - 1]
+          const key = getKey(item)
+          const inheritDisabled = !item.disabled && parent && parent.disabled
+
+          if (key == null || inheritDisabled) {
+            item = { ...item }
+
+            // 没有 name/value 直接用 ${label}${depth} 来生成 name 更稳定一点，反正 datasource 变化 uniqueId 也是在变化
+            if (key == null) {
+              item.name = `veui-${item.label}-${parentIndices
+                .concat(index)
+                .join('-')}`
+            }
+
+            if (inheritDisabled) {
+              item.disabled = true
             }
           }
           return item
@@ -318,7 +328,7 @@ export default {
         remove: this.handleTriggerRemove,
         clear: this.handleTriggerClear,
         toggle: this.handleTriggerToggle,
-        updateKeyword: val => (this.keyword = val),
+        updateKeyword: (val) => (this.keyword = val),
         select: this.handlePaneSelect
       }
     },
@@ -340,7 +350,7 @@ export default {
     },
     selectedOptions () {
       let options = this.realValue
-        .map(val =>
+        .map((val) =>
           find(
             this.realOptions,
             ({ value }) => value !== null && value === val,
@@ -563,10 +573,10 @@ export default {
     },
     getPopoutParents (value) {
       let parents =
-        findParents(this.realOptions, item => getKey(item) === value, {
+        findParents(this.realOptions, (item) => getKey(item) === value, {
           alias: 'options'
         }) || []
-      return parents.filter(i => i.position !== 'inline')
+      return parents.filter((i) => i.position !== 'inline')
     },
     expandSelected () {
       let expanded = true
@@ -598,7 +608,7 @@ export default {
     toggleOption (option, operation = 'toggle') {
       let parents = findParents(
         this.realOptions,
-        item => getKey(item) === getKey(option),
+        (item) => getKey(item) === getKey(option),
         { alias: 'options', includeSelf: true }
       )
       if (!parents) {
@@ -629,7 +639,7 @@ export default {
     getOptionWithParents (value, field) {
       return findParents(
         this.realOptions,
-        item => {
+        (item) => {
           let val = field ? item[field] : getKey(item)
           return val === value
         },
@@ -638,12 +648,12 @@ export default {
     },
     getPaneSlots () {
       return PANE_SLOTS.filter(
-        name => !!this.$scopedSlots[name] || !!this.$slots[name]
+        (name) => !!this.$scopedSlots[name] || !!this.$slots[name]
       )
     },
     getTriggerSlots () {
       let slots = TRIGGER_SLOTS.filter(
-        name => !!this.$scopedSlots[name] || !!this.$slots[name]
+        (name) => !!this.$scopedSlots[name] || !!this.$slots[name]
       )
       if (
         this.realCompleteDisplay &&

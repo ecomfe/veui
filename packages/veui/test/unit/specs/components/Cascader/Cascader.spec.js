@@ -605,6 +605,37 @@ describe('components/Cascader/Cascader', () => {
     expect(vm.value).to.deep.equal(['上海', '徐州', '苏州'])
     wrapper.destroy()
   })
+
+  it('should handle disabled parents correctly.', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-cascader': Cascader
+      },
+      data () {
+        return {
+          value: null,
+          expanded: true,
+          options: casOptions
+        }
+      },
+      template:
+        '<veui-cascader :expanded.sync="expanded" v-model="value" :options="options"/>'
+    })
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    let expandBtn = wrapper.find('.veui-cascader-pane-expandable')
+    expandBtn.trigger('click')
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal('浙江')
+    let hangzhou = wrapper.find(
+      '.veui-cascader-pane-column-wrap + .veui-cascader-pane-column-wrap .veui-cascader-pane-option'
+    )
+    hangzhou.trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.equal(null)
+    wrapper.destroy()
+  })
 })
 
 function select (wrapper, index) {
