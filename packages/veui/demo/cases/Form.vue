@@ -5,39 +5,23 @@
   </h1>
   <section>
     <h2>通过指定data、field及v-model来创建一个form</h2>
-    <veui-form
-      ref="form1"
-      :data="storeData1"
-    >
-      <veui-field
-        label="昵称"
-        field="nickName"
-      >
+    <veui-form ref="form1" :data="storeData1">
+      <veui-field label="昵称" field="nickName">
         <veui-input v-model="storeData1.nickName"/>
       </veui-field>
 
       <veui-field>
-        <veui-input
-          readonly
-          value="Labeless field"
-        />
+        <veui-input readonly value="Labeless field"/>
       </veui-field>
 
-      <veui-field
-        label="性别"
-        field="sex"
-      >
+      <veui-field label="性别" field="sex">
         <veui-select
           v-model="storeData1.sex"
           :options="storeData1.sexItems"
         />
       </veui-field>
 
-      <veui-field
-        ui="small"
-        label="婚姻"
-        field="married"
-      >
+      <veui-field ui="small" label="婚姻" field="married">
         <veui-radiogroup
           v-model="storeData1.married"
           ui="small"
@@ -45,10 +29,7 @@
         />
       </veui-field>
 
-      <veui-field
-        label="爱好"
-        field="hobby"
-      >
+      <veui-field label="爱好" field="hobby">
         <veui-checkboxgroup
           v-model="storeData1.hobby"
           type="checkbox"
@@ -56,27 +37,18 @@
         />
       </veui-field>
 
-      <veui-field
-        label="生日"
-        field="birthday"
-      >
+      <veui-field label="生日" field="birthday">
         <veui-datepicker v-model="storeData1.birthday"/>
       </veui-field>
 
-      <veui-field
-        label="地区"
-        field="regions"
-      >
+      <veui-field label="地区" field="regions">
         <veui-region-picker
           v-model="storeData1.regions"
           :datasource="regions"
         />
       </veui-field>
 
-      <veui-field
-        label="头像"
-        field="avatar"
-      >
+      <veui-field label="头像" field="avatar">
         <veui-uploader
           v-model="storeData1.files"
           type="image"
@@ -99,11 +71,7 @@
   <section>
     <h2>行内多组件表单</h2>
     <veui-form>
-      <veui-fieldset
-        ui="large"
-        class="two-name"
-        label="姓名"
-      >
+      <veui-fieldset ui="large" class="two-name" label="姓名">
         <veui-field>
           <veui-input
             v-model="storeData2.lastName"
@@ -130,15 +98,12 @@
         </veui-field>
 
         <veui-field style="margin-left: 4px">
-          <veui-input
-            v-model="storeData2.phone"
-            placeholder="名"
-          />
+          <veui-input v-model="storeData2.phone" placeholder="名"/>
         </veui-field>
       </veui-fieldset>
 
       <veui-fieldset class="salary">
-        <template slot="label">
+        <template #label>
           <veui-label>预期收入</veui-label>
         </template>
         <veui-field>
@@ -149,17 +114,13 @@
           <veui-input v-model="storeData2.end"/>
         </veui-field>
         <veui-span>万</veui-span>
-        <template slot="tip">
+        <template #tip>
           <veui-icon name="indent"/>使用 &lt;veui-span&gt;
           来插入中间非组件内容
         </template>
       </veui-fieldset>
 
-      <veui-field
-        label="预期收入"
-        field="salary"
-        name="salary"
-      >
+      <veui-field label="预期收入" field="salary" name="salary">
         <veui-slider
           v-model="storeData2.salary"
           :min="1"
@@ -235,42 +196,26 @@
     </section>-->
   <section>
     <h2>表单的禁用或只读</h2>
-    <veui-form
-      disabled
-      :data="storeData1"
-    >
-      <veui-field
-        label="昵称"
-        field="nickName"
-      >
+    <veui-form disabled :data="storeData1">
+      <veui-field label="昵称" field="nickName">
         <veui-input v-model="storeData1.nickName"/>
       </veui-field>
 
-      <veui-field
-        label="性别"
-        field="sex"
-      >
+      <veui-field label="性别" field="sex">
         <veui-select
           v-model="storeData1.sex"
           :options="storeData1.sexItems"
         />
       </veui-field>
 
-      <veui-field
-        label="婚姻"
-        field="married"
-      >
+      <veui-field label="婚姻" field="married">
         <veui-radiogroup
           v-model="storeData1.married"
           :items="storeData1.marryItems"
         />
       </veui-field>
 
-      <veui-field
-        ui="small"
-        label="爱好"
-        field="hobby"
-      >
+      <veui-field ui="small" label="爱好" field="hobby">
         <veui-checkboxgroup
           v-model="storeData1.hobby"
           ui="small"
@@ -279,17 +224,11 @@
         />
       </veui-field>
 
-      <veui-field
-        label="生日"
-        field="birthday"
-      >
+      <veui-field label="生日" field="birthday">
         <veui-datepicker v-model="storeData1.birthday"/>
       </veui-field>
 
-      <veui-field
-        label="头像"
-        field="avatar"
-      >
+      <veui-field label="头像" field="avatar">
         <veui-uploader
           v-model="storeData1.avatar"
           type="image"
@@ -345,7 +284,7 @@
         class="salary"
         tip="使用 <veui-span> 来插入中间非组件内容"
       >
-        <template slot="label">
+        <template #label>
           <veui-label>预期收入</veui-label>💰
         </template>
         <veui-field>
@@ -410,12 +349,7 @@
         />
       </veui-field>
 
-      <veui-field
-        field="name3"
-        name="name3"
-        label="别名"
-        tip="有内置错误"
-      >
+      <veui-field field="name3" name="name3" label="别名" tip="有内置错误">
         <veui-input
           v-model="storeData4.name3"
           maxlength="4"
@@ -423,38 +357,19 @@
         />
       </veui-field>
 
-      <veui-field
-        field="age"
-        name="age1"
-        :rules="ageRule"
-        label="年龄"
-      >
+      <veui-field field="age" name="age1" :rules="ageRule" label="年龄">
         <veui-input
           v-model="storeData4.age"
           placeholder="错误提示优先出在右侧, 长度不能超过3"
         />
       </veui-field>
 
-      <veui-field
-        name="desc"
-        rules="required"
-        label="介绍"
-      >
-        <veui-textarea
-          v-model="storeData4.desc"
-          rows="3"
-        />
+      <veui-field name="desc" rules="required" label="介绍">
+        <veui-textarea v-model="storeData4.desc" rows="3"/>
       </veui-field>
 
-      <veui-fieldset
-        name="phoneSet"
-        label="电话"
-        :required="true"
-      >
-        <veui-field
-          field="phoneType"
-          name="phoneType"
-        >
+      <veui-fieldset name="phoneSet" label="电话" :required="true">
+        <veui-field field="phoneType" name="phoneType">
           <veui-select
             v-model="storeData4.phoneType"
             :options="storeData4Options.phoneTypeOptions"
@@ -500,11 +415,7 @@
           <veui-input v-model="storeData4.start"/>
         </veui-field>
         <veui-span style="margin: 0 4px">-</veui-span>
-        <veui-field
-          field="end"
-          name="end"
-          :rules="numRequiredRule"
-        >
+        <veui-field field="end" name="end" :rules="numRequiredRule">
           <veui-input v-model="storeData4.end"/>
         </veui-field>
         <veui-span>万</veui-span>
@@ -557,11 +468,7 @@
       @submit="submit"
       @invalid="handleInvalid"
     >
-      <veui-field
-        field="qindian"
-        label="负责人"
-        name="qindian"
-      >
+      <veui-field field="qindian" label="负责人" name="qindian">
         <veui-input v-model="storeData5.qindian"/>
       </veui-field>
 
@@ -576,10 +483,7 @@
           :name="'projectName' + (index + 1)"
           :rules="requiredRule"
         >
-          <veui-input
-            v-model="item.project"
-            placeholder="项目名称"
-          />
+          <veui-input v-model="item.project" placeholder="项目名称"/>
         </veui-field>
         <veui-field
           style="margin-left: 4px"
@@ -587,10 +491,7 @@
           :name="`schedule${index + 1}`"
           :rules="requiredRule"
         >
-          <veui-datepicker
-            v-model="item.range"
-            range
-          />
+          <veui-datepicker v-model="item.range" range/>
         </veui-field>
         <veui-button
           style="margin-left: 4px"

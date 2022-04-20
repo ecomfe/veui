@@ -1,9 +1,4 @@
-import {
-  getTypeByInstance,
-  getType,
-  isType,
-  isEqualSet
-} from '@/utils/lang'
+import { getTypeByInstance, getType, isType, isEqualSet } from '@/utils/lang'
 
 function test () {}
 let a1 = 1

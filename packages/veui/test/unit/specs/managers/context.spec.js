@@ -24,7 +24,7 @@ describe('managers/context', () => {
           <Context.Provider value={this.value}>
             <Context.Consumer
               scopedSlots={{
-                default: contextValue => (
+                default: (contextValue) => (
                   <div>{JSON.stringify(contextValue)}</div>
                 )
               }}

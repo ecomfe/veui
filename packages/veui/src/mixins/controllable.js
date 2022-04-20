@@ -9,7 +9,7 @@ let options = {
     // 使用方法而非直接赋值：受控时赋值并未直接生效，而仅仅 emit 事件而已，直接让使用方使用赋值违反直觉
     // commit 可以额外的给事件传递更多的参数
     commit (prop, value, ...args) {
-      let def = find(this._controlledProps, i => i.prop === prop)
+      let def = find(this._controlledProps, (i) => i.prop === prop)
       if (def) {
         computedSetter(this, value, def, ...args)
         return
@@ -69,7 +69,7 @@ export default function useControllable (props) {
       let { prop, local, get, set } = def
 
       if (local !== false) {
-        result.data[getLocalName(def)] = vm => vm[prop]
+        result.data[getLocalName(def)] = (vm) => vm[prop]
       }
 
       result.computed[getRealName(def)] = {
@@ -129,7 +129,7 @@ function computedSetter (vm, value, def, ...args) {
   let oldReal = getReal(vm, def)
   if (oldReal !== value) {
     return set
-      ? set.call(vm, value, val => setReal(vm, val, def, ...args))
+      ? set.call(vm, value, (val) => setReal(vm, val, def, ...args))
       : setReal(vm, value, def, ...args)
   }
 }

@@ -1,9 +1,5 @@
 <template>
-<label
-  :class="$c('label')"
-  :ui="realUi"
-  @click="activateInput"
->
+<label :class="$c('label')" :ui="realUi" @click="activateInput">
   <slot/>
 </label>
 </template>
@@ -92,7 +88,7 @@ function findInput (component) {
   }
 
   let result
-  children.some(c => {
+  children.some((c) => {
     result = findInput(c)
     return result
   })

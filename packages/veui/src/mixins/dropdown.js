@@ -39,13 +39,10 @@ const baseMixin = {
       toggleClass(box, 'veui-dropdown-overflow', true)
 
       if (!box.__overlay_scroll_handler__) {
-        box.__overlay_scroll_handler__ = this.__overlay_scroll_handler__ = throttle(
-          this.handleScroll,
-          200,
-          {
+        box.__overlay_scroll_handler__ = this.__overlay_scroll_handler__ =
+          throttle(this.handleScroll, 200, {
             leading: true
-          }
-        )
+          })
         box.addEventListener('scroll', this.__overlay_scroll_handler__, false)
       }
 

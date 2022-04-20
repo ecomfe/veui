@@ -7,33 +7,26 @@
   <section>
     <h3>配置 Select 的 placeholder</h3>
     <p>
-      <code>select.placeholder: </code>
+      <code>select.placeholder:</code>
       <veui-input v-model="placeholder"/>
     </p>
     <veui-config-provider :value="contextValue">
-      <veui-select
-        :options="options"
-        clearable
-      />
+      <veui-select :options="options" clearable/>
     </veui-config-provider>
   </section>
 
   <section>
     <h3>配置 Autocomplete 的搜索逻辑</h3>
     <p>
-      <code>searchable.match/searchable.filter: </code>
+      <code>searchable.match/searchable.filter:</code>
       <veui-radio-group
         v-model="searchLogic"
         :items="searchItems"
-        style="display: inline-block;"
+        style="display: inline-block"
       />
     </p>
     <veui-config-provider :value="contextValue">
-      <veui-autocomplete
-        v-model="autoValue"
-        :datasource="options"
-        expanded
-      />
+      <veui-autocomplete v-model="autoValue" :datasource="options" expanded/>
     </veui-config-provider>
   </section>
 </article>

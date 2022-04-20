@@ -51,7 +51,7 @@ const useKeySelect = ({
     }
   },
   created () {
-    this.$watch(expandedKey, val => {
+    this.$watch(expandedKey, (val) => {
       if (!val) {
         if (this.focusSelector) {
           this.clearFocusSelector()
@@ -80,7 +80,7 @@ const useKeySelect = ({
       this.focusableFilter = null
     },
     getCurrentActiveElement () {
-      return find(this.getFocusable(), elem =>
+      return find(this.getFocusable(), (elem) =>
         isActive(elem, this.focusSelector)
       )
     },
@@ -96,10 +96,10 @@ const useKeySelect = ({
      */
     navigateToLevel (levelSelector, { targetSelector, lock } = {}) {
       let focusable = this.getFocusable()
-      let filter = elem => matches(elem, levelSelector)
+      let filter = (elem) => matches(elem, levelSelector)
       let nextLevel = find(
         focusable,
-        elem =>
+        (elem) =>
           filter(elem) && (!targetSelector || matches(elem, targetSelector))
       )
       if (nextLevel) {
@@ -119,7 +119,9 @@ const useKeySelect = ({
       let index = indexOrDirection
       if (typeof indexOrDir !== 'number') {
         let forward = indexOrDirection
-        index = findIndex(focusable, elem => isActive(elem, this.focusSelector))
+        index = findIndex(focusable, (elem) =>
+          isActive(elem, this.focusSelector)
+        )
         index =
           index === -1 ? 0 : (index + length + (forward ? 1 : -1)) % length
       }
@@ -142,7 +144,7 @@ const useKeySelect = ({
       }
     },
     focusElement (focusableList, element) {
-      focusableList.forEach(elem => {
+      focusableList.forEach((elem) => {
         toggleSelector(elem, this.focusSelector, element === elem)
       })
       scrollIntoView(element)

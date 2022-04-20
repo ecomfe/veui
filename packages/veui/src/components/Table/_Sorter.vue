@@ -1,9 +1,5 @@
 <template>
-<veui-button
-  :ui="table.uiParts.icon"
-  :class="klass"
-  @click="sort"
->
+<veui-button :ui="table.uiParts.icon" :class="klass" @click="sort">
   <veui-icon
     :class="[$c('table-sorter-icon-sort'), $c('table-header-icon')]"
     :name="table.icons.sort"
@@ -73,7 +69,7 @@ export default {
         : this.allowedOrders
     },
     klass () {
-      let orders = this.realAllowedOrders.filter(i => i !== false)
+      let orders = this.realAllowedOrders.filter((i) => i !== false)
       return {
         [this.$c('table-sorter')]: true,
         [this.$c(`table-sorter-${this.realOrder}`)]: true,

@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-cascader&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-cascader&gt;</code>
+  </h1>
   <section>
     <h3>Single Cascader</h3>
     <div class="cascader-config">
@@ -100,16 +102,16 @@
         '--dls-dropdown-max-display-items': 4
       }"
     >
-      <template slot="before">
+      <template #before>
         <div class="center-align">before</div>
       </template>
-      <template slot="after">
+      <template #after>
         <div class="center-align">after</div>
       </template>
-      <template slot="column-before">
+      <template #column-before>
         <div class="center-align">column-before</div>
       </template>
-      <template slot="column-after">
+      <template #column-after>
         <div class="center-align">column-after</div>
       </template>
     </cascader>
@@ -128,16 +130,16 @@
         ui="xs"
         multiple
       >
-        <template slot="before">
+        <template #before>
           <div class="center-align">before</div>
         </template>
-        <template slot="after">
+        <template #after>
           <div class="center-align">after</div>
         </template>
-        <template slot="column-before">
+        <template #column-before>
           <div class="center-align">column-before</div>
         </template>
-        <template slot="column-after">
+        <template #column-after>
           <div class="center-align">column-after</div>
         </template>
       </cascader>

@@ -14,14 +14,8 @@
   v-bind="baseProps"
   v-on="baseEvents"
 >
-  <template
-    slot="input"
-    slot-scope="props"
-  >
-    <slot
-      name="input"
-      v-bind="props"
-    >
+  <template slot="input" slot-scope="props">
+    <slot name="input" v-bind="props">
       <veui-input
         ref="input"
         v-outside:suggestions="props.closeSuggestions"
@@ -41,14 +35,8 @@
       />
     </slot>
   </template>
-  <template
-    slot="suggestions"
-    slot-scope="suggestionsProps"
-  >
-    <slot
-      name="suggestions"
-      v-bind="suggestionsProps"
-    >
+  <template slot="suggestions" slot-scope="suggestionsProps">
+    <slot name="suggestions" v-bind="suggestionsProps">
       <veui-option-group
         ref="suggestions"
         role="listbox"
@@ -58,14 +46,8 @@
         :class="$c('autocomplete-suggestion-group')"
         @mousedown.native.prevent
       >
-        <template
-          slot="option-label"
-          slot-scope="props"
-        >
-          <slot
-            name="option-label"
-            v-bind="props"
-          >
+        <template slot="option-label" slot-scope="props">
+          <slot name="option-label" v-bind="props">
             <veui-search-result
               v-if="!!suggestionsProps.keyword"
               :matches="props.matches"

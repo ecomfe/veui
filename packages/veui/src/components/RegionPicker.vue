@@ -6,12 +6,7 @@
   aria-multiselectable="true"
   :aria-label="t('description')"
 >
-  <div
-    ref="focus"
-    :class="$c('sr-only')"
-    tabindex="0"
-    @focus="initFocus"
-  />
+  <div ref="focus" :class="$c('sr-only')" tabindex="0" @focus="initFocus"/>
   <div
     v-for="(section, si) in localDatasource"
     :key="si"
@@ -39,21 +34,14 @@
         @keydown.right.prevent="focusDown"
         @keydown.down.prevent="focusStep()"
         @keydown.up.prevent="focusStep(false)"
-        @change="checked => toggleNode(section, checked)"
+        @change="(checked) => toggleNode(section, checked)"
       >
-        <slot
-          name="label"
-          v-bind="section"
-          :level="0"
-        >
+        <slot name="label" v-bind="section" :level="0">
           {{ section.label }}
         </slot>
       </veui-checkbox>
     </div>
-    <div
-      v-if="section.children"
-      :class="$c('region-picker-section-content')"
-    >
+    <div v-if="section.children" :class="$c('region-picker-section-content')">
       <div
         v-for="(branch, bi) in section.children"
         :key="bi"
@@ -82,13 +70,9 @@
             @keydown.right.prevent="focusDown"
             @keydown.down.prevent="focusStep"
             @keydown.up.prevent="focusStep(false)"
-            @change="checked => toggleNode(branch, checked)"
+            @change="(checked) => toggleNode(branch, checked)"
           >
-            <slot
-              name="label"
-              v-bind="branch"
-              :level="1"
-            >
+            <slot name="label" v-bind="branch" :level="1">
               {{ branch.label }}
             </slot>
           </veui-checkbox>
@@ -122,18 +106,14 @@
                 :disabled="realDisabled || group.disabled"
                 :indeterminate="group.indeterminate"
                 tabindex="-1"
-                @change="checked => toggleNode(group, checked)"
+                @change="(checked) => toggleNode(group, checked)"
                 @mouseenter.native="toggleActive(group, true)"
                 @keydown.left.prevent="focusUp"
                 @keydown.right.prevent="focusGroup(group, true)"
                 @keydown.down.prevent="focusStep"
                 @keydown.up.prevent="focusStep(false)"
               >
-                <slot
-                  name="label"
-                  v-bind="group"
-                  :level="2"
-                >
+                <slot name="label" v-bind="group" :level="2">
                   {{ group.label }}
                 </slot>
               </veui-checkbox>
@@ -158,10 +138,7 @@
                   <template
                     v-for="ri in Math.ceil(group.children.length / 3)"
                   >
-                    <div
-                      :key="ri"
-                      :class="$c('region-picker-unit-row')"
-                    >
+                    <div :key="ri" :class="$c('region-picker-unit-row')">
                       <div
                         v-for="(unit, ui) in group.children.slice(
                           ri * 3 - 3,
@@ -188,13 +165,9 @@
                           @keydown.left.prevent="focusUp"
                           @keydown.down.prevent="focusStep"
                           @keydown.up.prevent="focusStep(false)"
-                          @change="checked => toggleNode(unit, checked)"
+                          @change="(checked) => toggleNode(unit, checked)"
                         >
-                          <slot
-                            name="label"
-                            v-bind="unit"
-                            :level="3"
-                          >
+                          <slot name="label" v-bind="unit" :level="3">
                             {{ unit.label }}
                           </slot>
                         </veui-checkbox>
@@ -246,18 +219,15 @@
                     @keydown.right.prevent="focusDown"
                     @keydown.down.prevent="focusStep"
                     @keydown.up.prevent="focusStep(false)"
-                    @change="checked => toggleNode(group, checked)"
+                    @change="(checked) => toggleNode(group, checked)"
                   >
-                    <slot
-                      name="label"
-                      v-bind="group"
-                      overlay
-                      :level="2"
-                    >
+                    <slot name="label" v-bind="group" overlay :level="2">
                       {{ group.label }}
-                      <small v-if="group.children && group.children.length">
-                        ({{ group.solidCount }}/{{ group.children.length }})
-                      </small>
+                      <small
+                        v-if="group.children && group.children.length"
+                      >({{ group.solidCount }}/{{
+                        group.children.length
+                      }})</small>
                     </slot>
                   </veui-checkbox>
                 </div>
@@ -556,7 +526,7 @@ export default {
 
 function walk (source, { enter, exit }, parent) {
   if (Array.isArray(source)) {
-    source.forEach(node => walk(node, { enter, exit }))
+    source.forEach((node) => walk(node, { enter, exit }))
     return
   }
 
@@ -565,7 +535,7 @@ function walk (source, { enter, exit }, parent) {
     enter({ node: source, parent })
   }
   if (Array.isArray(children)) {
-    children.forEach(node => walk(node, { enter, exit }, source))
+    children.forEach((node) => walk(node, { enter, exit }, source))
   }
   if (typeof exit === 'function') {
     exit({ node: source, parent })

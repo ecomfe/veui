@@ -4,38 +4,20 @@
     <code>v-drag.sort</code>
   </h1>
   <section v-if="hasDebug">
-    <label> <input
-      v-model="debug"
-      type="checkbox"
-    > 显示debug层 </label>
+    <label> <input v-model="debug" type="checkbox">显示debug层 </label>
 
     <span style="margin-left: 2em">插入判定：</span>
-    <label><input
-      v-model="align"
-      type="radio"
-      :value="undefined"
-    >默认</label>
-    <label><input
-      v-model="align"
-      type="radio"
-      value="mouse"
-    >指针</label>
-    <label><input
-      v-model="align"
-      type="radio"
-      value="middle"
-    >中心点</label>
+    <label>
+      <input v-model="align" type="radio" :value="undefined">默认
+    </label>
+    <label> <input v-model="align" type="radio" value="mouse">指针 </label>
+    <label>
+      <input v-model="align" type="radio" value="middle">中心点
+    </label>
   </section>
-  <section
-    ref="itemGroup"
-    style="transform: translate(200px, 0)"
-  >
+  <section ref="itemGroup" style="transform: translate(200px, 0)">
     <h2>Axis: X</h2>
-    <transition-group
-      name="list"
-      tag="div"
-      class="items"
-    >
+    <transition-group name="list" tag="div" class="items">
       <div
         v-for="item in items"
         :key="item"
@@ -54,11 +36,7 @@
   </section>
   <section ref="itemGroup2x">
     <h2>Axis: X 宽度一致</h2>
-    <transition-group
-      name="list"
-      tag="div"
-      class="items"
-    >
+    <transition-group name="list" tag="div" class="items">
       <div
         v-for="item in items"
         :key="item"
@@ -77,11 +55,7 @@
   </section>
   <section>
     <h2>Axis: Y</h2>
-    <transition-group
-      name="list"
-      tag="ol"
-      class="list"
-    >
+    <transition-group name="list" tag="ol" class="list">
       <li
         v-for="item in items2"
         :key="item"
@@ -103,17 +77,11 @@
   <section>
     <h2>Overlay</h2>
     <button @click="dialogOpen = true">open dialog</button>
-    <button
-      ref="popoverButton"
-      @click="popoverOpen = true"
-    >
+    <button ref="popoverButton" @click="popoverOpen = true">
       open popover
     </button>
 
-    <veui-dialog
-      :open.sync="dialogOpen"
-      title="In Dialog"
-    >
+    <veui-dialog :open.sync="dialogOpen" title="In Dialog">
       <div class="dialog-content">
         <div>
           <p>
@@ -124,10 +92,7 @@
           </p>
           <p>所以者何？须菩提！实无有法发阿耨多罗三藐三菩提者。”</p>
         </div>
-        <div
-          ref="dialogContent"
-          class="items"
-        >
+        <div ref="dialogContent" class="items">
           <div
             v-for="item in items2"
             :key="item"

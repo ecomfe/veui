@@ -169,10 +169,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="(week, index) in p.weeks"
-                :key="index"
-              >
+              <tr v-for="(week, index) in p.weeks" :key="index">
                 <td
                   v-for="day in week"
                   :key="`${day.year}-${day.month + 1}-${day.date}`"
@@ -209,10 +206,7 @@
             </tbody>
           </template>
           <tbody v-else-if="isMonthsView(pIndex)">
-            <tr
-              v-for="(days, row) in p.months"
-              :key="row"
-            >
+            <tr v-for="(days, row) in p.months" :key="row">
               <td
                 v-for="(day, col) in days"
                 :key="col"
@@ -262,10 +256,7 @@
                 }"
               >
                 <tbody>
-                  <tr
-                    v-for="i in row"
-                    :key="`${i}-${page}`"
-                  >
+                  <tr v-for="i in row" :key="`${i}-${page}`">
                     <td
                       v-for="j in 3"
                       :key="j"
@@ -857,7 +848,7 @@ export default {
       if (!this.range) {
         if (this.multiple) {
           let result = this.realSelected ? [...this.realSelected] : []
-          let pos = findIndex(result, date => this.isSame(date, selected))
+          let pos = findIndex(result, (date) => this.isSame(date, selected))
           if (pos === -1) {
             result.push(selected)
           } else {
@@ -956,7 +947,7 @@ export default {
       // 转成 dateData
       let destinations = selected
         .sort((a, b) => a - b)
-        .map(val => {
+        .map((val) => {
           let { year, month } = toDateData(val)
           return this.isDateType ? { year, month } : { year }
         })
@@ -977,7 +968,7 @@ export default {
           let { year, month } = toDateData(destination)
           destination = this.isDateType ? { year, month } : { year }
           end = index - destinations.length + this.panels.length
-          let existIndex = findIndex(result.slice(start, end + 1), val =>
+          let existIndex = findIndex(result.slice(start, end + 1), (val) =>
             isEqual(val, destination)
           )
           if (existIndex >= 0) {
@@ -997,7 +988,7 @@ export default {
           }
           return result
         },
-        p.map(val => val.date)
+        p.map((val) => val.date)
       )
       // 调节完了之后，统一 sync，避免调节过程中多余的 sync
       newPanelDates.forEach((newVal, index) => {
@@ -1056,7 +1047,10 @@ export default {
           return
         }
 
-        let pos = findIndex(cells, cell => cell === closest(current, selector))
+        let pos = findIndex(
+          cells,
+          (cell) => cell === closest(current, selector)
+        )
         if (pos === -1) {
           return
         }
@@ -1070,7 +1064,7 @@ export default {
       // 如果已经禁用，就按方向向前/后找到最近的一个未禁用的
       if (target) {
         let button = target.querySelector('button')
-        let buttons = cells.map(cell => cell.querySelector('button'))
+        let buttons = cells.map((cell) => cell.querySelector('button'))
         do {
           if (!button.disabled) {
             button.focus()
@@ -1145,7 +1139,7 @@ export default {
       } else {
         // 一个参数如（true）即所有面板进入展开状态
         value = i
-        this.panelData.forEach(data => {
+        this.panelData.forEach((data) => {
           data.expanded = value
         })
       }
@@ -1162,7 +1156,7 @@ export default {
           return isSame(this.picking || this.realSelected, day)
         }
         // multiple single days
-        return (this.realSelected || []).some(d => isSame(d, day))
+        return (this.realSelected || []).some((d) => isSame(d, day))
       }
       if (!this.multiple) {
         // single range
@@ -1170,9 +1164,11 @@ export default {
         return isSame(range[0], day) || isSame(range[1], day)
       }
       // multiple ranges
-      return (this.pickingRanges || this.realSelected || []).some(selected => {
-        return isSame(selected[0], day) || isSame(selected[1], day)
-      })
+      return (this.pickingRanges || this.realSelected || []).some(
+        (selected) => {
+          return isSame(selected[0], day) || isSame(selected[1], day)
+        }
+      )
     },
     getRangePosition (day) {
       if (!this.range) {
@@ -1241,7 +1237,7 @@ function getRangePosition (day, range, type) {
       }
   }
 
-  range = range.map(i => {
+  range = range.map((i) => {
     if (i) {
       return new Date(
         i.getFullYear(),

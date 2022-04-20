@@ -97,10 +97,7 @@ describe('components/Steps', () => {
       }
     })
 
-    wrapper
-      .findAll(Link)
-      .at(1)
-      .trigger('click')
+    wrapper.findAll(Link).at(1).trigger('click')
     expect(wrapper.emitted().click[0][0]).to.equal(1)
     wrapper.destroy()
   })

@@ -37,7 +37,7 @@ export default {
       return message
     },
     remove (message) {
-      let index = findIndex(this.messages, msg => {
+      let index = findIndex(this.messages, (msg) => {
         return msg.__message_id__ === message.__message_id__
       })
       this.messages.splice(index, 1)
@@ -67,7 +67,7 @@ export default {
         overlay-class={this.mergeOverlayClass(this.$c('toast-list'))}
         priority={this.priority}
       >
-        {this.messages.map(m => (
+        {this.messages.map((m) => (
           <Toast
             key={m.__message_id__}
             open
@@ -79,7 +79,7 @@ export default {
             duration={m.duration}
             style={`top: ${m.top}px`}
             onClose={() => this.remove(m)}
-            onReady={e => this.updateHeight(m, e)}
+            onReady={(e) => this.updateHeight(m, e)}
             scopedSlots={
               typeof m.message === 'function'
                 ? {

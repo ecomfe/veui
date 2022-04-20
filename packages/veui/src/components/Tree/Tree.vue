@@ -77,9 +77,7 @@
             :depth="depth"
             :expanded="itemExpanded"
             :parents="parents"
-          >
-            {{ item.label }}
-          </slot>
+          >{{ item.label }}</slot>
         </div>
         <slot
           name="item-after"
@@ -151,7 +149,7 @@ export default {
   data () {
     return {
       focused: false,
-      focusVisible: map(this.datasource, _ => false)
+      focusVisible: map(this.datasource, (_) => false)
     }
   },
   computed: {
@@ -167,7 +165,9 @@ export default {
             ...item,
             ...(nameOrValue == null
               ? {
-                name: `veui-${label}-${parentIndices.concat(index).join('-')}`
+                name: `veui-${label}-${parentIndices
+                    .concat(index)
+                    .join('-')}`
               }
               : {})
           }
@@ -176,7 +176,7 @@ export default {
 
       let firstTabable
       // 在 topLevel 找下第一个可以用 tab 获取焦点的
-      datasource.forEach(item => {
+      datasource.forEach((item) => {
         item.tabIndex = item.disabled ? null : firstTabable ? '-1' : '0'
         firstTabable = item.tabIndex === '0' ? item : firstTabable
       })
@@ -204,7 +204,7 @@ export default {
       }
       let nameOrValue = name != null ? name : value
       let expanded = isExpanded
-        ? filter(this.realExpanded, expand => expand !== nameOrValue)
+        ? filter(this.realExpanded, (expand) => expand !== nameOrValue)
         : uniq([...this.realExpanded, nameOrValue])
 
       this.commit('expanded', expanded)
@@ -325,7 +325,7 @@ export default {
       return (
         !!this.realDisabled ||
         !!item.disabled ||
-        parents.some(i => !!i.disabled)
+        parents.some((i) => !!i.disabled)
       )
     },
     handleItemCheck (item, parents) {

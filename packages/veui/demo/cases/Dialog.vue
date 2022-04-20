@@ -1,6 +1,8 @@
 <template>
 <article class="demo-dialog">
-  <h1><code>&lt;veui-dialog&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-dialog&gt;</code>
+  </h1>
   <section>
     <veui-dialog
       overlay-class="test demo-dialog-standard-dialog"
@@ -17,14 +19,14 @@
         Nesciunt, odio alias consequuntur cum dolores distinctio officia nam
         nisi beatae possimus. Accusantium.
       </p>
-      <p><veui-button @click="handleGoto">Goto Button</veui-button></p>
+      <p>
+        <veui-button @click="handleGoto">Goto Button</veui-button>
+      </p>
     </veui-dialog>
     <veui-button
       ui="primary"
       @click="modalDialogVisible = !modalDialogVisible"
-    >
-      Open a modal dialog box
-    </veui-button>
+    >Open a modal dialog box</veui-button>
 
     <veui-dialog
       overlay-class="test demo-dialog-standard-dialog"
@@ -43,9 +45,7 @@
     <veui-button
       ui="primary"
       @click="fullscreenDialogVisible = !fullscreenDialogVisible"
-    >
-      Open a fullscreen dialog box
-    </veui-button>
+    >Open a fullscreen dialog box</veui-button>
 
     <veui-dialog
       overlay-class="test demo-dialog-standard-dialog auto-dialog-standard-dialog"
@@ -60,9 +60,7 @@
     <veui-button
       ui="primary"
       @click="autoDialogVisible = !autoDialogVisible"
-    >
-      Open an footless dialog box with auto dimension
-    </veui-button>
+    >Open an footless dialog box with auto dimension</veui-button>
   </section>
   <section>
     <veui-dialog
@@ -79,9 +77,7 @@
     <veui-button
       ui="primary"
       @click="titlelessDialogVisible = !titlelessDialogVisible"
-    >
-      Open a titleless dialog box
-    </veui-button>
+    >Open a titleless dialog box</veui-button>
 
     <veui-dialog
       :modal="false"
@@ -91,31 +87,19 @@
       title="Dialog Title"
     >
       The content of the Dialog. You can use the default slot to override it.
-      <template
-        slot="foot"
-        slot-scope="{ close }"
-      >
+      <template #foot="{ close }">
         <veui-button
           ui="primary"
           :loading="loading"
           @click="close('ok')"
-        >
-          OK
-        </veui-button>
-        <veui-button
-          autofocus
-          @click="close"
-        >
-          CANCEL
-        </veui-button>
+        >OK</veui-button>
+        <veui-button autofocus @click="close">CANCEL</veui-button>
       </template>
     </veui-dialog>
     <veui-button
       ui="primary"
       @click="nonModalDialogVisible = !nonModalDialogVisible"
-    >
-      Open a modaless dialog box
-    </veui-button>
+    >Open a modaless dialog box</veui-button>
   </section>
   <section>
     <veui-dialog
@@ -126,30 +110,15 @@
       draggable
     >
       You can drag the dialog box in the viewport.
-      <template
-        slot="foot"
-        slot-scope="{ close }"
-      >
-        <veui-button
-          ui="primary"
-          @click="close('ok')"
-        >
-          OK
-        </veui-button>
-        <veui-button
-          autofocus
-          @click="close"
-        >
-          CANCEL
-        </veui-button>
+      <template #foot="{ close }">
+        <veui-button ui="primary" @click="close('ok')">OK</veui-button>
+        <veui-button autofocus @click="close">CANCEL</veui-button>
       </template>
     </veui-dialog>
     <veui-button
       ui="primary"
       @click="draggableDialog1Visible = !draggableDialog1Visible"
-    >
-      Open the first draggable dialog box
-    </veui-button>
+    >Open the first draggable dialog box</veui-button>
 
     <veui-dialog
       :modal="false"
@@ -174,9 +143,7 @@
     <veui-button
       ui="primary"
       @click="draggableDialog2Visible = !draggableDialog2Visible"
-    >
-      Open the second draggable dialog box
-    </veui-button>
+    >Open the second draggable dialog box</veui-button>
 
     <veui-dialog
       ref="resetDialog"
@@ -187,21 +154,17 @@
       draggable
     >
       Click the `reset` button to put the dialog to the initial position.
-      <template slot="foot">
+      <template #foot>
         <veui-button
           ui="alt"
           @click="() => $refs.resetDialog.resetPosition()"
-        >
-          Reset
-        </veui-button>
+        >Reset</veui-button>
       </template>
     </veui-dialog>
     <veui-button
       ui="alt"
       @click="draggableDialog3Visible = !draggableDialog3Visible"
-    >
-      Draggable dialog box with reset button
-    </veui-button>
+    >Draggable dialog box with reset button</veui-button>
   </section>
   <section>
     <veui-dialog
@@ -209,15 +172,12 @@
       title="The Built-in Button"
       @ok="handleOk"
       @cancel="handleCancel"
-    >
-      The two built-in buttons emit their own event when clicked.
-    </veui-dialog>
+    >The two built-in buttons emit their own event when
+      clicked.</veui-dialog>
     <veui-button
       ui="primary"
       @click="operationDialogVisible = true"
-    >
-      The Built-in Button
-    </veui-button>
+    >The Built-in Button</veui-button>
   </section>
   <section>
     <veui-dialog
@@ -226,57 +186,43 @@
     >
       You can change the dialog title text by setting the `title` prop or
       passing in the `title` slot parameter.
-      <template slot="foot">
+      <template #foot>
         <veui-button
           ui="primary"
           @click="customTextTitleDialogVisible = false"
-        >
-          OK
-        </veui-button>
+        >OK</veui-button>
         <veui-button
           autofocus
           @click="customTextTitleDialogVisible = false"
-        >
-          CANCEL
-        </veui-button>
+        >CANCEL</veui-button>
       </template>
     </veui-dialog>
     <veui-button
       ui="primary"
       @click="customTextTitleDialogVisible = true"
-    >
-      Custom Title
-    </veui-button>
+    >Custom Title</veui-button>
 
     <veui-dialog :open.sync="customIconTitleDialogVisible">
-      <template slot="title">
-        Custom Title With ICON <veui-icon
-          class="svg"
-          name="calendar"
-        />
+      <template #title>
+        Custom Title With ICON
+        <veui-icon class="svg" name="calendar"/>
       </template>
-      <template slot="foot">
+      <template #foot>
         <veui-button
           ui="primary"
           @click="customIconTitleDialogVisible = false"
-        >
-          OK
-        </veui-button>
+        >OK</veui-button>
         <veui-button
           autofocus
           @click="customIconTitleDialogVisible = false"
-        >
-          CANCEL
-        </veui-button>
+        >CANCEL</veui-button>
       </template>
       You can add icons to title by the `title slot`.
     </veui-dialog>
     <veui-button
       ui="primary"
       @click="customIconTitleDialogVisible = true"
-    >
-      Custom Title With ICON
-    </veui-button>
+    >Custom Title With ICON</veui-button>
   </section>
 
   <section>
@@ -289,119 +235,75 @@
         height slowly:
       </p>
       <div v-html="dynamicContent"/>
-      <template slot="foot">
+      <template #foot>
         <veui-button
           ui="primary"
           @click="contentAutoHeightDialogVisible = false"
-        >
-          OK
-        </veui-button>
+        >OK</veui-button>
         <veui-button
           autofocus
           @click="contentAutoHeightDialogVisible = false"
-        >
-          CANCEL
-        </veui-button>
+        >CANCEL</veui-button>
       </template>
     </veui-dialog>
     <veui-button
       ui="primary"
       @click="contentAutoHeightDialogVisible = true"
-    >
-      Adaptive Content Height
-    </veui-button>
+    >Adaptive Content Height</veui-button>
   </section>
 
   <section>
     <veui-button
       @click="popupAlert('info', 'You\'ve got a new message', 'Message')"
-    >
-      Info Box
-    </veui-button>
+    >Info Box</veui-button>
     <veui-button
       @click="popupAlert('error', 'You\'ve got an error', 'Error')"
-    >
-      Error Box
-    </veui-button>
+    >Error Box</veui-button>
     <veui-button
       @click="
         popupAlert('success', 'Congratulations! Everything is ok!', 'Success')
       "
-    >
-      Success Box
-    </veui-button>
+    >Success Box</veui-button>
     <veui-button
       ui="primary"
       @click="popupAlerts"
-    >
-      Open a stack of AlertBox
-    </veui-button>
+    >Open a stack of AlertBox</veui-button>
   </section>
 
   <section>
-    <veui-button @click="alertOpen = true">
-      Inline AlertBox
-    </veui-button>
-    <veui-button @click="confirmOpen = true">
-      Inline ConfirmBox
-    </veui-button>
-    <veui-button @click="promptOpen = true">
-      Inline PromptBox
-    </veui-button>
+    <veui-button @click="alertOpen = true">Inline AlertBox</veui-button>
+    <veui-button @click="confirmOpen = true">Inline ConfirmBox</veui-button>
+    <veui-button @click="promptOpen = true">Inline PromptBox</veui-button>
     <veui-alert-box
       ui="s"
       :open.sync="alertOpen"
-    >
-      Hello world.
-    </veui-alert-box>
+    >Hello world.</veui-alert-box>
     <veui-confirm-box
       ui="s"
       :open.sync="confirmOpen"
-    >
-      Hello world.
-    </veui-confirm-box>
-    <veui-prompt-box
-      :open.sync="promptOpen"
-      @ok="$alert($event, 'Result')"
-    />
+    >Hello world.</veui-confirm-box>
+    <veui-prompt-box :open.sync="promptOpen" @ok="$alert($event, 'Result')"/>
   </section>
 
   <section>
     <veui-button
       ui="primary"
       @click="popupConfirms"
-    >
-      Open ConfirmBox
-    </veui-button>
+    >Open ConfirmBox</veui-button>
   </section>
   <section>
-    <veui-button @click="popupToasts('info')">
-      Info Toast
-    </veui-button>
-    <veui-button @click="popupToasts('warn')">
-      Warn Toast
-    </veui-button>
-    <veui-button @click="popupToasts('error')">
-      Error Toast
-    </veui-button>
-    <veui-button @click="popupToasts('success')">
-      Success Toast
-    </veui-button>
-    <veui-button
-      ui="primary"
-      @click="popupToasts"
-    >
-      Open Toasts
-    </veui-button>
+    <veui-button @click="popupToasts('info')">Info Toast</veui-button>
+    <veui-button @click="popupToasts('warn')">Warn Toast</veui-button>
+    <veui-button @click="popupToasts('error')">Error Toast</veui-button>
+    <veui-button @click="popupToasts('success')">Success Toast</veui-button>
+    <veui-button ui="primary" @click="popupToasts">Open Toasts</veui-button>
   </section>
   <section>
     <veui-button
       ref="p"
       ui="primary"
       @click="popupPrompt"
-    >
-      Open Prompt
-    </veui-button>
+    >Open Prompt</veui-button>
   </section>
 </article>
 </template>
@@ -454,13 +356,13 @@ export default {
       test: '123',
       adaptiveDialogTimer: null,
       loading: false,
-      beforeClose: type => {
+      beforeClose: (type) => {
         if (type === 'cancel') {
           return
         }
 
         this.loading = true
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve()
             this.loading = false
@@ -504,7 +406,7 @@ export default {
       alertManager.success('The task was successfully completed!', 'Success', {
         ok: () => {
           this.$alert('This alert box will be closed after 3 seconds.')
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               resolve()
             }, 3000)
@@ -527,7 +429,7 @@ export default {
             }
           }
         })
-        .then(ok => {
+        .then((ok) => {
           this.$alert(`You chose [${ok ? 'ok' : 'cancel'}]`)
         })
     },
@@ -549,7 +451,7 @@ export default {
     popupPrompt () {
       promptManager
         .info('Please tell us your age:', 'Prompt', {
-          ok: async val => {
+          ok: async (val) => {
             await wait(1000)
             let num = Number(val)
             if (`${num}` !== val || num <= 0) {
@@ -558,7 +460,7 @@ export default {
             }
           }
         })
-        .then(value => {
+        .then((value) => {
           console.log(value)
         })
     }
@@ -566,7 +468,7 @@ export default {
 }
 
 function wait (timeout) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, timeout)
   })
 }

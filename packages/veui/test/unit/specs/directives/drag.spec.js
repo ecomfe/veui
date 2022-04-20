@@ -3,7 +3,7 @@ import drag, { registerHandler } from '@/directives/drag'
 import { wait, normalizeTransform } from '../../../utils'
 
 describe('directives/drag', () => {
-  it(`should receive correct params inside callbacks`, done => {
+  it(`should receive correct params inside callbacks`, (done) => {
     let results = []
     let wrapper = mount(
       {
@@ -147,8 +147,9 @@ describe('directives/drag', () => {
     ])
     assertTransform(
       wrapper,
-      `translate(0px, ${window.innerHeight -
-        wrapper.vm.$refs.self.offsetHeight}px)`
+      `translate(0px, ${
+        window.innerHeight - wrapper.vm.$refs.self.offsetHeight
+      }px)`
     )
     document.body.style = ''
     wrapper.destroy()

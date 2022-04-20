@@ -9,24 +9,14 @@
   :ui="ui"
 >
   <template #head="{ items }">
-    <slot
-      name="head"
-      v-bind="slotApi"
-    >
-      <slot
-        name="title"
-        v-bind="slotApi"
-      >
-        {{ realTitle }}
-      </slot>
+    <slot name="head" v-bind="slotApi">
+      <slot name="title" v-bind="slotApi">{{ realTitle }}</slot>
       <veui-button
         :ui="uiParts.selectAll"
         :class="$c('transfer-select-all')"
         :disabled="!isSelectable"
         @click="selectAll(items)"
-      >
-        {{ t('@transfer.selectAll') }}
-      </veui-button>
+      >{{ t('@transfer.selectAll') }}</veui-button>
     </slot>
   </template>
 
@@ -43,31 +33,17 @@
       :disabled="!isSelectable"
       @check="handleSelect"
     >
-      <template
-        slot="item"
-        slot-scope="props"
-      >
-        <slot
-          name="item"
-          v-bind="props"
-        />
+      <template slot="item" slot-scope="props">
+        <slot name="item" v-bind="props"/>
       </template>
-      <template
-        slot="item-label"
-        slot-scope="props"
-      >
-        <slot
-          name="item-label"
-          v-bind="{ ...props, keyword }"
-        />
+      <template slot="item-label" slot-scope="props">
+        <slot name="item-label" v-bind="{ ...props, keyword }"/>
       </template>
     </veui-tree>
   </template>
 
   <template slot="no-data">
-    <slot name="no-data">
-      {{ t('@transfer.noData') }}
-    </slot>
+    <slot name="no-data">{{ t('@transfer.noData') }}</slot>
   </template>
 </veui-filter-panel>
 </template>

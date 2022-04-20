@@ -160,7 +160,7 @@ class OverlayNode {
     if (this.parent) {
       pull(this.parent.children, this)
     }
-    this.children.forEach(node => node.remove())
+    this.children.forEach((node) => node.remove())
     this.root = this.parent = null
     delete nodeIndex[this.id]
   }
@@ -216,13 +216,8 @@ export class OverlayManager {
    * @param {function(number)} options.orderChangeCallback the alias for `onOrderChange` (for backward-compatibility only, not recommended)
    */
   createNode (options = {}) {
-    let {
-      parent,
-      parentId,
-      priority,
-      onOrderChange,
-      orderChangeCallback
-    } = options
+    let { parent, parentId, priority, onOrderChange, orderChangeCallback } =
+      options
 
     let node = new OverlayNode(this.root, this.root, priority)
 
@@ -238,7 +233,7 @@ export class OverlayManager {
   reorder () {
     let nodes = []
 
-    walk(this.root.children, node => {
+    walk(this.root.children, (node) => {
       nodes.push(node)
     })
 

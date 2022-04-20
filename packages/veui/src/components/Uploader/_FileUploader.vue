@@ -11,10 +11,7 @@
         <span>{{ t('@uploader.selectFile') }}</span>
       </slot>
     </veui-button>
-    <span
-      v-if="$scopedSlots.desc"
-      :class="$c('uploader-desc')"
-    >
+    <span v-if="$scopedSlots.desc" :class="$c('uploader-desc')">
       <slot name="desc"/>
     </span>
   </div>
@@ -33,14 +30,8 @@
         [$c('uploader-list-item-failure')]: file.isFailure
       }"
     >
-      <slot
-        name="file"
-        v-bind="getScopeValue(index)"
-      >
-        <slot
-          name="file-before"
-          v-bind="getScopeValue(index)"
-        />
+      <slot name="file" v-bind="getScopeValue(index)">
+        <slot name="file-before" v-bind="getScopeValue(index)"/>
 
         <div :class="$c('uploader-list-container')">
           <veui-icon
@@ -88,10 +79,7 @@
           >{{ file.message || t('@uploader.uploadFailure') }}</veui-popover>
         </div>
 
-        <slot
-          name="file-after"
-          v-bind="getScopeValue(index)"
-        />
+        <slot name="file-after" v-bind="getScopeValue(index)"/>
 
         <veui-progress
           v-if="file.isUploading"

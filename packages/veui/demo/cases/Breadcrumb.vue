@@ -1,56 +1,38 @@
 <template>
 <article>
-  <h1><code>&lt;veui-breadcrumb&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-breadcrumb&gt;</code>
+  </h1>
   <section>
-    <veui-button @click="next">
-      Switch separator
-    </veui-button>
+    <veui-button @click="next">Switch separator</veui-button>
   </section>
   <section>
     <h4>自定义加粗</h4>
-    <veui-breadcrumb
-      :routes="items"
-      @redirect="handleRedirect"
-    >
-      <template
-        slot="item"
-        slot-scope="route"
-      >
+    <veui-breadcrumb :routes="items" @redirect="handleRedirect">
+      <template #item="route">
         <em>{{ route.label }}</em>
       </template>
-      <template slot="separator">
-        {{ sep }}
-      </template>
+      <template #separator>{{ sep }}</template>
     </veui-breadcrumb>
   </section>
   <section>
     <h4>加强型</h4>
-    <veui-breadcrumb
-      :routes="items"
-      ui="strong"
-      @redirect="handleRedirect"
-    />
+    <veui-breadcrumb :routes="items" ui="strong" @redirect="handleRedirect"/>
   </section>
   <section>
-    <h4><code>ui="s"</code></h4>
-    <veui-breadcrumb
-      :routes="items"
-      ui="s"
-      @redirect="handleRedirect"
-    />
+    <h4>
+      <code>ui="s"</code>
+    </h4>
+    <veui-breadcrumb :routes="items" ui="s" @redirect="handleRedirect"/>
   </section>
   <section>
     <h4>内联模式</h4>
     <veui-breadcrumb>
-      <veui-breadcrumb-item to="/">
-        首页
-      </veui-breadcrumb-item>
-      <veui-breadcrumb-item :to="{ name: 'Breadcrumb' }">
-        面包屑
-      </veui-breadcrumb-item>
-      <veui-breadcrumb-item type="text">
-        我在这里
-      </veui-breadcrumb-item>
+      <veui-breadcrumb-item to="/">首页</veui-breadcrumb-item>
+      <veui-breadcrumb-item
+        :to="{ name: 'Breadcrumb' }"
+      >面包屑</veui-breadcrumb-item>
+      <veui-breadcrumb-item type="text">我在这里</veui-breadcrumb-item>
     </veui-breadcrumb>
   </section>
 </article>

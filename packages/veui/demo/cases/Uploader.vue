@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-uploader&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-uploader&gt;</code>
+  </h1>
 
   <fieldset>
     <legend>Options</legend>
@@ -47,11 +49,10 @@
         :items="availableCustoms"
       />
     </div>
-    <div>Accept: <veui-input
-      v-model="accept"
-      ui="xs"
-      clearable
-    /></div>
+    <div>
+      Accept:
+      <veui-input v-model="accept" ui="xs" clearable/>
+    </div>
     <div>
       Action:
       <veui-searchbox
@@ -116,10 +117,7 @@
         @remove="handleUploaderEvent('remove', ...arguments)"
         @statuschange="handleUploaderEvent('statuschange', ...arguments)"
       >
-        <template
-          v-if="includes(enabledCustoms, '#desc')"
-          #desc
-        >
+        <template v-if="includes(enabledCustoms, '#desc')" #desc>
           请选择{{ accept }}图片， 大小在{{ maxSize }}以内，
           宽、高大于100像素， 最多上传{{ maxCount }}张图
         </template>
@@ -135,10 +133,7 @@
         >
           <div class="ellipsis">{{ name }}</div>
         </template>
-        <template
-          v-if="includes(enabledCustoms, '#upload')"
-          #upload
-        >
+        <template v-if="includes(enabledCustoms, '#upload')" #upload>
           <div class="veui-uploader-list-image-container">
             <veui-button
               @click="$refs.uploader.clickInput()"
@@ -153,10 +148,7 @@
           >
             <form @submit.prevent="handleTooltipImageSubmit">
               <veui-span>图片地址：</veui-span>
-              <veui-input
-                name="src"
-                placeholder="https://"
-              />
+              <veui-input name="src" placeholder="https://"/>
               <veui-button type="submit">确定</veui-button>
             </form>
           </veui-popover>
@@ -168,16 +160,17 @@
           <div class="veui-uploader-list-image-container">
             <p>“{{ name }}”上传中</p>
             <p>
-              已完成 <strong>{{ loaded }}</strong>字节，剩余<strong>{{ total - loaded }}</strong>字节
+              已完成
+              <strong>{{ loaded }}</strong>字节，剩余 <strong>{{ total - loaded }}</strong>字节
             </p>
           </div>
         </template>
         <template
           v-if="includes(enabledCustoms, '#file')"
-          #file="{ name, status }"
+          #file="{ name, status: s }"
         >
           <div class="veui-uploader-list-media-container">
-            <p>{{ statusIcons[status] }} {{ status }} {{ name }}</p>
+            <p>{{ statusIcons[s] }} {{ s }} {{ name }}</p>
           </div>
         </template>
       </veui-uploader>
@@ -206,13 +199,9 @@
       @click="handleComponentRemoveButtonClick"
     >{{ removed ? '恢复' : '移除' }}上传组件</veui-button>
     <div class="space"/>
-    <veui-button
-      v-if="!removed"
-      ui="basic s"
-      @click="inDialog = !inDialog"
-    >{{
-      inDialog ? '-' : '放在对话框里'
-    }}</veui-button>
+    <veui-button v-if="!removed" ui="basic s" @click="inDialog = !inDialog">
+      {{ inDialog ? '-' : '放在对话框里' }}
+    </veui-button>
   </fieldset>
 
   <fieldset>
@@ -252,32 +241,27 @@ import bus from '../bus'
 const files = [
   {
     name: 'EXPjUWaWoAQ07Rj.jpg',
-    src:
-      'https://feed-image.baidu.com/0/pic/f1cc5f2566cba57dedd3357c4aeaf0ef.jpg'
+    src: 'https://feed-image.baidu.com/0/pic/f1cc5f2566cba57dedd3357c4aeaf0ef.jpg'
   },
   {
-    name:
-      'D_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9Ta.png',
-    src:
-      'https://feed-image.baidu.com/0/pic/8e1f0412ce0b7104ae33f1e2c2fcd337.png',
+    name: 'D_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9TaD_REqQiU4AAY9Ta.png',
+    src: 'https://feed-image.baidu.com/0/pic/8e1f0412ce0b7104ae33f1e2c2fcd337.png',
     alt: 'A tea store with a cat inside in the shape of a drink box'
   },
   {
     name: '7a1ba2b.mp4',
-    src:
-      'https://nadvideo2.baidu.com/5dafd8544f4f53b27a5f59b0ab780403_1920_1080.mp4',
+    src: 'https://nadvideo2.baidu.com/5dafd8544f4f53b27a5f59b0ab780403_1920_1080.mp4',
     poster:
       'https://feed-image.baidu.com/0/pic/4dced79d185a16e228652b136f653dcc.jpg'
   },
   {
     name: 'c9c23af.mp4',
-    src:
-      'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
+    src: 'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
     extraInfo: '123'
   }
 ]
 
-const mapper = value => ({ label: value, value })
+const mapper = (value) => ({ label: value, value })
 const remoteFakeUploadTarget =
   'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog'
 const remoteUploadTarget = 'https://kylehe.me/veui/upload/xhr'
@@ -414,8 +398,8 @@ export default {
           return files
         }
         let check = {
-          image: item => /\.(jpe?g|png)$/i.test(item.name),
-          video: item => /\.mp4$/i.test(item.name)
+          image: (item) => /\.(jpe?g|png)$/i.test(item.name),
+          video: (item) => /\.mp4$/i.test(item.name)
         }[this.type]
         return files.filter(check)
       },
@@ -461,7 +445,7 @@ export default {
       console.log(
         'Files updated',
         this.files,
-        this.files.map(file => [file.key, file.name].join('\t'))
+        this.files.map((file) => [file.key, file.name].join('\t'))
       )
     },
     maxCount (val) {
@@ -495,7 +479,7 @@ export default {
       }
       bus.$emit(
         'log',
-        [evt, ...args.map(arg => JSON.stringify(arg))].join('\t')
+        [evt, ...args.map((arg) => JSON.stringify(arg))].join('\t')
       )
     },
     handleComponentRemoveButtonClick () {
@@ -530,7 +514,9 @@ export default {
       }
       let ret
       if (this.type === 'image') {
-        let valid = [el.naturalWidth, el.naturalHeight].every(val => val > 100)
+        let valid = [el.naturalWidth, el.naturalHeight].every(
+          (val) => val > 100
+        )
         ret = valid
           ? { valid }
           : { valid, message: 'Dimension of image must be great than 100×100' }

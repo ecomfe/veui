@@ -22,13 +22,12 @@
       :name="icons.collapse"
     />
     <slot name="title">{{ label }}</slot>
-    <div :class="$c('collapse-title-after')"><slot name="title-after"/></div>
+    <div :class="$c('collapse-title-after')">
+      <slot name="title-after"/>
+    </div>
   </div>
   <veui-expand-transition :name="$c('collapse-body')">
-    <div
-      v-if="realExpanded"
-      :class="$c('collapse-body')"
-    >
+    <div v-if="realExpanded" :class="$c('collapse-body')">
       <div :class="$c('collapse-content')">
         <slot/>
       </div>
@@ -79,7 +78,7 @@ export default {
               : [].concat(accordion.realExpanded)
           return (
             expanded
-              .map(key => {
+              .map((key) => {
                 let item = find(
                   accordion.items,
                   ({ name, id }) => (name || id) === key

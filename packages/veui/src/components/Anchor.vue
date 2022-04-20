@@ -1,31 +1,14 @@
 <template>
-<div
-  :class="$c('anchor')"
-  :ui="realUi"
->
-  <div
-    ref="placeholder"
-    :class="$c('anchor-placeholder')"
-  />
-  <div
-    :is="tagName"
-    ref="append"
-    :class="$c('anchor-wrapper')"
-    :ui="realUi"
-  >
+<div :class="$c('anchor')" :ui="realUi">
+  <div ref="placeholder" :class="$c('anchor-placeholder')"/>
+  <div :is="tagName" ref="append" :class="$c('anchor-wrapper')" :ui="realUi">
     <veui-tree
       :class="$c('anchor-tree')"
       :datasource="items"
       :expanded="allAnchors"
     >
-      <template
-        slot="item"
-        slot-scope="props"
-      >
-        <slot
-          name="item"
-          v-bind="props"
-        >
+      <template slot="item" slot-scope="props">
+        <slot name="item" v-bind="props">
           <veui-link
             :class="{
               [$c('tree-item-label')]: true,
@@ -37,12 +20,7 @@
             :ui="getFinalUi(props.value)"
             @click.stop="handleClick(props)"
           >
-            <slot
-              name="item-label"
-              v-bind="props"
-            >
-              {{ props.label }}
-            </slot>
+            <slot name="item-label" v-bind="props">{{ props.label }}</slot>
           </veui-link>
         </slot>
       </template>
@@ -72,7 +50,7 @@ const VEUI_OVERLAY_ELEMENT_NAME = 'veui-x-overlay'
 
 ignoreElements(VEUI_OVERLAY_ELEMENT_NAME)
 
-const extractValue = data => {
+const extractValue = (data) => {
   return reduce(
     data,
     (result, { value, children }) => {
@@ -86,8 +64,8 @@ const extractValue = data => {
   )
 }
 
-const globalScrollHandler = event => {
-  globalScrollHandler.fns.forEach(fn => {
+const globalScrollHandler = (event) => {
+  globalScrollHandler.fns.forEach((fn) => {
     // 保证每个 handler 都调用
     try {
       fn(event)
@@ -98,7 +76,7 @@ const globalScrollHandler = event => {
 }
 globalScrollHandler.fns = []
 
-const getScrollTop = el =>
+const getScrollTop = (el) =>
   el === window ? document.documentElement.scrollTop : el.scrollTop
 
 const getOffset = (container, top, offset) => {
@@ -109,7 +87,7 @@ const getOffset = (container, top, offset) => {
   return Math.round(top + clientTop + resolveOffset(offset, clientHeight))
 }
 
-const offsetValidator = val => !isNaN(resolveOffset(val))
+const offsetValidator = (val) => !isNaN(resolveOffset(val))
 
 // TODO: sticky anchor 和 placeholder 大小的同步
 
@@ -318,7 +296,7 @@ export default {
       let placeholderRect = this.$refs.placeholder.getBoundingClientRect()
       let beforeScroll = null
       if (this.sticky) {
-        beforeScroll = curScrollTop => {
+        beforeScroll = (curScrollTop) => {
           if (
             !this.removePortal &&
             curScrollTop >= this.getScrollTopToAffix(placeholderRect, conRect)

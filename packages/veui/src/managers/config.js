@@ -14,7 +14,7 @@ export class ConfigManager {
         if (isObject(key)) {
           ns = val
           val = key
-          Object.keys(val).forEach(k => {
+          Object.keys(val).forEach((k) => {
             this.setConfig(obj, k, val[k], ns, override)
           })
           return
@@ -32,10 +32,10 @@ export class ConfigManager {
       setConfigItem (obj, key, val) {
         this.$set(obj, key, val)
 
-        let relatedWatcherKeys = Object.keys(this.watchers).filter(k =>
+        let relatedWatcherKeys = Object.keys(this.watchers).filter((k) =>
           startsWith(k, key)
         )
-        relatedWatcherKeys.forEach(watcherKey => this.unwatch(watcherKey))
+        relatedWatcherKeys.forEach((watcherKey) => this.unwatch(watcherKey))
 
         this.transformValue(obj, key, null)
       },
@@ -58,7 +58,7 @@ export class ConfigManager {
             }
             this.watchers[watcherKey] = {
               key: i18nKey,
-              unwatch: i18n.watch(i18nKey, val => {
+              unwatch: i18n.watch(i18nKey, (val) => {
                 context[key] = val
               })
             }

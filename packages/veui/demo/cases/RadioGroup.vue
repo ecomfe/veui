@@ -1,10 +1,10 @@
 <template>
 <article>
-  <h1><code>&lt;veui-radio-group&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-radio-group&gt;</code>
+  </h1>
   <p>
-    <veui-checkbox v-model="disabled">
-      禁用
-    </veui-checkbox>
+    <veui-checkbox v-model="disabled">禁用</veui-checkbox>
   </p>
   <p>
     <veui-radio-group
@@ -13,9 +13,7 @@
       :disabled="disabled"
       name="111"
     >
-      <template #item="props">
-        {{ props.label }}
-      </template>
+      <template #item="props">{{ props.label }}</template>
     </veui-radio-group>
   </p>
   <p>value: {{ picked1 }}</p>
@@ -26,23 +24,13 @@
       :disabled="disabled"
       ui="s"
     >
-      <template
-        slot="item"
-        slot-scope="props"
-      >
-        {{ props.label }}
-      </template>
-      <template #desc>
-        您没有权限！
-      </template>
+      <template #item="props">{{ props.label }}</template>
+      <template #desc>您没有权限！</template>
     </veui-radio-group>
   </p>
   <p>value: {{ picked2 }}</p>
   <p>
-    <veui-radio-group
-      v-model="picked3"
-      :items="data3"
-    />
+    <veui-radio-group v-model="picked3" :items="data3"/>
   </p>
   <p>value: {{ picked3 }}</p>
 </article>

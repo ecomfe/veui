@@ -22,7 +22,7 @@ export class Type {
       return
     }
 
-    let config = find(this.configs, config => config.type === newConfig.type)
+    let config = find(this.configs, (config) => config.type === newConfig.type)
     if (!config) {
       this.configs.push(newConfig)
     } else {
@@ -32,7 +32,7 @@ export class Type {
 }
 
 function cloneBuiltIn (val) {
-  let config = find(this.configs, config => isType(config.type, val))
+  let config = find(this.configs, (config) => isType(config.type, val))
   if (config) {
     return config.clone(val)
   }

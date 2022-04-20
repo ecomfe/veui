@@ -18,13 +18,7 @@
         :aria-setsize="items.length"
         @click="handleClick(item, index, $event)"
       >
-        <slot
-          name="item"
-          v-bind="item"
-          :index="index"
-        >
-          {{ item.label }}
-        </slot>
+        <slot name="item" v-bind="item" :index="index">{{ item.label }}</slot>
       </veui-button>
     </slot>
   </div>

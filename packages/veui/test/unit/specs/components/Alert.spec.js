@@ -184,7 +184,8 @@ describe('components/Alert', function () {
             message: ['message one', 'message two', 'message three']
           }
         },
-        template: '<veui-alert :index="0" :open="true" :message="message" closable/>'
+        template:
+          '<veui-alert :index="0" :open="true" :message="message" closable/>'
       },
       {
         sync: false

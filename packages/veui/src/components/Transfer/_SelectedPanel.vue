@@ -11,24 +11,14 @@
   :ui="ui"
 >
   <template slot="head">
-    <slot
-      name="head"
-      v-bind="slotApi"
-    >
-      <slot
-        name="title"
-        v-bind="slotApi"
-      >
-        {{ realTitle }}
-      </slot>
+    <slot name="head" v-bind="slotApi">
+      <slot name="title" v-bind="slotApi">{{ realTitle }}</slot>
       <veui-button
         :ui="uiParts.removeAll"
         :class="$c('transfer-remove-all')"
         :disabled="!isSelectable || !datasource.length"
         @click="removeAll"
-      >
-        {{ t('@transfer.deselectAll') }}
-      </veui-button>
+      >{{ t('@transfer.deselectAll') }}</veui-button>
     </slot>
   </template>
 
@@ -39,19 +29,10 @@
       :class="$c('transfer-selected-tree')"
       :disabled="!isSelectable"
     >
-      <template
-        slot="item"
-        slot-scope="props"
-      >
-        <slot
-          name="item"
-          v-bind="props"
-        />
+      <template slot="item" slot-scope="props">
+        <slot name="item" v-bind="props"/>
       </template>
-      <template
-        slot="item-label"
-        slot-scope="props"
-      >
+      <template slot="item-label" slot-scope="props">
         <slot
           v-if="showMode === 'tree'"
           name="item-label"
@@ -67,9 +48,7 @@
                 name="item-label"
                 v-bind="{ item, ...item, keyword }"
                 :index="i"
-              >
-                {{ item.label }}
-              </slot>
+              >{{ item.label }}</slot>
             </span>
             <veui-icon
               v-if="i < props.path.length - 1"
@@ -85,7 +64,7 @@
           :class="$c('tree-item-remove')"
           :ui="uiParts.remove"
           :disabled="
-            !isSelectable || !!disabled || parents.some(i => !!i.disabled)
+            !isSelectable || !!disabled || parents.some((i) => !!i.disabled)
           "
           @click.stop="remove(item, parents)"
         >
@@ -99,9 +78,7 @@
   </template>
 
   <template slot="no-data">
-    <slot name="no-data">
-      {{ t('@transfer.select') }}
-    </slot>
+    <slot name="no-data">{{ t('@transfer.select') }}</slot>
   </template>
 </veui-filter-panel>
 </template>
@@ -163,13 +140,13 @@ export default {
             return
           }
 
-          option.children.forEach(child => {
+          option.children.forEach((child) => {
             walk(child, [...path, option], paths)
           })
         }
 
         let paths = []
-        selectedOptions.forEach(option => {
+        selectedOptions.forEach((option) => {
           let itemPaths = []
           walk(option, [], itemPaths)
           paths.push(...itemPaths)

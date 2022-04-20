@@ -16,14 +16,8 @@
     <slot name="label">
       <veui-label>{{ label }}</veui-label>
     </slot>
-    <div
-      v-if="tip || $slots.tip"
-      :class="$c('field-tip')"
-    >
-      <veui-icon
-        ref="tip"
-        :name="icons.tip"
-      />
+    <div v-if="tip || $slots.tip" :class="$c('field-tip')">
+      <veui-icon ref="tip" :name="icons.tip"/>
       <veui-popover
         :ui="uiParts.tip"
         target="tip"
@@ -44,27 +38,21 @@
         :disabled="realDisabled"
       />
     </div>
-    <div
-      v-if="!realAbstract"
-      :class="$c('field-messages')"
-    >
-      <veui-loading
-        v-if="validating"
-        :loading="validating"
-      >{{
-        t('validating')
-      }}</veui-loading>
+    <div v-if="!realAbstract" :class="$c('field-messages')">
+      <veui-loading v-if="validating" :loading="validating">
+        {{ t('validating') }}
+      </veui-loading>
       <template v-else-if="validationStatus !== 'success'">
         <template v-for="(validity, index) in renderableValidities">
           <component
             :is="{ render: validity.render }"
             v-if="validity.render"
-            :key="index"
+            :key="`r${index}`"
             :validity="validity"
           />
           <veui-message
             v-else
-            :key="index"
+            :key="`m${index}`"
             :ui="uiParts.message"
             :status="validity.status"
             :display="realValidityDisplay"

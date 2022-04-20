@@ -28,11 +28,7 @@
       @click="handleChange(item.value)"
       @mouseenter="handleEnterForDesc(item)"
     >
-      <slot
-        name="item"
-        v-bind="item"
-        :index="index"
-      >{{ item.label }}</slot>
+      <slot name="item" v-bind="item" :index="index">{{ item.label }}</slot>
     </veui-button>
   </div>
   <veui-popover
@@ -43,10 +39,7 @@
     :open.sync="openForDesc"
     trigger="hover"
   >
-    <slot
-      name="desc"
-      v-bind="currentForDesc"
-    >{{ currentForDesc.desc }}</slot>
+    <slot name="desc" v-bind="currentForDesc">{{ currentForDesc.desc }}</slot>
   </veui-popover>
 </div>
 </template>

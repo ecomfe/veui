@@ -1,14 +1,11 @@
 <template>
 <article>
-  <h1><code>&lt;veui-carousel&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-carousel&gt;</code>
+  </h1>
   <p>
     <code>interval</code>:
-    <veui-number-input
-      v-model="interval"
-      ui="tiny"
-      :min="0"
-      :step="1000"
-    />
+    <veui-number-input v-model="interval" ui="tiny" :min="0" :step="1000"/>
   </p>
   <p>
     <veui-checkbox v-model="loose">
@@ -31,28 +28,16 @@
     </veui-checkbox>
   </p>
   <p>
-    <veui-radio-group
-      v-model="trigger"
-      :items="triggers"
-    />
+    <veui-radio-group v-model="trigger" :items="triggers"/>
   </p>
   <p>
-    <veui-radio-group
-      v-model="effect"
-      :items="effects"
-    />
+    <veui-radio-group v-model="effect" :items="effects"/>
   </p>
   <p>
-    <veui-radio-group
-      v-model="indicator"
-      :items="indicators"
-    />
+    <veui-radio-group v-model="indicator" :items="indicators"/>
   </p>
   <p>
-    <veui-radio-group
-      v-model="alignment"
-      :items="alignments"
-    />
+    <veui-radio-group v-model="alignment" :items="alignments"/>
   </p>
   <p>
     <veui-radio-group
@@ -61,10 +46,7 @@
     />
   </p>
   <p>
-    <veui-radio-group
-      v-model="control"
-      :items="controls"
-    />
+    <veui-radio-group v-model="control" :items="controls"/>
   </p>
   <p>
     <veui-checkbox v-model="vertical">
@@ -137,13 +119,9 @@
         '--dls-carousel-transition-duration': `${duration}s`
       }"
     >
-      <div
-        slot="item"
-        slot-scope="{ label }"
-        class="demo-carousel-slide"
-      >
-        {{ label }}
-      </div>
+      <template #item="{ label }">
+        <div class="demo-carousel-slide">{{ label }}</div>
+      </template>
     </veui-carousel>
   </section>
   <section class="carousel-section">
@@ -439,27 +417,23 @@ export default {
       ],
       items: [
         {
-          src:
-            'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
+          src: 'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
           alt: 'A 1080p video.',
           label: 'A 1080p video',
           type: 'video'
         },
         {
-          src:
-            'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
+          src: 'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
           alt: 'A cute kitty looking at you with its greenish eyes.',
           label: '猫'
         },
         {
-          src:
-            'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
+          src: 'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
           alt: 'A common kingfisher flying above river.',
           label: '翠鸟'
         },
         {
-          src:
-            'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
+          src: 'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
           alt: 'A white and gray dolphin in blue water.',
           label: '海豚'
         },
@@ -469,8 +443,7 @@ export default {
           label: '百度'
         },
         {
-          src:
-            'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg',
+          src: 'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg',
           alt: 'Tesla logo.',
           label: '特斯拉'
         }

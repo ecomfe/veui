@@ -1,16 +1,7 @@
 <template>
-<div
-  :class="sliderClasses"
-  :ui="realUi"
-  role="application"
-  tabindex="-1"
->
+<div :class="sliderClasses" :ui="realUi" role="application" tabindex="-1">
   <!-- 条 -->
-  <div
-    ref="track"
-    :class="$c('slider-track')"
-    @click="handleTrackClick"
-  >
+  <div ref="track" :class="$c('slider-track')" @click="handleTrackClick">
     <slot name="track">
       <div :class="$c('slider-track-default')">
         <div :class="$c('slider-track-default-wrapper')">
@@ -34,10 +25,7 @@
             ]"
             :style="progressStyle"
           />
-          <div
-            v-if="stepMarks"
-            :class="$c('slider-track-default-marks')"
-          >
+          <div v-if="stepMarks" :class="$c('slider-track-default-marks')">
             <div
               v-for="mk in stepMarks"
               :key="mk"
@@ -112,9 +100,7 @@
       :interactive="false"
       :ui="uiParts.tooltip"
     >
-      <slot name="tip-label">
-        {{ tooltipLabel }}
-      </slot>
+      <slot name="tip-label">{{ tooltipLabel }}</slot>
     </veui-tooltip>
   </slot>
 </div>
@@ -162,7 +148,7 @@ export default {
         return !this.isControlled('value')
           ? val
           : val
-            .map(val => this.getAdjustedValue(this.parse(val)))
+            .map((val) => this.getAdjustedValue(this.parse(val)))
             .sort((a, b) => (a > b ? 1 : -1))
       },
       set (value) {
@@ -194,7 +180,7 @@ export default {
     step: {
       type: Number,
       default: 0,
-      validator: val => val >= 0
+      validator: (val) => val >= 0
     },
     mark: Boolean,
     parse: {
@@ -234,7 +220,7 @@ export default {
     },
     ratios () {
       let { min, max } = this
-      return this.realValue.map(val => (val - min) / (max - min))
+      return this.realValue.map((val) => (val - min) / (max - min))
     },
     activeTooltipIndex () {
       if (this.currentThumbFocusIndex >= 0) {
@@ -283,7 +269,7 @@ export default {
       let { min, max } = this
       return []
         .concat(this.secondaryProgress)
-        .map(progress => (progress - min) / (max - min))
+        .map((progress) => (progress - min) / (max - min))
     },
     secondaryProgressStyle () {
       return this.getProgressStyle(this.localSecondaryProgress)

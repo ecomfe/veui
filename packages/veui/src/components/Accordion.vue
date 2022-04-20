@@ -1,8 +1,5 @@
 <template>
-<div
-  :ui="realUi"
-  :class="$c('accordion')"
->
+<div :ui="realUi" :class="$c('accordion')">
   <slot/>
 </div>
 </template>

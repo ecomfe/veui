@@ -5,10 +5,7 @@
   v-bind="rootAttrs"
   @keydown="handleCascaderKeydown"
 >
-  <slot
-    name="trigger"
-    v-bind="slotProps"
-  >
+  <slot name="trigger" v-bind="slotProps">
     <veui-select-trigger
       ref="trigger"
       :class="$c('cascader-trigger')"
@@ -37,10 +34,7 @@
         :slot="name"
         slot-scope="props"
       >
-        <slot
-          :name="name"
-          v-bind="props"
-        >
+        <slot :name="name" v-bind="props">
           {{
             realCompleteDisplay && name === 'selected'
               ? backfillOption.chains.map((i) => i.label).join(' > ')
@@ -91,15 +85,9 @@
         v-if="keyword && !filteredOptions.length"
         :class="$c('cascader-pane-wrap-no-data')"
       >
-        <slot name="search-no-data">
-          {{ t('noData') }}
-        </slot>
+        <slot name="search-no-data">{{ t('noData') }}</slot>
       </div>
-      <slot
-        v-else
-        name="pane"
-        v-bind="slotProps"
-      >
+      <slot v-else name="pane" v-bind="slotProps">
         <veui-cascader-pane
           ref="pane"
           :class="{
@@ -118,10 +106,7 @@
           @select="handlePaneSelect"
           @keydown.native="!searchable && handleCascaderKeydown($event)"
         >
-          <template
-            slot="option-label"
-            slot-scope="{ option }"
-          >
+          <template slot="option-label" slot-scope="{ option }">
             <veui-search-result
               v-if="keyword"
               :matches="option.matches"
@@ -134,10 +119,7 @@
             :slot="name"
             slot-scope="props"
           >
-            <slot
-              :name="name"
-              v-bind="props"
-            />
+            <slot :name="name" v-bind="props"/>
           </template>
         </veui-cascader-pane>
       </slot>

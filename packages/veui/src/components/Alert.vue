@@ -13,20 +13,13 @@
 >
   <slot name="content">
     <div :class="$c('alert-state')">
-      <veui-icon
-        :class="$c('alert-icon')"
-        :name="icons[type]"
-      />
+      <veui-icon :class="$c('alert-icon')" :name="icons[type]"/>
     </div>
     <div
       v-if="isMultiple"
       :class="`${$c('alert-content')} ${$c('alert-content-multiple')}`"
     >
-      <slot
-        :index="realIndex"
-        :message="message[realIndex]"
-        :close="close"
-      >
+      <slot :index="realIndex" :message="message[realIndex]" :close="close">
         {{ message[realIndex] }}
       </slot>
       <div
@@ -41,43 +34,22 @@
         />
       </div>
     </div>
-    <div
-      v-else
-      :class="$c('alert-content')"
-    >
-      <div
-        v-if="title || $slots.title"
-        :class="$c('alert-content-title')"
-      >
+    <div v-else :class="$c('alert-content')">
+      <div v-if="title || $slots.title" :class="$c('alert-content-title')">
         <slot name="title">{{ title }}</slot>
       </div>
-      <div
-        ref="message"
-        :class="$c('alert-content-message')"
-      >
-        <slot
-          :message="message"
-          :close="close"
-        >
-          {{ message }}
-        </slot>
+      <div ref="message" :class="$c('alert-content-message')">
+        <slot :message="message" :close="close">{{ message }}</slot>
         <div
           v-if="$scopedSlots.extra || $slots.extra"
           :class="$c('alert-content-extra')"
         >
-          <slot
-            name="extra"
-            :message="message"
-            :close="close"
-          />
+          <slot name="extra" :message="message" :close="close"/>
         </div>
       </div>
     </div>
 
-    <div
-      v-if="isMultiple"
-      :class="$c('alert-nav')"
-    >
+    <div v-if="isMultiple" :class="$c('alert-nav')">
       <veui-button
         :ui="uiParts.prev"
         :disabled="isFirst"
@@ -94,9 +66,7 @@
             total: message.length
           })
         "
-      >
-        {{ realIndex + 1 }}/{{ message.length }}
-      </span>
+      >{{ realIndex + 1 }}/{{ message.length }}</span>
       <veui-button
         :ui="uiParts.next"
         :disabled="isLast"
@@ -106,10 +76,7 @@
         <veui-icon :name="icons.next"/>
       </veui-button>
     </div>
-    <div
-      v-if="closable"
-      :class="$c('alert-close')"
-    >
+    <div v-if="closable" :class="$c('alert-close')">
       <veui-button
         :ui="uiParts.close"
         :aria-label="t('close')"

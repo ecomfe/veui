@@ -1,29 +1,18 @@
 <template>
 <article>
-  <h1><code>&lt;veui-icon&gt;</code></h1>
-  <section><veui-checkbox v-model="compact">Compact</veui-checkbox></section>
-  <div
-    class="icons"
-    :class="{ compact }"
-  >
-    <div
-      v-for="icon in icons"
-      :key="icon"
-      class="icon"
-    >
-      <div
-        v-tooltip="{ content: icon, disabled: !compact }"
-        class="svg"
-      >
+  <h1>
+    <code>&lt;veui-icon&gt;</code>
+  </h1>
+  <section>
+    <veui-checkbox v-model="compact">Compact</veui-checkbox>
+  </section>
+  <div class="icons" :class="{ compact }">
+    <div v-for="icon in icons" :key="icon" class="icon">
+      <div v-tooltip="{ content: icon, disabled: !compact }" class="svg">
         <veui-icon :name="icon"/>
       </div>
       <transition name="name">
-        <div
-          v-if="!compact"
-          class="name"
-        >
-          {{ icon }}
-        </div>
+        <div v-if="!compact" class="name">{{ icon }}</div>
       </transition>
     </div>
   </div>

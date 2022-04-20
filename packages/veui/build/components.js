@@ -45,7 +45,7 @@ async function genComponentJson () {
 function genComponentIndex () {
   let files = readdirSync(componentDir, { encoding: 'utf8' })
   let res = files
-    .filter(file => {
+    .filter((file) => {
       let match = /^[A-Z]/.test(file)
       // 没有 index.js 的目录不要
       if (match) {
@@ -79,7 +79,7 @@ function genComponentIndex () {
 if (process.argv.indexOf('index') >= 0) {
   genComponentIndex()
 } else {
-  genComponentJson().catch(err => {
+  genComponentJson().catch((err) => {
     console.error(err)
     process.exit(1)
   })

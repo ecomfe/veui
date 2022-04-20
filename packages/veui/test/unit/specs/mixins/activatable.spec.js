@@ -25,7 +25,7 @@ const InActivatableComponent = {
 describe('mixins/activatable', () => {
   let msg
   beforeEach(() => {
-    Vue.config.warnHandler = message => {
+    Vue.config.warnHandler = (message) => {
       msg = message
     }
   })

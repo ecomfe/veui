@@ -9,12 +9,7 @@
   </section>
   <section>
     <h2>可清除(s)</h2>
-    <veui-autocomplete
-      ui="s"
-      clearable
-      autofocus
-      :datasource="suggestions"
-    />
+    <veui-autocomplete ui="s" clearable autofocus :datasource="suggestions"/>
   </section>
   <section>
     <h2>禁用(l)</h2>

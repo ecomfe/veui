@@ -1,14 +1,8 @@
 <template>
-<div
-  v-if="type === 'number'"
-  :class="rootClass"
->
+<div v-if="type === 'number'" :class="rootClass">
   {{ index + 1 }}/{{ labels.length }}
 </div>
-<nav
-  v-else
-  :class="rootClass"
->
+<nav v-else :class="rootClass">
   <button
     v-for="(label, i) in labels"
     :key="i"

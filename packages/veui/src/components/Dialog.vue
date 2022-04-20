@@ -46,12 +46,7 @@
         v-if="title || $slots.title || $scopedSlots.title"
         :class="$c('dialog-content-head-title')"
       >
-        <slot
-          name="title"
-          :close="close"
-        >
-          {{ title }}
-        </slot>
+        <slot name="title" :close="close">{{ title }}</slot>
       </h3>
       <veui-button
         v-if="closable"
@@ -66,27 +61,15 @@
     <div :class="$c('dialog-content-body')">
       <slot :close="close"/>
     </div>
-    <div
-      v-if="!footless"
-      :class="$c('dialog-content-foot')"
-    >
-      <slot
-        name="foot"
-        :close="close"
-      >
+    <div v-if="!footless" :class="$c('dialog-content-foot')">
+      <slot name="foot" :close="close">
         <veui-button
           :ui="uiParts.ok"
           :disabled="disabled"
           :loading="loading"
           @click="close('ok')"
-        >
-          {{ realOkLabel }}
-        </veui-button>
-        <veui-button
-          :ui="uiParts.cancel"
-          autofocus
-          @click="cancel"
-        >
+        >{{ realOkLabel }}</veui-button>
+        <veui-button :ui="uiParts.cancel" autofocus @click="cancel">
           {{ realCancelLabel }}
         </veui-button>
       </slot>

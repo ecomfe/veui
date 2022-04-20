@@ -10,7 +10,7 @@ let style =
 
 const TRANSFORM_ACCESSOR = find(
   ['transform', 'msTransform', 'MozTransform', 'webkitTransform'],
-  accessor => accessor in style
+  (accessor) => accessor in style
 )
 
 function getComputedTransform (elm) {

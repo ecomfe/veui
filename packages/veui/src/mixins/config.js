@@ -6,8 +6,8 @@ export default function useConfig (injectionKey, configPrefixes = ['']) {
   configPrefixes = Array.isArray(configPrefixes)
     ? configPrefixes
     : [configPrefixes]
-  const keys = Object.keys(config.getAll()).filter(k =>
-    configPrefixes.some(cp => cp === k || k.indexOf(`${cp}.`) === 0)
+  const keys = Object.keys(config.getAll()).filter((k) =>
+    configPrefixes.some((cp) => cp === k || k.indexOf(`${cp}.`) === 0)
   )
   return {
     ...configContext.useConsumer(internalKey),
@@ -34,16 +34,16 @@ export default function useConfig (injectionKey, configPrefixes = ['']) {
 // 先取 prop，没有再取 context。
 export function useConfigurable (injectionKey, configurable) {
   // normalize
-  const realConfigurable = map(configurable, conf => {
+  const realConfigurable = map(configurable, (conf) => {
     let realConf = typeof conf === 'string' ? { namespace: conf } : conf
-    realConf.props = map(realConf.props, prop =>
+    realConf.props = map(realConf.props, (prop) =>
       typeof prop === 'string' ? { prop } : prop
     )
     return realConf
   })
 
   // generate computeds
-  const namespaces = realConfigurable.map(i => i.namespace)
+  const namespaces = realConfigurable.map((i) => i.namespace)
   return {
     mixins: [useConfig(injectionKey, namespaces)],
     computed: realConfigurable.reduce((acc, { namespace, props }) => {

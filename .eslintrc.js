@@ -92,7 +92,11 @@ module.exports = {
     'vue/no-irregular-whitespace': 'error',
     'vue/object-curly-spacing': ['error', 'always'],
     'vue/space-infix-ops': 'error',
-    'vue/space-unary-ops': ['error', { words: true, nonwords: false }]
+    'vue/space-unary-ops': ['error', { words: true, nonwords: false }],
+    'vue/max-attributes-per-line': ['error', {
+      singleline: 100,
+      multiline: 1
+    }]
   },
   overrides: [
     {

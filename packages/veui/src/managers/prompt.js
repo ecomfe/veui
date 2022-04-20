@@ -30,7 +30,7 @@ export class PromptManager extends SimpleDialog {
             on: {
               ok: () => data.ok(data.value),
               cancel: data.cancel,
-              input: val => {
+              input: (val) => {
                 data.value = val
               },
               afterclose: () => {
@@ -48,11 +48,11 @@ export class PromptManager extends SimpleDialog {
     let ok = isFunction(options.ok) ? options.ok : noop
     let cancel = isFunction(options.cancel) ? options.cancel : noop
 
-    return new Promise(resolve => {
-      let checkRemove = value => {
+    return new Promise((resolve) => {
+      let checkRemove = (value) => {
         component.loading = true
         Promise.resolve(value != null ? ok(value) : cancel(value)).then(
-          returnVal => {
+          (returnVal) => {
             component.loading = false
             component.invalid = returnVal === false
 
@@ -66,7 +66,7 @@ export class PromptManager extends SimpleDialog {
 
       let component = this.create({
         ...options,
-        ok: value => checkRemove(value || ''),
+        ok: (value) => checkRemove(value || ''),
         cancel: () => checkRemove(null)
       })
     })

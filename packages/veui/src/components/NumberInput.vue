@@ -18,10 +18,7 @@
   @change="handleChange"
   @input="handleInput"
 >
-  <template
-    v-if="isStrong"
-    slot="before"
-  >
+  <template v-if="isStrong" slot="before">
     <veui-button
       v-longpress.repeat="decrease"
       tabindex="-1"
@@ -71,10 +68,7 @@
       </veui-button>
     </div>
   </template>
-  <template
-    v-if="isStrong"
-    slot="after"
-  >
+  <template v-if="isStrong" slot="after">
     <veui-button
       v-longpress.repeat="increase"
       tabindex="-1"

@@ -4,28 +4,31 @@
     <code>&lt;veui-table&gt;</code>
   </h1>
   <section class="options">
-    <veui-button
-      ui="primary"
-      @click="append"
-    > 添加 </veui-button>
+    <veui-button ui="primary" @click="append">添加</veui-button>
     <veui-button @click="toggle">切换数据</veui-button>
     <veui-button @click="toggleLoading">切换加载</veui-button>
     <veui-button @click="filtered = null">清空筛选</veui-button>
   </section>
   <section class="options">
-    <veui-label>内容固定行<veui-number-input
-      v-model="lines"
-      :disabled="linesAuto"
-      :min="1"
-      :max="2"
-    /></veui-label>
+    <veui-label>
+      内容固定行
+      <veui-number-input
+        v-model="lines"
+        :disabled="linesAuto"
+        :min="1"
+        :max="2"
+      />
+    </veui-label>
     <veui-checkbox v-model="linesAuto">自适应</veui-checkbox>
-    <veui-label>表头固定行<veui-number-input
-      v-model="headLines"
-      :disabled="headLinesAuto"
-      :min="1"
-      :max="2"
-    /></veui-label>
+    <veui-label>
+      表头固定行
+      <veui-number-input
+        v-model="headLines"
+        :disabled="headLinesAuto"
+        :min="1"
+        :max="2"
+      />
+    </veui-label>
     <veui-checkbox v-model="headLinesAuto">自适应</veui-checkbox>
   </section>
   <section class="options">
@@ -67,28 +70,19 @@
       @select="handleSelect"
       @sort="handleSort"
     >
-      <veui-table-column
-        field="id"
-        title="数据 ID"
-        sortable
-        fixed
-        width="80"
-      >
-        <template slot="head">
+      <veui-table-column field="id" title="数据 ID" sortable fixed width="80">
+        <template #head>
           <strong>
             数据
             <span style="color: #3998fc">ID</span>
             很长很长很长很长很长很长很长很长很长很长很长很长很长很长
           </strong>
         </template>
-        <template slot="foot">
+        <template #foot>
           <strong>总计</strong>
         </template>
       </veui-table-column>
-      <veui-table-column
-        title="元数据"
-        :desc="popover"
-      >
+      <veui-table-column title="元数据" :desc="popover">
         <veui-table-column
           field="typeId"
           title="类型 ID"
@@ -97,7 +91,9 @@
         >
           <template #desc="{ close }">
             <p>一段说明文本……</p>
-            <p><veui-button @click="close">知道了</veui-button></p>
+            <p>
+              <veui-button @click="close">知道了</veui-button>
+            </p>
           </template>
         </veui-table-column>
         <veui-table-column
@@ -141,25 +137,21 @@
               @click="close"
             >优惠</veui-checkbox>
           </div>
-        </template> -->
-        <template slot="desc"> 这是一条带有 slot 的提示 </template>
-        <template slot="head">
+          </template>-->
+        <template #desc>这是一条带有 slot 的提示</template>
+        <template #head>
           价格
           <i>(每 1000g)</i>
           <button>❤️</button>
         </template>
-        <template slot-scope="props">{{
-          props.item.price | currency
-        }}</template>
-        <template slot="foot">
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
+        <template #foot>
           <strong>{{ total | currency }}</strong>
         </template>
       </veui-table-column>
-      <veui-table-column
-        field="updateDate"
-        title="更新时间"
-        align="center"
-      >
+      <veui-table-column field="updateDate" title="更新时间" align="center">
         <template #default="{ updateDate }">
           <span v-tooltip="time(updateDate)">{{ updateDate | date }}</span>
         </template>
@@ -171,18 +163,9 @@
         width="160"
       >
         <template slot-scope="props">
-          <veui-button
-            ui="text"
-            @click="log(props.item)"
-          >编辑</veui-button>
-          <veui-button
-            ui="text"
-            @click="del(props.index)"
-          >删除</veui-button>
-          <veui-link
-            ui="strong"
-            to="table"
-          >查看</veui-link>
+          <veui-button ui="text" @click="log(props.item)">编辑</veui-button>
+          <veui-button ui="text" @click="del(props.index)">删除</veui-button>
+          <veui-link ui="strong" to="table">查看</veui-link>
         </template>
       </veui-table-column>
     </veui-table>
@@ -200,10 +183,7 @@
       :loading="loading"
     >
       <veui-table-column title="元数据">
-        <veui-table-column
-          field="id"
-          title="数据 ID"
-        />
+        <veui-table-column field="id" title="数据 ID"/>
         <veui-table-column
           v-if="showGroup"
           field="group"
@@ -233,9 +213,9 @@
           { label: '低价格', value: 'low' }
         ]"
       >
-        <template slot-scope="props">{{
-          props.item.price | currency
-        }}</template>
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
       </veui-table-column>
       <veui-table-column
         field="updateDate"
@@ -263,37 +243,19 @@
       :scroll="{ x: 1024 }"
       :loading="loading"
     >
-      <veui-table-column
-        field="id"
-        title="数据 ID"
-      />
-      <veui-table-column
-        field="desc"
-        title="数据描述"
-      />
-      <veui-table-column
-        field="price"
-        title="价格"
-        width="160"
-        align="right"
-      >
-        <template slot-scope="props">{{
-          props.item.price | currency
-        }}</template>
+      <veui-table-column field="id" title="数据 ID"/>
+      <veui-table-column field="desc" title="数据描述"/>
+      <veui-table-column field="price" title="价格" width="160" align="right">
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
       </veui-table-column>
-      <veui-table-column
-        field="updateDate"
-        title="更新时间"
-        align="right"
-      >
+      <veui-table-column field="updateDate" title="更新时间" align="right">
         <template #default="{ updateDate }">
           <span v-tooltip="time(updateDate)">{{ updateDate | date }}</span>
         </template>
       </veui-table-column>
-      <template
-        slot="sub-row"
-        slot-scope="{ desc }"
-      >{{ desc }}</template>
+      <template #sub-row="{ desc }">{{ desc }}</template>
     </veui-table>
   </section>
   <section class="container">
@@ -304,93 +266,49 @@
       :scroll="{ x: 1200 }"
       :loading="loading"
     >
-      <veui-table-column
-        field="id"
-        title="数据 ID"
-      >
-        <template
-          slot="sub-row"
-          slot-scope="{ id }"
-        >
+      <veui-table-column field="id" title="数据 ID">
+        <template #sub-row="{ id }">
           <em>{{ id }}</em>
         </template>
       </veui-table-column>
-      <veui-table-column
-        field="desc"
-        title="数据描述"
-      />
-      <veui-table-column
-        field="price"
-        title="价格"
-        width="160"
-        align="right"
-      >
-        <template slot-scope="props">{{
-          props.item.price | currency
-        }}</template>
+      <veui-table-column field="desc" title="数据描述"/>
+      <veui-table-column field="price" title="价格" width="160" align="right">
+        <template slot-scope="props">
+          {{ props.item.price | currency }}
+        </template>
       </veui-table-column>
-      <veui-table-column
-        field="updateDate"
-        title="更新时间"
-        align="right"
-      >
+      <veui-table-column field="updateDate" title="更新时间" align="right">
         <template #default="{ updateDate }">
           <span v-tooltip="time(updateDate)">{{ updateDate | date }}</span>
         </template>
       </veui-table-column>
-      <template slot="foot">An awesome table foot!</template>
+      <template #foot>An awesome table foot!</template>
     </veui-table>
   </section>
   <section class="container">
     <section>
-      <veui-input
-        v-model="idTitle"
-        placeholder="列标题"
-      />
+      <veui-input v-model="idTitle" placeholder="列标题"/>
     </section>
-    <veui-table
-      :data="data"
-      key-field="id"
-      :loading="loading"
-    >
-      <veui-table-column
-        field="id"
-        title="数据 ID"
-      >
-        <template slot="head">{{ idTitle }}</template>
+    <veui-table :data="data" key-field="id" :loading="loading">
+      <veui-table-column field="id" title="数据 ID">
+        <template #head>{{ idTitle }}</template>
       </veui-table-column>
-      <veui-table-column
-        field="desc"
-        title="数据描述"
-      />
-      <veui-table-column
-        field="price"
-        title="价格"
-        width="160"
-        align="right"
-      >
-        <template slot-scope="props">{{
-          props.item.price | currency
-        }}</template>
-      </veui-table-column>
-      <veui-table-column
-        field="updateDate"
-        title="更新时间"
-        align="right"
-      >
+      <veui-table-column field="desc" title="数据描述"/>
+      <veui-table-column field="price" title="价格" width="160" align="right">
         <template slot-scope="props">
-          {{ props.item.updateDate | date }}
+          {{ props.item.price | currency }}
         </template>
       </veui-table-column>
-      <template slot="foot">An awesome table foot!</template>
+      <veui-table-column field="updateDate" title="更新时间" align="right">
+        <template slot-scope="props">{{
+          props.item.updateDate | date
+        }}</template>
+      </veui-table-column>
+      <template #foot>An awesome table foot!</template>
     </veui-table>
   </section>
   <section class="container">
-    <veui-table
-      key-field="id"
-      :data="data"
-      :loading="loading"
-    >
+    <veui-table key-field="id" :data="data" :loading="loading">
       <veui-table-column
         v-for="field in fields"
         :key="field.name"
@@ -400,42 +318,19 @@
     </veui-table>
   </section>
   <section class="container">
-    <veui-table
-      :data="items"
-      :scroll="{ x: 1200 }"
-      :loading="loading"
-    >
-      <veui-table-column
-        fixed="right"
-        title="meta"
-      >
-        <veui-table-column
-          field="id"
-          :title="idTitle"
-          width="120"
-        />
-        <veui-table-column
-          field="type"
-          title="type"
-          width="120"
-        />
+    <veui-table :data="items" :scroll="{ x: 1200 }" :loading="loading">
+      <veui-table-column fixed="right" title="meta">
+        <veui-table-column field="id" :title="idTitle" width="120"/>
+        <veui-table-column field="type" title="type" width="120"/>
       </veui-table-column>
-      <veui-table-column
-        fixed
-        field="name"
-        title="name"
-        width="120"
-      />
+      <veui-table-column fixed field="name" title="name" width="120"/>
       <veui-table-column
         fixed="left"
         field="origin"
         title="origin"
         width="120"
       />
-      <veui-table-column
-        field="level"
-        title="level"
-      />
+      <veui-table-column field="level" title="level"/>
     </veui-table>
   </section>
   <section class="container">
@@ -453,11 +348,7 @@
         }
       "
     >
-      <veui-table-column
-        field="id"
-        title="id"
-        sortable
-      />
+      <veui-table-column field="id" title="id" sortable/>
     </veui-table>
     <h3>Orders: {{ allowedOrders2 }} , Current: {{ order2 }}</h3>
     <veui-button @click="switchDisabled">切换disabled</veui-button>
@@ -471,66 +362,31 @@
       :allowed-orders="allowedOrders2"
       @sort="(_, order) => (order2 = order)"
     >
-      <veui-table-column
-        field="id"
-        title="id"
-        sortable
-      />
+      <veui-table-column field="id" title="id" sortable/>
     </veui-table>
 
-    <veui-table
-      key-field="id"
-      :data="items"
-    >
-      <veui-table-column
-        field="id"
-        title="id"
-        sortable
-      />
-      <veui-table-column
-        v-if="!toggled"
-        field="type"
-        title="type"
-      />
-      <veui-table-column
-        v-if="false"
-        field="name"
-        title="name"
-      />
+    <veui-table key-field="id" :data="items">
+      <veui-table-column field="id" title="id" sortable/>
+      <veui-table-column v-if="!toggled" field="type" title="type"/>
+      <veui-table-column v-if="false" field="name" title="name"/>
       <veui-table-column
         v-if="toggled"
         key="origin"
         field="origin"
         title="origin"
       />
-      <veui-table-column
-        field="level"
-        title="level"
-      />
+      <veui-table-column field="level" title="level"/>
     </veui-table>
     <veui-button
       @click="toggled = !toggled"
     >toggle type and origin</veui-button>
-    <veui-table
-      key-field="id"
-      :data="items"
-    >
+    <veui-table key-field="id" :data="items">
       <template v-if="!toggled">
-        <veui-table-column
-          field="id"
-          title="id1"
-          sortable
-        />
-        <veui-table-column
-          field="type"
-          title="type2"
-        />
+        <veui-table-column field="id" title="id1" sortable/>
+        <veui-table-column field="type" title="type2"/>
       </template>
       <origin-and-level v-if="toggled"/>
-      <veui-table-column
-        field="name"
-        title="name"
-      />
+      <veui-table-column field="name" title="name"/>
     </veui-table>
   </section>
 </article>

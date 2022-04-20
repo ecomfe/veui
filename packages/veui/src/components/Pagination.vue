@@ -5,34 +5,25 @@
   :aria-label="t('infoLabel', { page, pageCount })"
   :ui="realUi"
 >
-  <div
-    v-if="showTotal || showPageSize"
-    :class="$c('pagination-info')"
-  >
-    <div
-      v-if="showTotal"
-      :class="$c('pagination-total')"
-    >
+  <div v-if="showTotal || showPageSize" :class="$c('pagination-info')">
+    <div v-if="showTotal" :class="$c('pagination-total')">
       {{ t('total', { total: realTotal }) }}
     </div>
-    <div
-      v-if="showPageSize"
-      :class="$c('pagination-size')"
-    >
+    <div v-if="showPageSize" :class="$c('pagination-size')">
       <veui-select
         v-model="realPageSize"
         :ui="uiParts.pageSize"
         :options="realPageSizes"
         :overlay-class="$c('pagination-select-overlay')"
         :aria-label="t('pageSizeLabel')"
-        @change="size => $emit('pagesizechange', size)"
+        @change="(size) => $emit('pagesizechange', size)"
       >
-        <template #option-label="{ label }">{{
-          t('pageSize', { size: label })
-        }}</template>
-        <template #selected="{ label }">{{
-          t('pageSize', { size: label })
-        }}</template>
+        <template #option-label="{ label }">
+          {{ t('pageSize', { size: label }) }}
+        </template>
+        <template #selected="{ label }">
+          {{ t('pageSize', { size: label }) }}
+        </template>
       </veui-select>
     </div>
   </div>
@@ -116,18 +107,12 @@
       <veui-icon :name="icons.next"/>
     </veui-link>
   </div>
-  <div
-    v-if="goto || showGoto"
-    :class="$c('pagination-goto')"
-  >
+  <div v-if="goto || showGoto" :class="$c('pagination-goto')">
     <span
       v-if="gotoPageLabel[0]"
       :class="$c('pagination-goto-label-before')"
     >{{ gotoPageLabel[0] }}</span>
-    <veui-input
-      v-model="targetPage"
-      @keydown.enter="gotoPage"
-    />
+    <veui-input v-model="targetPage" @keydown.enter="gotoPage"/>
     <span
       v-if="gotoPageLabel[1]"
       :class="$c('pagination-goto-label-after')"
@@ -276,7 +261,7 @@ export default {
         this.pageSizes == null
           ? this.config['pagination.pageSizes']
           : this.pageSizes
-      return pageSizes.map(size => ({
+      return pageSizes.map((size) => ({
         label: size,
         value: size
       }))

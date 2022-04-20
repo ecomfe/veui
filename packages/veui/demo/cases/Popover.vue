@@ -1,19 +1,17 @@
 <template>
 <article>
-  <h1><code>&lt;veui-popover&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-popover&gt;</code>
+  </h1>
   <section>
     <veui-checkbox
       v-model="aimCenter"
       style="margin-left: 20px"
-    >
-      对准中心
-    </veui-checkbox>
+    >对准中心</veui-checkbox>
   </section>
   <section>
     <div class="demo-wrap">
-      <div style="margin-bottom:10px;">
-        hover事件
-      </div>
+      <div style="margin-bottom: 10px">hover事件</div>
       <div class="box">
         <div class="top">
           <veui-button
@@ -25,9 +23,7 @@
                 target: $refs['topLeftHover']
               })
             "
-          >
-            上左
-          </veui-button>
+          >上左</veui-button>
           <veui-button
             ref="topCenterHover"
             ui="aux"
@@ -37,9 +33,7 @@
                 target: 'topCenterHover'
               })
             "
-          >
-            上边
-          </veui-button>
+          >上边</veui-button>
           <veui-button
             ref="topRightHover"
             ui="aux"
@@ -49,9 +43,7 @@
                 target: 'topRightHover'
               })
             "
-          >
-            上右
-          </veui-button>
+          >上右</veui-button>
         </div>
         <div class="left">
           <veui-button
@@ -63,9 +55,7 @@
                 target: 'leftTopHover'
               })
             "
-          >
-            左上
-          </veui-button>
+          >左上</veui-button>
           <veui-button
             ref="leftCenterHover"
             ui="aux"
@@ -75,9 +65,7 @@
                 target: 'leftCenterHover'
               })
             "
-          >
-            左边
-          </veui-button>
+          >左边</veui-button>
           <veui-button
             ref="leftBottomHover"
             ui="aux"
@@ -87,9 +75,7 @@
                 target: 'leftBottomHover'
               })
             "
-          >
-            左下
-          </veui-button>
+          >左下</veui-button>
         </div>
         <div class="right">
           <veui-button
@@ -101,9 +87,7 @@
                 target: 'rightTopHover'
               })
             "
-          >
-            右上
-          </veui-button>
+          >右上</veui-button>
           <veui-button
             ref="rightCenterHover"
             ui="aux"
@@ -113,9 +97,7 @@
                 target: 'rightCenterHover'
               })
             "
-          >
-            右边
-          </veui-button>
+          >右边</veui-button>
           <veui-button
             ref="rightBottomHover"
             ui="aux"
@@ -125,9 +107,7 @@
                 target: 'rightBottomHover'
               })
             "
-          >
-            右下
-          </veui-button>
+          >右下</veui-button>
         </div>
         <div class="bottom">
           <veui-button
@@ -139,9 +119,7 @@
                 target: 'BottomLeftHover'
               })
             "
-          >
-            下左
-          </veui-button>
+          >下左</veui-button>
           <veui-button
             ref="BottomCenterHover"
             ui="aux"
@@ -151,9 +129,7 @@
                 target: 'BottomCenterHover'
               })
             "
-          >
-            下边
-          </veui-button>
+          >下边</veui-button>
           <veui-button
             ref="BottomRightHover"
             ui="aux"
@@ -163,9 +139,7 @@
                 target: 'BottomRightHover'
               })
             "
-          >
-            下右
-          </veui-button>
+          >下右</veui-button>
         </div>
       </div>
     </div>
@@ -180,15 +154,11 @@
       }"
       :aim-center="aimCenter"
       trigger="hover"
-    >
-      当前是hover事件
-    </veui-popover>
+    >当前是hover事件</veui-popover>
   </section>
   <section>
     <div class="demo-wrap">
-      <div style="margin-bottom:10px;">
-        click事件
-      </div>
+      <div style="margin-bottom: 10px">click事件</div>
       <div class="box">
         <div class="top">
           <veui-button
@@ -200,9 +170,7 @@
                 clickTarget: 'topLeftClick'
               })
             "
-          >
-            上左
-          </veui-button>
+          >上左</veui-button>
           <veui-button
             ref="topCenterClick"
             ui="aux"
@@ -212,9 +180,7 @@
                 clickTarget: 'topCenterClick'
               })
             "
-          >
-            上边
-          </veui-button>
+          >上边</veui-button>
           <veui-button
             ref="topRightClick"
             ui="aux"
@@ -224,9 +190,7 @@
                 clickTarget: 'topRightClick'
               })
             "
-          >
-            上右
-          </veui-button>
+          >上右</veui-button>
         </div>
         <div class="left">
           <veui-button
@@ -238,9 +202,7 @@
                 clickTarget: 'leftTopClick'
               })
             "
-          >
-            左上
-          </veui-button>
+          >左上</veui-button>
           <veui-button
             ref="leftCenterClick"
             ui="aux"
@@ -250,9 +212,7 @@
                 clickTarget: 'leftCenterClick'
               })
             "
-          >
-            左边
-          </veui-button>
+          >左边</veui-button>
           <veui-button
             ref="leftBottomClick"
             ui="aux"
@@ -262,9 +222,7 @@
                 clickTarget: 'leftBottomClick'
               })
             "
-          >
-            左下
-          </veui-button>
+          >左下</veui-button>
         </div>
         <div class="right">
           <veui-button
@@ -276,9 +234,7 @@
                 clickTarget: 'rightTopClick'
               })
             "
-          >
-            右上
-          </veui-button>
+          >右上</veui-button>
           <veui-button
             ref="rightCenterClick"
             ui="aux"
@@ -288,9 +244,7 @@
                 clickTarget: 'rightCenterClick'
               })
             "
-          >
-            右边
-          </veui-button>
+          >右边</veui-button>
           <veui-button
             ref="rightBottomClick"
             ui="aux"
@@ -300,9 +254,7 @@
                 clickTarget: 'rightBottomClick'
               })
             "
-          >
-            右下
-          </veui-button>
+          >右下</veui-button>
         </div>
         <div class="bottom">
           <veui-button
@@ -314,9 +266,7 @@
                 clickTarget: 'BottomLeftClick'
               })
             "
-          >
-            下左
-          </veui-button>
+          >下左</veui-button>
           <veui-button
             ref="BottomCenterClick"
             ui="aux"
@@ -326,9 +276,7 @@
                 clickTarget: 'BottomCenterClick'
               })
             "
-          >
-            下边
-          </veui-button>
+          >下边</veui-button>
           <veui-button
             ref="BottomRightClick"
             ui="aux"
@@ -338,9 +286,7 @@
                 clickTarget: 'BottomRightClick'
               })
             "
-          >
-            下右
-          </veui-button>
+          >下右</veui-button>
         </div>
       </div>
     </div>
@@ -353,9 +299,7 @@
       :aim-center="aimCenter"
       :footless="false"
       trigger="click"
-    >
-      当前是click事件
-    </veui-popover>
+    >当前是click事件</veui-popover>
   </section>
 </article>
 </template>
@@ -384,7 +328,7 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach(child => {
+    this.$children.forEach((child) => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })

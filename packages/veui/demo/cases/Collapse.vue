@@ -9,9 +9,7 @@
 
   <section>
     <h3>本地状态</h3>
-    <veui-collapse label="点击切换">
-      Content
-    </veui-collapse>
+    <veui-collapse label="点击切换">Content</veui-collapse>
   </section>
 
   <section>
@@ -54,7 +52,7 @@
       label="点击切换"
     >
       故事烂俗却没讲完...
-      <template slot="title-after">title-after</template>
+      <template #title-after>title-after</template>
     </veui-collapse>
   </section>
 
@@ -66,19 +64,12 @@
       :expanded="expanded2"
       label="点击切换"
       @toggle="toggle2"
-    >
-      Content
-    </veui-collapse>
+    >Content</veui-collapse>
   </section>
 
   <section>
     <h3>禁用</h3>
-    <veui-collapse
-      disabled
-      label="点击切换"
-    >
-      Content
-    </veui-collapse>
+    <veui-collapse disabled label="点击切换">Content</veui-collapse>
   </section>
 
   <h2>Accordion</h2>
@@ -86,10 +77,7 @@
   <section>
     <h3>本地状态</h3>
     <p class="control-wrap">
-      <veui-checkbox
-        v-model="Separate"
-        ui="s"
-      >Separate</veui-checkbox>
+      <veui-checkbox v-model="Separate" ui="s">Separate</veui-checkbox>
       <veui-number-input
         v-if="Separate"
         v-model="gutter"
@@ -106,77 +94,29 @@
       :ui="`${realVariants} ${Separate ? 'separate' : ''}`.trim()"
       :toggle-position="position"
     >
-      <veui-collapse label="标题一">
-        Content
-      </veui-collapse>
-      <veui-collapse label="标题二">
-        Content
-      </veui-collapse>
-      <veui-collapse
-        label="标题三"
-        disabled
-      >
-        Content
-      </veui-collapse>
+      <veui-collapse label="标题一">Content</veui-collapse>
+      <veui-collapse label="标题二">Content</veui-collapse>
+      <veui-collapse label="标题三" disabled>Content</veui-collapse>
     </veui-accordion>
   </section>
 
   <section>
     <h3>.sync & multiple</h3>
-    <veui-checkbox-group
-      v-model="expanded3"
-      :items="items"
-    />
-    <veui-accordion
-      multiple
-      :expanded.sync="expanded3"
-    >
-      <veui-collapse
-        label="标题一"
-        name="1"
-      >
-        Content
-      </veui-collapse>
-      <veui-collapse
-        label="标题二"
-        name="2"
-      >
-        Content
-      </veui-collapse>
-      <veui-collapse
-        label="标题三"
-        name="3"
-      >
-        Content
-      </veui-collapse>
+    <veui-checkbox-group v-model="expanded3" :items="items"/>
+    <veui-accordion multiple :expanded.sync="expanded3">
+      <veui-collapse label="标题一" name="1">Content</veui-collapse>
+      <veui-collapse label="标题二" name="2">Content</veui-collapse>
+      <veui-collapse label="标题三" name="3">Content</veui-collapse>
     </veui-accordion>
     <p>{{ expanded3 }}</p>
   </section>
 
   <section>
     <h3>受控</h3>
-    <veui-accordion
-      :expanded="expanded4"
-      @toggle="toggle4"
-    >
-      <veui-collapse
-        label="标题一"
-        name="1"
-      >
-        Content
-      </veui-collapse>
-      <veui-collapse
-        label="标题二"
-        name="2"
-      >
-        Content
-      </veui-collapse>
-      <veui-collapse
-        label="标题三"
-        name="3"
-      >
-        Content
-      </veui-collapse>
+    <veui-accordion :expanded="expanded4" @toggle="toggle4">
+      <veui-collapse label="标题一" name="1">Content</veui-collapse>
+      <veui-collapse label="标题二" name="2">Content</veui-collapse>
+      <veui-collapse label="标题三" name="3">Content</veui-collapse>
     </veui-accordion>
     <p>{{ expanded4 }}</p>
   </section>
@@ -188,34 +128,17 @@
         <veui-accordion>
           <veui-collapse label="标题一">
             <veui-accordion>
-              <veui-collapse label="标题一">
-                Content
-              </veui-collapse>
-              <veui-collapse label="标题二">
-                Content
-              </veui-collapse>
-              <veui-collapse label="标题三">
-                Content
-              </veui-collapse>
+              <veui-collapse label="标题一">Content</veui-collapse>
+              <veui-collapse label="标题二">Content</veui-collapse>
+              <veui-collapse label="标题三">Content</veui-collapse>
             </veui-accordion>
           </veui-collapse>
-          <veui-collapse label="标题二">
-            Content
-          </veui-collapse>
-          <veui-collapse label="标题三">
-            Content
-          </veui-collapse>
+          <veui-collapse label="标题二">Content</veui-collapse>
+          <veui-collapse label="标题三">Content</veui-collapse>
         </veui-accordion>
       </veui-collapse>
-      <veui-collapse
-        label="标题二"
-        disabled
-      >
-        Content
-      </veui-collapse>
-      <veui-collapse label="标题三">
-        Content
-      </veui-collapse>
+      <veui-collapse label="标题二" disabled>Content</veui-collapse>
+      <veui-collapse label="标题三">Content</veui-collapse>
     </veui-accordion>
   </section>
 </article>
@@ -294,7 +217,7 @@ export default {
         this.expanded2 = val
         return
       }
-      this.$confirm('要展开吗？').then(confirmed => {
+      this.$confirm('要展开吗？').then((confirmed) => {
         if (confirmed) {
           this.expanded2 = val
         }
@@ -305,7 +228,7 @@ export default {
         this.expanded4 = expanded
         return
       }
-      this.$confirm('要展开吗？').then(confirmed => {
+      this.$confirm('要展开吗？').then((confirmed) => {
         if (confirmed) {
           this.expanded4 = expanded
         }

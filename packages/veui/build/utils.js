@@ -19,7 +19,7 @@ function getComponentDeps () {
   }).then(() => {
     // deps array
     // 用 index 文件中的引入顺序来保证相对顺序的稳定，避免两次运行而顺序不一致导致的 diff。
-    return depMap[indexPath].map(key => ({
+    return depMap[indexPath].map((key) => ({
       name: getComponentName(key),
       deps: depMap[key] ? resolveDirectDeps(depMap[key], depMap) : []
     }))
@@ -111,7 +111,7 @@ function getSortedComponents (componentDeps) {
   let result = []
   componentDeps.forEach(({ name, deps }) => {
     deps.push(name)
-    deps.forEach(name => {
+    deps.forEach((name) => {
       if (!result.includes(name)) {
         result.push(name)
       }
@@ -122,6 +122,6 @@ function getSortedComponents (componentDeps) {
 
 module.exports = {
   getSortedComponents () {
-    return getComponentDeps().then(deps => getSortedComponents(deps))
+    return getComponentDeps().then((deps) => getSortedComponents(deps))
   }
 }

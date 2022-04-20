@@ -37,7 +37,7 @@ export class AlertManager extends SimpleDialogManager {
 
   _show (options) {
     let ok = isFunction(options.ok) ? options.ok : noop
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       let component = this.create({
         ...options,
         ok: () => {

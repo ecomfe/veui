@@ -80,8 +80,8 @@ describe('components/Uploader', function () {
 
     let changes = wrapper
       .emittedByOrder()
-      .filter(e => e.name === 'change')
-      .map(e => e.args[0])
+      .filter((e) => e.name === 'change')
+      .map((e) => e.args[0])
     expect(changes[0]).to.be.a('array')
     expect(changes[1]).to.eql([])
     expect(changes[2]).to.be.a('object')
@@ -157,7 +157,7 @@ describe('components/Uploader', function () {
       ]
     })
     await wait(0)
-    let files = wrapper.vm.fileList.map(file => file.value)
+    let files = wrapper.vm.fileList.map((file) => file.value)
     expect(files.length, '填充后文件个数').to.equal(4)
 
     expect(files[0].key, '第一个文件 key').to.be.a('string')
@@ -218,7 +218,7 @@ describe('components/Uploader', function () {
           })
         },
         afterPick (files) {
-          files = files.map(file => {
+          files = files.map((file) => {
             file.jiale = '强力被夹.jpg'
             return file
           })
@@ -286,8 +286,8 @@ describe('components/Uploader', function () {
 
     let invalidEvents = wrapper
       .emittedByOrder()
-      .filter(e => e.name === 'invalid')
-      .map(e => e.args[0])
+      .filter((e) => e.name === 'invalid')
+      .map((e) => e.args[0])
     expect(invalidEvents.length).to.equal(3)
 
     expect(invalidEvents[0].file).to.be.an('undefined')
@@ -311,7 +311,7 @@ describe('components/Uploader', function () {
       propsData: {
         action: '/upload/xhr?latency=0',
         validator (file) {
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               resolve({
                 valid: file.name.length > 10,
@@ -372,7 +372,7 @@ describe('components/Uploader', function () {
 
     const eventNames = wrapper
       .emittedByOrder()
-      .filter(e => e.name !== 'progress')
+      .filter((e) => e.name !== 'progress')
       .map(({ name, args }) => {
         switch (name) {
           case 'statuschange':
@@ -463,7 +463,9 @@ describe('components/Uploader', function () {
     let mockFile = createFile('xxx.png', 'image/png', 128 * 1024)
     let promise = Promise.all([
       waitForEvent(wrapper.vm, 'success'),
-      new Promise(resolve => addOnceEventListener(window, 'message', resolve))
+      new Promise((resolve) =>
+        addOnceEventListener(window, 'message', resolve)
+      )
     ])
     wrapper.vm.addFiles([mockFile])
     await promise
@@ -527,7 +529,7 @@ describe('components/Uploader', function () {
         requestMode: 'custom',
         order: 'append',
         upload: successUpload,
-        convertResponse: data => {
+        convertResponse: (data) => {
           called = true
           return data
         }
@@ -573,7 +575,7 @@ describe('components/Uploader', function () {
   it('should handle cancel correctly.', async function () {
     let called = 0
     let cancel
-    let cancelled = new Promise(resolve => {
+    let cancelled = new Promise((resolve) => {
       cancel = resolve
     })
     let wrapper = mount(Uploader, {
@@ -755,10 +757,7 @@ describe('components/Uploader', function () {
         children: []
       }
     ])
-    items
-      .at(1)
-      .find('.veui-button')
-      .trigger('mouseenter')
+    items.at(1).find('.veui-button').trigger('mouseenter')
     expect(dropdown.localExpanded).to.equal(true)
     dropdown.handleSelect('test11')
     expect(wrapper.emitted('test11')[0][0].name).to.equal('test1.jpg')
@@ -827,7 +826,7 @@ describe('components/Uploader', function () {
 
     let input = wrapper.find('input[type="file"]').element
     let clickTriggeredPromise = Promise.race([
-      new Promise(resolve => {
+      new Promise((resolve) => {
         input.addEventListener(
           'click',
           function () {
@@ -836,7 +835,7 @@ describe('components/Uploader', function () {
           { once: true }
         )
       }),
-      new Promise(resolve => {
+      new Promise((resolve) => {
         setTimeout(function () {
           resolve(false)
         }, 2000)

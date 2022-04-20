@@ -1,8 +1,7 @@
 <template>
-<div
-  :class="$c('input-group')"
-  :ui="realUi"
-><slot/></div>
+<div :class="$c('input-group')" :ui="realUi">
+  <slot/>
+</div>
 </template>
 
 <script>

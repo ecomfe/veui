@@ -21,11 +21,7 @@
   <div v-show="false">
     <slot/>
   </div>
-  <div
-    v-if="scrollableY"
-    ref="fixedHeader"
-    :class="$c('table-fixed-header')"
-  >
+  <div v-if="scrollableY" ref="fixedHeader" :class="$c('table-fixed-header')">
     <table
       :style="{
         minWidth: scrollableX
@@ -34,10 +30,7 @@
       }"
     >
       <col-group gutter/>
-      <table-head
-        ref="head"
-        @sort="sort"
-      />
+      <table-head ref="head" @sort="sort"/>
     </table>
   </div>
   <div
@@ -55,20 +48,13 @@
       }"
     >
       <col-group/>
-      <table-head
-        v-if="!scrollableY"
-        ref="head"
-        @sort="sort"
-      />
+      <table-head v-if="!scrollableY" ref="head" @sort="sort"/>
       <table-body>
         <template slot="no-data">
           <slot name="no-data">{{ t('noData') }}</slot>
         </template>
       </table-body>
-      <table-foot
-        v-if="!scrollableY && hasFoot"
-        ref="foot"
-      >
+      <table-foot v-if="!scrollableY && hasFoot" ref="foot">
         <slot name="foot"/>
       </table-foot>
     </table>
@@ -96,9 +82,7 @@
       :class="$c('table-loading')"
       :loading="loading"
       :ui="uiParts.loading"
-    >
-      {{ t('loading') }}
-    </veui-loading>
+    >{{ t('loading') }}</veui-loading>
   </transition>
 </div>
 </template>

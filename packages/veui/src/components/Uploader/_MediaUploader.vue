@@ -22,21 +22,15 @@
       }"
     >
       <template v-if="file.isUploading">
-        <slot
-          name="uploading"
-          v-bind="getScopeValue(index)"
-        >
-          <slot
-            name="file-before"
-            v-bind="getScopeValue(index)"
-          />
+        <slot name="uploading" v-bind="getScopeValue(index)">
+          <slot name="file-before" v-bind="getScopeValue(index)"/>
           <div
             :class="`${listClass}-container ${listClass}-container-uploading`"
           >
             <div :class="`${listClass}-container-uploading-text`">
-              <slot name="uploading-label">{{
-                t('@uploader.uploading')
-              }}</slot>
+              <slot name="uploading-label">
+                {{ t('@uploader.uploading') }}
+              </slot>
             </div>
             <veui-progress
               :ui="uiParts.progress"
@@ -44,21 +38,12 @@
               :value="isIndeterminate(file) ? 0 : file.loaded / file.total"
             />
           </div>
-          <slot
-            name="file-after"
-            v-bind="getScopeValue(index)"
-          />
+          <slot name="file-after" v-bind="getScopeValue(index)"/>
         </slot>
       </template>
       <template v-else-if="file.isFailure">
-        <slot
-          name="failure"
-          v-bind="getScopeValue(index)"
-        >
-          <slot
-            name="file-before"
-            v-bind="getScopeValue(index)"
-          />
+        <slot name="failure" v-bind="getScopeValue(index)">
+          <slot name="file-before" v-bind="getScopeValue(index)"/>
           <div
             :ref="`fileItem${index}`"
             :class="`${listClass}-container ${listClass}-container-failure`"
@@ -70,16 +55,10 @@
               :ui="uiParts.media"
               tabindex="0"
             >
-              <slot
-                name="button-label"
-                v-bind="getScopeValue(index)"
-              >
+              <slot name="button-label" v-bind="getScopeValue(index)">
                 <veui-icon :name="getIconName(type)"/>
               </slot>
-              <span
-                :class="`${listClass}-file-name`"
-                :title="file.name"
-              >
+              <span :class="`${listClass}-file-name`" :title="file.name">
                 {{ file.name }}
               </span>
             </div>
@@ -91,27 +70,15 @@
               @click="handleMediaAction(index, $event)"
             />
           </div>
-          <veui-popover
-            :target="`fileItem${index}`"
-            position="top"
-          >
+          <veui-popover :target="`fileItem${index}`" position="top">
             {{ file.message || t('@uploader.uploadFailure') }}
           </veui-popover>
-          <slot
-            name="file-after"
-            v-bind="getScopeValue(index)"
-          />
+          <slot name="file-after" v-bind="getScopeValue(index)"/>
         </slot>
       </template>
       <template v-else>
-        <slot
-          name="file"
-          v-bind="getScopeValue(index)"
-        >
-          <slot
-            name="file-before"
-            v-bind="getScopeValue(index)"
-          />
+        <slot name="file" v-bind="getScopeValue(index)">
+          <slot name="file-before" v-bind="getScopeValue(index)"/>
           <div :class="$c('uploader-list-media-container')">
             <template v-if="file.type === 'image'">
               <veui-uploader-file-viewer
@@ -147,10 +114,7 @@
               @click="handleMediaAction(index, $event)"
             />
           </div>
-          <slot
-            name="file-after"
-            v-bind="getScopeValue(index)"
-          />
+          <slot name="file-after" v-bind="getScopeValue(index)"/>
         </slot>
       </template>
     </li>
@@ -205,10 +169,7 @@
     </li>
   </transition-group>
 
-  <span
-    v-if="$scopedSlots.desc"
-    :class="$c('uploader-desc')"
-  >
+  <span v-if="$scopedSlots.desc" :class="$c('uploader-desc')">
     <slot name="desc"/>
   </span>
 </div>

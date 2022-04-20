@@ -20,20 +20,11 @@
     @click.stop
   >
   <div :class="$c('switch-switcher')">
-    <div
-      v-if="hasContent && !loading"
-      :class="$c('switch-text')"
-    >
-      <slot
-        name="content"
-        :on="realChecked"
-      >{{ contentLabel }}</slot>
+    <div v-if="hasContent && !loading" :class="$c('switch-text')">
+      <slot name="content" :on="realChecked">{{ contentLabel }}</slot>
     </div>
     <div :class="$c('switch-button')">
-      <veui-loading
-        v-if="loading"
-        loading
-      />
+      <veui-loading v-if="loading" loading/>
     </div>
   </div>
   <template v-if="$slots.default">

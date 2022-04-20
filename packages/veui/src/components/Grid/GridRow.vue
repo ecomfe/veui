@@ -1,8 +1,5 @@
 <template>
-<div
-  :class="$c('grid-row')"
-  :style="style"
->
+<div :class="$c('grid-row')" :style="style">
   <slot/>
 </div>
 </template>

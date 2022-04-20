@@ -145,10 +145,7 @@ describe('components/Nav', () => {
     vm.active = null
     await vm.$nextTick()
     expect(item.classes('veui-nav-item-active')).to.equal(false)
-    wrapper
-      .findAll('.veui-nav-body .veui-nav-item')
-      .at(1)
-      .trigger('click')
+    wrapper.findAll('.veui-nav-body .veui-nav-item').at(1).trigger('click')
     await vm.$nextTick()
     expect(vm.active).to.equal('Button')
     wrapper.destroy()
@@ -168,10 +165,7 @@ describe('components/Nav', () => {
     )
 
     let { vm } = wrapper
-    wrapper
-      .findAll('.veui-nav-body .veui-nav-item')
-      .at(1)
-      .trigger('click')
+    wrapper.findAll('.veui-nav-body .veui-nav-item').at(1).trigger('click')
     await vm.$nextTick()
     expect(vm.$refs.nav.realActive).to.equal('Button')
     wrapper.destroy()

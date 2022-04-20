@@ -1,6 +1,6 @@
 module.exports = {
   install (less, pluginManager, functions) {
-    functions.add('args', node => {
+    functions.add('args', (node) => {
       if (typeof node.value === 'string') {
         return node.value
       }

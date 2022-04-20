@@ -21,10 +21,7 @@
     @focus="openDropdown"
     @click="openDropdown"
   >
-    <div
-      slot="after"
-      :class="$c('time-picker-icon')"
-    >
+    <div slot="after" :class="$c('time-picker-icon')">
       <veui-button
         v-if="clearable && localValue"
         :class="$c('time-picker-clear')"
@@ -36,10 +33,7 @@
       >
         <veui-icon :name="icons.clear"/>
       </veui-button>
-      <veui-icon
-        :class="$c('time-picker-clock')"
-        :name="icons.clock"
-      />
+      <veui-icon :class="$c('time-picker-clock')" :name="icons.clock"/>
     </div>
   </veui-input>
   <veui-overlay
@@ -80,14 +74,8 @@
           :value="realValue[0]"
           @change="handleDropdownChange(0, $event)"
         >
-          <template
-            slot="option"
-            slot-scope="option"
-          >
-            <slot
-              name="option"
-              v-bind="{ ...option, part: 'hour' }"
-            />
+          <template slot="option" slot-scope="option">
+            <slot name="option" v-bind="{ ...option, part: 'hour' }"/>
           </template>
         </veui-time-picker-option-group>
       </div>
@@ -105,14 +93,8 @@
           :value="realValue[1]"
           @change="handleDropdownChange(1, $event)"
         >
-          <template
-            slot="option"
-            slot-scope="option"
-          >
-            <slot
-              name="option"
-              v-bind="{ ...option, part: 'minute' }"
-            />
+          <template slot="option" slot-scope="option">
+            <slot name="option" v-bind="{ ...option, part: 'minute' }"/>
           </template>
         </veui-time-picker-option-group>
       </div>
@@ -130,14 +112,8 @@
           :value="realValue[2]"
           @change="handleDropdownChange(2, $event)"
         >
-          <template
-            slot="option"
-            slot-scope="option"
-          >
-            <slot
-              name="option"
-              v-bind="{ ...option, part: 'second' }"
-            />
+          <template slot="option" slot-scope="option">
+            <slot name="option" v-bind="{ ...option, part: 'second' }"/>
           </template>
         </veui-time-picker-option-group>
       </div>
@@ -304,19 +280,19 @@ export default {
       }
     },
     realHours () {
-      return this.sortedHours.map(i => ({
+      return this.sortedHours.map((i) => ({
         ...genOption(i, this.minuteSuffix),
         disabled: !includes(this.availableData[0], i)
       }))
     },
     realMinutes () {
-      return this.sortedMinutes.map(i => ({
+      return this.sortedMinutes.map((i) => ({
         ...genOption(i),
         disabled: !includes(this.availableData[1], i)
       }))
     },
     realSeconds () {
-      return this.sortedSeconds.map(i => ({
+      return this.sortedSeconds.map((i) => ({
         ...genOption(i),
         disabled: !includes(this.availableData[2], i)
       }))
@@ -407,7 +383,7 @@ export default {
       let value = [...this.realValue]
       value[index] = val
       let hasEmpty =
-        value.filter(i => i != null).length !== this.availableData.length
+        value.filter((i) => i != null).length !== this.availableData.length
       if (hasEmpty || !this.util.isAvailable(value)) {
         value = this.util.getMinimumTimeOfIndex(index, val)
       }
@@ -430,7 +406,7 @@ function toString (value, suffix, sep = ':') {
   if (!get(value, 'length')) {
     return ''
   }
-  return value.map(i => padStart(i, 2, '0')).join(sep) + suffix
+  return value.map((i) => padStart(i, 2, '0')).join(sep) + suffix
 }
 
 function toArray (value, sep = ':') {
@@ -441,7 +417,7 @@ function toArray (value, sep = ':') {
     ? value
       .trim()
       .split(sep)
-      .map(i => parseInt(i, 10))
+      .map((i) => parseInt(i, 10))
     : []
 }
 

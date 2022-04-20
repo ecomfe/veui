@@ -48,7 +48,8 @@ describe('components/CheckButtonGroup', () => {
             selected: null
           }
         },
-        template: '<veui-check-button-group v-model="selected" :items="items"/>'
+        template:
+          '<veui-check-button-group v-model="selected" :items="items"/>'
       },
       {
         sync: false
@@ -125,7 +126,8 @@ describe('components/CheckButtonGroup', () => {
             selected: ['a']
           }
         },
-        template: '<veui-check-button-group v-model="selected" :items="items"/>'
+        template:
+          '<veui-check-button-group v-model="selected" :items="items"/>'
       },
       {
         sync: false

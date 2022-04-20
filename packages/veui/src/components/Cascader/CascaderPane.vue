@@ -15,10 +15,7 @@
     :class="$c('cascader-pane-column-wrap')"
     :style="realColumnWidth ? { width: realColumnWidth } : null"
   >
-    <div
-      :class="$c('cascader-pane-column')"
-      :ui="realUi"
-    >
+    <div :class="$c('cascader-pane-column')" :ui="realUi">
       <div
         v-if="$scopedSlots['column-before']"
         :class="$c('cascader-pane-column-before')"
@@ -37,10 +34,7 @@
         :class="$c('cascader-pane-tree')"
         :group-class="$c('cascader-pane-tree')"
       >
-        <template
-          slot="item"
-          slot-scope="{ item: option, parents }"
-        >
+        <template slot="item" slot-scope="{ item: option, parents }">
           <div
             :class="{
               [$c('cascader-pane-option-wrap')]: true,

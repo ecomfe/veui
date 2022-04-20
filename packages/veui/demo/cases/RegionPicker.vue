@@ -1,12 +1,11 @@
 <template>
 <article>
-  <h1><code>&lt;veui-region-picker&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-region-picker&gt;</code>
+  </h1>
   <h3>品牌数据源</h3>
   <section>
-    <input
-      v-model="selected"
-      type="text"
-    >
+    <input v-model="selected" type="text">
   </section>
   <section>已选地区：{{ selected1.join(', ') || '无' }}</section>
   <section>
@@ -19,10 +18,7 @@
   <h3>网盟数据源</h3>
   <section>已选地区：{{ selected2.join(', ') || '无' }}</section>
   <section>
-    <veui-region-picker
-      v-model="selected2"
-      :datasource="regions2"
-    />
+    <veui-region-picker v-model="selected2" :datasource="regions2"/>
   </section>
 </article>
 </template>
@@ -46,7 +42,7 @@ export default {
   },
   watch: {
     selected (val) {
-      let ids = val.split(/,\s*/).filter(id => id)
+      let ids = val.split(/,\s*/).filter((id) => id)
       if (ids.length) {
         this.selected1 = ids
       }

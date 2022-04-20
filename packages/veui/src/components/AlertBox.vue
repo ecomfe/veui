@@ -25,29 +25,21 @@
     />
   </div>
   <div :class="$c('alert-box-wrapper')">
-    <h3
-      v-if="title || $slots.title"
-      :class="$c('alert-box-title')"
-    >
+    <h3 v-if="title || $slots.title" :class="$c('alert-box-title')">
       <slot name="title">{{ title }}</slot>
     </h3>
     <div :class="$c('alert-box-content')">
       <slot/>
     </div>
   </div>
-  <template
-    slot="foot"
-    slot-scope="{ close }"
-  >
+  <template slot="foot" slot-scope="{ close }">
     <veui-button
       :ui="uiParts.ok"
       :loading="loading"
       :disabled="disabled"
       autofocus
       @click="close('ok')"
-    >
-      {{ realOkLabel }}
-    </veui-button>
+    >{{ realOkLabel }}</veui-button>
   </template>
 </veui-dialog>
 </template>

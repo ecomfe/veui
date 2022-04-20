@@ -1,6 +1,8 @@
 <template>
 <article class="demo-overlay">
-  <h1><code>&lt;veui-overlay&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-overlay&gt;</code>
+  </h1>
 
   <div class="row">
     <veui-button
@@ -9,12 +11,8 @@
       ui="primary"
       @click="overlayVisible = !overlayVisible"
     >
-      <template v-if="overlayVisible">
-        隐藏overlay
-      </template>
-      <template v-else>
-        展示overlay
-      </template>
+      <template v-if="overlayVisible">隐藏overlay</template>
+      <template v-else>展示overlay</template>
     </veui-button>
 
     <veui-overlay
@@ -22,48 +20,36 @@
       target="clickOpen"
       :open="overlayVisible"
       position="left-start"
-    >
-      点击按钮展开的
-    </veui-overlay>
+    >点击按钮展开的</veui-overlay>
   </div>
 
   <div class="row">
     <veui-button
       ref="inlineOverlay"
       @click="inline = !inline"
-    >
-      toggle inline
-    </veui-button>
+    >toggle inline</veui-button>
     <veui-overlay
       overlay-class="demo-overlay-box"
       target="inlineOverlay"
       open
       :inline="inline"
-    >
-      {{ inline ? '' : 'non-' }}inline Overlay
-    </veui-overlay>
+    >{{ inline ? '' : 'non-' }}inline Overlay</veui-overlay>
   </div>
   <div class="row">
     <veui-button
       ref="overlay3"
       @click="showMultiFirst"
-    >
-      第一个target
-    </veui-button>
+    >第一个target</veui-button>
     <veui-button
       ref="overlay4"
       @click="showMultiSecond"
-    >
-      第二个target
-    </veui-button>
+    >第二个target</veui-button>
     <veui-overlay
       overlay-class="demo-overlay-box"
       :target="multiTargetRef"
       :open="multiTargetOpen"
       :options="multiOptions"
-    >
-      多个target
-    </veui-overlay>
+    >多个target</veui-overlay>
   </div>
 
   <div class="row">
@@ -78,49 +64,35 @@
       position="top"
       local
     >
-      不移动到 <code>&lt;body&gt;</code>
+      不移动到
+      <code>&lt;body&gt;</code>
     </veui-overlay>
   </div>
 
   <div class="row">
-    <a ref="vnodeTest">
-      直接传vnode
-    </a>
+    <a ref="vnodeTest">直接传vnode</a>
     <veui-overlay
       overlay-class="demo-overlay-box"
       :target="vnodeTarget"
       :open="true"
       position="top-start"
-    >
-      好的，一切正常。
-    </veui-overlay>
+    >好的，一切正常。</veui-overlay>
     <veui-overlay
       overlay-class="demo-overlay-box global"
       :open="true"
-    >
-      全局定位在右下角
-    </veui-overlay>
+    >全局定位在右下角</veui-overlay>
 
-    <veui-button ref="vnodeComponentTest">
-      组件vnode
-    </veui-button>
+    <veui-button ref="vnodeComponentTest">组件vnode</veui-button>
     <veui-overlay
       overlay-class="demo-overlay-box"
       :target="vnodeComponentTarget"
       open
       position="top-start"
-    >
-      组件vnode的overlay
-    </veui-overlay>
+    >组件vnode的overlay</veui-overlay>
   </div>
 
   <div class="row">
-    <a
-      ref="multilevel"
-      @click="parentOpen = !parentOpen"
-    >
-      多层浮层嵌套
-    </a>
+    <a ref="multilevel" @click="parentOpen = !parentOpen">多层浮层嵌套</a>
     <veui-overlay
       overlay-class="demo-overlay-box"
       :open="parentOpen"
@@ -138,12 +110,8 @@
         <p>外层浮层</p>
         <div>
           <veui-select>
-            <veui-option value="a">
-              A
-            </veui-option>
-            <veui-option value="b">
-              B
-            </veui-option>
+            <veui-option value="a">A</veui-option>
+            <veui-option value="b">B</veui-option>
           </veui-select>
         </div>
       </div>

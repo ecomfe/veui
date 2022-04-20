@@ -1,63 +1,46 @@
 <template>
 <article class="veui-transfer-demo">
-  <h1><code>&lt;veui-tree&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-tree&gt;</code>
+  </h1>
 
   <h2>点击左侧图标展开收起</h2>
   <p>当前展开：{{ expanded1 }}</p>
-  <veui-tree
-    :datasource="treeDatasource1"
-    :expanded.sync="expanded1"
-  />
+  <veui-tree :datasource="treeDatasource1" :expanded.sync="expanded1"/>
 
   <h2>点击整行展开收起</h2>
-  <veui-tree
-    :datasource="treeDatasource2"
-    item-click="toggle"
-  />
+  <veui-tree :datasource="treeDatasource2" item-click="toggle"/>
 
-  <h1><code>&lt;veui-filter-panel&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-filter-panel&gt;</code>
+  </h1>
 
   <veui-filter-panel
     :datasource="treeDatasource1"
     class="veui-select-panel-demo1"
   >
-    <template slot="head">
-      列表
-    </template>
+    <template #head>列表</template>
     <template slot-scope="{ items }">
       <veui-tree :datasource="items">
-        <template
-          slot="item-label"
-          slot-scope="props"
-        >
-          <slot
-            name="tree-item-label"
-            v-bind="props"
-          >
-            {{ props.item.label }}
-          </slot>
+        <template #item-label="props">
+          <slot name="tree-item-label" v-bind="props">{{
+            props.item.label
+          }}</slot>
         </template>
       </veui-tree>
     </template>
   </veui-filter-panel>
 
-  <h1><code>&lt;veui-transfer&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-transfer&gt;</code>
+  </h1>
 
   <h2>自定义项目内容</h2>
-  <veui-transfer
-    :datasource="datasource1"
-    selected-show-mode="flat"
-  >
-    <template
-      slot="candidate-item-label"
-      slot-scope="{ label }"
-    >
+  <veui-transfer :datasource="datasource1" selected-show-mode="flat">
+    <template #candidate-item-label="{ label }">
       <em>{{ label }}</em>
     </template>
-    <template
-      slot="selected-item-label"
-      slot-scope="{ label }"
-    >
+    <template #selected-item-label="{ label }">
       <small>{{ label }}</small>
     </template>
   </veui-transfer>
@@ -77,18 +60,13 @@
     :include-indeterminate="strategy === 'include-indeterminate'"
     :datasource="datasource1"
   >
-    <template #candidate-title="{ count }">
-      备选列表（{{ count }}）
-    </template>
-    <template #selected-title="{ count }"> 已选列表（{{ count }}） </template>
+    <template #candidate-title="{ count }">备选列表（{{ count }}）</template>
+    <template #selected-title="{ count }">已选列表（{{ count }}）</template>
   </veui-transfer>
   <div>selected: {{ selected1 }}</div>
   <h2>单级结构</h2>
   <p>
-    <veui-transfer
-      v-model="selected2"
-      :datasource="datasource2"
-    />
+    <veui-transfer v-model="selected2" :datasource="datasource2"/>
   </p>
 
   <h2>多级树形结构，右侧扁平</h2>
@@ -99,28 +77,18 @@
       selected-show-mode="flat"
       ui="s"
     >
-      <template #candidate-title="{ count }">
-        备选列表（{{ count }}）
-      </template>
-      <template #selected-title="{ count }">
-        已选列表（{{ count }}）
-      </template>
+      <template
+        #candidate-title="{ count }"
+      >备选列表（{{ count }}）</template>
+      <template #selected-title="{ count }">已选列表（{{ count }}）</template>
     </veui-transfer>
   </p>
 
   <h2>单级结构，禁用</h2>
   <p>
-    <veui-transfer
-      v-model="selected4"
-      :datasource="datasource4"
-      disabled
-    >
-      <template slot="candidate-title">
-        备选列表
-      </template>
-      <template #selected-title="{ count }">
-        已选列表（{{ count }}）
-      </template>
+    <veui-transfer v-model="selected4" :datasource="datasource4" disabled>
+      <template #candidate-title>备选列表</template>
+      <template #selected-title="{ count }">已选列表（{{ count }}）</template>
     </veui-transfer>
   </p>
 
@@ -132,20 +100,15 @@
       selected-show-mode="flat"
       disabled
     >
-      <template #candidate-title="{ count }">
-        备选列表（{{ count }}）
-      </template>
-      <template #selected-title="{ count }">
-        已选列表（{{ count }}）
-      </template>
+      <template
+        #candidate-title="{ count }"
+      >备选列表（{{ count }}）</template>
+      <template #selected-title="{ count }">已选列表（{{ count }}）</template>
     </veui-transfer>
   </p>
 
   <h2>用于表单</h2>
-  <veui-form
-    :data="formData"
-    :validators="validators"
-  >
+  <veui-form :data="formData" :validators="validators">
     <veui-field
       label="咖啡："
       field="selected6"
@@ -158,29 +121,21 @@
         candidate-placeholder="搜索备选列表"
         selected-placeholder="搜索已选列表"
       >
-        <template #candidate-title="{ count }">
-          备选列表（{{ count }}）
-        </template>
-        <template #selected-title="{ count }">
-          已选列表（{{ count }}）
-        </template>
+        <template
+          #candidate-title="{ count }"
+        >备选列表（{{ count }}）</template>
+        <template
+          #selected-title="{ count }"
+        >已选列表（{{ count }}）</template>
       </veui-transfer>
     </veui-field>
     <div class="operation">
-      <veui-button
-        ui="primary"
-        type="submit"
-      >
-        提交
-      </veui-button>
+      <veui-button ui="primary" type="submit">提交</veui-button>
     </div>
   </veui-form>
 
   <h2>自定义candidate</h2>
-  <veui-transfer
-    v-model="selected4"
-    :datasource="datasource4"
-  >
+  <veui-transfer v-model="selected4" :datasource="datasource4">
     <template v-slot:candidate="{ datasource }">
       <veui-table
         class="custom-table"
@@ -189,14 +144,8 @@
         :selected.sync="selected4"
         key-field="value"
       >
-        <veui-table-column
-          field="value"
-          title="ID"
-        />
-        <veui-table-column
-          field="label"
-          title="Name"
-        />
+        <veui-table-column field="value" title="ID"/>
+        <veui-table-column field="label" title="Name"/>
       </veui-table>
     </template>
   </veui-transfer>
@@ -440,8 +389,8 @@ export default {
   methods: {
     countLeaves (tree) {
       let count = 0
-      let walk = tree => {
-        tree.forEach(item => {
+      let walk = (tree) => {
+        tree.forEach((item) => {
           if (!item.children) {
             count += 1
           } else {

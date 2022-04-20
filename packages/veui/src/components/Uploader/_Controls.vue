@@ -15,10 +15,7 @@
       @click="handleButtonClick"
       @toggle="handleDropdownToggle"
     >
-      <template
-        slot="trigger"
-        slot-scope="{ props, handlers }"
-      >
+      <template slot="trigger" slot-scope="{ props, handlers }">
         <veui-button
           :key="control.name"
           :ui="buttonUi"

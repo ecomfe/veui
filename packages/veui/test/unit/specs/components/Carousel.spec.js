@@ -7,20 +7,17 @@ testConfig.stubs['transition-group'] = false
 
 let items = [
   {
-    src:
-      'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
+    src: 'http://ecmb.bdimg.com/public01/one-design/2b77cc4a4c5c906993c0e512f3ddaf03.jpg',
     alt: 'A cute kitty looking at you with its greenish eyes.',
     label: '猫1'
   },
   {
-    src:
-      'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
+    src: 'http://ecmb.bdimg.com/public01/one-design/6fedc62b9221846ce5114c7447622e47.jpeg',
     alt: 'A common kingfisher flying above river.',
     label: '翠鸟2'
   },
   {
-    src:
-      'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
+    src: 'http://ecmb.bdimg.com/public01/one-design/e1b6473c898d9e456452ee79d7533a86.jpeg',
     alt: 'A white and gray dolphin in blue water.',
     label: '海豚3'
   },
@@ -30,8 +27,7 @@ let items = [
     label: '百度4'
   },
   {
-    src:
-      'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg',
+    src: 'https://ss3.bdstatic.com/yrwDcj7w0QhBkMak8IuT_XF5ehU5bvGh7c50/logopic/1b61ee88fdb4a4b918816ae1cfd84af1_fullsize.jpg',
     alt: 'Tesla logo.',
     label: '特斯拉5'
   }
@@ -63,32 +59,23 @@ describe('components/Carousel', () => {
     let next = wrapper.find('.veui-carousel-control-next')
     let prev = wrapper.find('.veui-carousel-control-prev')
 
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(0)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(0).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     await wait(100)
     prev.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(0)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(0).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     await wait(100)
     next.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(1).classes()).to.include(
+      'veui-carousel-item-current'
+    )
 
     wrapper.destroy()
   })
@@ -119,31 +106,22 @@ describe('components/Carousel', () => {
     let { vm } = wrapper
     let next = wrapper.find('.veui-carousel-control-next')
 
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(3)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(3).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     next.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(4)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(4).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     expect(vm.index).to.equal(4)
     vm.index = 1
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(1).classes()).to.include(
+      'veui-carousel-item-current'
+    )
 
     wrapper.destroy()
   })
@@ -182,39 +160,27 @@ describe('components/Carousel', () => {
     let { vm } = wrapper
     let next = wrapper.find('.veui-carousel-control-next')
 
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(1).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     next.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(1).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     vm.index = 2
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(2)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(2).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     next.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(3)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(3).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     expect(vm.index).to.equal(3)
 
     wrapper.destroy()
@@ -247,46 +213,31 @@ describe('components/Carousel', () => {
     )
 
     let { vm } = wrapper
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(0)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(0).classes()).to.include(
+      'veui-carousel-item-current'
+    )
 
     await wait(300)
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(1).classes()).to.include(
+      'veui-carousel-item-current'
+    )
 
     await wait(200)
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(2)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(2).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     vm.interval = 100
 
     await wait(150)
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(3)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(3).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     vm.autoplay = false
 
     await wait(100)
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(3)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(3).classes()).to.include(
+      'veui-carousel-item-current'
+    )
 
     wrapper.destroy()
   })
@@ -319,10 +270,7 @@ describe('components/Carousel', () => {
       true
     )
     expect(
-      wrapper
-        .findAll('.veui-carousel-indicator-item')
-        .at(0)
-        .classes()
+      wrapper.findAll('.veui-carousel-indicator-item').at(0).classes()
     ).to.include('veui-carousel-indicator-item-current')
     vm.indicator = 'number'
 
@@ -340,10 +288,7 @@ describe('components/Carousel', () => {
       true
     )
     expect(
-      wrapper
-        .findAll('.veui-carousel-indicator-item')
-        .at(0)
-        .classes()
+      wrapper.findAll('.veui-carousel-indicator-item').at(0).classes()
     ).to.include('veui-carousel-indicator-item-current')
     vm.indicator = 'none'
 
@@ -387,58 +332,34 @@ describe('components/Carousel', () => {
 
     let { vm } = wrapper
 
-    wrapper
-      .findAll('.veui-carousel-indicator-item')
-      .at(3)
-      .trigger('mouseenter')
+    wrapper.findAll('.veui-carousel-indicator-item').at(3).trigger('mouseenter')
 
     await vm.$nextTick()
     expect(
-      wrapper
-        .findAll('.veui-carousel-indicator-item')
-        .at(0)
-        .classes()
+      wrapper.findAll('.veui-carousel-indicator-item').at(0).classes()
     ).to.include('veui-carousel-indicator-item-current')
 
-    wrapper
-      .findAll('.veui-carousel-indicator-item')
-      .at(0)
-      .trigger('click')
+    wrapper.findAll('.veui-carousel-indicator-item').at(0).trigger('click')
 
     await vm.$nextTick()
     expect(
-      wrapper
-        .findAll('.veui-carousel-indicator-item')
-        .at(0)
-        .classes()
+      wrapper.findAll('.veui-carousel-indicator-item').at(0).classes()
     ).to.include('veui-carousel-indicator-item-current')
 
-    wrapper
-      .findAll('.veui-carousel-indicator-item')
-      .at(3)
-      .trigger('click')
+    wrapper.findAll('.veui-carousel-indicator-item').at(3).trigger('click')
 
     await vm.$nextTick()
     expect(
-      wrapper
-        .findAll('.veui-carousel-indicator-item')
-        .at(3)
-        .classes()
+      wrapper.findAll('.veui-carousel-indicator-item').at(3).classes()
     ).to.include('veui-carousel-indicator-item-current')
     vm.trigger = 'hover'
 
     await vm.$nextTick()
-    wrapper
-      .findAll('.veui-carousel-indicator-item')
-      .at(1)
-      .trigger('mouseenter')
+    wrapper.findAll('.veui-carousel-indicator-item').at(1).trigger('mouseenter')
 
     await vm.$nextTick()
     expect(
-      wrapper
-        .findAll('.veui-carousel-indicator-item')
-        .at(1)
-        .classes()
+      wrapper.findAll('.veui-carousel-indicator-item').at(1).classes()
     ).to.include('veui-carousel-indicator-item-current')
 
     wrapper.destroy()
@@ -472,42 +393,30 @@ describe('components/Carousel', () => {
     let { vm } = wrapper
 
     await wait(300)
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(1).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     wrapper.find('.veui-carousel-viewport').trigger('mouseenter')
 
     await wait(300)
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(1)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(1).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     wrapper.find('.veui-carousel-viewport').trigger('mouseleave')
 
     await wait(300)
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(2)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(2).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     vm.pauseOnHover = false
 
     await vm.$nextTick()
     wrapper.find('.veui-carousel-viewport').trigger('mouseenter')
 
     await wait(300)
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(3)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(3).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     wrapper.find('.veui-carousel-viewport').trigger('mouseleave')
 
     wrapper.destroy()
@@ -542,24 +451,18 @@ describe('components/Carousel', () => {
     prev.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(0)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(0).classes()).to.include(
+      'veui-carousel-item-current'
+    )
     vm.wrap = true
 
     await vm.$nextTick()
     prev.trigger('click')
 
     await vm.$nextTick()
-    expect(
-      wrapper
-        .findAll('.veui-carousel-item')
-        .at(4)
-        .classes()
-    ).to.include('veui-carousel-item-current')
+    expect(wrapper.findAll('.veui-carousel-item').at(4).classes()).to.include(
+      'veui-carousel-item-current'
+    )
 
     wrapper.destroy()
   })
@@ -597,7 +500,7 @@ describe('components/Carousel', () => {
     expect(
       wrapper
         .findAll('.veui-carousel-item img')
-        .wrappers.map(wrapper => wrapper.element.alt)
+        .wrappers.map((wrapper) => wrapper.element.alt)
     ).to.eql([items[0].alt, items[1].alt, items[4].alt])
     next.trigger('click')
 
@@ -605,7 +508,7 @@ describe('components/Carousel', () => {
     expect(
       wrapper
         .findAll('.veui-carousel-item img')
-        .wrappers.map(wrapper => wrapper.element.alt)
+        .wrappers.map((wrapper) => wrapper.element.alt)
     ).to.eql([items[0].alt, items[1].alt, items[2].alt])
     vm.lazy = {
       preload: 2
@@ -1002,8 +905,7 @@ describe('components/Carousel', () => {
           return {
             items: [
               {
-                src:
-                  'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
+                src: 'https://nadvideo2.baidu.com/b45f066cccd13549219cb475ca520cee_1920_1080.mp4',
                 alt: 'A 1080p video.',
                 label: 'A 1080p video',
                 type: 'video'

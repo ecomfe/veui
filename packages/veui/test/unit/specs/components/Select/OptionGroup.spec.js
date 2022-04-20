@@ -383,7 +383,7 @@ describe('components/Select/OptionGroup', () => {
     wrapper.destroy()
   })
 
-  it('should scroll into view when a value is selected', done => {
+  it('should scroll into view when a value is selected', (done) => {
     let wrapper = mount(
       {
         components: {

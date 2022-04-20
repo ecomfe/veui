@@ -8,84 +8,50 @@
       <h3>基础加载</h3>
       <p>
         大尺寸：
-        <veui-loading
-          loading
-          ui="l"
-        />
+        <veui-loading loading ui="l"/>
       </p>
       <p>
         中等尺寸：
-        <veui-loading
-          loading
-          ui="m"
-        />
+        <veui-loading loading ui="m"/>
       </p>
       <p>
         小尺寸：
-        <veui-loading
-          loading
-          ui="s"
-        />
+        <veui-loading loading ui="s"/>
       </p>
       <p>
         普通效果：
-        <veui-loading
-          loading
-          ui="normal"
-        />
+        <veui-loading loading ui="normal"/>
       </p>
       <p>
         加强效果：
-        <veui-loading
-          loading
-          ui="strong"
-        />
+        <veui-loading loading ui="strong"/>
       </p>
       <p>
         反白效果：
-        <veui-loading
-          loading
-          ui="reverse"
-          class="reverse"
-        />
+        <veui-loading loading ui="reverse" class="reverse"/>
       </p>
     </section>
     <section>
       <h3>含辅助文案加载</h3>
       <p>
         大尺寸：
-        <veui-loading
-          loading
-          ui="l"
-        >加载中...</veui-loading>
+        <veui-loading loading ui="l">加载中...</veui-loading>
       </p>
       <p>
         中等尺寸：
-        <veui-loading
-          loading
-          ui="m"
-        >加载中...</veui-loading>
+        <veui-loading loading ui="m">加载中...</veui-loading>
       </p>
       <p>
         小尺寸：
-        <veui-loading
-          loading
-          ui="s"
-        >加载中...</veui-loading>
+        <veui-loading loading ui="s">加载中...</veui-loading>
       </p>
       <p>
         普通效果：
-        <veui-loading
-          loading
-          ui="normal"
-        >加载中...</veui-loading>
+        <veui-loading loading ui="normal">加载中...</veui-loading>
       </p>
       <p>
         加强效果：
-        <veui-loading
-          loading
-          ui="strong"
-        >加载中...</veui-loading>
+        <veui-loading loading ui="strong">加载中...</veui-loading>
       </p>
       <p>
         反白效果：
@@ -108,15 +74,9 @@
       <h3>自定义加载图标</h3>
       <p>
         自定义图标-星星：
-        <veui-loading
-          loading
-          ui="strong"
-        >
-          <template slot="spinner">
-            <veui-icon
-              spin
-              name="star"
-            />
+        <veui-loading loading ui="strong">
+          <template #spinner>
+            <veui-icon spin name="star"/>
           </template>
           拼命加载中...
         </veui-loading>
@@ -124,27 +84,17 @@
       <p>
         自定义图标-太阳：
         <veui-loading loading>
-          <template slot="spinner">
-            <veui-icon
-              spin
-              name="sun"
-            />
+          <template #spinner>
+            <veui-icon spin name="sun"/>
           </template>
           拼命加载中...
         </veui-loading>
       </p>
       <p>
         自定义图标-雨伞：
-        <veui-loading
-          loading
-          ui="reverse"
-          class="reverse"
-        >
-          <template slot="spinner">
-            <veui-icon
-              spin
-              name="umbrella"
-            />
+        <veui-loading loading ui="reverse" class="reverse">
+          <template #spinner>
+            <veui-icon spin name="umbrella"/>
           </template>
           拼命加载中...
         </veui-loading>
@@ -172,20 +122,14 @@
           similique nam, iure maiores consequatur quia suscipit temporibus
           corporis ipsa molestias magnam repudiandae. Nam nihil eveniet eius
           dolores ducimus cumque facere.
-          <veui-loading
-            loading
-            ui="strong l overlay"
-          >正在加载…</veui-loading>
+          <veui-loading loading ui="strong l overlay">正在加载…</veui-loading>
         </div>
         <div class="card">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
           similique nam, iure maiores consequatur quia suscipit temporibus
           corporis ipsa molestias magnam repudiandae. Nam nihil eveniet eius
           dolores ducimus cumque facere.
-          <veui-loading
-            loading
-            ui="reverse l overlay"
-          />
+          <veui-loading loading ui="reverse l overlay"/>
         </div>
       </section>
     </section>

@@ -1,26 +1,12 @@
 <template>
-<div
-  v-if="loading"
-  :ui="realUi"
-  :class="$c('loading')"
->
+<div v-if="loading" :ui="realUi" :class="$c('loading')">
   <div :class="$c('loading-spinner')">
     <slot name="spinner">
-      <veui-icon
-        v-if="icons.loading"
-        :name="icons.loading"
-        spin
-      />
-      <svg
-        v-bind="attrs"
-        v-html="contents"
-      />
+      <veui-icon v-if="icons.loading" :name="icons.loading" spin/>
+      <svg v-bind="attrs" v-html="contents"/>
     </slot>
   </div>
-  <div
-    v-if="$slots.default"
-    :class="$c('loading-text')"
-  >
+  <div v-if="$slots.default" :class="$c('loading-text')">
     <slot/>
   </div>
 </div>

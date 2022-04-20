@@ -91,29 +91,17 @@
             slot="label"
             slot-scope="group"
           >
-            <slot
-              name="group-label"
-              v-bind="group"
-            />
+            <slot name="group-label" v-bind="group"/>
           </template>
           <template
             v-if="$scopedSlots['suggestion']"
             slot="option"
             slot-scope="option"
           >
-            <slot
-              name="suggestion"
-              v-bind="option"
-            />
+            <slot name="suggestion" v-bind="option"/>
           </template>
-          <template
-            slot="option-label"
-            slot-scope="option"
-          >
-            <slot
-              name="option-label"
-              v-bind="option"
-            >
+          <template slot="option-label" slot-scope="option">
+            <slot name="option-label" v-bind="option">
               <template v-if="!!keyword">
                 <template v-for="({ parts }, idx) in option.matches">
                   <template v-for="({ text, matched }, index) in parts">
@@ -122,10 +110,7 @@
                       :key="`${idx}-${index}`"
                       :class="$c('option-matched')"
                     >{{ text }}</mark>
-                    <span
-                      v-else
-                      :key="`${idx}-${index}`"
-                    >{{ text }}</span>
+                    <span v-else :key="`${idx}-${index}`">{{ text }}</span>
                   </template>
                   <span
                     v-if="idx < option.matches.length - 1"

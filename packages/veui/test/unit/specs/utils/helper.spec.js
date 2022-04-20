@@ -156,11 +156,11 @@ describe('utils/helper', () => {
     let bar = wrapper.find(Bar).vm
     let baz = wrapper.find(Baz).vm
 
-    expect(findAncestor(foo, vm => vm.value === 'bar')).to.equal(bar)
-    expect(findAncestor(foo, vm => vm.value === 'baz')).to.equal(baz)
-    expect(findAncestor(foo, vm => vm.value === 'qux')).to.equal(null)
-    expect(findAncestor(bar, vm => vm.value === 'baz')).to.equal(baz)
-    expect(findAncestor(bar, vm => vm.value === 'qux')).to.equal(null)
+    expect(findAncestor(foo, (vm) => vm.value === 'bar')).to.equal(bar)
+    expect(findAncestor(foo, (vm) => vm.value === 'baz')).to.equal(baz)
+    expect(findAncestor(foo, (vm) => vm.value === 'qux')).to.equal(null)
+    expect(findAncestor(bar, (vm) => vm.value === 'baz')).to.equal(baz)
+    expect(findAncestor(bar, (vm) => vm.value === 'qux')).to.equal(null)
   })
 
   it('should detect Vue components', () => {
@@ -263,7 +263,7 @@ describe('utils/helper', () => {
       template: '<div><Foo/><Baz/></div>'
     })
 
-    let [foo1, foo2] = wrapper.findAll(Foo).wrappers.map(w => w.vm)
+    let [foo1, foo2] = wrapper.findAll(Foo).wrappers.map((w) => w.vm)
     let bar = wrapper.find(Bar).vm
     let baz = wrapper.find(Baz).vm
     let { vm } = wrapper

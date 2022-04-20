@@ -1,6 +1,8 @@
 <template>
 <article class="demo-embedded">
-  <h1><code>&lt;veui-embedded&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-embedded&gt;</code>
+  </h1>
 
   <section>
     <veui-button @click="show = !show">Toggle</veui-button>
@@ -9,30 +11,17 @@
   <section>
     <veui-embedded :open.sync="show">
       <p>content area</p>
-      <template
-        slot="title"
-        slot-scope="{ close }"
-      >
-        <a @click="close">
-          点我也可关闭
-        </a>
+      <template #title="{ close }">
+        <a @click="close">点我也可关闭</a>
       </template>
     </veui-embedded>
   </section>
 
   <section>
-    <veui-embedded
-      ui="s"
-      :open.sync="show"
-    >
+    <veui-embedded ui="s" :open.sync="show">
       <p>content area</p>
-      <template
-        slot="title"
-        slot-scope="{ close }"
-      >
-        <a @click="close">
-          点我也可关闭
-        </a>
+      <template #title="{ close }">
+        <a @click="close">点我也可关闭</a>
       </template>
     </veui-embedded>
   </section>

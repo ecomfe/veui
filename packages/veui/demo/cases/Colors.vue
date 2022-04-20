@@ -5,11 +5,7 @@
     :key="serie"
     :class="['serie', `serie-${serie}`]"
   >
-    <div
-      v-for="i in 10"
-      :key="i"
-      class="shade"
-    />
+    <div v-for="i in 10" :key="i" class="shade"/>
   </figure>
 </article>
 </template>

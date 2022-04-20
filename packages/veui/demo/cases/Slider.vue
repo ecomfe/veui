@@ -1,35 +1,25 @@
 <template>
 <article>
-  <h1><code>&lt;veui-slider&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-slider&gt;</code>
+  </h1>
 
   <section>
     <veui-slider v-model="value1"/>
-    <veui-slider
-      v-model="value1"
-      readonly
-    />
-    <veui-slider
-      v-model="value1"
-      disabled
-      ui="s"
-    >
-      <span slot="tip-label">
-        {{ value1.toFixed(2) }}
-      </span>
+    <veui-slider v-model="value1" readonly/>
+    <veui-slider v-model="value1" disabled ui="s">
+      <template #tip-label>
+        <span>{{ value1.toFixed(2) }}</span>
+      </template>
     </veui-slider>
     <div class="desc">Range: 0~1, Value: {{ value1 }}</div>
   </section>
 
   <section>
-    <veui-slider
-      v-model="value2"
-      ui="s"
-      :min="10"
-      :max="100"
-      :step="7"
-      mark
-    >
-      <span slot="tip-label"> {{ value2 }}% </span>
+    <veui-slider v-model="value2" ui="s" :min="10" :max="100" :step="7" mark>
+      <template #tip-label>
+        <span>{{ value2 }}%</span>
+      </template>
     </veui-slider>
     <veui-slider
       v-model="value2"
@@ -41,20 +31,11 @@
     />
     <div class="desc">Range: 10~100, Step: 7, Value: {{ value2 }}</div>
     <h3>固定比例</h3>
-    <veui-slider
-      :value="50"
-      :min="1"
-      :max="100"
-      mark
-    />
+    <veui-slider :value="50" :min="1" :max="100" mark/>
   </section>
 
   <section>
-    <veui-slider
-      v-model="value4"
-      :min="0"
-      :max="100"
-    />
+    <veui-slider v-model="value4" :min="0" :max="100"/>
     <div class="desc">Range: 0~100, Value: {{ value4 }}</div>
   </section>
 
@@ -69,7 +50,7 @@
     >
       <div
         slot="track"
-        style="width: 100%; height: 20px;"
+        style="width: 100%; height: 20px"
         :style="{ background: colorGradient }"
       />
       <div
@@ -79,61 +60,48 @@
         style="margin-top: 6px"
       >
         <div style="width: 16px; height: 12px">
-          <svg
-            width="16"
-            height="12"
-            viewBox="0 0 16 12"
-          >
+          <svg width="16" height="12" viewBox="0 0 16 12">
             <polygon points="8,0 16,12 0,12"/>
           </svg>
         </div>
       </div>
-      <template
-        slot="tip"
-        slot-scope="{ open, activeIndex }"
-      >
+      <template #tip="{ open, activeIndex }">
         <div
           v-show="open"
           class="custom-tip"
           :style="{
-            left: `${((activeIndex >= 0
-              ? parseColorHue(value3[activeIndex])
-              : 0) /
-              360) *
-              100}%`,
+            left: `${
+              ((activeIndex >= 0 ? parseColorHue(value3[activeIndex]) : 0) /
+                360) *
+              100
+            }%`,
             backgroundColor: value3[activeIndex]
           }"
         />
       </template>
     </veui-slider>
     <div class="desc">
-      Range: 0~255, Step: 1, Value: <br>
-      [
-      <span
-        v-for="(val, index) in value3"
-        :key="`colorValue${index}`"
-      >
-        "<span :style="{ color: val }"> {{ val }} </span>"
-        <span v-if="index < value3.length - 1">
-          ,
-        </span>
+      Range: 0~255, Step: 1, Value:
+      <br>[
+      <span v-for="(val, index) in value3" :key="`colorValue${index}`">
+        "
+        <span :style="{ color: val }">{{ val }}</span>"
+        <span v-if="index < value3.length - 1">,</span>
       </span>
       ]
     </div>
   </section>
 
   <section class="video">
-    <div class="play-button">
-      ▶️
-    </div>
+    <div class="play-button">▶️</div>
     <veui-slider
       v-model="videoPlayProgress"
       :secondary-progress="videoBufferProgress"
       ui="micro"
     >
-      <span slot="tip-label">
-        {{ Math.round(videoPlayProgress * 100) }}%
-      </span>
+      <template #tip-label>
+        <span>{{ Math.round(videoPlayProgress * 100) }}%</span>
+      </template>
     </veui-slider>
     <div class="duration">
       <span>{{ formatDuration(videoDuration * videoPlayProgress) }}</span> /

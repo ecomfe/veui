@@ -1,29 +1,20 @@
 <template>
 <article>
-  <h1><code>&lt;veui-tree&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-tree&gt;</code>
+  </h1>
   <section>
     <h4>Expanded items</h4>
     {{ expanded }}
   </section>
   <section>
     <h4>item-label slot was override</h4>
-    <veui-tree
-      :datasource="coffees"
-      :expanded.sync="expanded"
-    />
+    <veui-tree :datasource="coffees" :expanded.sync="expanded"/>
   </section>
   <section>
     <h4>item slot was override</h4>
-    <veui-tree
-      :datasource="coffees"
-      :expanded.sync="expanded"
-    >
-      <template
-        slot="item"
-        slot-scope="item"
-      >
-        {{ item.label }}
-      </template>
+    <veui-tree :datasource="coffees" :expanded.sync="expanded">
+      <template #item="item">{{ item.label }}</template>
     </veui-tree>
   </section>
   <section>
@@ -263,7 +254,7 @@ export default {
   },
   methods: {
     omitGroupValue (original) {
-      return original.map(i => {
+      return original.map((i) => {
         if (i.children && i.children.length) {
           if (i.value === 'milk-coffee') {
             i = {

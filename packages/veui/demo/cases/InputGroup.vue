@@ -1,31 +1,32 @@
 <template>
 <article>
-  <h1><code>&lt;veui-input-group&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-input-group&gt;</code>
+  </h1>
   <section>
     <h4>Select + Input + Button</h4>
     <veui-input-group>
-      <veui-select
-        :options="protocals"
-        style="width: 100px"
-      />
+      <veui-select :options="protocals" style="width: 100px"/>
       <veui-input/>
       <veui-button ui="primary">Submit</veui-button>
     </veui-input-group>
   </section>
   <section>
-    <h4>Label + NumberInput + Button + <code>ui="s"</code></h4>
+    <h4>
+      Label + NumberInput + Button +
+      <code>ui="s"</code>
+    </h4>
     <veui-input-group ui="s">
       <veui-label for="bid">USD</veui-label>
-      <veui-number-input
-        ref="bid"
-        v-model="bid"
-        style="width: 120px"
-      />
+      <veui-number-input ref="bid" v-model="bid" style="width: 120px"/>
       <veui-button>Submit</veui-button>
     </veui-input-group>
   </section>
   <section>
-    <h4>NumberInput + Span + NumberInput + <code>ui="xs"</code></h4>
+    <h4>
+      NumberInput + Span + NumberInput +
+      <code>ui="xs"</code>
+    </h4>
     <veui-input-group ui="xs">
       <veui-number-input v-model="width"/>
       <veui-span>×</veui-span>
@@ -36,20 +37,16 @@
     <h4>Autocomplete + ButtonGroup</h4>
     <veui-input-group>
       <veui-autocomplete :datasource="suggestions"/>
-      <veui-button-group
-        :items="ops"
-        ui="primary"
-      />
+      <veui-button-group :items="ops" ui="primary"/>
     </veui-input-group>
   </section>
   <section>
-    <h4>Select + SearchBox + <code>ui="l"</code></h4>
+    <h4>
+      Select + SearchBox +
+      <code>ui="l"</code>
+    </h4>
     <veui-input-group ui="l">
-      <veui-select
-        :options="types"
-        :value="type"
-        style="width: 120px"
-      />
+      <veui-select :options="types" :value="type" style="width: 120px"/>
       <veui-search-box/>
     </veui-input-group>
   </section>

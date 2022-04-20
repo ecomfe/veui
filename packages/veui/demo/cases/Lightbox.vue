@@ -1,11 +1,10 @@
 <template>
 <article>
-  <h1><code>&lt;veui-lightbox&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-lightbox&gt;</code>
+  </h1>
   <section>
-    <veui-check-button-group
-      v-model="features"
-      :items="featureItems"
-    />
+    <veui-check-button-group v-model="features" :items="featureItems"/>
   </section>
   <h2>wrap模式</h2>
   <veui-button @click="handleClick(0)">打开</veui-button>

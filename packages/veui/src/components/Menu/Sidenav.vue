@@ -22,11 +22,7 @@
         slot="item"
         slot-scope="{ item: link, expanded: itemExpanded, depth }"
       >
-        <slot
-          name="item"
-          :expanded="itemExpanded"
-          v-bind="link"
-        >
+        <slot name="item" :expanded="itemExpanded" v-bind="link">
           <div
             :ref="link.name"
             :class="{
@@ -52,22 +48,12 @@
                 v-if="link.icon || $scopedSlots.icon || $slots.icon"
                 :class="$c('menu-item-icon')"
               >
-                <slot
-                  name="icon"
-                  v-bind="link"
-                >
-                  <veui-icon
-                    :ui="realUi"
-                    :name="link.icon"
-                  />
+                <slot name="icon" v-bind="link">
+                  <veui-icon :ui="realUi" :name="link.icon"/>
                 </slot>
               </span>
               <span :class="$c('menu-item-label')">
-                <slot
-                  v-if="!realCollapsed"
-                  name="item-label"
-                  v-bind="link"
-                >
+                <slot v-if="!realCollapsed" name="item-label" v-bind="link">
                   {{ link.label }}
                 </slot>
               </span>
@@ -120,14 +106,8 @@
               option-tag="div"
               @keydown.native="handleKeydown($event, null, link)"
             >
-              <template
-                slot="option"
-                slot-scope="option"
-              >
-                <slot
-                  name="item"
-                  v-bind="option"
-                >
+              <template slot="option" slot-scope="option">
+                <slot name="item" v-bind="option">
                   <veui-link
                     :class="{
                       [$c('menu-item')]: true,
@@ -138,25 +118,16 @@
                     :tabindex="option.disabled ? null : 0"
                     @click="handleItemClick(option)"
                   >
-                    <slot
-                      name="item-label"
-                      v-bind="option"
-                    >
-                      <span :class="$c('menu-item-label')">{{
-                        option.label
-                      }}</span>
+                    <slot name="item-label" v-bind="option">
+                      <span :class="$c('menu-item-label')">
+                        {{ option.label }}
+                      </span>
                     </slot>
                   </veui-link>
                 </slot>
               </template>
-              <template
-                slot="option-group-label"
-                slot-scope="group"
-              >
-                <slot
-                  name="item"
-                  v-bind="group"
-                >
+              <template slot="option-group-label" slot-scope="group">
+                <slot name="item" v-bind="group">
                   <veui-link
                     :class="{
                       [$c('menu-item')]: true,
@@ -169,13 +140,10 @@
                       handleGroupLabelClick(group.option, group.closeMenu)
                     "
                   >
-                    <slot
-                      name="item-label"
-                      v-bind="group"
-                    >
-                      <span :class="$c('menu-item-label')">{{
-                        group.label
-                      }}</span>
+                    <slot name="item-label" v-bind="group">
+                      <span :class="$c('menu-item-label')">
+                        {{ group.label }}
+                      </span>
                     </slot>
                   </veui-link>
                 </slot>

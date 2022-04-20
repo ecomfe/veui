@@ -294,8 +294,7 @@ describe('components/Tree', () => {
         datasource
       },
       scopedSlots: {
-        item:
-          '<div class="test-item-slot" slot-scope="props">{{props.item.label}} item slot</div>'
+        item: '<div class="test-item-slot" slot-scope="props">{{props.item.label}} item slot</div>'
       },
       sync: false
     })
@@ -578,20 +577,14 @@ describe('components/Tree', () => {
     ])
 
     // remove middle node 'brewed'
-    checkboxes
-      .at(1)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    checkboxes.at(1).find('input[type="checkbox"]').trigger('change')
     await wrapper.vm.$nextTick()
     expect(data.checked).to.deep.equal(['turkish'])
 
     wrapper.destroy()
 
     function select (index) {
-      checkboxes
-        .at(index)
-        .find('input[type="checkbox"]')
-        .trigger('change')
+      checkboxes.at(index).find('input[type="checkbox"]').trigger('change')
     }
   })
 
@@ -719,10 +712,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
 
     function select (index) {
-      checkboxes
-        .at(index)
-        .find('input[type="checkbox"]')
-        .trigger('change')
+      checkboxes.at(index).find('input[type="checkbox"]').trigger('change')
     }
   })
 
@@ -784,10 +774,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
 
     function select (index) {
-      checkboxes
-        .at(index)
-        .find('input[type="checkbox"]')
-        .trigger('change')
+      checkboxes.at(index).find('input[type="checkbox"]').trigger('change')
     }
   })
 
@@ -863,10 +850,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
 
     function select (index) {
-      checkboxes
-        .at(index)
-        .find('input[type="checkbox"]')
-        .trigger('change')
+      checkboxes.at(index).find('input[type="checkbox"]').trigger('change')
     }
   })
 
@@ -955,10 +939,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
 
     function select (index) {
-      checkboxes
-        .at(index)
-        .find('input[type="checkbox"]')
-        .trigger('change')
+      checkboxes.at(index).find('input[type="checkbox"]').trigger('change')
     }
   })
 
@@ -1062,10 +1043,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
 
     function select (index) {
-      checkboxes
-        .at(index)
-        .find('input[type="checkbox"]')
-        .trigger('change')
+      checkboxes.at(index).find('input[type="checkbox"]').trigger('change')
     }
   })
 
@@ -1139,10 +1117,7 @@ describe('components/Tree', () => {
     wrapper.destroy()
 
     function select (index) {
-      checkboxes
-        .at(index)
-        .find('input[type="checkbox"]')
-        .trigger('change')
+      checkboxes.at(index).find('input[type="checkbox"]').trigger('change')
     }
   })
 
@@ -1216,23 +1191,18 @@ describe('components/Tree', () => {
     wrapper.destroy()
 
     function select (index) {
-      checkboxes
-        .at(index)
-        .find('input[type="checkbox"]')
-        .trigger('change')
+      checkboxes.at(index).find('input[type="checkbox"]').trigger('change')
     }
   })
 })
 
 function unorderedEqual (a, b) {
-  expect(a)
-    .to.have.members(b)
-    .and.to.have.lengthOf(b.length)
+  expect(a).to.have.members(b).and.to.have.lengthOf(b.length)
 }
 
 function omitGroupValue (original, except) {
   except = except || []
-  return original.map(i => {
+  return original.map((i) => {
     i = { ...i }
     if (i.children && i.children.length) {
       if (except.indexOf(i.value) === -1) {

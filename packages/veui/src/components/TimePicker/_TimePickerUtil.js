@@ -51,14 +51,14 @@ export default class TimePickerUtil {
     if (
       !isArray(datasource) ||
       !datasource.length ||
-      datasource.some(i => !isArray(i))
+      datasource.some((i) => !isArray(i))
     ) {
       throw new Error('datasource array required')
     }
 
-    this.datasource = map(datasource, i => i.sort((a, b) => (a > b ? 1 : -1)))
-    this.min = min || datasource.map(i => -Infinity)
-    this.max = max || datasource.map(i => Infinity)
+    this.datasource = map(datasource, (i) => i.sort((a, b) => (a > b ? 1 : -1)))
+    this.min = min || datasource.map((i) => -Infinity)
+    this.max = max || datasource.map((i) => Infinity)
     // null 表示尚未计算
     this.available = null
     return this
@@ -82,7 +82,7 @@ export default class TimePickerUtil {
     }
     let source = this.datasource[index]
     // 根据上层选取的情况来决定决定本次选取的位置
-    let start = prevEdge ? findIndex(source, i => i >= this.min[index]) : 0
+    let start = prevEdge ? findIndex(source, (i) => i >= this.min[index]) : 0
     if (start > -1) {
       let val = source[start]
       // 上层贴着，本层值和最值相等，那么本层才是贴着最值得
@@ -115,7 +115,7 @@ export default class TimePickerUtil {
     }
     let source = this.datasource[index]
     let start = prevEdge
-      ? findLastIndex(source, i => i <= this.max[index])
+      ? findLastIndex(source, (i) => i <= this.max[index])
       : source.length - 1
     if (start > -1) {
       let val = source[start]
@@ -177,7 +177,7 @@ export default class TimePickerUtil {
     let result = []
     let hasNext = index + 1 < this.datasource.length
     if (!index) {
-      result = source.filter(i => i >= min && i <= max)
+      result = source.filter((i) => i >= min && i <= max)
       // 0处只有一个值，下层要取交集；0处有两个值，下层要取并集，否则下层取 datasource 中所有值
       if (hasNext) {
         // eslint-disable-next-line no-sparse-arrays
@@ -186,8 +186,8 @@ export default class TimePickerUtil {
     } else if (prevOp === NONE) {
       result = source
     } else {
-      let rangeFromMin = source.filter(i => i >= min)
-      let rangeFromMax = source.filter(i => i <= max)
+      let rangeFromMin = source.filter((i) => i >= min)
+      let rangeFromMax = source.filter((i) => i <= max)
       if (prevOp === INTERSECTION) {
         result = intersection(rangeFromMin, rangeFromMax).sort((a, b) =>
           a > b ? 1 : -1
@@ -276,7 +276,10 @@ export default class TimePickerUtil {
     }
     if (val < this.aMin[index]) {
       while (index--) {
-        let idx = findIndex(this.available[index], i => i === this.aMin[index])
+        let idx = findIndex(
+          this.available[index],
+          (i) => i === this.aMin[index]
+        )
         if (idx < this.available[index].length - 1) {
           min[index] = this.available[index][idx + 1]
           break
@@ -300,5 +303,5 @@ export default class TimePickerUtil {
 function timeToNumber (time) {
   return includes([-Infinity, Infinity], time[0])
     ? time[0]
-    : parseInt(time.map(i => padStart(i, 2, '0')).join(''), 10)
+    : parseInt(time.map((i) => padStart(i, 2, '0')).join(''), 10)
 }

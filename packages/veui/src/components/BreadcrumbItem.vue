@@ -11,18 +11,12 @@
   >
     <slot/>
   </veui-link>
-  <span
-    v-else
-    :class="$c('breadcrumb-item-current')"
-  >
+  <span v-else :class="$c('breadcrumb-item-current')">
     <slot/>
   </span>
   <span :class="$c('breadcrumb-separator')">
     <slot name="separator">
-      <veui-icon
-        v-if="icons.separator"
-        :name="icons.separator"
-      />
+      <veui-icon v-if="icons.separator" :name="icons.separator"/>
     </slot>
   </span>
 </li>

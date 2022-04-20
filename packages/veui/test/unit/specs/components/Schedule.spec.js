@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import Schedule from '@/components/Schedule'
 
 describe('components/Schedule', () => {
-  it('should handle selected prop with `null` value.', done => {
+  it('should handle selected prop with `null` value.', (done) => {
     let wrapper = mount({
       methods: {
         handleSelect (val) {
@@ -14,7 +14,10 @@ describe('components/Schedule', () => {
       },
       render () {
         return (
-          <Schedule selected={null} onSelect={val => this.handleSelect(val)} />
+          <Schedule
+            selected={null}
+            onSelect={(val) => this.handleSelect(val)}
+          />
         )
       }
     })
@@ -127,53 +130,28 @@ describe('components/Schedule', () => {
 
     // hourClass
     expect(
-      rows
-        .at(0)
-        .findAll('td')
-        .at(20)
-        .find('button')
-        .classes('night')
+      rows.at(0).findAll('td').at(20).find('button').classes('night')
     ).to.equal(true)
     expect(
-      rows
-        .at(5)
-        .findAll('td')
-        .at(20)
-        .find('button')
-        .classes('night')
+      rows.at(5).findAll('td').at(20).find('button').classes('night')
     ).to.equal(true)
     expect(
-      rows
-        .at(5)
-        .findAll('td')
-        .at(20)
-        .find('button')
-        .classes('weekend')
+      rows.at(5).findAll('td').at(20).find('button').classes('weekend')
     ).to.equal(true)
 
     // disabledHour
-    expect(
-      rows
-        .at(0)
-        .find('td button')
-        .attributes('disabled')
-    ).to.equal('disabled')
+    expect(rows.at(0).find('td button').attributes('disabled')).to.equal(
+      'disabled'
+    )
 
     // head-day-checkbox
     wrapper.find('.veui-schedule-head-day-item input').trigger('change')
     await vm.$nextTick()
+    expect(rows.at(0).find('td button').attributes('disabled')).to.equal(
+      'disabled'
+    )
     expect(
-      rows
-        .at(0)
-        .find('td button')
-        .attributes('disabled')
-    ).to.equal('disabled')
-    expect(
-      rows
-        .at(0)
-        .findAll('td button')
-        .at(5)
-        .attributes('disabled')
+      rows.at(0).findAll('td button').at(5).attributes('disabled')
     ).to.not.equal('disabled')
 
     // shortcuts
@@ -257,7 +235,7 @@ describe('components/Schedule', () => {
     wrapper.destroy()
   })
 
-  it('should support select event correctly.', done => {
+  it('should support select event correctly.', (done) => {
     let wrapper = mount(
       {
         components: {

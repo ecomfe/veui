@@ -123,13 +123,13 @@ export class FocusManager {
   }
 
   initTriggerHandlers () {
-    Object.keys(this.triggerHandlers).forEach(type => {
+    Object.keys(this.triggerHandlers).forEach((type) => {
       document.addEventListener(type, this.triggerHandlers[type], true)
     })
   }
 
   destroyTriggerHandlers () {
-    Object.keys(this.triggerHandlers).forEach(type => {
+    Object.keys(this.triggerHandlers).forEach((type) => {
       document.removeEventListener(type, this.triggerHandlers[type], true)
     })
   }
@@ -161,7 +161,7 @@ export class FocusManager {
       stack[i + 1].source = context.source
     }
 
-    remove(this.stack, item => item === context)
+    remove(this.stack, (item) => item === context)
     return context
   }
 

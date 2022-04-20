@@ -155,7 +155,7 @@ const methods = {
       },
       exit: (item, context) => {
         if (hasChildren(item, this.treeChildrenKey)) {
-          let children = context.childrenResult.filter(i => !!i)
+          let children = context.childrenResult.filter((i) => !!i)
           if (children.length) {
             return {
               ...item,
@@ -173,7 +173,7 @@ const methods = {
         }
       }
     }
-    return walk(tree, walker, this.treeChildrenKey).filter(i => !!i)
+    return walk(tree, walker, this.treeChildrenKey).filter((i) => !!i)
   }
 }
 
@@ -270,7 +270,7 @@ function getNormalizedCheckedValues (
       let partialChecked = false
       let childrenCheckedValues = []
       if (hasChildren(item, childrenKey)) {
-        itemChecked = context.childrenResult.every(i => !!i.checked)
+        itemChecked = context.childrenResult.every((i) => !!i.checked)
         partialChecked =
           !itemChecked &&
           context.childrenResult.some(
@@ -378,7 +378,7 @@ function checkLeaf (prevChecked, item) {
 
 function uncheckLeaf (prevChecked, item, parents, { strategy, childrenKey }) {
   let includeIndeterminate = strategy === INDETERMINATE
-  let parentValues = parents.map(i => i.value).filter(val => val != null)
+  let parentValues = parents.map((i) => i.value).filter((val) => val != null)
   let willUncheck = [item.value, ...parentValues] // 可能多删掉中间态的 parent，会在后面的 getNormalizedCheckedValues 中重新推导出来
   let mostTopAncestor = find(parents, ({ value }) =>
     includes(prevChecked, value)
@@ -389,7 +389,7 @@ function uncheckLeaf (prevChecked, item, parents, { strategy, childrenKey }) {
       ...(mostTopAncestor ? getLeaves(mostTopAncestor, childrenKey) : [])
     ]
     : prevChecked
-  return realChecked.filter(i => !includes(willUncheck, i))
+  return realChecked.filter((i) => !includes(willUncheck, i))
 }
 
 function checkGroup (prevChecked, leaves) {
@@ -403,7 +403,7 @@ function uncheckGroup (
   { strategy, leaves, childrenKey }
 ) {
   let includeIndeterminate = strategy === INDETERMINATE
-  let parentValues = parents.map(i => i.value).filter(val => val != null)
+  let parentValues = parents.map((i) => i.value).filter((val) => val != null)
   let willUncheck = [
     ...leaves,
     ...getGroupDescendants(item, childrenKey),
@@ -431,7 +431,7 @@ function uncheckGroup (
     ]
     : prevChecked
 
-  return realChecked.filter(i => !includes(willUncheck, i))
+  return realChecked.filter((i) => !includes(willUncheck, i))
 }
 
 function replaceCheckedGroupWithLeaves (
@@ -440,7 +440,7 @@ function replaceCheckedGroupWithLeaves (
   self,
   childrenKey
 ) {
-  let mostTopAncestor = find(parents, p => inChecked(prevChecked, p))
+  let mostTopAncestor = find(parents, (p) => inChecked(prevChecked, p))
   // 祖先有选中的，那么直接替换最高祖先
   if (mostTopAncestor) {
     return getLeaves(mostTopAncestor, childrenKey)
@@ -453,7 +453,7 @@ function replaceCheckedGroupWithLeaves (
 
   // 遍历替换后代选中的 group 节点
   let result = []
-  walk(self, item => {
+  walk(self, (item) => {
     if (hasChildren(item, childrenKey) && inChecked(prevChecked, item)) {
       result.push(...getLeaves(item, childrenKey))
       // 该节点以下已经替换过了
@@ -537,7 +537,7 @@ function isLeafAncestor (item, childrenKey) {
   return (
     !item.hidden &&
     hasChildren(item, childrenKey) &&
-    item[childrenKey].every(i => !!i.hidden)
+    item[childrenKey].every((i) => !!i.hidden)
   )
 }
 
@@ -553,7 +553,7 @@ function respectSelectionOrder (checked, prevChecked) {
   if (checked.length && prevChecked && prevChecked.length) {
     let stillChecked = []
     let newChecked = []
-    checked.forEach(ck => {
+    checked.forEach((ck) => {
       let index = prevChecked.indexOf(ck)
       if (index >= 0) {
         stillChecked[index] = ck
@@ -561,7 +561,7 @@ function respectSelectionOrder (checked, prevChecked) {
         newChecked.push(ck)
       }
     })
-    return stillChecked.filter(i => i != null).concat(newChecked)
+    return stillChecked.filter((i) => i != null).concat(newChecked)
   }
   return checked
 }

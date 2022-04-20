@@ -17,9 +17,9 @@ let tab = useChild('tab', 'tabs', [
   ['matched', 'isMatched'],
   ['matches', 'realMatches'],
   ['attrs', ({ $attrs }) => $attrs],
-  ['renderTab', vm => props => renderSlot(vm, 'item', props)],
-  ['renderLabel', vm => props => renderSlot(vm, 'label', props)],
-  ['renderPanel', vm => props => renderSlot(vm, 'default', props)]
+  ['renderTab', (vm) => (props) => renderSlot(vm, 'item', props)],
+  ['renderLabel', (vm) => (props) => renderSlot(vm, 'label', props)],
+  ['renderPanel', (vm) => (props) => renderSlot(vm, 'default', props)]
 ])
 
 const STATUS_LIST = ['success', 'warning', 'info', 'error']

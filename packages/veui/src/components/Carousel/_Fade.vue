@@ -48,12 +48,7 @@
           :autoplay="idx === index && options.video.autoplay"
           :muted="isAutoplay || options.video.muted"
         />
-        <img
-          v-else
-          :class="$c('sr-only')"
-          :src="item.src"
-          :alt="item.alt"
-        >
+        <img v-else :class="$c('sr-only')" :src="item.src" :alt="item.alt">
       </div>
     </slot>
   </li>
