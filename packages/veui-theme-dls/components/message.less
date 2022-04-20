@@ -3,7 +3,6 @@
 .@{veui-prefix}-message {
   display: flex;
   align-items: center;
-  line-height: @dls-message-line-height;
 
   &-icon {
     .dls-icon-size(@dls-message-icon-size);
@@ -61,9 +60,15 @@
 
   &[ui~="m"] {
     font-size: @dls-message-font-size-m;
+    line-height: dls-even(
+      dls-line-height(@dls-message-line-height, @dls-message-font-size-m)
+    );
   }
 
   &[ui~="s"] {
     font-size: @dls-message-font-size-s;
+    line-height: dls-even(
+      dls-line-height(@dls-message-line-height, @dls-message-font-size-s)
+    );
   }
 }
