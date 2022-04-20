@@ -52,9 +52,8 @@
                 group.parents
               ),
               [$c('cascader-pane-option-wrap-selected')]: isSelected(option),
-              [$c(
-                'cascader-pane-option-wrap-indeterminate'
-              )]: option.partialChecked
+              [$c('cascader-pane-option-wrap-indeterminate')]:
+                option.partialChecked
             }"
             :data-kbd-level="depth + 1"
             :data-kbd-key="getKey(option)"
@@ -215,7 +214,7 @@ export default {
         return (
           findParents(
             this.realOptions,
-            item => this.expanded === getKey(item),
+            (item) => this.expanded === getKey(item),
             {
               alias: 'options',
               includeSelf: true
@@ -256,7 +255,7 @@ export default {
       return {
         select: this.handleSelect,
         click: this.handleClick,
-        expand: option => {
+        expand: (option) => {
           if (this.canPopOut(option)) {
             this.updateExpanded(option)
           }
@@ -271,9 +270,13 @@ export default {
         if (this.canPopOut(option)) {
           this.updateExpanded(option)
         } else if (trigger === 'hover') {
-          // 设置延时：避免鼠标在面板之间斜着移动时遇到不能展开项而过早的关闭下一级的面板
+          // 设置延迟：避免鼠标在面板之间斜着移动时遇到不能展开项而过早的关闭下一级的面板
           this.expandTimer = setTimeout(() => {
-            this.updateExpanded(depth ? this.expandedItems[depth] : true)
+            // 比如从浙江移动上海（叶子）要关闭之前浙江的子节点
+            // 因为延迟原因，要检查下浙江还是打开的（可能在延迟期间触发了 outside 关闭）
+            if (this.expandedItems[depth]) {
+              this.updateExpanded(depth ? this.expandedItems[depth] : true)
+            }
           }, 200)
         } else {
           this.updateExpanded(depth ? this.expandedItems[depth] : true)
@@ -331,10 +334,14 @@ export default {
     },
     getPopoutParents (option) {
       let parents =
-        findParents(this.realOptions, item => getKey(item) === getKey(option), {
-          alias: 'options'
-        }) || []
-      return parents.filter(i => i.position !== 'inline')
+        findParents(
+          this.realOptions,
+          (item) => getKey(item) === getKey(option),
+          {
+            alias: 'options'
+          }
+        ) || []
+      return parents.filter((i) => i.position !== 'inline')
     },
     expandTo (option) {
       let expanded = true
@@ -356,7 +363,7 @@ export default {
     isExpanded (option) {
       return (
         option.value != null &&
-        this.expandedItems.some(item => getKey(item) === getKey(option))
+        this.expandedItems.some((item) => getKey(item) === getKey(option))
       )
     },
     isSelected (option) {
@@ -372,8 +379,8 @@ export default {
     isDisabled (option, parents, panelParents) {
       return (
         !!option.disabled ||
-        parents.some(i => !!i.disabled) ||
-        panelParents.some(i => !!i.disabled)
+        parents.some((i) => !!i.disabled) ||
+        panelParents.some((i) => !!i.disabled)
       )
     },
     scrollToCurrent () {
