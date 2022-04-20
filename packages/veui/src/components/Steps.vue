@@ -1,9 +1,5 @@
 <template>
-<div
-  :class="$c('steps')"
-  :ui="realUi"
-  role="list"
->
+<div :class="$c('steps')" :ui="realUi" role="list">
   <template v-for="(step, index) in steps">
     <div
       v-if="index !== 0"
@@ -28,17 +24,10 @@
       :aria-current="index === current ? 'step' : null"
       @click="$emit('click', index, $event)"
     >
-      <slot
-        v-bind="step"
-        :index="index"
-      >
+      <slot v-bind="step" :index="index">
         <div :class="$c('steps-step-index-container')">
           <div :class="$c('steps-step-index')">
-            <slot
-              name="index"
-              v-bind="step"
-              :index="index"
-            >
+            <slot name="index" v-bind="step" :index="index">
               <veui-icon
                 v-if="index < current && step.status !== 'error'"
                 :name="icons.success"
@@ -47,9 +36,7 @@
                 v-else-if="step.status === 'error'"
                 :name="icons.error"
               />
-              <template v-else>
-                {{ index + 1 }}
-              </template>
+              <template v-else>{{ index + 1 }}</template>
             </slot>
           </div>
           <div
@@ -60,28 +47,14 @@
             ]"
           />
         </div>
-        <div
-          v-if="step.label"
-          :class="$c('steps-step-content')"
-        >
+        <div v-if="step.label" :class="$c('steps-step-content')">
           <h3 :class="$c('steps-step-label')">
-            <slot
-              name="label"
-              v-bind="step"
-              :index="index"
-            >
+            <slot name="label" v-bind="step" :index="index">
               {{ step.label }}
             </slot>
           </h3>
-          <p
-            v-if="step.desc"
-            :class="$c('steps-step-desc')"
-          >
-            <slot
-              name="desc"
-              v-bind="step"
-              :index="index"
-            >
+          <p v-if="step.desc" :class="$c('steps-step-desc')">
+            <slot name="desc" v-bind="step" :index="index">
               {{ step.desc }}
             </slot>
           </p>

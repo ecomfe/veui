@@ -143,7 +143,7 @@ export default {
                 <Checkbox
                   checked={checked}
                   disabled={!!item.disabled}
-                  onChange={checked => {
+                  onChange={(checked) => {
                     this.table.select(checked, index)
                   }}
                   aria-label={this.t(
@@ -154,7 +154,7 @@ export default {
                 <Radio
                   checked={checked}
                   disabled={!!item.disabled}
-                  onChange={checked => {
+                  onChange={(checked) => {
                     this.table.select(checked, index)
                   }}
                   aria-label={this.t('@table.selectRow')}

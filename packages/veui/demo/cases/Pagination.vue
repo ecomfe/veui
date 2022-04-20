@@ -1,13 +1,12 @@
 <template>
 <article>
-  <h1><code>&lt;veui-pagination&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-pagination&gt;</code>
+  </h1>
   <section>
     <h2>三种尺寸</h2>
     <section>
-      <check-button-group
-        v-model="flags"
-        :items="flagOptions"
-      />
+      <check-button-group v-model="flags" :items="flagOptions"/>
     </section>
     <section>
       <veui-pagination
@@ -64,19 +63,17 @@
   <section>
     <h2>原生跳转</h2>
     <section>
-      <veui-pagination
-        :page="page"
-        :total="total"
-        :to="to"
-        native
-      />
+      <veui-pagination :page="page" :total="total" :to="to" native/>
     </section>
   </section>
 
   <section>
     <h2>阻止跳转</h2>
     <section>
-      <small>仅原生跳转可阻止已配置 <code>to</code> 的跳转</small>
+      <small>
+        仅原生跳转可阻止已配置
+        <code>to</code> 的跳转
+      </small>
     </section>
     <section>
       <veui-pagination
@@ -87,9 +84,7 @@
         @redirect="handlePageRedirect"
       />
     </section>
-    <div class="message">
-      {{ fifthPaginationMessage }}
-    </div>
+    <div class="message">{{ fifthPaginationMessage }}</div>
   </section>
 
   <section>
@@ -106,12 +101,7 @@
   <section>
     <h2>没有数据时</h2>
     <section>
-      <veui-pagination
-        :page="1"
-        :total="0"
-        :to="to"
-        native
-      />
+      <veui-pagination :page="1" :total="0" :to="to" native/>
     </section>
   </section>
 </article>
@@ -145,7 +135,7 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach(child => {
+    this.$children.forEach((child) => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })

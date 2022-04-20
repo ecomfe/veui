@@ -25,10 +25,7 @@
       @click="$emit('click')"
     >
       <span :class="$c('dropdown-label')">
-        <slot
-          name="label"
-          :label="label"
-        >{{ label }}</slot>
+        <slot name="label" :label="label">{{ label }}</slot>
       </span>
     </veui-button>
     <veui-button
@@ -37,14 +34,8 @@
       v-bind="triggerAttrs"
       v-on="triggerHandlers"
     >
-      <span
-        v-if="!split"
-        :class="$c('dropdown-label')"
-      >
-        <slot
-          name="label"
-          :label="label"
-        >{{ label }}</slot>
+      <span v-if="!split" :class="$c('dropdown-label')">
+        <slot name="label" :label="label">{{ label }}</slot>
       </span>
       <veui-icon
         :class="$c('dropdown-icon')"
@@ -93,10 +84,7 @@
         v-if="isSearching && !filteredSuggestions.length"
         :class="$c('dropdown-options-no-data')"
       >
-        <slot
-          name="no-data"
-          v-bind="{ keyword }"
-        >{{ t('noData') }}</slot>
+        <slot name="no-data" v-bind="{ keyword }">{{ t('noData') }}</slot>
       </div>
       <veui-option-group
         v-else
@@ -117,29 +105,17 @@
           slot="label"
           slot-scope="group"
         >
-          <slot
-            name="group-label"
-            v-bind="group"
-          />
+          <slot name="group-label" v-bind="group"/>
         </template>
         <template
           v-if="$scopedSlots.option"
           slot="option"
           slot-scope="option"
         >
-          <slot
-            name="option"
-            v-bind="option"
-          />
+          <slot name="option" v-bind="option"/>
         </template>
-        <template
-          slot="option-label"
-          slot-scope="option"
-        >
-          <slot
-            name="option-label"
-            v-bind="option"
-          >
+        <template slot="option-label" slot-scope="option">
+          <slot name="option-label" v-bind="option">
             <template v-if="!!searchable && keyword">
               <template v-for="({ parts }, idx) in option.matches">
                 <template v-for="({ text, matched }, index) in parts">
@@ -148,10 +124,7 @@
                     :key="`m-${idx}-${index}`"
                     :class="$c('option-matched')"
                   >{{ text }}</mark>
-                  <span
-                    v-else
-                    :key="`s-${idx}-${index}`"
-                  >{{ text }}</span>
+                  <span v-else :key="`s-${idx}-${index}`">{{ text }}</span>
                 </template>
                 <span
                   v-if="idx < option.matches.length - 1"

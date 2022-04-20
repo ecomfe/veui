@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-steps&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-steps&gt;</code>
+  </h1>
   <section>
     <p>
       Step
@@ -14,9 +16,7 @@
     </p>
     <p>
       <label>
-        <veui-checkbox v-model="vertical">
-          纵向样式
-        </veui-checkbox>
+        <veui-checkbox v-model="vertical">纵向样式</veui-checkbox>
       </label>
     </p>
   </section>
@@ -38,19 +38,11 @@
   </section>
   <section>
     <h2>文案纵向样式：</h2>
-    <veui-steps
-      :steps="steps"
-      ui="label-vertical"
-      :current="current - 1"
-    />
+    <veui-steps :steps="steps" ui="label-vertical" :current="current - 1"/>
   </section>
   <section>
     <h2>小型文案纵向样式：</h2>
-    <veui-steps
-      :steps="steps"
-      ui="s label-vertical"
-      :current="current - 1"
-    />
+    <veui-steps :steps="steps" ui="s label-vertical" :current="current - 1"/>
   </section>
   <section>
     <h2>自定义模板：</h2>
@@ -59,14 +51,9 @@
       :ui="`${vertical ? ' vertical' : ''}`"
       :current="current - 1"
     >
-      <template
-        slot="label"
-        slot-scope="step"
-      >
-        {{ step.label }} <veui-icon
-          class="star"
-          name="star"
-        />
+      <template #label="step">
+        {{ step.label }}
+        <veui-icon class="star" name="star"/>
       </template>
     </veui-steps>
   </section>

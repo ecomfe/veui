@@ -20,16 +20,10 @@
       :aria-selected="realValue.indexOf(item.value) !== -1"
       :aria-posinset="index + 1"
       :aria-setsize="items.length"
-      @change="checked => handleChange(item, checked)"
+      @change="(checked) => handleChange(item, checked)"
       @mouseenter="handleEnterForDesc(item)"
     >
-      <slot
-        name="item"
-        v-bind="item"
-        :index="index"
-      >
-        {{ item.label }}
-      </slot>
+      <slot name="item" v-bind="item" :index="index">{{ item.label }}</slot>
     </veui-checkbox>
   </div>
   <veui-popover
@@ -40,10 +34,7 @@
     :open.sync="openForDesc"
     trigger="hover"
   >
-    <slot
-      name="desc"
-      v-bind="currentForDesc"
-    >{{ currentForDesc.desc }}</slot>
+    <slot name="desc" v-bind="currentForDesc">{{ currentForDesc.desc }}</slot>
   </veui-popover>
 </div>
 </template>
@@ -114,11 +105,11 @@ export default {
         // checked 表示要选中
         // cancel
         values.splice(
-          findIndex(values, item => item === value),
+          findIndex(values, (item) => item === value),
           1
         )
         // prop value 可能一开始就包含了如下 2 种错误情况
-        let selectedExclusives = values.filter(val =>
+        let selectedExclusives = values.filter((val) =>
           includes(this.exclusiveValues, val)
         )
         let exLen = selectedExclusives.length
@@ -133,7 +124,7 @@ export default {
         values = [value]
       } else {
         // select inclusive: remove all exclusive values
-        values = values.filter(val => !includes(this.exclusiveValues, val))
+        values = values.filter((val) => !includes(this.exclusiveValues, val))
         values.push(value)
       }
 

@@ -2,11 +2,11 @@ import Vue from 'vue'
 import { remove } from 'lodash'
 
 export default class SimpleDialog {
-  components = [];
+  components = []
 
   createComponent () {
     const component = new Vue({
-      render: h => h()
+      render: (h) => h()
     })
     return component
   }
@@ -21,7 +21,7 @@ export default class SimpleDialog {
   }
 
   removeComponent (component) {
-    remove(this.components, item => item === component)
+    remove(this.components, (item) => item === component)
     component.$destroy()
 
     let { $el } = component
@@ -31,7 +31,7 @@ export default class SimpleDialog {
   }
 
   _show () {
-    throw new Error('SimpleDialog\'s [_show] method must be implemented.')
+    throw new Error("SimpleDialog's [_show] method must be implemented.")
   }
 
   show (content, title, options = {}) {

@@ -1,10 +1,10 @@
 <template>
 <article>
-  <h1><code>&lt;veui-check-button-group&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-check-button-group&gt;</code>
+  </h1>
   <section>
-    <veui-checkbox v-model="disabled">
-      禁用
-    </veui-checkbox>
+    <veui-checkbox v-model="disabled">禁用</veui-checkbox>
   </section>
   <section>
     <p>
@@ -13,9 +13,7 @@
         :items="data1"
         :disabled="disabled"
       >
-        <template #item="props">
-          {{ props.label }}
-        </template>
+        <template #item="props">{{ props.label }}</template>
       </veui-check-button-group>
     </p>
     <p>value: {{ picked1 }}</p>
@@ -28,12 +26,8 @@
         ui="s"
         :disabled="disabled"
       >
-        <template #item="props">
-          {{ props.label }}
-        </template>
-        <template #desc>
-          您没有权限！
-        </template>
+        <template #item="props">{{ props.label }}</template>
+        <template #desc>您没有权限！</template>
       </veui-check-button-group>
     </p>
     <p>value: {{ picked2 }}</p>
@@ -46,10 +40,7 @@
         ui="s"
         :disabled="disabled"
       >
-        <template
-          slot="item"
-          slot-scope="props"
-        >
+        <template #item="props">
           <veui-icon :name="props.icon"/>
         </template>
       </veui-check-button-group>

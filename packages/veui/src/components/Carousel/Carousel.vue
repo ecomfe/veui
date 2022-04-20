@@ -37,14 +37,8 @@
           :options="options"
           v-bind="isFade ? {} : slideProps"
         >
-          <template
-            slot="item"
-            slot-scope="props"
-          >
-            <slot
-              name="item"
-              v-bind="props"
-            />
+          <template slot="item" slot-scope="props">
+            <slot name="item" v-bind="props"/>
           </template>
         </component>
       </div>
@@ -66,10 +60,7 @@
         tabindex="-1"
         @click="doStep(-1)"
       >
-        <veui-icon
-          :name="icons.prev"
-          :aria-label="t('prev')"
-        />
+        <veui-icon :name="icons.prev" :aria-label="t('prev')"/>
       </veui-button>
       <veui-button
         :ui="controlUi"
@@ -82,10 +73,7 @@
         tabindex="-1"
         @click="doStep(1)"
       >
-        <veui-icon
-          :name="icons.next"
-          :aria-label="t('next')"
-        />
+        <veui-icon :name="icons.next" :aria-label="t('next')"/>
       </veui-button>
     </template>
   </div>
@@ -104,11 +92,7 @@
     :vertical="vertical"
     @trigger="handleIndicator"
   />
-  <div
-    :class="$c('sr-only')"
-    aria-live="polite"
-    aria-atomic="true"
-  >
+  <div :class="$c('sr-only')" aria-live="polite" aria-atomic="true">
     {{ t('detail', { index: realIndex + 1, total: datasource.length }) }}
   </div>
 </div>
@@ -193,7 +177,7 @@ export default {
             return val > 0
           }
           let splited = val.split('/').map(Number)
-          return splited.length === 2 && splited.every(i => i > 0)
+          return splited.length === 2 && splited.every((i) => i > 0)
         }
         return true
       }
@@ -240,7 +224,7 @@ export default {
         ? this.datasource.map(
           ({ label }, index) => label || this.t('pageIndex', { index })
         )
-        : range(1, this.groupCount + 1).map(index =>
+        : range(1, this.groupCount + 1).map((index) =>
           this.t('pageIndex', { index })
         )
     },

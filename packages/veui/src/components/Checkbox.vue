@@ -24,22 +24,13 @@
     }"
   >
     <transition :name="$c('checkbox-icon')">
-      <veui-icon
-        v-if="indeterminate"
-        :name="icons.indeterminate"
-      />
+      <veui-icon v-if="indeterminate" :name="icons.indeterminate"/>
     </transition>
     <transition :name="$c('checkbox-icon')">
-      <veui-icon
-        v-if="realChecked && !indeterminate"
-        :name="icons.checked"
-      />
+      <veui-icon v-if="realChecked && !indeterminate" :name="icons.checked"/>
     </transition>
   </span>
-  <span
-    v-if="$slots.default"
-    :class="$c('checkbox-label')"
-  >
+  <span v-if="$slots.default" :class="$c('checkbox-label')">
     <slot/>
   </span>
 </label>

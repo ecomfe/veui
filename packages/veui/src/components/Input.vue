@@ -19,11 +19,7 @@
     </div>
   </template>
   <div :class="$c('input-content')">
-    <div
-      v-show="empty"
-      :class="$c('input-placeholder')"
-      @selectstart.prevent
-    >
+    <div v-show="empty" :class="$c('input-placeholder')" @selectstart.prevent>
       <slot name="placeholder">{{ placeholder }}</slot>
     </div>
     <!-- 如果以后 Vue 对 native input 完全受控，那么这里就不能用 realValue 了 -->

@@ -1,24 +1,16 @@
 <template>
 <article>
-  <h1><code>&lt;veui-progress&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-progress&gt;</code>
+  </h1>
   <section>
     <p>
       Progress
-      <input
-        v-model="progress"
-        type="number"
-        step="0.01"
-        min="0"
-        :max="1"
-      >
+      <input v-model="progress" type="number" step="0.01" min="0" :max="1">
     </p>
     <p>
-      <veui-button @click="status = 'error'">
-        Trigger Error
-      </veui-button>
-      <veui-button @click="status = null">
-        Clear Status
-      </veui-button>
+      <veui-button @click="status = 'error'">Trigger Error</veui-button>
+      <veui-button @click="status = null">Clear Status</veui-button>
       <veui-button
         @click="indeterminate = !indeterminate"
       >Toggle Indeterminate</veui-button>
@@ -37,10 +29,7 @@
   </section>
   <section>
     <h2>线性进度条（不确定进度）</h2>
-    <veui-progress
-      :status.sync="status"
-      indeterminate
-    />
+    <veui-progress :status.sync="status" indeterminate/>
   </section>
   <section>
     <h2>线性进度条（小尺寸）</h2>

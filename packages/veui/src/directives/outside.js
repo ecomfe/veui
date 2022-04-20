@@ -44,8 +44,8 @@ function initBindingType (type) {
 
   document.addEventListener(
     event,
-    e => {
-      handlerBindings[type].forEach(item => {
+    (e) => {
+      handlerBindings[type].forEach((item) => {
         item[key] && item[key].realHandler(e)
       })
     },
@@ -55,7 +55,7 @@ function initBindingType (type) {
 
 function getElementsByRefs (refs, context) {
   const elements = []
-  refs.forEach(ref => {
+  refs.forEach((ref) => {
     elements.push(...getNodes(ref, context))
   })
   return elements
@@ -68,7 +68,7 @@ function getElementsByRefs (refs, context) {
  * @param {Array.<Element>} elements 元素范围
  */
 function isElementIn (element, elements) {
-  return elements.some(el => {
+  return elements.some((el) => {
     return contains(el, element, true)
   })
 }
@@ -141,10 +141,10 @@ function generate (el, { handler, trigger, delay, refs, excludeSelf }, context) 
 }
 
 function clear (el) {
-  TRIGGER_TYPES.forEach(type => {
+  TRIGGER_TYPES.forEach((type) => {
     let key = getBindingKey(type)
     if (el[key]) {
-      remove(handlerBindings[type], item => item[key].id === el[key].id)
+      remove(handlerBindings[type], (item) => item[key].id === el[key].id)
       // bug: 导致 Dropdown 同时展开多个 popup
       // 这里直接 clearTimeout 可能会导致之前 delay 的 timer 无效，暂时降级下，忽略 delay 直接调用
       if (type === 'hover' && el[key].timer != null) {

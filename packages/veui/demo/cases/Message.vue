@@ -1,22 +1,15 @@
 <template>
 <article class="demo-message">
-  <h1><code>&lt;veui-message&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-message&gt;</code>
+  </h1>
   <section>
     <div class="control-wrapper">
-      <veui-radio-button-group
-        v-model="ui"
-        :items="uiValues"
-      />
+      <veui-radio-button-group v-model="ui" :items="uiValues"/>
 
-      <veui-radio-button-group
-        v-model="display"
-        :items="displayValues"
-      />
+      <veui-radio-button-group v-model="display" :items="displayValues"/>
     </div>
-    <div
-      v-for="(status, index) in statuses"
-      :key="index"
-    >
+    <div v-for="(status, index) in statuses" :key="index">
       <span class="message-label">{{ status }}:</span>
       <veui-message
         :display="display"

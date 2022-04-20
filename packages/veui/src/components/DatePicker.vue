@@ -61,15 +61,9 @@
         @click.stop="clear"
         @mouseup.stop
       >
-        <veui-icon
-          :name="icons.clear"
-          :aria-label="t('clear')"
-        />
+        <veui-icon :name="icons.clear" :aria-label="t('clear')"/>
       </veui-button>
-      <veui-icon
-        :class="$c('date-picker-clock')"
-        :name="icons.calendar"
-      />
+      <veui-icon :class="$c('date-picker-clock')" :name="icons.calendar"/>
     </div>
   </div>
   <veui-overlay
@@ -151,15 +145,8 @@
             </template>
           </div>
         </template>
-        <template
-          v-if="$scopedSlots.date"
-          slot="date"
-          slot-scope="date"
-        >
-          <slot
-            name="date"
-            v-bind="date"
-          />
+        <template v-if="$scopedSlots.date" slot="date" slot-scope="date">
+          <slot name="date" v-bind="date"/>
         </template>
       </veui-calendar>
     </div>

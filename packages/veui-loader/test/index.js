@@ -45,7 +45,7 @@ const SPECS = [
 ]
 
 function runWebpack (config) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const compiler = webpack(config)
 
     compiler.run((err, stats) => {
@@ -55,7 +55,7 @@ function runWebpack (config) {
 }
 
 SPECS.forEach(({ entry, expect, title }) => {
-  test(title, t => {
+  test(title, (t) => {
     return prepare()
       .then(() =>
         runWebpack({
@@ -113,8 +113,8 @@ SPECS.forEach(({ entry, expect, title }) => {
         }
 
         let { include = [], exclude = [] } = expect
-        include.forEach(item => t.true(src.includes(item)))
-        exclude.forEach(item => t.false(src.includes(item)))
+        include.forEach((item) => t.true(src.includes(item)))
+        exclude.forEach((item) => t.false(src.includes(item)))
       })
       .then(tearDown)
   })
@@ -137,7 +137,7 @@ function getSource (stats) {
 }
 
 function prepare () {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     symlink(
       r(__dirname, '../node_modules/veui'),
       r(__dirname, '../node_modules/veui-next'),
@@ -147,7 +147,7 @@ function prepare () {
 }
 
 function tearDown () {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     unlink(r(__dirname, '../node_modules/veui-next'), resolve)
   })
 }

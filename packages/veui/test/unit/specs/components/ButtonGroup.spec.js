@@ -96,10 +96,7 @@ describe('components/ButtonGroup', () => {
 
     const wrapper = mount(ButtonGroupClick)
 
-    wrapper
-      .findAll('.veui-button')
-      .at(0)
-      .trigger('click')
+    wrapper.findAll('.veui-button').at(0).trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.hasUndo).to.equal(true)
     expect(wrapper.vm.clicktime).to.equal(1)
@@ -107,10 +104,7 @@ describe('components/ButtonGroup', () => {
     expect(wrapper.vm.value).to.equal('undo')
     expect(wrapper.vm.event.type).to.equal('click')
 
-    wrapper
-      .findAll('.veui-button')
-      .at(1)
-      .trigger('click')
+    wrapper.findAll('.veui-button').at(1).trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.hasUndo).to.equal(true)
     expect(wrapper.vm.clicktime).to.equal(2)

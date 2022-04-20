@@ -4,10 +4,7 @@
     <code>&lt;veui-button-group&gt;</code>
   </h1>
   <section>
-    <veui-checkbox
-      v-model="disabled"
-      ui="s"
-    >禁用全部</veui-checkbox>
+    <veui-checkbox v-model="disabled" ui="s">禁用全部</veui-checkbox>
   </section>
   <section>
     <veui-checkbox
@@ -16,11 +13,7 @@
     >禁用「删除」</veui-checkbox>
   </section>
   <section>
-    <veui-radio-group
-      v-model="size"
-      ui="s"
-      :items="sizes"
-    />
+    <veui-radio-group v-model="size" ui="s" :items="sizes"/>
   </section>
   <section>
     <veui-button-group
@@ -44,11 +37,7 @@
     />
   </section>
   <section>
-    <veui-button-group
-      :ui="size"
-      :items="items"
-      :disabled="disabled"
-    />
+    <veui-button-group :ui="size" :items="items" :disabled="disabled"/>
   </section>
   <section>
     <h4>Inline Buttons</h4>

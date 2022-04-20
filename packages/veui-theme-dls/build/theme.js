@@ -6,7 +6,7 @@ const themeDir = resolve(__dirname, '..')
 
 // 简单实现
 function kebabCase (str) {
-  return str.replace(/[A-Z]/g, s => `-${s.toLowerCase()}`).replace(/^-/, '')
+  return str.replace(/[A-Z]/g, (s) => `-${s.toLowerCase()}`).replace(/^-/, '')
 }
 
 function getSortedComponents () {

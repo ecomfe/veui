@@ -10,7 +10,7 @@ import outside from '../../directives/outside'
 import { find } from '../../utils/datasource'
 import { map, endsWith, pick, isString } from 'lodash'
 
-const ensureSlash = str => (endsWith(str, '/') ? str : `${str}/`)
+const ensureSlash = (str) => (endsWith(str, '/') ? str : `${str}/`)
 
 export default {
   components: {
@@ -53,8 +53,8 @@ export default {
   mixins: [prefix, overlay, ui, useControllable(['active'])],
   created () {
     if (this.$router) {
-      const updateActive = route => {
-        let exactActiveItem = find(this.normalizedItems, item =>
+      const updateActive = (route) => {
+        let exactActiveItem = find(this.normalizedItems, (item) =>
           this.matches(route, item)
         )
         this.commit('active', exactActiveItem ? exactActiveItem.name : null)
@@ -110,7 +110,7 @@ export default {
     },
     findActiveItems (items) {
       let result = []
-      items.some(item => {
+      items.some((item) => {
         let exactActive = this.realActive === item.name
         if (exactActive) {
           result.push(item)
@@ -133,7 +133,7 @@ export default {
     activateItem (nameOrItem, closePopout) {
       let item =
         typeof nameOrItem === 'string'
-          ? find(this.normalizedItems, item => item.name === nameOrItem)
+          ? find(this.normalizedItems, (item) => item.name === nameOrItem)
           : nameOrItem
       let { to, disabled, name } = item
       if (disabled) return

@@ -29,7 +29,7 @@ export default {
   computed: {
     uiParts () {
       let parts = this.getComponentConfig('parts') || {}
-      return mapValues(parts, ui => callWithProps(ui, this.uiProps))
+      return mapValues(parts, (ui) => callWithProps(ui, this.uiProps))
     },
     declaredUiProps () {
       let ui = (this.ui || '').trim()
@@ -37,7 +37,7 @@ export default {
       let { uiConfig = {} } = this
       return tokens.reduce(
         (result, token) => {
-          let name = find(Object.keys(uiConfig), name => {
+          let name = find(Object.keys(uiConfig), (name) => {
             let { boolean = false, values = [] } = uiConfig[name]
             if (boolean) {
               return token === name
@@ -95,7 +95,7 @@ export default {
     },
     uiProps () {
       let { inheritableUiProps = {} } =
-        findAncestor(this, component => !isTransparent(component)) || {}
+        findAncestor(this, (component) => !isTransparent(component)) || {}
 
       return {
         ...this.defaultUiProps,
@@ -109,7 +109,7 @@ export default {
     uiData () {
       let { uiConfig = {}, uiProps } = this
       return Object.keys(uiProps)
-        .filter(name => name !== UNKNOWN_KEY)
+        .filter((name) => name !== UNKNOWN_KEY)
         .reduce((result, name) => {
           let data = get(uiConfig[name], ['data', uiProps[name]], {})
           merge(result, data)
@@ -129,7 +129,7 @@ export default {
           ...icons,
           ...uiIcons
         },
-        ui => callWithProps(ui, this.uiProps)
+        (ui) => callWithProps(ui, this.uiProps)
       )
     },
     realUi () {
@@ -137,13 +137,13 @@ export default {
       return (
         uniq(
           Object.keys(props)
-            .map(key => {
+            .map((key) => {
               if (props[key] === true) {
                 return key
               }
               return key === UNKNOWN_KEY ? null : props[key]
             })
-            .filter(val => val && val !== DEFAULT_VAL && val !== false)
+            .filter((val) => val && val !== DEFAULT_VAL && val !== false)
             .concat(this.declaredUiProps[UNKNOWN_KEY])
         ).join(' ') || null
       )

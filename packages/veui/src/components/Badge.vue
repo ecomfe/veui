@@ -16,12 +16,9 @@
       }"
     >{{ !standalone ? content : '' }}</span>
   </transition>
-  <span
-    v-if="standalone && value"
-    :class="$c('badge-standalone-label')"
-  >{{
-    value
-  }}</span>
+  <span v-if="standalone && value" :class="$c('badge-standalone-label')">
+    {{ value }}
+  </span>
 </div>
 </template>
 

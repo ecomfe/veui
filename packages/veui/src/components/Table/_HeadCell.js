@@ -147,10 +147,10 @@ export default {
         colspan={col.colspan > 1 ? col.colspan : null}
         rowspan={col.rowspan > 1 ? col.rowspan : null}
         ref="self"
-        onMouseover={e => {
+        onMouseover={(e) => {
           this.handleMouseover(!!desc, !!col.sortable, e)
         }}
-        onMouseout={e => {
+        onMouseout={(e) => {
           this.handleMouseout(!!desc, !!col.sortable, e)
         }}
         onClick={this.handleClick}
@@ -205,13 +205,14 @@ export default {
                       name={this.table.icons.filter}
                       class={{
                         [this.$c('table-header-icon')]: true,
-                        [this.$c('table-header-icon-active')]: this.filterActive
+                        [this.$c('table-header-icon-active')]:
+                          this.filterActive
                       }}
                     />
                   </Button>
                 ),
                 before: col.hasFilterSlot()
-                  ? props => (
+                  ? (props) => (
                     <div class={this.$c('table-filter-custom')}>
                       {col.renderFilter(props)}
                     </div>

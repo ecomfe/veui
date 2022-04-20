@@ -24,14 +24,14 @@ export class ToastManager {
 
     let messages = []
     if (Array.isArray(option)) {
-      messages = option.map(item => this.container.add(item))
+      messages = option.map((item) => this.container.add(item))
     } else if (isObject(option)) {
       messages = [this.container.add(option)]
     } else {
       warn('[toast-manager] Invalid arguments for Toasts.')
     }
 
-    return () => messages.forEach(message => this.container.remove(message))
+    return () => messages.forEach((message) => this.container.remove(message))
   }
 
   remove (index) {

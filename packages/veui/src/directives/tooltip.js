@@ -6,7 +6,7 @@ import { isOverflow } from '../utils/dom'
 const OPTIONS_SCHEMA = {
   value: 'content',
   modifiers: {
-    position: flatMap(['top', 'right', 'bottom', 'left', 'auto'], side => {
+    position: flatMap(['top', 'right', 'bottom', 'left', 'auto'], (side) => {
       return [side, `${side}-start`, `${side}-end`]
     }),
     overflow: false

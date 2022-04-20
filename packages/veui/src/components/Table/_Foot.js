@@ -57,9 +57,8 @@ export default {
                     <th
                       class={{
                         [this.$c('table-cell-expand')]: true,
-                        [this.$c(
-                          'table-cell-sticky-left'
-                        )]: table.needFixLeft,
+                        [this.$c('table-cell-sticky-left')]:
+                            table.needFixLeft,
                         [this.$c('table-cell-sticky-edge')]:
                             table.needFixLeft && !table.hasFixedLeft
                       }}
@@ -77,7 +76,7 @@ export default {
                   : []
               )
               .concat(
-                table.realColumns.map(col => (
+                table.realColumns.map((col) => (
                   <th
                     class={{
                       [this.$c(`table-cell-${col.align}`)]: !!col.align,

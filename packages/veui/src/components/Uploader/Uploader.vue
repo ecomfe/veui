@@ -28,10 +28,9 @@
       v-for="(_, slotName) in $scopedSlots"
       :slot="slotName"
       slot-scope="slotData"
-    ><slot
-      :name="slotName"
-      v-bind="slotData"
-    /></template>
+    >
+      <slot :name="slotName" v-bind="slotData"/>
+    </template>
   </component>
 
   <veui-lightbox
@@ -258,14 +257,14 @@ export default {
       }
       let status = find(
         [STATUS.UPLOADING, STATUS.FAILURE, STATUS.PENDING],
-        status => this.fileList.some(file => file.status === status)
+        (status) => this.fileList.some((file) => file.status === status)
       )
       return status || STATUS.SUCCESS
     },
     successFiles () {
       return this.fileList
-        .filter(file => file.isSuccess)
-        .map(file => file.value)
+        .filter((file) => file.isSuccess)
+        .map((file) => file.value)
     },
     realOrder () {
       if (this.order) {
@@ -349,10 +348,10 @@ export default {
         // 并不是 value 变化了才更新 fileList
         let values = [].concat(val).filter(Boolean)
         if (process.env.NODE_ENV !== 'test') {
-          if (some(values, val => isString(val))) {
+          if (some(values, (val) => isString(val))) {
             warn('[veui-uploader] `value` must be object(s).', this)
           }
-          if (some(values, val => isNil(val[this.keyField]))) {
+          if (some(values, (val) => isNil(val[this.keyField]))) {
             warn(
               '[veui-uploader] `key-field` is required of `value` to ensure correct order.',
               this
@@ -362,7 +361,7 @@ export default {
 
         let j = 0
         this.fileList = this.fileList
-          .map(file => {
+          .map((file) => {
             if (!file.isSuccess) {
               return file
             }
@@ -376,7 +375,7 @@ export default {
             if (value[this.keyField]) {
               let file = find(
                 this.fileList,
-                file => file.key === value[this.keyField]
+                (file) => file.key === value[this.keyField]
               )
               // file.value 对应 value array 中的元素
               if (file) {
@@ -390,7 +389,7 @@ export default {
           .filter(Boolean)
           .concat(
             // 还有剩的添加到最后（TODO: 需要考虑 order 么？）
-            values.slice(j).map(val => this.createUploaderFile(val))
+            values.slice(j).map((val) => this.createUploaderFile(val))
           )
 
         // fileList 不能超过 maxCount，若超过，先删除失败的，再删除上传中的，最后删除成功的
@@ -413,10 +412,10 @@ export default {
             return this.fileList.indexOf(a) - this.fileList.indexOf(b)
           })
           this.fileList = this.fileList.filter(
-            file => sorted.indexOf(file) < maxCount
+            (file) => sorted.indexOf(file) < maxCount
           )
           // 要取消上传中的
-          sorted.slice(maxCount).forEach(file => {
+          sorted.slice(maxCount).forEach((file) => {
             if (file.isUploading) {
               file.cancel()
             }
@@ -451,16 +450,16 @@ export default {
     preview (index) {
       let successFileIndex = findIndex(
         this.successFiles,
-        val => val[this.keyField] === this.fileList[index].key
+        (val) => val[this.keyField] === this.fileList[index].key
       )
       this.previewIndex = successFileIndex
       this.previewOpen = true
     },
     cancelAll () {
-      this.fileList.forEach(file => file.cancel())
+      this.fileList.forEach((file) => file.cancel())
     },
     clear () {
-      this.fileList.forEach(file => {
+      this.fileList.forEach((file) => {
         if (file.isFailure) {
           this.removeFile(this.fileList.indexOf(file))
         }
@@ -490,7 +489,7 @@ export default {
     },
     handleItemReplace (index) {
       // TODO: pickFiles 异步回调后可能 fileList index 已经变了
-      this.pickFiles(false).then(files => {
+      this.pickFiles(false).then((files) => {
         this.replaceFile(index, files[0])
       })
     },
@@ -537,17 +536,17 @@ export default {
         cancelFunctions.push(reject)
       })
       this.removePreviousFileInputHandler = () =>
-        cancelFunctions.forEach(c => c())
+        cancelFunctions.forEach((c) => c())
 
       input.click()
       return !this.afterPick
         ? promise
-        : promise.then(files => this.afterPick(files))
+        : promise.then((files) => this.afterPick(files))
     },
     chooseFiles () {
       let restCount = this.maxCount - this.fileList.length
       this.pickFiles(restCount > 1)
-        .then(files => {
+        .then((files) => {
           if (!files.length) {
             return
           }
@@ -571,7 +570,7 @@ export default {
         })
         return
       }
-      files = files.map(file => this.createUploaderFile(file))
+      files = files.map((file) => this.createUploaderFile(file))
       this.fileList =
         this.realOrder === ORDERS.PREPEND
           ? files.concat(this.fileList)
@@ -582,7 +581,7 @@ export default {
       }
     },
     startUpload () {
-      this.fileList.forEach(file => this.uploadFile(file))
+      this.fileList.forEach((file) => this.uploadFile(file))
     },
     uploadFile (file) {
       if (!file.isPending) {
@@ -592,7 +591,7 @@ export default {
       file.isUploading = true
       return file
         .validate(this.validateOptions, this)
-        .then(errors => {
+        .then((errors) => {
           if (!errors) {
             return
           }
@@ -605,7 +604,7 @@ export default {
         .then(() => {
           // validate success, start to upload
           return file.upload(this, {
-            onprogress: evt => {
+            onprogress: (evt) => {
               if (evt.loaded < 0) {
                 return
               }
@@ -621,16 +620,16 @@ export default {
           })
         })
         .then(() => STATUS.SUCCESS)
-        .catch(err => {
+        .catch((err) => {
           if (err.__CANCEL__) {
             throw err
           }
           return STATUS.FAILURE
         })
-        .then(status => {
+        .then((status) => {
           this.updateFileStatus(this.fileList.indexOf(file), status)
         })
-        .catch(err => {
+        .catch((err) => {
           warn(`[veui-uploader] File upload failed: ${err.message}`, this)
         })
     },

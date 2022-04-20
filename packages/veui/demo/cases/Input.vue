@@ -1,56 +1,29 @@
 <template>
 <article>
-  <h1><code>&lt;veui-input&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-input&gt;</code>
+  </h1>
   <veui-form>
     <section class="five-sizes">
       <h3>4 种大小：</h3>
-      <veui-field
-        ui="xs"
-        label="xs"
-      >
-        <veui-input
-          v-model="poem"
-          ui="xs"
-          autofocus
-        />
+      <veui-field ui="xs" label="xs">
+        <veui-input v-model="poem" ui="xs" autofocus/>
       </veui-field>
-      <veui-field
-        ui="s"
-        label="s"
-      >
-        <veui-input
-          v-model="poem"
-          ui="s"
-        />
+      <veui-field ui="s" label="s">
+        <veui-input v-model="poem" ui="s"/>
       </veui-field>
-      <veui-field
-        ui="s"
-        label="m"
-      >
-        <veui-input
-          v-model="poem"
-          ui="m"
-        />
+      <veui-field ui="s" label="m">
+        <veui-input v-model="poem" ui="m"/>
       </veui-field>
-      <veui-field
-        ui="l"
-        label="l"
-      >
-        <veui-input
-          v-model="poem"
-          ui="l"
-        />
+      <veui-field ui="l" label="l">
+        <veui-input v-model="poem" ui="l"/>
       </veui-field>
     </section>
 
     <section>
       <h3>受控（感知输入法，固定值）</h3>
       <p class="attention">现象：中英文直接不能输入</p>
-      <veui-input
-        value="固定内容"
-        composition
-        ui="xs"
-      />
+      <veui-input value="固定内容" composition ui="xs"/>
       <veui-button ui="xs">Submit</veui-button>
       <h3>受控（不感知输入法，固定值）</h3>
       <p class="attention">
@@ -59,10 +32,7 @@
       <veui-input value="固定内容"/>
       <h3>受控（感知输入法, 且用 v-model 同步），value: {{ controlled1 }}</h3>
       <p class="attention">现象：value的值实时在同步</p>
-      <veui-input
-        v-model="controlled1"
-        composition
-      />
+      <veui-input v-model="controlled1" composition/>
       <veui-button @click="delaySet">delaySet</veui-button>
       <h3>
         受控（不感知输入法, 且用 v-model 同步），value: {{ controlled2 }}
@@ -72,10 +42,7 @@
       </p>
       <veui-input v-model="controlled2"/>
       <h3>非受控（感知输入法），localValue：{{ uncontrolled1 }}</h3>
-      <veui-input
-        composition
-        @input="uncontrolled1 = $event"
-      />
+      <veui-input composition @input="uncontrolled1 = $event"/>
       <h3>非受控（不感知输入法），localValue：{{ uncontrolled2 }}</h3>
       <veui-input @input="uncontrolled2 = $event"/>
     </section>
@@ -109,32 +76,14 @@
           placeholder="李云腾"
           @focus="log('focus')"
         />
-        <veui-input
-          v-model="name"
-          readonly
-          placeholder="李云腾"
-        />
-        <veui-input
-          v-model="name"
-          disabled
-          placeholder="李云腾"
-        />
+        <veui-input v-model="name" readonly placeholder="李云腾"/>
+        <veui-input v-model="name" disabled placeholder="李云腾"/>
       </veui-field>
 
       <veui-field label="手机：">
-        <veui-input
-          v-model="phone"
-          select-on-focus
-          @blur="log('blur')"
-        />
-        <veui-input
-          v-model="phone"
-          readonly
-        />
-        <veui-input
-          v-model="phone"
-          disabled
-        />
+        <veui-input v-model="phone" select-on-focus @blur="log('blur')"/>
+        <veui-input v-model="phone" readonly/>
+        <veui-input v-model="phone" disabled/>
       </veui-field>
 
       <veui-field label="密码：">
@@ -159,10 +108,8 @@
       </veui-field>
 
       <veui-field label="隐藏：">
-        <veui-span>这里有一个隐藏的&nbsp;input</veui-span><veui-input
-          v-model="hiddenValue"
-          type="hidden"
-        />
+        <veui-span>这里有一个隐藏的&nbsp;input</veui-span>
+        <veui-input v-model="hiddenValue" type="hidden"/>
       </veui-field>
     </section>
 
@@ -170,7 +117,9 @@
       <h3>Before / After Slot</h3>
       <section>
         <veui-input clearable>
-          <template slot="before"><veui-icon name="info-circle"/></template>
+          <template #before>
+            <veui-icon name="info-circle"/>
+          </template>
         </veui-input>
       </section>
     </section>
@@ -179,7 +128,9 @@
       <h3>Placeholder Slot</h3>
       <section>
         <veui-input clearable>
-          <template slot="placeholder"><veui-icon name="edit"/></template>
+          <template #placeholder>
+            <veui-icon name="edit"/>
+          </template>
         </veui-input>
       </section>
     </section>
@@ -196,17 +147,8 @@
           class="input-nudge"
           @focus="log('focus')"
         />
-        <veui-input
-          v-model="price"
-          class="input-nudge"
-          clearable
-          readonly
-        />
-        <veui-input
-          v-model="price"
-          class="input-nudge"
-          disabled
-        />
+        <veui-input v-model="price" class="input-nudge" clearable readonly/>
+        <veui-input v-model="price" class="input-nudge" disabled/>
       </veui-field>
     </section>
 
@@ -224,20 +166,9 @@
     <section>
       <h3>内联样式</h3>
       <veui-field label="内联：">
-        <veui-input
-          v-model="price"
-          ui="inline"
-        />
-        <veui-input
-          v-model="price"
-          ui="inline"
-          readonly
-        />
-        <veui-input
-          v-model="price"
-          ui="inline"
-          disabled
-        />
+        <veui-input v-model="price" ui="inline"/>
+        <veui-input v-model="price" ui="inline" readonly/>
+        <veui-input v-model="price" ui="inline" disabled/>
       </veui-field>
     </section>
   </veui-form>
@@ -246,45 +177,24 @@
     <h3>错误样式</h3>
     <section>
       <veui-input invalid/>
-      <veui-input
-        ui="inline"
-        invalid
-      />
+      <veui-input ui="inline" invalid/>
     </section>
   </section>
 
   <section>
     <h3>字数限制显示</h3>
     <section>
-      <veui-input
-        placeholder="允许溢出"
-        maxlength="6"
-        clearable
-      />
-      <veui-input
-        placeholder="不允许溢出"
-        maxlength="6"
-        clearable
-        strict
-      />
+      <veui-input placeholder="允许溢出" maxlength="6" clearable/>
+      <veui-input placeholder="不允许溢出" maxlength="6" clearable strict/>
     </section>
   </section>
 
   <section>
     <h3>移除前后空白</h3>
     <section>
-      <veui-input
-        placeholder="both"
-        trim
-      />
-      <veui-input
-        placeholder="start"
-        trim="start"
-      />
-      <veui-input
-        placeholder="end"
-        trim="end"
-      />
+      <veui-input placeholder="both" trim/>
+      <veui-input placeholder="start" trim="start"/>
+      <veui-input placeholder="end" trim="end"/>
     </section>
   </section>
 </article>

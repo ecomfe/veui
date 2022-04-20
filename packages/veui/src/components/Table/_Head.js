@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     update () {
-      ;(this.$refs.cells || []).forEach(cell => cell.$forceUpdate())
+      ;(this.$refs.cells || []).forEach((cell) => cell.$forceUpdate())
     }
   },
   render () {
@@ -57,7 +57,7 @@ export default {
                         checked={table.selectStatus !== 'none'}
                         disabled={!table.enabledData.length}
                         indeterminate={table.selectStatus === 'partial'}
-                        onChange={checked => {
+                        onChange={(checked) => {
                           table.select(checked)
                         }}
                         aria-label={this.t(
@@ -92,12 +92,12 @@ export default {
                 }
               />
             ) : null}
-            {row.map(col => (
+            {row.map((col) => (
               <HeadCell
                 ref="cells"
                 refInFor
                 col={col}
-                onSort={order => this.$emit('sort', col.field, order)}
+                onSort={(order) => this.$emit('sort', col.field, order)}
               />
             ))}
             {i === 0 && table.gutterWidth ? (

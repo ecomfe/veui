@@ -95,11 +95,7 @@
           <veui-input v-model="storeData4.start"/>
         </veui-field>
         <veui-span style="margin: 0 4px">-</veui-span>
-        <veui-field
-          field="end"
-          name="end"
-          :rules="numRequiredRule"
-        >
+        <veui-field field="end" name="end" :rules="numRequiredRule">
           <veui-input v-model="storeData4.end"/>
         </veui-field>
         <veui-span>万</veui-span>
@@ -131,10 +127,7 @@
         ]"
         tip="抽象表单项"
       >
-        <veui-transfer
-          v-model="storeData4.store"
-          :datasource="storeList"
-        >
+        <veui-transfer v-model="storeData4.store" :datasource="storeList">
           <template #selected-item-label="{ label, value }">
             <div class="selected-store">
               <span class="store-label">{{ label }}</span>

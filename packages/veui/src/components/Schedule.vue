@@ -11,10 +11,7 @@
   <slot name="header">
     <div :class="$c('schedule-header')">
       <slot name="header-content">
-        <slot
-          v-if="shortcuts && shortcuts.length"
-          name="shortcuts"
-        >
+        <slot v-if="shortcuts && shortcuts.length" name="shortcuts">
           <div :class="$c('schedule-shortcuts')">
             <template v-if="shortcutsDisplay === 'inline'">
               <button
@@ -44,10 +41,7 @@
           </div>
         </slot>
         <slot name="legend">
-          <div
-            :class="$c('schedule-legend')"
-            aria-hidden="true"
-          >
+          <div :class="$c('schedule-legend')" aria-hidden="true">
             <span
               v-for="(status, i) in realStatuses"
               :key="i"
@@ -56,10 +50,7 @@
                 $c(`schedule-legend-${status.value || status.name}`)
               ]"
             >
-              <slot
-                name="legend-label"
-                v-bind="status"
-              >
+              <slot name="legend-label" v-bind="status">
                 {{ status.label }}
               </slot>
             </span>
@@ -70,20 +61,12 @@
   </slot>
   <div :class="$c('schedule-body')">
     <div :class="$c('schedule-head-hour')">
-      <div
-        v-for="i in 13"
-        :key="i"
-        :class="$c('schedule-head-hour-item')"
-      >
+      <div v-for="i in 13" :key="i" :class="$c('schedule-head-hour-item')">
         {{ `${(i - 1) * 2}:00` }}
       </div>
     </div>
     <div :class="$c('schedule-head-day')">
-      <div
-        v-for="i in 7"
-        :key="i"
-        :class="$c('schedule-head-day-item')"
-      >
+      <div v-for="i in 7" :key="i" :class="$c('schedule-head-day-item')">
         <veui-checkbox
           :ui="uiParts.dayPicker"
           :indeterminate="dayChecked[i - 1].indeterminate"
@@ -91,30 +74,19 @@
           :aria-label="getDayLabel(i - 1)"
           :disabled="realDisabled || realReadonly"
           @change="toggleDay(week[i - 1], !dayChecked[i - 1].checked)"
-        >
-          {{ dayNames[i - 1] }}
-        </veui-checkbox>
+        >{{ dayNames[i - 1] }}</veui-checkbox>
       </div>
     </div>
-    <div
-      v-outside.mouseup="() => markEnd()"
-      :class="$c('schedule-detail')"
-    >
+    <div v-outside.mouseup="() => markEnd()" :class="$c('schedule-detail')">
       <table
         :class="[$c('schedule-table'), $c('schedule-table-interaction')]"
         @mouseenter="tooltipOpen = true"
         @mouseleave="tooltipOpen = false"
       >
         <colgroup>
-          <col
-            v-for="i in 24"
-            :key="i"
-          >
+          <col v-for="i in 24" :key="i">
         </colgroup>
-        <tr
-          v-for="(day, i) in hourlyStates"
-          :key="i"
-        >
+        <tr v-for="(day, i) in hourlyStates" :key="i">
           <td
             v-for="(hour, j) in day"
             :key="j"
@@ -145,11 +117,7 @@
               @keydown.down.prevent="moveFocus((i + 1) % 7, j)"
               @keydown.left.prevent="moveFocus(i, (j + 23) % 24)"
             >
-              <slot
-                name="hour"
-                :day="week[i]"
-                :hour="j"
-              />
+              <slot name="hour" :day="week[i]" :hour="j"/>
             </button>
           </td>
         </tr>
@@ -157,26 +125,16 @@
 
       <table :class="[$c('schedule-table'), $c('schedule-table-selected')]">
         <colgroup>
-          <col
-            v-for="i in 24"
-            :key="i"
-          >
+          <col v-for="i in 24" :key="i">
         </colgroup>
-        <tr
-          v-for="(day, i) in hourlyStates"
-          :key="i"
-        >
+        <tr v-for="(day, i) in hourlyStates" :key="i">
           <template v-for="(hour, j) in day">
             <td
               v-if="!hour.isSelected || hour.isStart"
               :key="j"
               :colspan="hour.isStart && hour.span > 1 ? hour.span : false"
             >
-              <slot
-                name="label"
-                :from="hour.start"
-                :to="hour.end"
-              >
+              <slot name="label" :from="hour.start" :to="hour.end">
                 {{
                   hour.isWhole
                     ? t('entireDay')
@@ -199,12 +157,7 @@
         :ui="uiParts.tooltip"
         :open="tooltipOpen"
       >
-        <slot
-          name="tooltip"
-          v-bind="current"
-        >
-          {{ currentLabel }}
-        </slot>
+        <slot name="tooltip" v-bind="current">{{ currentLabel }}</slot>
       </veui-tooltip>
     </div>
   </div>
@@ -306,7 +259,7 @@ export default {
       return [...this.t('daysAbbr')]
     },
     dayChecked () {
-      return this.week.map(day => {
+      return this.week.map((day) => {
         let [firstRange] = this.realSelected[day] || []
         return {
           checked: !!firstRange,
@@ -316,7 +269,7 @@ export default {
       })
     },
     shortcutChecked () {
-      return this.realShortcuts.map(shortcut => {
+      return this.realShortcuts.map((shortcut) => {
         return isEqual(shortcut.selected, this.realSelected)
       })
     },
@@ -343,7 +296,7 @@ export default {
       return this.week.reduce((acc, day) => {
         acc[day] = [...Array(24)]
           .map((_, i) => (this.disabledHour(day, i) ? [i, i] : false))
-          .filter(i => i)
+          .filter((i) => i)
 
         return acc
       }, {})
@@ -388,7 +341,9 @@ export default {
       return shortcuts.map(({ label, selected }) => {
         return {
           label,
-          selected: mapValues(selected, day => (day === true ? [[0, 23]] : day))
+          selected: mapValues(selected, (day) =>
+            day === true ? [[0, 23]] : day
+          )
         }
       })
     },

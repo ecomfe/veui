@@ -79,7 +79,7 @@ export function find (array, predicate, alias = 'children', parents = []) {
   }
 
   let result = null
-  array.some(item => {
+  array.some((item) => {
     if (predicate(item, parents)) {
       result = item
       return true
@@ -121,7 +121,7 @@ export function findParents (
 function getChildrenByAlias (obj, alias) {
   let keys = typeof alias === 'string' ? [alias] : alias
 
-  let key = _find(keys, key => {
+  let key = _find(keys, (key) => {
     return Array.isArray(obj[key])
   })
 
@@ -152,7 +152,7 @@ export function hasChildren (item, childrenKey = 'children') {
 export function getLeaves (root, childrenKey) {
   return getDescendants(
     root,
-    descendant => {
+    (descendant) => {
       return {
         keep: hasChildren(descendant, childrenKey) ? false : 'value'
       }
@@ -164,7 +164,7 @@ export function getLeaves (root, childrenKey) {
 export function getGroupDescendants (root, childrenKey) {
   return getDescendants(
     root,
-    descendant => {
+    (descendant) => {
       return {
         keep: hasChildren(descendant, childrenKey) ? 'value' : false
       }

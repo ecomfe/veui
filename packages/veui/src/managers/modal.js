@@ -67,7 +67,7 @@ export class ModalManager {
   }
 
   unlock () {
-    this.unlockCallbacks.forEach(fn => fn())
+    this.unlockCallbacks.forEach((fn) => fn())
     this.unlockCallbacks = []
   }
 }

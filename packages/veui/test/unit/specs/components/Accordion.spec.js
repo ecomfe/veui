@@ -252,43 +252,25 @@ describe('components/Accordion', () => {
 
     let collapses = wrapper.findAll(Collapse)
 
-    expect(
-      collapses
-        .at(0)
-        .find('.veui-collapse-toggle')
-        .exists()
-    ).to.equal(true)
-    expect(
-      collapses
-        .at(0)
-        .find('.veui-collapse-toggle-end')
-        .exists()
-    ).to.equal(false)
+    expect(collapses.at(0).find('.veui-collapse-toggle').exists()).to.equal(
+      true
+    )
+    expect(collapses.at(0).find('.veui-collapse-toggle-end').exists()).to.equal(
+      false
+    )
 
-    expect(
-      collapses
-        .at(1)
-        .find('.veui-collapse-toggle')
-        .exists()
-    ).to.equal(true)
-    expect(
-      collapses
-        .at(1)
-        .find('.veui-collapse-toggle-end')
-        .exists()
-    ).to.equal(true)
+    expect(collapses.at(1).find('.veui-collapse-toggle').exists()).to.equal(
+      true
+    )
+    expect(collapses.at(1).find('.veui-collapse-toggle-end').exists()).to.equal(
+      true
+    )
 
-    expect(
-      collapses
-        .at(2)
-        .find('.veui-collapse-toggle')
-        .exists()
-    ).to.equal(false)
-    expect(
-      collapses
-        .at(2)
-        .find('.veui-collapse-toggle-end')
-        .exists()
-    ).to.equal(false)
+    expect(collapses.at(2).find('.veui-collapse-toggle').exists()).to.equal(
+      false
+    )
+    expect(collapses.at(2).find('.veui-collapse-toggle-end').exists()).to.equal(
+      false
+    )
   })
 })

@@ -15,26 +15,22 @@
     <icon
       :name="expanded ? 'chevron-down' : 'chevron-up'"
       label="Toggle console"
-    />
-    Console <small>({{ logs.length }})</small>
+    />Console
+    <small>({{ logs.length }})</small>
   </h2>
-  <section
-    ref="logList"
-    class="output"
-  >
+  <section ref="logList" class="output">
     <pre
       v-for="(logItem, index) in logs"
       :key="`log-${index}`"
       class="log"
-    ><template v-if="logItem != null"><div v-if="typeof logItem === 'string'">{{ logItem }}</div><div
+    ><template v-if="logItem != null"><div v-if="typeof logItem === 'string'">{{ logItem }}</div><template v-else><div
       v-for="(line, i) in logItem"
-      v-else
       :key="`line-${i}`"
       class="line"
       v-html="format(line)"
-    /></template><template
-      v-else
-      v-html="format(log)"
+    /></template></template><template
+  v-else
+  v-html="format(log)"
     /></pre>
   </section>
 </aside>

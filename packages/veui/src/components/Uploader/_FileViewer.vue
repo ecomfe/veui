@@ -1,8 +1,5 @@
 <template>
-<component
-  :is="tag"
-  :src="realSrc"
-/>
+<component :is="tag" :src="realSrc"/>
 </template>
 
 <script>

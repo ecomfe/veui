@@ -71,9 +71,7 @@
       [$c('textarea-count')]: true,
       [$c('textarea-count-overflow')]: lengthOverflow
     }"
-  >
-    {{ length }}/{{ realMaxlength }}
-  </span>
+  >{{ length }}/{{ realMaxlength }}</span>
 </div>
 </template>
 
@@ -185,7 +183,7 @@ export default {
     },
     lines () {
       // use a zero-width space to prevent empty element from being collapsed
-      return this.realValue.split('\n').map(line => line || `\u200b${line}`)
+      return this.realValue.split('\n').map((line) => line || `\u200b${line}`)
     },
     digits () {
       return Math.floor(log10(this.lines.length)) + 1
@@ -310,17 +308,13 @@ export default {
       }
       let { input } = this.$refs
       let lineHeight = getAbsoluteLineHeight(input)
-      let {
-        borderTopWidth,
-        paddingTop,
-        paddingBottom,
-        borderBottomWidth
-      } = getComputedStyle(input)
+      let { borderTopWidth, paddingTop, paddingBottom, borderBottomWidth } =
+        getComputedStyle(input)
 
       return (
         this.realRows * lineHeight +
         [borderTopWidth, paddingTop, paddingBottom, borderBottomWidth]
-          .map(val => parseFloat(val))
+          .map((val) => parseFloat(val))
           .reduce((acc, cur) => acc + cur, 0)
       )
     },

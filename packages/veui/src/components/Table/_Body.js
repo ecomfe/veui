@@ -27,7 +27,7 @@ export default {
                 rows.push(<Row>{subRow({ ...item, index })}</Row>)
               } else {
                 rows = rows.concat(
-                  (item.children || []).map(item => {
+                  (item.children || []).map((item) => {
                     return <Row item={item} index={index} />
                   })
                 )

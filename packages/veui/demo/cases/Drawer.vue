@@ -1,6 +1,8 @@
 <template>
 <article class="demo-drawer">
-  <h1><code>&lt;veui-drawer&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-drawer&gt;</code>
+  </h1>
 
   <section>
     <veui-checkbox v-model="modal">Modal</veui-checkbox>
@@ -8,18 +10,10 @@
   </section>
 
   <section>
-    <veui-button @click="topOpen = true">
-      Top
-    </veui-button>
-    <veui-button @click="rightOpen = true">
-      Right
-    </veui-button>
-    <veui-button @click="bottomOpen = true">
-      Bottom
-    </veui-button>
-    <veui-button @click="leftOpen = true">
-      Left
-    </veui-button>
+    <veui-button @click="topOpen = true">Top</veui-button>
+    <veui-button @click="rightOpen = true">Right</veui-button>
+    <veui-button @click="bottomOpen = true">Bottom</veui-button>
+    <veui-button @click="leftOpen = true">Left</veui-button>
   </section>
 
   <veui-drawer
@@ -31,15 +25,10 @@
     placement="top"
   >
     <p>content area</p>
-    <template
-      slot="title"
-      slot-scope="{ close }"
-    >
-      <a @click="close">
-        点我也可关闭
-      </a>
+    <template #title="{ close }">
+      <a @click="close">点我也可关闭</a>
     </template>
-    <template slot="foot">
+    <template #foot>
       <div>我是foot</div>
     </template>
   </veui-drawer>

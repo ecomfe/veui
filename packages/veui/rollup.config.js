@@ -67,7 +67,7 @@ function bundleUmd () {
       sourcemap: false
     },
     plugins: commonPlugins,
-    external: id => ['vue'].includes(id)
+    external: (id) => ['vue'].includes(id)
   }
 }
 
@@ -80,7 +80,7 @@ function bundleEsm () {
       sourcemap: false
     },
     plugins: commonPlugins,
-    external: id => {
+    external: (id) => {
       return (
         ['vue', 'bytes', 'popper.js'].includes(id) ||
         id.match(/^(?:vue-awesome|date-fns|lodash)(?:\/|$)/)
@@ -115,7 +115,7 @@ function bundleLocales (locales) {
         }
       }
     ],
-    external: id => id === ESM_VEUI
+    external: (id) => id === ESM_VEUI
   }))
 }
 

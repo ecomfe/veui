@@ -19,9 +19,7 @@
 >
   <slot>
     <span :class="$c('option-label')">
-      <slot name="label">
-        {{ label }}
-      </slot>
+      <slot name="label">{{ label }}</slot>
     </span>
   </slot>
 </div>

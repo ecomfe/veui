@@ -13,15 +13,12 @@
     :class="$c('message-icon')"
     :name="icons[status]"
   />
-  <veui-popover
-    v-if="display === 'popup'"
-    target="icon"
-    position="right"
-  ><slot/></veui-popover>
-  <div
-    v-else
-    :class="$c('message-content')"
-  ><slot/></div>
+  <veui-popover v-if="display === 'popup'" target="icon" position="right">
+    <slot/>
+  </veui-popover>
+  <div v-else :class="$c('message-content')">
+    <slot/>
+  </div>
 </div>
 </template>
 

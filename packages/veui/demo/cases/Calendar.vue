@@ -1,12 +1,11 @@
 <template>
 <article class="veui-demo-calendar">
-  <h1><code>&lt;veui-calendar&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-calendar&gt;</code>
+  </h1>
   <section>
     <h2>实验定制样式</h2>
-    <veui-calendar
-      ui="display"
-      class="experimental-calendar"
-    >
+    <veui-calendar ui="display" class="experimental-calendar">
       <template #date="{ date }">
         <div class="experimental-cell">
           {{ date }}
@@ -29,11 +28,7 @@
   </section>
   <section>
     <h2>日期多选</h2>
-    <veui-calendar
-      v-model="multipleDate"
-      type="date"
-      multiple
-    />
+    <veui-calendar v-model="multipleDate" type="date" multiple/>
   </section>
   <section>
     <h2>日期范围单选(small)</h2>
@@ -47,12 +42,7 @@
   </section>
   <section>
     <h2>日期范围多选</h2>
-    <veui-calendar
-      v-model="multipleDateRange"
-      type="date"
-      range
-      multiple
-    />
+    <veui-calendar v-model="multipleDateRange" type="date" range multiple/>
   </section>
 
   <section>
@@ -71,29 +61,15 @@
   </section>
   <section>
     <h2>月份多选</h2>
-    <veui-calendar
-      v-model="multipleMonth"
-      type="month"
-      multiple
-    />
+    <veui-calendar v-model="multipleMonth" type="month" multiple/>
   </section>
   <section>
     <h2>月份范围单选(small)</h2>
-    <veui-calendar
-      v-model="singleMonthRange"
-      type="month"
-      range
-      ui="s"
-    />
+    <veui-calendar v-model="singleMonthRange" type="month" range ui="s"/>
   </section>
   <section>
     <h2>月份范围多选</h2>
-    <veui-calendar
-      v-model="multipleMonthRange"
-      type="month"
-      range
-      multiple
-    />
+    <veui-calendar v-model="multipleMonthRange" type="month" range multiple/>
   </section>
 
   <section>
@@ -106,51 +82,42 @@
   </section>
   <section>
     <h2>年份多选</h2>
-    <veui-calendar
-      v-model="multipleYear"
-      type="year"
-      multiple
-    />
+    <veui-calendar v-model="multipleYear" type="year" multiple/>
   </section>
   <section>
     <h2>年份范围单选(small)</h2>
-    <veui-calendar
-      v-model="singleYearRange"
-      type="year"
-      range
-      ui="s"
-    />
+    <veui-calendar v-model="singleYearRange" type="year" range ui="s"/>
   </section>
   <section>
     <h2>年份范围多选</h2>
-    <veui-calendar
-      v-model="multipleYearRange"
-      type="year"
-      range
-      multiple
-    />
+    <veui-calendar v-model="multipleYearRange" type="year" range multiple/>
   </section>
   <section>
     <h2>禁用</h2>
-    <veui-calendar
-      v-model="selected1"
-      disabled
-    />
+    <veui-calendar v-model="selected1" disabled/>
   </section>
   <section>
     <h2>部分禁用</h2>
     <veui-calendar :disabled-date="disabledDate"/>
   </section>
   <section>
-    <h2>多单日选择 <small>(<code>multiple</code>)</small></h2>
-    <veui-calendar
-      v-model="selected0"
-      multiple
-      :date-class="dateClass"
-    />
+    <h2>
+      多单日选择
+      <small>
+        (
+        <code>multiple</code>)
+      </small>
+    </h2>
+    <veui-calendar v-model="selected0" multiple :date-class="dateClass"/>
   </section>
   <section>
-    <h2>时间段选择 <small>(<code>range</code>)</small></h2>
+    <h2>
+      时间段选择
+      <small>
+        (
+        <code>range</code>)
+      </small>
+    </h2>
     <veui-calendar
       v-model="selected2"
       range
@@ -161,45 +128,29 @@
   <section>
     <h2>
       多时间段选择带 scoped slot
-      <small>(<code>multiple</code> &amp; <code>range</code>)</small>
+      <small>
+        (
+        <code>multiple</code> &amp; <code>range</code>)
+      </small>
     </h2>
-    <veui-calendar
-      v-model="selected3"
-      range
-      multiple
-      :panel="3"
-    >
-      <template
-        slot="date"
-        slot-scope="day"
-      >
+    <veui-calendar v-model="selected3" range multiple :panel="3">
+      <template #date="day">
         {{ day.date }}
-        <span
-          v-if="day.date % 7 === 0"
-          style="position: absolute;"
-        >
-          *
-        </span>
+        <span v-if="day.date % 7 === 0" style="position: absolute">*</span>
       </template>
     </veui-calendar>
   </section>
   <section>
-    <h2>外部设置 <code>selected</code></h2>
-    <veui-calendar
-      v-model="selected4"
-      range
-      :panel="2"
-    />
-    <veui-button @click="setSelected">
-      设置
-    </veui-button>
+    <h2>
+      外部设置
+      <code>selected</code>
+    </h2>
+    <veui-calendar v-model="selected4" range :panel="2"/>
+    <veui-button @click="setSelected">设置</veui-button>
   </section>
   <section>
     <h2>年份选择</h2>
-    <veui-calendar
-      v-model="selected6"
-      type="year"
-    />
+    <veui-calendar v-model="selected6" type="year"/>
     Selected: {{ selected6 ? selected6.getFullYear() : '-' }}
   </section>
 </article>

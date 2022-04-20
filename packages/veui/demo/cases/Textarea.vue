@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-textarea&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-textarea&gt;</code>
+  </h1>
   <section>
     <h3>小尺寸 + 默认显示 3 行 + 允许手动 resize</h3>
     <veui-textarea
@@ -85,49 +87,30 @@
     <h3>自动扩展</h3>
     <details>
       <summary>Toggle</summary>
-      <veui-textarea
-        v-model="longValue"
-        autoresize
-      />
+      <veui-textarea v-model="longValue" autoresize/>
     </details>
   </section>
   <section>
     <h3>只读样式</h3>
-    <veui-textarea
-      v-model="value"
-      readonly
-    />
+    <veui-textarea v-model="value" readonly/>
   </section>
   <section>
     <h3>禁用样式</h3>
-    <veui-textarea
-      v-model="value"
-      disabled
-    />
+    <veui-textarea v-model="value" disabled/>
   </section>
   <section>
     <h3>错误样式</h3>
-    <veui-textarea
-      v-model="value"
-      invalid
-    />
+    <veui-textarea v-model="value" invalid/>
   </section>
 
   <section>
     <h3>字数限制显示</h3>
     <section>
-      <veui-textarea
-        placeholder="不允许溢出"
-        maxlength="5"
-        strict
-      />
+      <veui-textarea placeholder="不允许溢出" maxlength="5" strict/>
     </section>
     <h3>字数限制， 一个汉字长度算2</h3>
     <section>
-      <veui-textarea
-        maxlength="5"
-        :get-length="getLength"
-      />
+      <veui-textarea maxlength="5" :get-length="getLength"/>
     </section>
     <section>
       <veui-textarea
@@ -164,7 +147,7 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach(child => {
+    this.$children.forEach((child) => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })

@@ -18,16 +18,10 @@
       :checked="item.value === realValue"
       :aria-posinset="index + 1"
       :aria-setsize="items.length"
-      @change="checked => handleChange(checked, item.value)"
+      @change="(checked) => handleChange(checked, item.value)"
       @mouseenter="handleEnterForDesc(item)"
     >
-      <slot
-        name="item"
-        v-bind="item"
-        :index="index"
-      >
-        {{ item.label }}
-      </slot>
+      <slot name="item" v-bind="item" :index="index">{{ item.label }}</slot>
     </veui-radio>
   </div>
   <veui-popover
@@ -38,10 +32,7 @@
     :open.sync="openForDesc"
     trigger="hover"
   >
-    <slot
-      name="desc"
-      v-bind="currentForDesc"
-    >{{ currentForDesc.desc }}</slot>
+    <slot name="desc" v-bind="currentForDesc">{{ currentForDesc.desc }}</slot>
   </veui-popover>
 </div>
 </template>

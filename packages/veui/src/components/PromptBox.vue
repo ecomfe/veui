@@ -19,10 +19,7 @@
   <template slot="title">
     <slot name="title">{{ title }}</slot>
   </template>
-  <div
-    v-if="content || $slots.default"
-    :class="$c('prompt-box-info')"
-  >
+  <div v-if="content || $slots.default" :class="$c('prompt-box-info')">
     <slot>{{ content }}</slot>
   </div>
   <veui-input

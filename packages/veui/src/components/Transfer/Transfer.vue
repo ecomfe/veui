@@ -78,7 +78,7 @@ export default {
     },
     realKeys () {
       if (isString(this.keys)) {
-        return source => source[this.keys]
+        return (source) => source[this.keys]
       }
 
       return this.keys
@@ -146,10 +146,10 @@ export default {
                 ui: this.realUi
               },
               on: {
-                select: value => {
+                select: (value) => {
                   this.commit('selected', value)
                 },
-                selectall: filtered => {
+                selectall: (filtered) => {
                   if (filtered && filtered.length) {
                     let selected = this.checkAll(this.realSelected, filtered)
                     if (!isEqualSet(selected, this.realSelected)) {

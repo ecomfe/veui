@@ -24,10 +24,7 @@
       [$c('radio-box-labelled')]: !!$slots.default
     }"
   />
-  <span
-    v-if="$slots.default"
-    :class="$c('radio-label')"
-  >
+  <span v-if="$slots.default" :class="$c('radio-label')">
     <slot/>
   </span>
 </label>

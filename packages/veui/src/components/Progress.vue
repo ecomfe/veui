@@ -9,11 +9,7 @@
   :class="klass"
   :ui="realUi"
 >
-  <div
-    v-if="type === 'bar'"
-    :class="$c('progress-rail')"
-    aria-hidden="true"
-  >
+  <div v-if="type === 'bar'" :class="$c('progress-rail')" aria-hidden="true">
     <div
       :class="$c('progress-meter')"
       :style="{

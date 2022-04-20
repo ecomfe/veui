@@ -61,7 +61,7 @@ function xorRanges (r1, r2, { compare, inc }) {
       range[i * 2] = range[i * 2 - 1] = null
     }
   }
-  range = range.filter(date => date !== null)
+  range = range.filter((date) => date !== null)
   let result = []
   while (range.length) {
     result.push(range.splice(0, 2))

@@ -34,7 +34,7 @@ let cars = [
 ]
 
 describe('components/SearchBox', () => {
-  it('should handle selected prop with `null` value.', done => {
+  it('should handle selected prop with `null` value.', (done) => {
     let wrapper = mount({
       methods: {
         handleInput (val) {
@@ -45,14 +45,16 @@ describe('components/SearchBox', () => {
         }
       },
       render () {
-        return <SearchBox value={null} onInput={val => this.handleInput(val)} />
+        return (
+          <SearchBox value={null} onInput={(val) => this.handleInput(val)} />
+        )
       }
     })
 
     wrapper.find('.veui-input-input').trigger('input')
   })
 
-  it('should support input event correctly.', done => {
+  it('should support input event correctly.', (done) => {
     let wrapper = mount(
       {
         components: {
@@ -237,7 +239,7 @@ describe('components/SearchBox', () => {
     wrapper.destroy()
   })
 
-  it('should support suggest event correctly.', done => {
+  it('should support suggest event correctly.', (done) => {
     let wrapper = mount(
       {
         data () {
@@ -404,12 +406,9 @@ describe('components/SearchBox', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.test-overlay-class h3').text()).to.equal('header')
-    expect(
-      wrapper
-        .findAll('.test-overlay-class h3')
-        .at(1)
-        .text()
-    ).to.equal('ender')
+    expect(wrapper.findAll('.test-overlay-class h3').at(1).text()).to.equal(
+      'ender'
+    )
 
     let items = wrapper.findAll('.veui-search-box-suggestion-item')
     expect(items.length).to.equal(4)

@@ -5,26 +5,11 @@
   </h1>
   <section>
     <h3>全局提示</h3>
-    <veui-button
-      ui="aux"
-      @click="showToast('all')"
-    >全部</veui-button>
-    <veui-button
-      ui="aux"
-      @click="showToast('success')"
-    >成功</veui-button>
-    <veui-button
-      ui="aux"
-      @click="showToast('warn')"
-    >警告</veui-button>
-    <veui-button
-      ui="aux"
-      @click="showToast('info')"
-    >提醒</veui-button>
-    <veui-button
-      ui="aux"
-      @click="showToast('error')"
-    >错误</veui-button>
+    <veui-button ui="aux" @click="showToast('all')">全部</veui-button>
+    <veui-button ui="aux" @click="showToast('success')">成功</veui-button>
+    <veui-button ui="aux" @click="showToast('warn')">警告</veui-button>
+    <veui-button ui="aux" @click="showToast('info')">提醒</veui-button>
+    <veui-button ui="aux" @click="showToast('error')">错误</veui-button>
     <veui-button
       ui="aux"
       @click="showSlottedToast"
@@ -34,10 +19,7 @@
   <section>
     <h4>关闭</h4>
 
-    <veui-button
-      ui="aux"
-      @click="showCloseToast"
-    >打开</veui-button>
+    <veui-button ui="aux" @click="showCloseToast">打开</veui-button>
     <veui-button
       :disabled="!closeToast"
       ui="aux"
@@ -51,18 +33,10 @@
       <veui-toast open>Test</veui-toast>
     </section>
     <section>
-      <veui-toast
-        open
-        closable
-        type="warning"
-      >Test</veui-toast>
+      <veui-toast open closable type="warning">Test</veui-toast>
     </section>
     <section>
-      <veui-toast
-        open
-        closable
-        type="error"
-      >
+      <veui-toast open closable type="error">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolores,
         sint harum aspernatur aliquid sed maxime dolorum qui recusandae
         voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam illo non
@@ -70,11 +44,7 @@
       </veui-toast>
     </section>
     <section>
-      <veui-toast
-        open
-        title="Lorem Ipsum"
-        type="info"
-      >
+      <veui-toast open title="Lorem Ipsum" type="info">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
         laboriosam, atque cumque sequi, debitis impedit fugit vitae iure,
         rerum accusantium odio porro. Exercitationem excepturi adipisci unde
@@ -82,11 +52,7 @@
       </veui-toast>
     </section>
     <section>
-      <veui-toast
-        open
-        title="Lorem Ipsum"
-        closable
-      >
+      <veui-toast open title="Lorem Ipsum" closable>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
         minima doloremque quaerat consequatur accusamus repellat eum? Dolorem
         sunt est, sint inventore, id atque ut aspernatur ipsa corrupti debitis
@@ -96,26 +62,13 @@
   </section>
   <section class="col">
     <section>
-      <veui-toast
-        ui="s"
-        open
-      >Test</veui-toast>
+      <veui-toast ui="s" open>Test</veui-toast>
     </section>
     <section>
-      <veui-toast
-        ui="s"
-        open
-        closable
-        type="warning"
-      >Test</veui-toast>
+      <veui-toast ui="s" open closable type="warning">Test</veui-toast>
     </section>
     <section>
-      <veui-toast
-        ui="s"
-        open
-        closable
-        type="error"
-      >
+      <veui-toast ui="s" open closable type="error">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolores,
         sint harum aspernatur aliquid sed maxime dolorum qui recusandae
         voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam illo non
@@ -123,12 +76,7 @@
       </veui-toast>
     </section>
     <section>
-      <veui-toast
-        ui="s"
-        open
-        title="Lorem Ipsum"
-        type="info"
-      >
+      <veui-toast ui="s" open title="Lorem Ipsum" type="info">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
         laboriosam, atque cumque sequi, debitis impedit fugit vitae iure,
         rerum accusantium odio porro. Exercitationem excepturi adipisci unde
@@ -136,12 +84,7 @@
       </veui-toast>
     </section>
     <section>
-      <veui-toast
-        ui="s"
-        open
-        title="Lorem Ipsum"
-        closable
-      >
+      <veui-toast ui="s" open title="Lorem Ipsum" closable>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
         minima doloremque quaerat consequatur accusamus repellat eum? Dolorem
         sunt est, sint inventore, id atque ut aspernatur ipsa corrupti debitis
@@ -201,7 +144,7 @@ export default {
     }
   },
   mounted () {
-    this.$children.forEach(child => {
+    this.$children.forEach((child) => {
       child.$on('click', () => {
         bus.$emit('log', child.$el.getAttribute('ui'))
       })

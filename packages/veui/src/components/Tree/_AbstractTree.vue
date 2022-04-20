@@ -1,8 +1,5 @@
 <template>
-<ul
-  :class="$c('abstract-tree')"
-  role="tree"
->
+<ul :class="$c('abstract-tree')" role="tree">
   <li
     v-for="(item, index) in items"
     :key="getKey(item, index)"
@@ -29,14 +26,8 @@
         :group-class="groupClass"
         :class="realGroupClass"
       >
-        <template
-          slot="item"
-          slot-scope="props"
-        >
-          <slot
-            name="item"
-            v-bind="props"
-          />
+        <template slot="item" slot-scope="props">
+          <slot name="item" v-bind="props"/>
         </template>
       </abstract-tree>
     </veui-expand-transition>

@@ -288,10 +288,7 @@ describe('components/Transfer', () => {
     let { vm } = wrapper
 
     let selectors = wrapper.find(Tree).findAll(Checkbox)
-    selectors
-      .at(0)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    selectors.at(0).find('input[type="checkbox"]').trigger('change')
     // // first.checked = false
     // first.trigger('change')
     await vm.$nextTick()
@@ -299,14 +296,8 @@ describe('components/Transfer', () => {
     // 之前change一下希望全选么？现在行为是优先清空
     unorderedEqual(vm.selected, ['bb', 'cc11'])
 
-    let selectedItems = wrapper
-      .findAll(Tree)
-      .at(1)
-      .findAll('.veui-tree-item')
-    selectedItems
-      .at(0)
-      .find('.veui-tree-item-remove')
-      .trigger('click')
+    let selectedItems = wrapper.findAll(Tree).at(1).findAll('.veui-tree-item')
+    selectedItems.at(0).find('.veui-tree-item-remove').trigger('click')
     await vm.$nextTick()
     unorderedEqual(vm.selected, ['cc11'])
 
@@ -336,10 +327,7 @@ describe('components/Transfer', () => {
     let { vm } = wrapper
 
     let selectors = wrapper.find(Tree).findAll(Checkbox)
-    selectors
-      .at(0)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    selectors.at(0).find('input[type="checkbox"]').trigger('change')
     await vm.$nextTick()
     unorderedEqual(vm.selected, ['aa10', 'aa11', 'bb', 'cc11'])
     unorderedEqual(vm.$refs.transfer.$refs.candidatePanel.selected, [
@@ -410,10 +398,7 @@ describe('components/Transfer', () => {
     let { vm } = wrapper
 
     let selectors = wrapper.find(Tree).findAll(Checkbox)
-    selectors
-      .at(0)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    selectors.at(0).find('input[type="checkbox"]').trigger('change')
     await vm.$nextTick()
     unorderedEqual(vm.selected, ['aa2'])
     unorderedEqual(vm.$refs.transfer.$refs.candidatePanel.selected, ['aa2'])
@@ -421,21 +406,12 @@ describe('components/Transfer', () => {
     vm.selected = null
     await vm.$nextTick()
 
-    selectors
-      .at(1)
-      .find('input[type="checkbox"]')
-      .trigger('change')
+    selectors.at(1).find('input[type="checkbox"]').trigger('change')
     await vm.$nextTick()
     unorderedEqual(vm.selected, ['bb1', 'bb'])
 
-    let selectedItems = wrapper
-      .findAll(Tree)
-      .at(1)
-      .findAll('.veui-tree-item')
-    selectedItems
-      .at(0)
-      .find('.veui-tree-item-remove')
-      .trigger('click')
+    let selectedItems = wrapper.findAll(Tree).at(1).findAll('.veui-tree-item')
+    selectedItems.at(0).find('.veui-tree-item-remove').trigger('click')
     await vm.$nextTick()
     expect(vm.selected).to.deep.equal([])
 
@@ -443,7 +419,7 @@ describe('components/Transfer', () => {
   })
 
   it('should select all after searching correctly.', async () => {
-    let datasourceWithRenaming = datasource.map(i => ({ ...i }))
+    let datasourceWithRenaming = datasource.map((i) => ({ ...i }))
     datasourceWithRenaming[0].label = 'AAGroup'
     let children = datasourceWithRenaming[2].children
     datasourceWithRenaming[2].children = [
@@ -676,9 +652,7 @@ describe('components/Transfer', () => {
 })
 
 function unorderedEqual (a, b) {
-  expect(a)
-    .to.have.members(b)
-    .and.to.have.lengthOf(b.length)
+  expect(a).to.have.members(b).and.to.have.lengthOf(b.length)
 }
 
 async function search (wrapper, val) {

@@ -131,17 +131,17 @@ describe('managers/overlay', () => {
         expect(parent.children.length).to.equal(2)
       })
 
-      it('should respect `orderChangeCallback` and `onOrderChange`', done => {
+      it('should respect `orderChangeCallback` and `onOrderChange`', (done) => {
         let mgr = new OverlayManager()
         let parent = mgr.createNode({
-          orderChangeCallback: order => {
+          orderChangeCallback: (order) => {
             expect(order).to.equal(100)
           }
         })
 
         mgr.createNode({
           parent,
-          onOrderChange: order => {
+          onOrderChange: (order) => {
             expect(order).to.equal(101)
             done()
           }

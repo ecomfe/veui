@@ -80,7 +80,7 @@ describe('components/Anchor', function () {
     window.scrollTo(0, 100)
     await wrapper.vm.$nextTick()
     let stickyFirstAnchor = wrapper.find(ANCHOR_ITEM)
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         expect(stickyFirstAnchor.element.getBoundingClientRect().top).to.equal(
           0
@@ -95,7 +95,7 @@ describe('components/Anchor', function () {
 
     // 滚动回来
     window.scrollTo(0, 0)
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         expect(
           stickyFirstAnchor.element.getBoundingClientRect().top
@@ -127,7 +127,7 @@ describe('components/Anchor', function () {
     vm.$refs.wrapper.scrollTop = 100
     await vm.$nextTick()
     let stickyFirstAnchor = wrapper.find(ANCHOR_ITEM)
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         expect(stickyFirstAnchor.element.getBoundingClientRect().top).to.equal(
           0
@@ -142,7 +142,7 @@ describe('components/Anchor', function () {
 
     // 滚动回来
     vm.$refs.wrapper.scrollTop = 0
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         expect(
           stickyFirstAnchor.element.getBoundingClientRect().top
@@ -171,7 +171,7 @@ describe('components/Anchor', function () {
     await vm.$nextTick()
     let stickyFirstAnchor = wrapper.find(ANCHOR_ITEM)
     stickyFirstAnchor.trigger('click')
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         expect(stickyFirstAnchor.element.getBoundingClientRect().top).to.equal(
           0

@@ -63,13 +63,7 @@ describe('components/TimePicker', function () {
     wrapper.find(NATIVE_INPUT).trigger('focus')
     await vm.$nextTick()
     let options = wrapper.findAll(OPTION_WRAPPER)
-    expect(
-      options
-        .at(0)
-        .findAll(OPTION)
-        .at(0)
-        .contains('*')
-    ).to.equal(true)
+    expect(options.at(0).findAll(OPTION).at(0).contains('*')).to.equal(true)
 
     wrapper.destroy()
   })
@@ -92,11 +86,7 @@ describe('components/TimePicker', function () {
     await vm.$nextTick()
     let options = wrapper.findAll(OPTION_WRAPPER)
     expect(options.isVisible()).to.equal(true)
-    options
-      .at(2)
-      .findAll(OPTION)
-      .at(1)
-      .trigger('click')
+    options.at(2).findAll(OPTION).at(1).trigger('click')
     await vm.$nextTick()
     expect(isEqual(vm.value0, '00:15:30')).to.equal(true)
     wrapper.destroy()

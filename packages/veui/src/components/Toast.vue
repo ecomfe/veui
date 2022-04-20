@@ -1,8 +1,5 @@
 <template>
-<transition
-  :name="$c('toast')"
-  appear
->
+<transition :name="$c('toast')" appear>
   <div
     v-if="realOpen"
     :ui="realUi"
@@ -15,32 +12,17 @@
     role="alert"
   >
     <div :class="$c('toast-state')">
-      <veui-icon
-        :class="$c('toast-icon')"
-        :name="icons[type]"
-      />
+      <veui-icon :class="$c('toast-icon')" :name="icons[type]"/>
     </div>
     <div :class="$c('toast-content')">
-      <div
-        v-if="title || $slots.title"
-        :class="$c('toast-content-title')"
-      >
-        <slot
-          name="title"
-          :close="close"
-        >{{ title }}</slot>
+      <div v-if="title || $slots.title" :class="$c('toast-content-title')">
+        <slot name="title" :close="close">{{ title }}</slot>
       </div>
-      <div
-        ref="message"
-        :class="$c('toast-content-message')"
-      >
+      <div ref="message" :class="$c('toast-content-message')">
         <slot :close="close">{{ message }}</slot>
       </div>
     </div>
-    <div
-      v-if="closable"
-      :class="$c('toast-close')"
-    >
+    <div v-if="closable" :class="$c('toast-close')">
       <veui-button
         :ui="uiParts.close"
         :aria-label="t('close')"

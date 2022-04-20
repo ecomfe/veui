@@ -7,12 +7,7 @@
   :ui="realUi"
 >
   <h3 :class="$c('filter-panel-title')">
-    <slot
-      name="head"
-      v-bind="slotProps"
-    >
-      {{ title }}
-    </slot>
+    <slot name="head" v-bind="slotProps">{{ title }}</slot>
   </h3>
   <div :class="$c('filter-panel-content')">
     <veui-search-box
@@ -31,16 +26,8 @@
     >
       <slot v-bind="slotProps"/>
     </div>
-    <div
-      v-else
-      :class="$c('filter-panel-no-data')"
-    >
-      <slot
-        name="no-data"
-        v-bind="slotProps"
-      >
-        {{ t('noData') }}
-      </slot>
+    <div v-else :class="$c('filter-panel-no-data')">
+      <slot name="no-data" v-bind="slotProps">{{ t('noData') }}</slot>
     </div>
   </div>
 </div>
@@ -98,7 +85,7 @@ export default {
       }
 
       return !this.datasource.some(
-        item => item.children && item.children.length > 0
+        (item) => item.children && item.children.length > 0
       )
     },
     slotProps () {

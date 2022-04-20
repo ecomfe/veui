@@ -1,8 +1,5 @@
 <template>
-<div
-  :class="$c('nav')"
-  :ui="realUi"
->
+<div :class="$c('nav')" :ui="realUi">
   <ul
     ref="body"
     v-resize.debounce.leading.200="renderAllThenUpdateLayout"
@@ -16,10 +13,7 @@
         [$c('nav-more-hidden')]: isMoreBtn(item) && !restItems.length
       }"
     >
-      <slot
-        v-if="isMoreBtn(item)"
-        name="more"
-      >
+      <slot v-if="isMoreBtn(item)" name="more">
         <div
           ref="more"
           :class="{
@@ -37,11 +31,7 @@
           </slot>
         </div>
       </slot>
-      <slot
-        v-else
-        name="item"
-        v-bind="item"
-      >
+      <slot v-else name="item" v-bind="item">
         <veui-link
           :ref="`link-${item.name}`"
           :class="{
@@ -61,22 +51,10 @@
             :ref="`label-${item.name}`"
             :class="$c('nav-item-label-wrapper')"
           >
-            <slot
-              name="item-label"
-              v-bind="item"
-            >
-              {{ item.label }}
-            </slot>
+            <slot name="item-label" v-bind="item">{{ item.label }}</slot>
           </span>
-          <slot
-            v-if="hasChildren(item)"
-            name="item-icon"
-            v-bind="item"
-          >
-            <veui-icon
-              :class="$c('nav-expand-icon')"
-              :name="icons.expand"
-            />
+          <slot v-if="hasChildren(item)" name="item-icon" v-bind="item">
+            <veui-icon :class="$c('nav-expand-icon')" :name="icons.expand"/>
           </slot>
         </veui-link>
       </slot>
@@ -114,10 +92,7 @@
               :class="$c('nav-card-item')"
               @click="handleItemClick(cardItem)"
             >
-              <slot
-                name="item"
-                v-bind="cardItem"
-              >
+              <slot name="item" v-bind="cardItem">
                 <veui-link
                   :class="{
                     [$c('nav-item')]: true,
@@ -141,27 +116,18 @@
                       :name="cardItem.icon"
                     />
                   </slot>
-                  <slot
-                    name="item-label"
-                    v-bind="cardItem"
-                  >
+                  <slot name="item-label" v-bind="cardItem">
                     {{ cardItem.label }}
                   </slot>
                 </veui-link>
               </slot>
-              <ul
-                v-if="hasChildren(cardItem)"
-                role="group"
-              >
+              <ul v-if="hasChildren(cardItem)" role="group">
                 <li
                   v-for="subCardItem in cardItem.children"
                   :key="subCardItem.name"
                   @click="handleItemClick(subCardItem)"
                 >
-                  <slot
-                    name="item"
-                    v-bind="subCardItem"
-                  >
+                  <slot name="item" v-bind="subCardItem">
                     <veui-link
                       :class="{
                         [$c('nav-item')]: true,
@@ -170,10 +136,7 @@
                       :tabindex="subCardItem.disabled ? null : 0"
                       v-bind="pickLinkProps(subCardItem)"
                     >
-                      <slot
-                        name="item-label"
-                        v-bind="subCardItem"
-                      >
+                      <slot name="item-label" v-bind="subCardItem">
                         {{ subCardItem.label }}
                       </slot>
                     </veui-link>
@@ -190,14 +153,8 @@
             trigger="hover"
             option-tag="div"
           >
-            <template
-              slot="option"
-              slot-scope="option"
-            >
-              <slot
-                name="item"
-                v-bind="option"
-              >
+            <template slot="option" slot-scope="option">
+              <slot name="item" v-bind="option">
                 <veui-link
                   :class="{
                     [$c('nav-item')]: true,
@@ -207,23 +164,14 @@
                   v-bind="pickLinkProps(option)"
                   @click="handleItemClick(option)"
                 >
-                  <slot
-                    name="item-label"
-                    v-bind="option"
-                  >
+                  <slot name="item-label" v-bind="option">
                     {{ option.label }}
                   </slot>
                 </veui-link>
               </slot>
             </template>
-            <template
-              slot="option-group-label"
-              slot-scope="group"
-            >
-              <slot
-                name="item"
-                v-bind="group"
-              >
+            <template slot="option-group-label" slot-scope="group">
+              <slot name="item" v-bind="group">
                 <veui-link
                   :class="{
                     [$c('nav-item')]: true,
@@ -236,10 +184,7 @@
                   "
                 >
                   <span :class="$c('nav-item-label-wrapper')">
-                    <slot
-                      name="item-label"
-                      v-bind="group"
-                    >
+                    <slot name="item-label" v-bind="group">
                       {{ group.label }}
                     </slot>
                   </span>

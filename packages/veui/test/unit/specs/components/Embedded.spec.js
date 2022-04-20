@@ -33,22 +33,13 @@ describe('components/Embedded', () => {
     await vm.$nextTick()
 
     expect(
-      wrapper
-        .find('.veui-dialog-content-head-title')
-        .text()
-        .includes('Title')
+      wrapper.find('.veui-dialog-content-head-title').text().includes('Title')
     ).to.equal(true)
     expect(
-      wrapper
-        .find('.veui-dialog-content-body')
-        .text()
-        .includes('Content')
+      wrapper.find('.veui-dialog-content-body').text().includes('Content')
     ).to.equal(true)
     expect(
-      wrapper
-        .find('.veui-dialog-content-foot')
-        .text()
-        .includes('Foot')
+      wrapper.find('.veui-dialog-content-foot').text().includes('Foot')
     ).to.equal(true)
     wrapper.destroy()
   })

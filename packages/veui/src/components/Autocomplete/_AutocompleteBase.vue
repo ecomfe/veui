@@ -1,9 +1,5 @@
 <template>
-<div
-  ref="self"
-  :aria-expanded="finalExpanded"
-  :aria-owns="dropdownId"
->
+<div ref="self" :aria-expanded="finalExpanded" :aria-owns="dropdownId">
   <slot
     :open-suggestions="openSuggestions"
     :close-suggestions="closeSuggestions"
@@ -24,10 +20,7 @@
     :priority="overlayPriority"
     match-width
   >
-    <div
-      :id="dropdownId"
-      ref="box"
-    >
+    <div :id="dropdownId" ref="box">
       <slot
         :datasource="keyword ? filteredDatasource : realDatasource"
         :keyword="keyword"
@@ -68,8 +61,8 @@ export default {
     }),
     useSearchable({
       datasourceKey: 'realDatasource',
-      childrenKey: vm => vm.childrenKey,
-      valueKey: vm => vm.valueKey,
+      childrenKey: (vm) => vm.childrenKey,
+      valueKey: (vm) => vm.valueKey,
       searchKey: 'label',
       resultKey: 'filteredDatasource',
       exposeProps: true
@@ -109,7 +102,7 @@ export default {
     realDatasource () {
       let valueKey = this.valueKey
       let childrenKey = this.childrenKey
-      const walk = suggestions => {
+      const walk = (suggestions) => {
         return suggestions.reduce((result, item) => {
           if (typeof item === 'string') {
             item = { [valueKey]: item }
@@ -149,7 +142,9 @@ export default {
     },
     $listeners ({ suggest }) {
       if (suggest) {
-        warn('[veui-autocomplete] The `suggest` event is deprecated and will be removed in future versions. Please use the `select` event instead.')
+        warn(
+          '[veui-autocomplete] The `suggest` event is deprecated and will be removed in future versions. Please use the `select` event instead.'
+        )
       }
     }
   },
@@ -166,7 +161,7 @@ export default {
       this.closeSuggestions()
     },
     findComponentByMethod (name) {
-      return findComponent(this, vm => isFunction(vm[name]))
+      return findComponent(this, (vm) => isFunction(vm[name]))
     },
     callComponentMethod (name, ...args) {
       let comp = this.findComponentByMethod(name)

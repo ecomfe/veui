@@ -1,16 +1,11 @@
 <template>
 <article class="anchor-demo">
-  <h1><code>&lt;veui-anchor&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-anchor&gt;</code>
+  </h1>
   <div class="content-wrapper">
     <div class="line"/>
-    <div
-      v-for="i in ids"
-      :id="i"
-      :key="i"
-      class="block"
-    >
-      {{ i }}
-    </div>
+    <div v-for="i in ids" :id="i" :key="i" class="block">{{ i }}</div>
   </div>
   <h2 class="sticky-header">sticky anchor</h2>
   <veui-anchor
@@ -20,10 +15,9 @@
     target-offset="10%"
     :items="coffees0"
   >
-    <span
-      slot="item-label"
-      slot-scope="{ label }"
-    >{{ label }}🤘</span>
+    <template #item-label="{ label }">
+      <span>{{ label }}🤘</span>
+    </template>
   </veui-anchor>
   <h2 class="header-four">sticky anchor (100px)</h2>
   <veui-anchor
@@ -45,10 +39,7 @@
 
   <h2>clipped anchor</h2>
   <div class="anchor-three-wrapper anchor-three-scroll">
-    <div
-      ref="container"
-      class="anchor-three-scroll"
-    >
+    <div ref="container" class="anchor-three-scroll">
       <div class="long red"/>
       <veui-anchor
         container="container"

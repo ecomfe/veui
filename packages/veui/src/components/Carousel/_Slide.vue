@@ -162,7 +162,7 @@ export default {
       //  1. wrap 时实现循环
       //  2. 作为非空白 pad，虽然 normalize 时补上了 pad，但是对于（总共5个，每页2个，每次滚动1个），就不用补空白 pad，而是非空白 pad 效果更好
       //  3. 始终有 duplicate，使得计算偏移的逻辑统一
-      const startDups = normalized.slice(0, this.slidesPerView).map(real => {
+      const startDups = normalized.slice(0, this.slidesPerView).map((real) => {
         const dup = {
           ...real,
           duplicate: true,
@@ -170,7 +170,7 @@ export default {
         }
         return dup
       })
-      const endDups = normalized.slice(-this.slidesPerGroup).map(real => {
+      const endDups = normalized.slice(-this.slidesPerGroup).map((real) => {
         const dup = {
           ...real,
           duplicate: true,
@@ -385,12 +385,10 @@ export default {
     },
     // 获取将要滚动出去的索引（并非 view 中所有项目都会滚动出去）
     getSlideOutRange (fromLoopGroupIndex, toLoopGroupIndex) {
-      const [fromStart, fromEnd] = this.getRdIndexesByLoopGroupIndex(
-        fromLoopGroupIndex
-      )
-      const [toStart, toEnd] = this.getRdIndexesByLoopGroupIndex(
-        toLoopGroupIndex
-      )
+      const [fromStart, fromEnd] =
+        this.getRdIndexesByLoopGroupIndex(fromLoopGroupIndex)
+      const [toStart, toEnd] =
+        this.getRdIndexesByLoopGroupIndex(toLoopGroupIndex)
       let start = fromStart
       let end = fromEnd
 

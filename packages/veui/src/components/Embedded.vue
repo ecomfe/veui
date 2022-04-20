@@ -29,7 +29,7 @@ export default {
     return h(
       Dialog,
       data,
-      Object.keys(this.$slots).map(slot =>
+      Object.keys(this.$slots).map((slot) =>
         h('template', { slot }, this.$slots[slot])
       )
     )

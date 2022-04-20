@@ -1,6 +1,8 @@
 <template>
 <article class="veui-search-box-demo">
-  <h1><code>&lt;veui-search-box&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-search-box&gt;</code>
+  </h1>
   <section class="has-margin-right">
     <h2>sizes</h2>
     <section>
@@ -173,10 +175,7 @@
         @search="log($event)"
         @suggest="suggestHandler"
       >
-        <template
-          slot="suggestion"
-          slot-scope="suggestion"
-        >
+        <template #suggestion="suggestion">
           <span>{{ suggestion.value }}</span>
           <veui-icon name="eye"/>
         </template>
@@ -188,22 +187,12 @@
         @input="handleSuggest('7', $event)"
         @search="log($event)"
       >
-        <template slot="suggestions-before">
+        <template #suggestions-before>
           <h3>header</h3>
         </template>
-        <template
-          slot="group-label"
-          slot-scope="{ label }"
-        >
-          1👉 {{ label }}
-        </template>
-        <template
-          slot="option-label"
-          slot-scope="{ label }"
-        >
-          2👉 {{ label }}
-        </template>
-        <template slot="suggestions-after">
+        <template #group-label="{ label }">1👉 {{ label }}</template>
+        <template #option-label="{ label }">2👉 {{ label }}</template>
+        <template #suggestions-after>
           <h3>ender</h3>
         </template>
       </veui-search-box>
@@ -346,7 +335,7 @@ export default {
       bus.$emit('log', ...items)
     },
     suggestHandler (value) {
-      this.suggestions8 = this.suggestions8.map(item => {
+      this.suggestions8 = this.suggestions8.map((item) => {
         item.hidden = !(
           includes(item.label, value) || includes(item.value, value)
         )

@@ -80,7 +80,7 @@ function search (datasource, keyword, options, result = []) {
     ancestors
   } = options
 
-  datasource.some(item => {
+  datasource.some((item) => {
     // 包下不会怕属性冲突
     let itemWrap = { item }
 

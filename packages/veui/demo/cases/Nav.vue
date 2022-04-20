@@ -1,35 +1,24 @@
 <template>
 <article class="veui-nav-demo">
-  <h1><code>&lt;veui-nav&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-nav&gt;</code>
+  </h1>
   <div>active: {{ active }}</div>
   <section>
     <h3>small nav</h3>
-    <veui-nav
-      :items="items"
-      :active.sync="active"
-      ui="s"
-    />
+    <veui-nav :items="items" :active.sync="active" ui="s"/>
   </section>
   <section>
     <h3>medium nav</h3>
-    <veui-nav
-      :items="items"
-      :active.sync="active"
-    />
+    <veui-nav :items="items" :active.sync="active"/>
   </section>
   <section>
     <h3>large nav</h3>
-    <veui-nav
-      :items="items"
-      ui="l"
-    />
+    <veui-nav :items="items" ui="l"/>
   </section>
   <section>
     <h3>folded nav</h3>
-    <veui-nav
-      class="rest-nav"
-      :items="items"
-    />
+    <veui-nav class="rest-nav" :items="items"/>
   </section>
   <section>
     <h3>uncontrolled nav</h3>
@@ -38,10 +27,7 @@
   <section>
     <h3>item-label scoped slot</h3>
     <veui-nav :items="items">
-      <template
-        slot="item-label"
-        slot-scope="item"
-      >{{ item.label }}🐂</template>
+      <template #item-label="item">{{ item.label }}🐂</template>
     </veui-nav>
   </section>
   <section>
@@ -52,7 +38,9 @@
     <h3>nav based on params</h3>
     <veui-nav :items="nameItems"/>
   </section>
-  <section><router-view/></section>
+  <section>
+    <router-view/>
+  </section>
 </article>
 </template>
 

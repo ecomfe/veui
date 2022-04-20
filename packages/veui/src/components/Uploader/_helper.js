@@ -50,7 +50,7 @@ export const ERRORS = {
 
 export function getFileMediaType (file, mediaExtensions) {
   return find(keys(mediaExtensions), function (type) {
-    return some(mediaExtensions[type], ext => endsWith(file.name, `.${ext}`))
+    return some(mediaExtensions[type], (ext) => endsWith(file.name, `.${ext}`))
   })
 }
 
@@ -75,7 +75,7 @@ function getValidateFileType ({ accept, extensions, type }) {
 
     let ext = last(file.name.split('.')).toLowerCase()
 
-    return accept.split(/,\s*/).some(item => {
+    return accept.split(/,\s*/).some((item) => {
       let acceptExtention = last(item.split(/[./]/)).toLowerCase()
       if (
         acceptExtention === ext ||
@@ -112,14 +112,14 @@ export function getValidateFile (options, ctx) {
     [
       getValidateFileType(options),
       ERRORS.TYPE_INVALID,
-      file => file.name,
+      (file) => file.name,
       identity,
       () => ctx.t('fileTypeInvalid')
     ],
     [
       getValidateFileSize(options),
       ERRORS.SIZE_INVALID,
-      file => file.size,
+      (file) => file.size,
       identity,
       () => ctx.t('fileSizeInvalid')
     ],
@@ -127,8 +127,8 @@ export function getValidateFile (options, ctx) {
       getCustomValidate(options),
       ERRORS.CUSTOM_INVALID,
       identity,
-      result => result.valid,
-      result => result.message
+      (result) => result.valid,
+      (result) => result.message
     ]
   ].map(function ([validate, type, getValue, getValid, getMessage]) {
     return function (file) {
@@ -146,7 +146,7 @@ export function getValidateFile (options, ctx) {
   })
 
   return function validateFile (file) {
-    return Promise.all(validators.map(validate => validate(file))).then(
+    return Promise.all(validators.map((validate) => validate(file))).then(
       function (errors) {
         errors = errors.filter(identity)
         return errors.length ? errors : null
@@ -257,7 +257,7 @@ export class UploaderFile {
         ...pick(this, PUBLIC_FILE_PROPS),
         [this.keyField]: this.key
       },
-      val => !isUndefined(val)
+      (val) => !isUndefined(val)
     )
   }
 
@@ -297,7 +297,7 @@ export class UploaderFile {
         ret[key] = (...args) =>
           forEach(
             compact([this[key].bind(this), callbacks[key], local[key]]),
-            execute => {
+            (execute) => {
               try {
                 execute(...args)
               } catch (err) {

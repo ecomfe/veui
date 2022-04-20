@@ -96,9 +96,13 @@ describe('components/Slider', function () {
         step: 10
       }
     })
-    let marks = wrapper.findAll('.veui-slider-track-default-marks .veui-slider-track-default-mark')
+    let marks = wrapper.findAll(
+      '.veui-slider-track-default-marks .veui-slider-track-default-mark'
+    )
     marks.at(3).trigger('click')
     await wrapper.vm.$nextTick()
-    expect(getStyle(wrapper.find('.veui-slider-thumb').element).left).to.equal('10%')
+    expect(getStyle(wrapper.find('.veui-slider-thumb').element).left).to.equal(
+      '10%'
+    )
   })
 })

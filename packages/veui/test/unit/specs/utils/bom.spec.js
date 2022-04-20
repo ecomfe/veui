@@ -1,16 +1,15 @@
-import {pick} from 'lodash'
-import {
-  isFirefox,
-  isSafari
-} from '@/utils/bom'
+import { pick } from 'lodash'
+import { isFirefox, isSafari } from '@/utils/bom'
 
 const firefoxNavigatorMock = {
-  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
+  userAgent:
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
   vendor: ''
 }
 
 const safariNavigatorMock = {
-  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15',
+  userAgent:
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15',
   vendor: 'Apple Computer, Inc.'
 }
 
@@ -43,22 +42,28 @@ describe('utils/bom', () => {
 
 function overrideNavigator (obj) {
   let origin = pick(navigator, Object.keys(obj))
-  Object.defineProperties(navigator, Object.entries(obj).reduce(function (ret, [key, val]) {
-    ret[key] = {
-      configurable: true,
-      writable: true,
-      value: val
-    }
-    return ret
-  }, {}))
-
-  return function redo () {
-    Object.defineProperties(navigator, Object.entries(origin).reduce(function (ret, [key, val]) {
+  Object.defineProperties(
+    navigator,
+    Object.entries(obj).reduce(function (ret, [key, val]) {
       ret[key] = {
-        writable: false,
+        configurable: true,
+        writable: true,
         value: val
       }
       return ret
-    }, {}))
+    }, {})
+  )
+
+  return function redo () {
+    Object.defineProperties(
+      navigator,
+      Object.entries(origin).reduce(function (ret, [key, val]) {
+        ret[key] = {
+          writable: false,
+          value: val
+        }
+        return ret
+      }, {})
+    )
   }
 }

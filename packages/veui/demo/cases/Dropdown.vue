@@ -15,24 +15,9 @@
           '--dls-dropdown-max-display-items': 4
         }"
       />
-      <veui-dropdown
-        ui="primary s"
-        label="操作"
-        split
-        :options="options"
-      />
-      <veui-dropdown
-        ui="primary"
-        label="操作"
-        split
-        :options="options"
-      />
-      <veui-dropdown
-        ui="primary l"
-        label="操作"
-        split
-        :options="options"
-      />
+      <veui-dropdown ui="primary s" label="操作" split :options="options"/>
+      <veui-dropdown ui="primary" label="操作" split :options="options"/>
+      <veui-dropdown ui="primary l" label="操作" split :options="options"/>
       <veui-dropdown
         ui="primary"
         label="操作"
@@ -43,61 +28,18 @@
     </div>
     <div>
       <h4>default</h4>
-      <veui-dropdown
-        ui="xs"
-        label="操作"
-        :options="options"
-      />
-      <veui-dropdown
-        ui="s"
-        label="操作"
-        split
-        :options="options"
-      />
-      <veui-dropdown
-        ui="m"
-        label="操作"
-        split
-        :options="options"
-      />
-      <veui-dropdown
-        ui="l"
-        label="操作"
-        split
-        :options="options"
-      />
-      <veui-dropdown
-        label="操作"
-        split
-        disabled
-        :options="options"
-      />
+      <veui-dropdown ui="xs" label="操作" :options="options"/>
+      <veui-dropdown ui="s" label="操作" split :options="options"/>
+      <veui-dropdown ui="m" label="操作" split :options="options"/>
+      <veui-dropdown ui="l" label="操作" split :options="options"/>
+      <veui-dropdown label="操作" split disabled :options="options"/>
     </div>
     <div>
       <h4>normal</h4>
-      <veui-dropdown
-        ui="normal xs"
-        label="操作"
-        :options="options"
-      />
-      <veui-dropdown
-        ui="normal s"
-        label="操作"
-        split
-        :options="options"
-      />
-      <veui-dropdown
-        ui="normal m"
-        label="操作"
-        split
-        :options="options"
-      />
-      <veui-dropdown
-        ui="normal l"
-        label="操作"
-        split
-        :options="options"
-      />
+      <veui-dropdown ui="normal xs" label="操作" :options="options"/>
+      <veui-dropdown ui="normal s" label="操作" split :options="options"/>
+      <veui-dropdown ui="normal m" label="操作" split :options="options"/>
+      <veui-dropdown ui="normal l" label="操作" split :options="options"/>
       <veui-dropdown
         ui="normal"
         label="操作"
@@ -141,12 +83,7 @@
     <div>
       <h4>triggers</h4>
       <div>
-        <veui-dropdown
-          ui="xs"
-          label="操作"
-          split
-          :options="options"
-        />
+        <veui-dropdown ui="xs" label="操作" split :options="options"/>
         <veui-dropdown
           ui="xs"
           split
@@ -154,10 +91,7 @@
           trigger="hover"
           :options="options"
         >
-          <template
-            slot="option-label"
-            slot-scope="{ label }"
-          >👉 {{ label }}</template>
+          <template #option-label="{ label }">👉 {{ label }}</template>
         </veui-dropdown>
       </div>
     </div>
@@ -246,27 +180,13 @@
   <section>
     <h3>文字链下拉框菜单</h3>
     <div>
-      <veui-dropdown
-        ui="text"
-        label="操作"
-        disabled
-        :options="options"
-      />
-      <veui-dropdown
-        ui="text xs"
-        label="操作"
-      >
-        <veui-option-group
-          label="提交"
-          ui="xs"
-        >
+      <veui-dropdown ui="text" label="操作" disabled :options="options"/>
+      <veui-dropdown ui="text xs" label="操作">
+        <veui-option-group label="提交" ui="xs">
           <veui-option @click="log('save')">💾保存</veui-option>
           <veui-option value="publish">✅发布</veui-option>
         </veui-option-group>
-        <veui-option-group
-          label="操作"
-          ui="xs"
-        >
+        <veui-option-group label="操作" ui="xs">
           <veui-option value="undo">⬅️撤消</veui-option>
           <veui-option value="redo">➡️重复</veui-option>
         </veui-option-group>
@@ -291,11 +211,7 @@
         <veui-option value="undo">⬅️撤消</veui-option>
         <veui-option value="redo">➡️重复</veui-option>
         <template #trigger="{ handlers, props }">
-          <veui-button
-            ui="icon"
-            v-bind="props"
-            v-on="handlers"
-          >
+          <veui-button ui="icon" v-bind="props" v-on="handlers">
             <veui-icon name="ellipsis"/>
           </veui-button>
         </template>
@@ -307,14 +223,8 @@
         <template #default="{ close }">
           <div class="filter">
             筛选：
-            <veui-input
-              ui="xs"
-              class="query"
-            />
-            <veui-button
-              ui="xs primary"
-              @click="close"
-            >OK</veui-button>
+            <veui-input ui="xs" class="query"/>
+            <veui-button ui="xs primary" @click="close">OK</veui-button>
           </div>
         </template>
         <template #trigger="{ handlers, attrs }">

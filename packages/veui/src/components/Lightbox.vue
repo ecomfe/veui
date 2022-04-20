@@ -23,11 +23,7 @@
     >
       {{ realIndex + 1 }}/{{ count }}
     </div>
-    <div
-      :class="$c('sr-only')"
-      aria-live="polite"
-      aria-atomic="true"
-    >
+    <div :class="$c('sr-only')" aria-live="polite" aria-atomic="true">
       {{ t('detail', { index: realIndex + 1, total: datasource.length }) }}
     </div>
     <veui-button
@@ -54,10 +50,7 @@
         :class="[$c('lightbox-control'), $c('lightbox-control-prev')]"
         @click="step(-1)"
       >
-        <veui-icon
-          :name="icons.prev"
-          :aria-label="t('prev')"
-        />
+        <veui-icon :name="icons.prev" :aria-label="t('prev')"/>
       </veui-button>
       <div
         :class="{
@@ -97,20 +90,11 @@
                     :muted="options.video.autoplay || options.video.muted"
                     :src="item.src"
                   />
-                  <img
-                    v-else
-                    :src="item.src"
-                    :alt="item.alt"
-                  >
+                  <img v-else :src="item.src" :alt="item.alt">
                 </div>
               </slot>
-              <slot
-                name="desc"
-                v-bind="{ ...item, index: i }"
-              >
-                <div :class="$c('lightbox-item-desc')">
-                  {{ item.desc }}
-                </div>
+              <slot name="desc" v-bind="{ ...item, index: i }">
+                <div :class="$c('lightbox-item-desc')">{{ item.desc }}</div>
               </slot>
             </div>
           </li>
@@ -122,10 +106,7 @@
         :class="[$c('lightbox-control'), $c('lightbox-control-next')]"
         @click="step(1)"
       >
-        <veui-icon
-          :name="icons.next"
-          :aria-label="t('next')"
-        />
+        <veui-icon :name="icons.next" :aria-label="t('next')"/>
       </veui-button>
     </div>
   </div>

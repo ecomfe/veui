@@ -5,8 +5,8 @@ let files = ['test/global.js']
 if (process.env.TEST_FILES) {
   files = files.concat(
     process.env.TEST_FILES.split(',')
-      .map(v => v.trim())
-      .map(name => `test/unit/**/${name}.spec.js`)
+      .map((v) => v.trim())
+      .map((name) => `test/unit/**/${name}.spec.js`)
   )
 } else {
   files.push('test/unit/**/*.spec.js')

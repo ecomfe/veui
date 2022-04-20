@@ -18,7 +18,7 @@ export default {
   computed: {
     realRoutes () {
       if (this.routes && this.routes.length) {
-        let routes = this.routes.map(i => ({ ...i }))
+        let routes = this.routes.map((i) => ({ ...i }))
 
         // 默认将最后一个route的type设置为text
         const last = routes[routes.length - 1]
@@ -45,7 +45,7 @@ export default {
               replace={route.replace}
               type={route.type}
               native={route.native}
-              onRedirect={event => this.fireRedirect(event, route, index)}
+              onRedirect={(event) => this.fireRedirect(event, route, index)}
             >
               {this.$scopedSlots.item
                 ? this.$scopedSlots.item({ route, ...route, index })

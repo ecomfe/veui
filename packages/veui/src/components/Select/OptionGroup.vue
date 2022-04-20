@@ -212,7 +212,7 @@ const OptionGroup = {
     relocateDeep () {
       walk(
         this,
-        child => {
+        (child) => {
           if (child.$options.name === this.$options.name) {
             child.relocate()
           }
@@ -288,7 +288,7 @@ const OptionGroup = {
               label:
                   option.renderLabel ||
                   this.$scopedSlots.label ||
-                  (group => group.label),
+                  ((group) => group.label),
               option: this.$scopedSlots.option || null,
               'option-label': this.$scopedSlots['option-label'] || null,
               'option-group-label':
@@ -376,7 +376,7 @@ const OptionGroup = {
                       this.commit('expanded', true)
                     }
                   },
-                  keydown: e => {
+                  keydown: (e) => {
                     if (e.key === 'Right' || e.key === 'ArrowRight') {
                       this.commit('expanded', true)
                       e.stopPropagation()

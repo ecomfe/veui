@@ -14,10 +14,7 @@
   role="alertdialog"
   v-on="listeners"
 >
-  <template
-    v-if="title || $slots.title"
-    slot="title"
-  >
+  <template v-if="title || $slots.title" slot="title">
     <slot name="title">{{ title }}</slot>
   </template>
   <slot/>
@@ -26,10 +23,7 @@
     slot="foot"
     slot-scope="scope"
   >
-    <slot
-      name="foot"
-      v-bind="scope"
-    />
+    <slot name="foot" v-bind="scope"/>
   </template>
 </veui-dialog>
 </template>

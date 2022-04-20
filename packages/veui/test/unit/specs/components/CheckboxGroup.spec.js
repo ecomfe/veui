@@ -32,7 +32,7 @@ describe('components/CheckboxGroup', () => {
     wrapper.destroy()
   })
 
-  it('should handle checked prop with `null` value.', done => {
+  it('should handle checked prop with `null` value.', (done) => {
     const wrapper = mount(
       {
         components: {
@@ -63,10 +63,7 @@ describe('components/CheckboxGroup', () => {
       }
     )
 
-    wrapper
-      .findAll('input[type="checkbox"]')
-      .at(0)
-      .trigger('change')
+    wrapper.findAll('input[type="checkbox"]').at(0).trigger('change')
   })
 
   it('should make prop `value` fully controlled.', async () => {

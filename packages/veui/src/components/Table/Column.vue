@@ -5,7 +5,8 @@ import colgroup from '../../mixins/colgroup'
 import { renderSlot } from '../../utils/helper'
 import '../../common/global'
 
-let renderBody = vm => item => renderSlot(vm, 'default', item) || item[vm.field]
+let renderBody = (vm) => (item) =>
+  renderSlot(vm, 'default', item) || item[vm.field]
 
 let col = useChild('table-column', 'colgroup', [
   'title',
@@ -23,25 +24,28 @@ let col = useChild('table-column', 'colgroup', [
   'filterMultiple',
   'columns',
   ['fixed', 'realFixed'],
-  ['hasFoot', vm => () => !!(vm.$scopedSlots.foot || vm.$slots.foot)],
+  ['hasFoot', (vm) => () => !!(vm.$scopedSlots.foot || vm.$slots.foot)],
   ['renderBody', renderBody],
   [
     'renderSubRow',
-    vm => item => renderSlot(vm, 'sub-row', item) || renderBody(vm)(item)
+    (vm) => (item) => renderSlot(vm, 'sub-row', item) || renderBody(vm)(item)
   ],
-  ['renderHead', vm => () => renderSlot(vm, 'head') || vm.title],
-  ['renderFoot', vm => () => renderSlot(vm, 'foot')],
-  ['renderDesc', vm => props => renderSlot(vm, 'desc', props) || vm.desc],
-  ['renderFilter', vm => props => renderSlot(vm, 'filter', props)],
+  ['renderHead', (vm) => () => renderSlot(vm, 'head') || vm.title],
+  ['renderFoot', (vm) => () => renderSlot(vm, 'foot')],
+  ['renderDesc', (vm) => (props) => renderSlot(vm, 'desc', props) || vm.desc],
+  ['renderFilter', (vm) => (props) => renderSlot(vm, 'filter', props)],
   [
     'hasFilter',
-    vm => () =>
+    (vm) => () =>
       !!(vm.$scopedSlots.filter || vm.$slots.filter || vm.filterOptions)
   ],
-  ['hasFilterSlot', vm => () => !!(vm.$scopedSlots.filter || vm.$slots.filter)],
-  ['hasStaleHead', vm => () => !!(vm.$slots.head || vm.$slots.desc)],
-  ['hasStaleFoot', vm => () => !!vm.$slots.foot],
-  ['handleFilterChange', vm => vm.handleFilterChange]
+  [
+    'hasFilterSlot',
+    (vm) => () => !!(vm.$scopedSlots.filter || vm.$slots.filter)
+  ],
+  ['hasStaleHead', (vm) => () => !!(vm.$slots.head || vm.$slots.desc)],
+  ['hasStaleFoot', (vm) => () => !!vm.$slots.foot],
+  ['handleFilterChange', (vm) => vm.handleFilterChange]
 ])
 
 export default {

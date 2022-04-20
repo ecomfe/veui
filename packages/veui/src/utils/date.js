@@ -84,7 +84,7 @@ function prepareRanges (range) {
     range = range[0] ? [range] : []
   }
 
-  return range.map(r => r.map(toDate).sort((d1, d2) => d1 - d2))
+  return range.map((r) => r.map(toDate).sort((d1, d2) => d1 - d2))
 }
 
 export function mergeRange (r1, r2, type = 'date', mode = 'xor') {
@@ -139,7 +139,7 @@ function getDateData (dataStr, re, type) {
   let matches = dataStr.match(re)
   let result = null
   if (matches) {
-    matches = matches.slice(1).map(i => +i)
+    matches = matches.slice(1).map((i) => +i)
     let [year, month, date] = matches
     if (type === 'date') {
       let d = new Date(year, month - 1, date)

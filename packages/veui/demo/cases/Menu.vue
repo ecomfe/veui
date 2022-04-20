@@ -1,6 +1,8 @@
 <template>
 <article class="veui-sidenav-demo">
-  <h1><code>&lt;veui-sidenav&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-sidenav&gt;</code>
+  </h1>
   <div>expanded: {{ expanded }}</div>
   <div>active: {{ active1 }}</div>
   <veui-button
@@ -37,18 +39,13 @@
   </section>
   <section>
     <h3>自定义 icon slot</h3>
-    <veui-sidenav
-      ui="s"
-      :collapsed.sync="collapsed"
-      :items="items"
-    >
-      <veui-icon
-        slot="icon"
-        name="baidu"
-      />
+    <veui-sidenav ui="s" :collapsed.sync="collapsed" :items="items">
+      <veui-icon slot="icon" name="baidu"/>
     </veui-sidenav>
   </section>
-  <section><router-view/></section>
+  <section>
+    <router-view/>
+  </section>
 </article>
 </template>
 

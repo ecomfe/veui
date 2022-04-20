@@ -6,10 +6,7 @@
   @reset.prevent="reset(null)"
 >
   <slot v-bind="{ submit, validating: isValidating, validities }"/>
-  <div
-    v-if="hasActions()"
-    :class="$c('form-actions')"
-  >
+  <div v-if="hasActions()" :class="$c('form-actions')">
     <slot
       name="actions"
       v-bind="{ submit, validating: isValidating, validities }"

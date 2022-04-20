@@ -1,6 +1,8 @@
 <template>
 <article>
-  <h1><code>&lt;veui-tag&gt;</code></h1>
+  <h1>
+    <code>&lt;veui-tag&gt;</code>
+  </h1>
   <section>
     <veui-checkbox v-model="bordered">带边框样式</veui-checkbox>
   </section>
@@ -11,9 +13,7 @@
         v-for="size in sizes"
         :key="size"
         :ui="size + (bordered ? ' bordered' : '')"
-      >
-        {{ size }}
-      </veui-tag>
+      >{{ size }}</veui-tag>
     </div>
   </section>
 
@@ -25,9 +25,7 @@
         :key="type"
         :type="type"
         :ui="bordered ? 'bordered' : ''"
-      >
-        {{ type }}
-      </veui-tag>
+      >{{ type }}</veui-tag>
     </div>
   </section>
 
@@ -41,9 +39,7 @@
         :ui="bordered ? 'bordered' : ''"
         removable
         @remove="handleRemove(team)"
-      >
-        {{ team }}
-      </veui-tag>
+      >{{ team }}</veui-tag>
     </div>
   </section>
 
@@ -57,9 +53,7 @@
         removable
         :ui="'s' + (bordered ? ' bordered' : '')"
         @remove="handleRemove(team)"
-      >
-        {{ team }}
-      </veui-tag>
+      >{{ team }}</veui-tag>
     </div>
   </section>
 
@@ -71,9 +65,7 @@
         removable
         :removed="controlledRemoved"
         @remove="handleControlledRemove"
-      >
-        受控可移除标签
-      </veui-tag>
+      >受控可移除标签</veui-tag>
     </div>
   </section>
 
@@ -87,9 +79,7 @@
         :selected.sync="selected"
         :ui="bordered ? 'bordered' : ''"
         selectable
-      >
-        {{ type }}
-      </veui-tag>
+      >{{ type }}</veui-tag>
     </div>
   </section>
 
@@ -104,9 +94,7 @@
         :ui="bordered ? 'bordered' : ''"
         disabled
         selectable
-      >
-        {{ type }}
-      </veui-tag>
+      >{{ type }}</veui-tag>
     </div>
     <div style="margin-top: 20px">
       <veui-tag
@@ -116,9 +104,7 @@
         :ui="bordered ? 'bordered' : ''"
         disabled
         removable
-      >
-        {{ type }}
-      </veui-tag>
+      >{{ type }}</veui-tag>
     </div>
   </section>
 </article>
@@ -155,7 +141,7 @@ export default {
       this.$toast.success(name + '赢了')
     },
     handleControlledRemove () {
-      this.$confirm('要删除吗？').then(confirmed => {
+      this.$confirm('要删除吗？').then((confirmed) => {
         if (confirmed) {
           this.controlledRemoved = true
         }
