@@ -7,6 +7,7 @@
   - 不再支持 `s` / `l` 尺寸变体，现在只支持默认的 `m` 尺寸。
   - 移除了属性 `collapsible`，侧导航不再内置切换展开/收起的按钮。
   - `collapsed` 属性在不受控时默认会和上层 `Sidebar` 的 `collapsed` 属性联动。
+
 - [^] 组件 `Sidebar` 的属性 `collapsible` 默认值调整为 `false`。<!-- #Sidebar -->
 
 ### 💡 主要变更
