@@ -66,7 +66,9 @@ const options = {
   }
 }
 
-describe('components/Sidenav', () => {
+describe('components/Sidenav', function () {
+  this.timeout(10000)
+
   it('should handle ui prop correctly', () => {
     let wrapper = mount(
       {

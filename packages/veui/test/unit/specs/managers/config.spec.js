@@ -1,6 +1,8 @@
 import { ConfigManager } from '@/managers/config'
 
-describe('managers/config', () => {
+describe('managers/config', function () {
+  this.timeout(10000)
+
   it('should be able to set configs from a key/value pair', () => {
     let config = new ConfigManager()
     config.set('test.a', 'a')

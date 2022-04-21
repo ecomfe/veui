@@ -18,7 +18,9 @@ const attach = {
 
 const CONTENT = '.veui-dialog-content'
 
-describe('components/Drawer', () => {
+describe('components/Drawer', function () {
+  this.timeout(10000)
+
   it('should support placement `top`.', async () => {
     let wrapper = mount(
       {

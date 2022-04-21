@@ -1,6 +1,8 @@
 import maxLength from 'veui/managers/rules/maxLength'
 
-describe('managers/rules/maxLength', () => {
+describe('managers/rules/maxLength', function () {
+  this.timeout(10000)
+
   it('should allow empty values', () => {
     expect(maxLength.validate(null)).to.equal(true)
     expect(maxLength.validate(undefined)).to.equal(true)

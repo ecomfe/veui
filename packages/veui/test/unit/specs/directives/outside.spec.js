@@ -5,7 +5,9 @@ import { Overlay, Select, Option } from 'veui'
 
 config.stubs.transition = false
 
-describe('directives/outside', () => {
+describe('directives/outside', function () {
+  this.timeout(10000)
+
   it('should handle `click` correctly', () => {
     let count = 0
     let wrapper = mount(

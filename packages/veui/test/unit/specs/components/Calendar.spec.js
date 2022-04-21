@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import Calendar from '@/components/Calendar'
 import { expectDisabled, wait } from '../../../utils'
 
-describe('components/Calendar', () => {
+describe('components/Calendar', function () {
+  this.timeout(10000)
+
   it('should handle selected prop with `null` value.', (done) => {
     const wrapper = mount(Calendar, {
       propsData: {

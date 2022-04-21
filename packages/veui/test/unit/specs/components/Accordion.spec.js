@@ -6,7 +6,9 @@ const COLLAPSE_CLASS = '.veui-collapse'
 const HEADER_CLASS = '.veui-collapse-header'
 const BODY_CLASS = '.veui-collapse-body'
 
-describe('components/Accordion', () => {
+describe('components/Accordion', function () {
+  this.timeout(10000)
+
   it('should expand/collapse correctly with local state', async () => {
     let wrapper = mount(
       {

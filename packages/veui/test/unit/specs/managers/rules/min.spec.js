@@ -1,6 +1,8 @@
 import min from 'veui/managers/rules/min'
 
-describe('managers/rules/min', () => {
+describe('managers/rules/min', function () {
+  this.timeout(10000)
+
   it('should allow empty values', () => {
     expect(min.validate(null)).to.equal(true)
     expect(min.validate(undefined)).to.equal(true)

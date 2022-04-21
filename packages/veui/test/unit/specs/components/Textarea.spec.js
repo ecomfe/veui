@@ -4,7 +4,9 @@ import Form from '@/components/Form'
 import Field from '@/components/Field'
 import { wait, expectFieldError } from '../../../utils'
 
-describe('components/Textarea', () => {
+describe('components/Textarea', function () {
+  this.timeout(10000)
+
   it('should handle value prop with `null` value', (done) => {
     let wrapper = mount(
       Textarea,

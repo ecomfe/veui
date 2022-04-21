@@ -3,7 +3,9 @@ import Button from '@/components/Button'
 import ui from '@/managers/ui'
 import { wait } from '../../../utils'
 
-describe('components/Button', () => {
+describe('components/Button', function () {
+  this.timeout(10000)
+
   it('should create a button component with `primary` ui', () => {
     const wrapper = mount(Button, {
       propsData: {

@@ -1,6 +1,8 @@
 import required from 'veui/managers/rules/required'
 
-describe('managers/rules/required', () => {
+describe('managers/rules/required', function () {
+  this.timeout(10000)
+
   it('should validate empty value correctly', () => {
     expect(required.validate(null)).to.equal(false)
     expect(required.validate(undefined)).to.equal(false)

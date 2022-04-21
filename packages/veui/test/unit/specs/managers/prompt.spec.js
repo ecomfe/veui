@@ -1,7 +1,9 @@
 import prompt from '@/managers/prompt'
 import { wait } from '../../../utils'
 
-describe('managers/prompt', () => {
+describe('managers/prompt', function () {
+  this.timeout(10000)
+
   it('should implement `createComponent` function correctly', async () => {
     let isOk = false
     let isCancel = false

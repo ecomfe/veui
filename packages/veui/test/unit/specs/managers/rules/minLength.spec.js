@@ -1,6 +1,8 @@
 import minLength from 'veui/managers/rules/minLength'
 
-describe('managers/rules/minLength', () => {
+describe('managers/rules/minLength', function () {
+  this.timeout(10000)
+
   it('should allow empty values', () => {
     expect(minLength.validate(null)).to.equal(true)
     expect(minLength.validate(undefined)).to.equal(true)

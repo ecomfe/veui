@@ -8,7 +8,9 @@ let datasource = [
   { label: 'label 3', desc: 'desc 3' }
 ]
 
-describe('components/Steps', () => {
+describe('components/Steps', function () {
+  this.timeout(10000)
+
   it('should handle steps prop with `null` value.', () => {
     let wrapper = mount(Steps, {
       propsData: {

@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils'
 import ButtonGroup from '@/components/ButtonGroup'
 
-describe('components/ButtonGroup', () => {
+describe('components/ButtonGroup', function () {
+  this.timeout(10000)
+
   it('should create a buttonGroup with `primary` ui', () => {
     const wrapper = mount(ButtonGroup, {
       propsData: {

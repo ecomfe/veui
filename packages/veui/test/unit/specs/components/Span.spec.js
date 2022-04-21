@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils'
 import Span from '@/components/Span'
 
-describe('components/Span', () => {
+describe('components/Span', function () {
+  this.timeout(10000)
+
   it('should support customized ui correctly.', async () => {
     let wrapper = mount(
       {

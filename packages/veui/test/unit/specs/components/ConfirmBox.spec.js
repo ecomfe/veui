@@ -6,6 +6,8 @@ import { wait, mount } from '../../../utils'
 config.stubs.transition = false
 
 describe('components/ConfirmBox', function () {
+  this.timeout(10000)
+
   it('should handle props correctly', async () => {
     let closeHandler = sinon.spy()
     let wrapper = mount({
@@ -56,9 +58,7 @@ describe('components/ConfirmBox', function () {
     wrapper.destroy()
   })
 
-  it('should handle event correctly when click ok/cancel button', async function () {
-    this.timeout(3000)
-
+  it('should handle event correctly when click ok/cancel button', async () => {
     let okHandler = sinon.spy()
     let cancelHandler = sinon.spy()
     let afterCloseHandler = sinon.spy()

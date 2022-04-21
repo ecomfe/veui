@@ -14,7 +14,9 @@ const DropdownComponent = {
   mixins: [dropdown()]
 }
 
-describe('mixins/dropdown', () => {
+describe('mixins/dropdown', function () {
+  this.timeout(10000)
+
   it('should apply dropdown mixins', () => {
     const { vm } = shallowMount(DropdownComponent, {
       localVue,

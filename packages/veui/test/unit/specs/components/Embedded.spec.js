@@ -16,7 +16,9 @@ const debugInBrowser = {
   sync: false
 }
 
-describe('components/Embedded', () => {
+describe('components/Embedded', function () {
+  this.timeout(10000)
+
   it('should render slot correctly.', async () => {
     let wrapper = mount(
       {

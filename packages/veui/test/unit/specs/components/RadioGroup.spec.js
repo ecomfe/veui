@@ -18,7 +18,9 @@ const items = [
   }
 ]
 
-describe('components/RadioGroup', () => {
+describe('components/RadioGroup', function () {
+  this.timeout(10000)
+
   it('should handle controlled value correctly.', async () => {
     let sync = true
     let wrapper = mount({

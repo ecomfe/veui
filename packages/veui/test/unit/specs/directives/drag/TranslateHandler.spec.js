@@ -32,7 +32,9 @@ function assertTransform (el, transform) {
   )
 }
 
-describe('directives/drag/TranslateHandler', () => {
+describe('directives/drag/TranslateHandler', function () {
+  this.timeout(10000)
+
   it('should be instantiatable with specified options and context', () => {
     let { wrapper, vm, handler } = createHandler()
     expect(handler.options.targets).to.deep.equal(['target'])

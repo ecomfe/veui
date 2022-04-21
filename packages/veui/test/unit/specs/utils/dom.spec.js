@@ -9,7 +9,9 @@ import {
 } from '@/utils/dom'
 import { wait } from '../../../utils'
 
-describe('utils/dom', () => {
+describe('utils/dom', function () {
+  this.timeout(10000)
+
   it('should find the closest parent as expected', () => {
     let el = document.createElement('div')
     el.innerHTML = `<div class="tip">点此

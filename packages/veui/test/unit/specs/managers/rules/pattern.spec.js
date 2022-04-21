@@ -1,6 +1,8 @@
 import pattern from 'veui/managers/rules/pattern'
 
-describe('managers/rules/pattern', () => {
+describe('managers/rules/pattern', function () {
+  this.timeout(10000)
+
   it('should match string RegExp correctly', () => {
     expect(pattern.validate('abc', '\\w+')).to.equal(true)
     expect(pattern.validate(' ', '\\w+')).to.equal(false)

@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import Badge from '@/components/Badge'
 import config from '@/managers/config'
 
-describe('components/Badge', () => {
+describe('components/Badge', function () {
+  this.timeout(10000)
+
   it('should render corner badge without content correctly', async () => {
     const wrapper = mount({
       components: {

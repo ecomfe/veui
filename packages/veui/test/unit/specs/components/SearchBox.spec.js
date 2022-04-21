@@ -33,7 +33,9 @@ let cars = [
   }
 ]
 
-describe('components/SearchBox', () => {
+describe('components/SearchBox', function () {
+  this.timeout(10000)
+
   it('should handle selected prop with `null` value.', (done) => {
     let wrapper = mount({
       methods: {

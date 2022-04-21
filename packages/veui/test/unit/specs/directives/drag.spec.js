@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import drag, { registerHandler } from '@/directives/drag'
 import { wait, normalizeTransform } from '../../../utils'
 
-describe('directives/drag', () => {
+describe('directives/drag', function () {
+  this.timeout(10000)
+
   it(`should receive correct params inside callbacks`, (done) => {
     let results = []
     let wrapper = mount(

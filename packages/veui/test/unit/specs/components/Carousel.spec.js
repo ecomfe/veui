@@ -33,7 +33,9 @@ let items = [
   }
 ]
 
-describe('components/Carousel', () => {
+describe('components/Carousel', function () {
+  this.timeout(10000)
+
   it('should switch correctly with local state', async () => {
     let wrapper = mount(
       {
@@ -761,8 +763,7 @@ describe('components/Carousel', () => {
     wrapper.destroy()
   })
 
-  it('should work with wrap + slidesPerGroup/slidesPerView', async function () {
-    this.timeout(3000)
+  it('should work with wrap + slidesPerGroup/slidesPerView', async () => {
     let wrapper = mount(
       {
         components: {
@@ -883,8 +884,7 @@ describe('components/Carousel', () => {
     wrapper.destroy()
   })
 
-  it('should handle video content correctly', async function () {
-    this.timeout(3000)
+  it('should handle video content correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -964,8 +964,7 @@ describe('components/Carousel', () => {
     wrapper.destroy()
   })
 
-  it('should render item slot and handle clicking prev/next button correctly', async function () {
-    this.timeout(3000)
+  it('should render item slot and handle clicking prev/next button correctly', async () => {
     let wrapper = mount(
       {
         components: {

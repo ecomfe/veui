@@ -8,7 +8,9 @@ let datasource = [
   { label: 'BC', value: 'c' }
 ]
 
-describe('components/FilterPanel', () => {
+describe('components/FilterPanel', function () {
+  this.timeout(10000)
+
   it('should render `title` props correctly', () => {
     let wrapper = mount(FilterPanel, {
       propsData: {

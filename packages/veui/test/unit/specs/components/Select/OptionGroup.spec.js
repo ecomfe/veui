@@ -7,7 +7,9 @@ import { wait, mount } from '../../../../utils'
 
 config.stubs.transition = false
 
-describe('components/Select/OptionGroup', () => {
+describe('components/Select/OptionGroup', function () {
+  this.timeout(10000)
+
   it('should pass down the `disabled` prop to the Option.', async () => {
     let wrapper = mount(
       {

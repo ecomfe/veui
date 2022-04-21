@@ -6,6 +6,8 @@ import { wait, mount } from '../../../utils'
 config.stubs.transition = false
 
 describe('components/PromptBox', function () {
+  this.timeout(10000)
+
   it('shoule handle props correctly', async () => {
     let beforeCloseHandler = sinon.spy()
     let wrapper = mount(
@@ -85,9 +87,7 @@ describe('components/PromptBox', function () {
     wrapper.destroy()
   })
 
-  it('should handle event correctly when click ok/cancel button', async function () {
-    this.timeout(3000)
-
+  it('should handle event correctly when click ok/cancel button', async () => {
     let okMock = sinon.spy()
     let cancelMock = sinon.spy()
     let afterCloseMock = sinon.spy()

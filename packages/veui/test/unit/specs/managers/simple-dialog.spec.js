@@ -10,7 +10,9 @@ class Dialog extends SimpleDialogManager {
 
 let dialog = new Dialog()
 
-describe('managers/simple-dialog', () => {
+describe('managers/simple-dialog', function () {
+  this.timeout(10000)
+
   it('should implement `createComponent` function correctly', () => {
     let component = dialog.createComponent()
     expect(isType(Vue, component)).to.equal(true)

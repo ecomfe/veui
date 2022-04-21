@@ -6,7 +6,9 @@ import Form from '@/components/Form'
 import Field from '@/components/Field'
 import { expectFieldError } from '../../../utils'
 
-describe('components/NumberInput', () => {
+describe('components/NumberInput', function () {
+  this.timeout(10000)
+
   it('should handle value prop with `null` value.', async () => {
     let wrapper = mount(NumberInput, {
       propsData: {

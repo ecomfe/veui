@@ -6,7 +6,9 @@ const debugInBrowser = {
   sync: false
 }
 
-describe('components/DatePicker', () => {
+describe('components/DatePicker', function () {
+  this.timeout(10000)
+
   it('should use `localActive` when used as a uncontrolled component.', async () => {
     let wrapper = mount(DatePicker)
 

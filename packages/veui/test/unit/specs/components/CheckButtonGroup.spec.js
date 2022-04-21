@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import CheckButtonGroup from '@/components/CheckButtonGroup'
 import { expectDisabled, wait } from '../../../utils'
 
-describe('components/CheckButtonGroup', () => {
+describe('components/CheckButtonGroup', function () {
+  this.timeout(10000)
+
   it('should handle props correctly', () => {
     const wrapper = mount(
       CheckButtonGroup,
@@ -48,8 +50,7 @@ describe('components/CheckButtonGroup', () => {
             selected: null
           }
         },
-        template:
-          '<veui-check-button-group v-model="selected" :items="items"/>'
+        template: '<veui-check-button-group v-model="selected" :items="items"/>'
       },
       {
         sync: false
@@ -126,8 +127,7 @@ describe('components/CheckButtonGroup', () => {
             selected: ['a']
           }
         },
-        template:
-          '<veui-check-button-group v-model="selected" :items="items"/>'
+        template: '<veui-check-button-group v-model="selected" :items="items"/>'
       },
       {
         sync: false

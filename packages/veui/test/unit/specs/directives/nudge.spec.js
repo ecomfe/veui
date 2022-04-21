@@ -4,7 +4,9 @@ import config from '@/managers/config'
 
 let DEFAULT_STEP = config.get('nudge.step')
 
-describe('directives/nudge', () => {
+describe('directives/nudge', function () {
+  this.timeout(10000)
+
   it(`should callback with step ${DEFAULT_STEP} upon keydown by default`, async () => {
     let updated = []
     let wrapper = mount({
