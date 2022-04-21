@@ -10,12 +10,10 @@ const STYLE_PATTERNS = [
   'packages/veui/demo/**/*.vue'
 ]
 
-const JSON_PATTERNS = [
-  'packages/**/package-lock.json'
-]
+const JSON_PATTERNS = ['packages/**/package-lock.json']
 
-module.exports = staged => {
-  const relativePaths = staged.map(p => relative(__dirname, p))
+module.exports = (staged) => {
+  const relativePaths = staged.map((p) => relative(__dirname, p))
   const scripts = micromatch(relativePaths, SCRIPT_PATTERNS).join(' ')
   const styles = micromatch(relativePaths, STYLE_PATTERNS).join(' ')
   const jsons = micromatch(relativePaths, JSON_PATTERNS).join(' ')

@@ -1,9 +1,6 @@
 {
   "customSyntax": "postcss-less",
-  "extends": [
-    "stylelint-config-standard",
-    "stylelint-config-prettier"
-  ],
+  "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
   "rules": {
     "selector-class-pattern": "^_?([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
     "alpha-value-notation": "number",
@@ -18,9 +15,7 @@
     "at-rule-no-unknown": [
       true,
       {
-        "ignoreAtRules": [
-          "plugin"
-        ]
+        "ignoreAtRules": ["plugin"]
       }
     ],
     "string-quotes": [
@@ -30,16 +25,10 @@
       }
     ]
   },
-  "ignoreFiles": [
-    "**/*.js",
-    "**/*.json",
-    "**/*.md"
-  ],
+  "ignoreFiles": ["**/.*.*", "**/*.ts", "**/*.js", "**/*.json", "**/*.md"],
   "overrides": [
     {
-      "files": [
-        "**/*.vue"
-      ],
+      "files": ["**/*.vue"],
       "customSyntax": "postcss-html"
     }
   ]

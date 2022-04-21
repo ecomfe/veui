@@ -12,7 +12,7 @@ const ICON_PATH = path.resolve(__dirname, '../icons')
 rimraf.sync(ICON_PATH)
 
 let indexModule = ''
-let bindings = Object.keys(icons).filter(b => b.startsWith('Icon'))
+let bindings = Object.keys(icons).filter((b) => b.startsWith('Icon'))
 let slugs = []
 bindings.forEach(function (binding) {
   let slug = kebabCase(binding).replace(/^icon-/, '')
@@ -25,7 +25,10 @@ bindings.forEach(function (binding) {
   }
   fs.writeFileSync(
     filePath,
-    MODULE_TPL.replace(/\$\{icon\}/g, binding).replace(/\$\{name\}/g, `'${slug}'`)
+    MODULE_TPL.replace(/\$\{icon\}/g, binding).replace(
+      /\$\{name\}/g,
+      `'${slug}'`
+    )
   )
   indexModule += `import './${slug}'\n`
 })
@@ -33,8 +36,13 @@ bindings.forEach(function (binding) {
 fs.writeFileSync(path.join(ICON_PATH, 'index.js'), indexModule)
 console.log(bindings.length + ' icon modules generated.')
 
-fs.writeFileSync(path.join(ICON_PATH, 'icon-names.json'), JSON.stringify(slugs, null, '  '))
+fs.writeFileSync(
+  path.join(ICON_PATH, 'icon-names.json'),
+  JSON.stringify(slugs, null, '  ')
+)
 
 function kebabCase (str) {
-  return str.replace(/([A-Z])/g, (_, ch) => `-${ch.toLowerCase()}`).replace(/^-/, '')
+  return str
+    .replace(/([A-Z])/g, (_, ch) => `-${ch.toLowerCase()}`)
+    .replace(/^-/, '')
 }
