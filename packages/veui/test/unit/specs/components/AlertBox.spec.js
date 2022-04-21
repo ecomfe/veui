@@ -5,7 +5,7 @@ import { wait } from '../../../utils'
 config.stubs.transition = false
 
 describe('components/AlertBox', function () {
-  this.timeout(3000)
+  this.timeout(10000)
 
   it('should render title prop correctly by AlertBox', () => {
     let wrapper = mount(
@@ -149,8 +149,7 @@ describe('components/AlertBox', function () {
           loading: false
         }
       },
-      template:
-        '<veui-alert-box open :disabled="disabled" :loading="loading"/>'
+      template: '<veui-alert-box open :disabled="disabled" :loading="loading"/>'
     })
 
     let { vm } = wrapper
