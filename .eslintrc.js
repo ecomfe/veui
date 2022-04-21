@@ -77,13 +77,16 @@ module.exports = {
     'vue/block-spacing': ['error', 'always'],
     'vue/brace-style': ['error', '1tbs', { allowSingleLine: true }],
     'vue/camelcase': ['error', { properties: 'never' }],
-    'vue/comma-dangle': ['error', {
-      arrays: 'never',
-      objects: 'never',
-      imports: 'never',
-      exports: 'never',
-      functions: 'never'
-    }],
+    'vue/comma-dangle': [
+      'error',
+      {
+        arrays: 'never',
+        objects: 'never',
+        imports: 'never',
+        exports: 'never',
+        functions: 'never'
+      }
+    ],
     'vue/dot-location': ['error', 'property'],
     'vue/eqeqeq': ['error', 'always', { null: 'ignore' }],
     'vue/key-spacing': ['error', { beforeColon: false, afterColon: true }],
@@ -93,16 +96,13 @@ module.exports = {
     'vue/object-curly-spacing': ['error', 'always'],
     'vue/space-infix-ops': 'error',
     'vue/space-unary-ops': ['error', { words: true, nonwords: false }],
-    'vue/max-attributes-per-line': ['error', {
-      singleline: 100,
-      multiline: 1
-    }]
+    'vue/max-attributes-per-line': ['error', { singleline: 100, multiline: 1 }]
   },
   overrides: [
     {
       files: ['**/test/**', '*.spec.js'],
       env: {
-        mocha: true,
+        mocha: true
       },
       globals: {
         expect: true
@@ -112,7 +112,7 @@ module.exports = {
       files: ['*.ts'],
       parserOptions: {
         parser: '@typescript-eslint/parser',
-        sourceType: "module"
+        sourceType: 'module'
       },
       plugins: ['@typescript-eslint']
     }
