@@ -1,7 +1,9 @@
 import alert from '@/managers/alert'
 import { wait } from '../../../utils'
 
-describe('managers/alert', () => {
+describe('managers/alert', function () {
+  this.timeout(10000)
+
   it('should implement `createComponent` function correctly', async () => {
     let isClicked = false
     let component = alert.create({

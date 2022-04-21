@@ -7,7 +7,9 @@ import { wait } from '../../../utils'
 
 testConfig.stubs.transition = false
 
-describe('components/Overlay', () => {
+describe('components/Overlay', function () {
+  this.timeout(10000)
+
   it('should put the layer root node directly below the body.', async () => {
     let wrapper = mount(Overlay, { sync: false })
 

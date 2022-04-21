@@ -48,7 +48,9 @@ const OPTION_ITEM =
   '.veui-select-options .veui-option-group:not([hidden]) > .veui-option'
 const GROUP_LABEL = '.veui-select-options .veui-option-group-label'
 
-describe('components/Select/Select', () => {
+describe('components/Select/Select', function () {
+  this.timeout(10000)
+
   it('should render options correctly', async () => {
     let wrapper = mount(
       {
@@ -424,8 +426,7 @@ describe('components/Select/Select', () => {
             value: null
           }
         },
-        template:
-          '<veui-select v-model="value" :options="options" searchable/>'
+        template: '<veui-select v-model="value" :options="options" searchable/>'
       },
       {
         sync: false,

@@ -164,7 +164,9 @@ let dsForStrategy = [
 
 let dsWithoutGroupValue = omitGroupValue(dsForStrategy, ['infused'])
 
-describe('components/Tree', () => {
+describe('components/Tree', function () {
+  this.timeout(10000)
+
   it('should render datasource correctly when `expanded` was not set', () => {
     let wrapper = mount(Tree, {
       propsData: {

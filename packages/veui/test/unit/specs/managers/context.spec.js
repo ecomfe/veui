@@ -11,7 +11,9 @@ const DummyConsumer = {
   }
 }
 
-describe('managers/context', () => {
+describe('managers/context', function () {
+  this.timeout(10000)
+
   it('should work with Provider + Consumer', async () => {
     let wrapper = mount({
       data () {

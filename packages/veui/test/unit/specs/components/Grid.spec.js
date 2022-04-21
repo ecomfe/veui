@@ -4,7 +4,9 @@ import GridRow from '@/components/GridRow'
 import GridColumn from '@/components/GridColumn'
 import { getStyle } from '../../../utils'
 
-describe('components/GridContainer', () => {
+describe('components/GridContainer', function () {
+  this.timeout(10000)
+
   it('should render `columns` props correctly', () => {
     let wrapper = mount(
       {
@@ -93,7 +95,9 @@ describe('components/GridContainer', () => {
   })
 })
 
-describe('components/GridColumn', () => {
+describe('components/GridColumn', function () {
+  this.timeout(10000)
+
   it('should render `span` props correctly', () => {
     let wrapper = mount(
       {

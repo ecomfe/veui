@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils'
 import Schedule from '@/components/Schedule'
 
-describe('components/Schedule', () => {
+describe('components/Schedule', function () {
+  this.timeout(10000)
+
   it('should handle selected prop with `null` value.', (done) => {
     let wrapper = mount({
       methods: {

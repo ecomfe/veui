@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils'
 import Tag from '@/components/Tag'
 
-describe('components/Tag', () => {
+describe('components/Tag', function () {
+  this.timeout(10000)
+
   it('should render slot correctly', () => {
     let wrapper = mount({
       components: {
@@ -258,8 +260,7 @@ describe('components/Tag', () => {
           selected: true
         }
       },
-      template:
-        '<veui-tag selectable :selected="selected">small tag</veui-tag>'
+      template: '<veui-tag selectable :selected="selected">small tag</veui-tag>'
     })
     let { vm } = wrapper
     wrapper.trigger('click')

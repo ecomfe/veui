@@ -4,7 +4,9 @@ import Tree from '@/components/Tree'
 import Checkbox from '@/components/Checkbox'
 import { wait } from '../../../utils'
 
-describe('components/Transfer', () => {
+describe('components/Transfer', function () {
+  this.timeout(10000)
+
   it('should handle datasource change correctly.', async () => {
     let wrapper = mount(
       {

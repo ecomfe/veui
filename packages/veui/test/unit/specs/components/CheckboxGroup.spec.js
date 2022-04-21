@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import CheckboxGroup from '@/components/CheckboxGroup'
 import { wait } from '../../../utils'
 
-describe('components/CheckboxGroup', () => {
+describe('components/CheckboxGroup', function () {
+  this.timeout(10000)
+
   it('should handle items prop correctly', () => {
     const wrapper = mount(
       CheckboxGroup,

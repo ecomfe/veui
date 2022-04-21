@@ -45,7 +45,9 @@ let slot = `
   </template>
 `
 
-describe('components/Form/Fieldset', () => {
+describe('components/Form/Fieldset', function () {
+  this.timeout(10000)
+
   it('should set `readonly` state correctly', () => {
     let template = genTemplate('readonly')
     let wrapper = genWrapper(template)

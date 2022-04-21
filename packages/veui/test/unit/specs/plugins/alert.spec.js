@@ -5,7 +5,9 @@ const localVue = createLocalVue()
 
 localVue.use(alertPlugin)
 
-describe('plugins/alert', () => {
+describe('plugins/alert', function () {
+  this.timeout(10000)
+
   it('should add `alert` methods to Vue prototype', () => {
     expect(localVue.prototype.$alert).to.be.a('function')
     expect(localVue.prototype.$alert.success).to.be.a('function')

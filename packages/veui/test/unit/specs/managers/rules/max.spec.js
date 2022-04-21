@@ -1,6 +1,8 @@
 import max from 'veui/managers/rules/max'
 
-describe('managers/rules/max', () => {
+describe('managers/rules/max', function () {
+  this.timeout(10000)
+
   it('should allow empty values', () => {
     expect(max.validate(null)).to.equal(true)
     expect(max.validate(undefined)).to.equal(true)

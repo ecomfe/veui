@@ -3,7 +3,9 @@ import config from '@/managers/config'
 import { getPortalEntry } from '@/utils/dom'
 import { expectTooltip, wait } from '../../../utils'
 
-describe('managers/tooltip', () => {
+describe('managers/tooltip', function () {
+  this.timeout(10000)
+
   it('should respect warmup and cooldown', async () => {
     const manager = createTooltipManager({ warmup: 200, cooldown: 300 })
     const el = document.createElement('div')

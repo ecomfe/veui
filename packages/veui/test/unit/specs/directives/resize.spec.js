@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import resize from '@/directives/resize'
 import { wait } from '../../../utils'
 
-describe('directives/resize', () => {
+describe('directives/resize', function () {
+  this.timeout(10000)
+
   it(`should callback upon size changes`, async () => {
     let count = 0
     let wrapper = mount(

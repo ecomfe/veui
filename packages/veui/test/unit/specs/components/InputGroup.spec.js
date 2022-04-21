@@ -3,7 +3,9 @@ import Button from '@/components/Button'
 import Input from '@/components/Input'
 import InputGroup from '@/components/InputGroup'
 
-describe('components/Span', () => {
+describe('components/Span', function () {
+  this.timeout(10000)
+
   it('should render default slot correctly.', () => {
     let wrapper = mount(InputGroup, {
       sync: false,

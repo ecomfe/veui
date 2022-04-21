@@ -52,7 +52,9 @@ const casOptions = [
   }
 ]
 
-describe('components/Cascader/Cascader', () => {
+describe('components/Cascader/Cascader', function () {
+  this.timeout(10000)
+
   it('should render options/inline options correctly', async () => {
     let wrapper = mount(
       {

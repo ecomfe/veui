@@ -1,6 +1,8 @@
 import { isSupportFileListContructor, createFileList } from '@/utils/file'
 
-describe('utils/bom', () => {
+describe('utils/bom', function () {
+  this.timeout(10000)
+
   it('should check is DataTransferItemList available correctly', () => {
     expect(isSupportFileListContructor()).to.equal(true)
   })

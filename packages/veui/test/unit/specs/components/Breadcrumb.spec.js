@@ -18,7 +18,9 @@ let routes = [
   }
 ]
 
-describe('components/Breadcrumb', () => {
+describe('components/Breadcrumb', function () {
+  this.timeout(10000)
+
   it('should handle routes prop with `null` value.', () => {
     let wrapper = mount(Breadcrumb, {
       propsData: {

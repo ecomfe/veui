@@ -5,7 +5,9 @@ import { wait, mount } from '../../../utils'
 
 config.stubs.transition = false
 
-describe('components/Dialog', () => {
+describe('components/Dialog', function () {
+  this.timeout(10000)
+
   it('should support `sync` modifier for prop `open`.', async () => {
     let wrapper = mount({
       components: {

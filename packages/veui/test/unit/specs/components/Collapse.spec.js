@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils'
 import Collapse from '@/components/Collapse'
 
-describe('components/Collapse', () => {
+describe('components/Collapse', function () {
+  this.timeout(10000)
+
   it('should expand/collapse correctly with local state', async () => {
     let wrapper = mount(
       {

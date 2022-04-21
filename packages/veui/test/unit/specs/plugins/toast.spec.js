@@ -6,7 +6,9 @@ const localVue = createLocalVue()
 
 localVue.use(toastPlugin)
 
-describe('plugins/toast', () => {
+describe('plugins/toast', function () {
+  this.timeout(10000)
+
   it('should add `toast` methods to Vue prototype', () => {
     expect(localVue.prototype.$toast).to.be.a('function')
     expect(localVue.prototype.$toast.success).to.be.a('function')

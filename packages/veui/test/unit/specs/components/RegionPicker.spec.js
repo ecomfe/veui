@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils'
 import RegionPicker from '@/components/RegionPicker'
 
-describe('components/RegionPicker', () => {
+describe('components/RegionPicker', function () {
+  this.timeout(10000)
+
   it('should handle selected prop with `null` value.', (done) => {
     let wrapper = mount({
       data () {

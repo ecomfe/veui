@@ -1,6 +1,8 @@
 import { is, sign, isPositive } from '@/utils/math'
 
-describe('utils/math', () => {
+describe('utils/math', function () {
+  this.timeout(10000)
+
   it('should calculate equality correctly and distinguish -0 vs +0', () => {
     expect(is(1, 0)).to.be.equal(false)
     expect(is(-1, -0)).to.be.equal(false)

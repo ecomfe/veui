@@ -7,7 +7,9 @@ let a3 = false
 let a4 = []
 let a5 = {}
 
-describe('utils/lang', () => {
+describe('utils/lang', function () {
+  this.timeout(10000)
+
   it('should implement `getTypeByInstance` correctly', () => {
     expect(getTypeByInstance(null)).to.equal(null)
     expect(getTypeByInstance(undefined)).to.equal(undefined)

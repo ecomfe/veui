@@ -1,6 +1,8 @@
 import { Type } from '@/managers/type'
 
-describe('managers/type', () => {
+describe('managers/type', function () {
+  this.timeout(10000)
+
   it('should init `type` instance correctly', () => {
     let type = new Type()
 

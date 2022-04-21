@@ -1,6 +1,8 @@
 import numeric from 'veui/managers/rules/numeric'
 
-describe('managers/rules/numeric', () => {
+describe('managers/rules/numeric', function () {
+  this.timeout(10000)
+
   it('should allow empty values.', () => {
     expect(numeric.validate(null)).to.equal(true)
     expect(numeric.validate(undefined)).to.equal(true)

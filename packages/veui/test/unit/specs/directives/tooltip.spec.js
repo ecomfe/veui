@@ -3,9 +3,10 @@ import tooltip from '@/directives/tooltip'
 import tooltipManager from '@/managers/tooltip'
 import config from '@/managers/config'
 
-describe('directives/tooltip', () => {
-  it('should respect globally configured warmup and cooldown', async function () {
-    this.timeout(5000)
+describe('directives/tooltip', function () {
+  this.timeout(10000)
+
+  it('should respect globally configured warmup and cooldown', async () => {
     let warmup = config.get('tooltip.warmup')
     let cooldown = config.get('tooltip.cooldown')
 
@@ -61,8 +62,7 @@ describe('directives/tooltip', () => {
     wrapper.destroy()
   })
 
-  it('should work with dynamic disabled option', async function () {
-    this.timeout(5000)
+  it('should work with dynamic disabled option', async () => {
     let warmup = config.get('tooltip.warmup')
     let cooldown = config.get('tooltip.cooldown')
 
@@ -112,8 +112,7 @@ describe('directives/tooltip', () => {
     wrapper.destroy()
   })
 
-  it('should work with dynamic position option', async function () {
-    this.timeout(5000)
+  it('should work with dynamic position option', async () => {
     let warmup = config.get('tooltip.warmup')
     let cooldown = config.get('tooltip.cooldown')
 
@@ -159,8 +158,7 @@ describe('directives/tooltip', () => {
     wrapper.destroy()
   })
 
-  it('should close correctly when target is destroyed', async function () {
-    this.timeout(5000)
+  it('should close correctly when target is destroyed', async () => {
     let warmup = config.get('tooltip.warmup')
 
     let wrapper = mount(
@@ -209,8 +207,7 @@ describe('directives/tooltip', () => {
     wrapper.destroy()
   })
 
-  it('should respect `overflow` modifier', async function () {
-    this.timeout(8000)
+  it('should respect `overflow` modifier', async () => {
     let warmup = config.get('tooltip.warmup')
     let cooldown = config.get('tooltip.cooldown')
 

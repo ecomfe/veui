@@ -4,7 +4,9 @@ import Tab from '@/components/Tab'
 import { findIndex } from 'lodash'
 import { expectDisabled, wait } from '../../../utils'
 
-describe('components/Tabs', () => {
+describe('components/Tabs', function () {
+  this.timeout(10000)
+
   it('should render default active tab correctly with uncontrolled `active` prop', async () => {
     let wrapper = mount(
       {
@@ -675,9 +677,7 @@ describe('components/Tabs', () => {
     wrapper.destroy()
   })
 
-  it('should handle scroll and resize correctly', async function () {
-    this.timeout(3000)
-
+  it('should handle scroll and resize correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -1043,9 +1043,7 @@ describe('components/Tabs', () => {
     wrapper.destroy()
   })
 
-  it('should handle wheel scroll correctly', async function () {
-    this.timeout(3000)
-
+  it('should handle wheel scroll correctly', async () => {
     let wrapper = mount(
       {
         components: {

@@ -5,7 +5,9 @@ import Field from '@/components/Field'
 import sinon from 'sinon'
 import { expectFieldError } from '../../../utils'
 
-describe('components/Switch', () => {
+describe('components/Switch', function () {
+  this.timeout(10000)
+
   it('should handle checked prop with `null` value.', (done) => {
     let wrapper = mount(Switch, {
       propsData: {

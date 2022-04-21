@@ -40,7 +40,9 @@ let items = [
   }
 ]
 
-describe('components/Lightbox', () => {
+describe('components/Lightbox', function () {
+  this.timeout(10000)
+
   it('should handle video type correctly', async () => {
     let wrapper = mount(
       {

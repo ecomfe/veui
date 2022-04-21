@@ -5,7 +5,9 @@ const localVue = createLocalVue()
 
 localVue.use(confirmPlugin)
 
-describe('plugins/confirm', () => {
+describe('plugins/confirm', function () {
+  this.timeout(10000)
+
   it('should add `confirm` methods to Vue prototype', () => {
     expect(localVue.prototype.$confirm).to.be.a('function')
   })

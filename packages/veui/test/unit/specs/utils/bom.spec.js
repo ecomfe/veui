@@ -15,7 +15,9 @@ const safariNavigatorMock = {
 
 const emptyNavigatorMock = {}
 
-describe('utils/bom', () => {
+describe('utils/bom', function () {
+  this.timeout(10000)
+
   it('should detect browsers correctly', () => {
     // suppose cases are running on chrome by default
     expect(isFirefox()).to.be.equal(false)

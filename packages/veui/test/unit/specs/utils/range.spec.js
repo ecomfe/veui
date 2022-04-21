@@ -1,6 +1,8 @@
 import { includes, merge } from '@/utils/range'
 
-describe('utils/range', () => {
+describe('utils/range', function () {
+  this.timeout(10000)
+
   it('should calculate includes correctly', () => {
     expect(includes([0, 0], 0)).to.equal(true)
     expect(includes([0, 0], 1)).to.be.equal(false)

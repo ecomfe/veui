@@ -3,7 +3,9 @@ import Form from '@/components/Form'
 import Field from '@/components/Field'
 import Checkbox from '@/components/Checkbox'
 
-describe('components/Label', () => {
+describe('components/Label', function () {
+  this.timeout(10000)
+
   it('should activate component which ui type is input when label is clicked in form field', async () => {
     let wrapper = mount(
       {

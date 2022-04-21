@@ -27,7 +27,9 @@ import {
   safeSlice
 } from '@/utils/helper'
 
-describe('utils/helper', () => {
+describe('utils/helper', function () {
+  this.timeout(10000)
+
   it('should find typed ancestor', () => {
     let Foo = {
       template: '<div>Foo</div>'

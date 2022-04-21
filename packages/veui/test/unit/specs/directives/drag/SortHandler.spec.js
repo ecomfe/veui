@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import drag from '@/directives/drag'
 import { wait } from '../../../../utils'
 
-describe('directives/drag/SortHandler', () => {
+describe('directives/drag/SortHandler', function () {
+  this.timeout(10000)
+
   it(`should callback with insert index when the dragging item matches insert zone`, async () => {
     let results = []
     let wrapper = mount(

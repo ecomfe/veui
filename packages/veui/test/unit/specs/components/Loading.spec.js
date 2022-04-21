@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils'
 import Loading from '@/components/Loading'
 
-describe('components/Loading', () => {
+describe('components/Loading', function () {
+  this.timeout(10000)
+
   it('should not render loading component if loading prop is false', () => {
     let wrapper = mount(
       {

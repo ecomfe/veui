@@ -4,7 +4,9 @@ import Form from '@/components/Form'
 import Field from '@/components/Field'
 import { expectFieldError } from '../../../utils'
 
-describe('components/Checkbox', () => {
+describe('components/Checkbox', function () {
+  this.timeout(10000)
+
   it('should handle checked prop with `null` value.', (done) => {
     let wrapper = mount(Checkbox, {
       propsData: {

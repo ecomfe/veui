@@ -34,7 +34,9 @@ function genSimpleForm (propsData = {}, defaultSlot = slot, actions = false) {
   let { form } = wrapper.vm.$refs
   return { form, wrapper }
 }
-describe('components/Form/Form', () => {
+describe('components/Form/Form', function () {
+  this.timeout(10000)
+
   it('should set `disabled` state correctly', () => {
     let { wrapper } = genSimpleForm({ disabled: true })
     let isDisabled = wrapper

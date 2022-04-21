@@ -1,7 +1,9 @@
 import confirm from '@/managers/confirm'
 import { wait } from '../../../utils'
 
-describe('managers/confirm', () => {
+describe('managers/confirm', function () {
+  this.timeout(10000)
+
   it('should implement `createComponent` function correctly', async () => {
     let isOk = false
     let isCancel = false

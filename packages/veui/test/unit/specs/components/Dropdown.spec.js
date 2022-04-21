@@ -15,7 +15,9 @@ let datasource = [
   }
 ]
 
-describe('components/Dropdown', () => {
+describe('components/Dropdown', function () {
+  this.timeout(10000)
+
   it('should handle `trigger` prop correctly', () => {
     let wrapper = mount(Dropdown, {
       propsData: {

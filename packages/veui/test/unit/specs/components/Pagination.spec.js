@@ -3,7 +3,9 @@ import sinon from 'sinon'
 import { wait, mount } from '../../../utils'
 import Pagination from '@/components/Pagination'
 
-describe('components/Pagination', () => {
+describe('components/Pagination', function () {
+  this.timeout(10000)
+
   it('should handle props correctly', async () => {
     let wrapper = mount(Pagination, {
       propsData: {

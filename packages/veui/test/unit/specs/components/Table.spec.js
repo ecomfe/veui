@@ -9,7 +9,9 @@ import { expectTooltip, mount, wait } from '../../../utils'
 import tooltipManager from '@/managers/tooltip'
 import config from '@/managers/config'
 
-describe('components/Table', () => {
+describe('components/Table', function () {
+  this.timeout(10000)
+
   it('should select the specified fields.', async () => {
     let wrapper = mount(
       {
@@ -2458,9 +2460,7 @@ describe('components/Table', () => {
     wrapper.destroy()
   })
 
-  it('should support tooltip prop on Columns', async function () {
-    this.timeout(5000)
-
+  it('should support tooltip prop on Columns', async () => {
     const loremIpsum =
       'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!'
 

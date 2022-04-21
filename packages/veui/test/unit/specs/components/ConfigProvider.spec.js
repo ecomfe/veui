@@ -17,7 +17,9 @@ const DummyConsumer = {
   }
 }
 
-describe('components/ConfigProvider', () => {
+describe('components/ConfigProvider', function () {
+  this.timeout(10000)
+
   it('should ConfigProvider works correctly', async () => {
     let wrapper = mount(
       {

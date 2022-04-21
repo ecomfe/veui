@@ -59,7 +59,9 @@ const options = {
   }
 }
 
-describe('components/Nav', () => {
+describe('components/Nav', function () {
+  this.timeout(10000)
+
   it('should handle ui prop correctly', async () => {
     let wrapper = mount(
       {

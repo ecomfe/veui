@@ -14,7 +14,9 @@ const options = {
   }
 }
 
-describe('components/Sidebar', () => {
+describe('components/Sidebar', function () {
+  this.timeout(10000)
+
   it('should handle collapsed prop correctly', async () => {
     let wrapper = mount(
       {

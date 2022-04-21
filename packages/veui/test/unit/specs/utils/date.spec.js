@@ -13,7 +13,9 @@ import {
   lt
 } from '@/utils/date'
 
-describe('utils/date', () => {
+describe('utils/date', function () {
+  this.timeout(10000)
+
   it('should calculate days in a month correctly', () => {
     let SPECS = [
       [2000, 1, 29],
