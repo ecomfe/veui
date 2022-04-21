@@ -1,3 +1,23 @@
+## 2.6.3 (2022-04-21)
+
+### ⚠️ 非兼容性变更
+
+- [^] 重命名组件 `Menu` 为 `Sidenav` 并且升级了样式：<!-- #Menu #Sidenav -->
+
+  - 不再支持 `s` / `l` 尺寸变体，现在只支持默认的 `m` 尺寸。
+  - 移除了属性 `collapsible`，侧导航不再内置切换展开/收起的按钮。
+  - `collapsed` 属性在不受控时默认会和上层 `Sidebar` 的 `collapsed` 属性联动。
+- [^] 组件 `Sidebar` 的属性 `collapsible` 默认值调整为 `false`。<!-- #Sidebar -->
+
+### 💡 主要变更
+
+- [^] 组件 `Popover` 支持透传 `overlay-options` 来配置浮层选项。<!-- #Popover -->
+
+### 🐞 问题修复
+
+- [^] 修复了 `Cascader` 组件的禁用项目可以选中的问题。<!-- #Cascader -->
+- [^] 修复了 `Cascader` 组件在悬浮展开子级面板时报错的问题。<!-- #Cascader -->
+
 ## 2.6.2 (2022-04-08)
 
 ### 🐞 问题修复

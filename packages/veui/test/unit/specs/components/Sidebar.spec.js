@@ -20,7 +20,7 @@ describe('components/Sidebar', () => {
       {
         ...options,
         template:
-          '<veui-sidebar :collapsed.sync="collapsed" collapse-mode="slim"/>'
+          '<veui-sidebar collapsible :collapsed.sync="collapsed" collapse-mode="slim"/>'
       },
       {
         sync: false,
