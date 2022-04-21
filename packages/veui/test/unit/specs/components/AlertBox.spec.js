@@ -5,6 +5,8 @@ import { wait } from '../../../utils'
 config.stubs.transition = false
 
 describe('components/AlertBox', function () {
+  this.timeout(3000)
+
   it('should render title prop correctly by AlertBox', () => {
     let wrapper = mount(
       {
@@ -69,8 +71,7 @@ describe('components/AlertBox', function () {
     wrapper.destroy()
   })
 
-  it('should handle close event correctly by AlertBox', async function () {
-    this.timeout(3000)
+  it('should handle close event correctly by AlertBox', async () => {
     let count = 0
     let wrapper = mount(
       {
@@ -115,7 +116,6 @@ describe('components/AlertBox', function () {
   })
 
   it('should make `open` prop fully controlled', async () => {
-    this.timeout(3000)
     let wrapper = mount(
       {
         components: {
