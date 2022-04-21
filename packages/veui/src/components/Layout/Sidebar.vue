@@ -64,10 +64,7 @@ export default {
     }))
   ],
   props: {
-    collapsible: {
-      type: Boolean,
-      default: true
-    },
+    collapsible: Boolean,
     collapsed: {
       type: Boolean,
       default: null
