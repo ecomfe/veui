@@ -11,22 +11,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
 
       - name: Setup
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'npm'
-          cache-dependency-path: |
-            package-lock.json
-            packages/*/package-lock.json
+          cache: 'pnpm'
 
-      - name: Bootstrap
-        run: npm run bootstrap
+      - name: Install
+        run: pnpm install
 
       - name: Run test
-        run: npm run test
+        run: pnpm test
 
       - name: Collect coverage
         uses: codecov/codecov-action@v2

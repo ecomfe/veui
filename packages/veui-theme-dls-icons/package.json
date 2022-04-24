@@ -14,13 +14,13 @@
     "build": "node -r esm build/icons.js",
     "prepublishOnly": "rollup -c && cp -r ./icons/* .",
     "publish": "del '*.js' '!*.config.js' 'icon-names.json'",
-    "prepare": "npm run build"
+    "prepare": "pnpm build"
   },
   "dependencies": {
     "dls-icons-vue": "~2.6.0"
   },
   "peerDependencies": {
-    "veui": "2.6.3"
+    "veui": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",

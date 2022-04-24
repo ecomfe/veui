@@ -1,5 +1,6 @@
 const webpackConfig = require('@vue/cli-service/webpack.config.js')
 const devServer = require('./build/dev-server')
+const { devDependencies } = require('./package')
 
 let files = ['test/global.js']
 if (process.env.TEST_FILES) {
@@ -21,6 +22,12 @@ if (process.env.TEST_UI) {
 
 module.exports = function (config) {
   config.set({
+    // Make Karma work with pnpm.
+    // See: https://github.com/pnpm/pnpm/issues/720#issuecomment-954120387
+    plugins: Object.keys(devDependencies)
+      .map((name) => (name.startsWith('karma-') ? require(name) : null))
+      .filter(Boolean),
+
     frameworks: ['mocha', 'chai', 'expressServer'],
 
     files,

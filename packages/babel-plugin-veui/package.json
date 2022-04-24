@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir .",
-    "test": "npm run build && ava",
-    "prepare": "npm run build",
+    "test": "pnpm build && ava",
+    "prepare": "pnpm build",
     "publish": "rm -rf ./*.js"
   },
   "keywords": [
@@ -27,7 +27,7 @@
     "ava": "^3.10.1",
     "esm": "^3.2.25",
     "prettier": "^1.18.2",
-    "veui": "^2.6.3"
+    "veui": "workspace:*"
   },
   "ava": {
     "require": [
