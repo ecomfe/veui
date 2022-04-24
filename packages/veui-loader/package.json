@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "test": "npm run build && ava",
-    "prepare": "npm run build"
+    "test": "pnpm build && ava",
+    "prepare": "pnpm build"
   },
   "keywords": [
     "webpack",
@@ -32,8 +32,8 @@
     "ava": "^3.10.1",
     "esm": "^3.2.25",
     "raw-loader": "^0.5.1",
-    "veui": "^2.6.3",
-    "veui-theme-dls": "^2.6.3",
+    "veui": "workspace:*",
+    "veui-theme-dls": "workspace:*",
     "webpack": "^4.43.0"
   },
   "ava": {

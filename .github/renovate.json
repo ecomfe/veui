@@ -12,12 +12,5 @@
       "enabled": true
     }
   ],
-  "rangeStrategy": "bump",
-  "allowedPostUpgradeCommands": ["prettier"],
-  "postUpgradeTasks": {
-    "commands": ["npx prettier --write packages/**/package-lock.json"],
-    "fileFilters": ["packages/**/package-lock.json"],
-    "executionMode": "update"
-  },
   "commitBody": "[skip ci]"
 }

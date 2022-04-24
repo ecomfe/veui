@@ -13,8 +13,8 @@
   "scripts": {
     "lint": "stylelint **/*.less --syntax=less",
     "theme": "node -r esm build/theme.js",
-    "bundle": "rollup -c",
-    "prepublishOnly": "npm run bundle"
+    "build": "rollup -c",
+    "prepublishOnly": "pnpm build"
   },
   "module": "dist/dls.esm.js",
   "dependencies": {
@@ -23,10 +23,10 @@
     "focus-visible": "^4.1.0",
     "less-plugin-dls": "^7.1.0",
     "less-plugin-est": "^3.0.0",
-    "veui-theme-dls-icons": "^2.6.3"
+    "veui-theme-dls-icons": "workspace:*"
   },
   "peerDependencies": {
-    "veui": "2.6.3"
+    "veui": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
