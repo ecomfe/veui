@@ -12,5 +12,6 @@
       "enabled": true
     }
   ],
+  "rangeStrategy": "bump",
   "commitBody": "[skip ci]"
 }
