@@ -2,8 +2,8 @@ import postcss from 'rollup-plugin-postcss'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import replace from '@rollup/plugin-replace'
-import varPlugin from './build/less/varPlugin'
-import filePlugin from './build/less/filePlugin'
+import varPlugin from './build/less/var-plugin'
+import filePlugin from './build/less/file-plugin'
 
 function transformVeuiConfig (veuiId) {
   return {

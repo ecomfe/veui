@@ -119,6 +119,13 @@ function bundleLocales (locales) {
   }))
 }
 
+function addSymlinkSupport (options) {
+  return {
+    ...options,
+    preserveSymlinks: true
+  }
+}
+
 export default [
   bundleUmd(),
   bundleEsm(),
@@ -132,4 +139,4 @@ export default [
       output: 'dist/locale.zh-Hans.esm.js'
     }
   ])
-]
+].map(addSymlinkSupport)

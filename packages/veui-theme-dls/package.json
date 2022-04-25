@@ -13,7 +13,7 @@
   "scripts": {
     "lint": "stylelint **/*.less --syntax=less",
     "theme": "node -r esm build/theme.js",
-    "build": "rollup -c",
+    "build": "rollup -c && node -r esm build/normalize-ignore.js",
     "prepublishOnly": "pnpm build"
   },
   "module": "dist/dls.esm.js",
