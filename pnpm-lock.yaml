@@ -137,7 +137,7 @@ importers:
       veui-theme-dls-icons: workspace:*
       vue: ^2.6.11
       vue-awesome: ^4.1.0
-      vue-directive-normalizer: ^1.0.0
+      vue-directive-normalizer: 0.1.0
       vue-router: ^3.3.4
       vue-template-compiler: ^2.6.11
       webpack: ^4.43.0
@@ -151,7 +151,7 @@ importers:
       popper.js: 1.16.1
       resize-detector: 0.1.10
       vue-awesome: 4.5.0_vue@2.6.14
-      vue-directive-normalizer: 1.0.0
+      vue-directive-normalizer: 0.1.0
     devDependencies:
       '@babel/core': 7.17.9
       '@babel/runtime': 7.17.9
@@ -14771,8 +14771,8 @@ packages:
       vue: 2.6.14
     dev: false
 
-  /vue-directive-normalizer/1.0.0:
-    resolution: {integrity: sha512-2JYn4N2FtYZrtfVrUYLgKx+b87TOs2Rf0dOkXacWYqCGdCaLshrrELNMXSGwK5d1AJ6wFixTmw07ffrgX6IiWA==}
+  /vue-directive-normalizer/0.1.0:
+    resolution: {integrity: sha512-PmV0yjPatfhVMAO/+oAEWAZlCNNQA0jDt8auaBMmkzQsm0YvjuT1Am7c97fzk24XHA7T5rqwpdhgBM49Qg/R9Q==}
     dev: false
 
   /vue-eslint-parser/7.11.0_eslint@6.8.0:
