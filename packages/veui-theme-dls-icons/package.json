@@ -11,10 +11,11 @@
     "svg icons"
   ],
   "scripts": {
-    "build": "node -r esm build/icons.js",
-    "prepublishOnly": "rollup -c && cp -r ./icons/* .",
+    "icons": "node -r esm build/icons.js",
+    "build": "pnpm icons && rollup -c",
+    "prepublishOnly": "pnpm build && cp -r ./icons/* .",
     "publish": "del '*.js' '!*.config.js' 'icon-names.json'",
-    "prepare": "pnpm build"
+    "prepare": "pnpm icons"
   },
   "dependencies": {
     "dls-icons-vue": "~2.6.0"
