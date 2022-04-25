@@ -30,6 +30,8 @@
     "esm": "^3.0.84",
     "mkdirp": "^0.5.4",
     "rimraf": "^2.6.2",
-    "rollup": "^2.56.3"
+    "rollup": "^2.56.3",
+    "veui": "workspace:*",
+    "vue": "2"
   }
 }
