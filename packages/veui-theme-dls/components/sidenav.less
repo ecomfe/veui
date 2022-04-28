@@ -54,6 +54,8 @@
       content: "";
       .absolute(_, 0);
       height: inherit;
+      border-radius: @dls-sidenav-item-border-radius;
+      .veui-transition(background-color);
     }
   }
 
@@ -76,8 +78,6 @@
 
         &::before {
           background-color: @dls-sidenav-item-background-color-hover;
-          border-radius: @dls-sidenav-item-border-radius;
-          .veui-transition(border-radius);
         }
       }
 
