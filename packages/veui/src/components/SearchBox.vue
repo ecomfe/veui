@@ -154,7 +154,11 @@ const SHARED_PROPS = [
   'autofocus',
   'selectOnFocus',
   'composition',
-  'clearable'
+  'clearable',
+  'maxlength',
+  'getLength',
+  'strict',
+  'trim'
 ]
 
 export default {

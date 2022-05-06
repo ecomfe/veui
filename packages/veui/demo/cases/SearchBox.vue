@@ -3,7 +3,7 @@
   <h1>
     <code>&lt;veui-search-box&gt;</code>
   </h1>
-  <section class="has-margin-right">
+  <section>
     <h2>sizes</h2>
     <section>
       <veui-search-box
@@ -97,7 +97,7 @@
       />
     </section>
   </section>
-  <section class="has-margin-right">
+  <section>
     <h2>styles</h2>
     <section>
       <veui-search-box
@@ -112,7 +112,7 @@
       />
     </section>
   </section>
-  <section class="has-margin-right">
+  <section>
     <h2>disabled</h2>
     <section>
       <veui-search-box
@@ -132,7 +132,7 @@
       />
     </section>
   </section>
-  <section class="has-margin-right">
+  <section>
     <h2>readonly</h2>
     <section>
       <veui-search-box
@@ -152,7 +152,7 @@
       />
     </section>
   </section>
-  <section class="has-margin-right">
+  <section>
     <h2>suggestions</h2>
     <section>
       <veui-search-box
@@ -208,6 +208,19 @@
         :suggest-trigger="[]"
         @search="log($event)"
         @select="log('select', $event)"
+      />
+    </div>
+  </section>
+  <section>
+    <h2>maxlength</h2>
+    <div>
+      <veui-search-box clearable maxlength="10" placeholder="maxlength"/>
+      <veui-search-box
+        ui="strong"
+        clearable
+        maxlength="10"
+        strict
+        placeholder="maxlength &amp; strict"
       />
     </div>
   </section>
@@ -349,10 +362,8 @@ export default {
 .veui-search-box-demo {
   padding-bottom: 20px;
 
-  .has-margin-right {
-    .veui-search-box {
-      margin-right: 15px;
-    }
+  .veui-search-box {
+    margin-right: 12px;
   }
 }
 
