@@ -11,27 +11,27 @@
     "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.9.1",
-    "@typescript-eslint/parser": "^5.9.1",
-    "babel-eslint": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "babel-eslint": "^10.1.0",
     "bumpp": "^7.1.1",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^4.1.0",
     "eslint-plugin-vue": "^6.2.2",
-    "husky": "^7.0.0",
-    "lint-staged": "^10.5.1",
-    "micromatch": "^4.0.2",
-    "postcss-html": "^1.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^10.5.4",
+    "micromatch": "^4.0.5",
+    "postcss-html": "^1.4.1",
     "postcss-less": "^5.0.0",
-    "prettier": "^2.5.1",
-    "stylelint": "^14.0.1",
+    "prettier": "^2.6.2",
+    "stylelint": "^14.8.2",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-standard": "^23.0.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.4"
   }
 }
