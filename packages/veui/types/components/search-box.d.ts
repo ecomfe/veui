@@ -21,6 +21,10 @@ type SHARED_PROPS =
   | 'selectOnFocus'
   | 'composition'
   | 'clearable'
+  | 'maxlength'
+  | 'getLength'
+  | 'strict'
+  | 'trim'
 
 type Item =
   | string
