@@ -45,8 +45,8 @@
       <template v-else-if="validationStatus !== 'success'">
         <template v-for="(validity, index) in renderableValidities">
           <component
-            :is="{ render: validity.render }"
-            v-if="validity.render"
+            :is="validity.component"
+            v-if="validity.component"
             :key="`r${index}`"
             :validity="validity"
           />
@@ -412,7 +412,7 @@ export default {
       this.assertForm()
       // 清空错误消息，为什么要先做，因为有可能是个fieldset，可以清错误，但是没有值
       if (this.realName) {
-        this.form.clearValiditiesOfField(this.realName)
+        this.form.clearValidities([this.realName])
       }
 
       let path = this.realField.split('.')

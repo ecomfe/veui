@@ -105,19 +105,33 @@ function createValidityMixinImpl () {
         }
       },
       // 删掉指定 field 的指定 validity
-      clearValiditiesOfField (fieldName) {
-        this.$delete(this.ruleValidities, fieldName)
-        this.$delete(this.inputValidities, fieldName)
+      clearValiditiesOfFields (fieldNames) {
+        fieldNames.forEach((fieldName) => {
+          this.$delete(this.ruleValidities, fieldName)
+          this.$delete(this.inputValidities, fieldName)
+        })
+
         Object.keys(this.validatorValidities).forEach((validatorName) => {
           let validity = this.validatorValidities[validatorName]
-          if (validity[fieldName]) {
-            if (Object.keys(validity).length === 1) {
-              this.$delete(this.validatorValidities, validatorName)
-            } else {
-              this.$delete(validity, fieldName)
+          fieldNames.forEach((fieldName) => {
+            if (validity[fieldName]) {
+              if (Object.keys(validity).length === 1) {
+                this.$delete(this.validatorValidities, validatorName)
+              } else {
+                this.$delete(validity, fieldName)
+              }
             }
-          }
+          })
         })
+      },
+      clearValidities (fieldNames) {
+        if (fieldNames) {
+          return this.clearValiditiesOfFields(fieldNames)
+        }
+
+        this.ruleValidities = {}
+        this.validatorValidities = {}
+        this.inputValidities = {}
       }
     }
   })
@@ -131,7 +145,7 @@ export default function useValidity (namespace) {
         return {
           getValidities: () => impl.validities,
           getValiditiesOf: impl.getValidities,
-          clearValiditiesOfField: impl.clearValiditiesOfField,
+          clearValidities: impl.clearValidities,
           updateRuleValidities: impl.updateRuleValidities,
           updateValidatorValidities: impl.updateValidatorValidities,
           updateInputValidities: impl.updateInputValidities

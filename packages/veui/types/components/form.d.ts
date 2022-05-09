@@ -36,6 +36,7 @@ type Methods = {
   validate(
     fieldNames?: Array<string> | null
   ): Promise<boolean | Record<string, Record<any, unknown>>>
+  clearValidities(fieldNames?: Array<string> | null): void
 }
 
 type Form = VeuiDefineComponent<{

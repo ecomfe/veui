@@ -21,7 +21,11 @@ import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
 import { pull } from '../../utils/helper'
-import useValidity, { isAllValid, isSimpleValid } from './_useValidity'
+import useValidity, {
+  isAllValid,
+  isSimpleValid,
+  normalizeValiditiesOfFields
+} from './_useValidity'
 import useValidator from './_useValidator'
 import { useCoupled, useFacade } from './_facade'
 
@@ -45,14 +49,14 @@ export default {
         vm.fields.push(field)
         return () => {
           pull(vm.fields, field)
-          vm.validityManager.clearValiditiesOfField(field.getName())
+          vm.clearValidities([field.getName()])
         }
       },
       getValiditiesOf: vm.validityManager.getValiditiesOf,
       updateRuleValidities: vm.validityManager.updateRuleValidities,
-      clearValiditiesOfField: vm.validityManager.clearValiditiesOfField,
       updateInputValidities: vm.validityManager.updateInputValidities,
       validateForEvent: vm.validateForEvent,
+      clearValidities: vm.clearValidities,
       getInteractiveEvents: vm.validator.getInteractiveEvents
     })),
     useFormParent((vm) => vm.getFacade()),
@@ -225,6 +229,16 @@ export default {
       fields.forEach((target) => {
         target.resetValue()
       })
+    },
+    clearValidities (fieldNames) {
+      return this.validityManager.clearValidities(fieldNames)
+    },
+    // internal: 用来更新后端错误
+    updateValiditiesForValidator (validatorName, validities) {
+      return this.validityManager.updateValidatorValidities(
+        validatorName,
+        normalizeValiditiesOfFields(validities)
+      )
     }
   }
 }
