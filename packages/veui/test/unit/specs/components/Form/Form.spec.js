@@ -404,4 +404,34 @@ describe('components/Form/Form', function () {
     expect(testValidating.text().trim()).to.equal('false')
     wrapper.destroy()
   })
+
+  it('should clear validities correctly', async () => {
+    let { wrapper, form } = genSimpleForm({
+      validators: [
+        {
+          fields: ['age', 'gender'],
+          handler: () => {
+            return {
+              age: 'error',
+              gender: 'error'
+            }
+          }
+        }
+      ]
+    })
+
+    await wrapper.vm.$nextTick()
+    form.validate()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.findAll('.veui-field.veui-invalid').length).to.equal(2)
+
+    form.clearValidities(['age'])
+    await wrapper.vm.$nextTick()
+    expect(wrapper.findAll('.veui-field.veui-invalid').length).to.equal(1)
+
+    form.clearValidities()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.findAll('.veui-field.veui-invalid').length).to.equal(0)
+    wrapper.destroy()
+  })
 })
