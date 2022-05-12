@@ -9,11 +9,11 @@ ui.defaults(
     ui: {
       size: {
         values: ['l', 'm', 's', 'xs'],
-        inherit: true
+        inherit: true,
+        default: 'm'
       }
     },
     parts: {
-      tip: 'alt',
       message: 's'
     }
   },

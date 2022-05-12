@@ -1,3 +1,14 @@
 import ui from 'veui/managers/ui'
 
-ui.defaults({}, 'form')
+ui.defaults(
+  {
+    ui: {
+      size: {
+        values: ['l', 'm', 's', 'xs'],
+        inherit: true,
+        default: 'm'
+      }
+    }
+  },
+  'form'
+)
