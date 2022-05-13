@@ -84,3 +84,16 @@ export function expectFieldError (wrapper, err) {
     expect(wrapper.find('.veui-message-content').exists()).to.eql(false)
   }
 }
+
+export function expectTokenList (value) {
+  const list = value.split(/\s+/).filter(Boolean)
+
+  return {
+    has (token) {
+      expect(list).to.include(token)
+    },
+    hasNot (token) {
+      expect(list).to.not.include(token)
+    }
+  }
+}

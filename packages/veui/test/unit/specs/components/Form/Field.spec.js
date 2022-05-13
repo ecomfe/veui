@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
 import ruleManager from '@/managers/rule'
-import { expectFieldError } from '../../../../utils'
+import { expectFieldError, expectTokenList } from '../../../../utils'
 
 ruleManager.addRule('custom-validator', {
   validate (value, ruleValue) {
@@ -15,7 +15,7 @@ ruleManager.addRule('custom-validator', {
 
 function genTemplate (state = '', slots = '') {
   return `
-    <veui-field ui="large" field="test" name="test" label="测试label" tip="测试tip" ${state} :rules="rules">
+    <veui-field field="test" name="test" label="测试label" tip="测试tip" ${state} :rules="rules">
       <veui-input class="test-field"/>
       ${slots}
     </veui-field>
@@ -93,7 +93,7 @@ describe('components/Form/Field', function () {
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.veui-tooltip').text()).to.equal('测试tip')
     // should set ui correctly
-    expect(fieldWrapper.attributes().ui).to.equal('large')
+    expectTokenList(fieldWrapper.attributes().ui).has('m')
     // should set name and field correctly
     expect(fieldWrapper.vm.field).to.equal('test')
     expect(fieldWrapper.vm.name).to.equal('test')

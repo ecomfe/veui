@@ -3,11 +3,12 @@ import { mount } from '@vue/test-utils'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
 import Fieldset from '@/components/Form/Fieldset'
+import { expectTokenList } from '../../../../utils'
 
 function genTemplate (state = '', slots = '') {
   return `
     <veui-form>
-      <veui-fieldset label="测试label" tip="测试tip" ui="tiny" name="test" required >
+      <veui-fieldset label="测试label" tip="测试tip" ui="l" name="test" required >
         <veui-field field="test" ${state}>
           <veui-input class="test-field"/>
         </veui-field>
@@ -92,7 +93,7 @@ describe('components/Form/Fieldset', function () {
     await wrapper.vm.$nextTick()
     expect(fieldsetWrapper.find('.veui-tooltip').text()).to.equal('测试tip')
     // should set ui correctly
-    expect(fieldsetWrapper.attributes().ui).to.equal('tiny')
+    expectTokenList(fieldsetWrapper.attributes().ui).has('l')
     // should set name correctly
     expect(fieldsetWrapper.vm.$refs.field.name).to.equal('test')
     wrapper.destroy()

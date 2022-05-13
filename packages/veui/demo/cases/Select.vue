@@ -199,6 +199,7 @@
       :max="4"
       searchable
       multiple
+      show-select-all
     />
     <veui-button>OK</veui-button>
   </section>
@@ -535,21 +536,33 @@ export default {
         clearable: true,
         options: [
           {
-            label: '下拉选项111',
+            label: '下拉选项1',
             value: 1
           },
           {
-            label: '下拉选项下拉选项下拉选项112',
+            label: '下拉选项下拉选项下拉选项2',
             value: 2
           },
           {
-            label: '下拉选项122',
+            label: '下拉选项3',
             value: 3,
             disabled: true
           },
           {
-            label: '下拉选项222',
+            label: '下拉选项4',
             value: 4
+          },
+          {
+            label: '下拉选项5',
+            value: 5
+          },
+          {
+            label: '下拉选项6',
+            value: 6
+          },
+          {
+            label: '下拉选项7',
+            value: 7
           }
         ]
       },

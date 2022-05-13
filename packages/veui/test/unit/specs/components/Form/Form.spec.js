@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import Button from '@/components/Button'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
-import { wait, expectFieldError } from '../../../../utils'
+import { wait, expectFieldError, expectTokenList } from '../../../../utils'
 
 let slot = `
   <veui-field name="gender" field="gender"><veui-input class="gender-input"/></veui-field>
@@ -67,7 +67,7 @@ describe('components/Form/Form', function () {
 
   it('should set data and ui props correctly', () => {
     let { wrapper } = genSimpleForm({ ui: 'inline' })
-    expect(wrapper.attributes().ui).to.equal('inline')
+    expectTokenList(wrapper.attributes().ui).has('inline')
     wrapper.destroy()
   })
 
