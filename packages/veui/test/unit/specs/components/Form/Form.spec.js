@@ -6,8 +6,8 @@ import Field from '@/components/Form/Field'
 import { wait, expectFieldError } from '../../../../utils'
 
 let slot = `
-  <veui-field name="gender" field="gender"><veui-input class="gender-input"/></veui-field>
-  <veui-field name="age" field="age" disabled><veui-input class="age-input"/></veui-field>
+  <veui-field name="gender" field="gender"><veui-input ref="gender" class="gender-input"/></veui-field>
+  <veui-field name="age" field="age" disabled><veui-input ref="age" class="age-input"/></veui-field>
 `
 function genSimpleForm (propsData = {}, defaultSlot = slot, actions = false) {
   actions = actions
@@ -31,9 +31,10 @@ function genSimpleForm (propsData = {}, defaultSlot = slot, actions = false) {
       attachToDocument: true
     }
   )
-  let { form } = wrapper.vm.$refs
-  return { form, wrapper }
+  let { form, gender, age } = wrapper.vm.$refs
+  return { form, wrapper, gender, age }
 }
+
 describe('components/Form/Form', function () {
   this.timeout(10000)
 
@@ -430,6 +431,27 @@ describe('components/Form/Form', function () {
     expect(wrapper.findAll('.veui-field.veui-invalid').length).to.equal(1)
 
     form.clearValidities()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.findAll('.veui-field.veui-invalid').length).to.equal(0)
+    wrapper.destroy()
+  })
+
+  it('should clear validities correctly when the value changes', async () => {
+    let { wrapper, form, gender, age } = genSimpleForm()
+
+    await wrapper.vm.$nextTick()
+    form.setValidities({
+      age: 'error',
+      gender: 'error'
+    })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.findAll('.veui-field.veui-invalid').length).to.equal(2)
+
+    gender.$emit('input')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.findAll('.veui-field.veui-invalid').length).to.equal(1)
+
+    age.$emit('input')
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll('.veui-field.veui-invalid').length).to.equal(0)
     wrapper.destroy()

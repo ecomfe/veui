@@ -31,12 +31,18 @@ type Slots = {
   actions(slotProps: { submit: () => unknown }): unknown
 }
 
+type InputValidity = {
+  status: 'success' | 'warning' | 'error'
+  message: string
+}
+
 type Methods = {
   submit(): void
   validate(
     fieldNames?: Array<string> | null
   ): Promise<boolean | Record<string, Record<any, unknown>>>
   clearValidities(fieldNames?: Array<string> | null): void
+  setValidities(validities: Record<string, string | InputValidity>): void
 }
 
 type Form = VeuiDefineComponent<{
