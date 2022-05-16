@@ -233,10 +233,10 @@ export default {
     clearValidities (fieldNames) {
       return this.validityManager.clearValidities(fieldNames)
     },
-    // internal: 用来更新后端错误
-    updateValiditiesForValidator (validatorName, validities) {
+    // 用来 manual 错误
+    setValidities (validities) {
       return this.validityManager.updateValidatorValidities(
-        validatorName,
+        'veui:manual',
         normalizeValiditiesOfFields(validities)
       )
     }

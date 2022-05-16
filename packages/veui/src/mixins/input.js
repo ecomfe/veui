@@ -1,5 +1,5 @@
 import { mergeWith, forEach } from 'lodash'
-import { isTopMostOfType, wrapListeners } from '../utils/helper'
+import { isTopMostOfType, wrapListeners, getModelEvent } from '../utils/helper'
 import focusable from './focusable'
 import { useFormChild } from '../components/Form/Form'
 import { useFieldChild } from '../components/Form/Field'
@@ -65,7 +65,18 @@ export default {
       return this.field && this.field.getName() && this.isTopMostInput
     },
     listenersFromField () {
-      return this.field.getInteractiveListeners(this.getFacade())
+      const valueChangeEvent = getModelEvent(this)
+      const listeners = this.field.getInteractiveListeners(this.getFacade())
+      return {
+        ...listeners,
+        [valueChangeEvent]: (...args) => {
+          // 先清空再触发交互事件
+          this.field.clearValidities()
+          if (listeners[valueChangeEvent]) {
+            listeners[valueChangeEvent](...args)
+          }
+        }
+      }
     },
     listenersWithValidations () {
       // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归

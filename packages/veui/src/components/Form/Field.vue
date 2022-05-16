@@ -161,6 +161,9 @@ export default {
       addField (field) {
         vm.fields.push(field)
         return () => pull(vm.fields, field)
+      },
+      clearValidities () {
+        vm.form.clearValidities([vm.realName])
       }
     })),
     useFieldParent((vm) => vm.getFacade()),
@@ -405,14 +408,14 @@ export default {
       })
     },
     resetValue () {
-      if (!this.realField) {
+      if (!this.realName) {
         return
       }
 
       this.assertForm()
-      // 清空错误消息，为什么要先做，因为有可能是个fieldset，可以清错误，但是没有值
-      if (this.realName) {
-        this.form.clearValidities([this.realName])
+      this.form.clearValidities([this.realName])
+      if (this.isFieldset) {
+        return
       }
 
       let path = this.realField.split('.')
