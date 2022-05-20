@@ -44,6 +44,7 @@ export default {
       isDisabled: () => vm.disabled,
       isReadonly: () => vm.readonly,
       getFormData: () => vm.data,
+      labelPosition: () => vm.labelPosition,
       isValidating: (...args) => vm.validator.isAnyValidating(...args),
       addField (field) {
         vm.fields.push(field)
@@ -90,6 +91,13 @@ export default {
     afterValidate: Function,
     disabled: Boolean,
     readonly: Boolean,
+    labelPosition: {
+      type: String,
+      default: 'side',
+      validator (value) {
+        return ['top', 'side'].indexOf(value) >= 0
+      }
+    },
     /* eslint-disable vue/require-prop-types */
     data: {}
     /* eslint-enable vue/require-prop-types */

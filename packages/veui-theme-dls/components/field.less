@@ -22,7 +22,15 @@
     color: @dls-form-label-font-color;
   }
 
-  &-required > &-label::before {
+  &-wrap {
+    display: flex;
+  }
+
+  &-label-top > &-wrap {
+    flex-direction: column;
+  }
+
+  &-required > &-wrap > &-label::before {
     content: "*";
     margin-right: @dls-form-label-content-spacing;
     color: @dls-form-label-required-color;
@@ -103,5 +111,43 @@
 
   &[ui~="xs"] {
     .make-ui(@dls-font-size-0, @dls-height-xs);
+  }
+
+  &-label-top > &-help-content-side {
+    align-self: flex-end;
+  }
+
+  &-label-top[ui~="m"] > &-help-content-side {
+    height: @dls-height-m;
+  }
+
+  &-label-top[ui~="l"] > &-help-content-side {
+    height: @dls-height-l;
+  }
+
+  &-label-top[ui~="s"] > &-help-content-side {
+    height: @dls-height-s;
+  }
+
+  &-label-top[ui~="xs"] > &-help-content-side {
+    height: @dls-height-xs;
+  }
+
+  &-label-top > &-wrap > &-label {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    height: auto;
+    margin-bottom: @dls-form-label-content-spacing;
+
+    .@{veui-prefix}-field-tip {
+      position: static;
+      margin-left: @dls-form-label-content-spacing;
+      transform: none;
+    }
+
+    .@{veui-prefix}-message {
+      margin-left: @dls-form-label-content-spacing;
+    }
   }
 }
