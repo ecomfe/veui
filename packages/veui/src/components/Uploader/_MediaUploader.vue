@@ -15,115 +15,139 @@
       :class="{
         [`${listClass}-item`]: true,
         [`${listClass}-item-failure`]: file.isFailure,
+        [`${listClass}-help-${helpPosition}`]: !multiple && $scopedSlots.desc,
         [`${listClass}-item-dropdown-open`]: expandedControlDropdowns[index]
       }"
       :style="{
         order: index + 1
       }"
     >
-      <template v-if="file.isUploading">
-        <slot name="uploading" v-bind="getScopeValue(index)">
-          <slot name="file-before" v-bind="getScopeValue(index)"/>
-          <div
-            :class="`${listClass}-container ${listClass}-container-uploading`"
-          >
-            <div :class="`${listClass}-container-uploading-text`">
-              <slot name="uploading-label">
-                {{ t('@uploader.uploading') }}
-              </slot>
-            </div>
-            <veui-progress
-              :ui="uiParts.progress"
-              :indeterminate="isIndeterminate(file)"
-              :value="isIndeterminate(file) ? 0 : file.loaded / file.total"
-            />
-          </div>
-          <slot name="file-after" v-bind="getScopeValue(index)"/>
-        </slot>
-      </template>
-      <template v-else-if="file.isFailure">
-        <slot name="failure" v-bind="getScopeValue(index)">
-          <slot name="file-before" v-bind="getScopeValue(index)"/>
-          <div
-            :ref="`fileItem${index}`"
-            :class="`${listClass}-container ${listClass}-container-failure`"
-          >
+      <div :class="`${listClass}-container-wrap`">
+        <template v-if="file.isUploading">
+          <slot name="uploading" v-bind="getScopeValue(index)">
+            <slot name="file-before" v-bind="getScopeValue(index)"/>
             <div
-              :class="{
-                [$c('uploader-input-label-media')]: true
-              }"
-              :ui="uiParts.media"
-              tabindex="0"
+              :class="`${listClass}-container ${listClass}-container-uploading`"
             >
-              <slot name="button-label" v-bind="getScopeValue(index)">
-                <veui-icon :name="getIconName(type)"/>
-              </slot>
-              <span :class="`${listClass}-file-name`" :title="file.name">
-                {{ file.name }}
-              </span>
+              <div :class="`${listClass}-container-uploading-text`">
+                <slot name="uploading-label">
+                  {{ t('@uploader.uploading') }}
+                </slot>
+              </div>
+              <veui-progress
+                :ui="uiParts.progress"
+                :indeterminate="isIndeterminate(file)"
+                :value="isIndeterminate(file) ? 0 : file.loaded / file.total"
+              />
             </div>
-            <veui-uploader-controls
-              :class="`${listClass}-mask`"
-              :items="getMediaControls(file)"
-              :expanded.sync="expandedControlDropdowns[index]"
-              :disabled="disabled"
-              @click="handleMediaAction(index, $event)"
-            />
-          </div>
-          <veui-popover :target="`fileItem${index}`" position="top">
-            {{ file.message || t('@uploader.uploadFailure') }}
-          </veui-popover>
-          <slot name="file-after" v-bind="getScopeValue(index)"/>
-        </slot>
-      </template>
-      <template v-else>
-        <slot name="file" v-bind="getScopeValue(index)">
-          <slot name="file-before" v-bind="getScopeValue(index)"/>
-          <div :class="$c('uploader-list-media-container')">
-            <template v-if="file.type === 'image'">
-              <veui-uploader-file-viewer
-                tag="img"
-                :src="file.src || file.native"
-                :alt="file.alt"
-                :class="$c('uploader-list-media-container-media')"
-                :draggable="!sortable"
-              />
-            </template>
-            <template v-else-if="file.type === 'video'">
-              <img
-                v-if="file.poster"
-                :src="file.poster"
-                :alt="file.alt"
-                :class="$c('uploader-list-media-container-media')"
-                :draggable="!sortable"
+            <slot name="file-after" v-bind="getScopeValue(index)"/>
+          </slot>
+        </template>
+        <template v-else-if="file.isFailure">
+          <slot name="failure" v-bind="getScopeValue(index)">
+            <slot name="file-before" v-bind="getScopeValue(index)"/>
+            <div
+              :ref="`fileItem${index}`"
+              :class="`${listClass}-container ${listClass}-container-failure`"
+            >
+              <div
+                :class="{
+                  [$c('uploader-input-label-media')]: true
+                }"
+                :ui="uiParts.media"
+                tabindex="0"
               >
-              <veui-uploader-file-viewer
-                v-else
-                tag="video"
-                :src="file.src || file.native"
-                :class="$c('uploader-list-media-container-media')"
-                :draggable="!sortable"
+                <slot name="button-label" v-bind="getScopeValue(index)">
+                  <veui-icon
+                    v-if="uiProps.size !== 's'"
+                    :name="getIconName(type)"
+                  />
+                  <span :class="`${listClass}-file-name`" :title="file.name">
+                    {{ file.name }}
+                  </span>
+                </slot>
+              </div>
+              <veui-uploader-controls
+                :class="`${listClass}-mask`"
+                :items="getMediaControls(file)"
+                :expanded.sync="expandedControlDropdowns[index]"
+                :disabled="disabled"
+                @click="handleMediaAction(index, $event)"
               />
-            </template>
+            </div>
+            <slot name="file-after" v-bind="getScopeValue(index)"/>
+            <veui-message
+              v-if="validityDisplay === 'inline'"
+              status="error"
+              display="simple"
+            >{{
+              file.message || t('@uploader.uploadFailure')
+            }}</veui-message>
+            <veui-popover v-else :target="`fileItem${index}`" position="top">
+              {{ file.message || t('@uploader.uploadFailure') }}
+            </veui-popover>
+          </slot>
+        </template>
+        <template v-else>
+          <slot name="file" v-bind="getScopeValue(index)">
+            <slot name="file-before" v-bind="getScopeValue(index)"/>
+            <div
+              :class="`${listClass}-container ${listClass}-container-file`"
+            >
+              <template v-if="file.type === 'image'">
+                <veui-uploader-file-viewer
+                  tag="img"
+                  :src="file.src || file.native"
+                  :alt="file.alt"
+                  :class="$c('uploader-list-media-container-media')"
+                  :draggable="!sortable"
+                />
+              </template>
+              <template v-else-if="file.type === 'video'">
+                <img
+                  v-if="file.poster"
+                  :src="file.poster"
+                  :alt="file.alt"
+                  :class="$c('uploader-list-media-container-media')"
+                  :draggable="!sortable"
+                >
+                <veui-uploader-file-viewer
+                  v-else
+                  tag="video"
+                  :src="file.src || file.native"
+                  :class="$c('uploader-list-media-container-media')"
+                  :draggable="!sortable"
+                />
+              </template>
 
-            <veui-uploader-controls
-              :class="`${listClass}-mask`"
-              :items="getMediaControls(file)"
-              :expanded.sync="expandedControlDropdowns[index]"
-              :disabled="disabled"
-              @click="handleMediaAction(index, $event)"
-            />
-          </div>
-          <slot name="file-after" v-bind="getScopeValue(index)"/>
-        </slot>
-      </template>
+              <veui-uploader-controls
+                :class="`${listClass}-mask`"
+                :items="getMediaControls(file)"
+                :expanded.sync="expandedControlDropdowns[index]"
+                :disabled="disabled"
+                @click="handleMediaAction(index, $event)"
+              />
+            </div>
+            <slot name="file-after" v-bind="getScopeValue(index)"/>
+          </slot>
+        </template>
+      </div>
+      <span
+        v-if="!multiple && ($scopedSlots.desc || $scopedSlots.help)"
+        :class="$c('uploader-help')"
+      >
+        <slot name="desc"/>
+        <slot name="help"/>
+      </span>
     </li>
     <!-- 继续上传按钮 -->
     <li
+      v-if="pickerPosition !== 'none'"
       key="input"
       :class="{
         [`${listClass}-item`]: true,
         [`${listClass}-item-upload`]: true,
+        [`${listClass}-help-${helpPosition}`]: true,
         [`${listClass}-item-hidden`]: !disabled && !addable
       }"
     >
@@ -149,6 +173,9 @@
           >
             <slot name="button-label">
               <veui-icon :name="getIconName(type)"/>
+              <span :class="$c('uploader-media-button-text')">{{
+                getIconText(type)
+              }}</span>
             </slot>
           </label>
           <div
@@ -165,24 +192,28 @@
             />
           </div>
         </div>
+        <span
+          v-if="addable && ($scopedSlots.desc || $scopedSlots.help)"
+          :class="$c('uploader-help')"
+        >
+          <slot name="desc"/>
+          <slot name="help"/>
+        </span>
       </slot>
     </li>
   </transition-group>
-
-  <span v-if="$scopedSlots.desc" :class="$c('uploader-desc')">
-    <slot name="desc"/>
-  </span>
 </div>
 </template>
 
 <script>
-import { includes } from 'lodash'
+import { includes, upperFirst } from 'lodash'
 import prefix from '../../mixins/prefix'
 import upload from './_mixin'
 import i18n from '../../mixins/i18n'
 import Icon from '../Icon'
 import Progress from '../Progress'
 import Popover from '../Popover'
+import Message from '../Message'
 import Controls from './_Controls'
 import FileViewer from './_FileViewer'
 import { STATUS } from './_helper'
@@ -197,7 +228,8 @@ export default {
     'veui-popover': Popover,
     'veui-progress': Progress,
     'veui-uploader-controls': Controls,
-    'veui-uploader-file-viewer': FileViewer
+    'veui-uploader-file-viewer': FileViewer,
+    'veui-message': Message
   },
   mixins: [prefix, upload, i18n],
   provide () {
@@ -311,6 +343,9 @@ export default {
       }
 
       return null
+    },
+    getIconText (type) {
+      return this.t(`@uploader.upload${upperFirst(type)}`)
     }
   }
 }

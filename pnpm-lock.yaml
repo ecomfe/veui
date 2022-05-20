@@ -265,7 +265,7 @@ importers:
       esm: ^3.2.25
       focus-visible: ^4.1.5
       less: ^4.1.2
-      less-plugin-dls: ^7.1.2
+      less-plugin-dls: ^8.0.1
       less-plugin-est: ^3.0.1
       postcss: ^8.4.13
       rollup: ^2.72.0
@@ -276,7 +276,7 @@ importers:
       classlist-polyfill: 1.2.0
       dls-icons-vue: 2.6.0_vue@2.6.14
       focus-visible: 4.1.5
-      less-plugin-dls: 7.1.2
+      less-plugin-dls: 8.0.1
       less-plugin-est: 3.0.1
     devDependencies:
       '@rollup/plugin-commonjs': 20.0.0_rollup@2.72.0
@@ -6714,6 +6714,7 @@ packages:
   /errno/0.1.8:
     resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==}
     hasBin: true
+    requiresBuild: true
     dependencies:
       prr: 1.0.1
     dev: true
@@ -8211,6 +8212,7 @@ packages:
 
   /graceful-fs/4.2.10:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
+    requiresBuild: true
     dev: true
 
   /growl/1.10.5:
@@ -9754,8 +9756,8 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /less-plugin-dls/7.1.2:
-    resolution: {integrity: sha512-Xn8eHlVG9yE89riO1o791HToNJaoBVW+LDdxQ2BKk+1sWg8LKEb2Hmw0f2EmnAcPObMHz3jWnRKI3xc6lkwNRQ==}
+  /less-plugin-dls/8.0.1:
+    resolution: {integrity: sha512-A7iB5sWcc0Xp1i9zibYDU+E8hq9QvrHWcAsnihsmTLk4RkS7O9pJKIv2BX2owxFMIWVcVjUWE+r7jPRtWNfWgQ==}
     hasBin: true
     dependencies:
       arg: 4.1.3
@@ -10213,6 +10215,7 @@ packages:
   /make-dir/2.1.0:
     resolution: {integrity: sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA==}
     engines: {node: '>=6'}
+    requiresBuild: true
     dependencies:
       pify: 4.0.1
       semver: 5.7.1
@@ -10459,6 +10462,7 @@ packages:
     resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
     engines: {node: '>=4'}
     hasBin: true
+    requiresBuild: true
     dev: true
 
   /mime/2.6.0:

@@ -13,7 +13,10 @@ i18n.register(
     replace: 'Replace',
     preview: 'Preview',
     uploading: 'Uploading…',
-    separator: '; '
+    separator: '; ',
+    uploadImage: 'Upload images',
+    uploadVideo: 'Upload videos',
+    uploadMedia: 'Upload media'
   },
   {
     ns: 'uploader'
