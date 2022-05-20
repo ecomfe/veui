@@ -6,78 +6,94 @@
     [$c('invalid')]: invalid,
     [$c('field-abstract')]: realAbstract,
     [$c('field-no-label')]: !realAbstract && !label && !$slots.label,
-    [$c('field-required')]: isRequired
+    [$c('field-required')]: isRequired,
+    [$c(`field-label-${form.labelPosition()}`)]: true
   }"
 >
-  <div
-    v-if="(!realAbstract && label) || $slots.label"
-    :class="$c('field-label')"
-  >
-    <slot name="label">
-      <veui-label>{{ label }}</veui-label>
-    </slot>
-    <div v-if="tip || $slots.tip" :class="$c('field-tip')">
-      <veui-icon ref="tip" :name="icons.tip"/>
-      <veui-popover
-        :ui="uiParts.tip"
-        target="tip"
-        aim-center
-        position="top-start"
-      >
-        <slot name="tip">{{ tip }}</slot>
-      </veui-popover>
-    </div>
-  </div>
-  <div :class="$c('field-main')">
-    <div :class="$c('field-content')">
-      <slot
-        :listeners="interactiveListeners"
-        :invalid="invalid"
-        :validities="validities"
-        :readonly="realReadonly"
-        :disabled="realDisabled"
-      />
-    </div>
-    <div v-if="!realAbstract" :class="$c('field-messages')">
-      <veui-loading v-if="validating" :loading="validating">
-        {{ t('validating') }}
-      </veui-loading>
-      <template v-else-if="validationStatus !== 'success'">
-        <template v-for="(validity, index) in renderableValidities">
-          <component
-            :is="validity.component"
-            v-if="validity.component"
-            :key="`r${index}`"
-            :validity="validity"
-          />
-          <veui-message
-            v-else
-            :key="`m${index}`"
-            :ui="uiParts.message"
-            :status="validity.status"
-            :display="realValidityDisplay"
-          >
-            <span>{{ validity.message }}</span>
-          </veui-message>
-        </template>
-      </template>
+  <div :class="$c('field-wrap')">
+    <div
+      v-if="(!realAbstract && label) || $slots.label"
+      :class="$c('field-label')"
+    >
+      <slot name="label">
+        <veui-label>{{ label }}</veui-label>
+      </slot>
+      <div v-if="tip || $slots.tip" :class="$c('field-tip')">
+        <veui-icon ref="tip" :name="icons.tip"/>
+        <veui-popover
+          :ui="uiParts.tip"
+          target="tip"
+          aim-center
+          position="top-start"
+        >
+          <slot name="tip">{{ tip }}</slot>
+        </veui-popover>
+      </div>
       <veui-message
-        v-if="(help || $scopedSlots.help) && helpPosition === 'bottom'"
+        v-if="(help || $scopedSlots.help) && realHelpPosition === 'top'"
         :ui="uiParts.message"
         status="aux"
         display="simple"
-        :class="$c(`field-help-content-${helpPosition}`)"
+        :class="$c(`field-help-content-${realHelpPosition}`)"
       >
         <slot name="help">{{ help }}</slot>
       </veui-message>
     </div>
+    <div :class="$c('field-main')">
+      <div :class="$c('field-content')">
+        <slot
+          :listeners="interactiveListeners"
+          :invalid="invalid"
+          :validities="validities"
+          :readonly="realReadonly"
+          :disabled="realDisabled"
+        />
+      </div>
+      <div v-if="!realAbstract" :class="$c('field-messages')">
+        <veui-loading
+          v-if="validating"
+          :loading="validating"
+          :ui="uiParts.message"
+        >
+          {{ t('validating') }}
+        </veui-loading>
+        <template v-else-if="validationStatus !== 'success'">
+          <template v-for="(validity, index) in renderableValidities">
+            <component
+              :is="validity.component"
+              v-if="validity.component"
+              :key="`r${index}`"
+              :validity="validity"
+            />
+            <veui-message
+              v-else
+              :key="`m${index}`"
+              :ui="uiParts.message"
+              :status="validity.status"
+              :display="realValidityDisplay"
+            >
+              <span>{{ validity.message }}</span>
+            </veui-message>
+          </template>
+        </template>
+        <veui-message
+          v-if="(help || $scopedSlots.help) && realHelpPosition === 'bottom'"
+          :ui="uiParts.message"
+          status="aux"
+          display="simple"
+          :class="$c(`field-help-content-${realHelpPosition}`)"
+        >
+          <slot name="help">{{ help }}</slot>
+        </veui-message>
+      </div>
+    </div>
   </div>
   <veui-message
-    v-if="(help || $scopedSlots.help) && helpPosition === 'side'"
+    v-if="(help || $scopedSlots.help) && realHelpPosition === 'side'"
     :ui="uiParts.message"
     status="aux"
     display="simple"
-    :class="$c(`field-help-content-${helpPosition}`)"
+    :class="$c(`field-help-content-${realHelpPosition}`)"
   >
     <slot name="help">{{ help }}</slot>
   </veui-message>
@@ -189,7 +205,7 @@ export default {
       type: String,
       default: 'side',
       validator (value) {
-        return ['bottom', 'side'].indexOf(value) >= 0
+        return ['bottom', 'side', 'top'].indexOf(value) >= 0
       }
     },
     validityDisplay: {
@@ -236,6 +252,13 @@ export default {
         (!!this.parentField && this.parentField.isReadonly()) ||
         (!!this.form && this.form.isReadonly())
       )
+    },
+    realHelpPosition () {
+      const topLabel = this.form && this.form.labelPosition() === 'top'
+      if (!topLabel && this.helpPosition === 'top') {
+        return 'side'
+      }
+      return this.helpPosition
     },
     realValidityDisplay () {
       return this.validityDisplay || this.config['field.validityDisplay']

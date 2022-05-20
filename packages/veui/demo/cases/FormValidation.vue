@@ -5,12 +5,26 @@
   </h1>
   <section>
     <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
+    <p>
+      <veui-radio-button-group
+        v-model="labelPos"
+        ui="s"
+        :items="availableLabelPos"
+      />
+      <veui-radio-button-group
+        v-model="helpPos"
+        ui="s"
+        style="margin: 0 0 12px 12px"
+        :items="availableHelpPos"
+      />
+    </p>
     <veui-form
       ref="form"
       :data="storeData4"
       :validators="validators"
       :before-validate="beforeValidate"
       :after-validate="afterValidate"
+      :label-position="labelPos"
       @submit="submit"
       @invalid="handleInvalid"
     >
@@ -21,6 +35,7 @@
         :rules="requiredRule"
         tip="rule validator: required"
         help="不支持特殊字符"
+        :help-position="helpPos"
       >
         <veui-input v-model="storeData4.name"/>
       </veui-field>
@@ -218,6 +233,7 @@ import {
   Checkbox,
   CheckboxGroup,
   NumberInput,
+  RadioButtonGroup,
   Transfer,
   ConfigProvider
 } from 'veui'
@@ -238,6 +254,7 @@ export default {
     'veui-checkbox': Checkbox,
     'veui-checkboxgroup': CheckboxGroup,
     'veui-transfer': Transfer,
+    'veui-radio-button-group': RadioButtonGroup,
     'veui-config-provider': ConfigProvider
   },
   data () {
@@ -287,6 +304,17 @@ export default {
         storeCounts: {},
         nativeInput: ''
       },
+      availableLabelPos: [
+        { label: 'top label', value: 'top' },
+        { label: 'side label', value: 'side' }
+      ],
+      labelPos: 'side',
+      availableHelpPos: [
+        { label: 'top help', value: 'top' },
+        { label: 'side help', value: 'side' },
+        { label: 'bottom help', value: 'bottom' }
+      ],
+      helpPos: 'side',
       storeList: [
         { label: '门店1', value: '1' },
         { label: '门店2', value: '2' },
