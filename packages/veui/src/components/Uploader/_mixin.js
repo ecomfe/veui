@@ -10,7 +10,11 @@ export const sharedProps = [
   'uiParts',
   'entries',
   'pickerPosition',
-  'requestMode'
+  'requestMode',
+  'validityDisplay',
+  'help',
+  'helpPosition',
+  'multiple'
 ]
 
 const computed = sharedProps.reduce((ret, key) => {

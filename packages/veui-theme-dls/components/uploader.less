@@ -28,12 +28,23 @@
 
   &-input-label-media {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     .absolute(-1px);
     border-style: none;
     line-height: inherit;
     border-radius: inherit;
+
+    padding: 0 @dls-uploader-media-padding-x-m;
+    // 是个按钮，将按钮默认的 before 干掉
+    .veui-uploader-media-button-text {
+      text-align: center;
+    }
+
+    &::before {
+      display: none;
+    }
 
     .@{veui-prefix}-icon {
       .dls-icon-size(@dls-uploader-media-icon-size-m);
@@ -57,14 +68,6 @@
       .veui-transition(transform, opacity);
     }
 
-    .@{veui-prefix}-uploader-success-icon {
-      color: @dls-uploader-foreground-color-success;
-    }
-
-    .@{veui-prefix}-uploader-failure-icon {
-      color: @dls-uploader-foreground-color-error;
-    }
-
     &-enter,
     &-leave-to {
       opacity: 0;
@@ -78,7 +81,8 @@
   &-list {
     &-item {
       margin: @dls-uploader-file-item-spacing-y 0;
-      width: @dls-uploader-file-item-width;
+      min-width: @dls-uploader-file-item-width;
+      width: var(--dls-uploader-file-item-width, @dls-uploader-file-item-width);
       color: @dls-uploader-file-item-font-color;
     }
 
@@ -96,33 +100,35 @@
       padding: 0 @dls-uploader-file-item-padding-x;
     }
 
-    .@{veui-prefix}-uploader-success-icon,
-    .@{veui-prefix}-uploader-failure-icon {
+    &-actions {
+      display: flex;
       margin-left: auto;
-      flex: none;
+
+      .@{veui-prefix}-button + .@{veui-prefix}-button {
+        margin-left: @dls-uploader-file-item-action-spacing;
+      }
+
+      .@{veui-prefix}-icon {
+        .dls-icon-size(@dls-icon-size-aux, true);
+      }
+    }
+
+    &-item-failure .@{veui-prefix}-message {
+      margin-left: dls-sum(
+        @dls-icon-size-aux,
+        @dls-uploader-file-item-padding-x,
+        @dls-uploader-file-item-label-spacing
+      );
     }
 
     &-container:hover {
       background-color: @dls-uploader-file-item-background-color-hover;
-
-      .@{veui-prefix}-uploader-list-remove {
-        display: flex;
-
-        .@{veui-prefix}-icon {
-          .dls-icon-size(@dls-icon-size-aux, true);
-        }
-      }
-
-      .@{veui-prefix}-uploader-success-icon,
-      .@{veui-prefix}-uploader-failure-icon {
-        display: none;
-      }
     }
 
     &-name {
       .ellipsis();
-      margin: 0 @dls-uploader-file-item-label-spacing-after 0
-        @dls-uploader-file-item-label-spacing-before;
+      margin: 0 @dls-uploader-file-item-action-spacing 0
+        @dls-uploader-file-item-label-spacing;
     }
 
     &-name-failure {
@@ -133,19 +139,14 @@
       color: @dls-uploader-foreground-color-error;
     }
 
-    .@{veui-prefix}-button&-remove {
-      margin-left: auto;
-      display: none;
-    }
-
     .@{veui-prefix}-progress {
       .absolute(
         _,
         @dls-uploader-file-item-padding-x,
-        -@dls-uploader-file-item-spacing-y / 2,
+        0,
         @dls-uploader-file-item-padding-x
       );
-      transform: translateY(50%);
+      transform: translateY(100%);
     }
 
     .@{veui-prefix}-progress .@{veui-prefix}-progress-rail {
@@ -157,7 +158,7 @@
     margin: -@dls-uploader-media-spacing-y 0 0 -@dls-uploader-media-spacing-x;
 
     &-item {
-      display: inline-block;
+      display: inline-flex;
       vertical-align: top;
       margin: @dls-uploader-media-spacing-y 0 0 @dls-uploader-media-spacing-x;
       width: @dls-uploader-media-width-m;
@@ -178,7 +179,7 @@
       position: relative;
       border-radius: @dls-button-border-radius-m;
       border: 1px solid @dls-button-border-color-basic;
-      background-color: @dls-button-background-color-basic;
+      background-color: @dls-background-color-base-2;
       .size(100%, @dls-uploader-media-height-m);
 
       &-media {
@@ -236,18 +237,13 @@
         justify-content: center;
         align-items: center;
         outline: none;
-        bottom: dls-sum(
-          @dls-uploader-mask-padding-y * 2,
-          @dls-icon-size-minor,
-          -1px
-        );
       }
 
       .@{veui-prefix}-uploader-list-media-file-name {
         color: @dls-uploader-foreground-color-error;
         max-width: calc(100% - 2 * @dls-uploader-media-padding-x-m);
         .ellipsis();
-        margin-top: @dls-uploader-media-error-spacing;
+        margin-top: @dls-uploader-error-spacing;
       }
     }
 
@@ -280,17 +276,43 @@
     }
   }
 
-  &-desc {
-    color: @dls-uploader-helper-text-font-color;
-    margin-left: @dls-uploader-helper-text-spacing-file;
+  &-file &-list-item-failure {
+    background-color: @dls-uploader-file-item-background-color-error;
+
+    &:hover {
+      background-color: @dls-uploader-file-item-background-color-error-hover;
+    }
   }
 
-  &-media &-desc {
-    display: inline-flex;
-    align-items: center;
+  &-help {
+    color: @dls-uploader-helper-text-font-color;
+  }
+
+  &-file &-help {
+    margin-left: @dls-uploader-helper-text-spacing-x;
+  }
+
+  &-list-media-help-side {
+    width: auto;
+  }
+
+  &-list-media-help-bottom {
+    flex-direction: column;
+  }
+
+  &-list-media-container-wrap {
+    width: 100%;
+  }
+
+  &-list-media-help-side &-list-media-container-wrap,
+  &-list-media-help-side &-list-media-container {
+    width: @dls-uploader-media-width-m;
+  }
+
+  &-list-media-help-side &-help {
+    margin-left: @dls-uploader-helper-text-spacing-x;
     height: @dls-uploader-media-height-m;
-    margin-left: @dls-uploader-helper-text-spacing-media;
-    max-width: @dls-uploader-helper-text-max-width-media;
+    max-width: @dls-uploader-helper-text-max-width-media-m;
   }
 
   &-entries-container {
@@ -337,11 +359,16 @@
       .@{veui-prefix}-icon {
         .dls-icon-size(@dls-uploader-media-icon-size-s);
       }
+      padding: @dls-uploader-media-padding-x-s;
     }
 
     .@{veui-prefix}-uploader-list-media {
       &-item {
         width: @dls-uploader-media-width-s;
+      }
+
+      &-help-side {
+        width: auto;
       }
 
       &-container {
@@ -364,18 +391,22 @@
       }
     }
 
-    &.@{veui-prefix}-uploader-media {
-      .@{veui-prefix}-uploader-desc {
-        height: @dls-uploader-media-height-s;
-      }
-    }
-
     &-entries-container {
       padding: @dls-uploader-media-entry-spacing 0;
       .@{veui-prefix}-icon {
         .dls-icon-size(@dls-uploader-media-entry-icon-size, true);
       }
     }
+  }
+
+  &[ui~="s"] &-list-media-help-side &-list-media-container-wrap,
+  &[ui~="s"] &-list-media-help-side &-list-media-container {
+    width: @dls-uploader-media-width-s;
+  }
+
+  &[ui~="s"] &-list-media-help-side &-help {
+    height: @dls-uploader-media-height-s;
+    max-width: @dls-uploader-helper-text-max-width-media-s;
   }
 
   &-hide {

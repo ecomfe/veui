@@ -216,9 +216,28 @@ export default {
     },
     sortable: Boolean,
     upload: Function,
+    pick: Function,
     controls: Function,
     pickerPosition: {
-      type: String
+      type: String,
+      validator (value) {
+        return includes(['before', 'after', 'none'], value)
+      }
+    },
+    validityDisplay: {
+      type: String,
+      default: 'side',
+      validator (value) {
+        return includes(['popup', 'inline'], value)
+      }
+    },
+    help: String,
+    helpPosition: {
+      type: String,
+      default: 'side',
+      validator (value) {
+        return includes(['side', 'bottom'], value)
+      }
     },
     entries: Function,
     previewOptions: {
@@ -327,6 +346,7 @@ export default {
     childOptions () {
       let options = pick(this, sharedProps)
       options.pickerPosition = this.realPickerPosition
+      options.multiple = this.realMultiple
       return options
     },
     preferType () {
@@ -545,7 +565,11 @@ export default {
     },
     chooseFiles () {
       let restCount = this.maxCount - this.fileList.length
-      this.pickFiles(restCount > 1)
+      const doPick =
+        typeof this.pick === 'function'
+          ? this.pick // 不给this
+          : this.pickFiles
+      doPick(restCount > 1)
         .then((files) => {
           if (!files.length) {
             return

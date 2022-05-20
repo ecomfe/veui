@@ -42,6 +42,22 @@
       />
     </div>
     <div>
+      validityDisplay:
+      <veui-radio-button-group
+        v-model="validityDisplay"
+        ui="s"
+        :items="availableDisplays"
+      />
+    </div>
+    <div>
+      helpPosition:
+      <veui-radio-button-group
+        v-model="helpPosition"
+        ui="s"
+        :items="availableHelpPositions"
+      />
+    </div>
+    <div>
       Custom:
       <veui-check-button-group
         v-model="enabledCustoms"
@@ -111,13 +127,15 @@
         v-model="files"
         v-bind="uploaderOptions"
         :entries="entries"
+        :validity-display="validityDisplay"
+        :help-position="helpPosition"
         @success="handleUploaderEvent('success', ...arguments)"
         @failure="handleUploaderEvent('failure', ...arguments)"
         @invalid="handleUploaderEvent('invalid', ...arguments)"
         @remove="handleUploaderEvent('remove', ...arguments)"
         @statuschange="handleUploaderEvent('statuschange', ...arguments)"
       >
-        <template v-if="includes(enabledCustoms, '#desc')" #desc>
+        <template v-if="includes(enabledCustoms, '#help')" #help>
           请选择{{ accept }}图片， 大小在{{ maxSize }}以内，
           宽、高大于100像素， 最多上传{{ maxCount }}张图
         </template>
@@ -282,7 +300,7 @@ const availableActions = [
 const availableTypes = ['file', 'video', 'image', 'media'].map(mapper)
 const availableSizes = ['m', 's'].map(mapper)
 const availableCustoms = [
-  '#desc',
+  '#help',
   '#button-label',
   '#file-after',
   '#file',
@@ -293,8 +311,10 @@ const availableCustoms = [
 ].map(mapper)
 const availableRequestModes = ['xhr', 'iframe', 'custom'].map(mapper)
 const availableRequestIframeModes = ['postmessage', 'callback'].map(mapper)
-const availablePickerPositions = ['before', 'after'].map(mapper)
-const avaliableMaxCounts = [1, 5, 10].map(mapper)
+const availablePickerPositions = ['before', 'after', 'none'].map(mapper)
+const avaliableMaxCounts = [1, 2, 5, 10].map(mapper)
+const availableDisplays = ['popup', 'inline'].map(mapper)
+const availableHelpPositions = ['side', 'bottom'].map(mapper)
 
 const statusIcons = {
   [Uploader.status.PENDING]: '❔',
@@ -340,6 +360,8 @@ export default {
       availableRequestModes,
       availableRequestIframeModes,
       availablePickerPositions,
+      availableHelpPositions,
+      helpPosition: 'side',
       removed: false,
       inDialog: false,
 
@@ -351,6 +373,9 @@ export default {
       autoupload: true,
       type: 'image',
       size: 'm',
+
+      validityDisplay: 'popup',
+      availableDisplays,
 
       accept: '.jpg,.jpeg,.png',
       maxCount: 5,

@@ -17,7 +17,10 @@ i18n.register(
     complete: '完成',
     error: '错误！',
     uploading: '上传中…',
-    separator: '；'
+    separator: '；',
+    uploadImage: '上传图片',
+    uploadVideo: '上传视频',
+    uploadMedia: '上传多媒体'
   },
   {
     ns: 'uploader'
