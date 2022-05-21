@@ -117,15 +117,15 @@
     border-color: @dls-input-border-color-error-hover;
   }
 
+  &.@{veui-prefix}-focus.@{veui-prefix}-readonly {
+    border-color: @dls-input-border-color-read-only-focus;
+  }
+
   &.@{veui-prefix}-invalid.@{veui-prefix}-focus {
     .dls-focus-ring(
       @dls-input-border-color-error-focus,
       @dls-input-shadow-error-focus
     );
-  }
-
-  &.@{veui-prefix}-focus.@{veui-prefix}-readonly {
-    border-color: @dls-input-border-color-read-only-focus;
   }
 
   &.@{veui-prefix}-disabled {
