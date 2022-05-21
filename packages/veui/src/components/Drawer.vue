@@ -42,11 +42,6 @@ export default {
     overlayClass: LOOSE_PROP_DEF,
     overlayStyle: LOOSE_PROP_DEF
   },
-  data () {
-    return {
-      level: 0
-    }
-  },
   computed: {
     attrs () {
       return {
@@ -105,7 +100,10 @@ export default {
       if (val) {
         stack.push(this)
       } else {
-        stack.splice(stack.indexOf(this), 1)
+        let index = stack.indexOf(this)
+        if (index !== -1) {
+          stack.splice(index, 1)
+        }
       }
     }
   }
