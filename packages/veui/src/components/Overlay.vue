@@ -13,7 +13,9 @@ import {
   isType,
   ignoreElements,
   createPortal,
-  inheritScopeAttrs
+  inheritScopeAttrs,
+  normalizeClass,
+  normalizeStyle
 } from '../utils/helper'
 import '../common/global'
 import { omit } from 'lodash'
@@ -79,16 +81,16 @@ export default {
       return this.open && (this.inline || this.local || this.zIndex !== null)
     },
     realOverlayClass () {
-      return [this.overlayClass, this.config['overlay.overlayClass']]
+      return normalizeClass(
+        this.overlayClass,
+        this.config['overlay.overlayClass']
+      )
     },
     realOverlayStyle () {
-      return [
-        this.overlayStyle,
-        {
-          zIndex: this.zIndex,
-          minWidth: this.minWidth
-        }
-      ]
+      return normalizeStyle(this.overlayStyle, {
+        zIndex: this.zIndex,
+        minWidth: this.minWidth
+      })
     },
     realPosition () {
       return this.position || this.options.position || 'auto'

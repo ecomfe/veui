@@ -26,6 +26,7 @@ import {
   forwardSlots,
   safeSlice
 } from '@/utils/helper'
+import { normalizeStyle } from '../../../../src/utils/helper'
 
 describe('utils/helper', function () {
   this.timeout(10000)
@@ -342,10 +343,11 @@ describe('utils/helper', function () {
 
   it('should normalize class expressions', () => {
     let specs = [
-      ['foo', { foo: true }],
-      ['foo bar', { foo: true, bar: true }],
       [['foo'], { foo: true }],
+      [['foo bar'], { foo: true, bar: true }],
       [['foo', 'bar'], { foo: true, bar: true }],
+      [[['foo']], { foo: true }],
+      [[['foo', 'bar']], { foo: true, bar: true }],
       [['foo', { bar: true }], { foo: true, bar: true }],
       [['foo', ['bar'], { baz: true }], { foo: true, bar: true, baz: true }],
       [
@@ -357,6 +359,42 @@ describe('utils/helper', function () {
 
     specs.forEach(([value, expected], i) => {
       expect(normalizeClass(value), i).to.deep.equal(expected)
+    })
+  })
+
+  it('should normalize style expressions', () => {
+    let specs = [
+      [['color:red'], { color: 'red' }],
+      [['color:red;position:absolute'], { color: 'red', position: 'absolute' }],
+      [
+        ['color:red', 'position:absolute'],
+        { color: 'red', position: 'absolute' }
+      ],
+      [[['color:red']], { color: 'red' }],
+      [
+        [['color:red', 'position:absolute']],
+        { color: 'red', position: 'absolute' }
+      ],
+      [
+        ['color:red', { position: 'absolute' }],
+        { color: 'red', position: 'absolute' }
+      ],
+      [
+        ['color:red', ['position:absolute'], { top: '1px' }],
+        { color: 'red', position: 'absolute', top: '1px' }
+      ],
+      [
+        [['color:red'], ['position:absolute'], ['top:1px'], { left: '0' }],
+        { color: 'red', position: 'absolute', top: '1px', left: '0' }
+      ],
+      [
+        ['color:red;position:absolute', { top: '1px' }, 0],
+        { color: 'red', position: 'absolute', top: '1px' }
+      ]
+    ]
+
+    specs.forEach(([value, expected], i) => {
+      expect(normalizeStyle(value), i).to.deep.equal(expected)
     })
   })
 

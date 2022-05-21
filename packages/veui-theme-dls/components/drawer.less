@@ -1,13 +1,16 @@
 @import "../lib.less";
 
 .@{veui-prefix}-drawer {
+  @indent: 180px;
+
   &-box {
+    .veui-transition(background-color);
+
     .@{veui-prefix}-dialog-content {
       display: flex;
       flex-direction: column;
       max-height: none;
       margin: 0;
-      transform: translate(0, 0);
       border-radius: 0;
       overflow: auto;
       .veui-transition(transform);
@@ -42,6 +45,9 @@
       .absolute(0, 0, auto, 0);
       width: auto !important;
       box-shadow: @dls-drawer-shadow-top;
+      transform: translateY(
+        calc(var(~"--@{veui-prefix}-drawer-indent-level") * @indent)
+      );
     }
   }
 
@@ -50,6 +56,9 @@
       .absolute(0, 0, 0, auto);
       width: @dls-drawer-width;
       box-shadow: @dls-drawer-shadow-right;
+      transform: translateX(
+        calc(var(~"--@{veui-prefix}-drawer-indent-level") * -@indent)
+      );
     }
   }
 
@@ -58,6 +67,9 @@
       .absolute(auto, 0, 0, 0);
       width: auto !important;
       box-shadow: @dls-drawer-shadow-bottom;
+      transform: translateY(
+        calc(var(~"--@{veui-prefix}-drawer-indent-level") * -@indent)
+      );
     }
   }
 
@@ -66,29 +78,35 @@
       .absolute(0, auto, 0, 0);
       width: @dls-drawer-width;
       box-shadow: @dls-drawer-shadow-left;
+      transform: translateX(
+        calc(var(~"--@{veui-prefix}-drawer-indent-level") * @indent)
+      );
     }
   }
 
   &-box.@{veui-prefix}-overlay-enter,
   &-box.@{veui-prefix}-overlay-leave-to {
+    opacity: 1;
+    background-color: transparent;
+
     &.@{veui-prefix}-drawer-top {
       .@{veui-prefix}-dialog-content {
-        transform: translateY(-20px);
+        transform: translateY(-100%);
       }
     }
     &.@{veui-prefix}-drawer-right {
       .@{veui-prefix}-dialog-content {
-        transform: translateX(20px);
+        transform: translateX(100%);
       }
     }
     &.@{veui-prefix}-drawer-bottom {
       .@{veui-prefix}-dialog-content {
-        transform: translateY(20px);
+        transform: translateY(100%);
       }
     }
     &.@{veui-prefix}-drawer-left {
       .@{veui-prefix}-dialog-content {
-        transform: translateX(-20px);
+        transform: translateX(-100%);
       }
     }
   }

@@ -38,14 +38,68 @@
     :outside-closable="outsideClosable"
     placement="right"
     title="Hey man"
-  />
+  >
+    <veui-button @click="right2Open = true">Second</veui-button>
+    <veui-drawer
+      title="Hey second"
+      :modal="modal"
+      :open.sync="right2Open"
+      :outside-closable="outsideClosable"
+      placement="right"
+    >
+      <veui-button @click="right3Open = true">Third</veui-button>
+      <veui-drawer
+        title="Hey third"
+        :modal="modal"
+        :open.sync="right3Open"
+        :outside-closable="outsideClosable"
+        placement="right"
+      />
+    </veui-drawer>
+  </veui-drawer>
   <veui-drawer
     title="Hey man"
     :modal="modal"
     :open.sync="bottomOpen"
     :outside-closable="outsideClosable"
     placement="bottom"
-  />
+  >
+    <veui-button @click="left2Open = true">Left</veui-button>
+    <veui-drawer
+      title="Hey left"
+      :modal="modal"
+      :open.sync="left2Open"
+      :outside-closable="outsideClosable"
+      placement="left"
+    >
+      <veui-button @click="top2Open = true">Top</veui-button>
+      <veui-drawer
+        title="Hey third"
+        :modal="modal"
+        :open.sync="top2Open"
+        :outside-closable="outsideClosable"
+        placement="top"
+      >
+        <veui-button @click="bottom2Open = true">Bottom</veui-button>
+        <veui-drawer
+          title="Hey bottom"
+          :modal="modal"
+          :open.sync="bottom2Open"
+          :outside-closable="outsideClosable"
+          placement="bottom"
+        >
+          <veui-button @click="left3Open = true">Left</veui-button>
+          <veui-drawer
+            title="Hey left"
+            :modal="modal"
+            :open.sync="left3Open"
+            :outside-closable="outsideClosable"
+            placement="left"
+          />
+        </veui-drawer>
+      </veui-drawer>
+    </veui-drawer>
+  </veui-drawer>
   <veui-drawer
     title="Hey man"
     :modal="modal"
@@ -72,9 +126,15 @@ export default {
       modal: true,
       outsideClosable: true,
       topOpen: false,
+      top2Open: false,
       rightOpen: false,
+      right2Open: false,
+      right3Open: false,
       bottomOpen: false,
-      leftOpen: false
+      bottom2Open: false,
+      leftOpen: false,
+      left2Open: false,
+      left3Open: false
     }
   }
 }

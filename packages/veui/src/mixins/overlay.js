@@ -1,4 +1,4 @@
-import { LOOSE_PROP_DEF } from '../utils/helper'
+import { LOOSE_PROP_DEF, normalizeClass } from '../utils/helper'
 
 export default {
   props: {
@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     mergeOverlayClass (klass) {
-      return [this.overlayClass, klass]
+      return normalizeClass(this.overlayClass, klass)
     },
     relocate () {
       if (!this.$refs.overlay) {
