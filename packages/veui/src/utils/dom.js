@@ -368,7 +368,7 @@ export function focus (elem) {
     return
   }
 
-  elem.focus()
+  elem.focus({ preventScroll: true })
 }
 
 let transformKey

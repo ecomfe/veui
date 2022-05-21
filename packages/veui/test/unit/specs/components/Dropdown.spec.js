@@ -382,7 +382,7 @@ describe('components/Dropdown', function () {
           ref="dropdown"
           :options="datasource"
           :searchable="searchable"
-          overlayClass="test-overlay-class"
+          overlay-class="test-overlay-class"
         />`,
         components: {
           'veui-dropdown': Dropdown

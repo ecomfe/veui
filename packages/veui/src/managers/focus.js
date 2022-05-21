@@ -1,5 +1,5 @@
 import { remove, findIndex, last } from 'lodash'
-import { focusIn } from '../utils/dom'
+import { focusIn, getFocusable } from '../utils/dom'
 
 class FocusContext {
   /**
@@ -23,11 +23,28 @@ class FocusContext {
     this.trap = trap
     this.preferred = preferred
 
-    this.outsideStartHandler = () => {
-      this.focusAt(-2, true)
-    }
-    this.outsideEndHandler = () => {
-      this.focusAt(1, true)
+    this.trapHanlder = (e) => {
+      if (e.key !== 'Tab') {
+        return
+      }
+
+      let focusable = getFocusable(this.root)
+
+      if (!focusable.length) {
+        return
+      }
+
+      if (e.shiftKey) {
+        if (e.target === focusable[0]) {
+          focusable[focusable.length - 1].focus()
+          e.preventDefault()
+        }
+      } else {
+        if (e.target === focusable[focusable.length - 1]) {
+          focusable[0].focus()
+          e.preventDefault()
+        }
+      }
     }
 
     this.init()
@@ -40,22 +57,10 @@ class FocusContext {
    */
   init () {
     if (this.trap) {
-      let before = document.createElement('div')
-      before.tabIndex = 0
-      let after = before.cloneNode()
-
-      before.addEventListener('focus', this.outsideStartHandler, true)
-      after.addEventListener('focus', this.outsideEndHandler, true)
-
-      this.root.insertBefore(before, this.root.firstChild)
-      this.root.appendChild(after)
-
-      this.wardBefore = before
-      this.wardAfter = after
+      this.root.addEventListener('keydown', this.trapHanlder, true)
     }
 
-    // skip wardBefore if trapping
-    this.focusAt(this.trap ? 1 : 0)
+    this.focusAt(0)
   }
 
   focusAt (index = 0, ignoreAutofocus) {
@@ -76,12 +81,9 @@ class FocusContext {
   }
 
   destroy () {
-    let { trap, source, wardBefore, wardAfter } = this
+    let { trap, source } = this
     if (trap) {
-      wardBefore.removeEventListener('focus', this.outsideStartHandler, true)
-      wardAfter.removeEventListener('focus', this.outsideEndHandler, true)
-      this.root.removeChild(wardBefore)
-      this.root.removeChild(wardAfter)
+      this.root.removeEventListener('keydown', this.trapHanlder, true)
     }
     if (source) {
       this.source = null
@@ -124,7 +126,7 @@ export class FocusManager {
 
   initTriggerHandlers () {
     Object.keys(this.triggerHandlers).forEach((type) => {
-      document.addEventListener(type, this.triggerHandlers[type], true)
+      document.addEventListener(type, this.triggerHandlers[type], true, true)
     })
   }
 

@@ -133,29 +133,62 @@ export function isEmpty (val) {
   return val == null || val === '' || (Array.isArray(val) && !val.length)
 }
 
-/**
- * Vue 里面有三种设置 class 的方式：
- * 1. 字符串
- * 2. 字符串
- * 3. object
- * 此处统一将这些形式的 class 转换成 object 形式的
- *
- * @param {string | Array<string | Object> | Object<string, boolean>} klasses
- */
-export function normalizeClass (klasses) {
-  let klassObj = {}
-  if (isString(klasses)) {
-    klasses.split(/\s+/).forEach((klass) => {
-      klassObj[klass] = true
-    })
-  } else if (Array.isArray(klasses)) {
-    klasses.forEach((klass) => {
-      assign(klassObj, normalizeClass(klass))
-    })
-  } else if (isObject(klasses)) {
-    assign(klassObj, klasses)
+// See https://github.com/vuejs/vue/blob/dev/src/platforms/web/util/style.js
+function parseStyleText (cssText) {
+  const res = {}
+  const listDelimiter = /;(?![^(]*\))/g
+  const propertyDelimiter = /:(.+)/
+  cssText.split(listDelimiter).forEach((item) => {
+    if (item) {
+      const tmp = item.split(propertyDelimiter)
+      tmp.length > 1 && (res[tmp[0].trim()] = tmp[1].trim())
+    }
+  })
+  return res
+}
+
+function parseClassName (className) {
+  return className
+    .split(/\s+/)
+    .filter(Boolean)
+    .reduce((acc, cur) => {
+      acc[cur] = true
+      return acc
+    }, {})
+}
+
+export function normalizeBindings (bindings, parse) {
+  if (isString(bindings)) {
+    return parse(bindings)
   }
-  return klassObj
+
+  const result = {}
+  if (Array.isArray(bindings)) {
+    bindings.forEach((binding) => {
+      assign(result, normalizeBindings(binding, parse))
+    })
+  } else if (isObject(bindings)) {
+    assign(result, bindings)
+  }
+  return result
+}
+
+/**
+ * 统一将 string/object/array 形式的 class 转换成 object
+ * @param {string | Array<string | Object> | Object<string, boolean>} klasses 待归一化的类表达式
+ * @return {Object<string, boolean>} object 形式的类表达式
+ */
+export function normalizeClass (...klasses) {
+  return normalizeBindings(klasses, parseClassName)
+}
+
+/**
+ * 统一将 string/object/array 形式的 class 转换成 object
+ * @param {string | Array<string | Object> | Object<string, boolean>} styles 待归一化的样式表达式
+ * @return {Object<string, string>} object 形式的样式表达式
+ */
+export function normalizeStyle (...styles) {
+  return normalizeBindings(styles, parseStyleText)
 }
 
 export function getConfigKey (name) {

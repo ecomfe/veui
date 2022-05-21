@@ -1,4 +1,4 @@
-import { mount, wait } from '../../../utils'
+import { mount, normalizeTransform, wait } from '../../../utils'
 import Drawer from '@/components/Drawer'
 import Button from '@/components/Button'
 
@@ -17,6 +17,12 @@ const attach = {
 }
 
 const CONTENT = '.veui-dialog-content'
+
+function expectTransform (wrapper, transform) {
+  expect(
+    normalizeTransform(getComputedStyle(wrapper.element).transform)
+  ).to.equal(normalizeTransform(transform))
+}
 
 describe('components/Drawer', function () {
   this.timeout(10000)
@@ -213,7 +219,7 @@ describe('components/Drawer', function () {
       .find('.veui-dialog-content-foot .veui-button:first-child')
       .trigger('click')
 
-    await wait(100)
+    await wait(400)
     expect(vm.open).to.equal(true)
 
     await wait(500)
@@ -424,6 +430,141 @@ describe('components/Drawer', function () {
 
     let box = wrapper.find('.veui-drawer-box')
     expect(box.classes()).to.include('drawer-overlay-overlay')
+    wrapper.destroy()
+  })
+
+  it('should handle level indent correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-drawer': Drawer
+        },
+        data () {
+          return {
+            p1: 'right',
+            o1: false,
+            o2: false,
+            o3: false,
+            o4: false,
+            o5: false
+          }
+        },
+        template: `<div>
+        <veui-drawer overlay-class="c0" placement="left" open/>
+        <veui-drawer overlay-class="c1" :placement="p1" :open.sync="o1">
+          <veui-drawer overlay-class="c2" placement="right" :open.sync="o2"/>
+          <veui-drawer overlay-class="c3" placement="right" :open.sync="o3">
+            <veui-drawer overlay-class="c4" placement="top" :open.sync="o4">
+              <veui-drawer overlay-class="c5" placement="top" :open.sync="o5"/>
+            </veui-drawer>
+          </veui-drawer>
+        </veui-drawer>
+      </div>`
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    vm.o1 = true
+    await wait(400)
+    expectTransform(wrapper.find('.c1 .veui-dialog-content'), 'translateX(0px)')
+
+    vm.o2 = true
+    await wait(400)
+    expectTransform(
+      wrapper.find('.c1 .veui-dialog-content'),
+      'translateX(-180px)'
+    )
+    expectTransform(wrapper.find('.c2 .veui-dialog-content'), 'none')
+
+    vm.o3 = true
+    await wait(400)
+    expectTransform(
+      wrapper.find('.c1 .veui-dialog-content'),
+      'translateX(-360px)'
+    )
+    expectTransform(
+      wrapper.find('.c2 .veui-dialog-content'),
+      'translateX(-180px)'
+    )
+    expectTransform(wrapper.find('.c3 .veui-dialog-content'), 'none')
+
+    vm.o4 = true
+    await wait(400)
+    expectTransform(
+      wrapper.find('.c1 .veui-dialog-content'),
+      'translateX(-360px)'
+    )
+    expectTransform(
+      wrapper.find('.c2 .veui-dialog-content'),
+      'translateX(-180px)'
+    )
+    expectTransform(wrapper.find('.c3 .veui-dialog-content'), 'none')
+    expectTransform(wrapper.find('.c4 .veui-dialog-content'), 'none')
+
+    vm.o5 = true
+    await wait(400)
+    expectTransform(
+      wrapper.find('.c1 .veui-dialog-content'),
+      'translateX(-360px)'
+    )
+    expectTransform(
+      wrapper.find('.c2 .veui-dialog-content'),
+      'translateX(-180px)'
+    )
+    expectTransform(wrapper.find('.c3 .veui-dialog-content'), 'none')
+    expectTransform(
+      wrapper.find('.c4 .veui-dialog-content'),
+      'translateY(180px)'
+    )
+    expectTransform(wrapper.find('.c5 .veui-dialog-content'), 'none')
+
+    vm.p1 = 'left'
+    await wait(400)
+    expectTransform(
+      wrapper.find('.c0 .veui-dialog-content'),
+      'translateX(180px)'
+    )
+    expectTransform(wrapper.find('.c1 .veui-dialog-content'), 'none')
+    expectTransform(
+      wrapper.find('.c2 .veui-dialog-content'),
+      'translateX(-180px)'
+    )
+    expectTransform(wrapper.find('.c3 .veui-dialog-content'), 'none')
+
+    vm.o5 = false
+    await wait(400)
+    expectTransform(
+      wrapper.find('.c1 .veui-dialog-content'),
+      'translateX(none)'
+    )
+    expectTransform(
+      wrapper.find('.c2 .veui-dialog-content'),
+      'translateX(-180px)'
+    )
+    expectTransform(wrapper.find('.c3 .veui-dialog-content'), 'none')
+    expectTransform(wrapper.find('.c4 .veui-dialog-content'), 'none')
+
+    vm.o4 = false
+    await wait(400)
+    expectTransform(wrapper.find('.c1 .veui-dialog-content'), 'none')
+    expectTransform(
+      wrapper.find('.c2 .veui-dialog-content'),
+      'translateX(-180px)'
+    )
+    expectTransform(wrapper.find('.c3 .veui-dialog-content'), 'none')
+
+    vm.o3 = false
+    await wait(400)
+    expectTransform(wrapper.find('.c1 .veui-dialog-content'), 'none')
+    expectTransform(wrapper.find('.c2 .veui-dialog-content'), 'none')
+
+    vm.o2 = false
+    await wait(400)
+    expectTransform(wrapper.find('.c1 .veui-dialog-content'), 'none')
     wrapper.destroy()
   })
 })

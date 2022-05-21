@@ -365,10 +365,7 @@ export default {
       let extra = isFunction(this.hourClass)
         ? this.hourClass(day, hour)
         : this.hourClass
-      return {
-        ...normalizeClass(classes),
-        ...normalizeClass(extra)
-      }
+      return normalizeClass(classes, extra)
     },
     getSelectState (day, hour) {
       let selected = this.pickingSelected || this.localSelected

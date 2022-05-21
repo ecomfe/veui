@@ -121,10 +121,7 @@ export default {
       type: String,
       default: null
     },
-    open: {
-      type: Boolean,
-      default: false
-    },
+    open: Boolean,
     closable: {
       type: Boolean,
       default: true
@@ -135,10 +132,7 @@ export default {
     },
     inline: Boolean,
     outsideClosable: Boolean,
-    draggable: {
-      type: Boolean,
-      default: false
-    },
+    draggable: Boolean,
     priority: Number,
     beforeClose: Function,
     footless: Boolean,
