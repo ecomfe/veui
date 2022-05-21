@@ -442,6 +442,7 @@ describe('components/Drawer', function () {
         data () {
           return {
             p1: 'right',
+            o0: true,
             o1: false,
             o2: false,
             o3: false,
@@ -450,12 +451,17 @@ describe('components/Drawer', function () {
           }
         },
         template: `<div>
-        <veui-drawer overlay-class="c0" placement="left" open/>
+        <veui-drawer overlay-class="c0" placement="left" :open.sync="o0"/>
         <veui-drawer overlay-class="c1" :placement="p1" :open.sync="o1">
-          <veui-drawer overlay-class="c2" placement="right" :open.sync="o2"/>
-          <veui-drawer overlay-class="c3" placement="right" :open.sync="o3">
-            <veui-drawer overlay-class="c4" placement="top" :open.sync="o4">
-              <veui-drawer overlay-class="c5" placement="top" :open.sync="o5"/>
+          D1
+          <veui-drawer overlay-class="c2" placement="right" :open.sync="o2">
+            D2
+            <veui-drawer overlay-class="c3" placement="right" :open.sync="o3">
+              D3
+              <veui-drawer overlay-class="c4" placement="top" :open.sync="o4">
+                D4
+                <veui-drawer overlay-class="c5" placement="top" :open.sync="o5">D5</veui-drawer>
+              </veui-drawer>
             </veui-drawer>
           </veui-drawer>
         </veui-drawer>
@@ -565,6 +571,20 @@ describe('components/Drawer', function () {
     vm.o2 = false
     await wait(400)
     expectTransform(wrapper.find('.c1 .veui-dialog-content'), 'none')
+
+    vm.o1 = false
+    vm.o2 = true
+    vm.o3 = true
+    await vm.$nextTick(0) // wait for real values to take effect (#1 is closed)
+    vm.p1 = 'right'
+    await wait(400)
+    expectTransform(wrapper.find('.c0 .veui-dialog-content'), 'none')
+    expectTransform(
+      wrapper.find('.c2 .veui-dialog-content'),
+      'translateX(-180px)'
+    )
+    expectTransform(wrapper.find('.c3 .veui-dialog-content'), 'none')
+
     wrapper.destroy()
   })
 })

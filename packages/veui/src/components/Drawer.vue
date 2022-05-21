@@ -66,7 +66,13 @@ export default {
     },
     indentLevel () {
       let stack = state[this.placement]
-      return stack.length - stack.indexOf(this) - 1
+      let index = stack.indexOf(this)
+
+      if (index === -1) {
+        return 0
+      }
+
+      return stack.length - index - 1
     }
   },
   watch: {
@@ -89,6 +95,9 @@ export default {
     if (this.realOpen) {
       this.updateStack(this.placement, true)
     }
+  },
+  destroyed () {
+    this.updateStack(this.placement, false)
   },
   methods: {
     updateStack (side, val) {
