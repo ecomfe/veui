@@ -23,13 +23,15 @@
     overlay-class="drawer-demo-overlay"
     :modal="modal"
     placement="top"
+    :before-close="wait"
   >
     <p>content area</p>
     <template #title="{ close }">
       <a @click="close">点我也可关闭</a>
     </template>
-    <template #foot>
-      <div>我是foot</div>
+    <template #foot="{ close }">
+      <veui-button ui="primary" @click="close('foo')">foo</veui-button>
+      <veui-button @click="close">cancel</veui-button>
     </template>
   </veui-drawer>
   <veui-drawer
@@ -135,6 +137,13 @@ export default {
       leftOpen: false,
       left2Open: false,
       left3Open: false
+    }
+  },
+  methods: {
+    wait () {
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 1000)
+      })
     }
   }
 }

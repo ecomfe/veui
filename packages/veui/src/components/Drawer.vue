@@ -1,3 +1,11 @@
+<template>
+<veui-dialog v-bind="attrs" :open.sync="realOpen" v-on="$listeners">
+  <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope">
+    <slot :name="slot" v-bind="scope"/>
+  </template>
+</veui-dialog>
+</template>
+
 <script>
 import Vue from 'vue'
 import Dialog from './Dialog'
@@ -5,7 +13,6 @@ import prefix, { prefixify } from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 import '../common/global'
 import { LOOSE_PROP_DEF, normalizeClass, normalizeStyle } from '../utils/helper'
-import { omit } from 'lodash'
 
 const PLACEMENT = ['top', 'right', 'bottom', 'left']
 
@@ -18,6 +25,9 @@ const state = Vue.observable({
 
 export default {
   name: 'veui-drawer',
+  components: {
+    'veui-dialog': Dialog
+  },
   mixins: [prefix, useControllable(['open'])],
   inheritAttrs: false,
   props: {
@@ -38,6 +48,22 @@ export default {
     }
   },
   computed: {
+    attrs () {
+      return {
+        // attrs 都直接透传到 Dialog 去
+        ...this.$attrs,
+        overlayClass: normalizeClass(
+          this.$c(`drawer-${this.placement}`),
+          this.$c('drawer-box'),
+          this.overlayClass
+        ),
+        overlayStyle: normalizeStyle(
+          { [`--${prefixify('drawer-indent-level')}`]: this.indentLevel },
+          this.overlayStyle
+        ),
+        draggable: false
+      }
+    },
     indentLevel () {
       let stack = state[this.placement]
       return stack.length - stack.indexOf(this) - 1
@@ -73,38 +99,6 @@ export default {
         stack.splice(stack.indexOf(this), 1)
       }
     }
-  },
-  render (h) {
-    let data = {
-      attrs: {
-        // attrs 都直接透传到 Dialog 去
-        ...omit(this.$attrs, ['open', 'placement', 'overlayClass']),
-        overlayClass: normalizeClass(
-          this.$c(`drawer-${this.placement}`),
-          this.$c('drawer-box'),
-          this.overlayClass
-        ),
-        overlayStyle: normalizeStyle(
-          { [`--${prefixify('drawer-indent-level')}`]: this.indentLevel },
-          this.overlayStyle
-        ),
-        draggable: false
-      },
-      props: {
-        open: this.realOpen
-      },
-      // nativeOn 直接在 drawer 上注册到 dom ，不需透传
-      on: this.$listeners,
-      scopedSlots: this.$scopedSlots
-    }
-
-    return h(
-      Dialog,
-      data,
-      Object.keys(this.$slots).map((slot) =>
-        h('template', { slot }, this.$slots[slot])
-      )
-    )
   }
 }
 </script>
