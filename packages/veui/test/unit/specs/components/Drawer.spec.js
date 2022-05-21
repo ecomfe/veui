@@ -219,10 +219,10 @@ describe('components/Drawer', function () {
       .find('.veui-dialog-content-foot .veui-button:first-child')
       .trigger('click')
 
-    await wait(400)
+    await wait(200)
     expect(vm.open).to.equal(true)
 
-    await wait(500)
+    await wait(200)
     expect(vm.open).to.equal(false)
 
     wrapper.destroy()
