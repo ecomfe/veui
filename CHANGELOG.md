@@ -1,7 +1,10 @@
-## 2.6.7 (2022-05-19)
+## 2.7.0 (2022-05-24)
 
 ### 💡 主要变更
 
+- [+] `Drawer` 组件新增多级自动缩进功能。<!-- #Drawer -->
+- [+] `Form` 组件新增 `label-position` 属性，支持设置表单项标题显示在上方或侧面。<!-- #Form -->
+- [+] `Field` 组件的 `help-position` 属性新增可选值 `top`，支持设置表单项帮助文本显示在上方。<!-- #Field -->
 - [+] `veui-theme-dls` 新增 `typography.less`，提供“Baidu Number”字体支持。<!-- #veui-theme-dls -->
 
 ## 2.6.5 (2022-05-17)
