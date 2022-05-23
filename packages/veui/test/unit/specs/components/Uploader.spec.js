@@ -463,9 +463,7 @@ describe('components/Uploader', function () {
     let mockFile = createFile('xxx.png', 'image/png', 128 * 1024)
     let promise = Promise.all([
       waitForEvent(wrapper.vm, 'success'),
-      new Promise((resolve) =>
-        addOnceEventListener(window, 'message', resolve)
-      )
+      new Promise((resolve) => addOnceEventListener(window, 'message', resolve))
     ])
     wrapper.vm.addFiles([mockFile])
     await promise
@@ -634,7 +632,7 @@ describe('components/Uploader', function () {
 
     expect(wrapper.vm.canAddImage).to.equal(false)
     expectDisabled(wrapper.find('.veui-button'))
-    wrapper.find('.veui-uploader-list-remove').trigger('click')
+    wrapper.find('.veui-uploader-list-actions .veui-button').trigger('click')
     expect(wrapper.vm.canAddImage).to.equal(true)
 
     wrapper.destroy()
@@ -909,18 +907,18 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should render desc slot correctly.', function () {
+  it('should render help slot correctly.', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
         action: '/upload/xhr'
       },
       slots: {
-        desc: 'jpg only.'
+        help: 'jpg only.'
       }
     })
 
-    expect(wrapper.find('.veui-uploader-desc').text()).to.equal('jpg only.')
+    expect(wrapper.find('.veui-uploader-help').text()).to.equal('jpg only.')
     wrapper.destroy()
   })
 

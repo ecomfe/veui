@@ -97,10 +97,10 @@
     </div>
     <div>
       PickerPosition:
-      <veui-select
+      <veui-radio-button-group
         v-model="pickerPosition"
-        ui="xs"
-        :options="availablePickerPositions"
+        ui="s"
+        :items="availablePickerPositions"
       />
     </div>
   </fieldset>
@@ -128,6 +128,7 @@
         v-bind="uploaderOptions"
         :entries="entries"
         :validity-display="validityDisplay"
+        key-field="name"
         :help-position="helpPosition"
         @success="handleUploaderEvent('success', ...arguments)"
         @failure="handleUploaderEvent('failure', ...arguments)"
@@ -311,7 +312,7 @@ const availableCustoms = [
 ].map(mapper)
 const availableRequestModes = ['xhr', 'iframe', 'custom'].map(mapper)
 const availableRequestIframeModes = ['postmessage', 'callback'].map(mapper)
-const availablePickerPositions = ['before', 'after', 'none'].map(mapper)
+const availablePickerPositions = ['before', 'after', 'top', 'none'].map(mapper)
 const avaliableMaxCounts = [1, 2, 5, 10].map(mapper)
 const availableDisplays = ['popup', 'inline'].map(mapper)
 const availableHelpPositions = ['side', 'bottom'].map(mapper)
@@ -395,7 +396,7 @@ export default {
         year: new Date().getFullYear(),
         month: new Date().getMonth() + 1
       },
-      pickerPosition: undefined,
+      pickerPosition: 'after',
       entries (defaultEntries) {
         return [
           ...defaultEntries,

@@ -5,7 +5,7 @@
     :name="$c('uploader-list-media')"
     :class="{
       [listClass]: true,
-      [`${listClass}-picker-before`]: pickerPosition === 'before'
+      [`${listClass}-picker-${pickerPosition}`]: true
     }"
   >
     <li
@@ -78,6 +78,8 @@
             <slot name="file-after" v-bind="getScopeValue(index)"/>
             <veui-message
               v-if="validityDisplay === 'inline'"
+              :class="$c('uploader-validities')"
+              :ui="uiParts.message"
               status="error"
               display="simple"
             >{{
@@ -148,7 +150,8 @@
         [`${listClass}-item`]: true,
         [`${listClass}-item-upload`]: true,
         [`${listClass}-help-${helpPosition}`]: true,
-        [`${listClass}-item-hidden`]: !disabled && !addable
+        [`${listClass}-item-disabled`]: pickerStatus.disabled,
+        [`${listClass}-item-hidden`]: pickerStatus.hidden
       }"
     >
       <slot name="upload">
@@ -164,7 +167,7 @@
             :class="{
               [$c('button')]: true,
               [$c('uploader-input-label-media')]: true,
-              [$c('disabled')]: disabled
+              [$c('disabled')]: pickerStatus.disabled
             }"
             :tabindex="disabled ? null : 0"
             :ui="uiParts.media"
@@ -185,7 +188,7 @@
             <veui-uploader-controls
               :items="getMediaEntries()"
               :expanded.sync="expandedEntryDropdown"
-              :disabled="disabled"
+              :disabled="pickerStatus.disabled"
               show-label
               is-entry
               @click="handleMediaEntry"
@@ -246,6 +249,13 @@ export default {
   computed: {
     listClass () {
       return this.$c('uploader-list-media')
+    },
+    pickerStatus () {
+      const isTop = this.pickerPosition === 'top'
+      return {
+        disabled: this.disabled || (isTop && !this.addable),
+        hidden: !this.disabled && !this.addable && !isTop
+      }
     }
   },
   methods: {
@@ -333,6 +343,9 @@ export default {
       }
     },
     getIconName (type) {
+      if (this.pickerIcon) {
+        return this.pickerIcon
+      }
       switch (type) {
         case 'image':
           return this.icons.addImage
@@ -345,6 +358,9 @@ export default {
       return null
     },
     getIconText (type) {
+      if (this.pickerLabel) {
+        return this.pickerLabel
+      }
       return this.t(`@uploader.upload${upperFirst(type)}`)
     }
   }
