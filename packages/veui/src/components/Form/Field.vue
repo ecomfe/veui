@@ -7,7 +7,8 @@
     [$c('field-abstract')]: realAbstract,
     [$c('field-no-label')]: !realAbstract && !label && !$slots.label,
     [$c('field-required')]: isRequired,
-    [$c(`field-label-${form.labelPosition()}`)]: true
+    [$c(`field-label-${labelPosition}`)]: true,
+    [$c(`field-help-${helpPosition}`)]: true
   }"
 >
   <div :class="$c('field-wrap')">
@@ -30,16 +31,33 @@
         </veui-popover>
       </div>
       <veui-message
-        v-if="(help || $scopedSlots.help) && realHelpPosition === 'top'"
+        v-if="
+          (help || $scopedSlots.help) &&
+            helpPosition === 'top' &&
+            labelPosition === 'top'
+        "
         :ui="uiParts.message"
         status="aux"
         display="simple"
-        :class="$c(`field-help-content-${realHelpPosition}`)"
+        :class="$c(`field-help-content-${helpPosition}`)"
       >
         <slot name="help">{{ help }}</slot>
       </veui-message>
     </div>
     <div :class="$c('field-main')">
+      <veui-message
+        v-if="
+          (help || $scopedSlots.help) &&
+            helpPosition === 'top' &&
+            labelPosition === 'side'
+        "
+        :ui="uiParts.message"
+        status="aux"
+        display="simple"
+        :class="$c(`field-help-content-${helpPosition}`)"
+      >
+        <slot name="help">{{ help }}</slot>
+      </veui-message>
       <div :class="$c('field-content')">
         <slot
           :listeners="interactiveListeners"
@@ -77,11 +95,11 @@
           </template>
         </template>
         <veui-message
-          v-if="(help || $scopedSlots.help) && realHelpPosition === 'bottom'"
+          v-if="(help || $scopedSlots.help) && helpPosition === 'bottom'"
           :ui="uiParts.message"
           status="aux"
           display="simple"
-          :class="$c(`field-help-content-${realHelpPosition}`)"
+          :class="$c(`field-help-content-${helpPosition}`)"
         >
           <slot name="help">{{ help }}</slot>
         </veui-message>
@@ -89,11 +107,11 @@
     </div>
   </div>
   <veui-message
-    v-if="(help || $scopedSlots.help) && realHelpPosition === 'side'"
+    v-if="(help || $scopedSlots.help) && helpPosition === 'side'"
     :ui="uiParts.message"
     status="aux"
     display="simple"
-    :class="$c(`field-help-content-${realHelpPosition}`)"
+    :class="$c(`field-help-content-${helpPosition}`)"
   >
     <slot name="help">{{ help }}</slot>
   </veui-message>
@@ -253,12 +271,8 @@ export default {
         (!!this.form && this.form.isReadonly())
       )
     },
-    realHelpPosition () {
-      const topLabel = this.form && this.form.labelPosition() === 'top'
-      if (!topLabel && this.helpPosition === 'top') {
-        return 'side'
-      }
-      return this.helpPosition
+    labelPosition () {
+      return this.form.labelPosition()
     },
     realValidityDisplay () {
       return this.validityDisplay || this.config['field.validityDisplay']

@@ -16,6 +16,7 @@ type Props = {
   afterValidate?: ValidiateFn
   disabled?: boolean
   readonly?: boolean
+  labelPosition?: 'side' | 'top'
   data?: Record<any, unknown>
 }
 

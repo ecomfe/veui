@@ -95,6 +95,18 @@
     .@{veui-prefix}-label {
       line-height: dls-even(dls-line-height(@dls-line-height-1, @font-size));
     }
+
+    &.@{veui-prefix}-field-label-top .@{veui-prefix}-field-help-content-side {
+      height: @min-height;
+    }
+
+    .@{veui-prefix}-field-main > .@{veui-prefix}-field-help-content-top {
+      margin-bottom: @dls-form-field-message-spacing;
+      margin-top: calc(
+        @min-height / 2 -
+          dls-even(dls-line-height(@dls-line-height-1, @dls-font-size-0)) / 2
+      );
+    }
   }
 
   &[ui~="l"] {
@@ -113,24 +125,8 @@
     .make-ui(@dls-font-size-0, @dls-height-xs);
   }
 
-  &-label-top > &-help-content-side {
-    align-self: flex-end;
-  }
-
-  &-label-top[ui~="m"] > &-help-content-side {
-    height: @dls-height-m;
-  }
-
-  &-label-top[ui~="l"] > &-help-content-side {
-    height: @dls-height-l;
-  }
-
-  &-label-top[ui~="s"] > &-help-content-side {
-    height: @dls-height-s;
-  }
-
-  &-label-top[ui~="xs"] > &-help-content-side {
-    height: @dls-height-xs;
+  &-main > &-help-content-top {
+    margin-bottom: @dls-form-field-message-spacing;
   }
 
   &-label-top > &-wrap > &-label {
