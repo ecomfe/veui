@@ -45,7 +45,8 @@ ui.defaults(
       control: 'icon m',
       entry: 'text',
       preview: 'auto',
-      media: 'basic'
+      media: 'basic',
+      message: 's'
     }
   },
   'uploader'

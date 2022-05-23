@@ -70,6 +70,7 @@ import warn from '../../utils/warn'
 import { addOnceEventListener } from '../../utils/dom'
 import { isSupportFileListContructor } from '../../utils/file'
 import Lightbox from '../Lightbox'
+import Icon from '../Icon'
 import FileUploader from './_FileUploader'
 import MediaUploader from './_MediaUploader'
 import {
@@ -224,6 +225,8 @@ export default {
         return includes(['before', 'after', 'none'], value)
       }
     },
+    pickerLabel: String,
+    pickerIcon: Icon.props.name,
     validityDisplay: {
       type: String,
       default: 'side',
