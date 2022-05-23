@@ -23,7 +23,7 @@ type Props = {
   readonly?: boolean
   rules?: string | Array<string | RuleItem>
   help?: string
-  helpPosition?: 'bottom' | 'side'
+  helpPosition?: 'bottom' | 'side' | 'top'
   abstract?: boolean
   withholdValidity?: boolean
   validityDisplay?: 'normal' | 'simple'
