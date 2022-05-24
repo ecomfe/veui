@@ -23,10 +23,10 @@
       role="search"
       :aria-haspopup="inputPopup"
       :aria-owns="inputPopup ? dropdownId : null"
+      v-on="listeners"
       @input="handleInput"
       @focus="handleInputFocus"
       @keydown="handleInputKeydown"
-      @clear="handleClear"
     >
       <veui-button
         v-if="!isStrong"
@@ -107,10 +107,10 @@
                   <template v-for="({ text, matched }, index) in parts">
                     <mark
                       v-if="matched"
-                      :key="`${idx}-${index}`"
+                      :key="`m${idx}-${index}`"
                       :class="$c('option-matched')"
                     >{{ text }}</mark>
-                    <span v-else :key="`${idx}-${index}`">{{ text }}</span>
+                    <span v-else :key="`s${idx}-${index}`">{{ text }}</span>
                   </template>
                   <span
                     v-if="idx < option.matches.length - 1"
@@ -145,7 +145,7 @@ import OptionGroup from './OptionGroup'
 import focusable from '../mixins/focusable'
 import { useKeySelect } from '../mixins/key-select'
 import useControllable from '../mixins/controllable'
-import { pick, without, includes, map } from 'lodash'
+import { pick, omit, without, includes, map } from 'lodash'
 import '../common/global'
 
 const SHARED_PROPS = [
@@ -231,6 +231,9 @@ export default {
   computed: {
     attrs () {
       return pick(this, ['ui', ...without(SHARED_PROPS, 'value')])
+    },
+    listeners () {
+      return omit(this.$listeners, ['suggest', 'select', 'search'])
     },
     isStrong () {
       return this.uiProps.style === 'strong'
@@ -391,9 +394,6 @@ export default {
         this.keyword = this.realValue
         this.commit('expanded', true)
       }
-    },
-    handleClear () {
-      this.$emit('clear')
     }
   }
 }

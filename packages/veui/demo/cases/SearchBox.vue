@@ -16,8 +16,9 @@
           '--dls-dropdown-max-display-items': 8
         }"
         @input="handleSuggest('4', $event)"
-        @search="log($event)"
+        @search="log('search', $event)"
         @select="log('select', $event)"
+        @keydown="log('keydown', $event)"
       />
       <veui-search-box
         clearable
@@ -26,8 +27,9 @@
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
-        @search="log($event)"
+        @search="log('search', $event)"
         @select="log('select', $event)"
+        @keydown="log('keydown', $event)"
       />
     </section>
     <section>
@@ -38,8 +40,9 @@
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
-        @search="log($event)"
+        @search="log('search', $event)"
         @select="log('select', $event)"
+        @keydown="log('keydown', $event)"
       />
       <veui-search-box
         clearable
@@ -48,8 +51,9 @@
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
-        @search="log($event)"
+        @search="log('search', $event)"
         @select="log('select', $event)"
+        @keydown="log('keydown', $event)"
       />
     </section>
     <section>
@@ -60,8 +64,9 @@
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
-        @search="log($event)"
+        @search="log('search', $event)"
         @select="log('select', $event)"
+        @keydown="log('keydown', $event)"
       />
       <veui-search-box
         clearable
@@ -70,8 +75,9 @@
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
-        @search="log($event)"
+        @search="log('search', $event)"
         @select="log('select', $event)"
+        @keydown="log('keydown', $event)"
       />
     </section>
     <section>
@@ -82,8 +88,9 @@
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
-        @search="log($event)"
+        @search="log('search', $event)"
         @select="log('select', $event)"
+        @keydown="log('keydown', $event)"
       />
       <veui-search-box
         clearable
@@ -92,8 +99,9 @@
         :placeholder="placeholder"
         :suggestions="suggestions4"
         @input="handleSuggest('4', $event)"
-        @search="log($event)"
+        @search="log('search', $event)"
         @select="log('select', $event)"
+        @keydown="log('keydown', $event)"
       />
     </section>
   </section>
