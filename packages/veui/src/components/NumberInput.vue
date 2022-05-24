@@ -8,7 +8,6 @@
   :value="realInputValue"
   :ui="realUi"
   type="text"
-  inputmode="numeric"
   v-bind="attrs"
   :class="{
     [$c('number-input')]: true,
@@ -176,6 +175,7 @@ export default {
     },
     attrs () {
       return {
+        inputmode: 'decimal',
         ...this.$attrs,
         name: this.realName,
         disabled: this.realDisabled,
