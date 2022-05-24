@@ -585,4 +585,30 @@ describe('components/SearchBox', function () {
     expect(input.element.value).to.equal('ok')
     wrapper.destroy()
   })
+
+  it('should pass event handlers to inputs', (done) => {
+    let wrapper = mount(
+      {
+        template: `
+        <veui-search-box
+          @keydown.enter="handleEnter"
+        />`,
+        components: {
+          'veui-search-box': SearchBox
+        },
+        methods: {
+          handleEnter () {
+            wrapper.destroy()
+            done()
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    wrapper.find('input').trigger('keydown', { key: 'Enter' })
+  })
 })
