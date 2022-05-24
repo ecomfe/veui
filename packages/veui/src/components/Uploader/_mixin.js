@@ -9,6 +9,7 @@ export const sharedProps = [
   'uiProps',
   'uiParts',
   'entries',
+  'order',
   'pickerPosition',
   'pickerLabel',
   'pickerIcon',

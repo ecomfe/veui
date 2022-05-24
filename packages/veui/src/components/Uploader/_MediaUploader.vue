@@ -15,7 +15,8 @@
       :class="{
         [`${listClass}-item`]: true,
         [`${listClass}-item-failure`]: file.isFailure,
-        [`${listClass}-help-${helpPosition}`]: !multiple && $scopedSlots.desc,
+        [`${listClass}-help-${helpPosition}`]:
+          !multiple && ($scopedSlots.help || $scopedSlots.desc),
         [`${listClass}-item-dropdown-open`]: expandedControlDropdowns[index]
       }"
       :style="{
@@ -50,7 +51,25 @@
               :ref="`fileItem${index}`"
               :class="`${listClass}-container ${listClass}-container-failure`"
             >
+              <template v-if="canViewFile(file)">
+                <img
+                  v-if="file.type === 'video' && file.poster"
+                  :src="file.poster"
+                  :alt="file.alt"
+                  :class="$c('uploader-list-media-container-media')"
+                  :draggable="!sortable"
+                >
+                <veui-uploader-file-viewer
+                  v-else-if="file.type === 'video' || file.type === 'image'"
+                  :tag="file.type === 'image' ? 'img' : 'video'"
+                  :src="file.src || file.native"
+                  :alt="file.alt"
+                  :class="$c('uploader-list-media-container-media')"
+                  :draggable="!sortable"
+                />
+              </template>
               <div
+                v-else
                 :class="{
                   [$c('uploader-input-label-media')]: true
                 }"
@@ -96,31 +115,21 @@
             <div
               :class="`${listClass}-container ${listClass}-container-file`"
             >
-              <template v-if="file.type === 'image'">
-                <veui-uploader-file-viewer
-                  tag="img"
-                  :src="file.src || file.native"
-                  :alt="file.alt"
-                  :class="$c('uploader-list-media-container-media')"
-                  :draggable="!sortable"
-                />
-              </template>
-              <template v-else-if="file.type === 'video'">
-                <img
-                  v-if="file.poster"
-                  :src="file.poster"
-                  :alt="file.alt"
-                  :class="$c('uploader-list-media-container-media')"
-                  :draggable="!sortable"
-                >
-                <veui-uploader-file-viewer
-                  v-else
-                  tag="video"
-                  :src="file.src || file.native"
-                  :class="$c('uploader-list-media-container-media')"
-                  :draggable="!sortable"
-                />
-              </template>
+              <img
+                v-if="file.type === 'video' && file.poster"
+                :src="file.poster"
+                :alt="file.alt"
+                :class="$c('uploader-list-media-container-media')"
+                :draggable="!sortable"
+              >
+              <veui-uploader-file-viewer
+                v-else-if="file.type === 'video' || file.type === 'image'"
+                :tag="file.type === 'image' ? 'img' : 'video'"
+                :src="file.src || file.native"
+                :alt="file.alt"
+                :class="$c('uploader-list-media-container-media')"
+                :draggable="!sortable"
+              />
 
               <veui-uploader-controls
                 :class="`${listClass}-mask`"
@@ -196,7 +205,9 @@
           </div>
         </div>
         <span
-          v-if="addable && ($scopedSlots.desc || $scopedSlots.help)"
+          v-if="
+            !pickerStatus.hidden && ($scopedSlots.desc || $scopedSlots.help)
+          "
           :class="$c('uploader-help')"
         >
           <slot name="desc"/>
@@ -219,7 +230,12 @@ import Popover from '../Popover'
 import Message from '../Message'
 import Controls from './_Controls'
 import FileViewer from './_FileViewer'
-import { STATUS } from './_helper'
+import {
+  STATUS,
+  pickerOrderMatch,
+  PickerPosition,
+  HelpPosition
+} from './_helper'
 
 const INTERNAL_ACTION_EVENTS = ['add', 'preview', 'remove', 'replace']
 
@@ -251,10 +267,15 @@ export default {
       return this.$c('uploader-list-media')
     },
     pickerStatus () {
-      const isTop = this.pickerPosition === 'top'
+      const { pickerPosition, order, disabled, addable, helpPosition } = this
+      let hidden =
+        !disabled && !addable && pickerOrderMatch(pickerPosition, order)
+      if (hidden && pickerPosition === PickerPosition.BEFORE) {
+        hidden = helpPosition !== HelpPosition.SIDE
+      }
       return {
-        disabled: this.disabled || (isTop && !this.addable),
-        hidden: !this.disabled && !this.addable && !isTop
+        disabled: disabled || !addable,
+        hidden: hidden
       }
     }
   },
@@ -334,6 +355,13 @@ export default {
       } else {
         this.$emit('custom', actionName, index)
       }
+    },
+    canViewFile ({ type, poster, src, native }) {
+      const isVideo = type === 'video'
+      if (type === 'image' || isVideo) {
+        return (isVideo && poster) || src || native
+      }
+      return false
     },
     handleMediaEntry (entryName) {
       if (includes(INTERNAL_ACTION_EVENTS, entryName)) {

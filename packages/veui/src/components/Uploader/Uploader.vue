@@ -77,6 +77,8 @@ import {
   STATUS,
   ORDERS,
   ERRORS,
+  PickerPosition,
+  HelpPosition,
   getFileMediaType,
   UploaderFile,
   getUploadRequest
@@ -222,7 +224,7 @@ export default {
     pickerPosition: {
       type: String,
       validator (value) {
-        return includes(['before', 'after', 'none'], value)
+        return includes(values(PickerPosition), value)
       }
     },
     pickerLabel: String,
@@ -239,7 +241,7 @@ export default {
       type: String,
       default: 'side',
       validator (value) {
-        return includes(['side', 'bottom'], value)
+        return includes(values(HelpPosition), value)
       }
     },
     entries: Function,
@@ -350,6 +352,7 @@ export default {
       let options = pick(this, sharedProps)
       options.pickerPosition = this.realPickerPosition
       options.multiple = this.realMultiple
+      options.order = this.realOrder
       return options
     },
     preferType () {
@@ -574,6 +577,9 @@ export default {
           : this.pickFiles
       doPick(restCount > 1)
         .then((files) => {
+          if (files && !Array.isArray(files)) {
+            files = [files]
+          }
           if (!files.length) {
             return
           }

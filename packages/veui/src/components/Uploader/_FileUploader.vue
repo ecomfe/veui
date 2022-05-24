@@ -1,6 +1,11 @@
 <template>
 <div>
-  <div :class="$c('uploader-button-container')">
+  <div
+    :class="{
+      [$c('uploader-button-container')]: true,
+      [$c(`uploader-file-help-${helpPosition}`)]: true
+    }"
+  >
     <veui-button
       :ui="realUi"
       :disabled="!addable"
