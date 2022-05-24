@@ -79,6 +79,7 @@
         :ui="uiParts.search"
         :placeholder="placeholder"
         clearable
+        @keydown.enter="handleEnter"
       />
       <div
         v-if="isSearching && !filteredSuggestions.length"
@@ -192,14 +193,6 @@ export default {
           if (this.searchable) {
             this.close()
           }
-        },
-        enter () {
-          if (this.searchable) {
-            let elem = this.getCurrentActiveElement()
-            if (elem) {
-              elem.click()
-            }
-          }
         }
       }
     }),
@@ -294,6 +287,14 @@ export default {
       this.commit('expanded', false)
       if (value != null) {
         this.$emit('click', value)
+      }
+    },
+    handleEnter () {
+      if (this.searchable) {
+        let elem = this.getCurrentActiveElement()
+        if (elem) {
+          elem.click()
+        }
       }
     },
     focus () {
