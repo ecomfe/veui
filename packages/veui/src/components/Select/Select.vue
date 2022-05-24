@@ -603,12 +603,12 @@ export default {
         </div>
       ) : null
 
-    let renderGroup = (options, children, key) => {
+    let renderGroup = (options, children, renderFor) => {
       // overlay-class={this.overlayClass} 先不透传吧
       return (
-        <SelectProvider value={key === 'data'}>
+        <SelectProvider value={renderFor}>
           <OptionGroup
-            key={key}
+            key={renderFor}
             v-show={!!options}
             hidden={!options}
             aria-hidden={!options}

@@ -11,7 +11,8 @@ export default {
   },
   computed: getTypedAncestorTracker('menu').computed,
   created () {
-    if (!this.menu || !this.renderForData) {
+    // 只有 Select 是两次渲染 OptionGroup，仅仅跳过 Select 而已
+    if (!this.menu || this.renderFor === 'render') {
       return
     }
     let index = getIndexOfType(this, 'menu')

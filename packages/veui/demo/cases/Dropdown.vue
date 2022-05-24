@@ -186,7 +186,7 @@
           <veui-option @click="log('save')">💾保存</veui-option>
           <veui-option value="publish">✅发布</veui-option>
         </veui-option-group>
-        <veui-option-group label="操作" ui="xs">
+        <veui-option-group label="操作" ui="xs" position="popup">
           <veui-option value="undo">⬅️撤消</veui-option>
           <veui-option value="redo">➡️重复</veui-option>
         </veui-option-group>

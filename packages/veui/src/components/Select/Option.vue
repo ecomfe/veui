@@ -1,7 +1,7 @@
 <template>
 <div
   :is="tag"
-  v-if="!renderForData"
+  v-if="renderFor !== 'data'"
   v-show="!hidden"
   :type="tag === 'button' ? 'button' : null"
   :tabindex="hidden ? -1 : false"
@@ -37,13 +37,7 @@ import '../../common/global'
 
 export default {
   name: 'veui-option',
-  mixins: [
-    prefix,
-    ui,
-    menuItem,
-    selectItem,
-    useSelectConsumer('renderForData')
-  ],
+  mixins: [prefix, ui, menuItem, selectItem, useSelectConsumer('renderFor')],
   props: {
     label: {
       type: [String, Number]
@@ -76,7 +70,7 @@ export default {
     }
   },
   mounted () {
-    if (!this.renderForData && this.selected && !this.select.multiple) {
+    if (this.renderFor !== 'data' && this.selected && !this.select.multiple) {
       this.select.$once('afteropen', this.scrollIntoView)
       this.menu.$once('afteropen', this.scrollIntoView)
     }

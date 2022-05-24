@@ -1,5 +1,7 @@
 import Dropdown from '@/components/Dropdown'
 import Button from '@/components/Button'
+import Option from '@/components/Option'
+import OptionGroup from '@/components/OptionGroup'
 import { expectDisabled, mount, wait } from '../../../utils'
 
 let datasource = [
@@ -483,6 +485,39 @@ describe('components/Dropdown', function () {
     await vm.$nextTick()
     expect(vm.val).to.equal('male')
 
+    wrapper.destroy()
+  })
+
+  it('should render popup dropdown correctly', async () => {
+    let wrapper = mount(
+      {
+        template: `
+        <veui-dropdown ui="text xs" label="操作">
+          <veui-option-group label="操作" ui="xs" position="popup">
+            <veui-option value="undo">⬅️撤消</veui-option>
+            <veui-option value="redo">➡️重复</veui-option>
+          </veui-option-group>
+        </veui-dropdown>`,
+        components: {
+          'veui-dropdown': Dropdown,
+          'veui-option': Option,
+          'veui-option-group': OptionGroup
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+    wrapper.find('.veui-button').trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.findAll('.veui-option').length).to.equal(0)
+    wrapper.find('.veui-option-group-button').trigger('click')
+    await vm.$nextTick()
+    expect(wrapper.findAll('.veui-option').length).to.equal(2)
     wrapper.destroy()
   })
 })
