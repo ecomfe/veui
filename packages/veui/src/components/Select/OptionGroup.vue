@@ -46,7 +46,7 @@ const OptionGroup = {
     selectItem,
     overlay,
     keySelect,
-    useSelectConsumer('renderForData'),
+    useSelectConsumer('renderFor'),
     useControllable([
       {
         prop: 'expanded',
@@ -149,13 +149,10 @@ const OptionGroup = {
       let overlay = getTypedAncestor(this, 'overlay')
       return overlay ? overlay.$refs.box : null
     },
-    // items -> options 的影响：
-    // 应该只在渲染模式下这个属性才有意义，渲染模式下数据数据应该来自 options props 而非 items
     canPopOut () {
       return !!(
+        this.renderFor !== 'data' &&
         this.position === 'popup' &&
-        this.options &&
-        this.options.length &&
         this.hasLabelContent
       )
     }
@@ -325,7 +322,7 @@ const OptionGroup = {
       })
       : []
 
-    if (this.renderForData) {
+    if (this.renderFor === 'data') {
       // default 是内联的标签
       // content 是 options prop 渲染出来的，是不是应该直接把options往上注册即可？
       return (
@@ -343,6 +340,11 @@ const OptionGroup = {
       this.hasLabelContent && this.componentAttrs.option
         ? this.getOptionTag(this.componentAttrs.option)
         : 'div'
+
+    const hasContent = !!(
+      (this.options && this.options.length) ||
+      this.$slots.default
+    )
 
     return (
       <div
@@ -405,7 +407,7 @@ const OptionGroup = {
             ) : null}
           </LabelTag>
         ) : null}
-        {this.canPopOut ? (
+        {this.canPopOut && hasContent ? (
           <Overlay
             ref="overlay"
             target={this.overlayTarget}
