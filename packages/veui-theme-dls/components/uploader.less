@@ -290,8 +290,19 @@
     }
   }
 
+  & &-file-help-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .@{veui-prefix}-uploader-help {
+      margin-top: @dls-uploader-helper-text-spacing-y;
+      margin-left: 0;
+    }
+  }
+
   &-help {
     color: @dls-uploader-helper-text-font-color;
+    font-size: @dls-uploader-font-size-s;
   }
 
   &-validities,
@@ -324,10 +335,6 @@
     margin-left: @dls-uploader-helper-text-spacing-x;
     height: @dls-uploader-media-height-m;
     max-width: @dls-uploader-helper-text-max-width-media-m;
-  }
-
-  &-list-media-help-bottom &-help {
-    font-size: @dls-uploader-font-size-s;
   }
 
   &-entries-container {

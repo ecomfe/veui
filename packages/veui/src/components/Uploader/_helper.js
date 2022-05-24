@@ -32,6 +32,18 @@ export const ORDERS = {
   APPEND: 'append'
 }
 
+export const PickerPosition = {
+  BEFORE: 'before',
+  AFTER: 'after',
+  NONE: 'none',
+  TOP: 'top'
+}
+
+export const HelpPosition = {
+  SIDE: 'side',
+  BOTTOM: 'bottom'
+}
+
 export const PUBLIC_FILE_PROPS = [
   'name',
   'type',
@@ -46,6 +58,13 @@ export const ERRORS = {
   SIZE_INVALID: 'size',
   TOO_MANY_FILES: 'count',
   CUSTOM_INVALID: 'custom'
+}
+
+export function pickerOrderMatch (pickerPos, order) {
+  return (
+    (pickerPos === PickerPosition.BEFORE && order === ORDERS.PREPEND) ||
+    (pickerPos === PickerPosition.AFTER && order === ORDERS.APPEND)
+  )
 }
 
 export function getFileMediaType (file, mediaExtensions) {

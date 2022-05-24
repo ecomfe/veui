@@ -42,6 +42,14 @@
       />
     </div>
     <div>
+      Order:
+      <veui-radio-button-group
+        v-model="order"
+        ui="s"
+        :items="availableOrders"
+      />
+    </div>
+    <div>
       validityDisplay:
       <veui-radio-button-group
         v-model="validityDisplay"
@@ -130,6 +138,7 @@
         :validity-display="validityDisplay"
         key-field="name"
         :help-position="helpPosition"
+        :order="order"
         @success="handleUploaderEvent('success', ...arguments)"
         @failure="handleUploaderEvent('failure', ...arguments)"
         @invalid="handleUploaderEvent('invalid', ...arguments)"
@@ -284,7 +293,7 @@ const mapper = (value) => ({ label: value, value })
 const remoteFakeUploadTarget =
   'https://app.fakejson.com/q/ELymQ7xh?token=AWFkjMICPSAB_bO_z-Lnog'
 const remoteUploadTarget = 'https://kylehe.me/veui/upload/xhr'
-const localUploadTarget = '/upload/xhr'
+const localUploadTarget = '/upload/xhr?force=success'
 const localIframeUploadTarget = '/upload/iframe'
 const availableActions = [
   { label: localUploadTarget, value: localUploadTarget },
@@ -316,6 +325,7 @@ const availablePickerPositions = ['before', 'after', 'top', 'none'].map(mapper)
 const avaliableMaxCounts = [1, 2, 5, 10].map(mapper)
 const availableDisplays = ['popup', 'inline'].map(mapper)
 const availableHelpPositions = ['side', 'bottom'].map(mapper)
+const availableOrders = ['append', 'prepend'].map(mapper)
 
 const statusIcons = {
   [Uploader.status.PENDING]: '❔',
@@ -362,9 +372,11 @@ export default {
       availableRequestIframeModes,
       availablePickerPositions,
       availableHelpPositions,
+      availableOrders,
       helpPosition: 'side',
       removed: false,
       inDialog: false,
+      order: 'append',
 
       enabledCustoms: ['#file-after'],
       tooltipOpen: false,

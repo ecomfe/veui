@@ -50,6 +50,15 @@ type FileInfo = LooseObject<{
   status: string
 }>
 
+type PickedFile = {
+  name: string
+  type: string
+  src: string
+  poster?: string
+  alt?: string
+  size?: number
+}
+
 type WithKeyField<
   T,
   KeyField extends string,
@@ -89,11 +98,17 @@ type Props<T extends Item, KeyField extends string> = (
   autoupload?: boolean
   order?: 'prepend' | 'append'
   sortable?: boolean
-  pickerPosition?: 'before' | 'after'
+  pickerPosition?: 'before' | 'after' | 'none' | 'top'
   keyField?: KeyField
   convertResponse?: ((data: unknown) => UploadResult) &
     ((data: null | undefined, err: Error) => UploadResult)
   upload?: (file: File, callbacks: CustomCallbacks) => CancelFn
+  pick?: (restCount: number) => Promise<PickedFile[] | PickedFile>
+  validityDisplay?: 'popup' | 'inline'
+  help?: string
+  helpPosition?: 'side' | 'bottom'
+  pickerLabel?: string
+  pickerIcon?: string | Record<keyof any, unknown>
   controls?: (
     file: FileInfo,
     controls: Array<ControlItem>
@@ -129,9 +144,16 @@ type Mixins = [UiMixin, InputMixin]
 type SlotProps = FileInfo & { index: number }
 
 type Slots = {
+  /**
+   * @deprecated
+   */
   'button-label'(): unknown
   upload(): unknown
+  /**
+   * @deprecated
+   */
   desc(): unknown
+  help(): unknown
   file(slotProps: SlotProps): unknown
   'file-before'(slotProps: SlotProps): unknown
   'file-after'(slotProps: SlotProps): unknown
