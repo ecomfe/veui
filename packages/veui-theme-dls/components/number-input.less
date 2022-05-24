@@ -127,6 +127,7 @@
   }
 
   &[ui~="strong"] {
+    overflow: hidden;
     padding: 0;
 
     .@{veui-prefix}-input {
@@ -138,18 +139,14 @@
       &-after {
         position: relative;
         z-index: 1;
-        margin-top: -1px;
         padding: 0;
-        border-radius: inherit;
       }
 
       &-before {
         margin-right: @dls-input-padding;
-        margin-left: -1px;
       }
 
       &-after {
-        margin-right: -1px;
         margin-left: @dls-input-padding;
       }
     }
@@ -157,33 +154,24 @@
     &[ui~="xs"] {
       width: @dls-number-input-width-strong-xs;
 
-      .@{veui-prefix}-input {
-        &-before,
-        &-after {
-          .size(@dls-number-input-height-xs);
-        }
+      .@{veui-prefix}-number-input-step {
+        .size(dls-sum(@dls-number-input-height-xs, -1px), 100%);
       }
     }
 
     &[ui~="s"] {
       width: @dls-number-input-width-strong-s;
 
-      .@{veui-prefix}-input {
-        &-before,
-        &-after {
-          .size(@dls-number-input-height-s);
-        }
+      .@{veui-prefix}-number-input-step {
+        .size(dls-sum(@dls-number-input-height-s, -1px), 100%);
       }
     }
 
     &[ui~="m"] {
       width: @dls-number-input-width-strong-m;
 
-      .@{veui-prefix}-input {
-        &-before,
-        &-after {
-          .size(@dls-number-input-height-m);
-        }
+      .@{veui-prefix}-number-input-step {
+        .size(dls-sum(@dls-number-input-height-m, -1px), 100%);
       }
     }
 
@@ -191,18 +179,13 @@
       &-step {
         padding: 0;
         border-style: none;
-        .size(calc(100% - 1px), calc(100% - 2px));
 
         &-down {
           border-right-style: solid;
-          .border-right-radius(0);
-          margin-left: 1px;
         }
 
         &-up {
           border-left-style: solid;
-          .border-left-radius(0);
-          margin-right: 1px;
         }
 
         &[data-focus-visible-added] {
