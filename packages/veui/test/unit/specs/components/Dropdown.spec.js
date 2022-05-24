@@ -466,11 +466,9 @@ describe('components/Dropdown', function () {
     wrapper.find('.veui-dropdown-button').trigger('click')
 
     await vm.$nextTick()
-    let options = wrapper
-      .find('.test-overlay-class')
-      .find('.veui-dropdown-options')
-    options.trigger('keydown.down', { key: 'Down' })
-    options.trigger('keydown.enter', { key: 'Enter' })
+    const input = wrapper.find('input')
+    input.trigger('keydown.down', { key: 'Down' })
+    input.trigger('keydown.enter', { key: 'Enter' })
 
     await vm.$nextTick()
     expect(vm.val).to.equal('male')
@@ -478,7 +476,7 @@ describe('components/Dropdown', function () {
     vm.searchable = false
     wrapper.find('.veui-dropdown-button').trigger('click')
     await vm.$nextTick()
-    options = wrapper.find('.test-overlay-class').find('.veui-dropdown-options')
+    const options = wrapper.find('.veui-dropdown-options')
     options.trigger('keydown.down', { key: 'Down' })
     options.trigger('keydown.enter', { key: 'Enter' })
 

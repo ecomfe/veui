@@ -7,7 +7,7 @@ import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
 import menuItem from '../../mixins/menu-item'
 import selectItem from '../../mixins/select-item'
-import keySelect from '../../mixins/key-select'
+import { useKeySelect } from '../../mixins/key-select'
 import useControllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
 import '../../common/global'
@@ -45,7 +45,10 @@ const OptionGroup = {
     menuItem,
     selectItem,
     overlay,
-    keySelect,
+    useKeySelect({
+      useNativeFocus: true,
+      expandedKey: 'realExpanded'
+    }),
     useSelectConsumer('renderFor'),
     useControllable([
       {
