@@ -65,7 +65,7 @@
               <veui-button
                 v-for="action in getFileActions(file)"
                 :key="action.name"
-                :ui="uiParts.control"
+                :ui="uiParts.action"
                 :disabled="disabled"
                 @click="handleItemAction(index, action)"
               >
