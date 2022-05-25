@@ -231,7 +231,7 @@ export default {
     pickerIcon: Icon.props.name,
     validityDisplay: {
       type: String,
-      default: 'side',
+      default: 'popup',
       validator (value) {
         return includes(['popup', 'inline'], value)
       }

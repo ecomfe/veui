@@ -40,7 +40,7 @@ ui.defaults(
       }
     },
     parts: {
-      remove: 'icon aux',
+      action: 'icon aux',
       progress: 's',
       control: 'icon m',
       entry: 'text',

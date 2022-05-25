@@ -1063,6 +1063,38 @@ describe('components/Uploader', function () {
     expect(vm.fileList[0].isSuccess, '再删除上传中的').to.equal(true)
     wrapper.destroy()
   })
+
+  it('should support validityDisplay prop correctly.', async function () {
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        validityDisplay: 'popup',
+        type: 'image',
+        action: '/upload/xhr?force=fail&latency=0'
+      }
+    })
+
+    let mockFile = createFile('a.jpg', 'image/jpg', 128 * 1024)
+    let promise = waitForEvents(wrapper.vm, ['failure', 'statuschange'])
+    wrapper.vm.addFiles([mockFile])
+    await promise
+    await wait(0)
+
+    wrapper
+      .find('.veui-uploader-list-media-container-failure')
+      .trigger('mouseenter')
+    await wait(0)
+
+    const msg = wrapper.find('.veui-popover-box').text().trim()
+    expect(msg.length > 0).to.equal(true)
+
+    wrapper.setProps({ validityDisplay: 'inline' })
+    await wait(0)
+    const newMsg = wrapper.find('.veui-uploader-validities').text().trim()
+    expect(newMsg).to.equal(msg)
+    wrapper.destroy()
+  })
 })
 
 function waitForEvent (vm, event) {
