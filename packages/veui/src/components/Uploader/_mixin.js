@@ -17,7 +17,8 @@ export const sharedProps = [
   'validityDisplay',
   'help',
   'helpPosition',
-  'multiple'
+  'multiple',
+  'maxCount'
 ]
 
 const computed = sharedProps.reduce((ret, key) => {

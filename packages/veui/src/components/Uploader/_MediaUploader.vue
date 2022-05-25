@@ -16,7 +16,8 @@
         [`${listClass}-item`]: true,
         [`${listClass}-item-failure`]: file.isFailure,
         [`${listClass}-help-${helpPosition}`]:
-          !multiple && ($scopedSlots.help || $scopedSlots.desc),
+          (!multiple || (appendHelp && index === files.length - 1)) &&
+          ($scopedSlots.help || $scopedSlots.desc),
         [`${listClass}-item-dropdown-open`]: expandedControlDropdowns[index]
       }"
       :style="{
@@ -87,6 +88,7 @@
                 </slot>
               </div>
               <veui-uploader-controls
+                v-if="!disabled"
                 :class="`${listClass}-mask`"
                 :items="getMediaControls(file)"
                 :expanded.sync="expandedControlDropdowns[index]"
@@ -144,7 +146,10 @@
         </template>
       </div>
       <span
-        v-if="!multiple && ($scopedSlots.desc || $scopedSlots.help)"
+        v-if="
+          (!multiple || (appendHelp && index === files.length - 1)) &&
+            ($scopedSlots.desc || $scopedSlots.help)
+        "
         :class="$c('uploader-help')"
       >
         <slot name="desc"/>
@@ -154,7 +159,7 @@
     <!-- 继续上传按钮 -->
     <li
       v-if="pickerPosition !== 'none'"
-      key="input"
+      key="__input"
       :class="{
         [`${listClass}-item`]: true,
         [`${listClass}-item-upload`]: true,
@@ -180,8 +185,9 @@
             }"
             :tabindex="disabled ? null : 0"
             :ui="uiParts.media"
+            :disabled="pickerStatus.disabled"
             @keydown.enter.space.prevent="handleEnter"
-            @click="$emit('add')"
+            @click="handleAdd"
           >
             <slot name="button-label">
               <veui-icon :name="getIconName(type)"/>
@@ -268,8 +274,7 @@ export default {
     },
     pickerStatus () {
       const { pickerPosition, order, disabled, addable, helpPosition } = this
-      let hidden =
-        !disabled && !addable && pickerOrderMatch(pickerPosition, order)
+      let hidden = !addable && pickerOrderMatch(pickerPosition, order)
       if (hidden && pickerPosition === PickerPosition.BEFORE) {
         hidden = helpPosition !== HelpPosition.SIDE
       }
@@ -277,6 +282,18 @@ export default {
         disabled: disabled || !addable,
         hidden: hidden
       }
+    },
+    appendHelp () {
+      const { multiple, helpPosition, files, maxCount, pickerPosition } = this
+      // 没有入口也要展示 help
+      // 只能是 side
+      // files.length === 1 是为了兼容 maxCount=1 && multiple
+      return (
+        multiple &&
+        (helpPosition === HelpPosition.SIDE || files.length === 1) &&
+        files.length >= maxCount &&
+        pickerPosition === PickerPosition.AFTER
+      )
     }
   },
   methods: {
@@ -328,6 +345,11 @@ export default {
           children: normalizeDropdownDatasource(control.children)
         }
       })
+    },
+    handleAdd () {
+      if (!this.pickerStatus.disabled) {
+        this.$emit('add')
+      }
     },
     getMediaEntries () {
       let defaultEntries = []

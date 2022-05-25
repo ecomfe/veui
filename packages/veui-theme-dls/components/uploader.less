@@ -37,11 +37,16 @@
     border-radius: inherit;
 
     padding: 0 @dls-uploader-media-padding-x-m;
-    // 是个按钮，将按钮默认的 before 干掉
+
     .veui-uploader-media-button-text {
       text-align: center;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      overflow: hidden;
     }
 
+    // 是个按钮，将按钮默认的 before 干掉
     &::before {
       display: none;
     }
@@ -65,7 +70,7 @@
 
     &-item {
       position: relative;
-      .veui-transition(transform, opacity);
+      .veui-transition(transform, opacity, margin-right);
     }
 
     &-enter,
@@ -73,8 +78,8 @@
       opacity: 0;
     }
 
-    &-leave-active {
-      position: absolute;
+    &-item&-leave-active {
+      margin-right: -@dls-uploader-media-width-m;
     }
   }
 
@@ -92,13 +97,16 @@
     }
 
     &-container {
-      display: flex;
-      align-items: center;
       position: relative;
       background-color: @dls-uploader-file-item-background-color;
       .veui-transition(background-color);
       padding: @dls-uploader-file-item-padding-y
         @dls-uploader-file-item-padding-x;
+    }
+
+    &-file-content {
+      display: flex;
+      align-items: center;
     }
 
     &-actions {
@@ -122,23 +130,19 @@
       );
     }
 
-    &-container:hover {
-      background-color: @dls-uploader-file-item-background-color-hover;
-    }
-
     &-name {
       .ellipsis();
       margin: 0 @dls-uploader-file-item-action-spacing 0
         @dls-uploader-file-item-label-spacing;
     }
 
-    &-name-failure {
-      color: @dls-uploader-foreground-color-error;
-    }
+    // &-name-failure {
+    //   color: @dls-uploader-foreground-color-error;
+    // }
 
-    .@{veui-prefix}-icon&-file-icon-failure {
-      color: @dls-uploader-foreground-color-error;
-    }
+    // .@{veui-prefix}-icon&-file-icon-failure {
+    //   color: @dls-uploader-foreground-color-error;
+    // }
 
     .@{veui-prefix}-progress {
       .absolute(
@@ -273,13 +277,13 @@
       flex-wrap: wrap;
     }
 
-    &-picker-top &-item-upload {
-      width: 100%;
-    }
-
     .@{veui-prefix}-disabled + .@{veui-prefix}-uploader-entries-container {
       display: none;
     }
+  }
+
+  & &-list-media-picker-top &-list-media-item&-list-media-item-upload {
+    width: 100%;
   }
 
   &-file &-list-item-failure {
@@ -393,6 +397,10 @@
         width: auto;
       }
 
+      &-leave-active {
+        margin-right: -@dls-uploader-media-width-s;
+      }
+
       &-container {
         border-radius: @dls-button-border-radius-s;
         .size(100%, @dls-uploader-media-height-s);
@@ -409,6 +417,8 @@
       &-container-failure {
         .@{veui-prefix}-uploader-list-media-file-name {
           max-width: calc(100% - 2 * @dls-uploader-media-padding-x-s);
+          word-break: break-all;
+          white-space: normal;
         }
       }
     }

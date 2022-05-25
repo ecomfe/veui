@@ -43,45 +43,46 @@
         <slot name="file-before" v-bind="getScopeValue(index)"/>
 
         <div :class="$c('uploader-list-container')">
-          <veui-icon
-            :name="icons.file"
-            :class="{
-              [$c('uploader-list-file-icon')]: true,
-              [$c('uploader-list-file-icon-failure')]: file.isFailure
-            }"
-          />
+          <div :class="$c('uploader-list-file-content')">
+            <veui-icon
+              :name="icons.file"
+              :class="{
+                [$c('uploader-list-file-icon')]: true,
+                [$c('uploader-list-file-icon-failure')]: file.isFailure
+              }"
+            />
 
-          <span
-            :class="{
-              [$c('uploader-list-name')]: true,
-              [$c('uploader-list-name-success')]: file.isSuccess,
-              [$c('uploader-list-name-failure')]: file.isFailure
-            }"
-            :title="file.name"
-          >{{ file.name }}</span>
+            <span
+              :class="{
+                [$c('uploader-list-name')]: true,
+                [$c('uploader-list-name-success')]: file.isSuccess,
+                [$c('uploader-list-name-failure')]: file.isFailure
+              }"
+              :title="file.name"
+            >{{ file.name }}</span>
 
-          <div :class="$c('uploader-list-actions')">
-            <veui-button
-              v-for="action in getFileActions(file)"
-              :key="action.name"
-              :ui="uiParts.control"
-              :disabled="disabled"
-              @click="handleItemAction(index, action)"
-            >
-              <veui-icon :name="action.icon"/>
-            </veui-button>
+            <div :class="$c('uploader-list-actions')">
+              <veui-button
+                v-for="action in getFileActions(file)"
+                :key="action.name"
+                :ui="uiParts.control"
+                :disabled="disabled"
+                @click="handleItemAction(index, action)"
+              >
+                <veui-icon :name="action.icon"/>
+              </veui-button>
+            </div>
           </div>
+          <slot name="file-after" v-bind="getScopeValue(index)"/>
+
+          <veui-message
+            v-if="file.isFailure"
+            :class="$c('uploader-validities')"
+            status="error"
+            display="simple"
+            :ui="uiParts.message"
+          >{{ file.message || t('@uploader.uploadFailure') }}</veui-message>
         </div>
-
-        <slot name="file-after" v-bind="getScopeValue(index)"/>
-
-        <veui-message
-          v-if="file.isFailure"
-          :class="$c('uploader-validities')"
-          status="error"
-          display="simple"
-          :ui="uiParts.message"
-        >{{ file.message || t('@uploader.uploadFailure') }}</veui-message>
 
         <veui-progress
           v-if="file.isUploading"
