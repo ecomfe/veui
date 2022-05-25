@@ -1,4 +1,4 @@
-## 2.7.0 (2022-05-24)
+## 2.7.0 (2022-05-25)
 
 ### 💡 主要变更
 
@@ -6,6 +6,11 @@
 - [+] `Form` 组件新增 `label-position` 属性，支持设置表单项标题显示在上方或侧面。<!-- #Form -->
 - [+] `Field` 组件的 `help-position` 属性新增可选值 `top`，支持设置表单项帮助文本显示在上方。<!-- #Field -->
 - [+] `veui-theme-dls` 新增 `typography.less`，提供“Baidu Number”字体支持。<!-- #veui-theme-dls -->
+- [+] `Uploader` 组件进行了样式升级，新增了 `pick` 属性来自定义选择文件，新增了 `validityDisplay` 属性来支持不同的校验信息展示方式，将 `desc` 插槽废弃并重命名为 `help`, 也新增了 `help` 属性来设置帮助文本，新增了 `helpPosition` 属性来支持不同的帮助文本展示位置，扩展了 `pickerPosition` 属性的值选项来支持了隐藏上传入口和位于上方的上传入口， 废弃了原来的 `button-label` 插槽，新增了 `pickerLabel` 和 `pickerIcon` 属性来设置上传入口的文本和图标。<!-- #Uploader -->
+
+### 🐞 问题修复
+
+- [^] 修正 `Dropdown` 组件不能正确渲染 `position` 为 `popup` 的内联 `OptionGroup` 子组件。<!-- #Dropdown -->
 
 ## 2.6.5 (2022-05-17)
 
