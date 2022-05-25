@@ -1,6 +1,6 @@
 {
   "name": "veui-loader",
-  "version": "2.6.5",
+  "version": "2.7.0",
   "description": "webpack loader for VEUI.",
   "main": "lib/index.js",
   "repository": "ecomfe/veui",
