@@ -2,11 +2,19 @@
 
 ### 💡 主要变更
 
+- [^] `Uploader` 组件进行了整体优化。<!-- #Uploader -->
+
+  - 新增 `pick` 属性用于来自定义选择文件的行为；
+  - 新增 `validity-display` 属性来支持不同的校验信息展示方式；
+  - `desc` 插槽重命名为 `help`，并新增了 `help` 属性来设置帮助文本；
+  - 新增 `help-position` 属性来支持不同的帮助文本展示位置；
+  - `picker-position` 属性值新增 `none` 和 `top` 来支持上传入口隐藏或置于上方；
+  - 废弃 `button-label` 插槽，新增了 `picker-label` 和 `picker-icon` 属性来设置上传入口的文本和图标。
+
 - [+] `Drawer` 组件新增多级自动缩进功能。<!-- #Drawer -->
 - [+] `Form` 组件新增 `label-position` 属性，支持设置表单项标题显示在上方或侧面。<!-- #Form -->
 - [+] `Field` 组件的 `help-position` 属性新增可选值 `top`，支持设置表单项帮助文本显示在上方。<!-- #Field -->
 - [+] `veui-theme-dls` 新增 `typography.less`，提供“Baidu Number”字体支持。<!-- #veui-theme-dls -->
-- [+] `Uploader` 组件进行了样式升级，新增了 `pick` 属性来自定义选择文件，新增了 `validityDisplay` 属性来支持不同的校验信息展示方式，将 `desc` 插槽废弃并重命名为 `help`, 也新增了 `help` 属性来设置帮助文本，新增了 `helpPosition` 属性来支持不同的帮助文本展示位置，扩展了 `pickerPosition` 属性的值选项来支持了隐藏上传入口和位于上方的上传入口， 废弃了原来的 `button-label` 插槽，新增了 `pickerLabel` 和 `pickerIcon` 属性来设置上传入口的文本和图标。<!-- #Uploader -->
 
 ### 🐞 问题修复
 
