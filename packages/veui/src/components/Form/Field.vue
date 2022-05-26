@@ -48,16 +48,13 @@
       <veui-message
         v-if="
           (help || $scopedSlots.help) &&
-            helpPosition !== 'bottom' &&
-            (labelPosition !== 'top' || helpPosition !== 'top')
+            helpPosition === 'top' &&
+            labelPosition === 'side'
         "
         :ui="uiParts.message"
         status="aux"
         display="simple"
-        :class="{
-          [$c(`field-help-content-${helpPosition}`)]: true,
-          [$c(`field-help-content-before`)]: true
-        }"
+        :class="$c(`field-help-content-${helpPosition}`)"
       >
         <slot name="help">{{ help }}</slot>
       </veui-message>
@@ -109,6 +106,15 @@
       </div>
     </div>
   </div>
+  <veui-message
+    v-if="(help || $scopedSlots.help) && helpPosition === 'side'"
+    :ui="uiParts.message"
+    status="aux"
+    display="simple"
+    :class="$c(`field-help-content-${helpPosition}`)"
+  >
+    <slot name="help">{{ help }}</slot>
+  </veui-message>
 </div>
 </template>
 
