@@ -1,3 +1,10 @@
+## 2.7.1
+
+### 💡 主要变更
+
+- 优化了 `Slider` 组件的交互，现在通过鼠标拖动完毕后浮层会自动隐藏。
+- `Slider` 组件现在也可以通过键盘 <kbd>↑</kbd> 和 <kbd>↓</kbd> 调整取值了。
+
 ## 2.7.0 "🪁 Kite" (2022-05-26)
 
 ### 💡 主要变更
@@ -19,6 +26,7 @@
 ### 🐞 问题修复
 
 - [^] 修正 `Dropdown` 组件不能正确渲染 `position` 为 `popup` 的内联 `OptionGroup` 子组件。<!-- #Dropdown -->
+- [+] 修正 `Uploader` 组件在禁用状态下依然可以点击触发文件选择窗口的问题。<!-- #Uploader -->
 
 ## 2.6.5 (2022-05-17)
 
@@ -228,8 +236,8 @@
 
 - [^] 将对 `dls-icons-vue` 的依赖更新为 `2.0.0`。其中：<!-- #Icon -->
 
-  * `quality-circle` 图标重命名为 `grade-circle`；
-  * `full-square` 图标重命名为 `full-circle`。
+  - `quality-circle` 图标重命名为 `grade-circle`；
+  - `full-square` 图标重命名为 `full-circle`。
 
 ### 🐞 问题修复
 
@@ -541,10 +549,21 @@
   ```js
   import {
     Button, // components
-    config, i18n, validation, // managers
-    useControllable, useSearchable, // mixins
-    $alert, $confirm, $prompt, $toast, // plugins
-    drag, outside, resize, nudge, longpress, tooltip // directives
+    config,
+    i18n,
+    validation, // managers
+    useControllable,
+    useSearchable, // mixins
+    $alert,
+    $confirm,
+    $prompt,
+    $toast, // plugins
+    drag,
+    outside,
+    resize,
+    nudge,
+    longpress,
+    tooltip // directives
   } from 'veui'
   ```
 
@@ -555,7 +574,7 @@
   <script src="/path/to/veui/dist/veui.js"></script>
   <script src="/path/to/veui-theme-dls/dist/dls.js"></script>
   <script>
-  const { Button, i18n, outside } = window.veui
+    const { Button, i18n, outside } = window.veui
   </script>
   ```
 
@@ -633,7 +652,10 @@
   > ```vue
   > <!-- 配置最多显示 6 个选项（为提高在溢出且隐藏滚动条环境中的可访问性， -->
   > <!-- 实际最大高度为 6.5 个选项的高度以提示更多选项的存在） -->
-  > <veui-dropdown :overlay-style="{ '--dls-dropdown-max-display-items': 6 }" .../>
+  > <veui-dropdown
+  >   :overlay-style="{ '--dls-dropdown-max-display-items': 6 }"
+  >   ...
+  > />
   > ```
 
 ## 2.0.0-beta.33
@@ -902,9 +924,9 @@
 - [+] `Select` 组件新增 `trigger` 插槽，用于自定义下拉触发区域。<!-- #Select -->
 - [+] `Select` 组件新增 `selected` 插槽，用于自定义下拉按钮已选项回填内容的展示。<!-- #Select -->
 
-    > #### 与 `label` 插槽的区别
-    >
-    > `label` 插槽仅针对收起状态下的已选项回填内容，而 `selected` 插槽包括了展开状态下的已选项回填内容。
+  > #### 与 `label` 插槽的区别
+  >
+  > `label` 插槽仅针对收起状态下的已选项回填内容，而 `selected` 插槽包括了展开状态下的已选项回填内容。
 
 - [+] `Uploader` 组件新增了 `type` prop 的可选值 `video` / `media`，用来支持视频上传的场景。<!-- #Uploader -->
 - [+] `Uploader` 组件新增了 `entries` prop，内置了多入口操作的功能，类型和 `controls` 的返回值相同。<!-- #Uploader -->
@@ -1064,14 +1086,14 @@
 
 - [^] `veui-theme-dls` 对组件的 `ui` prop 进行了调整，见下表。<!-- #Button #Dropdown #Field #Table #Tabs #Tag -->
 
-  | 组件 | 删除 | 新增 |
-  | -- | -- | -- |
-  | `Button` | - | `normal` / `basic` / `aux` / `square` |
-  | `Dropdown` | - | `basic` / `normal` |
-  | `Field` | `micro` / `tiny` / `small` / `large` | `xs` / `s` / `m` / `l` |
-  | `Table` | - | `compact` / `loose` / `normal` |
-  | `Tabs` | - | `simple` / `strong` |
-  | `Tag` | `borderless` | `bordered` |
+  | 组件       | 删除                                 | 新增                                  |
+  | ---------- | ------------------------------------ | ------------------------------------- |
+  | `Button`   | -                                    | `normal` / `basic` / `aux` / `square` |
+  | `Dropdown` | -                                    | `basic` / `normal`                    |
+  | `Field`    | `micro` / `tiny` / `small` / `large` | `xs` / `s` / `m` / `l`                |
+  | `Table`    | -                                    | `compact` / `loose` / `normal`        |
+  | `Tabs`     | -                                    | `simple` / `strong`                   |
+  | `Tag`      | `borderless`                         | `bordered`                            |
 
   其中，按钮默认样式变为 `normal`，原默认样式现对应为 `basic`。
 
@@ -1218,6 +1240,7 @@
   >   <veui-tab label="C" name="c">Content C</veui-tab>
   > </veui-tabs>
   > ```
+  >
   > ##### 使用 `active.sync` 双向同步激活状态
   >
   > ```html
@@ -1227,6 +1250,7 @@
   >   <veui-tab label="C" name="c">Content C</veui-tab>
   > </veui-tabs>
   > ```
+  >
   > ##### 激活状态完全由组件内部控制
   >
   > ```html
@@ -1251,14 +1275,14 @@
   >
   > ```html
   > <veui-tabs>
-  >   <veui-tab label="A" to="content/a"/>
-  >   <veui-tab label="B" to="content/b"/>
+  >   <veui-tab label="A" to="content/a" />
+  >   <veui-tab label="B" to="content/b" />
   >   <veui-tab label="C" to="content/c">
   >     <h3>Content C</h3>
-  >     <router-view/>
+  >     <router-view />
   >   </veui-tab>
   >   <template #panel>
-  >     <router-view/>
+  >     <router-view />
   >   </template>
   > </veui-tabs>
   > ```
@@ -1304,7 +1328,9 @@
   > <veui-tabs>
   >   <veui-tab label="A">
   >     Content A
-  >     <template #label="tab">Content A {{ `${tab.active ? '✅' : '' }` }}</template>
+  >     <template #label="tab"
+  >       >Content A {{ `${tab.active ? '✅' : '' }` }}</template
+  >     >
   >   </veui-tab>
   >   <veui-tab label="B">Content B</veui-tab>
   >   <veui-tab label="C">Content C</veui-tab>
@@ -1331,13 +1357,13 @@
   > ##### 原回调方法
   >
   > ```js
-  > function upload (file, { onload, onprogress, onerror }) {
+  > function upload(file, { onload, onprogress, onerror }) {
   >   const xhr = new XMLHttpRequest()
-  >   xhr.upload.onprogress = e => onprogress(file, e)
+  >   xhr.upload.onprogress = (e) => onprogress(file, e)
   >   xhr.onload = () => {
   >     onload(file, JSON.parse(xhr.responseText))
   >   }
-  >   xhr.onerror = e => onerror(file, e)
+  >   xhr.onerror = (e) => onerror(file, e)
   >
   >   // ……实际上传操作……
   > }
@@ -1346,13 +1372,13 @@
   > ##### 新回调方法
   >
   > ```js
-  > function upload (file, { onload, onprogress, onerror }) {
+  > function upload(file, { onload, onprogress, onerror }) {
   >   const xhr = new XMLHttpRequest()
-  >   xhr.upload.onprogress = e => onprogress(e)
+  >   xhr.upload.onprogress = (e) => onprogress(e)
   >   xhr.onload = () => {
   >     onload(JSON.parse(xhr.responseText))
   >   }
-  >   xhr.onerror = e => onerror(e)
+  >   xhr.onerror = (e) => onerror(e)
   >
   >   // ……实际上传操作……
   > }
@@ -1413,9 +1439,9 @@
   >
   > ```css
   > v-app button,
-  > v-app [type="button"],
-  > v-app [type="reset"],
-  > v-app [type="submit"] {
+  > v-app [type='button'],
+  > v-app [type='reset'],
+  > v-app [type='submit'] {
   >   -webkit-appearance: button;
   > }
   > ```
@@ -1482,15 +1508,15 @@
   >
   > ```js
   > module.exports = {
-  >   presets: ["@vue/app"],
-  >   plugins: ["veui", ["veui", { name: "veui-next" }, "veui-next"], "lodash"],
+  >   presets: ['@vue/app'],
+  >   plugins: ['veui', ['veui', { name: 'veui-next' }, 'veui-next'], 'lodash'],
   >   overrides: [
   >     {
   >       test: [/veui-theme-dls/],
-  >       plugins: [["babel-plugin-veui/lib/rewrite", { alias: "veui-next" }]]
+  >       plugins: [['babel-plugin-veui/lib/rewrite', { alias: 'veui-next' }]]
   >     }
   >   ]
-  > };
+  > }
   > ```
 
 ### 🐞 问题修复
@@ -2285,8 +2311,8 @@
   > - 安装上述包后，将引入语句替换为：
   >
   >   ```js
-  >   import "classlist-polyfill";
-  >   import "focus-visible";
+  >   import 'classlist-polyfill'
+  >   import 'focus-visible'
   >   ```
 
 - [^] 去除了 `veui-theme-one` 中 `Alert` 组件默认的上下 `margin`。<!-- #veui-theme-one -->
