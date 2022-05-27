@@ -57,7 +57,7 @@
     ref="thumb"
     v-outside.hover="() => handleThumbMouseLeave(index)"
     v-drag="thumbDragOptions[index]"
-    v-nudge.x="{
+    v-nudge="{
       step: keyboardChangeStep,
       update: (...args) => handleThumbNudgeUpdage(index, ...args)
     }"
@@ -96,6 +96,7 @@
       ref="tip"
       :target="tooltipTarget"
       :open="activeTooltipIndex >= 0"
+      :overlay-class="$c('slider-tooltip')"
       trigger="custom"
       :interactive="false"
       :ui="uiParts.tooltip"
@@ -358,8 +359,9 @@ export default {
       let ratio = this.previousRatio + distanceX / this.trackWidth
       this.updateValueByRatio(ratio, index)
     },
-    handleThumbDragEnd (index) {
+    handleThumbDragEnd () {
       this.currentThumbDraggingIndex = -1
+      this.currentThumbFocusIndex = -1
     },
     handleThumbNudgeUpdage (index, delta) {
       if (this.noInteractive) {
@@ -377,7 +379,7 @@ export default {
     handleThumbFocus (index) {
       this.currentThumbFocusIndex = index
     },
-    handleThumbBlur (index) {
+    handleThumbBlur () {
       this.currentThumbFocusIndex = -1
     },
     updateValueByRatio (ratio, index = 0) {

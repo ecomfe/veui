@@ -11,7 +11,7 @@ config.defaults(
 const OPTIONS_SCHEMA = {
   value: 'update',
   modifiers: {
-    axis: ['y', 'x']
+    axis: [null, 'x', 'y']
   },
   defaults: () => ({
     step: config.get('nudge.step')
@@ -51,23 +51,17 @@ function refresh (el, binding) {
         increase *= 10
       }
 
-      switch (true) {
-        case axis === 'x' && (key === 'ArrowRight' || key === 'Right'):
-        case axis === 'y' && (key === 'ArrowUp' || key === 'Up'):
-          increase *= 1
-          break
-
-        case axis === 'x' && (key === 'ArrowLeft' || key === 'Left'):
-        case axis === 'y' && (key === 'ArrowDown' || key === 'Down'):
-          increase *= -1
-          break
-
-        default:
-          increase = 0
-          break
-      }
-
-      if (increase === 0) {
+      if (
+        ((key === 'ArrowRight' || key === 'Right') && axis !== 'y') ||
+        ((key === 'ArrowUp' || key === 'Up') && axis !== 'x')
+      ) {
+        increase *= 1
+      } else if (
+        ((key === 'ArrowLeft' || key === 'Left') && axis !== 'y') ||
+        ((key === 'ArrowDown' || key === 'Down') && axis !== 'x')
+      ) {
+        increase *= -1
+      } else {
         return
       }
 
