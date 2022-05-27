@@ -72,7 +72,7 @@
     @mouseenter="handleThumbMouseEnter(index)"
     @mousedown="handleThumbFocus(index)"
     @focus="handleThumbFocus(index)"
-    @blur="handleThumbBlur(index)"
+    @blur="handleThumbBlur"
   >
     <slot
       name="thumb"

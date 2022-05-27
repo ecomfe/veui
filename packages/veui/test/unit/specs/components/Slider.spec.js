@@ -1,6 +1,5 @@
-import { mount } from '@vue/test-utils'
 import Slider from '@/components/Slider'
-import { getStyle } from '../../../utils'
+import { mount, getStyle } from '../../../utils'
 
 describe('components/Slider', function () {
   it('shoule render right type for Slider', () => {
@@ -104,5 +103,41 @@ describe('components/Slider', function () {
     expect(getStyle(wrapper.find('.veui-slider-thumb').element).left).to.equal(
       '10%'
     )
+  })
+
+  it('should support keyboard access', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-slider': Slider
+      },
+      template: `<veui-slider v-model="value" :step="1" :min="0" :max="10"/>`,
+      data () {
+        return {
+          value: 5
+        }
+      }
+    })
+
+    let { vm } = wrapper
+    let thumb = wrapper.find('.veui-slider-thumb')
+    thumb.element.focus()
+
+    thumb.trigger('keydown.up', { key: 'Up' })
+    await vm.$nextTick()
+    expect(vm.value).to.equal(6)
+
+    thumb.trigger('keydown.right', { key: 'Right' })
+    await vm.$nextTick()
+    expect(vm.value).to.equal(7)
+
+    thumb.trigger('keydown.down', { key: 'Down' })
+    await vm.$nextTick()
+    expect(vm.value).to.equal(6)
+
+    thumb.trigger('keydown.left', { key: 'Left' })
+    await vm.$nextTick()
+    expect(vm.value).to.equal(5)
+
+    wrapper.destroy()
   })
 })
