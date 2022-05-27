@@ -22,15 +22,12 @@
     color: @dls-form-label-font-color;
   }
 
-  &-wrap {
-    display: flex;
-  }
-
-  &-label-top > &-wrap {
+  &-label-top {
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  &-required > &-wrap > &-label::before {
+  &-required > &-label::before {
     content: "*";
     margin-right: @dls-form-label-content-spacing;
     color: @dls-form-label-required-color;
@@ -82,6 +79,7 @@
 
   &-help-content-side {
     margin-left: @dls-form-field-help-spacing;
+    order: 1;
   }
 
   .make-ui(@font-size, @min-height) {
@@ -100,7 +98,8 @@
       height: @min-height;
     }
 
-    .@{veui-prefix}-field-main > .@{veui-prefix}-field-help-content-top {
+    .@{veui-prefix}-field-content-wrap
+      > .@{veui-prefix}-field-help-content-top {
       margin-bottom: @dls-form-field-message-spacing;
       margin-top: calc(
         @min-height / 2 -
@@ -125,11 +124,20 @@
     .make-ui(@dls-font-size-0, @dls-height-xs);
   }
 
-  &-main > &-help-content-top {
+  &-main > &-content-wrap > &-help-content-top {
     margin-bottom: @dls-form-field-message-spacing;
   }
 
-  &-label-top > &-wrap > &-label {
+  &-content-wrap {
+    display: flex;
+    flex: 1 0 auto;
+  }
+
+  &-help-top > &-main > &-content-wrap {
+    flex-direction: column;
+  }
+
+  &-label-top > &-label {
     width: auto;
     display: inline-flex;
     align-items: center;

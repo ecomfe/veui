@@ -11,45 +11,45 @@
     [$c(`field-help-${helpPosition}`)]: true
   }"
 >
-  <div :class="$c('field-wrap')">
-    <div
-      v-if="(!realAbstract && label) || $slots.label"
-      :class="$c('field-label')"
-    >
-      <slot name="label">
-        <veui-label>{{ label }}</veui-label>
-      </slot>
-      <div v-if="tip || $slots.tip" :class="$c('field-tip')">
-        <veui-icon ref="tip" :name="icons.tip"/>
-        <veui-popover
-          :ui="uiParts.tip"
-          target="tip"
-          aim-center
-          position="top-start"
-        >
-          <slot name="tip">{{ tip }}</slot>
-        </veui-popover>
-      </div>
-      <veui-message
-        v-if="
-          (help || $scopedSlots.help) &&
-            helpPosition === 'top' &&
-            labelPosition === 'top'
-        "
-        :ui="uiParts.message"
-        status="aux"
-        display="simple"
-        :class="$c(`field-help-content-${helpPosition}`)"
+  <div
+    v-if="(!realAbstract && label) || $slots.label"
+    :class="$c('field-label')"
+  >
+    <slot name="label">
+      <veui-label>{{ label }}</veui-label>
+    </slot>
+    <div v-if="tip || $slots.tip" :class="$c('field-tip')">
+      <veui-icon ref="tip" :name="icons.tip"/>
+      <veui-popover
+        :ui="uiParts.tip"
+        target="tip"
+        aim-center
+        position="top-start"
       >
-        <slot name="help">{{ help }}</slot>
-      </veui-message>
+        <slot name="tip">{{ tip }}</slot>
+      </veui-popover>
     </div>
-    <div :class="$c('field-main')">
+    <veui-message
+      v-if="
+        (help || $scopedSlots.help) &&
+          helpPosition === 'top' &&
+          labelPosition === 'top'
+      "
+      :ui="uiParts.message"
+      status="aux"
+      display="simple"
+      :class="$c(`field-help-content-${helpPosition}`)"
+    >
+      <slot name="help">{{ help }}</slot>
+    </veui-message>
+  </div>
+  <div :class="$c('field-main')">
+    <div :class="$c('field-content-wrap')">
       <veui-message
         v-if="
           (help || $scopedSlots.help) &&
-            helpPosition === 'top' &&
-            labelPosition === 'side'
+            helpPosition !== 'bottom' &&
+            (labelPosition !== 'top' || helpPosition !== 'top')
         "
         :ui="uiParts.message"
         status="aux"
@@ -67,54 +67,45 @@
           :disabled="realDisabled"
         />
       </div>
-      <div v-if="!realAbstract" :class="$c('field-messages')">
-        <veui-loading
-          v-if="validating"
-          :loading="validating"
-          :ui="uiParts.message"
-        >
-          {{ t('validating') }}
-        </veui-loading>
-        <template v-else-if="validationStatus !== 'success'">
-          <template v-for="(validity, index) in renderableValidities">
-            <component
-              :is="validity.component"
-              v-if="validity.component"
-              :key="`r${index}`"
-              :validity="validity"
-            />
-            <veui-message
-              v-else
-              :key="`m${index}`"
-              :ui="uiParts.message"
-              :status="validity.status"
-              :display="realValidityDisplay"
-            >
-              <span>{{ validity.message }}</span>
-            </veui-message>
-          </template>
+    </div>
+    <div v-if="!realAbstract" :class="$c('field-messages')">
+      <veui-loading
+        v-if="validating"
+        :loading="validating"
+        :ui="uiParts.message"
+      >
+        {{ t('validating') }}
+      </veui-loading>
+      <template v-else-if="validationStatus !== 'success'">
+        <template v-for="(validity, index) in renderableValidities">
+          <component
+            :is="validity.component"
+            v-if="validity.component"
+            :key="`r${index}`"
+            :validity="validity"
+          />
+          <veui-message
+            v-else
+            :key="`m${index}`"
+            :ui="uiParts.message"
+            :status="validity.status"
+            :display="realValidityDisplay"
+          >
+            <span>{{ validity.message }}</span>
+          </veui-message>
         </template>
-        <veui-message
-          v-if="(help || $scopedSlots.help) && helpPosition === 'bottom'"
-          :ui="uiParts.message"
-          status="aux"
-          display="simple"
-          :class="$c(`field-help-content-${helpPosition}`)"
-        >
-          <slot name="help">{{ help }}</slot>
-        </veui-message>
-      </div>
+      </template>
+      <veui-message
+        v-if="(help || $scopedSlots.help) && helpPosition === 'bottom'"
+        :ui="uiParts.message"
+        status="aux"
+        display="simple"
+        :class="$c(`field-help-content-${helpPosition}`)"
+      >
+        <slot name="help">{{ help }}</slot>
+      </veui-message>
     </div>
   </div>
-  <veui-message
-    v-if="(help || $scopedSlots.help) && helpPosition === 'side'"
-    :ui="uiParts.message"
-    status="aux"
-    display="simple"
-    :class="$c(`field-help-content-${helpPosition}`)"
-  >
-    <slot name="help">{{ help }}</slot>
-  </veui-message>
 </div>
 </template>
 
