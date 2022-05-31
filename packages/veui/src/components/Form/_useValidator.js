@@ -1,4 +1,4 @@
-import { isFunction, uniq, uniqueId, includes, fill } from 'lodash'
+import { isFunction, uniqueId, includes, fill } from 'lodash'
 import { normalizeValiditiesOfFields } from './_useValidity'
 import { bindVm } from '../../utils/context'
 import Vue from 'vue'
@@ -42,11 +42,15 @@ function createValidatorMixinImpl ({
           fields.forEach((field, index) => {
             acc[field] = acc[field] || []
             if (triggers[index]) {
-              acc[field] = uniq(
-                acc[field].concat(
-                  triggers[index].filter((item) => item !== 'submit')
-                )
-              )
+              triggers[index].forEach((trigger) => {
+                if (trigger.indexOf(':') >= 0) {
+                  const [triggerField, realTrigger] = trigger.split(':')
+                  acc[triggerField] = acc[triggerField] || []
+                  add(acc[triggerField], realTrigger)
+                  trigger = realTrigger
+                }
+                add(acc[field], trigger)
+              })
             }
           })
           return acc
@@ -62,13 +66,18 @@ function createValidatorMixinImpl ({
         }
         return false
       },
-      validateForEvent (eventName, fieldName, ruleResult) {
+      validateForEvent (triggerEvent, triggerField, ruleResult) {
         const validators = this.realValidators.filter((validator) => {
           const { fields, triggers } = validator
-          const fIndex = fields.indexOf(fieldName)
-          return fIndex >= 0 && includes(triggers[fIndex], eventName)
+          const fIndex = fields.indexOf(triggerField)
+          return (
+            (fIndex >= 0 && includes(triggers[fIndex], triggerEvent)) ||
+            triggers.some((trigger) =>
+              includes(trigger, `${triggerField}:${triggerEvent}`)
+            )
+          )
         })
-        return this.doValidate(validators, ruleResult, fieldName)
+        return this.doValidate(validators, ruleResult, triggerField)
       },
       validate (fieldNames, ruleResult) {
         let validators = this.realValidators
@@ -100,7 +109,9 @@ function createValidatorMixinImpl ({
         const { validate, fields } = validator
         const validities = validate.apply(
           this,
-          fields.map((fieldName) => getFieldValue(fieldName)).concat(ruleResult)
+          fields
+            .map((fieldName) => getFieldValue(fieldName))
+            .concat({ ruleResult })
         )
 
         // 本来可以统一成 Promise 的，但是为了同步校验时不要闪 Loading，需要尽量保证同步校验
@@ -162,4 +173,10 @@ function normalizeTriggers (triggers, length) {
   return triggers.map((item) => {
     return typeof item === 'string' ? item.split(/\s*,\s*/) : item
   })
+}
+
+function add (arr, item) {
+  if (item !== 'submit' && arr.indexOf(item) === -1) {
+    arr.push(item)
+  }
 }

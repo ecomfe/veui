@@ -182,6 +182,9 @@ export default {
         }
         return {}
       },
+      getSiblingTriggers () {
+        return vm.interactiveEvents.sibling
+      },
       isFieldset: () => vm.isFieldset,
       isAbstract: () => vm.realAbstract,
       getAbstractFieldNames: () => vm.abstractFieldNames,
@@ -192,6 +195,7 @@ export default {
       validate: vm.validate,
       clearValidities: vm.clearValidities,
       updateInputValidities: vm.updateInputValidities,
+      handleSiblingInteract: vm.handleSiblingInteract,
       // this 和 parentField 之间没有 input 即返回 true, 调用方保证 parentField 和 vm 的父子关系
       isDirectSubField: (parentField) =>
         !getTypedAncestor(vm, 'input', parentField),
@@ -223,6 +227,7 @@ export default {
     rules: [String, Array],
     field: String,
     help: String,
+    required: Boolean,
     helpPosition: {
       type: String,
       default: 'side',
@@ -351,18 +356,37 @@ export default {
       return this.abstract || this.inFieldset
     },
     isRequired () {
-      return this.rule.getRules().some((perRule) => perRule.name === 'required')
+      return (
+        this.required ||
+        this.rule.getRules().some((perRule) => perRule.name === 'required')
+      )
+    },
+    interactiveEvents () {
+      const { realName, rule } = this
+      return Object.keys(rule.getInteractiveRuleRecord()).reduce(
+        (acc, event) => {
+          if (event.indexOf(':') >= 0) {
+            const [field, trigger] = event.split(':')
+            if (field === realName) {
+              acc.own.push(trigger)
+            } else {
+              acc.sibling.push({ field, trigger })
+            }
+          } else {
+            acc.own.push(event)
+          }
+          return acc
+        },
+        { own: [], sibling: [] }
+      )
     },
     interactiveListeners () {
       let allEvents = []
-      const { form, realName, rule, handleInteract } = this
+      const { form, realName, handleInteract } = this
       if (form) {
-        let events = form.getInteractiveEvents()[realName]
-        if (events) {
-          allEvents = allEvents.concat(events)
-        }
+        allEvents = form.getInteractiveEvents(realName) || []
       }
-      allEvents = allEvents.concat(Object.keys(rule.getInteractiveRuleRecord()))
+      allEvents = allEvents.concat(this.interactiveEvents.own)
       return uniq(allEvents).reduce((acc, eventName) => {
         acc[eventName] = () => handleInteract(eventName)
         return acc
@@ -416,9 +440,9 @@ export default {
       }
 
       this.assertForm()
+
       const { form, realName, primaryInput, rule } = this
       const result = rule.validate(form.getFormData(), rules)
-
       const ruleNames = rules ? rules.map((rule) => rule.name) : null
       form.updateRuleValidities(realName, ruleNames, result)
 
@@ -435,17 +459,28 @@ export default {
       }
       return result
     },
+    // 处理 trigger 是其他 field 的规则，由 Form 调用
+    handleSiblingInteract (triggerField, triggerEvent) {
+      const { rule } = this
+      const rules =
+        rule.getInteractiveRuleRecord()[`${triggerField}:${triggerEvent}`] || []
+      return rules.length ? this.validate(rules) : true
+    },
     handleInteract (eventName) {
       // 需要让对应的 data 更新完值之后，再去 validate，都要 nextTick 来保证
       this.$nextTick(() => {
         this.assertForm()
 
-        const { form, rule } = this
-        const rules = rule.getInteractiveRuleRecord()[eventName]
-        let result = rules ? this.validate(rules) : {}
-        result = result === true ? {} : result
+        const { form, rule, realName } = this
+        const ruleRecord = rule.getInteractiveRuleRecord()
+        const rules = [
+          ...(ruleRecord[eventName] || []),
+          ...(ruleRecord[`${realName}:${eventName}`] || [])
+        ]
+        let ruleResult = rules.length ? this.validate(rules) : true
+        ruleResult = ruleResult === true ? {} : { [realName]: ruleResult }
 
-        form.validateForEvent(eventName, this.realName, result)
+        form.validateForEvent(eventName, realName, ruleResult)
       })
     },
     resetValue () {
