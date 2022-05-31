@@ -165,8 +165,23 @@ export default {
       isDisabled: () => (vm.withholdValidity ? false : vm.realDisabled),
       isReadonly: () => (vm.withholdValidity ? false : vm.realReadonly),
       isInvalid: (input) => (vm.isPassThrough(input) ? vm.invalid : false),
-      getInteractiveListeners: (input) =>
-        vm.isPassThrough(input) ? vm.interactiveListeners : {},
+      getInteractiveListeners: (input) => {
+        if (vm.isPassThrough(input)) {
+          const valueChangeEvent = input.getModelEvent()
+          const listeners = vm.interactiveListeners
+          return {
+            ...listeners,
+            [valueChangeEvent]: (...args) => {
+              // 先清空再触发交互事件
+              vm.clearValidities()
+              if (listeners[valueChangeEvent]) {
+                listeners[valueChangeEvent](...args)
+              }
+            }
+          }
+        }
+        return {}
+      },
       isFieldset: () => vm.isFieldset,
       isAbstract: () => vm.realAbstract,
       getAbstractFieldNames: () => vm.abstractFieldNames,
@@ -175,6 +190,7 @@ export default {
       getFieldValue: vm.getFieldValue,
       resetValue: vm.resetValue,
       validate: vm.validate,
+      clearValidities: vm.clearValidities,
       updateInputValidities: vm.updateInputValidities,
       // this 和 parentField 之间没有 input 即返回 true, 调用方保证 parentField 和 vm 的父子关系
       isDirectSubField: (parentField) =>
@@ -186,9 +202,6 @@ export default {
       addField (field) {
         vm.fields.push(field)
         return () => pull(vm.fields, field)
-      },
-      clearValidities () {
-        vm.form.clearValidities([vm.realName])
       }
     })),
     useFieldParent((vm) => vm.getFacade()),
@@ -441,7 +454,7 @@ export default {
       }
 
       this.assertForm()
-      this.form.clearValidities([this.realName])
+      this.clearValidities()
       if (this.isFieldset) {
         return
       }
@@ -461,6 +474,9 @@ export default {
         ? get(this.form.getFormData(), parentPath.join('.'))
         : this.form.getFormData()
       Vue.set(parentValue, name, type.clone(this.initialData))
+    },
+    clearValidities () {
+      this.form.clearValidities([this.realName])
     }
   }
 }

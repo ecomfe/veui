@@ -14,7 +14,8 @@ export default {
       // 内置校验
       validate: () => {
         return typeof vm.validate === 'function' ? vm.validate() : undefined
-      }
+      },
+      getModelEvent: () => getModelEvent(vm)
     })),
     useFormChild('form'),
     useFieldChild('field', (vm) => {
@@ -65,18 +66,7 @@ export default {
       return this.field && this.field.getName() && this.isTopMostInput
     },
     listenersFromField () {
-      const valueChangeEvent = getModelEvent(this)
-      const listeners = this.field.getInteractiveListeners(this.getFacade())
-      return {
-        ...listeners,
-        [valueChangeEvent]: (...args) => {
-          // 先清空再触发交互事件
-          this.field.clearValidities()
-          if (listeners[valueChangeEvent]) {
-            listeners[valueChangeEvent](...args)
-          }
-        }
-      }
+      return this.field.getInteractiveListeners(this.getFacade())
     },
     listenersWithValidations () {
       // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归
