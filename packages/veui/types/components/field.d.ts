@@ -21,6 +21,10 @@ type Props = {
   tip?: string
   disabled?: boolean
   readonly?: boolean
+  /**
+   * 用来在没有 required rule 的字段上加上必填样式
+   */
+  required?: boolean
   rules?: string | Array<string | RuleItem>
   help?: string
   helpPosition?: 'bottom' | 'side' | 'top'

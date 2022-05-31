@@ -16,7 +16,15 @@
 </template>
 
 <script>
-import { isFunction, includes, zipObject, map, omit, mergeWith } from 'lodash'
+import {
+  isFunction,
+  includes,
+  zipObject,
+  map,
+  omit,
+  mergeWith,
+  uniq
+} from 'lodash'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
@@ -58,7 +66,7 @@ export default {
       updateInputValidities: vm.validityManager.updateInputValidities,
       validateForEvent: vm.validateForEvent,
       clearValidities: vm.clearValidities,
-      getInteractiveEvents: vm.validator.getInteractiveEvents
+      getInteractiveEvents: vm.getInteractiveEvents
     })),
     useFormParent((vm) => vm.getFacade()),
     useValidity('validityManager'),
@@ -207,7 +215,27 @@ export default {
         this.validator.validate(fieldNames, ruleResult)
       ).then(this.updateValidatorValidities)
     },
+    getInteractiveEvents (fieldName) {
+      const events = this.validator.getInteractiveEvents()[fieldName] || []
+      this.fields.forEach((field) => {
+        events.push.apply(
+          events,
+          field
+            .getSiblingTriggers()
+            .filter(({ field }) => fieldName === field)
+            .map(({ trigger }) => trigger)
+        )
+      })
+      return uniq(events)
+    },
     validateForEvent (eventName, fieldName, ruleResult) {
+      this.fields.forEach((field) => {
+        const result = field.handleSiblingInteract(fieldName, eventName)
+        if (!isSimpleValid(result)) {
+          const name = field.getName()
+          ruleResult[name] = (ruleResult[name] || []).concat(result)
+        }
+      })
       return Promise.resolve(
         this.validator.validateForEvent(eventName, fieldName, ruleResult)
       ).then(this.updateValidatorValidities)

@@ -73,26 +73,27 @@
       </veui-field>
 
       <veui-field
-        :key="storeData4.phoneType"
-        name="phone"
         label="电话"
         help="请输入日常联系方式"
         help-position="bottom"
+        required
         tip="多个输入型组件: 校验名称和 Field 名称一致的输入组件"
-        :rules="phoneRule"
       >
-        <veui-select
-          v-model="storeData4.phoneType"
-          class="phone-type"
-          :options="storeData4Options.phoneTypeOptions"
-          @change="storeData4.phone = ''"
-        />
-
-        <veui-input
-          v-model="storeData4.phone"
-          name="phone"
-          autocomplete="off"
-        />
+        <veui-field name="phoneType" abstract>
+          <veui-select
+            v-model="storeData4.phoneType"
+            class="phone-type"
+            :options="storeData4Options.phoneTypeOptions"
+            @change="handlePhoneTypeChange"
+          />
+        </veui-field>
+        <veui-field name="phone" abstract :rules="phoneRule">
+          <veui-input
+            v-model="storeData4.phone"
+            name="phone"
+            autocomplete="off"
+          />
+        </veui-field>
       </veui-field>
 
       <veui-fieldset
@@ -205,6 +206,29 @@
         </veui-field>
       </veui-config-provider>
 
+      <veui-field
+        label="密码："
+        name="password"
+        :rules="[
+          { name: 'required', triggers: 'input,blur' },
+          { name: 'minLength', value: '6', triggers: 'blur' }
+        ]"
+      >
+        <veui-input v-model="storeData4.password" type="password"/>
+      </veui-field>
+
+      <veui-field
+        label="确认密码："
+        name="password2"
+        :rules="[
+          { name: 'required', triggers: 'input,blur' },
+          { name: 'prefix', value: storeData4.password, triggers: 'input' }
+          // { name: 'same', value: storeData4.password, triggers: 'change,password:input' }
+        ]"
+      >
+        <veui-input v-model="storeData4.password2" type="password"/>
+      </veui-field>
+
       <template #actions="{ validating }">
         <veui-button
           ui="primary"
@@ -235,10 +259,26 @@ import {
   NumberInput,
   RadioButtonGroup,
   Transfer,
-  ConfigProvider
+  ConfigProvider,
+  validation
 } from 'veui'
+import { isEmpty } from 'lodash'
 import confirmManager from 'veui/managers/confirm'
 import bus from '../bus'
+
+validation.addRule('prefix', {
+  validate (val, ruleValue = '') {
+    return !isEmpty(val) ? String(val).indexOf(ruleValue || '') === 0 : true
+  },
+  message: '两次输入的密码不一致(prefix)'
+})
+
+// validation.addRule('same', {
+//   validate (val, ruleValue) {
+//     return !isEmpty(val) ? String(val) === ruleValue || '' : true
+//   },
+//   message: '两次输入的密码不一致'
+// })
 
 export default {
   name: 'demo-form',
@@ -302,7 +342,9 @@ export default {
         floor: 3500,
         store: [],
         storeCounts: {},
-        nativeInput: ''
+        nativeInput: '',
+        password: '',
+        password2: ''
       },
       availableLabelPos: [
         { label: 'top label', value: 'top' },
@@ -356,7 +398,7 @@ export default {
         { name: 'required', triggers: 'change,input,blur' },
         {
           name: 'pattern',
-          value: /^1\d{10}$/,
+          value: /^(?:1\d{10})?$/,
           message: '请输入正确的手机号',
           triggers: 'blur'
         }
@@ -373,7 +415,7 @@ export default {
       validators: [
         {
           fields: ['start', 'end'],
-          handler (start, end) {
+          validate (start, end) {
             if (start == null || end == null) {
               return true
             }
@@ -413,12 +455,33 @@ export default {
             })
           },
           triggers: ['change']
+        },
+        {
+          fields: ['password2'],
+          validate: (password2) => {
+            // 1. change 时候会同时和 prefix 错误出现
+            // 2. password:input 时如果和 password2 一样了，prefix 错误没清掉
+            if (!password2) return true
+            const isSame = this.storeData4.password === password2
+            // TODO 如果不是整个 field 情况那就不行了
+            this.$refs.form.clearValidities(['password2'])
+            return isSame
+              ? true
+              : {
+                password2: '两次输入的密码不一致'
+              }
+          },
+          triggers: ['change,password:input']
         }
       ]
     }
   },
 
   methods: {
+    handlePhoneTypeChange () {
+      this.storeData4.phone = ''
+      this.$refs.form.clearValidities(['phone'])
+    },
     handleInvalid (e) {
       bus.$emit('log', 'handleInvalid', e)
       this.isValidating = false
