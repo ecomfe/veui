@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import Tabs from '@/components/Tabs'
 import Tab from '@/components/Tab'
 import { findIndex } from 'lodash'
-import { expectDisabled, wait } from '../../../utils'
+import config from '@/managers/config'
+import tooltipManager from '@/managers/tooltip'
+import { expectTooltip, expectDisabled, wait } from '../../../utils'
 
 describe('components/Tabs', function () {
   this.timeout(10000)
@@ -1106,6 +1108,61 @@ describe('components/Tabs', function () {
     expect(list.element.scrollLeft).to.equal(maxScrollLeft - 20)
 
     await wait(400)
+    wrapper.destroy()
+  })
+
+  it('should support tooltip prop on Tab', async () => {
+    const loremIpsum =
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!'
+
+    const wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs,
+          'veui-tab': Tab
+        },
+        data () {
+          return {
+            loremIpsum
+          }
+        },
+        template: `
+          <veui-tabs>
+            <veui-tab tooltip :label="loremIpsum"/>
+            <veui-tab :tooltip="({ label }) => label + '~'" :label="loremIpsum"/>
+            <veui-tab label="foo"/>
+          </veui-tabs>
+        `
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    await wait(0)
+
+    let [long1, long2, short] = wrapper.findAll(
+      '.veui-tabs-item-label-ellipsis'
+    ).wrappers
+
+    long1.trigger('mouseenter')
+    let warmup = config.get('tooltip.warmup')
+
+    await wait(warmup + 100)
+    expectTooltip(loremIpsum)
+
+    long1.trigger('mouseleave')
+    long2.trigger('mouseenter')
+    await wait(100)
+    expectTooltip(loremIpsum + '~')
+
+    long2.trigger('mouseleave')
+    short.trigger('mouseenter')
+    await wait(warmup + 100)
+    expectTooltip(null)
+
+    tooltipManager.destroy()
     wrapper.destroy()
   })
 })
