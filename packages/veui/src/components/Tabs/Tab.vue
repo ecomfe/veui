@@ -14,6 +14,7 @@ let tab = useChild('tab', 'tabs', [
   'native',
   'removable',
   'status',
+  'tooltip',
   ['matched', 'isMatched'],
   ['matches', 'realMatches'],
   ['attrs', ({ $attrs }) => $attrs],
@@ -50,7 +51,8 @@ export default {
       validator (val) {
         return includes(STATUS_LIST, val)
       }
-    }
+    },
+    tooltip: [Boolean, Function]
   },
   computed: {
     isActive () {

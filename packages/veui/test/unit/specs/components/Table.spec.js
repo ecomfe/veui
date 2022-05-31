@@ -2520,6 +2520,11 @@ describe('components/Table', function () {
     await wait(warmup + 100)
     expectTooltip(loremIpsum)
 
+    longFoo.trigger('mouseleave')
+    longBar.trigger('mouseenter')
+    await wait(100)
+    expectTooltip(loremIpsum)
+
     longBar.trigger('mouseleave')
     shortFoo.trigger('mouseenter')
     await wait(warmup + 100)

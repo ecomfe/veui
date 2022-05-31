@@ -105,6 +105,7 @@
         :label="
           n === 2 ? 'This is Tab2 with long long long long text' : `Tab${n}`
         "
+        tooltip
       />
     </veui-tabs>
     <veui-tabs ui="s">
@@ -114,6 +115,7 @@
         :label="
           n === 2 ? 'This is Tab2 with long long long long text' : `Tab${n}`
         "
+        :tooltip="({ label }) => `[${label}]`"
       />
     </veui-tabs>
   </section>

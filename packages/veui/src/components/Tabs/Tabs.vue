@@ -10,6 +10,7 @@ import useConfig from '../../mixins/config'
 import { useParent } from '../../mixins/coupled'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
+import tooltip from '../../directives/tooltip'
 import '../../common/global'
 import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle, pick, noop } from 'lodash'
@@ -33,13 +34,28 @@ const TAB_FIELDS = [
   'to',
   'native',
   'removable',
-  'status'
+  'status',
+  'tooltip'
 ]
+
+function renderTooltip (tooltip, item) {
+  if (tooltip === true) {
+    return item.label
+  }
+
+  if (typeof tooltip === 'function') {
+    const tab = pick(item, TAB_FIELDS)
+    return tooltip(tab)
+  }
+
+  return null
+}
 
 export default {
   name: 'veui-tabs',
   directives: {
-    resize
+    resize,
+    tooltip
   },
   mixins: [
     prefix,
@@ -295,7 +311,20 @@ export default {
     const renderTabItem = this.$scopedSlots['tab-item']
     const renderTabContent = (props) => (
       <div class={this.$c('tabs-item-label-content')}>
-        <div class={this.$c('tabs-item-label-ellipsis')}>
+        <div
+          class={this.$c('tabs-item-label-ellipsis')}
+          {...(props.tooltip
+            ? {
+              directives: [
+                {
+                  name: 'tooltip',
+                  value: renderTooltip(props.tooltip, props),
+                  modifiers: { overflow: true }
+                }
+              ]
+            }
+            : {})}
+        >
           {renderItem(
             [props.renderLabel, this.$scopedSlots['tab-label']],
             props

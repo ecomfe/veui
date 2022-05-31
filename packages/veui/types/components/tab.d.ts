@@ -15,6 +15,7 @@ type Props = {
   native?: boolean
   removable?: boolean
   status?: Status
+  tooltip?: boolean | ((tab: Props) => unknown)
 }
 
 type Emits = {}
