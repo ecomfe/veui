@@ -1,8 +1,8 @@
 import rule from '../../managers/rule'
-import type from '../../managers/type'
 import { normalizeValidities } from './_useValidity'
 import { bindVm } from '../../utils/context'
 import Vue from 'vue'
+import { isPlainObject } from 'lodash'
 
 function createRuleMixinImpl ({ getRules, getFieldValue }) {
   return new Vue({
@@ -14,7 +14,10 @@ function createRuleMixinImpl ({ getRules, getFieldValue }) {
         }
 
         if (Array.isArray(rules)) {
-          rules = type.clone(rules)
+          // 直接 shallow copy，validate 是函数不能用 type.clone
+          rules = rules.map((rule) =>
+            isPlainObject(rule) ? { ...rule } : rule
+          )
         } else {
           rules = rules
             .trim()
@@ -31,7 +34,8 @@ function createRuleMixinImpl ({ getRules, getFieldValue }) {
       interactiveRuleRecord () {
         let record = {}
         if (this.realRules) {
-          this.realRules.forEach(({ triggers, name, message, value }) => {
+          this.realRules.forEach((rule) => {
+            let { triggers } = rule
             if (triggers) {
               if (typeof triggers === 'string') {
                 triggers = triggers.split(',')
@@ -40,11 +44,7 @@ function createRuleMixinImpl ({ getRules, getFieldValue }) {
               triggers.forEach((eventName) => {
                 if (eventName !== 'submit') {
                   record[eventName] = record[eventName] || []
-                  record[eventName].push({
-                    value,
-                    name,
-                    message
-                  })
+                  record[eventName].push(rule)
                 }
               })
             }

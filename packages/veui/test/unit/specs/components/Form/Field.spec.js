@@ -17,13 +17,13 @@ ruleManager.addRule('equal', {
 function genTemplate (state = '', slots = '') {
   return `
     <veui-field field="test" name="test" label="测试label" tip="测试tip" ${state} :rules="rules">
-      <veui-input class="test-field"/>
+      <veui-input class="test-field" v-model="formData.test"/>
       ${slots}
     </veui-field>
   `
 }
 
-function genWrapper (template, rules = 'required', propsData = {}) {
+function genWrapper (template, rules = 'required', propsData = { test: '' }) {
   let wrapper = mount(
     {
       components: {
@@ -177,6 +177,39 @@ describe('components/Form/Field', function () {
     await wait(0)
     let error = wrapper.findAll('.veui-message')
     expect(error.length).to.equal(1)
+    wrapper.destroy()
+  })
+
+  it('should support inline validate correctly', async () => {
+    let template = genTemplate()
+    let rules = [
+      {
+        name: 'prefix',
+        value: '123',
+        validate (value, ruleValue) {
+          return ruleValue.indexOf(value || '') === 0
+        },
+        triggers: 'input',
+        message: 'prefix'
+      },
+      {
+        name: 'same',
+        value: '123',
+        validate (value, ruleValue) {
+          return !value || ruleValue === value
+        },
+        triggers: 'input',
+        message: 'same'
+      }
+    ]
+    let { wrapper } = genWrapper(template, rules)
+    await wrapper.vm.$nextTick()
+    let input = wrapper.find('.veui-input-input')
+    input.element.value = '2'
+    input.trigger('input')
+    await wait(0)
+    let error = wrapper.findAll('.veui-message')
+    expect(error.length).to.equal(2)
     wrapper.destroy()
   })
 })

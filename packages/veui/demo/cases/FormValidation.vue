@@ -217,15 +217,7 @@
         <veui-input v-model="storeData4.password" type="password"/>
       </veui-field>
 
-      <veui-field
-        label="确认密码："
-        name="password2"
-        :rules="[
-          { name: 'required', triggers: 'input,blur' },
-          { name: 'prefix', value: storeData4.password, triggers: 'input' }
-          // { name: 'same', value: storeData4.password, triggers: 'change,password:input' }
-        ]"
-      >
+      <veui-field label="确认密码：" name="password2" :rules="p2Rules">
         <veui-input v-model="storeData4.password2" type="password"/>
       </veui-field>
 
@@ -259,26 +251,10 @@ import {
   NumberInput,
   RadioButtonGroup,
   Transfer,
-  ConfigProvider,
-  validation
+  ConfigProvider
 } from 'veui'
-import { isEmpty } from 'lodash'
 import confirmManager from 'veui/managers/confirm'
 import bus from '../bus'
-
-validation.addRule('prefix', {
-  validate (val, ruleValue = '') {
-    return !isEmpty(val) ? String(val).indexOf(ruleValue || '') === 0 : true
-  },
-  message: '两次输入的密码不一致(prefix)'
-})
-
-// validation.addRule('same', {
-//   validate (val, ruleValue) {
-//     return !isEmpty(val) ? String(val) === ruleValue || '' : true
-//   },
-//   message: '两次输入的密码不一致'
-// })
 
 export default {
   name: 'demo-form',
@@ -455,28 +431,35 @@ export default {
             })
           },
           triggers: ['change']
-        },
-        {
-          fields: ['password2'],
-          validate: (password2) => {
-            // 1. change 时候会同时和 prefix 错误出现
-            // 2. password:input 时如果和 password2 一样了，prefix 错误没清掉
-            if (!password2) return true
-            const isSame = this.storeData4.password === password2
-            // TODO 如果不是整个 field 情况那就不行了
-            this.$refs.form.clearValidities(['password2'])
-            return isSame
-              ? true
-              : {
-                password2: '两次输入的密码不一致'
-              }
-          },
-          triggers: ['change,password:input']
         }
       ]
     }
   },
-
+  computed: {
+    p2Rules () {
+      return [
+        { name: 'required', triggers: 'input,blur' },
+        {
+          name: 'prefix',
+          value: this.storeData4.password,
+          triggers: 'input',
+          message: '两次输入的密码不一致',
+          validate (val, ruleValue) {
+            return (ruleValue || '').indexOf(val || '') === 0
+          }
+        },
+        {
+          name: 'same',
+          value: this.storeData4.password,
+          triggers: 'change,password:input',
+          message: '两次输入的密码不一致',
+          validate (val, ruleValue) {
+            return !val || (ruleValue || '') === val
+          }
+        }
+      ]
+    }
+  },
   methods: {
     handlePhoneTypeChange () {
       this.storeData4.phone = ''
