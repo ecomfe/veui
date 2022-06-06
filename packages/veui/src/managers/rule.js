@@ -10,6 +10,7 @@ import pattern from './rules/pattern'
 import { renderTpl } from '../utils/helper'
 import type from './type'
 
+const DEFAULT_PRI = 200
 export class Rule {
   constructor () {
     this.ruleValidators = new Vue({
@@ -32,15 +33,22 @@ export class Rule {
 
     rules = Array.isArray(rules) ? rules : [rules]
     let contextData = type.clone(context)
-    let results = rules.map(({ name, value: ruleValue, message }) => {
-      let validator = this.ruleValidators[name]
+    let results = rules.map((rule) => {
+      const { name, value: ruleValue, message } = rule
+      let validator = this.ruleValidators[name] || rule
+      if (!isFunction(validator.validate)) {
+        throw new Error('rule validate is required')
+      }
+
       if (!validator.validate(val, ruleValue, contextData)) {
         let realMessage = message || validator.message
         return {
           name: name,
           message: isFunction(realMessage)
             ? realMessage(val, ruleValue)
-            : renderTpl(realMessage, { ruleValue, value: val }, true)
+            : realMessage
+              ? renderTpl(realMessage, { ruleValue, value: val }, true)
+              : ''
         }
       }
       // 代表没错
@@ -55,9 +63,7 @@ export class Rule {
   initRules (rules) {
     // 根据优先级排一下显示顺序
     rules.sort((x, y) => {
-      let priorityX = x.priority || this.ruleValidators[x.name].priority
-      let priorityY = y.priority || this.ruleValidators[y.name].priority
-      return priorityX >= priorityY
+      return this.getPriority(x) >= this.getPriority(y)
     })
   }
 
@@ -65,6 +71,19 @@ export class Rule {
     if (!(rule in this.ruleValidators)) {
       this.ruleValidators[rule] = validator
     }
+  }
+
+  getPriority ({ priority, name }) {
+    // 0
+    if (priority != null) {
+      return priority
+    }
+    const rule = this.ruleValidators[name]
+    if (rule && rule.priority != null) {
+      return rule.priority
+    }
+
+    return DEFAULT_PRI
   }
 }
 
