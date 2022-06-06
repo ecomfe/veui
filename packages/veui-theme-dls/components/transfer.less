@@ -57,6 +57,8 @@
     .@{veui-prefix}-tree-item-label {
       .ellipsis();
       padding-right: @dls-transfer-item-content-spacing;
+      display: flex;
+      align-items: center;
 
       &:first-child {
         margin-left: 0;
@@ -71,12 +73,18 @@
       flex-shrink: 0;
       .dls-icon-size(@dls-icon-size-aux);
       color: @dls-icon-color-aux;
+      margin: 0 @dls-transfer-item-content-spacing;
     }
 
     &-separator,
     &-option-label {
       vertical-align: middle;
     }
+  }
+
+  &-selected-flat-option-label:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   // disabled 之后的样式
