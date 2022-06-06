@@ -41,7 +41,7 @@ type Methods = {
   submit(): void
   validate(
     fieldNames?: Array<string> | null
-  ): Promise<boolean | Record<string, Record<any, unknown>>>
+  ): Promise<true | Record<string, Record<any, unknown>>>
   clearValidities(fieldNames?: Array<string> | null): void
   setValidities(validities: Record<string, string | InputValidity>): void
 }

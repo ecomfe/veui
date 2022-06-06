@@ -223,11 +223,11 @@ export default {
     },
     validate (fieldNames) {
       const ruleResult = this.ruleValidate(fieldNames)
-      return this.validatorValidate(fieldNames, ruleResult).then(
-        (valiResult) => {
-          return mergeWith({}, ruleResult, ...valiResult, mergeValidities)
-        }
-      )
+      return this.validatorValidate(fieldNames, ruleResult)
+        .then((validatorResult) => {
+          return mergeWith({}, ruleResult, ...validatorResult, mergeValidities)
+        })
+        .then((result) => (isAllValid(result) ? true : result))
     },
     reset (names) {
       let fields = this.fields
