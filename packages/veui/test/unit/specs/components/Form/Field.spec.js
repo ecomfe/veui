@@ -3,13 +3,14 @@ import { mount } from '@vue/test-utils'
 import Form from '@/components/Form/Form'
 import Field from '@/components/Form/Field'
 import ruleManager from '@/managers/rule'
-import { expectFieldError, expectTokenList } from '../../../../utils'
+import { expectFieldError, expectTokenList, wait } from '../../../../utils'
 
-ruleManager.addRule('custom-validator', {
+const MSG = 'custom validator failed'
+ruleManager.addRule('equal', {
   validate (value, ruleValue) {
     return value === ruleValue
   },
-  message: 'custom validator failed',
+  message: MSG,
   priority: 100
 })
 
@@ -129,7 +130,7 @@ describe('components/Form/Field', function () {
     let template = genTemplate()
     let rules = [
       {
-        name: 'custom-validator',
+        name: 'equal',
         value: '123',
         triggers: 'input'
       }
@@ -139,7 +140,7 @@ describe('components/Form/Field', function () {
     let fieldWrapper = wrapper.find('.veui-field')
     let inputWrapper = wrapper.find('.veui-input-input')
     form.$on('invalid', () => {
-      expectFieldError(fieldWrapper, 'custom validator failed')
+      expectFieldError(fieldWrapper, MSG)
 
       inputWrapper.setValue('123')
       formData.test = '123'
@@ -155,5 +156,27 @@ describe('components/Form/Field', function () {
     formData.test = '123456'
 
     form.submit()
+  })
+
+  it('should filter validity messages correctly', async () => {
+    let template = genTemplate()
+    let rules = [
+      {
+        name: 'required',
+        message: MSG
+      },
+      {
+        name: 'equal',
+        value: '123',
+        message: MSG
+      }
+    ]
+    let { wrapper, form } = genWrapper(template, rules)
+    await wrapper.vm.$nextTick()
+    form.submit()
+    await wait(0)
+    let error = wrapper.findAll('.veui-message')
+    expect(error.length).to.equal(1)
+    wrapper.destroy()
   })
 })

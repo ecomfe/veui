@@ -24,7 +24,7 @@ function createValidityMixinImpl () {
     },
     computed: {
       validities () {
-        // => Record<fieldName, {message}>
+        // => Record<fieldName, [{message}]>
         let result = reduce(
           this.validatorValidities,
           (acc, validities) => {
@@ -37,7 +37,22 @@ function createValidityMixinImpl () {
         )
 
         result = mergeValidities(result, this.ruleValidities)
-        return sortValidities(mergeValidities(result, this.inputValidities))
+        result = sortValidities(mergeValidities(result, this.inputValidities))
+        const msgMap = {}
+        forEach(result, (validities, fieldName) => {
+          result[fieldName] = validities.filter(({ message }) => {
+            if (!msgMap[fieldName]) {
+              msgMap[fieldName] = [message]
+              return true
+            }
+            const seen = msgMap[fieldName].indexOf(message) >= 0
+            if (!seen) {
+              msgMap[fieldName].push(message)
+            }
+            return !seen
+          })
+        })
+        return result
       }
     },
     methods: {
