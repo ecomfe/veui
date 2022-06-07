@@ -132,19 +132,15 @@
       );
     }
 
+    &-item:not(&-item-failure) &-container:hover {
+      background-color: @dls-uploader-file-item-background-color-hover;
+    }
+
     &-name {
       .ellipsis();
       margin: 0 @dls-uploader-file-item-action-spacing 0
         @dls-uploader-file-item-label-spacing;
     }
-
-    // &-name-failure {
-    //   color: @dls-uploader-foreground-color-error;
-    // }
-
-    // .@{veui-prefix}-icon&-file-icon-failure {
-    //   color: @dls-uploader-foreground-color-error;
-    // }
 
     .@{veui-prefix}-progress {
       .absolute(
