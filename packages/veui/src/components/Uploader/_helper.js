@@ -15,7 +15,8 @@ import {
   omit,
   isEmpty,
   forEach,
-  isUndefined
+  isUndefined,
+  isPlainObject
 } from 'lodash'
 import { createFileList } from '../../utils/file'
 
@@ -157,6 +158,7 @@ export function getValidateFile (options, ctx) {
         }
         return {
           type,
+          preview: isPlainObject(result) ? result.preview : false,
           value: getValue(file),
           message: getMessage(result)
         }
@@ -181,6 +183,7 @@ export class UploaderFile {
     this.key = uniqueId('veuiUploaderFile')
     this.status = STATUS.PENDING
     this.message = undefined
+    this._preview = false
 
     this._file = file
     this.meta = file
@@ -268,6 +271,14 @@ export class UploaderFile {
     return this._file
   }
 
+  get preview () {
+    return (this.result && this.result.preview) || this._preview
+  }
+
+  set preview (val) {
+    this._preview = val
+  }
+
   get value () {
     return pickBy(
       {
@@ -339,11 +350,11 @@ export class UploaderFile {
   }
 
   onload (data) {
+    // 即使返回失败也将信息保留
+    this.result = omit(data, ['success', 'message'])
     if (!data.success) {
       throw new Error(data.message)
     }
-
-    this.result = omit(data, ['success', 'message'])
 
     // 上传完成，有了 src，不需要再 hold 文件对象
     this._file = undefined

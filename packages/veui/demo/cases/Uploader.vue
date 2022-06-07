@@ -19,6 +19,8 @@
       <veui-checkbox v-model="sortable">sortable</veui-checkbox>
       <div class="space"/>
       <veui-checkbox v-model="readonly">readonly</veui-checkbox>
+      <div class="space"/>
+      <veui-checkbox v-model="failureImage">failure image</veui-checkbox>
     </div>
     <div>
       MaxCount:
@@ -138,7 +140,15 @@
         :validity-display="validityDisplay"
         key-field="name"
         :help-position="helpPosition"
+        :help="includes(enabledCustoms, ':help') ? 'custom\nhelp' : undefined"
         :order="order"
+        :picker-icon="
+          includes(enabledCustoms, ':picker-icon') ? 'id-card' : undefined
+        "
+        :picker-label="
+          includes(enabledCustoms, ':picker-label') ? 'custom' : undefined
+        "
+        :pick="includes(enabledCustoms, ':pick') ? pick : undefined"
         @success="handleUploaderEvent('success', ...arguments)"
         @failure="handleUploaderEvent('failure', ...arguments)"
         @invalid="handleUploaderEvent('invalid', ...arguments)"
@@ -148,12 +158,6 @@
         <template v-if="includes(enabledCustoms, '#help')" #help>
           请选择{{ accept }}图片， 大小在{{ maxSize }}以内，
           宽、高大于100像素， 最多上传{{ maxCount }}张图
-        </template>
-        <template
-          v-if="includes(enabledCustoms, '#button-label')"
-          #button-label
-        >
-          <veui-icon name="id-card"/>
         </template>
         <template
           v-if="includes(enabledCustoms, '#file-after')"
@@ -265,6 +269,10 @@ import 'veui-theme-dls-icons/chevron-right'
 import 'veui-theme-dls-icons/star'
 import 'veui-theme-dls-icons/id-card'
 import bus from '../bus'
+import confirm from 'veui/plugins/confirm'
+import Vue from 'vue'
+
+Vue.use(confirm)
 
 const files = [
   {
@@ -311,7 +319,10 @@ const availableTypes = ['file', 'video', 'image', 'media'].map(mapper)
 const availableSizes = ['m', 's'].map(mapper)
 const availableCustoms = [
   '#help',
-  '#button-label',
+  ':help',
+  ':picker-icon',
+  ':picker-label',
+  ':pick',
   '#file-after',
   '#file',
   '#uploading',
@@ -377,6 +388,7 @@ export default {
       removed: false,
       inDialog: false,
       order: 'append',
+      failureImage: false,
 
       enabledCustoms: ['#file-after'],
       tooltipOpen: false,
@@ -500,6 +512,17 @@ export default {
       this.files = this.files.concat({ name: url, src: url })
       this.tooltipOpen = false
     },
+    pick () {
+      return new Promise((resolve) => {
+        this.$confirm('模拟自定义选择文件', '确认').then((ready) => {
+          resolve(
+            ready
+              ? new File(['hello'], 'hello.txt', { type: 'text/plain' })
+              : null
+          )
+        })
+      })
+    },
     handleEmptyButtonClick () {
       this.files = []
     },
@@ -550,6 +573,7 @@ export default {
       } finally {
         revoke()
       }
+      const preview = this.failureImage
       let ret
       if (this.type === 'image') {
         let valid = [el.naturalWidth, el.naturalHeight].every(
@@ -557,21 +581,31 @@ export default {
         )
         ret = valid
           ? { valid }
-          : { valid, message: 'Dimension of image must be great than 100×100' }
+          : {
+            valid,
+            message: 'Dimension of image must be great than 100×100',
+            preview
+          }
       } else if (this.type === 'video') {
         let valid = el.duration >= 3 && el.duration < 300
         ret = valid
           ? { valid }
-          : { valid, message: 'Duration of video must be in range of [3, 300)' }
+          : {
+            valid,
+            message: 'Duration of video must be in range of [3, 300)',
+            preview
+          }
       }
       revoke()
       return ret
     },
 
     convertResponse (data, err) {
+      const preview = this.failureImage
       if (!data) {
         return {
           success: false,
+          preview,
           message: `上传失败：${err.message}`
         }
       }
@@ -579,9 +613,10 @@ export default {
       return this.requestMode === 'iframe'
         ? {
           success: !data.code,
+          preview,
           ...data.result
         }
-        : data
+        : { ...data, preview }
     },
     customUploadRequest (file, { onload, onerror, onprogress, oncancel }) {
       let formData = new FormData()

@@ -16,7 +16,8 @@ i18n.register(
     separator: '; ',
     uploadImage: 'Upload images',
     uploadVideo: 'Upload videos',
-    uploadMedia: 'Upload media'
+    uploadMedia: 'Upload media',
+    localUpload: 'Local upload'
   },
   {
     ns: 'uploader'

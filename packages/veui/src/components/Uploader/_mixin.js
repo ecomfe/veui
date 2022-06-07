@@ -48,6 +48,9 @@ export default {
         name: uniqueId('veui-uploader-drag-sort-'),
         sort: this.handleDragSort
       }
+    },
+    realHelp () {
+      return (this.help || '').split(/\s*\n\s*/)
     }
   },
   methods: {
