@@ -136,7 +136,7 @@
         ref="uploader"
         v-model="files"
         v-bind="uploaderOptions"
-        :entries="entries"
+        :entries="includes(enabledCustoms, ':entries') ? entries : undefined"
         :validity-display="validityDisplay"
         key-field="name"
         :help-position="helpPosition"
@@ -390,7 +390,7 @@ export default {
       order: 'append',
       failureImage: false,
 
-      enabledCustoms: ['#file-after'],
+      enabledCustoms: [],
       tooltipOpen: false,
       localFiles: undefined,
       status: null,
