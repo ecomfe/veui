@@ -17,11 +17,15 @@
       </slot>
     </veui-button>
     <span
-      v-if="$scopedSlots.desc || $scopedSlots.help"
+      v-if="$scopedSlots.desc || $scopedSlots.help || help"
       :class="$c('uploader-help')"
     >
       <slot name="desc"/>
-      <slot name="help"/>
+      <slot v-if="!$scopedSlots.desc" name="help">
+        <template v-for="(frag, hIndex) in realHelp">
+          <br v-if="!!hIndex" :key="hIndex">{{ frag }}
+        </template>
+      </slot>
     </span>
   </div>
 

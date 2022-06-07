@@ -17,7 +17,7 @@
         [`${listClass}-item-failure`]: file.isFailure,
         [`${listClass}-help-${helpPosition}`]:
           (!multiple || (appendHelp && index === files.length - 1)) &&
-          ($scopedSlots.help || $scopedSlots.desc),
+          ($scopedSlots.help || $scopedSlots.desc || help),
         [`${listClass}-item-dropdown-open`]: expandedControlDropdowns[index]
       }"
       :style="{
@@ -52,16 +52,9 @@
               :ref="`fileItem${index}`"
               :class="`${listClass}-container ${listClass}-container-failure`"
             >
-              <template v-if="canViewFile(file)">
-                <img
-                  v-if="file.type === 'video' && file.poster"
-                  :src="file.poster"
-                  :alt="file.alt"
-                  :class="$c('uploader-list-media-container-media')"
-                  :draggable="!sortable"
-                >
+              <template v-if="file.preview">
                 <veui-uploader-file-viewer
-                  v-else-if="file.type === 'video' || file.type === 'image'"
+                  v-if="file.type === 'video' || file.type === 'image'"
                   :tag="file.type === 'image' ? 'img' : 'video'"
                   :src="file.src || file.native"
                   :alt="file.alt"
@@ -148,12 +141,16 @@
       <span
         v-if="
           (!multiple || (appendHelp && index === files.length - 1)) &&
-            ($scopedSlots.desc || $scopedSlots.help)
+            ($scopedSlots.desc || $scopedSlots.help || help)
         "
         :class="$c('uploader-help')"
       >
         <slot name="desc"/>
-        <slot name="help"/>
+        <slot v-if="!$scopedSlots.desc" name="help">
+          <template v-for="(frag, hIndex) in realHelp">
+            <br v-if="!!index" :key="hIndex">{{ frag }}
+          </template>
+        </slot>
       </span>
     </li>
     <!-- 继续上传按钮 -->
@@ -212,12 +209,17 @@
         </div>
         <span
           v-if="
-            !pickerStatus.hidden && ($scopedSlots.desc || $scopedSlots.help)
+            !pickerStatus.hidden &&
+              ($scopedSlots.desc || $scopedSlots.help || help)
           "
           :class="$c('uploader-help')"
         >
           <slot name="desc"/>
-          <slot name="help"/>
+          <slot v-if="!$scopedSlots.desc" name="help">
+            <template v-for="(frag, hIndex) in realHelp">
+              <br v-if="!!hIndex" :key="hIndex">{{ frag }}
+            </template>
+          </slot>
         </span>
       </slot>
     </li>
@@ -354,12 +356,10 @@ export default {
     getMediaEntries () {
       let defaultEntries = []
 
-      let addIcon = this.getIconName(this.type)
-
       defaultEntries.push({
         name: 'add',
-        icon: addIcon,
-        label: this.t('@uploader.add')
+        icon: this.icons.upload,
+        label: this.t('@uploader.localUpload')
       })
 
       let entries = this.entries ? this.entries(defaultEntries) : defaultEntries
@@ -377,13 +377,6 @@ export default {
       } else {
         this.$emit('custom', actionName, index)
       }
-    },
-    canViewFile ({ type, poster, src, native }) {
-      const isVideo = type === 'video'
-      if (type === 'image' || isVideo) {
-        return (isVideo && poster) || src || native
-      }
-      return false
     },
     handleMediaEntry (entryName) {
       if (includes(INTERNAL_ACTION_EVENTS, entryName)) {

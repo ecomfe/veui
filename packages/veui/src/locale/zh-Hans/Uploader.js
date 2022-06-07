@@ -20,7 +20,8 @@ i18n.register(
     separator: '；',
     uploadImage: '上传图片',
     uploadVideo: '上传视频',
-    uploadMedia: '上传多媒体'
+    uploadMedia: '上传多媒体',
+    localUpload: '本地上传'
   },
   {
     ns: 'uploader'

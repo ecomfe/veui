@@ -38,12 +38,14 @@
 
     padding: 0 @dls-uploader-media-padding-x-m;
 
-    .veui-uploader-media-button-text {
+    .@{veui-prefix}-uploader-media-button-text {
       text-align: center;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       display: -webkit-box;
       overflow: hidden;
+      max-width: 100%;
+      margin-top: @dls-uploader-media-content-spacing-m;
     }
 
     // 是个按钮，将按钮默认的 before 干掉
@@ -246,7 +248,7 @@
 
       .@{veui-prefix}-uploader-list-media-file-name {
         color: @dls-uploader-foreground-color-error;
-        max-width: calc(100% - 2 * @dls-uploader-media-padding-x-m);
+        max-width: 100%;
         .ellipsis();
         margin-top: @dls-uploader-error-spacing;
       }
@@ -416,10 +418,14 @@
 
       &-container-failure {
         .@{veui-prefix}-uploader-list-media-file-name {
-          max-width: calc(100% - 2 * @dls-uploader-media-padding-x-s);
-          word-break: break-all;
+          margin-top: 0;
           white-space: normal;
+          word-break: break-word;
         }
+      }
+
+      &-button-text {
+        margin-top: @dls-uploader-media-content-spacing-s;
       }
     }
 

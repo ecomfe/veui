@@ -571,11 +571,13 @@ export default {
     },
     chooseFiles () {
       let restCount = this.maxCount - this.fileList.length
-      const doPick =
+      const promise =
         typeof this.pick === 'function'
-          ? this.pick // 不给this
-          : this.pickFiles
-      doPick(restCount > 1)
+          ? this.pick.call(null, {
+            remainingCount: restCount
+          }) // 不给this
+          : this.pickFiles(restCount > 1)
+      promise
         .then((files) => {
           if (files && !Array.isArray(files)) {
             files = [files]
@@ -632,6 +634,7 @@ export default {
           file.message = errors
             .map(({ message }) => message)
             .join(this.t('separator'))
+          file.preview = errors.some(({ preview }) => !!preview)
           throw new Error('validate failed') // skip to next catch block
         })
         .then(() => {
