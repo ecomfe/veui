@@ -42,7 +42,12 @@
                 :value="isIndeterminate(file) ? 0 : file.loaded / file.total"
               />
             </div>
-            <slot name="file-after" v-bind="getScopeValue(index)"/>
+            <div
+              v-if="$scopedSlots['file-after']"
+              :class="$c('uploader-file-after')"
+            >
+              <slot name="file-after" v-bind="getScopeValue(index)"/>
+            </div>
           </slot>
         </template>
         <template v-else-if="file.isFailure">
@@ -89,7 +94,12 @@
                 @click="handleMediaAction(index, $event)"
               />
             </div>
-            <slot name="file-after" v-bind="getScopeValue(index)"/>
+            <div
+              v-if="$scopedSlots['file-after']"
+              :class="$c('uploader-file-after')"
+            >
+              <slot name="file-after" v-bind="getScopeValue(index)"/>
+            </div>
             <veui-message
               v-if="validityDisplay === 'inline'"
               :class="$c('uploader-validities')"
@@ -134,7 +144,12 @@
                 @click="handleMediaAction(index, $event)"
               />
             </div>
-            <slot name="file-after" v-bind="getScopeValue(index)"/>
+            <div
+              v-if="$scopedSlots['file-after']"
+              :class="$c('uploader-file-after')"
+            >
+              <slot name="file-after" v-bind="getScopeValue(index)"/>
+            </div>
           </slot>
         </template>
       </div>

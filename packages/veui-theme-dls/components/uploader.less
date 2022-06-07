@@ -1,5 +1,10 @@
 @import "../lib.less";
 
+@dls-uploader-media-spacing-x-s: 3 * @dls-spacing-unit;
+@dls-uploader-media-spacing-x-m: 4 * @dls-spacing-unit;
+@dls-uploader-media-spacing-y-s: 3 * @dls-spacing-unit;
+@dls-uploader-media-spacing-y-m: 4 * @dls-spacing-unit;
+
 .@{veui-prefix}-uploader {
   outline: none;
   font-size: @dls-uploader-font-size-m;
@@ -18,6 +23,15 @@
 
   &-file {
     flex-direction: column;
+  }
+
+  .line-clamp(@line-count) {
+    -webkit-line-clamp: @line-count;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: hidden;
+    white-space: normal;
+    word-break: break-word;
   }
 
   &-button-container {
@@ -40,10 +54,7 @@
 
     .@{veui-prefix}-uploader-media-button-text {
       text-align: center;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      display: -webkit-box;
-      overflow: hidden;
+      .line-clamp(2);
       max-width: 100%;
       margin-top: @dls-uploader-media-content-spacing-m;
     }
@@ -96,6 +107,7 @@
     &-file-icon {
       flex: none;
       color: @dls-uploader-file-item-icon-color;
+      .dls-icon-size(@dls-icon-size-aux, true);
     }
 
     &-container {
@@ -124,10 +136,9 @@
       }
     }
 
-    &-item-failure .@{veui-prefix}-message {
+    &-item-failure .@{veui-prefix}-uploader-validities {
       margin-left: dls-sum(
         @dls-icon-size-aux,
-        @dls-uploader-file-item-padding-x,
         @dls-uploader-file-item-label-spacing
       );
     }
@@ -158,12 +169,13 @@
   }
 
   &-list-media {
-    margin: -@dls-uploader-media-spacing-y 0 0 -@dls-uploader-media-spacing-x;
+    margin: -@dls-uploader-media-spacing-y-m 0 0 -@dls-uploader-media-spacing-x-m;
 
     &-item {
       display: inline-flex;
       vertical-align: top;
-      margin: @dls-uploader-media-spacing-y 0 0 @dls-uploader-media-spacing-x;
+      margin: @dls-uploader-media-spacing-y-m 0 0
+        @dls-uploader-media-spacing-x-m;
       width: @dls-uploader-media-width-m;
 
       &-hidden {
@@ -182,8 +194,11 @@
       position: relative;
       border-radius: @dls-button-border-radius-m;
       border: 1px solid @dls-button-border-color-basic;
-      background-color: @dls-background-color-base-2;
       .size(100%, @dls-uploader-media-height-m);
+
+      &:not(&-failure) {
+        background-color: @dls-background-color-base-2;
+      }
 
       &-media {
         width: auto;
@@ -245,6 +260,7 @@
       .@{veui-prefix}-uploader-list-media-file-name {
         color: @dls-uploader-foreground-color-error;
         max-width: 100%;
+        text-align: center;
         .ellipsis();
         margin-top: @dls-uploader-error-spacing;
       }
@@ -292,6 +308,10 @@
     }
   }
 
+  &[ui~="m"] &-list-media-file-name {
+    .line-clamp(2);
+  }
+
   & &-file-help-bottom {
     flex-direction: column;
     align-items: flex-start;
@@ -304,10 +324,10 @@
 
   &-help {
     color: @dls-uploader-helper-text-font-color;
-    font-size: @dls-uploader-font-size-s;
   }
 
   &-validities,
+  &-file-after,
   &-media &-help {
     margin-top: @dls-uploader-helper-text-spacing-y;
   }
@@ -370,7 +390,7 @@
         justify-content: flex-start;
 
         & + .@{veui-prefix}-control-item {
-          padding-top: @dls-uploader-media-spacing-y;
+          padding-top: @dls-uploader-media-entry-spacing;
         }
       }
     }
@@ -387,8 +407,12 @@
     }
 
     .@{veui-prefix}-uploader-list-media {
+      margin: -@dls-uploader-media-spacing-y-s 0 0 -@dls-uploader-media-spacing-x-s;
+
       &-item {
         width: @dls-uploader-media-width-s;
+        margin: @dls-uploader-media-spacing-y-s 0 0
+          @dls-uploader-media-spacing-x-s;
       }
 
       &-help-side {
@@ -415,8 +439,7 @@
       &-container-failure {
         .@{veui-prefix}-uploader-list-media-file-name {
           margin-top: 0;
-          white-space: normal;
-          word-break: break-word;
+          .line-clamp(4);
         }
       }
 

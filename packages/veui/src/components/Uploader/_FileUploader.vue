@@ -79,13 +79,15 @@
           </div>
           <slot name="file-after" v-bind="getScopeValue(index)"/>
 
-          <veui-message
-            v-if="file.isFailure"
-            :class="$c('uploader-validities')"
-            status="error"
-            display="simple"
-            :ui="uiParts.message"
-          >{{ file.message || t('@uploader.uploadFailure') }}</veui-message>
+          <div v-if="file.isFailure" :class="$c('uploader-validities')">
+            <veui-message
+              status="error"
+              display="simple"
+              :ui="uiParts.message"
+            >{{
+              file.message || t('@uploader.uploadFailure')
+            }}</veui-message>
+          </div>
         </div>
 
         <veui-progress
