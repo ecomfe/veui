@@ -10,7 +10,7 @@ import pattern from './rules/pattern'
 import { renderTpl } from '../utils/helper'
 import type from './type'
 
-const DEFAULT_PRI = 200
+const DEFAULT_PRIORITY = 200
 export class Rule {
   constructor () {
     this.ruleValidators = new Vue({
@@ -37,7 +37,7 @@ export class Rule {
       const { name, value: ruleValue, message } = rule
       let validator = this.ruleValidators[name] || rule
       if (!isFunction(validator.validate)) {
-        throw new Error('rule validate is required')
+        throw new Error('[veui] `validate` function is required for rules')
       }
 
       if (!validator.validate(val, ruleValue, contextData)) {
@@ -83,7 +83,7 @@ export class Rule {
       return rule.priority
     }
 
-    return DEFAULT_PRI
+    return DEFAULT_PRIORITY
   }
 }
 

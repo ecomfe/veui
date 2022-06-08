@@ -46,10 +46,10 @@ function createValidatorMixinImpl ({
                 if (trigger.indexOf(':') >= 0) {
                   const [triggerField, realTrigger] = trigger.split(':')
                   acc[triggerField] = acc[triggerField] || []
-                  add(acc[triggerField], realTrigger)
+                  addTrigger(acc[triggerField], realTrigger)
                   trigger = realTrigger
                 }
-                add(acc[field], trigger)
+                addTrigger(acc[field], trigger)
               })
             }
           })
@@ -175,8 +175,8 @@ function normalizeTriggers (triggers, length) {
   })
 }
 
-function add (arr, item) {
-  if (item !== 'submit' && arr.indexOf(item) === -1) {
-    arr.push(item)
+function addTrigger (triggers, trigger) {
+  if (trigger !== 'submit' && triggers.indexOf(trigger) === -1) {
+    triggers.push(trigger)
   }
 }
