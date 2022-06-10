@@ -1,10 +1,5 @@
 @import "../lib.less";
 
-@dls-uploader-media-spacing-x-s: 3 * @dls-spacing-unit;
-@dls-uploader-media-spacing-x-m: 4 * @dls-spacing-unit;
-@dls-uploader-media-spacing-y-s: 3 * @dls-spacing-unit;
-@dls-uploader-media-spacing-y-m: 4 * @dls-spacing-unit;
-
 .@{veui-prefix}-uploader {
   outline: none;
   font-size: @dls-uploader-font-size-m;
@@ -26,11 +21,7 @@
   }
 
   .line-clamp(@line-count) {
-    -webkit-line-clamp: @line-count;
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
-    overflow: hidden;
-    white-space: normal;
+    .ellipsis(@line-count);
     word-break: break-word;
   }
 
@@ -261,7 +252,7 @@
         color: @dls-uploader-foreground-color-error;
         max-width: 100%;
         text-align: center;
-        .ellipsis();
+        .line-clamp(2);
         margin-top: @dls-uploader-error-spacing;
       }
     }
@@ -306,10 +297,6 @@
     &:hover {
       background-color: @dls-uploader-file-item-background-color-error-hover;
     }
-  }
-
-  &[ui~="m"] &-list-media-file-name {
-    .line-clamp(2);
   }
 
   & &-file-help-bottom {
