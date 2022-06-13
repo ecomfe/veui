@@ -102,6 +102,7 @@
           :select-mode="selectMode"
           :column-width="keyword ? null : columnWidth"
           :expanded="realExpanded"
+          :load-data="loadData && !keyword ? loadAndSaveData : null"
           @update:expanded="handlePaneUpdateExpanded"
           @select="handlePaneSelect"
           @keydown.native="!searchable && handleCascaderKeydown($event)"
@@ -239,13 +240,15 @@ export default {
         return ['complete', 'simple'].indexOf(val) >= 0
       }
     },
+    loadData: Function,
     inline: Boolean,
     max: Number
   },
   data () {
     return {
       outsideRefs: ['root'],
-      keyword: ''
+      keyword: '',
+      loadedData: {}
     }
   },
   computed: {
@@ -258,26 +261,46 @@ export default {
     realOptions () {
       let options = mapDatasource(
         this.options,
-        (item, { parentIndices, index, parents }) => {
-          const parent = parents[parents.length - 1]
-          const key = getKey(item)
-          const inheritDisabled = !item.disabled && parent && parent.disabled
+        {
+          enter: (item) => {
+            const key = getKey(item)
+            // keep walking on this.loadedData[key]
+            return item.lazy && !item.options && this.loadedData[key]
+              ? { ...item, options: this.loadedData[key] }
+              : item
+          },
+          exit: (item, { parentIndices, index, parents, childrenResult }) => {
+            const parent = parents[parents.length - 1]
+            let key = getKey(item)
+            const inheritDisabled = !item.disabled && parent && parent.disabled
+            const containLazy =
+              childrenResult &&
+              childrenResult.some(
+                ({ lazy, containLazy, options }) =>
+                  (lazy && options == null) || containLazy
+              )
 
-          if (key == null || inheritDisabled) {
-            item = { ...item }
+            if (key == null || inheritDisabled || containLazy) {
+              item = { ...item }
 
-            // 没有 name/value 直接用 ${label}${depth} 来生成 name 更稳定一点，反正 datasource 变化 uniqueId 也是在变化
-            if (key == null) {
-              item.name = `veui-${item.label}-${parentIndices
-                .concat(index)
-                .join('-')}`
+              // 没有 name/value 直接用 ${label}${depth} 来生成 name 更稳定一点，反正 datasource 变化 uniqueId 也是在变化
+              if (key == null) {
+                item.name = `veui-${item.label}-${parentIndices
+                  .concat(index)
+                  .join('-')}`
+              }
+
+              if (inheritDisabled) {
+                item.disabled = true
+              }
+
+              // TODO 将更多功能放到 cascaderPane 上而非 cascader。
+              if (containLazy) {
+                item.containLazy = true
+              }
             }
-
-            if (inheritDisabled) {
-              item.disabled = true
-            }
+            return item
           }
-          return item
         },
         'options'
       )
@@ -382,6 +405,11 @@ export default {
     }
   },
   methods: {
+    loadAndSaveData (option, trigger) {
+      return Promise.resolve(this.loadData(option, trigger)).then((loaded) => {
+        this.$set(this.loadedData, getKey(option), loaded)
+      })
+    },
     handleCascaderKeydown (e) {
       let passive = true
       let elem = null

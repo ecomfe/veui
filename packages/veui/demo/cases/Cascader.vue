@@ -44,6 +44,7 @@
       :clearable="clearable1"
       :value-display="valueDisplay1"
       :inline="inline1"
+      :load-data="loadData"
       :column-width="getRealColumnWidth(columnWidth1)"
     />
   </section>
@@ -83,6 +84,7 @@
       :inline="inline2"
       :show-select-all="showSelectAll2"
       :max="max2"
+      :load-data="loadData"
       :column-width="getRealColumnWidth(columnWidth2)"
       multiple
     />
@@ -209,6 +211,69 @@
 <script>
 import { Cascader, Checkbox, Radio, NumberInput, Input } from 'veui'
 
+const getSdChildren = (full) => [
+  {
+    label: '菏泽',
+    value: '菏泽',
+    lazy: true,
+    ...(full ? { options: hzChildren } : null)
+  },
+  {
+    label: '潍坊',
+    value: '潍坊',
+    options: [
+      {
+        label: '潍',
+        value: '潍'
+      },
+      {
+        label: '坊',
+        value: '坊'
+      }
+    ]
+  },
+  {
+    label: '泰山',
+    value: '泰山'
+  },
+  {
+    label: '烟台',
+    value: '烟台',
+    disabled: true
+  },
+  {
+    label: '华山',
+    value: '华山'
+  },
+  {
+    label: '衡山',
+    value: '衡山'
+  },
+  {
+    label: '嵩山',
+    value: '嵩山'
+  },
+  {
+    label: '恒山',
+    value: '恒山'
+  },
+  {
+    label: '雪山',
+    value: '雪山'
+  }
+]
+
+const hzChildren = [
+  {
+    label: '菏',
+    value: '菏'
+  },
+  {
+    label: '泽',
+    value: '泽'
+  }
+]
+
 export default {
   name: 'cascader-demo',
   components: {
@@ -241,6 +306,18 @@ export default {
       max2: null,
 
       expanded3: false,
+      loadData: (option, trigger) => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(
+              {
+                菏泽: hzChildren,
+                山东: getSdChildren(trigger === 'select')
+              }[option.value]
+            )
+          }, 1000)
+        })
+      },
       options: [
         {
           label: '浙江',
@@ -272,57 +349,7 @@ export default {
         {
           label: '山东',
           value: '山东',
-          options: [
-            {
-              label: '菏泽',
-              value: '菏泽',
-              disabled: true,
-              options: [
-                {
-                  label: '菏泽1',
-                  value: '菏泽1'
-                }
-              ]
-            },
-            {
-              label: '潍坊',
-              value: '潍坊',
-              options: [
-                {
-                  label: '潍坊1',
-                  value: '潍坊1'
-                }
-              ]
-            },
-            {
-              label: '泰山',
-              value: '泰山'
-            },
-            {
-              label: '烟台',
-              value: '烟台'
-            },
-            {
-              label: '华山',
-              value: '华山'
-            },
-            {
-              label: '衡山',
-              value: '衡山'
-            },
-            {
-              label: '嵩山',
-              value: '嵩山'
-            },
-            {
-              label: '恒山',
-              value: '恒山'
-            },
-            {
-              label: '大雪山',
-              value: '大雪山'
-            }
-          ]
+          lazy: true
         },
         {
           label: '上海',

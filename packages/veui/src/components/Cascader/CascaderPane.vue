@@ -1,19 +1,26 @@
 <template>
-<div
+<transition-group
   ref="group"
+  tag="div"
+  :name="$c('cascader-pane')"
   :class="{
     [$c('cascader-pane')]: true,
     [$c('cascader-pane-inline')]: inline && !realColumnWidth,
     [$c('cascader-pane-custom-width')]: !!realColumnWidth
   }"
+  :style="
+    realColumnWidth
+      ? { '--veui-cascader-pane-custom-width': realColumnWidth }
+      : null
+  "
   :ui="realUi"
 >
   <div
     v-for="(group, depth) in expandedItems"
     ref="menu"
-    :key="depth"
+    :key="`g${depth}`"
     :class="$c('cascader-pane-column-wrap')"
-    :style="realColumnWidth ? { width: realColumnWidth } : null"
+    :style="getPaneItemStyle(depth)"
   >
     <div :class="$c('cascader-pane-column')" :ui="realUi">
       <div
@@ -66,7 +73,8 @@
               <div
                 ref="button"
                 :class="{
-                  [$c('cascader-pane-group-label')]: hasChildren(option),
+                  [$c('cascader-pane-group-label')]:
+                    hasChildren(option) || needLoad(option),
                   [$c('cascader-pane-option')]: true
                 }"
                 :ui="realUi"
@@ -101,8 +109,10 @@
                     @click.native.stop
                     @click="handleExpand(option, depth, 'click')"
                   >
-                    <veui-icon :name="icons.expandable"/>
+                    <veui-loading v-if="isLoading(option)" loading/>
+                    <veui-icon v-else :name="icons.expandable"/>
                   </veui-button>
+                  <veui-loading v-else-if="isLoading(option)" loading/>
                   <veui-icon
                     v-else
                     :class="$c('cascader-pane-expandable')"
@@ -127,13 +137,14 @@
       </div>
     </div>
   </div>
-</div>
+</transition-group>
 </template>
 
 <script>
 import Checkbox from '../Checkbox'
 import Icon from '../Icon'
 import Button from '../Button'
+import Loading from '../Loading'
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import keySelect from '../../mixins/key-select'
@@ -153,6 +164,7 @@ export default {
     'veui-icon': Icon,
     'veui-checkbox': Checkbox,
     'veui-button': Button,
+    'veui-loading': Loading,
     AbstractTree
   },
   directives: {
@@ -191,12 +203,19 @@ export default {
     // eslint-disable-next-line vue/require-prop-types
     expanded: {},
     columnWidth: [Number, String],
+    loadData: Function,
     selectMode: {
       type: String,
       default: 'any',
       validator (val) {
         return ['leaf-only', 'any'].indexOf(val) >= 0
       }
+    }
+  },
+  data () {
+    return {
+      effectiveLoadingKey: null,
+      loadingMap: {}
     }
   },
   computed: {
@@ -280,7 +299,20 @@ export default {
     getKey (item) {
       return getKey(item)
     },
+    getPaneItemStyle (depth) {
+      return {
+        zIndex: this.expandedItems.length - depth,
+        ...(this.realColumnWidth && { width: this.realColumnWidth })
+      }
+    },
     handleSelect (option) {
+      if (this.needLoad(option, true)) {
+        this.startLoad(option, 'select')
+        return
+      } else {
+        this.invalidateLoad()
+      }
+
       this.$emit('select', option)
     },
     handleClick (option) {
@@ -319,11 +351,24 @@ export default {
         }
       }
     },
+    // boolean 表示展开顶层的下拉
     updateExpanded (option) {
       let key = option
       if (typeof option !== 'boolean') {
         key = getKey(option)
+        const prevExpanded = this.expanded
+        if (this.needLoad(option)) {
+          this.startLoad(option, 'expand', () => {
+            // 1. expanded 从外部变化了则异步展开无效
+            // 2. TODO option 不在了处理下
+            if (prevExpanded === this.expanded) {
+              this.commit('expanded', key)
+            }
+          })
+          return
+        }
       }
+      this.invalidateLoad()
       this.commit('expanded', key)
     },
     getPopoutParents (option) {
@@ -346,13 +391,52 @@ export default {
       this.commit('expanded', expanded)
     },
     canPopOut (option) {
-      return canPopOut(option)
+      let { position } = option
+      return (
+        this.needLoad(option) ||
+        (hasChildren(option) && (position === 'popup' || !position))
+      )
     },
     expand (option) {
       return !this.canPopOut(option)
     },
     hasChildren (options) {
       return hasChildren(options)
+    },
+    startLoad (option, trigger, callback) {
+      const key = getKey(option)
+      const { loadData, loadingMap } = this
+      this.effectiveLoadingKey = key
+      if (loadingMap[key]) {
+        return loadingMap[key]
+      }
+
+      const promise = Promise.resolve(loadData(option, trigger))
+        .then(() =>
+          callback && this.effectiveLoadingKey === key ? callback() : undefined
+        )
+        .finally(() => this.endLoad(key))
+      this.$set(loadingMap, key, promise)
+      return promise
+    },
+    endLoad (key) {
+      const { effectiveLoadingKey, loadingMap } = this
+      if (loadingMap[key]) {
+        this.$delete(loadingMap, key)
+      }
+      if (effectiveLoadingKey === key) {
+        this.invalidateLoad()
+      }
+    },
+    invalidateLoad () {
+      this.effectiveLoadingKey = null
+    },
+    needLoad (option, descendant) {
+      const { lazy, containLazy, options } = option
+      return (
+        ((lazy && options == null) || (descendant && containLazy)) &&
+        typeof this.loadData === 'function'
+      )
     },
     isExpanded (option) {
       return (
@@ -376,6 +460,9 @@ export default {
         parents.some((i) => !!i.disabled) ||
         panelParents.some((i) => !!i.disabled)
       )
+    },
+    isLoading (option) {
+      return !!this.loadingMap[getKey(option)]
     },
     scrollToCurrent () {
       let menus = this.$refs.menu
@@ -405,11 +492,6 @@ export default {
       }
     }
   }
-}
-
-export function canPopOut (option) {
-  let { position } = option
-  return hasChildren(option) && (position === 'popup' || !position)
 }
 
 function hasChildren (option) {
