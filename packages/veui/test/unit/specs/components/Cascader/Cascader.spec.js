@@ -52,6 +52,40 @@ const casOptions = [
   }
 ]
 
+const hzChildren = [
+  {
+    label: '菏',
+    value: '菏'
+  },
+  {
+    label: '泽',
+    value: '泽'
+  }
+]
+
+const getSdChildren = (full) => [
+  {
+    label: '菏泽',
+    value: '菏泽',
+    lazy: true,
+    ...(full ? { options: hzChildren } : null)
+  },
+  {
+    label: '潍坊',
+    value: '潍坊',
+    options: [
+      {
+        label: '潍',
+        value: '潍'
+      },
+      {
+        label: '坊',
+        value: '坊'
+      }
+    ]
+  }
+]
+
 describe('components/Cascader/Cascader', function () {
   this.timeout(10000)
 
@@ -636,6 +670,81 @@ describe('components/Cascader/Cascader', function () {
     hangzhou.trigger('click')
     await vm.$nextTick()
     expect(vm.value).to.equal(null)
+    wrapper.destroy()
+  })
+
+  it('should handle loadData prop correctly.', async () => {
+    let resolveFn
+    let wrapper = mount({
+      components: {
+        'veui-cascader': Cascader
+      },
+      data () {
+        return {
+          value: null,
+          expanded: true,
+          options: [
+            {
+              label: '山东',
+              value: '山东',
+              lazy: true
+            }
+          ],
+          loadData (option, trigger) {
+            return new Promise((resolve) => {
+              resolveFn = () =>
+                resolve(
+                  {
+                    菏泽: hzChildren,
+                    山东: getSdChildren(trigger === 'select')
+                  }[option.value]
+                )
+            })
+          }
+        }
+      },
+      template:
+        '<veui-cascader :expanded.sync="expanded" :load-data="loadData" :options="options"/>'
+    })
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+    let expandable = wrapper.findAll('.veui-cascader-pane-expandable')
+    expect(expandable.length).to.equal(1)
+    expandable.at(0).trigger('click')
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal(true)
+    expect(wrapper.findAll('.veui-loading').length).to.equal(1)
+    resolveFn()
+    resolveFn = null
+    await wait(0)
+    expect(vm.expanded).to.equal('山东')
+    expect(wrapper.findAll('.veui-loading').length).to.equal(0)
+
+    // 干扰下lazy
+    expandable = wrapper.findAll('.veui-cascader-pane-expandable')
+    // 展开菏泽
+    expandable.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal('山东')
+    expect(wrapper.findAll('.veui-loading').length).to.equal(1)
+    // 展开潍坊
+    expandable.at(2).trigger('click')
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal('潍坊')
+    // 菏泽仍然加载中
+    expect(wrapper.findAll('.veui-loading').length).to.equal(1)
+    resolveFn()
+    await wait(0)
+    // 不会修改 expanded
+    expect(vm.expanded).to.equal('潍坊')
+    expect(wrapper.findAll('.veui-loading').length).to.equal(0)
+
+    // 菏泽加载过了，可以直接expand
+    expandable.at(1).trigger('click')
+    await vm.$nextTick()
+    expect(vm.expanded).to.equal('菏泽')
+    expect(wrapper.findAll('.veui-loading').length).to.equal(0)
     wrapper.destroy()
   })
 })
