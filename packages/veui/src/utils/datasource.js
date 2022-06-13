@@ -34,30 +34,33 @@ function _walk (array, callback, context, alias = 'children') {
     }
   }
 
-  let { depth, parents, parentIndices } = context
+  let { depth, parents, parentIndices, mutableEnter } = context
   let childrenResult = []
   array.forEach((item, index) => {
     let selfContext = { ...context, index }
     let skipChildren = false
     let childrenContext = selfContext
+    let realMutableEnter = false
 
     if (typeof enter === 'function') {
       let result = enter(item, selfContext)
       if (result === false) {
         skipChildren = true
       } else if (isPlainObject(result)) {
+        realMutableEnter = mutableEnter
         // 支持父给子传递上下文
         childrenContext = result
       }
     }
-
-    let children = getChildrenByAlias(item, alias)
-    if (children && !skipChildren) {
+    item = realMutableEnter ? childrenContext : item
+    let children = skipChildren ? null : getChildrenByAlias(item, alias)
+    if (children) {
       selfContext.childrenResult = _walk(
         children,
         callback,
         {
           ...childrenContext,
+          mutableEnter: realMutableEnter,
           parents: [...parents, item],
           parentIndices: [...parentIndices, index],
           depth: depth + 1
@@ -129,19 +132,24 @@ function getChildrenByAlias (obj, alias) {
 }
 
 export function mapDatasource (datasource, callback, childrenKey) {
+  const isExit = typeof callback === 'function'
+  const enter = isExit ? null : callback.enter
+  const exit = isExit ? callback : callback.exit
   return walk(
     datasource,
     {
+      ...(enter ? { enter } : null),
       exit: (item, context) => {
         return {
-          ...callback(item, context),
+          ...exit(item, context),
           ...(hasChildren(item, childrenKey)
             ? { [childrenKey]: context.childrenResult }
             : {})
         }
       }
     },
-    childrenKey
+    childrenKey,
+    { mutableEnter: true }
   )
 }
 

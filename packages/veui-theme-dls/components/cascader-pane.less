@@ -17,6 +17,28 @@
     .veui-transition(height);
   }
 
+  &-leave-active,
+  &-enter-active {
+    will-change: margin-left;
+    .veui-transition(margin-left);
+  }
+
+  &-leave-to,
+  &-enter {
+    margin-left: -@min-panel-width;
+  }
+
+  &-custom-width &-leave-to,
+  &-custom-width &-enter {
+    margin-left: calc(
+      -1 * var(--veui-cascader-pane-custom-width, @min-panel-width)
+    );
+  }
+
+  &-leave-active {
+    z-index: 0 !important;
+  }
+
   &-column {
     .padding(@dls-option-group-padding-y, _);
     position: relative;
@@ -49,6 +71,7 @@
 
   &-column-wrap {
     min-width: @min-panel-width;
+    background-color: @dls-option-background-color;
   }
 
   // 内联平分
