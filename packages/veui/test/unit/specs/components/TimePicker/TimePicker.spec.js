@@ -89,6 +89,7 @@ describe('components/TimePicker', function () {
     options.at(2).findAll(OPTION).at(1).trigger('click')
     await vm.$nextTick()
     expect(isEqual(vm.value0, '00:15:30')).to.equal(true)
+    expect(wrapper.find('.veui-option-selected').exists()).to.equal(true)
     wrapper.destroy()
   })
 

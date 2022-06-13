@@ -12,6 +12,9 @@ export default {
   methods: {
     handleSelect (value) {
       this.$emit('change', value)
+    },
+    isSelected (val) {
+      return Number(val) === this.value
     }
   },
   render (h) {
