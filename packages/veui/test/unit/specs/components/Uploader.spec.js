@@ -1095,6 +1095,59 @@ describe('components/Uploader', function () {
     expect(newMsg).to.equal(msg)
     wrapper.destroy()
   })
+
+  it('should support help prop correctly.', async function () {
+    const HELP = 'help\nprop'
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        help: HELP
+      }
+    })
+    await wait(0)
+    expect(
+      wrapper.find('.veui-uploader-help').html().includes('<br>')
+    ).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should preview failure items correctly.', async function () {
+    let preview = true
+    function convertResponse (data) {
+      return { ...data, preview }
+    }
+    let wrapper = mount(Uploader, {
+      sync: false,
+      attachToDocument: true,
+      propsData: {
+        type: 'image',
+        action: '/upload/xhr?force=fail&latency=0',
+        convertResponse
+      }
+    })
+    let mockFile = createFile('a.jpg', 'image/jpg', 128 * 1024)
+    let promise = waitForEvents(wrapper.vm, ['failure', 'statuschange'])
+    wrapper.vm.addFiles([mockFile])
+    await promise
+    await wait(0)
+    expect(
+      wrapper.find('.veui-uploader-list-media-item-failure img').exists()
+    ).to.equal(true)
+
+    preview = false
+    mockFile = createFile('a2.jpg', 'image/jpg', 128 * 1024)
+    promise = waitForEvents(wrapper.vm, ['failure', 'statuschange'])
+    wrapper.vm.addFiles([mockFile])
+    await promise
+    await wait(0)
+    expect(
+      wrapper
+        .find('.veui-uploader-list-media-item-failure:nth-child(2) img')
+        .exists()
+    ).to.equal(false)
+    wrapper.destroy()
+  })
 })
 
 function waitForEvent (vm, event) {
