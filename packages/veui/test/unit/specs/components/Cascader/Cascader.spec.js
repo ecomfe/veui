@@ -673,7 +673,7 @@ describe('components/Cascader/Cascader', function () {
     wrapper.destroy()
   })
 
-  it('should handle loadData prop correctly.', async () => {
+  it('should handle load prop correctly.', async () => {
     let resolveFn
     let wrapper = mount({
       components: {
@@ -690,21 +690,21 @@ describe('components/Cascader/Cascader', function () {
               lazy: true
             }
           ],
-          loadData (option, trigger) {
+          load ({ parent, scope }) {
             return new Promise((resolve) => {
               resolveFn = () =>
                 resolve(
                   {
                     菏泽: hzChildren,
-                    山东: getSdChildren(trigger === 'select')
-                  }[option.value]
+                    山东: getSdChildren(scope === 'DESCENDANT')
+                  }[parent.value]
                 )
             })
           }
         }
       },
       template:
-        '<veui-cascader :expanded.sync="expanded" :load-data="loadData" :options="options"/>'
+        '<veui-cascader :expanded.sync="expanded" :load="load" :options="options"/>'
     })
 
     let { vm } = wrapper
