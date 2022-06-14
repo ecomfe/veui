@@ -11,10 +11,7 @@
     [$c(`field-help-${helpPosition}`)]: true
   }"
 >
-  <div
-    v-if="(!realAbstract && label) || $slots.label"
-    :class="$c('field-label')"
-  >
+  <div v-if="!abstract && (label || $slots.label)" :class="$c('field-label')">
     <slot name="label">
       <veui-label>{{ label }}</veui-label>
     </slot>
