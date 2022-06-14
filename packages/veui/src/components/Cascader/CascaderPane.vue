@@ -158,6 +158,11 @@ import {
 import { scrollIntoView } from '../../utils/dom'
 import AbstractTree from '../Tree/_AbstractTree'
 
+const LoadScope = {
+  CHILDREN: 'CHILDREN',
+  DESCENDANT: 'DESCENDANT'
+}
+
 export default {
   name: 'veui-cascader-pane',
   components: {
@@ -203,7 +208,7 @@ export default {
     // eslint-disable-next-line vue/require-prop-types
     expanded: {},
     columnWidth: [Number, String],
-    loadData: Function,
+    load: Function,
     selectMode: {
       type: String,
       default: 'any',
@@ -214,7 +219,7 @@ export default {
   },
   data () {
     return {
-      effectiveLoadingKey: null,
+      currentLoadingKey: null,
       loadingMap: {}
     }
   },
@@ -307,7 +312,7 @@ export default {
     },
     handleSelect (option) {
       if (this.needLoad(option, true)) {
-        this.startLoad(option, 'select')
+        this.startLoad(option, LoadScope.DESCENDANT)
         return
       } else {
         this.invalidateLoad()
@@ -356,12 +361,12 @@ export default {
       let key = option
       if (typeof option !== 'boolean') {
         key = getKey(option)
-        const prevExpanded = this.expanded
         if (this.needLoad(option)) {
-          this.startLoad(option, 'expand', () => {
+          const prevExpanded = this.expanded
+          this.startLoad(option, LoadScope.CHILDREN, (data) => {
             // 1. expanded 从外部变化了则异步展开无效
             // 2. TODO option 不在了处理下
-            if (prevExpanded === this.expanded) {
+            if (data && data.length && prevExpanded === this.expanded) {
               this.commit('expanded', key)
             }
           })
@@ -403,39 +408,41 @@ export default {
     hasChildren (options) {
       return hasChildren(options)
     },
-    startLoad (option, trigger, callback) {
+    startLoad (option, scope, callback) {
       const key = getKey(option)
-      const { loadData, loadingMap } = this
-      this.effectiveLoadingKey = key
+      const { load, loadingMap } = this
+      this.currentLoadingKey = key
       if (loadingMap[key]) {
         return loadingMap[key]
       }
 
-      const promise = Promise.resolve(loadData(option, trigger))
-        .then(() =>
-          callback && this.effectiveLoadingKey === key ? callback() : undefined
+      const loading = Promise.resolve(load({ parent: option, scope }))
+        .then((data) =>
+          callback && this.currentLoadingKey === key
+            ? callback(data)
+            : undefined
         )
         .finally(() => this.endLoad(key))
-      this.$set(loadingMap, key, promise)
-      return promise
+      this.$set(loadingMap, key, loading)
+      return loading
     },
     endLoad (key) {
-      const { effectiveLoadingKey, loadingMap } = this
+      const { currentLoadingKey, loadingMap } = this
       if (loadingMap[key]) {
         this.$delete(loadingMap, key)
       }
-      if (effectiveLoadingKey === key) {
+      if (currentLoadingKey === key) {
         this.invalidateLoad()
       }
     },
     invalidateLoad () {
-      this.effectiveLoadingKey = null
+      this.currentLoadingKey = null
     },
     needLoad (option, descendant) {
       const { lazy, containLazy, options } = option
       return (
         ((lazy && options == null) || (descendant && containLazy)) &&
-        typeof this.loadData === 'function'
+        typeof this.load === 'function'
       )
     },
     isExpanded (option) {

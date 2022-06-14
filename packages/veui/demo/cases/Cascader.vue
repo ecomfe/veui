@@ -44,7 +44,7 @@
       :clearable="clearable1"
       :value-display="valueDisplay1"
       :inline="inline1"
-      :load-data="loadData"
+      :load="load"
       :column-width="getRealColumnWidth(columnWidth1)"
     />
   </section>
@@ -84,7 +84,7 @@
       :inline="inline2"
       :show-select-all="showSelectAll2"
       :max="max2"
-      :load-data="loadData"
+      :load="load"
       :column-width="getRealColumnWidth(columnWidth2)"
       multiple
     />
@@ -240,26 +240,6 @@ const getSdChildren = (full) => [
     label: '烟台',
     value: '烟台',
     disabled: true
-  },
-  {
-    label: '华山',
-    value: '华山'
-  },
-  {
-    label: '衡山',
-    value: '衡山'
-  },
-  {
-    label: '嵩山',
-    value: '嵩山'
-  },
-  {
-    label: '恒山',
-    value: '恒山'
-  },
-  {
-    label: '雪山',
-    value: '雪山'
   }
 ]
 
@@ -306,14 +286,16 @@ export default {
       max2: null,
 
       expanded3: false,
-      loadData: (option, trigger) => {
+      load: ({ parent, scope }) => {
         return new Promise((resolve) => {
           setTimeout(() => {
             resolve(
-              {
-                菏泽: hzChildren,
-                山东: getSdChildren(trigger === 'select')
-              }[option.value]
+              parent
+                ? {
+                  菏泽: hzChildren,
+                  山东: getSdChildren(scope === 'DESCENDANT')
+                }[parent.value]
+                : undefined
             )
           }, 1000)
         })

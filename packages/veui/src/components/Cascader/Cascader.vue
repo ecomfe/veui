@@ -102,7 +102,7 @@
           :select-mode="selectMode"
           :column-width="keyword ? null : columnWidth"
           :expanded="realExpanded"
-          :load-data="loadData && !keyword ? loadAndSaveData : null"
+          :load="load && !keyword ? loadAndSaveData : null"
           @update:expanded="handlePaneUpdateExpanded"
           @select="handlePaneSelect"
           @keydown.native="!searchable && handleCascaderKeydown($event)"
@@ -240,7 +240,7 @@ export default {
         return ['complete', 'simple'].indexOf(val) >= 0
       }
     },
-    loadData: Function,
+    load: Function,
     inline: Boolean,
     max: Number
   },
@@ -405,9 +405,12 @@ export default {
     }
   },
   methods: {
-    loadAndSaveData (option, trigger) {
-      return Promise.resolve(this.loadData(option, trigger)).then((loaded) => {
-        this.$set(this.loadedData, getKey(option), loaded)
+    loadAndSaveData (context) {
+      return Promise.resolve(this.load(context)).then((loaded) => {
+        if (loaded) {
+          this.$set(this.loadedData, getKey(context.parent), loaded)
+        }
+        return loaded
       })
     },
     handleCascaderKeydown (e) {
