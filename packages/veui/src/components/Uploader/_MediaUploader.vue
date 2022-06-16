@@ -153,7 +153,7 @@
           </slot>
         </template>
       </div>
-      <span
+      <div
         v-if="
           (!multiple || (appendHelp && index === files.length - 1)) &&
             ($scopedSlots.desc || $scopedSlots.help || help)
@@ -166,7 +166,7 @@
             <br v-if="!!index" :key="hIndex">{{ frag }}
           </template>
         </slot>
-      </span>
+      </div>
     </li>
     <!-- 继续上传按钮 -->
     <li
@@ -222,7 +222,7 @@
             />
           </div>
         </div>
-        <span
+        <div
           v-if="
             !pickerStatus.hidden &&
               ($scopedSlots.desc || $scopedSlots.help || help)
@@ -235,7 +235,7 @@
               <br v-if="!!hIndex" :key="hIndex">{{ frag }}
             </template>
           </slot>
-        </span>
+        </div>
       </slot>
     </li>
   </transition-group>
