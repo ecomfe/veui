@@ -300,12 +300,16 @@
     }
   }
 
+  &-file-help-bottom &-help,
+  &-list-media-help-bottom &-help {
+    margin-top: @dls-uploader-helper-text-spacing-y;
+  }
+
   & &-file-help-bottom {
     flex-direction: column;
     align-items: flex-start;
 
     .@{veui-prefix}-uploader-help {
-      margin-top: @dls-uploader-helper-text-spacing-y;
       margin-left: 0;
     }
   }
@@ -315,8 +319,7 @@
   }
 
   &-validities,
-  &-file-after,
-  &-media &-help {
+  &-file-after {
     margin-top: @dls-uploader-helper-text-spacing-y;
   }
 

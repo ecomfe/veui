@@ -114,14 +114,14 @@ describe('components/Nav', function () {
     expect(last.classes()).to.include('veui-nav-item-open')
 
     last.trigger('mouseleave')
-    await vm.$nextTick()
+    await wait(300)
     expect(last.classes()).to.not.include('veui-nav-item-open')
 
     let second = items.at(1)
     second.trigger('mouseenter')
     await vm.$nextTick()
     second.trigger('mouseleave')
-    await vm.$nextTick()
+    await wait(300)
     expect(second.classes(), '有下拉的不会监听mouseleave').to.include(
       'veui-nav-item-open'
     )

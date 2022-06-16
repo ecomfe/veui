@@ -43,7 +43,7 @@
           :tabindex="item.tabIndex"
           v-bind="pickLinkProps(item)"
           @mouseenter="handleItemHover(item)"
-          @mouseleave="!hasChildren(item) && close(item)"
+          @mouseleave="handleItemLeave(item)"
           @click="handleItemClick(item)"
           @keydown="handleKeydown($event, item)"
         >
@@ -375,6 +375,14 @@ export default {
       // 3. options: activate + close dropdown
       this.activateItem(item, true)
       this.$emit('click', item)
+    },
+    handleItemLeave (item) {
+      if (!this.hasChildren(item)) {
+        // for transition
+        setTimeout(() => {
+          this.close(item)
+        }, 200)
+      }
     },
     getFocusSelector () {
       return `.${this.$c('nav-body')} .${this.$c('nav-item')}:not(.${this.$c(
