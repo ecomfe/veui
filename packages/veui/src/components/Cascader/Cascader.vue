@@ -248,7 +248,7 @@ export default {
     return {
       outsideRefs: ['root'],
       keyword: '',
-      loadedData: {}
+      loadedData: Object.create(null)
     }
   },
   computed: {
@@ -265,8 +265,8 @@ export default {
           enter: (item, { replace }) => {
             const key = getKey(item)
             // keep walking on this.loadedData[key]
-            if (item.lazy && !item.options && this.loadedData[getKey(item)]) {
-              replace({ ...item, options: this.loadedData[key] })
+            if (item.lazy && !item.options && key in this.loadedData) {
+              replace({ ...item, options: this.loadedData[key], _loaded: true })
             }
           },
           exit: (item, { parentIndices, index, parents, childrenResult }) => {
@@ -407,9 +407,7 @@ export default {
   methods: {
     loadAndSaveData (context) {
       return Promise.resolve(this.load(context)).then((loaded) => {
-        if (loaded) {
-          this.$set(this.loadedData, getKey(context.parent), loaded)
-        }
+        this.$set(this.loadedData, getKey(context.parent), loaded)
         return loaded
       })
     },

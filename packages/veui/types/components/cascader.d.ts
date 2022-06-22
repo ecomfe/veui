@@ -9,11 +9,21 @@ import {
   ControllableMixin,
   InputMixin,
   DropdownMixin,
-  TreeMixinWithIndeterminate
+  TreeMixinWithIndeterminate,
+  Promisify
 } from '../common'
 import { MultipleAndValue } from './select'
-import { Item } from './option-group'
+import { Item as OptionItem } from './option-group'
 import { CheckedState } from './tree'
+
+type Item = OptionItem & {
+  lazy?: true
+}
+
+type Load = (arg: {
+  parent?: Item
+  scope: 'descendants' | 'children'
+}) => Promisify<Item[] | void>
 
 type Props<T extends Item> = MultipleAndValue<T> & {
   placeholder?: string
@@ -28,7 +38,7 @@ type Props<T extends Item> = MultipleAndValue<T> & {
   valueDisplay?: 'complete' | 'simple'
   inline?: boolean
   max?: number
-  // keyField?: string
+  load?: Load
 } & SearchableProps<Normalized<'options', T, false, CheckedState>>
 
 type Emits = {
