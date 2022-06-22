@@ -170,7 +170,7 @@ export default {
       let allIndeterminate = false
       walk(
         this.realOptions,
-        (option) => {
+        (option, { skip }) => {
           const { disabled, value, options } = option
           const isLeaf = !options || !options.length
 
@@ -185,7 +185,7 @@ export default {
             }
           }
 
-          return !disabled
+          skip(disabled)
         },
         'options'
       )

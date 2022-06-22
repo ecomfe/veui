@@ -20,12 +20,7 @@ const methods = {
   markChecked (tree, checked) {
     let walker = {
       enter: (item, context) => {
-        return markAncestorInChecked(
-          item,
-          checked,
-          context,
-          this.treeChildrenKey
-        )
+        markAncestorInChecked(item, checked, context, this.treeChildrenKey)
       },
       exit: (item, context) => {
         let { value, [this.treeChildrenKey]: children } = item
@@ -146,12 +141,7 @@ const methods = {
   getCheckedSubTree (tree, checked) {
     const walker = {
       enter: (item, context) => {
-        return markAncestorInChecked(
-          item,
-          checked,
-          context,
-          this.treeChildrenKey
-        )
+        markAncestorInChecked(item, checked, context, this.treeChildrenKey)
       },
       exit: (item, context) => {
         if (hasChildren(item, this.treeChildrenKey)) {
@@ -262,7 +252,7 @@ function getNormalizedCheckedValues (
 ) {
   let walker = {
     enter (item, context) {
-      return markAncestorInChecked(item, checked, context, childrenKey)
+      markAncestorInChecked(item, checked, context, childrenKey)
     },
     exit (item, context) {
       let { value, [childrenKey]: children } = item
@@ -453,11 +443,11 @@ function replaceCheckedGroupWithLeaves (
 
   // 遍历替换后代选中的 group 节点
   let result = []
-  walk(self, (item) => {
+  walk(self, (item, { skip }) => {
     if (hasChildren(item, childrenKey) && inChecked(prevChecked, item)) {
       result.push(...getLeaves(item, childrenKey))
       // 该节点以下已经替换过了
-      return false
+      skip()
     }
   })
   return result
@@ -467,20 +457,21 @@ function getLeavesByContext (item, initialContext, childrenKey) {
   let result = []
   walk(
     item,
-    (child, context) => {
+    (child, { setContext, skip, checked, hidden }) => {
       // 1. 只要 checked 叶子，disabled 或 disabled 父下的不要
       // 2. hidden条件：不是 true 的叶子，或者 leafAncestor 下的叶子
       let { disabled, value } = child
       if (hasChildren(child, childrenKey)) {
-        if (context.hidden != null && isLeafAncestor(child, childrenKey)) {
-          context = { ...context, hidden: null }
+        skip(disabled)
+        if (!disabled && hidden != null && isLeafAncestor(child, childrenKey)) {
+          setContext({ hidden: null })
         }
-        return disabled ? false : context
+        return
       }
       if (
         !disabled &&
-        hasEqualField(child, context, 'checked') &&
-        hasEqualField(child, context, 'hidden')
+        valueMatches(child.checked, checked) &&
+        valueMatches(child.hidden, hidden)
       ) {
         result.push(value)
       }
@@ -519,13 +510,16 @@ function getEnabledLeavesFrom (item, childrenKey) {
   )
 }
 
-function markAncestorInChecked (item, checked, context, childrenKey) {
-  if (hasChildren(item, childrenKey)) {
-    let isChecked = inChecked(checked, item)
-    if (isChecked && !context.ancestorInChecked) {
-      context.ancestorInChecked = true
+function markAncestorInChecked (
+  item,
+  checked,
+  { ancestorInChecked, setContext },
+  childrenKey
+) {
+  if (hasChildren(item, childrenKey) && !ancestorInChecked) {
+    if (inChecked(checked, item)) {
+      setContext({ ancestorInChecked: true })
     }
-    return context
   }
 }
 
@@ -541,8 +535,8 @@ function isLeafAncestor (item, childrenKey) {
   )
 }
 
-function hasEqualField (item, context, field) {
-  return context[field] == null || context[field] === Boolean(item[field])
+function valueMatches (itemValue, targetValue) {
+  return targetValue == null || targetValue === Boolean(itemValue)
 }
 
 function inChecked (checked, item) {
