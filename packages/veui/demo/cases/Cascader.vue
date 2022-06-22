@@ -234,7 +234,9 @@ const getSdChildren = (full) => [
   },
   {
     label: '泰山',
-    value: '泰山'
+    value: '泰山',
+    // load no data
+    ...(full ? null : { lazy: true })
   },
   {
     label: '烟台',
@@ -293,7 +295,7 @@ export default {
               parent
                 ? {
                   菏泽: hzChildren,
-                  山东: getSdChildren(scope === 'DESCENDANT')
+                  山东: getSdChildren(scope === 'descendants')
                 }[parent.value]
                 : undefined
             )

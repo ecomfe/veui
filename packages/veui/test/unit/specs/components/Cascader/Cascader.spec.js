@@ -696,7 +696,7 @@ describe('components/Cascader/Cascader', function () {
                 resolve(
                   {
                     菏泽: hzChildren,
-                    山东: getSdChildren(scope === 'DESCENDANT')
+                    山东: getSdChildren(scope === 'descendants')
                   }[parent.value]
                 )
             })

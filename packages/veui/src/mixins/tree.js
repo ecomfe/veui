@@ -535,6 +535,13 @@ function isLeafAncestor (item, childrenKey) {
   )
 }
 
+/**
+ * 检查 itemValue 是否匹配 targetValue
+ * 当 targetValue == null 表示目标无要求，itemValue 始终满足
+ * @param {*} itemValue 被匹配的值
+ * @param {boolean | null | undefined} targetValue 目标值
+ * @return boolean 是否匹配
+ */
 function valueMatches (itemValue, targetValue) {
   return targetValue == null || targetValue === Boolean(itemValue)
 }

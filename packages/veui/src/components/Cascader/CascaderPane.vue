@@ -159,8 +159,8 @@ import { scrollIntoView } from '../../utils/dom'
 import AbstractTree from '../Tree/_AbstractTree'
 
 const LoadScope = {
-  CHILDREN: 'CHILDREN',
-  DESCENDANT: 'DESCENDANT'
+  CHILDREN: 'children',
+  DESCENDANTS: 'descendants'
 }
 
 export default {
@@ -312,7 +312,7 @@ export default {
     },
     handleSelect (option) {
       if (this.needLoad(option, true)) {
-        this.startLoad(option, LoadScope.DESCENDANT)
+        this.startLoad(option, LoadScope.DESCENDANTS)
         return
       } else {
         this.invalidateLoad()
@@ -438,10 +438,12 @@ export default {
     invalidateLoad () {
       this.currentLoadingKey = null
     },
+    // descendant 是否判断后代中需要加载的
     needLoad (option, descendant) {
-      const { lazy, containLazy, options } = option
+      const { lazy, containLazy, options, _loaded } = option
       return (
-        ((lazy && options == null) || (descendant && containLazy)) &&
+        ((lazy && options == null && !_loaded) ||
+          (descendant && containLazy)) &&
         typeof this.load === 'function'
       )
     },
