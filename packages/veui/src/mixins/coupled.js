@@ -85,7 +85,7 @@ function isDiff (prevSorted, newSorted) {
 }
 
 function createVnodeWalker (sorted, childrenType) {
-  const callback = (vnode) => {
+  const callback = (vnode, { skip }) => {
     const { tag, componentInstance: vm } = vnode
     if (vm) {
       const { uiTypes } = vm.$options
@@ -97,9 +97,10 @@ function createVnodeWalker (sorted, childrenType) {
         walk([vm._vnode], callback)
       }
       // skip children
-      return false
+      skip()
+    } else {
+      skip(!tag)
     }
-    return !!tag
   }
 
   return callback

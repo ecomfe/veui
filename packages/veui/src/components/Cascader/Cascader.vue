@@ -262,12 +262,12 @@ export default {
       let options = mapDatasource(
         this.options,
         {
-          enter: (item) => {
+          enter: (item, { replace }) => {
             const key = getKey(item)
             // keep walking on this.loadedData[key]
-            return item.lazy && !item.options && this.loadedData[key]
-              ? { ...item, options: this.loadedData[key] }
-              : item
+            if (item.lazy && !item.options && this.loadedData[getKey(item)]) {
+              replace({ ...item, options: this.loadedData[key] })
+            }
           },
           exit: (item, { parentIndices, index, parents, childrenResult }) => {
             const parent = parents[parents.length - 1]

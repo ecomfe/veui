@@ -1,6 +1,13 @@
-import { find as _find, isPlainObject } from 'lodash'
+import { find as _find } from 'lodash'
 
-export function walk (array, callback, alias = 'children', context = {}) {
+const DEFAULT_CHILDREN_KEY = 'children'
+
+export function walk (
+  array,
+  callback,
+  alias = DEFAULT_CHILDREN_KEY,
+  context = {}
+) {
   return _walk(
     array,
     callback,
@@ -9,7 +16,7 @@ export function walk (array, callback, alias = 'children', context = {}) {
   )
 }
 
-function _walk (array, callback, context, alias = 'children') {
+function _walk (array, callback, context, alias = DEFAULT_CHILDREN_KEY) {
   if (!array || !callback) {
     return
   }
@@ -34,34 +41,41 @@ function _walk (array, callback, context, alias = 'children') {
     }
   }
 
-  let { depth, parents, parentIndices, mutableEnter } = context
-  let childrenResult = []
+  let { depth, parents, parentIndices } = context
+  let result = []
   array.forEach((item, index) => {
-    let selfContext = { ...context, index }
-    let skipChildren = false
-    let childrenContext = selfContext
-    let realMutableEnter = false
-
-    if (typeof enter === 'function') {
-      let result = enter(item, selfContext)
-      if (result === false) {
-        skipChildren = true
-      } else if (isPlainObject(result)) {
-        realMutableEnter = mutableEnter
-        // 支持父给子传递上下文
-        childrenContext = result
+    let skip = false
+    let replaced = item
+    let settedContext = null
+    let selfContext = {
+      ...context,
+      index,
+      skip: (...args) => {
+        skip = args.length ? !!args[0] : true
+      },
+      // 如果被 walk 的对象是可以修改的，可以直接修改
+      // 但是比如是 datasource prop，就只能用 replace 了
+      replace: (newItem) => {
+        replaced = newItem
+      },
+      setContext: (context) => {
+        settedContext = context
       }
     }
-    item = realMutableEnter ? childrenContext : item
-    let children = skipChildren ? null : getChildrenByAlias(item, alias)
+
+    if (typeof enter === 'function') {
+      enter(item, selfContext)
+    }
+
+    let children = skip ? null : getChildrenByAlias(replaced, alias)
     if (children) {
       selfContext.childrenResult = _walk(
         children,
         callback,
         {
-          ...childrenContext,
-          mutableEnter: realMutableEnter,
-          parents: [...parents, item],
+          ...context,
+          ...settedContext,
+          parents: [...parents, replaced],
           parentIndices: [...parentIndices, index],
           depth: depth + 1
         },
@@ -70,13 +84,19 @@ function _walk (array, callback, context, alias = 'children') {
     }
 
     if (typeof exit === 'function') {
-      childrenResult.push(exit(item, selfContext))
+      // 此时 exit 可以拿到 selfContext.childrenResult
+      result.push(exit(replaced, selfContext))
     }
   })
-  return childrenResult
+  return result
 }
 
-export function find (array, predicate, alias = 'children', parents = []) {
+export function find (
+  array,
+  predicate,
+  alias = DEFAULT_CHILDREN_KEY,
+  parents = []
+) {
   if (!array || typeof predicate !== 'function') {
     return null
   }
@@ -103,7 +123,7 @@ export function find (array, predicate, alias = 'children', parents = []) {
 export function findParents (
   array,
   predicate,
-  { alias = 'children', includeSelf = false } = {}
+  { alias = DEFAULT_CHILDREN_KEY, includeSelf = false } = {}
 ) {
   let parents = []
   let self = find(
@@ -131,7 +151,11 @@ function getChildrenByAlias (obj, alias) {
   return key ? obj[key] : null
 }
 
-export function mapDatasource (datasource, callback, childrenKey) {
+export function mapDatasource (
+  datasource,
+  callback,
+  childrenKey = DEFAULT_CHILDREN_KEY
+) {
   const isExit = typeof callback === 'function'
   const enter = isExit ? null : callback.enter
   const exit = isExit ? callback : callback.exit
@@ -148,12 +172,11 @@ export function mapDatasource (datasource, callback, childrenKey) {
         }
       }
     },
-    childrenKey,
-    { mutableEnter: true }
+    childrenKey
   )
 }
 
-export function hasChildren (item, childrenKey = 'children') {
+export function hasChildren (item, childrenKey = DEFAULT_CHILDREN_KEY) {
   return !!item[childrenKey] && item[childrenKey].length !== 0
 }
 
@@ -203,7 +226,11 @@ export function getEnabledDescendants (root, childrenKey) {
  * @param {string} childrenKey 子项的字段名
  * @return {Array} 获取到的后代节点的值
  */
-export function getDescendants (root, visit, childrenKey = 'children') {
+export function getDescendants (
+  root,
+  visit,
+  childrenKey = DEFAULT_CHILDREN_KEY
+) {
   let result = []
   if (typeof visit === 'string') {
     childrenKey = visit
@@ -218,7 +245,7 @@ export function getDescendants (root, visit, childrenKey = 'children') {
       if (keep && child[keep] !== undefined) {
         result.push(child[keep])
       }
-      return !skipChildren
+      context.skip(!!skipChildren)
     },
     childrenKey
   )
