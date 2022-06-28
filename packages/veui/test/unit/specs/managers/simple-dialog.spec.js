@@ -15,14 +15,14 @@ describe('managers/simple-dialog', function () {
 
   it('should implement `createComponent` function correctly', () => {
     let component = dialog.createComponent()
-    expect(isType(Vue, component)).to.equal(true)
+    expect(isType(component, Vue)).to.equal(true)
   })
 
   it('should implement `create` function correctly', () => {
     dialog.create()
 
     expect(dialog.components.length).to.equal(1)
-    expect(isType(Vue, dialog.components[0])).to.equal(true)
+    expect(isType(dialog.components[0], Vue)).to.equal(true)
   })
 
   it('should implement `removeComponent` function correctly', () => {

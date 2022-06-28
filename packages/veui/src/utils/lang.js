@@ -13,8 +13,8 @@ export function getType (type) {
   return match ? match[1] : ''
 }
 
-export function isType (type, obj) {
-  return getType(type) === getTypeByInstance(obj)
+export function isType (obj, type) {
+  return getTypeByInstance(obj) === getType(type)
 }
 
 export function isEqualSet (arr1, arr2) {

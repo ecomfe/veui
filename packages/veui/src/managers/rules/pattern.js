@@ -1,9 +1,9 @@
-import { isType, getTypeByInstance } from '../../utils/lang'
+import { isType } from '../../utils/lang'
 import i18n from '../i18n'
 
 export default {
   validate (val, ruleValue) {
-    return isType(getTypeByInstance(ruleValue), RegExp)
+    return isType(ruleValue, RegExp)
       ? ruleValue.test(val)
       : new RegExp(ruleValue).test(val)
   },
