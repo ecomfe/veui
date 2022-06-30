@@ -210,7 +210,7 @@ export default {
       if (this.local) {
         inheritScopeAttrs(box, this.$el)
       } else {
-        this.removePortal = createPortal(box, document.body)
+        this.removePortal = createPortal(box, box.ownerDocument.body)
       }
 
       if (this.realOpen) {
@@ -326,12 +326,14 @@ export default {
     },
     createFocusContext () {
       if (!this.focusContext) {
-        this.focusContext = focusManager.createContext(this.$refs.box, {
-          source: document.activeElement,
+        let { box } = this.$refs
+
+        this.focusContext = focusManager.createContext(box, {
+          source: box.ownerDocument.activeElement,
           trap: this.modal
         })
 
-        this.lastSource = document.activeElement
+        this.lastSource = box.ownerDocument.activeElement
       }
     },
     destroyFocus () {
