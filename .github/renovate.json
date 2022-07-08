@@ -13,5 +13,8 @@
     }
   ],
   "rangeStrategy": "bump",
-  "commitBody": "[skip ci]"
+  "commitBody": "[skip ci]",
+  "constraints": {
+    "pnpm": "7.3.0"
+  }
 }
