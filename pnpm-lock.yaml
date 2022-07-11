@@ -261,7 +261,7 @@ importers:
       babel-preset-env: ^1.7.0
       babel-preset-stage-2: ^6.24.1
       classlist-polyfill: ^1.2.0
-      dls-icons-vue: ~2.6.0
+      dls-icons-vue: ~2.7.0
       esm: ^3.2.25
       focus-visible: ^4.1.5
       less: ^4.1.2
@@ -274,7 +274,7 @@ importers:
       vue: ^2.6.14
     dependencies:
       classlist-polyfill: 1.2.0
-      dls-icons-vue: 2.6.0_vue@2.6.14
+      dls-icons-vue: 2.7.0_vue@2.6.14
       focus-visible: 4.1.5
       less-plugin-dls: 9.0.0
       less-plugin-est: 3.0.1
@@ -300,7 +300,7 @@ importers:
       '@rollup/plugin-commonjs': ^20.0.0
       '@rollup/plugin-node-resolve': ^13.3.0
       del-cli: ^4.0.1
-      dls-icons-vue: ~2.6.0
+      dls-icons-vue: ~2.7.0
       esm: ^3.2.25
       mkdirp: ^0.5.6
       rimraf: ^2.7.1
@@ -308,7 +308,7 @@ importers:
       veui: workspace:*
       vue: ^2.6.14
     dependencies:
-      dls-icons-vue: 2.6.0_vue@2.6.14
+      dls-icons-vue: 2.7.0_vue@2.6.14
     devDependencies:
       '@rollup/plugin-commonjs': 20.0.0_rollup@2.72.0
       '@rollup/plugin-node-resolve': 13.3.0_rollup@2.72.0
@@ -4173,6 +4173,7 @@ packages:
 
   /bindings/1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
+    requiresBuild: true
     dependencies:
       file-uri-to-path: 1.0.0
     dev: true
@@ -5211,7 +5212,7 @@ packages:
       lodash: ^4.17.20
       marko: ^3.14.4
       mote: ^0.2.0
-      mustache: ^4.0.1
+      mustache: ^3.0.0
       nunjucks: ^3.2.2
       plates: ~0.4.11
       pug: ^3.0.0
@@ -5380,7 +5381,7 @@ packages:
       lodash: ^4.17.20
       marko: ^3.14.4
       mote: ^0.2.0
-      mustache: ^4.0.1
+      mustache: ^3.0.0
       nunjucks: ^3.2.2
       plates: ~0.4.11
       pug: ^3.0.0
@@ -6411,16 +6412,16 @@ packages:
     resolution: {integrity: sha512-fyeXE9HhoBlt9P5kHnCMnSJQaCOWpTWVOqUAFgDveSlYgffqyoq6dX6cav8Vmu23W0un+KHDOm7/UyMwWzKusg==}
     dev: false
 
-  /dls-icons-data/2.6.0:
-    resolution: {integrity: sha512-EO4V+UCW52LB4UP4ml/XfNO3Cew6r7shRNaBTx3MCNMSDSiESLltdEH76ojhYW19Vo6JYhqTj0i4KZN/+Ax4sQ==}
+  /dls-icons-data/2.7.0:
+    resolution: {integrity: sha512-oqwa/a6+3yB7EqyyaDAPi1OpLG+N78SjuE1bOBrpsU9gQg/KILQYDBrx98s+r4gCsSUxEPwD9RnmAYrZrWfjlA==}
     dev: false
 
-  /dls-icons-vue/2.6.0_vue@2.6.14:
-    resolution: {integrity: sha512-Gsf8517qvRQKRY9weJZdGL94NWCVQ0nRckfg7wkCiEl/XIEqnLJl0CX+jBVjoCS/V7G7mSAwIYfxWNWeQeDl3A==}
+  /dls-icons-vue/2.7.0_vue@2.6.14:
+    resolution: {integrity: sha512-QyN3gSa2G+wDcu1jSV6QcJSUnpfeOKHLeB9CnjSkVIZQGewVMW3A870AJSVMVwyB5y814A0b1ROsBKwaSzKO/g==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-icons-data: 2.6.0
+      dls-icons-data: 2.7.0
       vue: 2.6.14
     dev: false
 
@@ -6824,7 +6825,7 @@ packages:
       eslint-plugin-standard: '>=4.0.0'
     dependencies:
       eslint: 6.8.0
-      eslint-plugin-import: 2.26.0_f576sxyjyh6adlm4vpbkhlfpzi
+      eslint-plugin-import: 2.26.0_eslint@6.8.0
       eslint-plugin-node: 11.1.0_eslint@6.8.0
       eslint-plugin-promise: 4.3.1
       eslint-plugin-standard: 4.1.0_eslint@6.8.0
@@ -7586,6 +7587,7 @@ packages:
 
   /file-uri-to-path/1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -10673,6 +10675,7 @@ packages:
 
   /nan/2.15.0:
     resolution: {integrity: sha512-8ZtvEnA2c5aYCZYd1cvgdnU6cqwixRoYg70xPLWUws5ORTa/lnw+u4amixRS/Ac5U5mQVgp9pnlSUnbNWFaWZQ==}
+    requiresBuild: true
     dev: true
     optional: true
 
