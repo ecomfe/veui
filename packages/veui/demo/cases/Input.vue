@@ -46,6 +46,17 @@
       <h3>非受控（不感知输入法），localValue：{{ uncontrolled2 }}</h3>
       <veui-input @input="uncontrolled2 = $event"/>
     </section>
+
+    <section>
+      <h3>自动填充适配</h3>
+      <veui-input
+        placeholder="请输入用户名"
+        autocomplete="username"
+        @autofillchange="handleAutofillChange"
+      />
+      <p>自动填充：{{ autofill }}</p>
+    </section>
+
     <section>
       <h3>事件及功能展示</h3>
       <veui-field label="描述：">
@@ -232,7 +243,8 @@ export default {
       controlled1: '',
       controlled2: '',
       uncontrolled1: '',
-      uncontrolled2: ''
+      uncontrolled2: '',
+      autofill: false
     }
   },
   methods: {
@@ -275,6 +287,9 @@ export default {
     },
     handlePriceChange (val) {
       this.price = val
+    },
+    handleAutofillChange (val) {
+      this.autofill = val
     }
   }
 }
