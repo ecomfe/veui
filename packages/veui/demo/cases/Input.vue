@@ -3,6 +3,24 @@
   <h1>
     <code>&lt;veui-input&gt;</code>
   </h1>
+
+  <veui-form>
+    <section>
+      <h3>自动填充适配</h3>
+      <veui-input
+        ui="inline"
+        placeholder="请输入用户名"
+        name="username"
+        autocomplete="username"
+        clearable
+        maxlength="10"
+        select-on-focus
+        @autofillchange="handleAutofillChange"
+      />
+      <p>自动填充：{{ autofill }}</p>
+    </section>
+  </veui-form>
+
   <veui-form>
     <section class="five-sizes">
       <h3>4 种大小：</h3>
@@ -45,16 +63,6 @@
       <veui-input composition @input="uncontrolled1 = $event"/>
       <h3>非受控（不感知输入法），localValue：{{ uncontrolled2 }}</h3>
       <veui-input @input="uncontrolled2 = $event"/>
-    </section>
-
-    <section>
-      <h3>自动填充适配</h3>
-      <veui-input
-        placeholder="请输入用户名"
-        autocomplete="username"
-        @autofillchange="handleAutofillChange"
-      />
-      <p>自动填充：{{ autofill }}</p>
     </section>
 
     <section>

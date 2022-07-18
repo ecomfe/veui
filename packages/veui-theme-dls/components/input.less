@@ -18,7 +18,11 @@
   .veui-transition(border-color, color, box-shadow);
 
   &-autofill {
-    background-color: @veui-autofill-color;
+    background-color: #e8f0fe;
+  }
+
+  &-autofill&-safari {
+    background-color: #faffbd;
   }
 
   &-hidden {
@@ -188,8 +192,11 @@
     border-radius: 0;
     position: relative;
     border-style: none none solid !important;
-    background-color: transparent;
     box-shadow: none;
+
+    &:not(.@{veui-prefix}-input-autofill) {
+      background-color: transparent;
+    }
 
     &.@{veui-prefix}-readonly,
     &.@{veui-prefix}-disabled {
