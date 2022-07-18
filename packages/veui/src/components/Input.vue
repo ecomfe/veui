@@ -35,6 +35,7 @@
       @compositionupdate="handleCompositionUpdate"
       @compositionend="handleCompositionEnd"
       @change="handleChange"
+      @transitionend="handleTransitionEnd"
     >
   </div>
   <template v-if="$slots.after || clearable || realMaxlength !== null">
@@ -216,6 +217,8 @@ export default {
       if (val) {
         this.$emit('autofill')
       }
+
+      this.$emit('autofillchange', val)
     },
     checkStrict: {
       handler ({ strict, getLength } = {}) {
@@ -232,11 +235,7 @@ export default {
   methods: {
     handleInput (e) {
       this.tmpInputValue = e.target.value
-      setTimeout(() => {
-        try {
-          this.autofill = !!this.$el.querySelector(':-webkit-autofill')
-        } catch (e) {}
-      })
+
       if (this.composing === COMPOSITION_UPDATE) {
         this.composing = COMPOSITION_INPUT
       }
@@ -303,7 +302,7 @@ export default {
     updateValue (value, ...args) {
       this.commit('value', value, ...args)
       this.$nextTick(() => {
-        let input = this.$refs.input
+        let { input } = this.$refs
         this.tmpInputValue = null
         if (input && this.realValue !== input.value) {
           input.value = this.realValue
@@ -337,6 +336,12 @@ export default {
       this.commit('value', '')
       this.focus()
       this.$emit('clear')
+    },
+    handleTransitionEnd ({ propertyName }) {
+      // we are changing opacity when autofill state changes
+      if (propertyName === 'opacity') {
+        this.autofill = this.$refs.input.matches(':-webkit-autofill')
+      }
     }
   }
 }
