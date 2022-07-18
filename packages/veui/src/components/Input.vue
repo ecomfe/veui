@@ -5,6 +5,7 @@
     [$c('focus')]: focused,
     [$c('input-hidden')]: type === 'hidden',
     [$c('input-autofill')]: autofill,
+    [$c('input-safari')]: isSafari,
     [$c('invalid')]: realInvalid || lengthOverflow,
     [$c('readonly')]: realReadonly,
     [$c('disabled')]: realDisabled
@@ -81,6 +82,7 @@ import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 import warn from '../utils/warn'
 import '../common/global'
 import i18nManager from '../managers/i18n'
+import { isSafari } from '../utils/bom'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
 
@@ -158,7 +160,8 @@ export default {
       // 具体情况比较复杂，所以直接输入过程中保留当前输入的值，输入结束再完全由 realValue 决定
       // 不能是空字符串，否则无法区分：用户在清空内容 vs. nextTick 中的 reset
       tmpInputValue: null,
-      autofill: false
+      autofill: false,
+      isSafari: false
     }
   },
   computed: {
@@ -231,6 +234,9 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted () {
+    this.isSafari = isSafari()
   },
   methods: {
     handleInput (e) {
