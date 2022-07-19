@@ -17,6 +17,7 @@ describe('directives/tooltip', function () {
           <div style="width: 200px; height: 200px; display: flex; align-items: center; justify-content: center">
             <div class="a" v-tooltip="'Hi'">A</div>
             <div class="b" v-tooltip="{ content: 'Hey' }">B</div>
+            <div class="c" v-tooltip>Hola</div>
           </div>`
       },
       {
@@ -27,6 +28,7 @@ describe('directives/tooltip', function () {
 
     let a = wrapper.find('.a')
     let b = wrapper.find('.b')
+    let c = wrapper.find('.c')
 
     a.trigger('mouseenter')
 
@@ -54,6 +56,11 @@ describe('directives/tooltip', function () {
     expectTooltip('Hey')
 
     b.trigger('mouseleave')
+    c.trigger('mouseenter')
+    await wait(0)
+    expectTooltip('Hola')
+
+    c.trigger('mouseleave')
     await wait(cooldown + 50)
     expectTooltip(null)
 
