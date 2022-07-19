@@ -10,6 +10,7 @@ describe('managers/tooltip', function () {
     const manager = createTooltipManager({ warmup: 200, cooldown: 300 })
     const el = document.createElement('div')
     const other = document.createElement('div')
+    other.textContent = 'Hola'
 
     manager.enter(el, { content: 'Hi' })
     await wait(100)
@@ -36,17 +37,30 @@ describe('managers/tooltip', function () {
     expectTooltip('Hey')
 
     manager.leave()
+    await wait(0)
+    manager.enter(other, {})
+    await wait(0)
+    expectTooltip('Hola')
+
+    manager.leave()
+    await wait(400)
+    manager.enter(other, { content: '' })
+    await wait(0)
+    expectTooltip(null)
+
+    manager.leave()
     await wait(350)
     expectTooltip(null)
 
     manager.destroy()
   })
 
-  it('should handle ignore invalid usage', async () => {
+  it('should ignore invalid usage', async () => {
     const warmup = config.get('tooltip.warmup')
 
     const manager = createTooltipManager()
     const el = document.createElement('div')
+    el.textContent = 'Hola'
 
     manager.enter(null, { content: 'Hi' })
     await wait(warmup + 50)
@@ -54,7 +68,7 @@ describe('managers/tooltip', function () {
 
     manager.enter(el, {})
     await wait(warmup + 50)
-    expectTooltip(null)
+    expectTooltip('Hola')
 
     manager.leave()
 
@@ -79,6 +93,7 @@ describe('managers/tooltip', function () {
   it('should respect reactive content', async () => {
     const manager = createTooltipManager({ warmup: 100 })
     const el = document.createElement('div')
+    el.textContent = 'Hola'
     const el2 = document.createElement('div')
 
     manager.enter(el, { content: 'Hi' })
@@ -89,9 +104,13 @@ describe('managers/tooltip', function () {
     await wait(0)
     expectTooltip('Hey')
 
+    manager.update(el, {})
+    await wait(0)
+    expectTooltip('Hola')
+
     manager.update(el2, { content: 'Bye' })
     await wait(0)
-    expectTooltip('Hey')
+    expectTooltip('Hola')
 
     manager.destroy()
   })

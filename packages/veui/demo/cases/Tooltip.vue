@@ -402,6 +402,12 @@
         corrupti dolorem, tempore libero magni accusantium aut repellat cum
         fuga quidem et.
       </p>
+      <p v-tooltip.overflow class="line-clamp">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repudiandae
+        quia modi, architecto sunt dolorem provident? Hic similique, at
+        corrupti dolorem, tempore libero magni accusantium aut repellat cum
+        fuga quidem et.
+      </p>
     </section>
   </section>
 </article>

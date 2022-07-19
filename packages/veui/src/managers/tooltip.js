@@ -80,11 +80,18 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
       return
     }
 
-    assign(component, options)
+    if (options.content == null) {
+      assign(component, {
+        ...options,
+        content: target.textContent
+      })
+    } else {
+      assign(component, options)
+    }
   }
 
   function open (target, { position, content }) {
-    if (!target || !content) {
+    if (!target || content === '') {
       return
     }
 
@@ -94,7 +101,7 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
 
     assign(component, {
       target,
-      content,
+      content: content == null ? target.textContent : content,
       position,
       open: true
     })
