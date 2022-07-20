@@ -11,6 +11,7 @@
   </div>
 </div>
 </template>
+
 <script>
 import Icon from './Icon'
 import prefix from '../mixins/prefix'
