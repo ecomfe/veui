@@ -93,7 +93,8 @@ importers:
       core-js: ^3.22.4
       cross-env: ^5.2.1
       date-fns: ^2.28.0
-      dls-graphics: ^1.2.0
+      dls-graphics: ^1.3.2
+      dls-illustrations-vue: ^1.3.2
       esbuild: ^0.12.29
       eslint: ^6.8.0
       eslint-config-prettier: ^6.15.0
@@ -146,7 +147,8 @@ importers:
       clone-element: 0.1.0
       core-js: 3.22.4
       date-fns: 2.28.0
-      dls-graphics: 1.2.0
+      dls-graphics: 1.3.2
+      dls-illustrations-vue: 1.3.2_vue@2.6.14
       lodash: 4.17.21
       popper.js: 1.16.1
       resize-detector: 0.1.10
@@ -265,7 +267,7 @@ importers:
       esm: ^3.2.25
       focus-visible: ^4.1.5
       less: ^4.1.2
-      less-plugin-dls: ^9.0.0
+      less-plugin-dls: ^9.1.1
       less-plugin-est: ^3.0.1
       postcss: ^8.4.13
       rollup: ^2.72.0
@@ -276,7 +278,7 @@ importers:
       classlist-polyfill: 1.2.0
       dls-icons-vue: 2.8.1_vue@2.6.14
       focus-visible: 4.1.5
-      less-plugin-dls: 9.0.0
+      less-plugin-dls: 9.1.1
       less-plugin-est: 3.0.1
     devDependencies:
       '@rollup/plugin-commonjs': 20.0.0_rollup@2.72.0
@@ -2539,7 +2541,7 @@ packages:
       source-map: 0.6.1
       vue-template-es2015-compiler: 1.9.1
     optionalDependencies:
-      prettier: 2.6.2
+      prettier: 2.7.1
     transitivePeerDependencies:
       - arc-templates
       - atpl
@@ -2608,7 +2610,7 @@ packages:
       source-map: 0.6.1
       vue-template-es2015-compiler: 1.9.1
     optionalDependencies:
-      prettier: 2.6.2
+      prettier: 2.7.1
     transitivePeerDependencies:
       - arc-templates
       - atpl
@@ -2681,7 +2683,7 @@ packages:
     optionalDependencies:
       less: 3.13.1
       pug: 3.0.2
-      sass: 1.52.3
+      sass: 1.53.0
       stylus: 0.54.8
     transitivePeerDependencies:
       - arc-templates
@@ -6408,8 +6410,8 @@ packages:
       color-converters: 0.1.1
     dev: false
 
-  /dls-graphics/1.2.0:
-    resolution: {integrity: sha512-fyeXE9HhoBlt9P5kHnCMnSJQaCOWpTWVOqUAFgDveSlYgffqyoq6dX6cav8Vmu23W0un+KHDOm7/UyMwWzKusg==}
+  /dls-graphics/1.3.2:
+    resolution: {integrity: sha512-hPCo8dpCQLffRLqtPsYIX8txrEzdgIIGfofN6XzRx2GOsm87SOlQIQoqdkir+rPZIuIHFScdb4ifSIsaicXDYQ==}
     dev: false
 
   /dls-icons-data/2.8.1:
@@ -6422,6 +6424,15 @@ packages:
       vue: 2.x
     dependencies:
       dls-icons-data: 2.8.1
+      vue: 2.6.14
+    dev: false
+
+  /dls-illustrations-vue/1.3.2_vue@2.6.14:
+    resolution: {integrity: sha512-uVLaaj2qO53iQi9gvPiAAi2HnYQyToqhtR4+RKNfxBd+Lggx1OET+Mz0Vmjh3bzuyxRHj5/jywJkpqNCxqhsSg==}
+    peerDependencies:
+      vue: 2.x
+    dependencies:
+      dls-graphics: 1.3.2
       vue: 2.6.14
     dev: false
 
@@ -9749,8 +9760,8 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /less-plugin-dls/9.0.0:
-    resolution: {integrity: sha512-u1flXH+5vjCG96ZYzbZbqIEDakZwTjuRsAL/xaylndqtLZdcfRgl+k5bNH4bzdnxyFoUalRRl98JAy94KSxPjw==}
+  /less-plugin-dls/9.1.1:
+    resolution: {integrity: sha512-gCe9bVw3uUu9Irl2Ik+zi4RAdzQvqG7siNTKMd1oEc3g8MdXeaia5uwyl+txCN1MMmx+FxM1/LRB/r6dy8AgKg==}
     hasBin: true
     dependencies:
       arg: 4.1.3
@@ -12379,6 +12390,14 @@ packages:
     requiresBuild: true
     dev: true
 
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /pretty-error/2.1.2:
     resolution: {integrity: sha512-EY5oDzmsX5wvuynAByrmY0P0hcp+QpnAKbJng2A2MPjVKXCxrDSUkzghVJ4ZGPIv+JC4gX8fPUWscC0RtjsWGw==}
     dependencies:
@@ -13344,8 +13363,8 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
-  /sass/1.52.3:
-    resolution: {integrity: sha512-LNNPJ9lafx+j1ArtA7GyEJm9eawXN8KlA1+5dF6IZyoONg1Tyo/g+muOsENWJH/2Q1FHbbV4UwliU0cXMa/VIA==}
+  /sass/1.53.0:
+    resolution: {integrity: sha512-zb/oMirbKhUgRQ0/GFz8TSAwRq2IlR29vOUJZOx0l8sV+CkHUfHa4u5nqrG+1VceZp7Jfj59SVW9ogdhTvJDcQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     requiresBuild: true

@@ -68,11 +68,6 @@ export default [
     component: Colors
   },
   {
-    path: '/layout',
-    name: 'Layout',
-    component: Layout
-  },
-  {
     path: '/alert',
     name: 'Alert',
     component: Alert
@@ -114,11 +109,6 @@ export default [
     component: ButtonGroup
   },
   {
-    path: '/config-provider',
-    name: 'ConfigProvider',
-    component: ConfigProvider
-  },
-  {
     path: '/calendar',
     name: 'Calendar',
     component: Calendar
@@ -139,19 +129,24 @@ export default [
     component: Checkbox
   },
   {
-    path: '/check-button-group',
-    name: 'CheckButtonGroup',
-    component: CheckButtonGroup
-  },
-  {
     path: '/checkbox-group',
     name: 'CheckboxGroup',
     component: CheckboxGroup
   },
   {
+    path: '/check-button-group',
+    name: 'CheckButtonGroup',
+    component: CheckButtonGroup
+  },
+  {
     path: '/collapse',
     name: 'Collapse',
     component: Collapse
+  },
+  {
+    path: '/config-provider',
+    name: 'ConfigProvider',
+    component: ConfigProvider
   },
   {
     path: '/date-picker',
@@ -199,11 +194,6 @@ export default [
     component: Icon
   },
   {
-    path: '/lightbox',
-    name: 'Lightbox',
-    component: Lightbox
-  },
-  {
     path: '/input',
     name: 'Input',
     component: Input
@@ -214,6 +204,16 @@ export default [
     component: InputGroup
   },
   {
+    path: '/layout',
+    name: 'Layout',
+    component: Layout
+  },
+  {
+    path: '/lightbox',
+    name: 'Lightbox',
+    component: Lightbox
+  },
+  {
     path: '/link',
     name: 'Link',
     component: Link
@@ -222,49 +222,6 @@ export default [
     path: '/loading',
     name: 'Loading',
     component: Loading
-  },
-  {
-    path: '/sidenav',
-    name: 'Sidenav(Menu)',
-    component: Menu,
-    children: [
-      {
-        path: 'input',
-        component: Input
-      },
-      {
-        path: 'progress',
-        component: Progress
-      },
-      {
-        path: 'switch',
-        component: Switch
-      },
-      {
-        path: 'link',
-        component: Link
-      },
-      {
-        path: 'loading',
-        component: Loading
-      },
-      {
-        path: 'button',
-        component: Button
-      },
-      {
-        path: 'number-input',
-        component: NumberInput
-      },
-      {
-        path: 'radio',
-        component: Radio
-      },
-      {
-        path: 'schedule',
-        component: Schedule
-      }
-    ]
   },
   {
     path: '/message',
@@ -377,6 +334,49 @@ export default [
     component: Select
   },
   {
+    path: '/sidenav',
+    name: 'Sidenav(Menu)',
+    component: Menu,
+    children: [
+      {
+        path: 'input',
+        component: Input
+      },
+      {
+        path: 'progress',
+        component: Progress
+      },
+      {
+        path: 'switch',
+        component: Switch
+      },
+      {
+        path: 'link',
+        component: Link
+      },
+      {
+        path: 'loading',
+        component: Loading
+      },
+      {
+        path: 'button',
+        component: Button
+      },
+      {
+        path: 'number-input',
+        component: NumberInput
+      },
+      {
+        path: 'radio',
+        component: Radio
+      },
+      {
+        path: 'schedule',
+        component: Schedule
+      }
+    ]
+  },
+  {
     path: '/slider',
     name: 'Slider',
     component: Slider
@@ -395,11 +395,6 @@ export default [
     path: '/table',
     name: 'Table',
     component: Table
-  },
-  {
-    path: '/tag',
-    name: 'Tag',
-    component: Tag
   },
   {
     path: '/tabs',
@@ -424,6 +419,11 @@ export default [
         component: Switch
       }
     ]
+  },
+  {
+    path: '/tag',
+    name: 'Tag',
+    component: Tag
   },
   {
     path: '/textarea',
