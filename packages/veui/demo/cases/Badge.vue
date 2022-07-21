@@ -5,9 +5,13 @@
   </h1>
   <section>
     <veui-checkbox v-model="hidden">Hidden</veui-checkbox>
+    <veui-checkbox v-model="toggle">Toggle</veui-checkbox>
   </section>
   <section>
-    <veui-badge :hidden="hidden" type="success">保存</veui-badge>
+    <veui-badge
+      :hidden="hidden"
+      type="success"
+    ><span v-if="toggle">保存</span></veui-badge>
     <veui-badge :hidden="hidden" type="info">保存</veui-badge>
     <veui-badge :hidden="hidden">保存</veui-badge>
     <veui-badge :hidden="hidden" type="warning">保存</veui-badge>
@@ -82,7 +86,8 @@ export default {
   data () {
     return {
       count: 996,
-      hidden: false
+      hidden: false,
+      toggle: false
     }
   }
 }

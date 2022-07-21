@@ -79,4 +79,24 @@ describe('components/Badge', function () {
     expect(dot.exists()).to.equal(true)
     expect(wrapper.text()).to.equal('hot')
   })
+
+  it('should recognize standalone reactively', async () => {
+    const wrapper = mount({
+      data () {
+        return {
+          standalone: true
+        }
+      },
+      components: {
+        'veui-badge': Badge
+      },
+      template: '<veui-badge><span v-if="!standalone">btn</span></veui-badge>'
+    })
+    const { vm } = wrapper
+    expect(wrapper.find('.veui-badge-standalone').exists()).to.equal(true)
+
+    vm.standalone = false
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-badge-standalone').exists()).to.equal(false)
+  })
 })

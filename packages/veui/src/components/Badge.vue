@@ -2,7 +2,7 @@
 <div
   :class="{
     [$c('badge')]: true,
-    [$c('badge-standalone')]: standalone
+    [$c('badge-standalone')]: !$scopedSlots.default
   }"
 >
   <slot/>
@@ -11,12 +11,17 @@
       v-if="!hidden"
       :class="{
         [$c('badge-main')]: true,
-        [$c(`badge-${content && !standalone ? 'label' : 'dot'}`)]: true,
+        [$c(
+          `badge-${content && $scopedSlots.default ? 'label' : 'dot'}`
+        )]: true,
         [$c(`badge-${type}`)]: true
       }"
-    >{{ !standalone ? content : '' }}</span>
+    >{{ $scopedSlots.default ? content : '' }}</span>
   </transition>
-  <span v-if="standalone && value" :class="$c('badge-standalone-label')">
+  <span
+    v-if="!$scopedSlots.default && value"
+    :class="$c('badge-standalone-label')"
+  >
     {{ value }}
   </span>
 </div>
@@ -55,9 +60,6 @@ export default {
     }
   },
   computed: {
-    standalone () {
-      return !this.$slots.default
-    },
     realMax () {
       return this.max || this.config['badge.max']
     },
