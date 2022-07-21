@@ -7,7 +7,7 @@
       "enabled": false
     },
     {
-      "matchPackageNames": ["dls-icons-vue"],
+      "matchPackageNames": ["dls-icons-vue", "dls-illustrations-vue", "dls-graphics"],
       "matchBaseBranches": ["d20"],
       "enabled": true
     }
