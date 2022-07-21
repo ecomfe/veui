@@ -11,9 +11,9 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Empty',
+      name: 'Undefined',
       component: {
-        name: 'empty',
+        name: 'undefined',
         render (h) {
           return h('article', [
             h('h1', 'Welcome to VEUI!'),
@@ -27,7 +27,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, _, next) => {
-  let name = to.name === 'Empty' ? '' : to.name
+  let name = to.name === 'Undefined' ? '' : to.name
   document.title = `Veui${name} - demo`
   next()
 })

@@ -1,0 +1,70 @@
+@import "../lib.less";
+
+.@{veui-prefix}-empty {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &-title {
+    line-height: @dls-empty-title-line-height;
+    color: @dls-empty-title-font-color;
+    font-weight: @dls-empty-title-font-weight;
+  }
+
+  &-image + &-title,
+  &-title + &-desc,
+  &-image + &-desc {
+    margin-top: @dls-empty-content-spacing;
+  }
+
+  &-desc {
+    line-height: @dls-empty-desc-line-height;
+    color: @dls-empty-desc-font-color;
+    font-weight: @dls-empty-desc-font-weight;
+  }
+
+  &-desc + &-actions,
+  &-title + &-actions,
+  &-image + &-actions {
+    margin-top: @dls-empty-actions-spacing-before;
+  }
+
+  &-actions {
+    .@{veui-prefix}-button + .@{veui-prefix}-button {
+      margin-left: @dls-empty-actions-content-spacing;
+    }
+  }
+
+  &[ui~="m"] {
+    max-width: @dls-empty-max-width-m;
+  }
+
+  &[ui~="m"] &-image > * {
+    max-height: @dls-empty-image-max-height-m;
+  }
+
+  &[ui~="m"] &-title {
+    font-size: @dls-empty-title-font-size-m;
+  }
+
+  &[ui~="m"] &-desc {
+    font-size: @dls-empty-desc-font-size-m;
+  }
+
+  &[ui~="s"] {
+    max-width: @dls-empty-max-width-s;
+  }
+
+  &[ui~="s"] &-image > * {
+    max-height: @dls-empty-image-max-height-s;
+  }
+
+  &[ui~="s"] &-title {
+    font-size: @dls-empty-title-font-size-s;
+  }
+
+  &[ui~="s"] &-desc {
+    font-size: @dls-empty-desc-font-size-s;
+  }
+}
