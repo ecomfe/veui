@@ -240,6 +240,10 @@
     "path": "Dropdown.vue"
   },
   {
+    "name": "Empty",
+    "path": "Empty.vue"
+  },
+  {
     "name": "Embedded",
     "path": "Embedded.vue"
   },
@@ -417,15 +421,15 @@
   },
   {
     "name": "Tabs",
+    "path": "Tabs/Tabs.vue"
+  },
+  {
+    "name": "Tabs",
     "path": "Tabs"
   },
   {
     "name": "Tabs",
     "path": "Tabs/index.js"
-  },
-  {
-    "name": "Tabs",
-    "path": "Tabs/Tabs.vue"
   },
   {
     "name": "Textarea",

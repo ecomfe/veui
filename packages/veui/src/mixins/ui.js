@@ -132,6 +132,13 @@ export default {
         (ui) => callWithProps(ui, this.uiProps)
       )
     },
+    illustrations () {
+      const icons = this.getComponentConfig('illustrations')
+      if (typeof icons === 'function') {
+        return icons(this.uiProps)
+      }
+      return icons
+    },
     realUi () {
       let props = this.uiProps
       return (

@@ -60,6 +60,7 @@ import Cascader from './Cascader'
 import ConfigProvider from './ConfigProvider'
 import Layout from './Layout'
 import Message from './Message'
+import Empty from './Empty'
 
 export default [
   {
@@ -167,6 +168,11 @@ export default [
     path: '/dropdown',
     name: 'Dropdown',
     component: Dropdown
+  },
+  {
+    path: '/empty',
+    name: 'Empty',
+    component: Empty
   },
   {
     path: '/embedded',
