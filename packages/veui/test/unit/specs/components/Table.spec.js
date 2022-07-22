@@ -2489,7 +2489,9 @@ describe('components/Table', function () {
               title="Foo"
               :width="200"
               tooltip
-            />
+            >
+              <template #default="{ foo }">{{ foo }}!</template>
+            </veui-table-column>
             <veui-table-column
               field="bar"
               title="Bar"
@@ -2518,7 +2520,7 @@ describe('components/Table', function () {
     let warmup = config.get('tooltip.warmup')
 
     await wait(warmup + 100)
-    expectTooltip(loremIpsum)
+    expectTooltip(`${loremIpsum}!`)
 
     longFoo.trigger('mouseleave')
     longBar.trigger('mouseenter')

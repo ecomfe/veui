@@ -18,7 +18,6 @@ const OPTIONS_SCHEMA = {
 
 function refresh (el, binding) {
   const options = normalize(binding, OPTIONS_SCHEMA)
-  console.log(options)
   let context = el.__tooltip_context__
 
   if (context) {

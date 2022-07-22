@@ -80,7 +80,9 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
       return
     }
 
-    if (options.content == null) {
+    let useDefault = typeof options.content === 'undefined'
+
+    if (useDefault) {
       assign(component, {
         ...options,
         content: target.textContent
@@ -91,7 +93,9 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
   }
 
   function open (target, { position, content }) {
-    if (!target || content === '') {
+    let useDefault = typeof content === 'undefined'
+
+    if (!target || (!content && !useDefault)) {
       return
     }
 
@@ -101,7 +105,7 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
 
     assign(component, {
       target,
-      content: content == null ? target.textContent : content,
+      content: useDefault ? target.textContent : content,
       position,
       open: true
     })

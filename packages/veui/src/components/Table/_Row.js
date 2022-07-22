@@ -10,7 +10,8 @@ import tooltip from '../../directives/tooltip'
 
 function renderTooltip (tooltip, item, field) {
   if (tooltip === true) {
-    return item[field]
+    // use default `textContent`
+    return undefined
   }
 
   if (typeof tooltip === 'function') {
