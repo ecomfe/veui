@@ -217,12 +217,6 @@ export default {
     isMatchWidth () {
       return !this.isMultiLevel || !!this.inputValue
     },
-    hasLabelSlot () {
-      return !!(this.$scopedSlots.label || this.$slots.label)
-    },
-    hasSelectedSlot () {
-      return !!(this.$scopedSlots.selected || this.$slots.selected)
-    },
     triggerAttrs () {
       return {
         ui: this.realUi,
@@ -247,14 +241,6 @@ export default {
         close: this.close
       }
     },
-    layoutWrap () {
-      return (
-        this.multiple &&
-        !this.isEmpty &&
-        (!this.hasLabelSlot || this.realExpanded) &&
-        !this.hasSelectedSlot
-      )
-    },
     selectAllOption () {
       return {
         label: this.t('selectAll'),
@@ -277,6 +263,20 @@ export default {
   methods: {
     toggleExpanded (force) {
       this.commit('expanded', force == null ? !this.realExpanded : !!force)
+    },
+    hasLabelSlot () {
+      return !!(this.$scopedSlots.label || this.$slots.label)
+    },
+    hasSelectedSlot () {
+      return !!(this.$scopedSlots.selected || this.$slots.selected)
+    },
+    layoutWrap () {
+      return (
+        this.multiple &&
+        !this.isEmpty &&
+        (!this.hasLabelSlot() || this.realExpanded) &&
+        !this.hasSelectedSlot()
+      )
     },
     clear (e) {
       if (this.multiple) {
@@ -573,8 +573,9 @@ export default {
 
     let multiBeforeSlot = this.multiple ? (
       this.selected.length > 0 &&
-      ((this.hasLabelSlot && !this.realExpanded) || this.hasSelectedSlot) ? (
-          this.hasLabelSlot && !this.realExpanded ? (
+      ((this.hasLabelSlot() && !this.realExpanded) ||
+        this.hasSelectedSlot()) ? (
+          this.hasLabelSlot() && !this.realExpanded ? (
             renderCustomLabel({ selected: this.selected })
           ) : (
             renderCustomSelected({ selected: this.selected })
@@ -635,7 +636,7 @@ export default {
           [this.$c('select-expanded')]: this.realExpanded,
           [this.$c('select-searchable')]: this.searchable,
           [this.$c('select-multiple')]: this.multiple,
-          [this.$c('select-wrap')]: this.layoutWrap,
+          [this.$c('select-wrap')]: this.layoutWrap(),
           [this.$c('readonly')]: this.realReadonly,
           [this.$c('disabled')]: this.realDisabled,
           [this.$c('invalid')]: this.realInvalid
@@ -680,7 +681,7 @@ export default {
             {!this.multiple &&
             this.searchable &&
             this.selected != null &&
-            (this.hasLabelSlot || this.hasSelectedSlot) ? (
+            (this.hasLabelSlot() || this.hasSelectedSlot()) ? (
                 <template slot="placeholder">
                   {renderLabelOrSelected({
                     ...this.selected,
