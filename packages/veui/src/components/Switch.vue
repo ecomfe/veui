@@ -20,7 +20,7 @@
     @click.stop
   >
   <div :class="$c('switch-switcher')">
-    <div v-if="hasContent && !loading" :class="$c('switch-text')">
+    <div v-if="hasContent() && !loading" :class="$c('switch-text')">
       <slot name="content" :on="realChecked">{{ contentLabel }}</slot>
     </div>
     <div :class="$c('switch-button')">
@@ -95,14 +95,14 @@ export default {
     labelListeners () {
       return pick(this.listenersWithValidations, MOUSE_EVENTS)
     },
-    hasContent () {
-      return this.onLabel || this.offLabel || this.$scopedSlots.content
-    },
     contentLabel () {
       return this.realChecked ? this.onLabel : this.offLabel
     }
   },
   methods: {
+    hasContent () {
+      return this.onLabel || this.offLabel || this.$scopedSlots.content
+    },
     handleChange () {
       let checkbox = this.$refs.box
       // 先还原checked，如果 realChecked 真的变了会重新渲染的

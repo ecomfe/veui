@@ -54,13 +54,13 @@
           <slot name="no-data">{{ t('noData') }}</slot>
         </template>
       </table-body>
-      <table-foot v-if="!scrollableY && hasFoot" ref="foot">
+      <table-foot v-if="!scrollableY && hasFoot()" ref="foot">
         <slot name="foot"/>
       </table-foot>
     </table>
   </div>
   <div
-    v-if="scrollableY && hasFoot"
+    v-if="scrollableY && hasFoot()"
     ref="fixedFooter"
     :class="$c('table-fixed-footer')"
   >
@@ -433,13 +433,6 @@ export default {
       }
       return 'partial'
     },
-    hasFoot () {
-      return (
-        this.$scopedSlots.foot ||
-        this.$slots.foot ||
-        this.filteredColumns.some((col) => col.hasFoot())
-      )
-    },
     scrollableX () {
       return !!this.realScroll.x
     },
@@ -509,7 +502,7 @@ export default {
     if (this.staleHead) {
       this.$refs.head.update()
     }
-    if (this.hasFoot && this.staleFoot) {
+    if (this.hasFoot() && this.staleFoot) {
       this.$refs.foot.$forceUpdate()
     }
   },
@@ -518,6 +511,13 @@ export default {
       this.selectColumnWidth = this.$el.querySelector(
         `.${this.$c('table-cell-select')}`
       ).offsetWidth
+    },
+    hasFoot () {
+      return (
+        this.$scopedSlots.foot ||
+        this.$slots.foot ||
+        this.filteredColumns.some((col) => col.hasFoot())
+      )
     },
     updateExpandColumnWidth () {
       this.expandColumnWidth = this.$el.querySelector(

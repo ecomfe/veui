@@ -6,7 +6,7 @@
     :class="{
       [$c('toast')]: true,
       [$c(`toast-${type}`)]: true,
-      [$c('toast-titled')]: isTitled,
+      [$c('toast-titled')]: isTitled(),
       [$c('toast-multiline')]: multiline
     }"
     role="alert"
@@ -91,9 +91,6 @@ export default {
     }
   },
   computed: {
-    isTitled () {
-      return this.title || this.$slots.title
-    },
     realDuration () {
       return this.duration == null
         ? this.config['toast.duration']
@@ -119,6 +116,9 @@ export default {
     clearTimeout(this.timer)
   },
   methods: {
+    isTitled () {
+      return this.title || this.$slots.title
+    },
     close () {
       this.commit('open', false)
       this.$emit('close')
