@@ -77,5 +77,6 @@ declare module '@vue/runtime-core' {
     VeuiLayout: Components.Layout
     VeuiSidebar: Components.Sidebar
     VeuiSidenav: Components.Sidenav
+    VeuiEmpty: Components.Empty
   }
 }

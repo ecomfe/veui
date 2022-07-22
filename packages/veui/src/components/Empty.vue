@@ -18,7 +18,7 @@
     "
     :class="$c('empty-desc')"
   >
-    <slot name="desc">{{ desc || t('fallbackDesc') }}</slot>
+    <slot name="desc">{{ desc || t('noData') }}</slot>
   </div>
   <div v-if="$scopedSlots.actions" :class="$c('empty-actions')">
     <slot name="actions"/>

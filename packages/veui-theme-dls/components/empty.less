@@ -12,10 +12,12 @@
     font-weight: @dls-empty-title-font-weight;
   }
 
-  &-image + &-title,
-  &-title + &-desc,
-  &-image + &-desc {
-    margin-top: @dls-empty-content-spacing;
+  &-image,
+  &-title,
+  &-desc {
+    &:not(:first-child) {
+      margin-top: @dls-empty-content-spacing;
+    }
   }
 
   &-desc {
@@ -24,9 +26,7 @@
     font-weight: @dls-empty-desc-font-weight;
   }
 
-  &-desc + &-actions,
-  &-title + &-actions,
-  &-image + &-actions {
+  &-actions:not(:first-child) {
     margin-top: @dls-empty-actions-spacing-before;
   }
 
@@ -38,33 +38,37 @@
 
   &[ui~="m"] {
     max-width: @dls-empty-max-width-m;
-  }
 
-  &[ui~="m"] &-image > * {
-    max-height: @dls-empty-image-max-height-m;
-  }
+    .@{veui-prefix}-empty {
+      &-image > * {
+        max-height: @dls-empty-image-max-height-m;
+      }
 
-  &[ui~="m"] &-title {
-    font-size: @dls-empty-title-font-size-m;
-  }
+      &-title {
+        font-size: @dls-empty-title-font-size-m;
+      }
 
-  &[ui~="m"] &-desc {
-    font-size: @dls-empty-desc-font-size-m;
+      &-desc {
+        font-size: @dls-empty-desc-font-size-m;
+      }
+    }
   }
 
   &[ui~="s"] {
     max-width: @dls-empty-max-width-s;
-  }
 
-  &[ui~="s"] &-image > * {
-    max-height: @dls-empty-image-max-height-s;
-  }
+    .@{veui-prefix}-empty {
+      &-image > * {
+        max-height: @dls-empty-image-max-height-s;
+      }
 
-  &[ui~="s"] &-title {
-    font-size: @dls-empty-title-font-size-s;
-  }
+      &-title {
+        font-size: @dls-empty-title-font-size-s;
+      }
 
-  &[ui~="s"] &-desc {
-    font-size: @dls-empty-desc-font-size-s;
+      &-desc {
+        font-size: @dls-empty-desc-font-size-s;
+      }
+    }
   }
 }

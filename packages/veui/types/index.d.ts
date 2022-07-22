@@ -76,3 +76,4 @@ export declare const Header: Components.Header
 export declare const Layout: Components.Layout
 export declare const Sidebar: Components.Sidebar
 export declare const Sidenav: Components.Sidenav
+export declare const Empty: Components.Empty
