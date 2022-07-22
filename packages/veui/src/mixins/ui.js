@@ -133,11 +133,11 @@ export default {
       )
     },
     illustrations () {
-      const icons = this.getComponentConfig('illustrations')
-      if (typeof icons === 'function') {
-        return icons(this.uiProps)
+      const illustrations = this.getComponentConfig('illustrations')
+      if (typeof illustrations === 'function') {
+        return illustrations(this.uiProps)
       }
-      return icons
+      return illustrations
     },
     realUi () {
       let props = this.uiProps
