@@ -1,3 +1,20 @@
+## 2.8.0 "💧 Droplet" (2022-07-25)
+
+### ⚠️ 非兼容性变更
+
+- [^] `Column` 组件 `tooltip` 为 `true` 时现在将自动展示对应单元格的 `textContent`。<!-- #Table #Column -->
+- [^] `v-tooltip` 指令在未指定 `content` 时现在将自动展示对应元素的 `textContent`。<!-- #v-tooltip -->
+
+### 💡 主要变更
+
+- [+] 新增 `Empty` 组件，提供空状态内容的标准样式。<!-- #Empty -->
+
+### 🐞 问题修复
+
+- [^] 修复了 `Badge` / `Select` / `Switch` / `Table` / `Toast` 等组件在动态设置插槽时的渲染更新问题。<!-- #Badge #Select #Switch #Table #Toast -->
+- [^] 优化了 `Input` 组件的自动填充识别逻辑，样式同步更加实时，且自动提示待选内容不再会与组件的占位提示重叠。<!-- #Input -->
+- [^] 优化了 `Input` 组件在 Safari 浏览器下自动提示的样式。<!-- #Input -->
+
 ## 2.7.3 (2022-06-30)
 
 ### 💡 主要变更
