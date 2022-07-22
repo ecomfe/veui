@@ -21,7 +21,7 @@
         #desc
       >当前页面无法访问，请检查地址栏中的网址，确保您访问的是正确的网址。</template>
       <template v-if="partValue.includes('image')" #default>
-        <illustration-not-found/>
+        <illustration-spot-no-access/>
       </template>
       <template v-if="partValue.includes('actions')" #actions>
         <veui-button ui="primary">确定</veui-button>
@@ -34,7 +34,7 @@
 
 <script>
 import { Button, Empty, CheckButtonGroup, RadioButtonGroup } from 'veui'
-import { IllustrationNotFound } from 'dls-illustrations-vue'
+import { IllustrationSpotNoAccess } from 'dls-illustrations-vue'
 
 function genLabel (value) {
   return { label: value, value }
@@ -47,7 +47,7 @@ export default {
     'veui-empty': Empty,
     'veui-check-button-group': CheckButtonGroup,
     'veui-radio-button-group': RadioButtonGroup,
-    IllustrationNotFound
+    IllustrationSpotNoAccess
   },
   data () {
     return {
