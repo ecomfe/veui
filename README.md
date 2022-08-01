@@ -25,11 +25,11 @@ Packages included in this repo are:
 
 ## Contribution
 
-To develop `veui` locally you need to clone this repo and run the following in `veui`'s root directory:
+To develop `veui` locally you need to clone this repo and run the following in `veui`'s root directory (VEUI uses pnpm as the package manager):
 
 ```sh
-$ npm run bootstrap
-$ npm run dev
+$ pnpm install
+$ pnpm dev
 ```
 
 And then you should be able to see the demo via `http://localhost:8080/`.
