@@ -12,7 +12,7 @@ import useControllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
 import '../../common/global'
 import { walk } from '../../utils/datasource'
-import { isType, isTopMostOfType, getTypedAncestor } from '../../utils/helper'
+import { isType, isTopMostOfType } from '../../utils/helper'
 import {
   pull,
   uniqueId,
@@ -140,18 +140,6 @@ const OptionGroup = {
 
       return this.items.map(normalizeItem)
     },
-    overlayTarget () {
-      if (!this.canPopOut) {
-        return null
-      }
-
-      if (!this.isInput) {
-        return 'button'
-      }
-
-      let overlay = getTypedAncestor(this, 'overlay')
-      return overlay ? overlay.$refs.box : null
-    },
     canPopOut () {
       return !!(
         this.renderFor !== 'data' &&
@@ -229,6 +217,17 @@ const OptionGroup = {
         menu.close()
         menu = menu.menu
       }
+    },
+    getOverlayTarget () {
+      if (!this.canPopOut) {
+        return null
+      }
+
+      if (!this.isInput) {
+        return 'button'
+      }
+
+      return this.menu.$refs.box || this.menu.$el
     },
     getOptionTag (option) {
       return isFunction(this.optionTag)
@@ -413,7 +412,7 @@ const OptionGroup = {
         {this.canPopOut && hasContent ? (
           <Overlay
             ref="overlay"
-            target={this.overlayTarget}
+            target={this.getOverlayTarget()}
             open={this.realExpanded}
             local={this.realLocal}
             options={this.realOverlayOptions}
