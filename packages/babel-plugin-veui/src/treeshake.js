@@ -40,7 +40,7 @@ export default function ({ types: t }) {
                   [
                     t.importSpecifier(
                       t.identifier(local.name),
-                      t.identifier(local.name)
+                      t.identifier(imported.name)
                     )
                   ],
                   t.stringLiteral(src)
