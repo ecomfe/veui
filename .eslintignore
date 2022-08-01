@@ -1,4 +1,4 @@
 **/dist/*
 **/fixtures/*
-packages/babel-plugin-veui/lib/*
+packages/babel-plugin-veui/*.js
 packages/veui-loader/lib/*
