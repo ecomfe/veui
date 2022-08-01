@@ -36,7 +36,7 @@
       @compositionupdate="handleCompositionUpdate"
       @compositionend="handleCompositionEnd"
       @change="handleChange"
-      @transitionend="handleTransitionEnd"
+      @transitionstart="handleTransitionStart"
     >
   </div>
   <template v-if="$slots.after || clearable || realMaxlength !== null">
@@ -343,7 +343,7 @@ export default {
       this.focus()
       this.$emit('clear')
     },
-    handleTransitionEnd ({ propertyName }) {
+    handleTransitionStart ({ propertyName }) {
       // we are changing opacity when autofill state changes
       if (propertyName === 'opacity') {
         this.autofill = this.$refs.input.matches(':-webkit-autofill')
@@ -352,3 +352,16 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+@veui-prefix: veui;
+
+.@{veui-prefix}-input-input {
+  opacity: 1;
+  transition: opacity 0.0001s;
+
+  &:-webkit-autofill {
+    opacity: 0.9999;
+  }
+}
+</style>

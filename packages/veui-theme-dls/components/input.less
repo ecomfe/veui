@@ -67,7 +67,6 @@
     width: 100%;
     background-color: transparent;
     .ellipsis();
-    .autofill-event();
   }
 
   &-clear {
@@ -209,15 +208,6 @@
       &.@{veui-prefix}-invalid {
         box-shadow: @dls-input-shadow-inline-error-focus;
       }
-    }
-  }
-
-  .autofill-event() {
-    opacity: 1;
-    transition: opacity 0.0001s;
-
-    &:-webkit-autofill {
-      opacity: 0.9999;
     }
   }
 }
