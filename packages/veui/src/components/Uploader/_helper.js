@@ -279,22 +279,42 @@ export class UploaderFile {
     this._preview = val
   }
 
-  get value () {
+  getValue () {
     return pickBy(
       {
         ...omit(this.result, PUBLIC_FILE_PROPS),
         ...this.extra,
-        ...pick(this, PUBLIC_FILE_PROPS),
-        [this.keyField]: this.key
+        ...pick(this, PUBLIC_FILE_PROPS)
       },
       (val) => !isUndefined(val)
     )
   }
 
+  get value () {
+    const value = this.getValue()
+    // 如果用户没有设置 keyField 那么自动加上初始的
+    // 如果用户设置了，那么保留用户设置的
+    return value[this.keyField] != null
+      ? value
+      : {
+        ...value,
+        [this.keyField]: this.key
+      }
+  }
+
+  // key 是用来渲染的，v-for 里面保持稳定, 对于新上传的文件，始终是自动生成的
+  // valueKey 是 value[keyField]
+  get valueKey () {
+    return typeof this._valueKey === 'undefined' ? this.key : this._valueKey
+  }
+
   set value (val) {
     this.isSuccess = true
-    if (val[this.keyField]) {
-      this.key = val[this.keyField]
+    const nextValueKey = val[this.keyField]
+    // 如果设置的 val 中 keyField 和之前的不一样，那么也不知道是否是同一个，直接保留一个 key 吧。
+    if (nextValueKey && nextValueKey !== this.valueKey) {
+      this._valueKey = undefined
+      this.key = nextValueKey
     }
     this.result = pick(val, PUBLIC_FILE_PROPS)
     this.extra = omit(val, [this.keyField, 'status', ...PUBLIC_FILE_PROPS])
@@ -353,7 +373,13 @@ export class UploaderFile {
     // 即使返回失败也将信息保留
     this.result = omit(data, ['success', 'message'])
     if (!data.success) {
+      this._valueKey = undefined
       throw new Error(data.message)
+    }
+    // 成功了，如果发现 value 中有 keyField 且和 this.key 不同，那么记录下 valueKey 和 key 不同
+    const valueKey = this.getValue()[this.keyField]
+    if (valueKey != null && this.key !== valueKey) {
+      this._valueKey = valueKey
     }
 
     // 上传完成，有了 src，不需要再 hold 文件对象

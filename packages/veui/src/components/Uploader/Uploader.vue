@@ -401,7 +401,7 @@ export default {
             if (value[this.keyField]) {
               let file = find(
                 this.fileList,
-                (file) => file.key === value[this.keyField]
+                (file) => file.valueKey === value[this.keyField]
               )
               // file.value 对应 value array 中的元素
               if (file) {
@@ -476,7 +476,7 @@ export default {
     preview (index) {
       let successFileIndex = findIndex(
         this.successFiles,
-        (val) => val[this.keyField] === this.fileList[index].key
+        (val) => val[this.keyField] === this.fileList[index].valueKey
       )
       this.previewIndex = successFileIndex
       this.previewOpen = true
@@ -750,6 +750,7 @@ export default {
 
       if (file) {
         file.keyField = this.keyField
+        // set value 依赖了最新的 keyField，所以要先设置 keyField
         file.value = val
       } else {
         file = UploaderFile.fromValue(val, options)
