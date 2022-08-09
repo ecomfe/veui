@@ -413,7 +413,7 @@ describe('components/Uploader', function () {
     let payload = {
       current: Date.now()
     }
-
+    let value = null
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -421,8 +421,14 @@ describe('components/Uploader', function () {
           '/upload/xhr?force=success&includeRequest=true&name=filedata&latency=0',
         name: 'filedata',
         accept: 'jpg,jpeg,png',
+        keyField: 'name', // 不建议用 name，这里只是测试
         headers,
         payload
+      },
+      listeners: {
+        change (val) {
+          value = val
+        }
       },
       attachToDocument: true
     })
@@ -438,7 +444,7 @@ describe('components/Uploader', function () {
     // formdata.append 会把 value 转字符串
     expect(arg._req.fields.current).to.equal(payload.current.toString())
     expect(arg._req.file.name).to.equal(filename)
-
+    expect(value[0].name).to.equal(filename)
     wrapper.destroy()
   })
 
