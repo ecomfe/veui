@@ -5,7 +5,7 @@
   :aria-valuemin="min"
   :aria-valuenow="realValue"
   :aria-valuetext="desc ? valueText : null"
-  :aria-describedby="descId"
+  :aria-describedby="desc ? descId : null"
   :class="klass"
   :ui="realUi"
 >
