@@ -240,12 +240,12 @@
     "path": "Dropdown.vue"
   },
   {
-    "name": "Empty",
-    "path": "Empty.vue"
-  },
-  {
     "name": "Embedded",
     "path": "Embedded.vue"
+  },
+  {
+    "name": "Empty",
+    "path": "Empty.vue"
   },
   {
     "name": "Fieldset",
@@ -320,6 +320,14 @@
     "path": "Lightbox.vue"
   },
   {
+    "name": "Progress",
+    "path": "Progress.vue"
+  },
+  {
+    "name": "LoadingBar",
+    "path": "LoadingBar.vue"
+  },
+  {
     "name": "Sidenav",
     "path": "Sidenav.js"
   },
@@ -358,10 +366,6 @@
   {
     "name": "Pagination",
     "path": "Pagination.vue"
-  },
-  {
-    "name": "Progress",
-    "path": "Progress.vue"
   },
   {
     "name": "PromptBox",

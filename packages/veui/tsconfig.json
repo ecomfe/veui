@@ -10,7 +10,8 @@
     "allowJs": true,
     "paths": {
       "veui": ["types/index.d.ts"]
-    }
+    },
+    "jsx": "preserve"
   },
   "vueCompilerOptions": {
     "experimentalCompatMode": 2,
