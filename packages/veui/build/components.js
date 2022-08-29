@@ -76,11 +76,8 @@ function genComponentIndex () {
   writeFileSync(resolve(componentDir, 'index.js'), content, 'utf8')
 }
 
-if (process.argv.indexOf('index') >= 0) {
-  genComponentIndex()
-} else {
-  genComponentJson().catch((err) => {
-    console.error(err)
-    process.exit(1)
-  })
-}
+genComponentIndex()
+genComponentJson().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

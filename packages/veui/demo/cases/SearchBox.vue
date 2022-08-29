@@ -366,7 +366,7 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .veui-search-box-demo {
   padding-bottom: 20px;
 

@@ -43,6 +43,7 @@ import Tree from './Tree'
 import Autocomplete from './Autocomplete'
 import Tag from './Tag'
 import Loading from './Loading'
+import LoadingBar from './LoadingBar'
 import Drawer from './Drawer'
 import Collapse from './Collapse'
 import Popover from './Popover'
@@ -228,6 +229,11 @@ export default [
     path: '/loading',
     name: 'Loading',
     component: Loading
+  },
+  {
+    path: '/loading-bar',
+    name: 'LoadingBar',
+    component: LoadingBar
   },
   {
     path: '/message',

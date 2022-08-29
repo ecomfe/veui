@@ -7,7 +7,6 @@
     "demo": "cross-env NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service build",
     "lint": "vue-cli-service lint",
     "components": "node ./build/components.js",
-    "index": "node ./build/components.js index",
     "build": "rollup -c",
     "prepublishOnly": "pnpm build && cp -r ./src/* . && cp ../../CHANGELOG.md .",
     "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js ./index-with-locale.js ./CHANGELOG.md",

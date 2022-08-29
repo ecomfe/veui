@@ -14,31 +14,37 @@ declare module '@vue/runtime-core' {
     VeuiCalendar: Components.Calendar
     VeuiCarousel: Components.Carousel
     VeuiCascader: Components.Cascader
-    VeuiCheckButtonGroup: Components.CheckButtonGroup
     VeuiCheckbox: Components.Checkbox
     VeuiCheckboxGroup: Components.CheckboxGroup
+    VeuiCheckButtonGroup: Components.CheckButtonGroup
     VeuiCollapse: Components.Collapse
     VeuiColumn: Components.Column
     VeuiConfigProvider: Components.ConfigProvider
     VeuiConfirmBox: Components.ConfirmBox
+    VeuiContent: Components.Content
     VeuiDatePicker: Components.DatePicker
     VeuiDialog: Components.Dialog
     VeuiDrawer: Components.Drawer
     VeuiDropdown: Components.Dropdown
-    VeuiFilterPanel: Components.FilterPanel
+    VeuiEmpty: Components.Empty
     VeuiField: Components.Field
     VeuiFieldset: Components.Fieldset
+    VeuiFilterPanel: Components.FilterPanel
+    VeuiFooter: Components.Footer
     VeuiForm: Components.Form
     VeuiGridColumn: Components.GridColumn
     VeuiGridContainer: Components.GridContainer
     VeuiGridRow: Components.GridRow
+    VeuiHeader: Components.Header
     VeuiIcon: Components.Icon
     VeuiInput: Components.Input
     VeuiInputGroup: Components.InputGroup
     VeuiLabel: Components.Label
+    VeuiLayout: Components.Layout
     VeuiLightbox: Components.Lightbox
     VeuiLink: Components.Link
     VeuiLoading: Components.Loading
+    VeuiLoadingBar: Components.LoadingBar
     VeuiMenu: Components.Menu
     VeuiMessage: Components.Message
     VeuiNav: Components.Nav
@@ -55,6 +61,8 @@ declare module '@vue/runtime-core' {
     VeuiRadioGroup: Components.RadioGroup
     VeuiSearchBox: Components.SearchBox
     VeuiSelect: Components.Select
+    VeuiSidebar: Components.Sidebar
+    VeuiSidenav: Components.Sidenav
     VeuiSlider: Components.Slider
     VeuiSpan: Components.Span
     VeuiSteps: Components.Steps
@@ -71,12 +79,5 @@ declare module '@vue/runtime-core' {
     VeuiTransfer: Components.Transfer
     VeuiTree: Components.Tree
     VeuiUploader: Components.Uploader
-    VeuiContent: Components.Content
-    VeuiFooter: Components.Footer
-    VeuiHeader: Components.Header
-    VeuiLayout: Components.Layout
-    VeuiSidebar: Components.Sidebar
-    VeuiSidenav: Components.Sidenav
-    VeuiEmpty: Components.Empty
   }
 }
