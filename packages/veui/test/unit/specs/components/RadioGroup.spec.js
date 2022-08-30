@@ -21,7 +21,7 @@ const items = [
 describe('components/RadioGroup', function () {
   this.timeout(10000)
 
-  it('should handle controlled value correctly.', async () => {
+  it('should handle controlled value correctly', async () => {
     let sync = true
     let wrapper = mount({
       components: {
@@ -62,7 +62,33 @@ describe('components/RadioGroup', function () {
     wrapper.destroy()
   })
 
-  it('should handle uncontrolled value correctly.', async () => {
+  it('should handle v-model correctly', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-radio-group': RadioGroup
+      },
+      data () {
+        return {
+          items,
+          value: null
+        }
+      },
+      template: '<veui-radio-group :items="items" v-model="value"/>'
+    })
+
+    let { vm } = wrapper
+    let radios = wrapper.findAll('input')
+    trigger(radios, 0)
+    await vm.$nextTick()
+    expect(vm.value).to.equal(items[0].value)
+
+    trigger(radios, 1)
+    await vm.$nextTick()
+    expect(vm.value).to.equal(items[1].value)
+    wrapper.destroy()
+  })
+
+  it('should handle uncontrolled value correctly', async () => {
     let wrapper = mount({
       components: {
         'veui-radio-group': RadioGroup

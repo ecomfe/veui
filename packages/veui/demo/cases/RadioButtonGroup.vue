@@ -85,7 +85,8 @@ export default {
         },
         {
           value: 'yen',
-          label: '¥'
+          label: '¥',
+          disabled: true
         }
       ],
       data3: [
