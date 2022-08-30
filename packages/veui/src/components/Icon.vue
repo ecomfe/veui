@@ -19,7 +19,8 @@ export default {
       computed: {
         classes () {
           return {
-            [prefixify('icon')]: true
+            [prefixify('icon')]: true,
+            [prefixify('icon-spin')]: this.spin
           }
         }
       }
@@ -57,7 +58,7 @@ export default {
       // <veui-icon :name="IconFlat"/>
       Icon = this.name
     }
-    return <Icon class={this.classes} spin={this.spin} />
+    return <Icon class={this.classes} />
   },
   register (name, icon) {
     if (typeof name !== 'string') {
@@ -71,3 +72,25 @@ export default {
   icons
 }
 </script>
+
+<style lang="less">
+@veui-prefix: veui;
+
+.@{veui-prefix}-icon {
+  @animation-name: ~'@{veui-prefix}-icon-spin';
+
+  &-spin {
+    animation: @animation-name 1s linear infinite;
+  }
+
+  @keyframes @animation-name {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+</style>
