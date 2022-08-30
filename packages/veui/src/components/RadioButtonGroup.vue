@@ -5,8 +5,8 @@
   role="radiogroup"
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
-  @keydown.left="pick(-1)"
-  @keydown.right="pick(1)"
+  @keydown.left="pick(true)"
+  @keydown.right="pick(false)"
 >
   <div :class="$c('radio-button-group-items')">
     <veui-button
@@ -84,29 +84,41 @@ export default {
   computed: {
     activeIndex () {
       return findIndex(this.items, ({ value }) => value === this.realValue)
+    },
+    enabledItems () {
+      return this.items.filter(({ disabled }) => !disabled)
+    },
+    activeEnabledIndex () {
+      return findIndex(
+        this.enabledItems,
+        ({ value }) => value === this.realValue
+      )
     }
   },
   methods: {
     handleChange (val) {
       this.commit('value', val)
     },
-    pick (step) {
-      let length = this.items.length
-      if (length <= 1) {
+    pick (reverse) {
+      if (this.realDisabled || this.enabledItems.length === 0) {
         return
       }
 
-      let index =
-        ((this.activeIndex === -1 ? 0 : this.activeIndex) +
-          (step % length) +
-          length) %
-        length
-      let item = this.items[index]
-      this.commit('value', item.value)
+      let value
+      if (this.realValue == null) {
+        value = this.enabledItems[0].value
+      } else {
+        const step = reverse ? -1 : 1
+        const { length } = this.enabledItems
+        value =
+          this.enabledItems[(this.activeEnabledIndex + step + length) % length]
+            .value
+      }
+      this.commit('value', value)
 
       this.$nextTick(() => {
-        if (this.$refs[`b-${item.value}`]) {
-          this.$refs[`b-${item.value}`][0].focus()
+        if (this.$refs[`b-${value}`]) {
+          this.$refs[`b-${value}`][0].focus()
         }
       })
     },
