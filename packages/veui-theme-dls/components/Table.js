@@ -32,7 +32,8 @@ ui.defaults(
     },
     parts: {
       icon: 'icon',
-      loading: 'm strong overlay'
+      loading: 'xs fluid',
+      spinner: 'overlay'
     }
   },
   'table'

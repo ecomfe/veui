@@ -7,7 +7,21 @@
   align-items: center;
   display: inline-flex;
   font-size: @dls-loading-font-size-m;
-  .veui-transition(opacity);
+
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter-to,
+  &-leave {
+    opacity: 1;
+  }
+
+  &-enter-active,
+  &-leave-active {
+    .veui-transition(opacity);
+  }
 
   &[ui~="s"] {
     font-size: @dls-loading-font-size-s;

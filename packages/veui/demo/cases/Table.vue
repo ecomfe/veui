@@ -35,6 +35,16 @@
     <veui-checkbox v-model="selectable">可选择</veui-checkbox>
     <veui-checkbox v-model="showGroup">显示数据分组</veui-checkbox>
     <veui-checkbox v-model="selectSpanRow">选择合并行</veui-checkbox>
+    <veui-checkbox v-model="scrollX">横向内部滚动</veui-checkbox>
+    <veui-checkbox v-model="scrollY">纵向内部滚动</veui-checkbox>
+    <veui-checkbox
+      v-model="loadingOptions.type"
+      true-value="spinner"
+    >使用 spinner</veui-checkbox>
+    <veui-checkbox
+      v-model="loadingOptions.modal"
+      :disabled="loadingOptions.type === 'spinner'"
+    >loading 遮罩</veui-checkbox>
   </section>
   <section class="options">
     <veui-checkboxgroup
@@ -55,8 +65,8 @@
     <veui-table
       ui="s compact crowded"
       :scroll="{
-        x: 1280,
-        y: 300
+        x: scrollX ? 1280 : null,
+        y: scrollY ? 300 : null
       }"
       :data="data"
       :column-filter="columns"
@@ -66,6 +76,7 @@
       :order="order"
       :selected.sync="selected1"
       :loading="loading"
+      :loading-options="loadingOptions"
       :style="style"
       @select="handleSelect"
       @sort="handleSort"
@@ -608,6 +619,12 @@ export default {
       s: false,
       toggled: false,
       selectable: true,
+      scrollX: true,
+      scrollY: true,
+      loadingOptions: {
+        type: 'default',
+        modal: true
+      },
       idTitle: '#',
       showGroup: true,
       selectSpanRow: true,
