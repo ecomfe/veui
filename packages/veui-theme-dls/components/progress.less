@@ -36,6 +36,7 @@
     }
 
     &[ui~="fluid"] {
+      display: flex;
       width: 100%;
 
       .@{veui-prefix}-progress-rail {
@@ -43,30 +44,34 @@
       }
     }
 
-    &[ui~="s"] {
-      font-size: @dls-progress-font-size-s;
+    .make-size(@size) {
+      @font-size: ~"dls-progress-font-size-@{size}";
+      @bar-width: ~"dls-progress-width-bar-@{size}";
+      @track-width: ~"dls-progress-track-width-@{size}";
+      @border-radius: ~"dls-progress-border-radius-@{size}";
+
+      font-size: @@font-size;
 
       .@{veui-prefix}-progress-rail {
-        .size(@dls-progress-width-bar-s, @dls-progress-track-width-s);
+        .size(@@bar-width, @@track-width);
       }
 
       .@{veui-prefix}-progress-rail,
       .@{veui-prefix}-progress-meter {
-        border-radius: @dls-progress-border-radius-s;
+        border-radius: @@border-radius;
       }
     }
 
     &[ui~="m"] {
-      font-size: @dls-progress-font-size-m;
+      .make-size(m);
+    }
 
-      .@{veui-prefix}-progress-rail {
-        .size(@dls-progress-width-bar-m, @dls-progress-track-width-m);
-      }
+    &[ui~="s"] {
+      .make-size(s);
+    }
 
-      .@{veui-prefix}-progress-rail,
-      .@{veui-prefix}-progress-meter {
-        border-radius: @dls-progress-border-radius-m;
-      }
+    &[ui~="xs"] {
+      .make-size(xs);
     }
 
     .@{veui-prefix}-progress-meter {
@@ -104,15 +109,35 @@
       stroke: @dls-progress-indicator-color;
       .veui-transition(stroke, stroke-dashoffset);
     }
+
+    .make-size(@size) {
+      @font-size: ~"dls-progress-font-size-circular-@{size}";
+      @icon-size: ~"dls-progress-icon-size-circular-@{size}";
+
+      .@{veui-prefix}-progress-desc {
+        font-size: @@font-size;
+      }
+
+      .@{veui-prefix}-progress-status-icon {
+        .dls-icon-size(@@icon-size);
+      }
+    }
+
+    &[ui~="m"] {
+      .make-size(m);
+    }
+
+    &[ui~="s"] {
+      .make-size(s);
+    }
+
+    &[ui~="xs"] {
+      .make-size(xs);
+    }
   }
 
   &-circular &-desc {
     .absolute(0);
-    font-size: @dls-progress-font-size-circular;
-
-    .@{veui-prefix}-progress-status-icon {
-      .dls-icon-size(@dls-progress-icon-size-circular);
-    }
   }
 
   &-status {
