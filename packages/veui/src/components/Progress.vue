@@ -142,7 +142,9 @@ export default {
       return this.ratio * 100
     },
     realRadius () {
-      return this.radius || this.uiData.radius || RADIUS_DEFAULT
+      return (
+        (this.radius || this.uiData.radius || RADIUS_DEFAULT) - this.halfStroke
+      )
     },
     realStroke () {
       return this.strokeWidth || this.uiData.strokeWidth || STROKE_DEFAULT

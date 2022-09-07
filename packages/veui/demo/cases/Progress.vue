@@ -32,10 +32,22 @@
     <veui-progress :status.sync="status" indeterminate/>
   </section>
   <section>
-    <h2>线性进度条（小尺寸）</h2>
+    <h2>线性进度条（s）</h2>
     <veui-progress
       :value="Number(progress)"
       ui="s"
+      desc
+      :autosucceed="200"
+      :status.sync="status"
+      :decimal-place="1"
+      :indeterminate="indeterminate"
+    />
+  </section>
+  <section>
+    <h2>线性进度条（xs）</h2>
+    <veui-progress
+      :value="Number(progress)"
+      ui="xs"
       desc
       :autosucceed="200"
       :status.sync="status"
@@ -66,9 +78,20 @@
     />
   </section>
   <section>
-    <h2>环形进度条（小尺寸）</h2>
+    <h2>环形进度条（s）</h2>
     <veui-progress
       ui="s"
+      type="circular"
+      :value="Number(progress)"
+      desc
+      :autosucceed="200"
+      :status.sync="status"
+    />
+  </section>
+  <section>
+    <h2>环形进度条（xs）</h2>
+    <veui-progress
+      ui="xs"
       type="circular"
       :value="Number(progress)"
       desc

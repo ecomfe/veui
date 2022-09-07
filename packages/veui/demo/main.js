@@ -3,7 +3,7 @@ import App from './App'
 import router from './router'
 import i18n from 'veui/managers/i18n'
 
-i18n.locale = 'en-US'
+i18n.locale = 'zh-Hans'
 
 Vue.config.productionTip = false
 
