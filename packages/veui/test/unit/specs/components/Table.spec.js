@@ -5,6 +5,7 @@ import Popover from '@/components/Popover'
 import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 import Select from '@/components/Select'
+import ConfigProvider from '@/components/ConfigProvider'
 import { expectTooltip, mount, wait } from '../../../utils'
 import tooltipManager from '@/managers/tooltip'
 import config from '@/managers/config'
@@ -2830,5 +2831,128 @@ describe('components/Table', function () {
     expect(cols.at(2).text()).to.equal('name')
 
     wrapper.destroy()
+  })
+
+  it('should support `loading-options` correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-column': Column
+        },
+        template: `
+        <veui-table
+          :data="data"
+          :loading="loading"
+          :loading-options="loadingOptions"
+        >
+          <veui-column
+            field="id"
+            title="id"
+          />
+        </veui-table>`,
+        data () {
+          return {
+            data: [],
+            loading: false,
+            loadingOptions: {}
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+
+    expect(wrapper.find('.veui-loading').exists()).to.equal(false)
+    expect(wrapper.find('.veui-loading-bar').exists()).to.equal(false)
+
+    vm.loading = true
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-loading').exists()).to.equal(false)
+    expect(wrapper.find('.veui-loading-bar').exists()).to.equal(true)
+    expect(wrapper.find('.veui-table-loading-backdrop').exists()).to.equal(true)
+
+    vm.$set(vm.loadingOptions, 'modal', false)
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-table-loading-backdrop').exists()).to.equal(
+      false
+    )
+
+    vm.$set(vm.loadingOptions, 'type', 'spinner')
+    await vm.$nextTick()
+    expect(wrapper.find('.veui-loading').exists()).to.equal(true)
+    expect(wrapper.find('.veui-loading-bar').exists()).to.equal(false)
+    expect(wrapper.find('.veui-table-loading-backdrop').exists()).to.equal(
+      false
+    )
+
+    wrapper.destroy()
+  })
+
+  it('should respect the `table.loadingOptions` config', async () => {
+    let loadingOptionsConfig = config.get('table.loadingOptions')
+
+    config.set('table.loadingOptions', {
+      type: 'spinner'
+    })
+
+    let wrapper = mount(
+      {
+        components: {
+          'veui-config-provider': ConfigProvider,
+          'veui-table': Table,
+          'veui-column': Column
+        },
+        template: `
+        <veui-config-provider :value="config">
+          <veui-table
+            :data="data"
+            loading
+          >
+            <veui-column
+              field="id"
+              title="id"
+            />
+          </veui-table>
+        </veui-config-provider>`,
+        data () {
+          return {
+            data: [],
+            config: {}
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    await vm.$nextTick()
+
+    expect(wrapper.find('.veui-loading').exists()).to.equal(true)
+    vm.config = {
+      'table.loadingOptions': {
+        type: 'progress',
+        modal: false
+      }
+    }
+    await vm.$nextTick()
+
+    expect(wrapper.find('.veui-loading').exists()).to.equal(false)
+    expect(wrapper.find('.veui-loading-bar').exists()).to.equal(true)
+    expect(wrapper.find('.veui-table-loading-backdrop').exists()).to.equal(
+      false
+    )
+
+    wrapper.destroy()
+
+    config.set('table.loadingOptions', loadingOptionsConfig)
   })
 })

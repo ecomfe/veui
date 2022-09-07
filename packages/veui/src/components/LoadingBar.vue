@@ -3,7 +3,7 @@
   <veui-progress
     v-if="loading || leaving"
     :value="value"
-    :ui="`${uiParts.progress} ${realUi}`"
+    :ui="uiParts.progress"
     :class="$c('loading-bar')"
   />
 </transition>
@@ -17,8 +17,10 @@ import ui from '../mixins/ui'
 import '../common/global'
 
 const INTERVAL_RANGE = [200, 500]
+const INTERVAL_SLOWDOWN_RATE = 0.25
 const ANCHOR_STOPS = [0.4, 0.7, 0.8]
 const DEVIATION_RANGE = [-0.05, 0.1]
+const REMAINING_STEP_RANGE = [0.01, 0.25]
 
 export default {
   name: 'veui-loading-bar',
@@ -63,12 +65,14 @@ export default {
       const { value, round, remaining } = this
       const interval = random(...INTERVAL_RANGE)
       const deviation = random(...DEVIATION_RANGE)
+      const remainingStep = random(...REMAINING_STEP_RANGE)
 
       let targetValue
-      if (round < ANCHOR_STOPS.length) {
+      const unanchoredRounds = round - ANCHOR_STOPS.length
+      if (unanchoredRounds < 0) {
         targetValue = Math.max(ANCHOR_STOPS[round] + deviation, value)
       } else {
-        targetValue = Math.min(value + remaining / 4, 1)
+        targetValue = Math.min(value + remaining * remainingStep, 1)
       }
       this.value = targetValue
 
@@ -76,7 +80,7 @@ export default {
         this.stepping = setTimeout(() => {
           this.round++
           this.step()
-        }, interval)
+        }, interval + Math.max(0, unanchoredRounds) * interval * INTERVAL_SLOWDOWN_RATE)
       } else {
         this.stop(true)
       }

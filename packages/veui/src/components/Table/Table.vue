@@ -17,11 +17,12 @@
       scrollableX && (!supportSticky || !hasFixedRight)
   }"
   :ui="realUi"
+  @focusin="handleFocusIn"
 >
   <div v-show="false">
     <slot/>
   </div>
-  <div v-if="scrollableY" ref="fixedHeader" :class="$c('table-fixed-header')">
+  <div ref="fixedHeader" :class="$c('table-fixed-header')">
     <table
       :style="{
         minWidth: scrollableX
@@ -32,6 +33,17 @@
       <col-group gutter/>
       <table-head ref="head" @sort="sort"/>
     </table>
+  </div>
+  <div
+    v-if="realLoadingOptions.type !== 'spinner'"
+    :class="$c('table-loading-row')"
+    aria-hidden="true"
+  >
+    <veui-loading-bar
+      :class="$c('table-loading')"
+      :ui="uiParts.loading"
+      :loading="loading"
+    />
   </div>
   <div
     ref="main"
@@ -48,7 +60,6 @@
       }"
     >
       <col-group/>
-      <table-head v-if="!scrollableY" ref="head" @sort="sort"/>
       <table-body>
         <template slot="no-data">
           <slot name="no-data">{{ t('noData') }}</slot>
@@ -77,17 +88,22 @@
       </table-foot>
     </table>
   </div>
-  <transition :name="$c('table-loading-fade')">
-    <veui-loading
-      :class="$c('table-loading')"
-      :loading="loading"
-      :ui="uiParts.loading"
-    >{{ t('loading') }}</veui-loading>
-  </transition>
+  <loading-backdrop
+    v-if="
+      realLoadingOptions.type !== 'spinner' &&
+        realLoadingOptions.modal !== false
+    "
+  />
+  <veui-loading
+    v-if="realLoadingOptions.type === 'spinner'"
+    :loading="loading"
+    :ui="uiParts.spinner"
+  >{{ t('loading') }}</veui-loading>
 </div>
 </template>
 
 <script>
+import { map, mapValues, intersection, find, omit, filter } from 'lodash'
 import warn from '../../utils/warn'
 import { normalizeLength } from '../../utils/helper'
 import prefix from '../../mixins/prefix'
@@ -95,13 +111,16 @@ import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import colgroup from '../../mixins/colgroup'
 import useControllable from '../../mixins/controllable'
+import { useConfigurable } from '../../mixins/config'
+import config from '../../managers/config'
 import resize from '../../directives/resize'
-import Loading from '../Loading'
-import { map, mapValues, intersection, find, omit, filter } from 'lodash'
 import Body from './_Body'
 import Head from './_Head'
 import Foot from './_Foot'
 import ColGroup from './_ColGroup'
+import LoadingBackdrop from './_LoadingBackdrop'
+import Loading from '../Loading'
+import LoadingBar from '../LoadingBar'
 import '../../common/global'
 import { isEqualSet } from '../../utils/lang'
 import { walk } from '../../utils/datasource'
@@ -110,6 +129,16 @@ import {
   preventBackForward,
   getElementScrollbarWidth
 } from '../../utils/dom'
+
+config.defaults(
+  {
+    loadingOptions: {
+      type: 'progress',
+      modal: true
+    }
+  },
+  'table'
+)
 
 const FIXED_PRIORITY = {
   left: 0,
@@ -129,7 +158,9 @@ export default {
     'table-head': Head,
     'table-foot': Foot,
     'col-group': ColGroup,
-    'veui-loading': Loading
+    'loading-backdrop': LoadingBackdrop,
+    'veui-loading': Loading,
+    'veui-loading-bar': LoadingBar
   },
   directives: {
     resize
@@ -180,7 +211,11 @@ export default {
           }
         }
       }
-    ])
+    ]),
+    useConfigurable('config', {
+      namespace: 'table',
+      props: ['loadingOptions']
+    })
   ],
   props: {
     data: {
@@ -218,7 +253,13 @@ export default {
     orderBy: String,
     allowedOrders: Array,
     columnFilter: Array,
-    loading: Boolean
+    loading: Boolean,
+    loadingOptions: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
   },
   data () {
     return {
@@ -447,6 +488,12 @@ export default {
     },
     offsetLeft () {
       return this.selectColumnWidth + this.expandColumnWidth
+    },
+    realLoadingOptions () {
+      return {
+        ...this.config['table.loadingOptions'],
+        ...this.loadingOptions
+      }
     }
   },
   watch: {
@@ -680,6 +727,11 @@ export default {
         }
       })
       return cols
+    },
+    handleFocusIn (e) {
+      if (this.loading) {
+        e.target.blur()
+      }
     }
   }
 }

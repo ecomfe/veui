@@ -51,23 +51,21 @@ export default {
                 }
               >
                 <div class={this.$c('table-cell')}>
-                  <div class={this.$c('table-cell-content')}>
-                    {table.selectMode === 'multiple' ? (
-                      <Checkbox
-                        checked={table.selectStatus !== 'none'}
-                        disabled={!table.enabledData.length}
-                        indeterminate={table.selectStatus === 'partial'}
-                        onChange={(checked) => {
-                          table.select(checked)
-                        }}
-                        aria-label={this.t(
-                          table.selectStatus !== 'none'
-                            ? '@table.unselectAll'
-                            : '@table.selectAll'
-                        )}
-                      />
-                    ) : null}
-                  </div>
+                  {table.selectMode === 'multiple' ? (
+                    <Checkbox
+                      checked={table.selectStatus !== 'none'}
+                      disabled={!table.enabledData.length}
+                      indeterminate={table.selectStatus === 'partial'}
+                      onChange={(checked) => {
+                        table.select(checked)
+                      }}
+                      aria-label={this.t(
+                        table.selectStatus !== 'none'
+                          ? '@table.unselectAll'
+                          : '@table.selectAll'
+                      )}
+                    />
+                  ) : null}
                 </div>
               </th>
             ) : null}
