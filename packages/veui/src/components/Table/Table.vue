@@ -14,7 +14,8 @@
       scrollableX &&
       (!supportSticky || (!needFixLeft && !selectable && !expandable)),
     [$c('table-overflow-right-edge')]:
-      scrollableX && (!supportSticky || !hasFixedRight)
+      scrollableX && (!supportSticky || !hasFixedRight),
+    [$c('table-has-loading-backdrop')]: hasLoadingBackdrop
   }"
   :ui="realUi"
   @focusin="handleFocusIn"
@@ -44,6 +45,9 @@
       :ui="uiParts.loading"
       :loading="loading"
     />
+    <div v-if="!data.length & loading" :class="$c('table-no-data-loading')">
+      {{ t('loading') }}
+    </div>
   </div>
   <div
     ref="main"
@@ -65,16 +69,9 @@
           <slot name="no-data">{{ t('noData') }}</slot>
         </template>
       </table-body>
-      <table-foot v-if="!scrollableY && hasFoot()" ref="foot">
-        <slot name="foot"/>
-      </table-foot>
     </table>
   </div>
-  <div
-    v-if="scrollableY && hasFoot()"
-    ref="fixedFooter"
-    :class="$c('table-fixed-footer')"
-  >
+  <div v-if="hasFoot()" ref="fixedFooter" :class="$c('table-fixed-footer')">
     <table
       :style="{
         minWidth: scrollableX
@@ -88,12 +85,6 @@
       </table-foot>
     </table>
   </div>
-  <loading-backdrop
-    v-if="
-      realLoadingOptions.type !== 'spinner' &&
-        realLoadingOptions.modal !== false
-    "
-  />
   <veui-loading
     v-if="realLoadingOptions.type === 'spinner'"
     :loading="loading"
@@ -118,7 +109,6 @@ import Body from './_Body'
 import Head from './_Head'
 import Foot from './_Foot'
 import ColGroup from './_ColGroup'
-import LoadingBackdrop from './_LoadingBackdrop'
 import Loading from '../Loading'
 import LoadingBar from '../LoadingBar'
 import '../../common/global'
@@ -158,7 +148,6 @@ export default {
     'table-head': Head,
     'table-foot': Foot,
     'col-group': ColGroup,
-    'loading-backdrop': LoadingBackdrop,
     'veui-loading': Loading,
     'veui-loading-bar': LoadingBar
   },
@@ -494,6 +483,13 @@ export default {
         ...this.config['table.loadingOptions'],
         ...this.loadingOptions
       }
+    },
+    hasLoadingBackdrop () {
+      return (
+        this.loading &&
+        this.realLoadingOptions.type !== 'spinner' &&
+        this.realLoadingOptions.modal !== false
+      )
     }
   },
   watch: {

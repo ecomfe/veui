@@ -55,8 +55,8 @@ export default {
                     : null
                 }}
               >
-                {table.loading && table.loadingOptions.type !== 'spinner'
-                  ? this.t('@table.loading')
+                {table.loading
+                  ? null
                   : this.$slots['no-data'] || this.t('@table.noData')}
               </div>
             </td>
