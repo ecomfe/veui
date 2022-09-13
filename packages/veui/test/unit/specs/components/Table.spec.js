@@ -2875,11 +2875,13 @@ describe('components/Table', function () {
     await vm.$nextTick()
     expect(wrapper.find('.veui-loading').exists()).to.equal(false)
     expect(wrapper.find('.veui-loading-bar').exists()).to.equal(true)
-    expect(wrapper.find('.veui-table-loading-backdrop').exists()).to.equal(true)
+    expect(wrapper.find('.veui-table-has-loading-backdrop').exists()).to.equal(
+      true
+    )
 
     vm.$set(vm.loadingOptions, 'modal', false)
     await vm.$nextTick()
-    expect(wrapper.find('.veui-table-loading-backdrop').exists()).to.equal(
+    expect(wrapper.find('.veui-table-has-loading-backdrop').exists()).to.equal(
       false
     )
 
@@ -2887,7 +2889,7 @@ describe('components/Table', function () {
     await vm.$nextTick()
     expect(wrapper.find('.veui-loading').exists()).to.equal(true)
     expect(wrapper.find('.veui-loading-bar').exists()).to.equal(false)
-    expect(wrapper.find('.veui-table-loading-backdrop').exists()).to.equal(
+    expect(wrapper.find('.veui-table-has-loading-backdrop').exists()).to.equal(
       false
     )
 
