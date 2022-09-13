@@ -1,3 +1,19 @@
+## 2.9.0 "🍄 Mushroom" (2022-09-13)
+
+### 💡 主要变更
+
+- [+] 新增 `LoadingBar` 组件，用于使用进度条来展示加载中的状态。<!-- #LoadingBar -->
+- [+] `Table` 组件新增 `loading-options` 属性和全局配置项 `table.loadingOptions`，用于指定加载中状态的选项配置。<!-- #Table -->
+- [^] `Table` 组件默认使用进度条型加载态，以代替原来的转动提示。可以通过设置 `loadingOptions.type` 为 `spinner` 切换回之前版本的加载态。在进度条模式下，如果加载过程已经正确处理了数据请求的竞态，可以设置 `loadingOptions.modal` 为 `false`，开启非模态的加载态，以提供更流畅的操作体验。<!-- #Table -->
+- [+] `Progress` 组件新增了可选的 `ui` 尺寸 `xs`。<!-- #Progress -->
+- [^] `Progress` 组件在环形模式下现在根据 `ui` 尺寸不同，进行了尺寸上的调整。<!-- #Progress -->
+
+### 🐞 问题修复
+
+- [^] 修正 `Uploader` 组件 `key-field` 指定的字段可能被覆盖的问题。<!-- #Uploader -->
+- [^] 修正 `RadioButtonGroup` 组件在禁用状态（整体禁用 & 单项禁用）下依然可以通过键盘获取焦点并进行修改的问题。<!-- #RadioButtonGroup -->
+- [^] 修正 `Icon` 组件的 `spin` 属性失效的问题。<!-- #Icon -->
+
 ## 2.8.2 (2022-08-01)
 
 ### 🐞 问题修复
