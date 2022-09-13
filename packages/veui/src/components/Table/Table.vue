@@ -45,7 +45,7 @@
       :ui="uiParts.loading"
       :loading="loading"
     />
-    <div v-if="!data.length & loading" :class="$c('table-no-data-loading')">
+    <div v-if="!data.length && loading" :class="$c('table-no-data-loading')">
       {{ t('loading') }}
     </div>
   </div>
