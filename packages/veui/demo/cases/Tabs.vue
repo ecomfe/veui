@@ -64,7 +64,13 @@
   <section>
     <h2>加强样式：</h2>
     <veui-tabs ui="strong" :active.sync="active0">
-      <veui-tab label="回答问题" name="answers"/>
+      <veui-tab label="回答问题" name="answers">
+        <veui-tabs ui="simple" :active.sync="active0">
+          <veui-tab label="回答问题" name="answers"/>
+          <veui-tab label="文章评论" name="articles"/>
+          <veui-tab label="分享朋友圈" name="shares"/>
+        </veui-tabs>
+      </veui-tab>
       <veui-tab label="文章评论" name="articles"/>
       <veui-tab label="分享朋友圈" name="shares"/>
     </veui-tabs>
