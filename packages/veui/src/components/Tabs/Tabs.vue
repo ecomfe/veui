@@ -413,6 +413,7 @@ export default {
                 key={tab.id}
                 ref="items"
                 refInFor
+                ui={this.realUi}
                 class={{
                   [this.$c('tabs-item')]: true,
                   [this.$c('disabled')]: tab.disabled,
