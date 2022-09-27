@@ -16,6 +16,7 @@ type Item = {
 type Props<T extends Item> = {
   steps: Array<T>
   current: number
+  stateless?: boolean
 }
 
 type Emits = {

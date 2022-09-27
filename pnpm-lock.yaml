@@ -268,7 +268,7 @@ importers:
       esm: ^3.2.25
       focus-visible: ^4.1.5
       less: ^4.1.2
-      less-plugin-dls: ^10.0.0
+      less-plugin-dls: ^11.2.1
       less-plugin-est: ^3.0.1
       postcss: ^8.4.13
       rollup: ^2.72.0
@@ -280,7 +280,7 @@ importers:
       dls-icons-vue: 2.11.0_vue@2.6.14
       dls-illustrations-vue: 1.3.2_vue@2.6.14
       focus-visible: 4.1.5
-      less-plugin-dls: 10.0.0
+      less-plugin-dls: 11.2.1
       less-plugin-est: 3.0.1
     devDependencies:
       '@rollup/plugin-commonjs': 20.0.0_rollup@2.72.0
@@ -9763,8 +9763,8 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /less-plugin-dls/10.0.0:
-    resolution: {integrity: sha512-/s3YMwlIH0C6/ll5AJtPcqRfSWuEk9BuHN5QsolkQsZerAqHnJcPaQwoNJV1/ZNEvami5RB08TjgnvUn6+vPrg==}
+  /less-plugin-dls/11.2.1:
+    resolution: {integrity: sha512-hOJJIE7LeJLD5wokGd/QfgDh0iT6Qh9VxXhZS/s2lNY9sOUAvqVUUS8Zea67IgJm1N+Y6LthB/k+MtpVPhbCxg==}
     hasBin: true
     dependencies:
       arg: 4.1.3

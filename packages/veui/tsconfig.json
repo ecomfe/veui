@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "./dist",
     // this aligns with Vue's browser support
     "target": "es5",
     // this enables stricter inference for data properties on `this`
@@ -9,14 +10,11 @@
     "moduleResolution": "node",
     "allowJs": true,
     "paths": {
-      "veui": ["types/index.d.ts"]
+      "veui": ["./types/index.d.ts"]
     },
     "jsx": "preserve"
   },
   "vueCompilerOptions": {
-    "experimentalCompatMode": 2,
-    "experimentalTemplateCompilerOptions": {
-      "compatConfig": { "MODE": 2 } // optional
-    }
+    "target": 2
   }
 }

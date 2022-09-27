@@ -13,7 +13,12 @@ ui.defaults(
       },
       size: {
         values: ['s', 'm'],
-        inherit: true
+        inherit: true,
+        default: 'm'
+      },
+      style: {
+        values: ['normal', 'dot'],
+        default: 'normal'
       }
     }
   },
