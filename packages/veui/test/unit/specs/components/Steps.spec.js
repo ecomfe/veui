@@ -11,7 +11,7 @@ let datasource = [
 describe('components/Steps', function () {
   this.timeout(10000)
 
-  it('should handle steps prop with `null` value.', () => {
+  it('should handle steps prop with `null` value', () => {
     let wrapper = mount(Steps, {
       propsData: {
         steps: null
@@ -22,7 +22,7 @@ describe('components/Steps', function () {
     wrapper.destroy()
   })
 
-  it('should render correctly according to the step status.', () => {
+  it('should render correctly according to the step status', () => {
     let wrapper = mount(Steps, {
       propsData: {
         steps: datasource,
@@ -43,7 +43,7 @@ describe('components/Steps', function () {
     wrapper.destroy()
   })
 
-  it('should set prop `to` of links properly.', () => {
+  it('should set prop `to` of links properly', () => {
     let wrapper = mount(Steps, {
       propsData: {
         steps: datasource
@@ -54,7 +54,7 @@ describe('components/Steps', function () {
     wrapper.destroy()
   })
 
-  it('should render index slot.', () => {
+  it('should render index slot', () => {
     let wrapper = mount(Steps, {
       propsData: {
         steps: datasource
@@ -69,7 +69,7 @@ describe('components/Steps', function () {
     wrapper.destroy()
   })
 
-  it('should render label slot.', () => {
+  it('should render label slot', () => {
     let wrapper = mount(Steps, {
       propsData: {
         steps: datasource
@@ -80,7 +80,7 @@ describe('components/Steps', function () {
     wrapper.destroy()
   })
 
-  it('should render desc slot.', () => {
+  it('should render desc slot', () => {
     let wrapper = mount(Steps, {
       propsData: {
         steps: datasource
@@ -91,7 +91,7 @@ describe('components/Steps', function () {
     wrapper.destroy()
   })
 
-  it('should handle `click` correctly.', () => {
+  it('should handle `click` correctly', () => {
     let wrapper = mount(Steps, {
       propsData: {
         steps: datasource,
@@ -101,6 +101,19 @@ describe('components/Steps', function () {
 
     wrapper.findAll(Link).at(1).trigger('click')
     expect(wrapper.emitted().click[0][0]).to.equal(1)
+    wrapper.destroy()
+  })
+
+  it('should support `stateless` mode', () => {
+    let wrapper = mount(Steps, {
+      propsData: {
+        steps: datasource,
+        stateless: true
+      }
+    })
+
+    expect(wrapper.find('.veui-steps-step-current').exists()).to.equal(false)
+    expect(wrapper.find('a.veui-steps-step').exists()).to.equal(false)
     wrapper.destroy()
   })
 })
