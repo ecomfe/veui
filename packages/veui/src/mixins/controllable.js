@@ -171,8 +171,10 @@ function getRealName ({ prop, computed } = {}) {
 function isControlled (vm, prop) {
   // 受控定义：显式传了 prop 且传的不是 undefined 就认为受控了
 
+  // 为了响应性，因为下面 in propsData 没有响应性
   // eslint-disable-next-line no-unused-expressions
-  vm[prop] // 为了响应性，因为下面 in propsData 没有响应性
+  vm[prop] // lgtm [js/useless-expression]
+
   let propsData = vm.$options.propsData
   return prop in propsData && typeof propsData[prop] !== 'undefined'
 }

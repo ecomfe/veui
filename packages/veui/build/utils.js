@@ -5,7 +5,7 @@ const { uniq } = require('lodash')
 
 const componentsDir = resolve(__dirname, '../src/components')
 const indexPath = resolve(componentsDir, './index.js')
-const scriptRE = /<script\b(?:\s[^>]*>|>)(.*?)<\/script>/ims
+const scriptRE = /<script\b(?<!\s)(?:\s[^>]*>|>)(.*?)<\/script\s*>/ims
 
 function getComponentDeps () {
   let depMap = {}
