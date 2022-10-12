@@ -14,13 +14,13 @@
     white-space: nowrap;
     height: @dls-tab-height-m;
     margin: 0 @dls-tab-menu-padding-normal;
+  }
 
-    &::before {
-      content: "";
-      .absolute(_, 0, 0);
-      border-bottom: @dls-tab-container-border-width solid
-        @dls-tab-container-separator-color;
-    }
+  &:not([ui~="borderless"]) > &-menu::before {
+    content: "";
+    .absolute(_, 0, 0);
+    border-bottom: @dls-tab-container-border-width solid
+      @dls-tab-container-separator-color;
   }
 
   &-list {

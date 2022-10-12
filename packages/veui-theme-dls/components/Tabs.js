@@ -30,7 +30,8 @@ ui.defaults(
       },
       style: {
         values: ['simple', 'strong']
-      }
+      },
+      borderless: false
     },
     parts: {
       remove: 'icon aux',
