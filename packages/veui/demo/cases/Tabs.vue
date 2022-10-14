@@ -8,8 +8,14 @@
     <p>
       当前标签
       <code>{{ active0 }}</code>
+      <veui-checkbox
+        v-model="bordered"
+        true-value=""
+        false-value="borderless"
+        style="margin-left: 8px"
+      >底边</veui-checkbox>
     </p>
-    <veui-tabs ui="l" :active.sync="active0">
+    <veui-tabs :ui="`l ${bordered}`" :active.sync="active0">
       <veui-tab :label="label1" name="answers" removable>{{
         count
       }}</veui-tab>
@@ -31,13 +37,13 @@
       <template #tab-label="{ label }">{{ label }}</template>
     </veui-tabs>
 
-    <veui-tabs :active.sync="active0">
+    <veui-tabs :active.sync="active0" :ui="bordered">
       <veui-tab label="回答问题" name="answers" removable/>
       <veui-tab label="文章评论" name="articles"/>
       <veui-tab label="分享朋友圈" name="shares" removable/>
     </veui-tabs>
 
-    <veui-tabs ui="s" :active.sync="active0">
+    <veui-tabs :ui="`s ${bordered}`" active.sync="active0">
       <veui-tab label="回答问题" name="answers" removable/>
       <veui-tab label="文章评论" name="articles" removable/>
       <veui-tab label="分享朋友圈" name="shares" status="success" removable/>
@@ -375,7 +381,7 @@
 </template>
 
 <script>
-import { Tabs, Tab, Button } from 'veui'
+import { Tabs, Tab, Button, Checkbox } from 'veui'
 import { findIndex, uniqueId } from 'lodash'
 
 export default {
@@ -383,7 +389,8 @@ export default {
   components: {
     'veui-tabs': Tabs,
     'veui-tab': Tab,
-    'veui-button': Button
+    'veui-button': Button,
+    'veui-checkbox': Checkbox
   },
   data () {
     return {
@@ -393,6 +400,7 @@ export default {
       label3: '分享朋友圈',
       totalTabs0: 15,
       totalTabs1: 20,
+      bordered: '',
       compact: false,
       active7: null,
       tabs0: [
