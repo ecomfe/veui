@@ -4,7 +4,7 @@ import { wait } from '../../../utils'
 describe('managers/confirm', function () {
   this.timeout(10000)
 
-  it('should implement `createComponent` function correctly', async () => {
+  it('should implement `create` function correctly', async () => {
     let isOk = false
     let isCancel = false
     let component = confirm.create({
@@ -21,8 +21,10 @@ describe('managers/confirm', function () {
     let confirmBox = component.$children[0]
 
     expect(confirmBox.open).to.equal(true)
-    expect(getEl('.veui-dialog-content-head-title').innerText).to.equal('Title')
-    expect(getEl('.veui-dialog-content-body').innerText).to.equal('Content')
+    expect(getEl('.veui-dialog-content-head-title').textContent).to.equal(
+      'Title'
+    )
+    expect(getEl('.veui-dialog-content-body').textContent).to.equal('Content')
 
     let buttons = getButtons()
     buttons[0].dispatchEvent(new MouseEvent('click'))
@@ -53,8 +55,10 @@ describe('managers/confirm', function () {
     })
     await wait(0)
 
-    expect(getEl('.veui-dialog-content-head-title').innerText).to.equal('Title')
-    expect(getEl('.veui-dialog-content-body').innerText).to.equal('Content')
+    expect(getEl('.veui-dialog-content-head-title').textContent).to.equal(
+      'Title'
+    )
+    expect(getEl('.veui-dialog-content-body').textContent).to.equal('Content')
 
     let buttons = getButtons()
     buttons[0].dispatchEvent(new MouseEvent('click'))

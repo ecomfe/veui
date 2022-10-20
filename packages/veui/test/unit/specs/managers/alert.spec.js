@@ -4,7 +4,7 @@ import { wait } from '../../../utils'
 describe('managers/alert', function () {
   this.timeout(10000)
 
-  it('should implement `createComponent` function correctly', async () => {
+  it('should implement `create` function correctly', async () => {
     let isClicked = false
     let component = alert.create({
       title: 'Title',
@@ -19,8 +19,8 @@ describe('managers/alert', function () {
 
     expect(alertBox.open).to.equal(true)
     expect(alertBox.type).to.equal('error')
-    expect(getEl('.veui-alert-box-title').innerText).to.equal('Title')
-    expect(getEl('.veui-alert-box-content').innerText).to.equal('Content')
+    expect(getEl('.veui-alert-box-title').textContent).to.equal('Title')
+    expect(getEl('.veui-alert-box-content').textContent).to.equal('Content')
 
     getEl('.veui-dialog-content-foot')
       .querySelector('.veui-button')
@@ -42,8 +42,8 @@ describe('managers/alert', function () {
     })
     await wait(0)
 
-    expect(getEl('.veui-alert-box-title').innerText).to.equal('Title')
-    expect(getEl('.veui-alert-box-content').innerText).to.equal('Content')
+    expect(getEl('.veui-alert-box-title').textContent).to.equal('Title')
+    expect(getEl('.veui-alert-box-content').textContent).to.equal('Content')
 
     getEl('.veui-dialog-content-foot')
       .querySelector('.veui-button')
