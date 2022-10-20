@@ -1,4 +1,5 @@
 import minLength from 'veui/managers/rules/minLength'
+import 'veui/locale/zh-Hans/common'
 
 describe('managers/rules/minLength', function () {
   this.timeout(10000)
@@ -15,5 +16,9 @@ describe('managers/rules/minLength', function () {
     expect(minLength.validate('abc', 4)).to.equal(false)
     expect(minLength.validate([1, 2, 3], 3)).to.equal(true)
     expect(minLength.validate([1, 2, 3], 4)).to.equal(false)
+  })
+
+  it('should produce validation error message correctly', () => {
+    expect(minLength.message(1, 10)).to.equal('字符长度不能短于10')
   })
 })

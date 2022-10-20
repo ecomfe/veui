@@ -1,4 +1,5 @@
 import max from 'veui/managers/rules/max'
+import 'veui/locale/zh-Hans/common'
 
 describe('managers/rules/max', function () {
   this.timeout(10000)
@@ -14,5 +15,9 @@ describe('managers/rules/max', function () {
     expect(max.validate(3, 2)).to.equal(false)
     expect(max.validate(-3, -2)).to.equal(true)
     expect(max.validate(0.3, 0.2)).to.equal(false)
+  })
+
+  it('should produce validation error message correctly', () => {
+    expect(max.message(100, 10)).to.equal('不能大于10')
   })
 })

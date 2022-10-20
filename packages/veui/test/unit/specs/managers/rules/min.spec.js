@@ -1,4 +1,5 @@
 import min from 'veui/managers/rules/min'
+import 'veui/locale/zh-Hans/common'
 
 describe('managers/rules/min', function () {
   this.timeout(10000)
@@ -14,5 +15,9 @@ describe('managers/rules/min', function () {
     expect(min.validate(3, 2)).to.equal(true)
     expect(min.validate(-3, -2)).to.equal(false)
     expect(min.validate(0.3, 0.2)).to.equal(true)
+  })
+
+  it('should produce validation error message correctly', () => {
+    expect(min.message(1, 10)).to.equal('不能小于10')
   })
 })
