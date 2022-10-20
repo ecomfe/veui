@@ -60,16 +60,7 @@ class FocusContext {
       this.root.addEventListener('keydown', this.trapHanlder, true)
     }
 
-    this.focusAt(0)
-  }
-
-  focusAt (index = 0, ignoreAutofocus) {
-    setTimeout(() => {
-      let target = this.preferred || this.root
-      if (target && !focusIn(target, index, ignoreAutofocus)) {
-        this.root.focus()
-      }
-    })
+    this.focus()
   }
 
   toTop () {
@@ -77,7 +68,12 @@ class FocusContext {
   }
 
   focus () {
-    this.focusAt(this.trap ? 1 : 0)
+    setTimeout(() => {
+      let target = this.preferred || this.root
+      if (target && !focusIn(target, 0)) {
+        this.root.focus()
+      }
+    })
   }
 
   destroy () {
@@ -161,6 +157,7 @@ export class FocusManager {
 
     if (i < stack.length - 1) {
       stack[i + 1].source = context.source
+      context.source = null
     }
 
     remove(this.stack, (item) => item === context)
