@@ -1,4 +1,5 @@
 import numeric from 'veui/managers/rules/numeric'
+import 'veui/locale/zh-Hans/common'
 
 describe('managers/rules/numeric', function () {
   this.timeout(10000)
@@ -34,5 +35,9 @@ describe('managers/rules/numeric', function () {
     expect(numeric.validate('aa')).to.equal(false)
     expect(numeric.validate('0|1')).to.equal(false)
     expect(numeric.validate('{0}')).to.equal(false)
+  })
+
+  it('should produce validation error message correctly', () => {
+    expect(numeric.message('a')).to.equal('值必须为数字')
   })
 })
