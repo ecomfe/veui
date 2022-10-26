@@ -235,6 +235,10 @@
       transform: translateY(-50%);
     }
   }
+  // 拖拽时 hover 的 remove 按钮有时候奇怪出现，干掉
+  &-list-dragging > &-item-removable &-item-remove {
+    opacity: 0;
+  }
 
   &-item-status {
     margin-left: @dls-tab-content-spacing;
@@ -499,6 +503,49 @@
     &:first-child .@{veui-prefix}-tabs-item-label::before,
     &:last-child .@{veui-prefix}-tabs-item-label::after {
       content: none !important;
+    }
+  }
+
+  &-list-leave-to {
+    opacity: 0;
+  }
+
+  &-list-move {
+    .veui-transition(transform);
+  }
+
+  &-list-leave-active {
+    height: 100%;
+    position: absolute;
+  }
+
+  @data-drag-sort-snapshot: ~"[data-@{veui-prefix}-drag-sort-snapshot]";
+  @{data-drag-sort-snapshot} {
+    transform: translateZ(0);
+
+    // 截图不要 strong 下面的角
+    &[ui~="strong"].veui-tabs-item {
+      & > .veui-tabs-item-label {
+        &::after,
+        &::before {
+          width: 0 !important;
+        }
+      }
+    }
+
+    // 截图不要删除按钮和 simple 的间隔线
+    .@{veui-prefix}-tabs-item-remove,
+    &::before {
+      transition-duration: 0ms;
+      opacity: 0;
+    }
+  }
+
+  // simple 的间隔线拖拽时保留
+  &-item[ui~="simple"][data-veui-drag-sort-dragging-ghost] {
+    visibility: visible !important;
+    .@{veui-prefix}-tabs-item-label-content {
+      visibility: hidden;
     }
   }
 }

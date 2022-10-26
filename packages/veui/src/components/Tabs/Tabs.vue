@@ -11,6 +11,7 @@ import { useParent } from '../../mixins/coupled'
 import useControllable from '../../mixins/controllable'
 import resize from '../../directives/resize'
 import tooltip from '../../directives/tooltip'
+import drag from '../../directives/drag'
 import '../../common/global'
 import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle, pick, noop } from 'lodash'
@@ -55,7 +56,8 @@ export default {
   name: 'veui-tabs',
   directives: {
     resize,
-    tooltip
+    tooltip,
+    drag
   },
   mixins: [
     prefix,
@@ -81,17 +83,19 @@ export default {
     },
     tip: String,
     eager: Boolean,
+    tabs: Array,
+    draggable: Boolean,
     addLabel: String
   },
   data () {
     return {
       focusedTab: null,
       menuOverflow: false,
-      stops: null,
       hit: {
         start: true,
         end: false
-      }
+      },
+      dragging: false
     }
   },
   computed: {
@@ -133,6 +137,32 @@ export default {
     },
     realAddLabel () {
       return this.addLabel || this.t('add')
+    },
+    dragDirective () {
+      return {
+        name: 'drag',
+        value: {
+          name: 'items',
+          containment: 'list',
+          dragstart: () => {
+            this.dragging = true
+          },
+          dragend: () => {
+            this.dragging = false
+          },
+          excludeHandle: `${this.$c('tabs-item-remove')}`,
+          sort: (fromIndex, toIndex) => {
+            const items = this.items.map((item) =>
+              pick(item, ['label', 'name', 'to'])
+            )
+            const item = items[fromIndex]
+            items.splice(fromIndex, 1)
+            items.splice(toIndex, 0, item)
+            this.$emit('sort', items)
+          }
+        },
+        modifiers: { sort: true, x: true }
+      }
     }
   },
   watch: {
@@ -141,8 +171,8 @@ export default {
         this.updateLayout()
       })
     },
-    activeTab (tab) {
-      if (!tab) {
+    activeTab (tab, prev) {
+      if (!tab || (prev && tab.id === prev.id)) {
         return
       }
 
@@ -176,6 +206,7 @@ export default {
       if (tab.disabled) {
         return
       }
+
       this.commit('active', tab.name || tab.id)
       this.scrollTabIntoView(tab)
 
@@ -190,6 +221,7 @@ export default {
     },
     isMenuOverflow () {
       let { menu, list, items = [] } = this.$refs
+      list = list.$el
 
       if (items.length === 0) {
         return false
@@ -199,28 +231,26 @@ export default {
         return true
       }
 
-      let first = items[0]
-      let last = items[items.length - 1]
+      let firstLeft = this.stops[0][0]
+      let lastRight = this.stops[items.length - 1][1]
 
-      return (
-        last.getBoundingClientRect().right -
-          first.getBoundingClientRect().left >
-        list.getBoundingClientRect().width
-      )
+      return lastRight - firstLeft - list.clientWidth > 1
     },
     updateLayout () {
-      let { items = [] } = this.$refs
-
-      // no items means no need to scroll
+      let { items = [], list } = this.$refs
+      if (!list) {
+        return
+      }
+      // stops 不用响应
+      // drag 之后 ，items 是无序的
+      this.stops = items
+        .map((el) => [el.offsetLeft, el.offsetLeft + el.offsetWidth])
+        .sort(([leftA], [leftB]) => (leftA > leftB ? 1 : -1))
       this.menuOverflow = this.isMenuOverflow()
-
-      this.stops = items.map((el) => [
-        el.offsetLeft,
-        el.offsetLeft + el.offsetWidth
-      ])
     },
     scrollTabIntoView (tab) {
       let { list } = this.$refs
+      list = list.$el
       let index = findIndex(this.items, ({ id }) => id === tab.id)
       if (index === -1) {
         return
@@ -244,11 +274,13 @@ export default {
     },
     scrollTo (x) {
       let { list } = this.$refs
+      list = list.$el
 
       scrollTo(list, x, 0)
     },
     handleScroll (forward) {
       let { list } = this.$refs
+      list = list.$el
 
       let current = forward
         ? list.scrollLeft + list.clientWidth
@@ -279,6 +311,7 @@ export default {
     },
     updateScrollState () {
       let { list } = this.$refs
+      list = list.$el
 
       this.hit = {
         start: list.scrollLeft === 0,
@@ -289,8 +322,7 @@ export default {
       let { deltaX, deltaY } = e
       let delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY
 
-      this.$refs.list.scrollLeft += delta
-
+      this.$refs.list.$el.scrollLeft += delta
       e.preventDefault()
     },
     handleRemoveChild (id) {
@@ -400,13 +432,23 @@ export default {
               <Icon name={this.icons.prev} />
             </Button>
           ) : null}
-          <div
+          <transition-group
             ref="list"
-            class={this.$c('tabs-list')}
+            key="list"
+            name={this.$c('tabs-list')}
+            tag="div"
+            class={{
+              [this.$c('tabs-list')]: true,
+              [this.$c('tabs-list-dragging')]: this.dragging
+            }}
             role="tablist"
-            onScroll={this.updateScrollState}
-            onWheel={this.menuOverflow ? this.handleWheelScroll : noop}
-            {...{ directives }}
+            {...{
+              directives,
+              nativeOn: {
+                scroll: this.updateScrollState,
+                wheel: this.menuOverflow ? this.handleWheelScroll : noop
+              }
+            }}
           >
             {this.items.map((tab, index) => (
               <div
@@ -420,6 +462,9 @@ export default {
                   [this.$c('tabs-item-removable')]: tab.removable,
                   [this.$c('tabs-item-active')]: this.activeTab === tab,
                   [this.$c('tabs-item-remove-focus')]: this.focusedTab === tab
+                }}
+                {...{
+                  directives: this.draggable ? [this.dragDirective] : undefined
                 }}
               >
                 {renderItem([tab.renderTab, renderTabItem], {
@@ -476,7 +521,7 @@ export default {
                 ) : null}
               </div>
             ))}
-          </div>
+          </transition-group>
           {this.menuOverflow ? (
             <Button
               key="__tabs_next__"
