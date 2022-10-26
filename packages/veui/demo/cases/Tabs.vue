@@ -182,12 +182,18 @@
   </section>
   <section class="inner-ui">
     <h2>增删模式1（内部 UI）：</h2>
+    <veui-checkbox
+      v-model="draggable"
+      style="margin-left: 8px"
+    >拖拽</veui-checkbox>
     <veui-tabs
       :active.sync="active1"
       addable
       :max="totalTabs0"
+      :draggable="draggable"
       @add="addTab0"
       @remove="removeTab0"
+      @sort="handleSort"
     >
       <veui-tab
         v-for="tab in tabs0"
@@ -205,8 +211,10 @@
       :active.sync="active1"
       addable
       :max="totalTabs0"
+      :draggable="draggable"
       @add="addTab0"
       @remove="removeTab0"
+      @sort="handleSort"
     >
       <veui-tab
         v-for="tab in tabs0"
@@ -224,8 +232,10 @@
       :active.sync="active1"
       addable
       :max="totalTabs0"
+      :draggable="draggable"
       @add="addTab0"
       @remove="removeTab0"
+      @sort="handleSort"
     >
       <veui-tab
         v-for="tab in tabs0"
@@ -401,6 +411,7 @@ export default {
       totalTabs0: 15,
       totalTabs1: 20,
       bordered: '',
+      draggable: false,
       compact: false,
       active7: null,
       tabs0: [
@@ -506,6 +517,11 @@ export default {
       if (index !== -1) {
         this.tabs3.splice(index, 1)
       }
+    },
+    handleSort (items) {
+      this.tabs0 = items.map(({ name }) => {
+        return this.tabs0.find((item) => name === item.name)
+      })
     }
   }
 }

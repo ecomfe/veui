@@ -29,6 +29,7 @@ const datasetDragSortKey = camelCase(prefixify('drag-sort'))
 const datasetDragSortHandleKey = camelCase(prefixify('drag-sort-handle'))
 const datasetDraggingKey = datasetDragSortKey + 'Dragging'
 const datasetDragGhostKey = datasetDraggingKey + 'Ghost'
+const datasetDragSnapshotKey = datasetDragSortKey + 'Snapshot'
 const dragContainerChildrenKey = '__drag_container_children__'
 const dragContainerRestoreKey = '__drag_container_restore__'
 
@@ -114,7 +115,8 @@ export default class SortHandler extends BaseHandler {
     // 加上拖动中标记，用于匹配css
     target.dataset[datasetDraggingKey] = ''
     document.body.classList.add(kebabCase(datasetDraggingKey))
-
+    // 加上 Snapshot 标记，用来调整截图的宽高（隐藏一些元素）有效，但是改颜色无效
+    target.dataset[datasetDragSnapshotKey] = ''
     // 计算热区
     this.updateHotRects()
 
@@ -128,6 +130,7 @@ export default class SortHandler extends BaseHandler {
 
     // 下一帧再加上 ghost 样式，避免拖动的 snapshot 也是 ghost 样式
     requestAnimationFrame(() => {
+      delete target.dataset[datasetDragSnapshotKey]
       target.dataset[datasetDragGhostKey] = ''
     })
   }
@@ -205,7 +208,14 @@ export default class SortHandler extends BaseHandler {
         this.dragElementIndex = toIndex
         // 元素列表变了，热区也要更新下（需要等DOM更新了
         Vue.nextTick(() => {
+          // tick1
           this.updateHotRects()
+
+          // microtasks: vue patch -> tick1 ->（?）-> tick2
+          // TODO: 实际需要这个 tick2，说明 vue patch 可能会导致额外的 flush 而非复用本次？
+          Vue.nextTick(() => {
+            this.updateHotRects()
+          })
         })
       }
     }
@@ -358,10 +368,15 @@ function getHotRects (elements, container, axis, target, dragElementIndex) {
   return hotRects
 }
 
+function gt (a, b) {
+  // 减少跳动
+  return a - b >= 1
+}
+
 function findInsertIndexByMousePointFromHotRect ([x, y], hotRects) {
   let rect = find(
     hotRects,
-    ([x1, x2, y1, y2]) => x >= x1 && x <= x2 && y >= y1 && y <= y2
+    ([x1, x2, y1, y2]) => gt(x, x1) && gt(x2, x) && gt(y, y1) && gt(y2, y)
   )
   return rect ? rect[4] : -1
 }
