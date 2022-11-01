@@ -510,7 +510,8 @@
     opacity: 0;
   }
 
-  &-list-move {
+  @data-drag-sort-ghost: ~"[data-@{veui-prefix}-sort-dragging-ghost]";
+  &-list-move:not(@{data-drag-sort-ghost}) {
     .veui-transition(transform);
   }
 
@@ -541,11 +542,14 @@
     }
   }
 
-  // simple 的间隔线拖拽时保留
-  &-item[ui~="simple"][data-veui-drag-sort-dragging-ghost] {
-    visibility: visible !important;
-    .@{veui-prefix}-tabs-item-label-content {
-      visibility: hidden;
+  &-item[data-veui-drag-sort-dragging-ghost] {
+    // simple 的间隔线拖拽时保留
+    &[ui~="simple"] {
+      visibility: visible !important;
+      .@{veui-prefix}-tabs-item-label-content {
+        visibility: hidden;
+      }
     }
+    transition-duration: 0ms;
   }
 }
