@@ -13,6 +13,7 @@
     [$c('number-input')]: true,
     [$c('number-input-controls-focus')]: spinnerFocused
   }"
+  :mask="mask"
   v-on="listeners"
   @change="handleChange"
   @input="handleInput"
@@ -97,7 +98,7 @@ import Icon from './Icon'
 import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
 import { VALUE_EVENTS } from '../utils/dom'
-import { isInteger, isNaN, get, find, omit, isFunction } from 'lodash'
+import { isInteger, isNaN, get, find, omit, isFunction, repeat } from 'lodash'
 import nudge from '../directives/nudge'
 import longpress from '../directives/longpress'
 import useControllable from '../mixins/controllable'
@@ -131,7 +132,7 @@ export default {
   inheritAttrs: false,
   props: {
     ui: String,
-    value: Number,
+    value: [Number, String],
     step: {
       type: Number,
       default: 1
@@ -228,12 +229,22 @@ export default {
         min: this.realMin,
         value: this.value
       }
+    },
+    mask () {
+      let { realMax, realMin, decimalPlace } = this
+      let prefix = realMax < 0 ? '-' : realMin >= 0 ? '' : '-?'
+      let mask =
+        decimalPlace === -1
+          ? '#*.#*'
+          : `#*${decimalPlace === 0 ? '' : '.'}${repeat('#', decimalPlace)}`
+
+      return `${prefix}${mask}`
     }
   },
   watch: {
     // 输入过程中，外部 value 发生变化，那么重置输入
     // 这个逻辑是为了统一：当无法完全受控，那么 prop 变化时如何处理？目前逻辑是 prop 覆盖 local
-    value (val) {
+    value () {
       if (this.parsedInputValue != null) {
         // 没有 local 状态了，就是 realValue 生效了，见 realInputValue
         this.parsedInputValue = null

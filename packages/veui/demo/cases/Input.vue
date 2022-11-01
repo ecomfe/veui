@@ -216,6 +216,11 @@
       <veui-input placeholder="end" trim="end"/>
     </section>
   </section>
+
+  <section>
+    <h3>Input mask</h3>
+    <veui-input mask="####-##-##" placeholder="YYYY-MM-DD" @input="log"/>
+  </section>
 </article>
 </template>
 

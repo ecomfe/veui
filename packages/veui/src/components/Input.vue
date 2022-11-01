@@ -26,6 +26,7 @@
     <!-- 如果以后 Vue 对 native input 完全受控，那么这里就不能用 realValue 了 -->
     <input
       ref="input"
+      v-maska="realMask"
       :value="tmpInputValue == null ? realValue : tmpInputValue"
       :class="$c('input-input')"
       v-bind="attrs"
@@ -68,6 +69,7 @@
 </template>
 
 <script>
+import { maska } from '@justfork/maska'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
@@ -82,7 +84,7 @@ import { MOUSE_EVENTS, KEYBOARD_EVENTS, FOCUS_EVENTS } from '../utils/dom'
 import warn from '../utils/warn'
 import '../common/global'
 import i18nManager from '../managers/i18n'
-import { isSafari } from '../utils/bom'
+import { isFirefox, isSafari } from '../utils/bom'
 
 const TYPE_LIST = ['text', 'password', 'hidden']
 
@@ -94,11 +96,18 @@ const TRIM_RE = {
   end: /\s+$/g
 }
 
+// Firefox's execution order of event handler and microtask is different from
+// other browsers, so we only enables input masks on other browsers for now.
+const supportsMasking = process.env.VUE_ENV !== 'server' && !isFirefox()
+
 export default {
   name: 'veui-input',
   components: {
     'veui-button': Button,
     'veui-icon': Icon
+  },
+  directives: {
+    maska
   },
   mixins: [
     prefix,
@@ -148,7 +157,8 @@ export default {
           val === 'both'
         )
       }
-    }
+    },
+    mask: [String, Object]
   },
   data () {
     return {
@@ -160,6 +170,7 @@ export default {
       // 具体情况比较复杂，所以直接输入过程中保留当前输入的值，输入结束再完全由 realValue 决定
       // 不能是空字符串，否则无法区分：用户在清空内容 vs. nextTick 中的 reset
       tmpInputValue: null,
+      composing: false,
       autofill: false,
       isSafari: false
     }
@@ -213,6 +224,9 @@ export default {
         strict: this.strict,
         getLength: this.getLength
       }
+    },
+    realMask () {
+      return this.mask && supportsMasking ? this.mask : null
     }
   },
   watch: {

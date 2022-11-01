@@ -129,6 +129,7 @@
               :value="realInputValue[0]"
               :ui="uiParts.input"
               :autofocus="activateByEnd ? null : ''"
+              :mask="mask"
               @input="handleInput(0, $event)"
               @focus="handleInputFocus"
             />
@@ -139,6 +140,7 @@
                 :value="realInputValue[1]"
                 :ui="uiParts.input"
                 :autofocus="activateByEnd ? '' : null"
+                :mask="mask"
                 @input="handleInput(1, $event)"
                 @focus="handleInputFocus"
               />
@@ -227,6 +229,10 @@ const RANGE_PLACEHOLDER_KEY_MAP = {
 }
 
 const DEFAULT_DATE_SEP = '[/.-]'
+
+function dateFormatToMask (format) {
+  return format.replace(/[yMd]/g, '#')
+}
 
 export default {
   name: 'veui-date-picker',
@@ -348,6 +354,13 @@ export default {
           to
         }
       })
+    },
+    mask () {
+      let format =
+        typeof this.format === 'string'
+          ? this.format
+          : TYPE_FORMAT_MAP[this.type]
+      return dateFormatToMask(format)
     }
   },
   watch: {

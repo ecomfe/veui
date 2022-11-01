@@ -121,4 +121,38 @@ describe('components/TimePicker', function () {
     expect(isEqual(vm.value0, '12:30:30')).to.equal(true)
     wrapper.destroy()
   })
+
+  it('should mask input correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-time-picker': TimePicker
+        },
+        data () {
+          return {
+            mode: 'second'
+          }
+        },
+        template: `<veui-time-picker :mode="mode"/>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find(TimePicker).vm.$refs.input
+    expect(input.mask).to.equal('##:##:##')
+
+    vm.mode = 'minute'
+    await vm.$nextTick()
+    expect(input.mask).to.equal('##:##')
+
+    vm.mode = 'hour'
+    await vm.$nextTick()
+    expect(input.mask).to.equal('##:00')
+
+    wrapper.destroy()
+  })
 })
