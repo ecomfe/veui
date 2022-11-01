@@ -14,10 +14,12 @@ import tooltip from '../../directives/tooltip'
 import drag from '../../directives/drag'
 import '../../common/global'
 import { scrollTo } from '../../utils/dom'
-import { find, findIndex, throttle, pick, noop } from 'lodash'
+import { find, findIndex, throttle, pick, noop, omit } from 'lodash'
+import warn from '../../utils/warn'
+import { renderSlot } from '../../utils/helper'
 
 let tabs = useParent('tabs', 'tab', {
-  childrenKey: 'items',
+  childrenKey: 'tabs',
   onBeforeRemoveChild: 'handleRemoveChild'
 })
 
@@ -27,30 +29,6 @@ config.defaults(
   },
   'tabs'
 )
-
-const TAB_FIELDS = [
-  'label',
-  'name',
-  'disabled',
-  'to',
-  'native',
-  'removable',
-  'status',
-  'tooltip'
-]
-
-function renderTooltip (tooltip, item) {
-  if (tooltip === true) {
-    return item.label
-  }
-
-  if (typeof tooltip === 'function') {
-    const tab = pick(item, TAB_FIELDS)
-    return tooltip(tab)
-  }
-
-  return null
-}
 
 export default {
   name: 'veui-tabs',
@@ -64,7 +42,7 @@ export default {
     ui,
     i18n,
     tabs,
-    useControllable(['active']),
+    useControllable(['active', 'items']),
     useConfig('config', 'tabs')
   ],
   props: {
@@ -83,8 +61,8 @@ export default {
     },
     tip: String,
     eager: Boolean,
-    tabs: Array,
-    draggable: Boolean,
+    items: Array,
+    sortable: Boolean,
     addLabel: String
   },
   data () {
@@ -102,12 +80,15 @@ export default {
     realMatches () {
       return this.matches == null ? this.config['tabs.matches'] : this.matches
     },
+    realItems () {
+      return this.isControlled('items') ? normalizeItems(this.items) : this.tabs
+    },
     tabAttrs () {
-      return this.items.map(({ id, attrs }, index) => {
+      return this.realItems.map(({ id, attrs }, index) => {
         return {
           role: 'tab',
           'aria-selected': this.activeTab && id === this.activeTab.id,
-          'aria-setsize': this.items.length,
+          'aria-setsize': this.realItems.length,
           'aria-posinset': index + 1,
           'aria-controls': id,
           ...attrs
@@ -115,28 +96,40 @@ export default {
       })
     },
     hasRouteItem () {
-      return this.items.some(({ to }) => !!to)
+      return this.realItems.some(({ to }) => !!to)
     },
     activeTab () {
       let active = this.realActive
       return (
-        find(this.items, ({ name, id }) => name === active || id === active) ||
+        find(
+          this.realItems,
+          ({ name, id }) => name === active || id === active
+        ) ||
         this.matchedTab ||
-        (this.items || [])[0]
+        (this.realItems || [])[0]
       )
     },
     activeIndex () {
-      return findIndex(this.items, (tab) => tab === this.activeTab)
+      return findIndex(this.realItems, (tab) => tab === this.activeTab)
     },
     matchedTab () {
       if (!this.$route || !this.hasRouteItem) {
         return null
       }
 
-      return find(this.items, ({ matches, to }) => matches(this.$route, to))
+      return find(this.realItems, ({ matches, to }) =>
+        matches ? matches(this.$route, to) : this.realMatches(this.$route, to)
+      )
     },
     realAddLabel () {
       return this.addLabel || this.t('add')
+    },
+    slotProps () {
+      return {
+        items: this.realItems,
+        active: this.realActive,
+        activeTab: this.activeTab ? pickFields(this.activeTab) : null
+      }
     },
     dragDirective () {
       return {
@@ -152,12 +145,11 @@ export default {
           },
           excludeHandle: `${this.$c('tabs-item-remove')}`,
           sort: (fromIndex, toIndex) => {
-            const items = this.items.map((item) =>
-              pick(item, ['label', 'name', 'to'])
-            )
+            const items = this.realItems.map((tab) => omit(tab, 'id'))
             const item = items[fromIndex]
             items.splice(fromIndex, 1)
             items.splice(toIndex, 0, item)
+            this.commit('items', items)
             this.$emit('sort', items)
           }
         },
@@ -166,7 +158,7 @@ export default {
     }
   },
   watch: {
-    items () {
+    realItems () {
       this.$nextTick(() => {
         this.updateLayout()
       })
@@ -206,7 +198,6 @@ export default {
       if (tab.disabled) {
         return
       }
-
       this.commit('active', tab.name || tab.id)
       this.scrollTabIntoView(tab)
 
@@ -251,7 +242,7 @@ export default {
     scrollTabIntoView (tab) {
       let { list } = this.$refs
       list = list.$el
-      let index = findIndex(this.items, ({ id }) => id === tab.id)
+      let index = findIndex(this.realItems, ({ id }) => id === tab.id)
       if (index === -1) {
         return
       }
@@ -315,7 +306,7 @@ export default {
 
       this.hit = {
         start: list.scrollLeft === 0,
-        end: list.scrollLeft + list.clientWidth >= list.scrollWidth
+        end: list.scrollWidth - list.scrollLeft - list.clientWidth < 1
       }
     },
     handleWheelScroll (e) {
@@ -330,78 +321,84 @@ export default {
         return
       }
       const index = this.activeIndex
-      let tab = this.items[index === 0 ? 1 : index - 1]
+      let tab = this.realItems[index === 0 ? 1 : index - 1]
       if (tab) {
         this.commit('active', tab.name || tab.id)
       } else {
         // 当前的已经是最后了，清空 active
         this.commit('active', null)
       }
+    },
+    renderPanelContent () {
+      if (this.isControlled('items')) {
+        return renderSlot(this, 'panel', this.slotProps)
+      }
+      let hasPanelsFromTab = false
+      const panelsFromTab = this.realItems.map((tab, index) => {
+        const active = this.activeTab === tab
+        if (active || this.eager) {
+          const tabPanel = tab.renderPanel({
+            ...pickFields(tab),
+            index,
+            active
+          })
+
+          if (tabPanel) {
+            hasPanelsFromTab = true
+            return (
+              <div
+                id={tab.id}
+                class={this.$c('tab-panel')}
+                role="tabpanel"
+                v-show={active}
+              >
+                {tabPanel}
+              </div>
+            )
+          }
+        }
+        return null
+      })
+      return hasPanelsFromTab
+        ? panelsFromTab
+        : renderSlot(this, 'panel', this.slotProps)
+    },
+    renderTabContent (tab) {
+      const { tooltip, renderLabel, label, status } = tab
+      return (
+        <div class={this.$c('tabs-item-label-content')}>
+          <div
+            class={this.$c('tabs-item-label-ellipsis')}
+            {...(tooltip
+              ? {
+                directives: [
+                  {
+                    name: 'tooltip',
+                    value: renderTooltip(tooltip, tab),
+                    modifiers: { overflow: true }
+                  }
+                ]
+              }
+              : {})}
+          >
+            {renderItem([renderLabel, this.$scopedSlots['tab-label']], tab) ||
+              label}
+          </div>
+          {status ? (
+            <Icon
+              class={[
+                this.$c('tabs-item-status'),
+                this.$c(`tabs-item-status-${status}`)
+              ]}
+              name={this.icons[status]}
+            />
+          ) : null}
+        </div>
+      )
     }
   },
   render () {
-    const renderTabItem = this.$scopedSlots['tab-item']
-    const renderTabContent = (props) => (
-      <div class={this.$c('tabs-item-label-content')}>
-        <div
-          class={this.$c('tabs-item-label-ellipsis')}
-          {...(props.tooltip
-            ? {
-              directives: [
-                {
-                  name: 'tooltip',
-                  value: renderTooltip(props.tooltip, props),
-                  modifiers: { overflow: true }
-                }
-              ]
-            }
-            : {})}
-        >
-          {renderItem(
-            [props.renderLabel, this.$scopedSlots['tab-label']],
-            props
-          ) || props.label}
-        </div>
-        {props.status ? (
-          <Icon
-            class={[
-              this.$c('tabs-item-status'),
-              this.$c(`tabs-item-status-${props.status}`)
-            ]}
-            name={this.icons[props.status]}
-          />
-        ) : null}
-      </div>
-    )
-
-    const renderTabPanel = (props) => {
-      const tabPanel = props.renderPanel({
-        ...pickFields(props),
-        index: props.index,
-        active: props.active
-      })
-
-      return tabPanel && (props.active || this.eager) ? (
-        <div
-          id={props.id}
-          class={this.$c('tab-panel')}
-          role="tabpanel"
-          v-show={props.active}
-        >
-          {tabPanel}
-        </div>
-      ) : null
-    }
-
-    const tabPanels = this.items.map((tab, index) =>
-      renderTabPanel({
-        ...tab,
-        index,
-        active: this.activeTab === tab
-      })
-    )
-    const panelContent = tabPanels.some(Boolean) ? tabPanels : this.$slots.panel
-
+    const panelContent = this.renderPanelContent()
     const directives = [
       {
         name: 'resize',
@@ -414,7 +411,7 @@ export default {
       <div
         class={{
           [this.$c('tabs')]: true,
-          [this.$c('tabs-empty')]: this.items.length === 0,
+          [this.$c('tabs-empty')]: this.realItems.length === 0,
           [this.$c('tabs-overflow')]: this.menuOverflow
         }}
         ui={this.realUi}
@@ -450,7 +447,7 @@ export default {
               }
             }}
           >
-            {this.items.map((tab, index) => (
+            {this.realItems.map((tab, index) => (
               <div
                 key={tab.id}
                 ref="items"
@@ -464,10 +461,10 @@ export default {
                   [this.$c('tabs-item-remove-focus')]: this.focusedTab === tab
                 }}
                 {...{
-                  directives: this.draggable ? [this.dragDirective] : undefined
+                  directives: this.sortable ? [this.dragDirective] : undefined
                 }}
               >
-                {renderItem([tab.renderTab, renderTabItem], {
+                {renderItem([tab.renderTab, this.$scopedSlots['tab-item']], {
                   ...pickFields(tab),
                   index,
                   active: this.activeTab === tab,
@@ -483,7 +480,7 @@ export default {
                       onClick={() => this.handleActivate(tab)}
                       {...{ attrs: this.tabAttrs[index] }}
                     >
-                      {renderTabContent({
+                      {this.renderTabContent({
                         ...pickFields(tab),
                         index,
                         active: this.activeTab === tab
@@ -497,7 +494,7 @@ export default {
                       onClick={() => this.handleActivate(tab)}
                       {...{ attrs: this.tabAttrs[index] }}
                     >
-                      {renderTabContent({
+                      {this.renderTabContent({
                         ...tab,
                         index
                       })}
@@ -538,7 +535,7 @@ export default {
               key="__tabs_add__"
               class={this.$c('tabs-add')}
               ui={this.uiParts.add}
-              disabled={this.max != null && this.items.length >= this.max}
+              disabled={this.max != null && this.realItems.length >= this.max}
               onClick={this.handleAdd}
             >
               <Icon name={this.icons.add} />
@@ -560,6 +557,30 @@ export default {
       </div>
     )
   }
+}
+
+const TAB_FIELDS = [
+  'label',
+  'name',
+  'disabled',
+  'to',
+  'native',
+  'removable',
+  'status',
+  'tooltip'
+]
+
+function renderTooltip (tooltip, item) {
+  if (tooltip === true) {
+    return item.label
+  }
+
+  if (typeof tooltip === 'function') {
+    const tab = pick(item, TAB_FIELDS)
+    return tooltip(tab)
+  }
+
+  return null
 }
 
 /**
@@ -590,5 +611,19 @@ function renderItem (renderFns, props) {
  */
 function pickFields (tab) {
   return pick(tab, TAB_FIELDS)
+}
+
+function normalizeItems (items) {
+  let hasWarning = false
+  return (items || []).map((item) => {
+    if (!item.name && !hasWarning) {
+      hasWarning = true
+      warn('[veui-tabs]The name in `items` of Tabs is required!')
+    }
+    return {
+      ...item,
+      id: item.name
+    }
+  })
 }
 </script>

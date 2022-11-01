@@ -202,40 +202,32 @@ function refresh (el, binding, vnode) {
       window.getSelection().removeAllRanges()
       window.addEventListener('selectstart', selectStartHandler)
 
-      const rafDragHandler = (event) => {
-        // 一帧里面看不到的drag切换位置直接忽略
-        // 如果 drag 导致的切换位置的 layout 是 long task(Tabs)，这样可以提高性能
-        window.cancelAnimationFrame(this._dragHandler)
-        this._dragHandler = window.requestAnimationFrame(() =>
-          mouseMoveHandler(event)
-        )
-      }
       if (isNative) {
         if (isFirefox) {
           // Firefox dragevent 里面的鼠标坐标是 0
           // https://bugzilla.mozilla.org/show_bug.cgi?id=505521
-          window.addEventListener('dragover', rafDragHandler)
+          window.addEventListener('dragover', mouseMoveHandler)
         } else {
-          target.addEventListener('drag', rafDragHandler)
+          target.addEventListener('drag', mouseMoveHandler)
         }
         target.addEventListener('dragend', mouseUpHandler)
       } else {
-        window.addEventListener('mousemove', rafDragHandler)
+        window.addEventListener('mousemove', mouseMoveHandler)
         window.addEventListener('mouseup', mouseUpHandler)
       }
 
       function removeOnceListeners () {
         if (isNative) {
           if (isFirefox) {
-            window.removeEventListener('dragover', rafDragHandler)
+            window.removeEventListener('dragover', mouseMoveHandler)
           } else {
-            target.removeEventListener('drag', rafDragHandler)
+            target.removeEventListener('drag', mouseMoveHandler)
           }
           target.removeEventListener('dragend', mouseUpHandler)
 
           target.removeAttribute('draggable')
         } else {
-          window.removeEventListener('mousemove', rafDragHandler)
+          window.removeEventListener('mousemove', mouseMoveHandler)
           window.removeEventListener('mouseup', mouseUpHandler)
         }
         window.removeEventListener('selectstart', selectStartHandler)
