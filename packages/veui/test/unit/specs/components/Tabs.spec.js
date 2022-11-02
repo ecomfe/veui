@@ -4,7 +4,12 @@ import Tab from '@/components/Tab'
 import { findIndex } from 'lodash'
 import config from '@/managers/config'
 import tooltipManager from '@/managers/tooltip'
-import { expectTooltip, expectDisabled, wait } from '../../../utils'
+import {
+  expectTooltip,
+  expectDisabled,
+  wait,
+  performDrag
+} from '../../../utils'
 
 describe('components/Tabs', function () {
   this.timeout(10000)
@@ -1163,6 +1168,118 @@ describe('components/Tabs', function () {
     expectTooltip(null)
 
     tooltipManager.destroy()
+    wrapper.destroy()
+  })
+
+  it('should support items prop on Tabs', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs
+        },
+        data () {
+          return {
+            items: [
+              { label: '默认1', name: '默认1', removable: true },
+              {
+                label: '默认2',
+                name: '默认2',
+                status: 'success',
+                removable: true
+              },
+              { label: '默认3', name: '默认3', removable: true }
+            ]
+          }
+        },
+        template: `
+          <veui-tabs :items="items">
+            <template
+              #panel="{ activeTab }"
+            ><p>{{ activeTab.label }}</p></template>
+          </veui-tabs>
+        `
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    await wait(0)
+    let tabs = wrapper.findAll('.veui-tabs-item')
+    expect(tabs.at(0).text()).to.equal('默认1')
+    expect(tabs.at(1).text()).to.equal('默认2')
+    expect(tabs.at(2).text()).to.equal('默认3')
+    expect(tabs.at(0).classes()).to.include('veui-tabs-item-active')
+
+    let panel = wrapper.find('.veui-tabs-panel')
+    expect(panel.text()).to.equal('默认1')
+
+    tabs.at(2).find('button').trigger('click')
+
+    await wrapper.vm.$nextTick()
+
+    expect(tabs.at(0).classes()).to.not.include('veui-tabs-item-active')
+    expect(tabs.at(2).classes()).to.include('veui-tabs-item-active')
+
+    panel = wrapper.find('.veui-tabs-panel')
+    expect(panel.text()).to.equal('默认3')
+
+    expect(wrapper.find('.veui-tabs-item-status-success').exists()).to.equal(
+      true
+    )
+    wrapper.destroy()
+  })
+
+  it('should support sortable prop on Tabs', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-tabs': Tabs
+        },
+        data () {
+          return {
+            items: [
+              { label: '默认1', name: '默认1' },
+              { label: '默认2', name: '默认2' },
+              { label: '默认3', name: '默认3' }
+            ]
+          }
+        },
+        template: `
+          <veui-tabs :items.sync="items" sortable style="position:fixed;left:100px;top:100px;width:300px">
+            <template #tab-item="{ label }"><span style="width:60px;display:inline-block;">{{label}}</span></template>
+            <template
+              #panel="{ activeTab }"
+            ><p>{{ activeTab.label }}</p></template>
+          </veui-tabs>
+        `
+      },
+      {
+        attachToDocument: true,
+        sync: false
+      }
+    )
+
+    await wait(0)
+    let third = wrapper.find('.veui-tabs-item:nth-child(3)')
+    await performDrag(
+      third,
+      [
+        [300, 125],
+        [270, 125],
+        [240, 125],
+        [220, 125],
+        [200, 125]
+      ],
+      third
+    )
+    await wait(0)
+    expect(wrapper.vm.items.map(({ name }) => name)).to.deep.equal([
+      '默认1',
+      '默认3',
+      '默认2'
+    ])
     wrapper.destroy()
   })
 })
