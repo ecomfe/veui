@@ -13,7 +13,7 @@ import { isFirefox as checkIsFirefox } from '../utils/bom'
 import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
 import SortHandler from './drag/SortHandler'
-import { matches } from '../utils/dom'
+import { closest } from '../utils/dom'
 
 const isFirefox = checkIsFirefox()
 
@@ -121,14 +121,14 @@ function refresh (el, binding, vnode) {
 
     prepareHandler (event) {
       const evTarget = event.target
-      const { excludeHandle, handle, enableSelector } = options
+      const { exclude, handle, enableSelector } = options
       let match = !enableSelector
       if (enableSelector) {
-        match = matchesOrContainsSelector(evTarget, handle)
+        match = matchesSelectorInContainer(evTarget, handle, target)
       }
 
-      if (match && excludeHandle && typeof excludeHandle === 'string') {
-        match = !matchesOrContainsSelector(evTarget, excludeHandle)
+      if (match && exclude && typeof exclude === 'string') {
+        match = !matchesSelectorInContainer(evTarget, exclude, target)
       }
 
       if (match) {
@@ -281,18 +281,9 @@ function isRect (containment) {
   )
 }
 
-function matchesOrContainsSelector (el, selector) {
-  if (matches(el, selector)) {
-    return true
-  }
-  if (selector.indexOf('*') === -1) {
-    const realSelectors = selector
-      .split(',')
-      .map((selector) => `${selector} *`)
-      .join(',')
-    return matches(el, realSelectors)
-  }
-  return false
+function matchesSelectorInContainer (el, selector, container) {
+  const matched = closest(el, selector)
+  return !!matched && container.contains(matched)
 }
 
 /**
