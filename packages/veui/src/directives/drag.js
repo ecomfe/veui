@@ -13,6 +13,7 @@ import { isFirefox as checkIsFirefox } from '../utils/bom'
 import BaseHandler from './drag/BaseHandler'
 import TranslateHandler from './drag/TranslateHandler'
 import SortHandler from './drag/SortHandler'
+import { matches } from '../utils/dom'
 
 const isFirefox = checkIsFirefox()
 
@@ -68,8 +69,12 @@ function getOptions (binding, vnode) {
   }
 
   options.target = vnode.elm
-  options.handle = get(getNodes(handle, vnode.context), '[0]', vnode.elm)
+  const handleEl = get(getNodes(handle, vnode.context), '[0]')
 
+  // 传了 handle 且 ref 找不到就认为是 selector
+  options.enableSelector = !handleEl && !!handle && typeof handle === 'string'
+
+  options.handle = handleEl || vnode.elm
   return options
 }
 
@@ -115,12 +120,21 @@ function refresh (el, binding, vnode) {
     handler,
 
     prepareHandler (event) {
-      // 原生拖拽需要在 handle 触发 mousedown 时设置 draggable 后，在 dragend 时重置
-      const exclude = options.excludeHandle
-      if (typeof exclude === 'string' && event.target.matches(`.${exclude}`)) {
-        return
+      const evTarget = event.target
+      const { excludeHandle, handle, enableSelector } = options
+      let match = !enableSelector
+      if (enableSelector) {
+        match = matchesOrContainsSelector(evTarget, handle)
       }
-      target.setAttribute('draggable', 'true')
+
+      if (match && excludeHandle && typeof excludeHandle === 'string') {
+        match = !matchesOrContainsSelector(evTarget, excludeHandle)
+      }
+
+      if (match) {
+        // 原生拖拽需要在 handle 触发 mousedown 时设置 draggable 后，在 dragend 时重置
+        target.setAttribute('draggable', 'true')
+      }
     },
 
     cleanupOnce: noop,
@@ -265,6 +279,20 @@ function isRect (containment) {
     'width' in containment &&
     'height' in containment
   )
+}
+
+function matchesOrContainsSelector (el, selector) {
+  if (matches(el, selector)) {
+    return true
+  }
+  if (selector.indexOf('*') === -1) {
+    const realSelectors = selector
+      .split(',')
+      .map((selector) => `${selector} *`)
+      .join(',')
+    return matches(el, realSelectors)
+  }
+  return false
 }
 
 /**

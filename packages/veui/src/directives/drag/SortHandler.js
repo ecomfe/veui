@@ -208,11 +208,8 @@ export default class SortHandler extends BaseHandler {
         this.dragElementIndex = toIndex
         // 元素列表变了，热区也要更新下（需要等DOM更新了
         Vue.nextTick(() => {
-          // tick1
-          this.updateHotRects()
-
           // microtasks: vue patch -> tick1 ->（?）-> tick2
-          // TODO: 实际需要这个 tick2，说明 vue patch 可能会导致额外的 flush 而非复用本次？
+          // TODO: 实际需要两次 nextTick ，说明 vue patch 可能会导致额外的 flush 而非复用本次？
           Vue.nextTick(() => {
             this.updateHotRects()
           })
