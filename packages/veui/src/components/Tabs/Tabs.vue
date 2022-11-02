@@ -142,7 +142,7 @@ export default {
           dragend: () => {
             this.dragging = false
           },
-          excludeHandle: `.${this.$c('tabs-item-remove')}`,
+          exclude: `.${this.$c('tabs-item-remove')}`,
           sort: (fromIndex, toIndex) => {
             const items = this.realItems.map((tab) => omit(tab, 'id'))
             const item = items[fromIndex]
