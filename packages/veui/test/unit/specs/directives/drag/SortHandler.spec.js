@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import drag from '@/directives/drag'
-import { wait } from '../../../../utils'
+import { performDrag } from '../../../../utils'
 
 describe('directives/drag/SortHandler', function () {
   this.timeout(10000)
@@ -261,81 +261,3 @@ describe('directives/drag/SortHandler', function () {
     wrapper.destroy()
   })
 })
-
-async function performDrag ($el, series, $handle = $el, handlers = {}) {
-  let [start, ...moves] = series
-  let end = moves.pop()
-
-  let el = $el.element
-
-  let { top, left, right, bottom } = $handle.element.getBoundingClientRect()
-  let [x, y] = start
-  if (top < y && right > x && bottom > y && left < x) {
-    $handle.trigger('mousedown', {
-      clientX: start[0],
-      clientY: start[1]
-    })
-  }
-
-  dispatchDrag(
-    el,
-    'dragstart',
-    {
-      clientX: start[0],
-      clientY: start[1]
-    },
-    handlers
-  )
-
-  await wait(50)
-
-  for (let i = 0; i < moves.length; i++) {
-    let move = moves[i]
-    dispatchDrag(
-      el,
-      'drag',
-      {
-        clientX: move[0],
-        clientY: move[1]
-      },
-      handlers
-    )
-
-    await wait(100)
-  }
-
-  dispatchDrag(
-    el,
-    'dragend',
-    {
-      clientX: end[0],
-      clientY: end[1]
-    },
-    handlers
-  )
-}
-
-// wrapper.trigger doesn't work for DragEvent for now
-// https://github.com/vuejs/vue-test-utils/issues/1762
-function createDragEvent (type, args) {
-  return new DragEvent(type, {
-    dataTransfer: new DataTransfer(),
-    ...args
-  })
-}
-
-function dispatchDrag (el, type, args, handlers) {
-  if (!el.draggable) {
-    return
-  }
-
-  el.dispatchEvent(createDragEvent(type, args))
-
-  let handler = {
-    dragstart: handlers.onDragStart,
-    dragend: handlers.onDragEnd
-  }[type]
-  if (handler) {
-    handler()
-  }
-}

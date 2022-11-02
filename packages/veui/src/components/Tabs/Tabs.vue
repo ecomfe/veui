@@ -618,7 +618,7 @@ function normalizeItems (items) {
   return (items || []).map((item) => {
     if (!item.name && !hasWarning) {
       hasWarning = true
-      warn('[veui-tabs]The name in `items` of Tabs is required!')
+      warn('[veui-tabs] The name of tab is required!')
     }
     return {
       ...item,
