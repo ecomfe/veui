@@ -15,7 +15,6 @@ import drag from '../../directives/drag'
 import '../../common/global'
 import { scrollTo } from '../../utils/dom'
 import { find, findIndex, throttle, pick, noop, omit } from 'lodash'
-import warn from '../../utils/warn'
 import { renderSlot } from '../../utils/helper'
 
 let tabs = useParent('tabs', 'tab', {
@@ -143,7 +142,7 @@ export default {
           dragend: () => {
             this.dragging = false
           },
-          excludeHandle: `${this.$c('tabs-item-remove')}`,
+          excludeHandle: `.${this.$c('tabs-item-remove')}`,
           sort: (fromIndex, toIndex) => {
             const items = this.realItems.map((tab) => omit(tab, 'id'))
             const item = items[fromIndex]
@@ -211,8 +210,8 @@ export default {
       this.$emit('add')
     },
     isMenuOverflow () {
-      let { menu, list, items = [] } = this.$refs
-      list = list.$el
+      let { menu, items = [] } = this.$refs
+      let list = this.$refs.list.$el
 
       if (items.length === 0) {
         return false
@@ -240,8 +239,7 @@ export default {
       this.menuOverflow = this.isMenuOverflow()
     },
     scrollTabIntoView (tab) {
-      let { list } = this.$refs
-      list = list.$el
+      let list = this.$refs.list.$el
       let index = findIndex(this.realItems, ({ id }) => id === tab.id)
       if (index === -1) {
         return
@@ -264,14 +262,12 @@ export default {
       }
     },
     scrollTo (x) {
-      let { list } = this.$refs
-      list = list.$el
+      let list = this.$refs.list.$el
 
       scrollTo(list, x, 0)
     },
     handleScroll (forward) {
-      let { list } = this.$refs
-      list = list.$el
+      let list = this.$refs.list.$el
 
       let current = forward
         ? list.scrollLeft + list.clientWidth
@@ -301,8 +297,7 @@ export default {
       this.scrollTo(forward ? target[0] : target[1] - list.clientWidth)
     },
     updateScrollState () {
-      let { list } = this.$refs
-      list = list.$el
+      let list = this.$refs.list.$el
 
       this.hit = {
         start: list.scrollLeft === 0,
@@ -614,11 +609,9 @@ function pickFields (tab) {
 }
 
 function normalizeItems (items) {
-  let hasWarning = false
   return (items || []).map((item) => {
-    if (!item.name && !hasWarning) {
-      hasWarning = true
-      warn('[veui-tabs] The name of tab is required!')
+    if (!item.name) {
+      throw new Error('[veui-tabs] The name of tab is required!')
     }
     return {
       ...item,
