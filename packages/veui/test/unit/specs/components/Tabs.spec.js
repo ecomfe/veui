@@ -1246,8 +1246,15 @@ describe('components/Tabs', function () {
             ]
           }
         },
+        methods: {
+          handleSort (fromIndex, toIndex) {
+            const item = this.items[fromIndex]
+            this.items.splice(fromIndex, 1)
+            this.items.splice(toIndex, 0, item)
+          }
+        },
         template: `
-          <veui-tabs :items.sync="items" sortable style="position:fixed;left:100px;top:100px;width:300px">
+          <veui-tabs :items="items" @sort="handleSort" sortable style="position:fixed;left:100px;top:100px;width:300px">
             <template #tab-item="{ label }"><span style="width:60px;display:inline-block;">{{label}}</span></template>
             <template
               #panel="{ activeTab }"

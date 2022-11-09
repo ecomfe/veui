@@ -14,7 +14,7 @@ import tooltip from '../../directives/tooltip'
 import drag from '../../directives/drag'
 import '../../common/global'
 import { scrollTo } from '../../utils/dom'
-import { find, findIndex, throttle, pick, noop, omit } from 'lodash'
+import { find, findIndex, throttle, pick, noop } from 'lodash'
 import { renderSlot } from '../../utils/helper'
 
 let tabs = useParent('tabs', 'tab', {
@@ -41,7 +41,7 @@ export default {
     ui,
     i18n,
     tabs,
-    useControllable(['active', 'items']),
+    useControllable(['active']),
     useConfig('config', 'tabs')
   ],
   props: {
@@ -144,12 +144,7 @@ export default {
           },
           exclude: `.${this.$c('tabs-item-remove')}`,
           sort: (fromIndex, toIndex) => {
-            const items = this.realItems.map((tab) => omit(tab, 'id'))
-            const item = items[fromIndex]
-            items.splice(fromIndex, 1)
-            items.splice(toIndex, 0, item)
-            this.commit('items', items)
-            this.$emit('sort', items)
+            this.$emit('sort', fromIndex, toIndex)
           }
         },
         modifiers: { sort: true, x: true }
