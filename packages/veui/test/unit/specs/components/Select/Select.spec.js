@@ -453,7 +453,6 @@ describe('components/Select/Select', function () {
     input.element.value = 'xxsddd'
     input.trigger('input')
     await vm.$nextTick()
-    items = wrapper.findAll(OPTION_ITEM)
     expect(wrapper.find('.veui-select-options-no-data').text()).to.equal(
       '无搜索结果'
     )
