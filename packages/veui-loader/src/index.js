@@ -240,7 +240,7 @@ function getExtname (file) {
   return path.extname(file).replace(/\./g, '').toLowerCase()
 }
 
-const RE_SCRIPT = /<script(?:\s[^>]*)?>/i
+const RE_SCRIPT = /<script(?:\s[^<>]*)?>/i
 
 /**
  * Patch file content according to a given type.
