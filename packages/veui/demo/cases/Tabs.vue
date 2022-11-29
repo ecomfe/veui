@@ -197,7 +197,12 @@
       v-model="showMoreDemo"
       style="margin-left: 8px"
     >更多示例</veui-checkbox>
+    <veui-checkbox
+      v-model="selectAdded"
+      style="margin-left: 8px"
+    >选中新增</veui-checkbox>
     <veui-tabs
+      ref="dataTab0"
       :active.sync="active1"
       addable
       :max="totalTabs0"
@@ -212,6 +217,7 @@
       ><p>{{ activeTab.label }}</p></template>
     </veui-tabs>
     <veui-tabs
+      ref="dataTab1"
       ui="simple"
       :active.sync="active1"
       addable
@@ -227,6 +233,7 @@
       ><p>{{ activeTab.label }}</p></template>
     </veui-tabs>
     <veui-tabs
+      ref="dataTab2"
       key="totalTabs01"
       ui="strong"
       :active.sync="active1"
@@ -421,6 +428,7 @@ export default {
         { label: 'C', name: '默认3' }
       ],
       showMoreDemo: true,
+      selectAdded: true,
       active0: '',
       active1: '',
       active2: '',
@@ -441,9 +449,19 @@ export default {
       let label = uniqueId('默认')
       this.tabs0.push({
         label,
-        name: label
+        name: label,
+        removable: true
       })
-      this.active1 = label
+      const { dataTab0, dataTab1, dataTab2 } = this.$refs
+      if (this.selectAdded) {
+        this.active1 = label
+      } else if (dataTab0) {
+        this.$nextTick(() => {
+          dataTab0.scrollTabIntoView(label)
+          dataTab1.scrollTabIntoView(label)
+          dataTab2.scrollTabIntoView(label)
+        })
+      }
     },
     addTab1 () {
       if (this.tabs1.length >= this.totalTabs1) {

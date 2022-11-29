@@ -108,6 +108,13 @@ export default {
         (this.realItems || [])[0]
       )
     },
+    activeKey () {
+      if (this.activeTab) {
+        const { id, name } = this.activeTab
+        return name || id
+      }
+      return undefined
+    },
     activeIndex () {
       return findIndex(this.realItems, (tab) => tab === this.activeTab)
     },
@@ -155,18 +162,14 @@ export default {
     realItems () {
       this.$nextTick(() => {
         this.updateLayout()
+        this.updateScrollState()
       })
     },
     activeTab (tab, prev) {
       if (!tab || (prev && tab.id === prev.id)) {
         return
       }
-
-      // Might trigger overflow change and scrollers need to be rendered before this
-      clearTimeout(this.scrollTimer)
-      this.scrollTimer = setTimeout(() => {
-        this.scrollTabIntoView(tab)
-      })
+      this.scrollTabIntoView(tab.id)
     },
     $route (value) {
       if (value && this.hasRouteItem) {
@@ -193,7 +196,7 @@ export default {
         return
       }
       this.commit('active', tab.name || tab.id)
-      this.scrollTabIntoView(tab)
+      this.scrollTab(tab.id)
 
       this.$emit('change', pickFields(tab))
     },
@@ -233,9 +236,17 @@ export default {
         .sort(([leftA], [leftB]) => (leftA > leftB ? 1 : -1))
       this.menuOverflow = this.isMenuOverflow()
     },
-    scrollTabIntoView (tab) {
+    scrollTabIntoView (tabId) {
+      // Might trigger overflow change and scrollers need to be rendered before this
+      clearTimeout(this.scrollTimer)
+      this.scrollTimer = setTimeout(() => {
+        this.scrollTab(tabId)
+      })
+    },
+    scrollTab (tabId) {
       let list = this.$refs.list.$el
-      let index = findIndex(this.realItems, ({ id }) => id === tab.id)
+      let index =
+        tabId != null ? findIndex(this.realItems, ({ id }) => id === tabId) : -1
       if (index === -1) {
         return
       }
@@ -542,7 +553,12 @@ export default {
           ) : null}
         </div>
         {panelContent ? (
-          <div class={this.$c('tabs-panel')}>{panelContent}</div>
+          <div
+            class={this.$c('tabs-panel')}
+            key={this.eager ? undefined : `__panel_${this.activeKey || ''}`}
+          >
+            {panelContent}
+          </div>
         ) : null}
       </div>
     )
