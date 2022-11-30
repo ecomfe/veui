@@ -32,8 +32,12 @@ type Slots = {
   extra(): unknown
 }
 
+type Methods = {
+  scrollTabIntoView(tabId: string): void
+}
+
 type Tabs = VeuiDefineComponent<{
-  new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
+  new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins, Methods>
 }>
 
 export default Tabs
