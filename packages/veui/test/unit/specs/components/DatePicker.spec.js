@@ -504,4 +504,38 @@ describe('components/DatePicker', function () {
     })
     wrapper.destroy()
   })
+
+  it('should mask input correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-date-picker': DatePicker
+        },
+        data () {
+          return {
+            type: 'date'
+          }
+        },
+        template: `<veui-date-picker :type="type" expanded/>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find(DatePicker).vm.$refs.start
+    expect(input.mask).to.equal('####/##/##')
+
+    vm.type = 'month'
+    await vm.$nextTick()
+    expect(input.mask).to.equal('####/##')
+
+    vm.type = 'year'
+    await vm.$nextTick()
+    expect(input.mask).to.equal('####')
+
+    wrapper.destroy()
+  })
 })

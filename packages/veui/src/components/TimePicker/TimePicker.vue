@@ -18,8 +18,10 @@
     v-model="realInputValue"
     v-bind="inputProps"
     autocomplete="off"
+    :mask="mask"
     @focus="openDropdown"
     @click="openDropdown"
+    @keydown.enter="closeDropdown"
   >
     <div slot="after" :class="$c('time-picker-icon')">
       <veui-button
@@ -153,6 +155,11 @@ const HOURS = range(24)
 const MINUTES = range(60)
 const SECONDS = MINUTES
 const MODES = ['hour', 'minute', 'second']
+const MASKS = {
+  hour: '##:00',
+  minute: '##:##',
+  second: '##:##:##'
+}
 
 config.defaults(
   {
@@ -312,6 +319,9 @@ export default {
         this.realValue = val
         this.scrollSelectedToCenter()
       }
+    },
+    mask () {
+      return MASKS[this.mode]
     }
   },
   watch: {

@@ -345,4 +345,49 @@ describe('components/NumberInput', function () {
       await vm.$nextTick()
     }
   })
+
+  it('should mask input correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-number-input': NumberInput
+        },
+        data () {
+          return {
+            decimalPlace: 0,
+            max: undefined,
+            min: undefined
+          }
+        },
+        template: `<veui-number-input :decimal-place="decimalPlace" :max="max" :min="min"/>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find(NumberInput).vm
+    expect(input.mask).to.equal('-?#*')
+
+    vm.decimalPlace = 2
+    vm.max = -10
+    await vm.$nextTick()
+    expect(input.mask).to.equal('-#*.##')
+
+    vm.decimalPlace = 4
+    vm.max = 10
+    vm.min = -10
+    await vm.$nextTick()
+    expect(input.mask).to.equal('-?#*.####')
+
+    vm.decimalPlace = -1
+    vm.max = undefined
+    vm.min = 10
+    await vm.$nextTick()
+    expect(input.mask).to.equal('#*.#*')
+
+    wrapper.destroy()
+  })
 })

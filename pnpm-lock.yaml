@@ -72,6 +72,7 @@ importers:
     specifiers:
       '@babel/core': ^7.17.10
       '@babel/runtime': ^7.17.9
+      '@justfork/maska': ^2.0.0
       '@rollup/plugin-alias': ^3.1.9
       '@rollup/plugin-babel': ^5.3.1
       '@rollup/plugin-commonjs': ^19.0.2
@@ -143,6 +144,7 @@ importers:
       vue-template-compiler: ^2.6.14
       webpack: ^4.46.0
     dependencies:
+      '@justfork/maska': 2.0.0
       bytes: 3.1.2
       clone-element: 0.1.0
       core-js: 3.22.4
@@ -1629,6 +1631,10 @@ packages:
       string-argv: 0.3.1
       type-detect: 4.0.8
     dev: true
+
+  /@justfork/maska/2.0.0:
+    resolution: {integrity: sha512-0kug/g3AXzhe0NbkvD5R/BGEGz8GBEZBzgmsMpAoPU19OHtls85vjBi77PyitnzdV9ZVBLBM3AXRA50wdNiZCw==}
+    dev: false
 
   /@mrmlnc/readdir-enhanced/2.2.1:
     resolution: {integrity: sha512-bPHp6Ji8b41szTOcaP63VlnbbO5Ny6dwAATtY6JTjh5N2OLrb5Qk/Th5cRkRQhkWCt+EJsYrNB0MiL+Gpn6e3g==}
