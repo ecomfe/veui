@@ -4,6 +4,11 @@
 
 - [+] `Tabs` 组件新增 `scrollTabIntoView` 方法，用于将指定的标签页滚动到组件视口。<!-- #Tabs -->
 - [^] `Tabs` 组件会在渲染 `panel` 插槽时自动加上 `key`, 避免出现切换时插槽内组件复用。<!-- #Tabs -->
+- [+] 为 `NumberInput`、`DatePicker` 和 `TimePicker` 组件自动增加输入掩码供功能（暂时在 Firefox 下无效）。<!-- #NumberInput #DatePicker #TimePicker -->
+
+### 🐞 问题修复
+
+- [^] 修正 `Textarea` 组件在禁用状态下的文字颜色。<!-- #Textarea -->
 
 ## 2.10.2 (2022-11-09)
 
