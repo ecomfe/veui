@@ -1,5 +1,5 @@
 {
-  "version": "2.10.2",
+  "version": "2.10.3",
   "scripts": {
     "dev": "cd packages/veui && pnpm run serve",
     "test": "pnpm -r test",
