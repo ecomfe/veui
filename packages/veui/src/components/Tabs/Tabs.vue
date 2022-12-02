@@ -169,7 +169,7 @@ export default {
       if (!tab || (prev && tab.id === prev.id)) {
         return
       }
-      this.scrollTabIntoView(tab.id)
+      this._scrollTabIntoView(tab.id)
     },
     $route (value) {
       if (value && this.hasRouteItem) {
@@ -236,7 +236,13 @@ export default {
         .sort(([leftA], [leftB]) => (leftA > leftB ? 1 : -1))
       this.menuOverflow = this.isMenuOverflow()
     },
-    scrollTabIntoView (tabId) {
+    scrollTabIntoView (tabName) {
+      const tab = find(this.realItems, ({ name }) => name === tabName)
+      if (tab) {
+        return this._scrollTabIntoView(tab.id)
+      }
+    },
+    _scrollTabIntoView (tabId) {
       // Might trigger overflow change and scrollers need to be rendered before this
       clearTimeout(this.scrollTimer)
       this.scrollTimer = setTimeout(() => {
