@@ -1,10 +1,10 @@
-## 2.10.4
+## 2.10.4 (2022-12-06)
 
-### 💡 主要变更
+### 🐞 问题修复
 
-- [^] `Tabs` 组件的 `scrollTabIntoView` 方法参数从 `tabId` 变更为 `tabName`。<!-- #Tabs -->
+- [^] `Tabs` 组件的 `scrollTabIntoView` 方法参数从 `tabId` 修正为 `tabName`。<!-- #Tabs -->
 
-## 2.10.3
+## 2.10.3 (2022-12-01)
 
 ### 💡 主要变更
 
