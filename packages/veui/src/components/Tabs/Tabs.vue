@@ -236,6 +236,9 @@ export default {
         .sort(([leftA], [leftB]) => (leftA > leftB ? 1 : -1))
       this.menuOverflow = this.isMenuOverflow()
     },
+    /**
+     * @public
+     */
     scrollTabIntoView (tabName) {
       const tab = find(this.realItems, ({ name }) => name === tabName)
       if (tab) {

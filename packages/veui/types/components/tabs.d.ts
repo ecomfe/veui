@@ -33,7 +33,7 @@ type Slots = {
 }
 
 type Methods = {
-  scrollTabIntoView(tabId: string): void
+  scrollTabIntoView(tabName: string): void
 }
 
 type Tabs = VeuiDefineComponent<{
