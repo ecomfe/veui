@@ -1,3 +1,9 @@
+## 2.10.4
+
+### 💡 主要变更
+
+- [^] `Tabs` 组件的 `scrollTabIntoView` 方法参数从 `tabId` 变更为 `tabName`。<!-- #Tabs -->
+
 ## 2.10.3
 
 ### 💡 主要变更
