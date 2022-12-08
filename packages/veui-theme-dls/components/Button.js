@@ -7,7 +7,15 @@ ui.defaults(
     },
     ui: {
       style: {
-        values: ['normal', 'basic', 'translucent', 'primary', 'text', 'icon'],
+        values: [
+          'normal',
+          'basic',
+          'translucent',
+          'primary',
+          'text',
+          'icon',
+          'ghost'
+        ],
         default: 'normal'
       },
       strength: {
