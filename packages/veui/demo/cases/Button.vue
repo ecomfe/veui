@@ -69,6 +69,66 @@
     <veui-button ui="primary" loading @click="handleClick">提交</veui-button>
   </section>
   <section>
+    <veui-button ui="ghost xs" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost s" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost l" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost xl" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost" disabled @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost" loading @click="handleClick">保存</veui-button>
+  </section>
+  <section>
+    <veui-button ui="ghost strong xs" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost strong s" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost strong" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost strong l" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost strong xl" @click="handleClick">保存</veui-button>
+    <veui-button
+      ui="ghost strong"
+      disabled
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="ghost strong"
+      loading
+      @click="handleClick"
+    >保存</veui-button>
+  </section>
+  <section>
+    <veui-button ui="ghost aux xs" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost aux s" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost aux" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost aux l" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost aux xl" @click="handleClick">保存</veui-button>
+    <veui-button
+      ui="ghost aux"
+      disabled
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="ghost aux"
+      loading
+      @click="handleClick"
+    >保存</veui-button>
+  </section>
+  <section class="reverse">
+    <veui-button ui="ghost reverse xs" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost reverse s" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost reverse" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost reverse l" @click="handleClick">保存</veui-button>
+    <veui-button ui="ghost reverse xl" @click="handleClick">保存</veui-button>
+    <veui-button
+      ui="ghost reverse"
+      disabled
+      @click="handleClick"
+    >保存</veui-button>
+    <veui-button
+      ui="ghost reverse"
+      loading
+      @click="handleClick"
+    >保存</veui-button>
+  </section>
+  <section>
     <veui-button ui="xs" @click="handleClick">
       <veui-icon name="times"/>取消
     </veui-button>
@@ -307,7 +367,8 @@ section {
   user-select: none;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  padding: 4px 8px;
 }
 
 .block {
@@ -320,5 +381,9 @@ section {
 
 .inline {
   display: block;
+}
+
+.reverse {
+  background-color: #0052cc;
 }
 </style>

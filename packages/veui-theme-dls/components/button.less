@@ -152,7 +152,7 @@
     }
   }
 
-  &[ui~="strong"]:not([ui~="text"]):not([ui~="icon"]) {
+  &[ui~="normal"][ui~="strong"] {
     border-color: @dls-button-border-color-strong;
     background-color: @dls-button-background-color-strong;
     color: @dls-button-font-color-strong;
@@ -245,6 +245,122 @@
     &.@{veui-prefix}-button-loading {
       border-color: @dls-button-border-color-translucent-active;
       background-color: @dls-button-background-color-translucent-active;
+    }
+  }
+
+  &[ui~="ghost"] {
+    border-color: @dls-button-border-color-ghost;
+    background-color: @dls-button-background-color-ghost;
+    color: @dls-button-font-color-ghost;
+
+    &:hover {
+      background-color: @dls-button-background-color-ghost-hover;
+    }
+
+    &[data-focus-visible-added] {
+      background-color: @dls-button-background-color-ghost-focus;
+    }
+
+    &:active,
+    &.@{veui-prefix}-active {
+      background-color: @dls-button-background-color-ghost-active;
+    }
+
+    &.@{veui-prefix}-disabled {
+      border-color: @dls-button-border-color-ghost-disabled;
+      background-color: @dls-button-background-color-ghost-disabled;
+      color: @dls-button-font-color-ghost-disabled;
+    }
+
+    &.@{veui-prefix}-button-loading {
+      background-color: @dls-button-background-color-ghost-active;
+    }
+  }
+
+  &[ui~="ghost"][ui~="strong"] {
+    border-color: @dls-button-border-color-ghost-strong;
+    background-color: @dls-button-background-color-ghost-strong;
+    color: @dls-button-font-color-ghost-strong;
+
+    &:hover {
+      background-color: @dls-button-background-color-ghost-strong-hover;
+    }
+
+    &[data-focus-visible-added] {
+      background-color: @dls-button-background-color-ghost-strong-focus;
+    }
+
+    &:active,
+    &.@{veui-prefix}-active {
+      background-color: @dls-button-background-color-ghost-strong-active;
+    }
+
+    &.@{veui-prefix}-disabled {
+      border-color: @dls-button-border-color-ghost-strong-disabled;
+      background-color: @dls-button-background-color-ghost-strong-disabled;
+      color: @dls-button-font-color-ghost-strong-disabled;
+    }
+
+    &.@{veui-prefix}-button-loading {
+      background-color: @dls-button-background-color-ghost-strong-active;
+    }
+  }
+
+  &[ui~="ghost"][ui~="aux"] {
+    border-color: @dls-button-border-color-ghost-aux;
+    background-color: @dls-button-background-color-ghost-aux;
+    color: @dls-button-font-color-ghost-aux;
+
+    &:hover {
+      background-color: @dls-button-background-color-ghost-aux-hover;
+    }
+
+    &[data-focus-visible-added] {
+      background-color: @dls-button-background-color-ghost-aux-focus;
+    }
+
+    &:active,
+    &.@{veui-prefix}-active {
+      background-color: @dls-button-background-color-ghost-aux-active;
+    }
+
+    &.@{veui-prefix}-disabled {
+      border-color: @dls-button-border-color-ghost-aux-disabled;
+      background-color: @dls-button-background-color-ghost-aux-disabled;
+      color: @dls-button-font-color-ghost-aux-disabled;
+    }
+
+    &.@{veui-prefix}-button-loading {
+      background-color: @dls-button-background-color-ghost-aux-active;
+    }
+  }
+
+  &[ui~="ghost"][ui~="reverse"] {
+    border-color: @dls-button-border-color-ghost-reverse;
+    background-color: @dls-button-background-color-ghost-reverse;
+    color: @dls-button-font-color-ghost-reverse;
+
+    &:hover {
+      background-color: @dls-button-background-color-ghost-reverse-hover;
+    }
+
+    &[data-focus-visible-added] {
+      background-color: @dls-button-background-color-ghost-reverse-focus;
+    }
+
+    &:active,
+    &.@{veui-prefix}-active {
+      background-color: @dls-button-background-color-ghost-reverse-active;
+    }
+
+    &.@{veui-prefix}-disabled {
+      border-color: @dls-button-border-color-ghost-reverse-disabled;
+      background-color: @dls-button-background-color-ghost-reverse-disabled;
+      color: @dls-button-font-color-ghost-reverse-disabled;
+    }
+
+    &.@{veui-prefix}-button-loading {
+      background-color: @dls-button-background-color-ghost-reverse-active;
     }
   }
 
