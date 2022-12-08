@@ -506,7 +506,8 @@ export default {
                     >
                       {this.renderTabContent({
                         ...tab,
-                        index
+                        index,
+                        active: this.activeTab === tab
                       })}
                     </button>
                   ))}

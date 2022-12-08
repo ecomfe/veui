@@ -578,7 +578,7 @@ describe('components/Tabs', function () {
             <veui-tab label="#1">
               ONE
               <template #label="tab">
-                <em class="foo-label">{{ tab.label }}</em>
+                <em class="foo-label">{{ tab.label }} / {{ tab.active }}</em>
               </template>
             </veui-tab>
             <veui-tab label="#2" disabled>TWO</veui-tab>
@@ -600,6 +600,7 @@ describe('components/Tabs', function () {
 
     let tabs = wrapper.findAll('.veui-tabs-item')
     expect(tabs.at(0).find('.foo-label').exists()).to.equal(true)
+    expect(tabs.at(0).find('.foo-label').text()).to.equal('#1 / true')
     expect(tabs.at(1).find('.bar-label').exists()).to.equal(true)
     expect(tabs.at(2).find('.bar-label').exists()).to.equal(true)
 
