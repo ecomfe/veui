@@ -14,12 +14,8 @@ ui.defaults(
         default: 'm'
       },
       style: {
-        values: ['primary', 'basic', 'normal'],
+        values: ['primary', 'basic', 'normal', 'text'],
         default: 'basic',
-        inherit: true
-      },
-      role: {
-        values: ['text'],
         inherit: true
       }
     },
