@@ -346,6 +346,12 @@
 
     &[data-focus-visible-added] {
       background-color: @dls-button-background-color-ghost-reverse-focus;
+
+      // TODO: add focus ring for reverse background to global tokens
+      .dls-focus-ring(
+        #fff,
+        0 0 0 2px rgba(255, 255, 255, 0.3)
+      ) !important;
     }
 
     &:active,
