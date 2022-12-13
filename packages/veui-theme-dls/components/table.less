@@ -616,7 +616,7 @@
     }
   }
 
-  &::after {
+  &-loading-backdrop {
     content: "";
     position: absolute;
     top: 0;
@@ -629,7 +629,7 @@
     .veui-transition(opacity);
   }
 
-  &-has-loading-backdrop::after {
+  &-has-loading-backdrop &-loading-backdrop {
     background-color: fade(@dls-background-color-base-1, 50%);
     opacity: 1;
     pointer-events: auto;

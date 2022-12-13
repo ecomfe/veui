@@ -90,6 +90,7 @@
     :loading="loading"
     :ui="uiParts.spinner"
   >{{ t('loading') }}</veui-loading>
+  <div :class="$c('table-loading-backdrop')" aria-hidden="true"/>
 </div>
 </template>
 
