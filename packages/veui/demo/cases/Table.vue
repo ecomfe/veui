@@ -400,6 +400,16 @@
       <veui-table-column field="name" title="name"/>
     </veui-table>
   </section>
+  <section>
+    <veui-table key-field="id" :data="data">
+      <veui-table-column width="300" title="Head" field="id"/>
+      <veui-table-column width="300" title="Head" field="desc"/>
+      <veui-table-column width="300" title="Head" field="price"/>
+      <veui-table-column width="300" title="Head" field="updateDate"/>
+      <veui-table-column width="300" title="Head" field="group"/>
+      <veui-table-column width="300" title="Head" field="typeId"/>
+    </veui-table>
+  </section>
 </article>
 </template>
 

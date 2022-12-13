@@ -464,7 +464,7 @@ export default {
       return 'partial'
     },
     scrollableX () {
-      return !!this.realScroll.x
+      return !!this.realScroll.x || this.overflow.x
     },
     scrollableY () {
       return !!(this.realScroll.y && this.data.length)
