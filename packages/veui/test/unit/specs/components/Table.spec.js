@@ -2957,4 +2957,46 @@ describe('components/Table', function () {
 
     config.set('table.loadingOptions', loadingOptionsConfig)
   })
+
+  it('should sync head/body scroll even if `scroll` is not set', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-column': Column
+        },
+        template: `
+        <veui-table :data="data" style="width: 300px">
+          <veui-column field="id" title="id" width="120"/>
+          <veui-column field="name" title="name" width="120"/>
+          <veui-column field="value" title="value" width="120"/>
+        </veui-table>`,
+        data () {
+          return {
+            data: [
+              {
+                id: 1,
+                name: 'One',
+                value: 100
+              }
+            ]
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    wrapper.find('.veui-table-main').element.scrollLeft = 20
+
+    await wrapper.vm.$nextTick()
+
+    expect(
+      wrapper.find('.veui-table-fixed-header').element.scrollLeft
+    ).to.equal(20)
+
+    wrapper.destroy()
+  })
 })
