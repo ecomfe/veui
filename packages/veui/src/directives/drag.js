@@ -73,8 +73,12 @@ function getOptions (binding, vnode) {
 
   // 传了 handle 且 ref 找不到就认为是 selector
   options.enableSelector = !handleEl && !!handle && typeof handle === 'string'
-
-  options.handle = handleEl || vnode.elm
+  let selected = null
+  if (options.enableSelector) {
+    options._rawHandle = handle
+    selected = vnode.elm && vnode.elm.querySelector(handle)
+  }
+  options.handle = handleEl || selected || vnode.elm
   return options
 }
 
@@ -121,10 +125,10 @@ function refresh (el, binding, vnode) {
 
     prepareHandler (event) {
       const evTarget = event.target
-      const { exclude, handle, enableSelector } = options
+      const { exclude, enableSelector, _rawHandle } = options
       let match = !enableSelector
       if (enableSelector) {
-        match = matchesSelectorInContainer(evTarget, handle, target)
+        match = matchesSelectorInContainer(evTarget, _rawHandle, target)
       }
 
       if (match && exclude && typeof exclude === 'string') {
