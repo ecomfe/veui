@@ -1,14 +1,21 @@
+/* eslint-disable no-labels */
+import {
+  getDaysInMonth as daysInMonth,
+  startOfDay,
+  startOfWeek,
+  startOfMonth,
+  startOfQuarter,
+  startOfYear,
+  addDays,
+  addWeeks,
+  addMonths,
+  addQuarters,
+  addYears
+} from 'date-fns'
 import { includes, merge } from './range'
 
 export function getDaysInMonth (year, month) {
-  let day
-  if (year instanceof Date) {
-    day = new Date(year)
-  } else {
-    day = new Date(year, month + 1)
-  }
-  day.setDate(0)
-  return day.getDate()
+  return daysInMonth(new Date(year, month + 1))
 }
 
 export function toDateData (date) {
@@ -96,71 +103,6 @@ export function mergeRange (r1, r2, type = 'date', mode = 'xor') {
   return merge(prepareRanges(r1), prepareRanges(r2), { inc, mode })
 }
 
-const ONE_DAY = 24 * 60 * 60 * 1000
-
-function addDays (date, days) {
-  return new Date(date - 0 + days * ONE_DAY)
-}
-
-function addMonths (date, months) {
-  let d = new Date(date - 0)
-  d.setMonth(d.getMonth() + months)
-  return d
-}
-
-function addYears (date, years) {
-  let d = new Date(date - 0)
-  d.setFullYear(d.getFullYear() + years)
-  return d
-}
-
-const dateReStr = ['(\\d{4})', '(0?[1-9]|1[0-2])', '(0?[1-9]|[12]\\d|3[01])']
-
-function createDateRe (type, sep, strict) {
-  let reStr =
-    type === 'date'
-      ? dateReStr.join(sep)
-      : type === 'month'
-        ? dateReStr.slice(0, 2).join(sep)
-        : dateReStr[0]
-  return new RegExp(`^${reStr}${strict ? '$' : '(?:$|' + sep + ')'}`)
-}
-
-const components = ['year', 'month', 'date']
-
-function fromArrayToDateData (arr) {
-  return arr.reduce((res, part, index) => {
-    res[components[index]] = index === 1 ? part - 1 : part
-    return res
-  }, {})
-}
-
-function getDateData (dataStr, re, type) {
-  let matches = dataStr.match(re)
-  let result = null
-  if (matches) {
-    matches = matches.slice(1).map((i) => +i)
-    let [year, month, date] = matches
-    if (type === 'date') {
-      let d = new Date(year, month - 1, date)
-      let valid =
-        d.getFullYear() === year &&
-        d.getMonth() === month - 1 &&
-        d.getDate() === date
-      if (valid) {
-        result = matches
-      }
-    } else if (year) {
-      result = matches
-    }
-  }
-  return result ? fromArrayToDateData(result) : null
-}
-
-export function getExactDateData (dataStr, type, sep) {
-  return getDateData(dataStr, createDateRe(type, sep, true), type)
-}
-
 function subtract (a, b) {
   a = a instanceof Date ? a : new Date(a.year, a.month || 0, a.date || 1)
   b = b instanceof Date ? b : new Date(b.year, b.month || 0, b.date || 1)
@@ -173,4 +115,38 @@ export function gt (a, b) {
 
 export function lt (a, b) {
   return a && b ? subtract(a, b) < 0 : false
+}
+
+export function startOf (base, startOf, { weekStartsOn }) {
+  switch (startOf) {
+    case 'day':
+      return startOfDay(base)
+    case 'week':
+      return startOfWeek(base, { weekStartsOn })
+    case 'month':
+      return startOfMonth(base)
+    case 'quarter':
+      return startOfQuarter(base)
+    case 'year':
+      return startOfYear(base)
+    default:
+      throw new Error('Invalid argument for `startOf`.')
+  }
+}
+
+const ADD_FN_MAP = {
+  days: addDays,
+  weeks: addWeeks,
+  months: addMonths,
+  quarters: addQuarters,
+  years: addYears
+}
+
+export function add (base, offset) {
+  return Object.keys(offset).reduce((acc, key) => {
+    if (key in ADD_FN_MAP && offset[key] !== 0) {
+      return ADD_FN_MAP[key](acc, offset[key])
+    }
+    return acc
+  }, base)
 }

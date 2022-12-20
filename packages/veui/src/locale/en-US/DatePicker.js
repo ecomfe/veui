@@ -9,7 +9,10 @@ i18n.register(
     selectYear: 'Select a year',
     selectRange: ['Start date', 'End date'],
     selectMonthRange: ['Start month', 'End month'],
-    selectYearRange: ['Start year', 'End year']
+    selectYearRange: ['Start year', 'End year'],
+    dateFormat: 'MM/dd/yyyy',
+    monthFormat: 'MM/yyyy',
+    yearFormat: 'yyyy'
   },
   {
     ns: 'datepicker'

@@ -9,7 +9,10 @@ i18n.register(
     selectYear: '请选择年份',
     selectRange: ['开始日期', '结束日期'],
     selectMonthRange: ['开始月份', '结束月份'],
-    selectYearRange: ['开始年份', '结束年份']
+    selectYearRange: ['开始年份', '结束年份'],
+    dateFormat: 'yyyy/MM/dd',
+    monthFormat: 'yyyy/MM',
+    yearFormat: 'yyyy'
   },
   {
     ns: 'datepicker'
