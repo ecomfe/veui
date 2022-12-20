@@ -85,11 +85,13 @@
       </table-foot>
     </table>
   </div>
-  <veui-loading
-    v-if="realLoadingOptions.type === 'spinner'"
-    :loading="loading"
-    :ui="uiParts.spinner"
-  >{{ t('loading') }}</veui-loading>
+  <transition :name="$c('loading-bar')">
+    <veui-loading
+      v-if="realLoadingOptions.type === 'spinner' && loading"
+      loading
+      :ui="uiParts.spinner"
+    >{{ t('loading') }}</veui-loading>
+  </transition>
   <div :class="$c('table-loading-backdrop')" aria-hidden="true"/>
 </div>
 </template>
@@ -778,3 +780,5 @@ function sumWidths (widths) {
       : `calc(${normalized.join(' + ')})`
 }
 </script>
+
+<style src="dls-graphics/dist/separate/loading.css"></style>
