@@ -171,20 +171,9 @@ import i18n from '../mixins/i18n'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
 import warn from '../utils/warn'
-import { toDateData, getExactDateData, lt } from '../utils/date'
+import { startOf, toDateData, lt, add } from '../utils/date'
 import { isNumber, pick, omit, defaults } from 'lodash'
-import format from 'date-fns/format'
-import parse from 'date-fns/parse'
-import startOfDay from 'date-fns/startOfDay'
-import startOfWeek from 'date-fns/startOfWeek'
-import startOfMonth from 'date-fns/startOfMonth'
-import startOfQuarter from 'date-fns/startOfQuarter'
-import startOfYear from 'date-fns/startOfYear'
-import addDays from 'date-fns/addDays'
-import addWeeks from 'date-fns/addWeeks'
-import addMonths from 'date-fns/addMonths'
-import addQuarters from 'date-fns/addQuarters'
-import addYears from 'date-fns/addYears'
+import { format, parse } from 'date-fns'
 import '../common/global'
 
 config.defaults(
@@ -195,7 +184,10 @@ config.defaults(
     yearPlaceholder: '@@datepicker.selectYear',
     rangePlaceholder: '@@datepicker.selectRange',
     monthRangePlaceholder: '@@datepicker.selectMonthRange',
-    yearRangePlaceholder: '@@datepicker.selectYearRange'
+    yearRangePlaceholder: '@@datepicker.selectYearRange',
+    dateFormat: '@@datepicker.dateFormat',
+    monthFormat: '@@datepicker.monthFormat',
+    yearFormat: '@@datepicker.yearFormat'
   },
   'datepicker'
 )
@@ -228,7 +220,11 @@ const RANGE_PLACEHOLDER_KEY_MAP = {
   year: 'datepicker.yearRangePlaceholder'
 }
 
-const DEFAULT_DATE_SEP = '[/.-]'
+const FORMAT_KEY_MAP = {
+  date: 'datepicker.dateFormat',
+  month: 'datepicker.monthFormat',
+  year: 'datepicker.yearFormat'
+}
 
 function dateFormatToMask (format) {
   return format.replace(/[yMd]/g, '#')
@@ -296,6 +292,9 @@ export default {
   },
   computed: {
     realWeekStart: Calendar.computed.realWeekStart,
+    realFormat () {
+      return this.format || this.config[FORMAT_KEY_MAP[this.type]]
+    },
     realInputValue () {
       let formatted = [].concat(this.formatted)
       return this.localInputValue.length
@@ -470,11 +469,11 @@ export default {
       if (!date) {
         return ''
       }
-      if (typeof this.format === 'function') {
-        return this.format(date)
+      if (typeof this.realFormat === 'function') {
+        return this.realFormat(date)
       }
 
-      let dateFormat = this.format || TYPE_FORMAT_MAP[this.type]
+      let dateFormat = this.realFormat || TYPE_FORMAT_MAP[this.type]
       dateFormat = checkFormat(dateFormat)
       return format(date, dateFormat)
     },
@@ -485,13 +484,12 @@ export default {
         result = this.parse(input)
         return isNaN(+result) ? null : result
       }
-      if (this.format && typeof this.format === 'string') {
-        let dateFormat = checkFormat(this.format)
+      if (this.realFormat && typeof this.realFormat === 'string') {
+        let dateFormat = checkFormat(this.realFormat)
         result = parse(input, dateFormat, new Date())
         return isNaN(+result) ? null : result
       }
-      let data = getExactDateData(input, this.type, DEFAULT_DATE_SEP)
-      return data ? new Date(data.year, data.month || 0, data.date || 1) : null
+      return null
     },
     toDateData (date) {
       if (!date) {
@@ -569,47 +567,13 @@ export default {
   }
 }
 
-function startOf (base, startOf, { weekStartsOn }) {
-  switch (startOf) {
-    case 'day':
-      return startOfDay(base)
-    case 'week':
-      return startOfWeek(base, { weekStartsOn })
-    case 'month':
-      return startOfMonth(base)
-    case 'quarter':
-      return startOfQuarter(base)
-    case 'year':
-      return startOfYear(base)
-    default:
-      throw new Error('Invalid argument for `startOf`.')
-  }
-}
-
-const ADD_FN_MAP = {
-  days: addDays,
-  weeks: addWeeks,
-  months: addMonths,
-  quarters: addQuarters,
-  years: addYears
-}
-
-function add (base, offset) {
-  return Object.keys(offset).reduce((acc, key) => {
-    if (key in ADD_FN_MAP && offset[key] !== 0) {
-      return ADD_FN_MAP[key](acc, offset[key])
-    }
-    return acc
-  }, base)
-}
-
 function checkFormat (input) {
   if (input.indexOf('YYYY') >= 0) {
     warn('Use `yyyy` instead of `YYYY` when formatting years.')
     input = input.replace(/YYYY/, 'yyyy')
   }
   if (input.indexOf('DD') >= 0) {
-    warn('Use `dd` instead of `DD` when formatting dates.')
+    warn('Use `dd` instead of `DD` when formatting days of month.')
     input = input.replace(/DD/, 'dd')
   }
   return input
