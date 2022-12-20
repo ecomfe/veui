@@ -108,48 +108,60 @@ describe('utils/date', function () {
   })
 
   it('should calculate `Date`/plain date object/timestamp equality correctly', () => {
-    expect(isSameDay(new Date(2018, 11, 31).getTime(), new Date(2018, 11, 31)))
+    expect(isSameDay(new Date(2018, 11, 13), null)).to.equal(false)
+    expect(isSameDay(null, new Date(2018, 11, 13))).to.equal(false)
+    expect(
+      isSameDay(new Date(2018, 11, 31).getTime(), new Date(2018, 11, 31))
+    ).to.equal(true)
     expect(
       isSameDay(
         new Date(2018, 11, 31).getTime(),
         new Date(2018, 11, 31).getTime()
       )
-    )
+    ).to.equal(true)
     expect(
       isSameDay(new Date(2018, 11, 31).getTime(), {
         year: 2018,
         month: 11,
         date: 31
       })
-    )
+    ).to.equal(true)
     expect(
       isSameDay(new Date(2018, 11, 31), { year: 2018, month: 11, date: 31 })
+    ).to.equal(true)
+    expect(isSameDay(new Date(2018, 11, 31), new Date(2018, 11, 31))).to.equal(
+      true
     )
-    expect(isSameDay(new Date(2018, 11, 31), new Date(2018, 11, 31)))
     expect(
       isSameDay(
         { year: 2018, month: 11, date: 31 },
         { year: 2018, month: 11, date: 31 }
       )
-    )
+    ).to.equal(true)
 
+    expect(isSameMonth(new Date(2018, 11, 13), null)).to.equal(false)
+    expect(isSameMonth(null, new Date(2018, 11, 13))).to.equal(false)
     expect(
       isSameMonth(new Date(2018, 11, 31).getTime(), new Date(2018, 11, 30))
-    )
+    ).to.equal(true)
     expect(
       isSameMonth(new Date(2018, 11, 31).getTime(), {
         year: 2018,
         month: 11
       })
-    )
+    ).to.equal(true)
 
-    expect(isSameYear(new Date(2018, 11, 31).getTime(), new Date(2018, 10, 31)))
+    expect(isSameYear(new Date(2018, 11, 13), null)).to.equal(false)
+    expect(isSameYear(null, new Date(2018, 11, 13))).to.equal(false)
+    expect(
+      isSameYear(new Date(2018, 11, 31).getTime(), new Date(2018, 10, 31))
+    ).to.equal(true)
     expect(
       isSameYear(new Date(2018, 11, 31).getTime(), {
         year: 2018,
         month: 11
       })
-    )
+    ).to.equal(true)
   })
 
   it('should check whether a date is within a range correctly', () => {
@@ -193,6 +205,9 @@ describe('utils/date', function () {
 
   it('should calculate range difference correctly', () => {
     expect(mergeRange([], [[DATES[1], DATES[1]]])).to.deep.equal([
+      [DATES[1], DATES[1]]
+    ])
+    expect(mergeRange([], [DATES[1], DATES[1]])).to.deep.equal([
       [DATES[1], DATES[1]]
     ])
     expect(
@@ -413,16 +428,23 @@ describe('utils/date', function () {
   })
 
   it('should compare date correctly', () => {
+    expect(gt({ year: 2019, month: 11, date: 15 }, null)).to.equal(false)
+    expect(gt(null, { year: 2019, month: 11, date: 15 })).to.equal(false)
     expect(
       gt(
         { year: 2019, month: 11, date: 15 },
         { year: 2019, month: 11, date: 14 }
       )
     ).to.be.equal(true)
+    expect(gt({ year: 2019 }, { year: 2018 })).to.equal(true)
+    expect(gt(new Date(2019, 11, 15), new Date(2019, 11, 14))).to.equal(true)
 
+    expect(lt({ year: 2019, month: 11, date: 15 }, null)).to.equal(false)
+    expect(lt(null, { year: 2019, month: 11, date: 15 })).to.equal(false)
     expect(
       lt({ year: 2019, month: 11 }, { year: 2019, month: 10 })
     ).to.be.equal(false)
+    expect(lt(new Date(2019, 11, 15), new Date(2019, 11, 14))).to.equal(false)
   })
 
   it('should merge startOf correctly', () => {
@@ -451,10 +473,14 @@ describe('utils/date', function () {
       add(new Date(2022, 10, 3), {
         years: 1,
         months: 1,
-        days: -1,
+        days: 0,
         quarters: -1,
         weeks: 1
       }).getTime()
-    ).to.equal(new Date(2023, 8, 9).getTime())
+    ).to.equal(new Date(2023, 8, 10).getTime())
+
+    expect(() => add(new Date(2022, 10, 3), { centuries: 1 })).to.throw(
+      '[veui] Invalid unit for `add`: centuries'
+    )
   })
 })
