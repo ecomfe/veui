@@ -1,6 +1,6 @@
 /* eslint-disable no-labels */
 import {
-  getDaysInMonth as daysInMonth,
+  getDaysInMonth,
   startOfDay,
   startOfWeek,
   startOfMonth,
@@ -14,8 +14,8 @@ import {
 } from 'date-fns'
 import { includes, merge } from './range'
 
-export function getDaysInMonth (year, month) {
-  return daysInMonth(new Date(year, month + 1))
+export function getMonthDays (year, month) {
+  return getDaysInMonth(new Date(year, month))
 }
 
 export function toDateData (date) {
@@ -117,21 +117,26 @@ export function lt (a, b) {
   return a && b ? subtract(a, b) < 0 : false
 }
 
-export function startOf (base, startOf, { weekStartsOn }) {
-  switch (startOf) {
-    case 'day':
-      return startOfDay(base)
-    case 'week':
-      return startOfWeek(base, { weekStartsOn })
-    case 'month':
-      return startOfMonth(base)
-    case 'quarter':
-      return startOfQuarter(base)
-    case 'year':
-      return startOfYear(base)
-    default:
-      throw new Error('Invalid argument for `startOf`.')
+const START_OF_FN_MAP = {
+  day: startOfDay,
+  week: startOfWeek,
+  month: startOfMonth,
+  quarter: startOfQuarter,
+  year: startOfYear
+}
+
+export function startOf (base, startOf, { weekStartsOn } = {}) {
+  const impl = START_OF_FN_MAP[startOf]
+
+  if (!impl) {
+    throw new Error(`[veui] Invalid unit for \`startOf\`: ${startOf}`)
   }
+
+  if (startOf === 'week') {
+    return impl(base, { weekStartsOn })
+  }
+
+  return impl(base)
 }
 
 const ADD_FN_MAP = {

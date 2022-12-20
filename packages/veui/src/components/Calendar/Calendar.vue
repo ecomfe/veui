@@ -305,7 +305,7 @@
 
 <script>
 import {
-  getDaysInMonth,
+  getMonthDays,
   fromDateData,
   toDateData,
   isSameDay,
@@ -589,8 +589,8 @@ export default {
     getWeeks (year, month) {
       let firstDayInMonth = new Date(year, month)
       let offset = (firstDayInMonth.getDay() + 7 - this.realWeekStart) % 7
-      let daysInMonth = getDaysInMonth(year, month)
-      let daysInPreviousMonth = getDaysInMonth(year, month - 1)
+      let daysInMonth = getMonthDays(year, month)
+      let daysInPreviousMonth = getMonthDays(year, month - 1)
       let weekCount = 6
       let weeks = []
 
@@ -1102,7 +1102,7 @@ export default {
       this.$nextTick(() => {
         let count =
           view === 'days'
-            ? getDaysInMonth(year, month)
+            ? getMonthDays(year, month)
             : view === 'months'
               ? 12
               : 10

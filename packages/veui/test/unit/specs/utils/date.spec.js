@@ -1,5 +1,5 @@
 import {
-  getDaysInMonth,
+  getMonthDays,
   toDateData,
   fromDateData,
   toDate,
@@ -8,9 +8,10 @@ import {
   isSameYear,
   isInRange,
   mergeRange,
-  getExactDateData,
   gt,
-  lt
+  lt,
+  startOf,
+  add
 } from '@/utils/date'
 
 describe('utils/date', function () {
@@ -36,7 +37,7 @@ describe('utils/date', function () {
     ]
 
     SPECS.forEach(([year, month, days]) => {
-      expect(getDaysInMonth(year, month)).to.be.equal(days)
+      expect(getMonthDays(year, month)).to.be.equal(days)
     })
   })
 
@@ -411,19 +412,6 @@ describe('utils/date', function () {
     ])
   })
 
-  it('should parse date correctly', () => {
-    expect(getExactDateData('2019-12-15', 'date', '[-]')).to.deep.equal({
-      year: 2019,
-      month: 11,
-      date: 15
-    })
-
-    expect(getExactDateData('2019-12', 'month', '[-]')).to.deep.equal({
-      year: 2019,
-      month: 11
-    })
-  })
-
   it('should compare date correctly', () => {
     expect(
       gt(
@@ -435,5 +423,38 @@ describe('utils/date', function () {
     expect(
       lt({ year: 2019, month: 11 }, { year: 2019, month: 10 })
     ).to.be.equal(false)
+  })
+
+  it('should merge startOf correctly', () => {
+    expect(startOf(new Date(2022, 10, 3), 'year').getTime()).to.equal(
+      new Date(2022, 0, 1).getTime()
+    )
+    expect(startOf(new Date(2022, 10, 3), 'quarter').getTime()).to.equal(
+      new Date(2022, 9, 1).getTime()
+    )
+    expect(startOf(new Date(2022, 10, 3), 'month').getTime()).to.equal(
+      new Date(2022, 10, 1).getTime()
+    )
+    expect(
+      startOf(new Date(2022, 10, 3), 'week', { weekStartsOn: 1 }).getTime()
+    ).to.equal(new Date(2022, 9, 31).getTime())
+    expect(startOf(new Date(2022, 10, 3, 13, 20), 'day').getTime()).to.equal(
+      new Date(2022, 10, 3).getTime()
+    )
+    expect(() => startOf(new Date(2022, 10, 3), 'century')).to.throw(
+      '[veui] Invalid unit for `startOf`: century'
+    )
+  })
+
+  it('should add by complex offset correctly', () => {
+    expect(
+      add(new Date(2022, 10, 3), {
+        years: 1,
+        months: 1,
+        days: -1,
+        quarters: -1,
+        weeks: 1
+      }).getTime()
+    ).to.equal(new Date(2023, 8, 9).getTime())
   })
 })
