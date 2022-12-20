@@ -55,3 +55,5 @@ export default {
   }
 }
 </script>
+
+<style src="dls-graphics/dist/separate/loading.css"></style>

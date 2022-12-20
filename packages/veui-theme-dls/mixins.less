@@ -117,3 +117,20 @@
 
   overflow-y: auto;
 }
+
+.veui-opacity-transition() {
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter-to,
+  &-leave {
+    opacity: 1;
+  }
+
+  &-enter-active,
+  &-leave-active {
+    .veui-transition(opacity);
+  }
+}

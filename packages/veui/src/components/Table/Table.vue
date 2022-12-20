@@ -85,7 +85,7 @@
       </table-foot>
     </table>
   </div>
-  <transition :name="$c('loading-bar')">
+  <transition :name="$c('table-loading')">
     <veui-loading
       v-if="realLoadingOptions.type === 'spinner' && loading"
       loading
@@ -780,5 +780,3 @@ function sumWidths (widths) {
       : `calc(${normalized.join(' + ')})`
 }
 </script>
-
-<style src="dls-graphics/dist/separate/loading.css"></style>
