@@ -1,23 +1,21 @@
 <template>
-<transition :name="$c('loading-bar')">
-  <div
-    v-if="loading"
-    :ui="realUi"
-    :class="$c('loading')"
-    :aria-label="hasDefaultSlot() ? null : t('loading')"
-    :aria-describedby="hasDefaultSlot() ? descId : null"
-  >
-    <div :class="$c('loading-spinner')" aria-hidden="true">
-      <slot name="spinner">
-        <veui-icon v-if="icons.loading" :name="icons.loading" spin/>
-        <svg v-bind="attrs" v-html="contents"/>
-      </slot>
-    </div>
-    <div v-if="hasDefaultSlot()" :id="descId" :class="$c('loading-text')">
-      <slot/>
-    </div>
+<div
+  v-if="loading"
+  :ui="realUi"
+  :class="$c('loading')"
+  :aria-label="hasDefaultSlot() ? null : t('loading')"
+  :aria-describedby="hasDefaultSlot() ? descId : null"
+>
+  <div :class="$c('loading-spinner')" aria-hidden="true">
+    <slot name="spinner">
+      <veui-icon v-if="icons.loading" :name="icons.loading" spin/>
+      <svg v-bind="attrs" v-html="contents"/>
+    </slot>
   </div>
-</transition>
+  <div v-if="hasDefaultSlot()" :id="descId" :class="$c('loading-text')">
+    <slot/>
+  </div>
+</div>
 </template>
 
 <script>
@@ -57,5 +55,3 @@ export default {
   }
 }
 </script>
-
-<style src="dls-graphics/dist/separate/loading.css"></style>
