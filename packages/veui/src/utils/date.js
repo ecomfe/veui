@@ -149,7 +149,7 @@ const ADD_FN_MAP = {
 
 export function add (base, offset) {
   return Object.keys(offset).reduce((acc, key) => {
-    const impl = ADD_FN_MAP[key]
+    const impl = ADD_FN_MAP[key] || ADD_FN_MAP[`${key}s`]
 
     if (!impl) {
       throw new Error(`[veui] Invalid unit for \`add\`: ${key}`)
@@ -158,6 +158,7 @@ export function add (base, offset) {
     if (offset[key] !== 0) {
       return impl(acc, offset[key])
     }
+
     return acc
   }, base)
 }
