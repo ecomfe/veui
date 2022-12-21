@@ -479,6 +479,17 @@ describe('utils/date', function () {
       }).getTime()
     ).to.equal(new Date(2023, 8, 10).getTime())
 
+    // Compatible with singular forms
+    expect(
+      add(new Date(2022, 10, 3), {
+        year: 1,
+        month: 1,
+        day: 0,
+        quarter: -1,
+        week: 1
+      }).getTime()
+    ).to.equal(new Date(2023, 8, 10).getTime())
+
     expect(() => add(new Date(2022, 10, 3), { centuries: 1 })).to.throw(
       '[veui] Invalid unit for `add`: centuries'
     )

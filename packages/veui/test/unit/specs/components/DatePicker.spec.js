@@ -341,6 +341,7 @@ describe('components/DatePicker', function () {
               label: '上个月',
               from: {
                 startOf: 'month',
+                // compatible with singular forms
                 month: -1
               },
               to: {
