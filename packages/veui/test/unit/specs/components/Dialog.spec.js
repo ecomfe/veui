@@ -401,4 +401,54 @@ describe('components/Dialog', function () {
 
     wrapper.destroy()
   })
+
+  it('should handle the width of dialog correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-dialog': Dialog
+        },
+        template: `<veui-dialog
+            open
+            :overlay-style="{
+              [widthProp]: width ? width + 'px' : ''
+            }"
+          ><div id="foo" style="width: 100%;">foo</div></veui-dialog>`,
+        data () {
+          return {
+            asContentWidth: false,
+            width: 300
+          }
+        },
+        computed: {
+          widthProp () {
+            return `--veui-dialog-${this.asContentWidth ? 'content-' : ''}width`
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+    const { vm } = wrapper
+    await wait(100)
+    let content = wrapper.find('.veui-dialog-content').element
+    expect(getComputedStyle(content).width).to.equal(`${vm.width}px`)
+
+    vm.width = 400
+    await wait(100)
+    expect(getComputedStyle(content).width).to.equal(`${vm.width}px`)
+
+    vm.width = null
+    await wait(100)
+    expect(getComputedStyle(content).width).to.equal('600px')
+
+    vm.asContentWidth = true
+    vm.width = 400
+    await wait(100)
+    const foo = wrapper.find('#foo').element
+    expect(getComputedStyle(foo).width).to.equal(`${vm.width}px`)
+
+    wrapper.destroy()
+  })
 })

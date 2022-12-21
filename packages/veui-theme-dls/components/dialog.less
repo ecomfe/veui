@@ -1,6 +1,19 @@
 @import "../lib.less";
 
 .@{veui-prefix}-dialog {
+  .dialog-width(@ui-width) {
+    @padding-x: @dls-dialog-padding-x * 2;
+
+    --internal-veui-dialog-ui-width: @ui-width;
+    --internal-veui-dialog-width: calc(
+      var(
+          --veui-dialog-content-width,
+          calc(var(--internal-veui-dialog-ui-width) - @padding-x)
+        ) + @padding-x
+    );
+    width: var(--veui-dialog-width, var(--internal-veui-dialog-width));
+  }
+
   @transition-offset: 10px;
 
   display: none;
@@ -41,15 +54,15 @@
     line-height: @dls-line-height-1;
 
     [ui~="narrow"] & {
-      width: @dls-dialog-width-narrow;
+      .dialog-width(@dls-dialog-width-narrow);
     }
 
     [ui~="medium"] & {
-      width: @dls-dialog-width-medium;
+      .dialog-width(@dls-dialog-width-medium);
     }
 
     [ui~="wide"] & {
-      width: @dls-dialog-width-wide;
+      .dialog-width(@dls-dialog-width-wide);
     }
 
     [ui~="fullscreen"] & {
@@ -66,7 +79,7 @@
     }
 
     [ui~="auto"] & {
-      width: auto;
+      .dialog-width(auto);
     }
 
     &-head {
