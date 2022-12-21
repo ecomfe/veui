@@ -61,6 +61,29 @@
       ui="primary"
       @click="autoDialogVisible = !autoDialogVisible"
     >Open an footless dialog box with auto dimension</veui-button>
+
+    <veui-dialog
+      overlay-class="test demo-dialog-standard-dialog"
+      :open.sync="customDialogVisible"
+      modal
+      outside-closable
+      ui="auto"
+      :overlay-style="{
+        [`--veui-dialog-${asContentWidth ? 'content-' : ''}width`]:
+          customedWidth ? `${customedWidth}px` : ''
+      }"
+    >
+      <label
+        class="demo-custom-width-label"
+      ><veui-checkbox v-model="asContentWidth"/>指定内容宽度</label>
+      <p>
+        <veui-number-input v-model="customedWidth"/>
+      </p>
+    </veui-dialog>
+    <veui-button
+      ui="primary"
+      @click="customDialogVisible = !customDialogVisible"
+    >Open an dialog box with customed width</veui-button>
   </section>
   <section>
     <veui-dialog
@@ -308,7 +331,16 @@
 </article>
 </template>
 <script>
-import { Dialog, AlertBox, ConfirmBox, PromptBox, Button, Icon } from 'veui'
+import {
+  Dialog,
+  AlertBox,
+  ConfirmBox,
+  PromptBox,
+  Button,
+  Icon,
+  NumberInput,
+  Checkbox
+} from 'veui'
 import alertManager from 'veui/managers/alert'
 import confirmManager from 'veui/managers/confirm'
 import promptManager from 'veui/managers/prompt'
@@ -333,11 +365,16 @@ export default {
     'veui-confirm-box': ConfirmBox,
     'veui-prompt-box': PromptBox,
     'veui-button': Button,
+    'veui-number-input': NumberInput,
+    'veui-checkbox': Checkbox,
     'veui-icon': Icon
   },
   data () {
     return {
       modalDialogVisible: false,
+      customDialogVisible: false,
+      asContentWidth: false,
+      customedWidth: 500,
       fullscreenDialogVisible: false,
       autoDialogVisible: false,
       titlelessDialogVisible: false,
@@ -509,5 +546,11 @@ section {
   .resizable {
     resize: both;
   }
+}
+
+.demo-custom-width-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 </style>
