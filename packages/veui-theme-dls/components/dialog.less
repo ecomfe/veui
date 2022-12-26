@@ -5,10 +5,13 @@
     @padding-x: @dls-dialog-padding-x * 2;
 
     --internal-veui-dialog-ui-width: @ui-width;
+    --internal-veui-dialog-content-fallback: calc(
+      var(--internal-veui-dialog-ui-width) - @padding-x
+    );
     --internal-veui-dialog-width: calc(
       var(
           --veui-dialog-content-width,
-          calc(var(--internal-veui-dialog-ui-width) - @padding-x)
+          var(--internal-veui-dialog-content-fallback)
         ) + @padding-x
     );
     width: var(--veui-dialog-width, var(--internal-veui-dialog-width));
