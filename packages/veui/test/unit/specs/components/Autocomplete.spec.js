@@ -70,6 +70,8 @@ const debugInBrowser = {
 }
 
 describe('components/Autocomplete', function () {
+  this.timeout(10000)
+
   it('should render datasource correctly & open dropdown on focus', async () => {
     let wrapper = mount(
       {
