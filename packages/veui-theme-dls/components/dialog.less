@@ -4,17 +4,17 @@
   .dialog-width(@ui-width) {
     @padding-x: @dls-dialog-padding-x * 2;
 
-    --internal-veui-dialog-ui-width: @ui-width;
-    --internal-veui-dialog-content-fallback: calc(
-      var(--internal-veui-dialog-ui-width) - @padding-x
+    --internal-dls-dialog-ui-width: @ui-width;
+    --internal-dls-dialog-content-fallback: calc(
+      var(--internal-dls-dialog-ui-width) - @padding-x
     );
-    --internal-veui-dialog-width: calc(
+    --internal-dls-dialog-width: calc(
       var(
-          --veui-dialog-content-width,
-          var(--internal-veui-dialog-content-fallback)
+          --dls-dialog-content-width,
+          var(--internal-dls-dialog-content-fallback)
         ) + @padding-x
     );
-    width: var(--veui-dialog-width, var(--internal-veui-dialog-width));
+    width: var(--dls-dialog-width, var(--internal-dls-dialog-width));
   }
 
   @transition-offset: 10px;
