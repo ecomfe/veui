@@ -422,7 +422,7 @@ describe('components/Dialog', function () {
         },
         computed: {
           widthProp () {
-            return `--veui-dialog-${this.asContentWidth ? 'content-' : ''}width`
+            return `--dls-dialog-${this.asContentWidth ? 'content-' : ''}width`
           }
         }
       },

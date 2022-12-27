@@ -69,7 +69,7 @@
       outside-closable
       ui="auto"
       :overlay-style="{
-        [`--veui-dialog-${asContentWidth ? 'content-' : ''}width`]:
+        [`--dls-dialog-${asContentWidth ? 'content-' : ''}width`]:
           customedWidth ? `${customedWidth}px` : ''
       }"
     >
