@@ -20,6 +20,10 @@
 
   .@{veui-prefix}-trigger {
     &:extend(._veui-select-trigger all);
+
+    .@{veui-prefix}-input-before {
+      flex: 0 1 auto; // TODO 后续看下加到 input 上更好？
+    }
   }
 
   &-pane-wrap {

@@ -309,7 +309,7 @@ export default {
           position: 'inline',
           options: [
             {
-              label: '威海',
+              label: '测试很长很长很长很长很长很长很长很长很长很长很长的威海',
               value: '威海'
             },
             {
