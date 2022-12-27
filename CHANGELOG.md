@@ -1,4 +1,4 @@
-## 2.11.1
+## 2.11.1 (2022-12-27)
 
 ### 🐞 问题修复
 
@@ -8,7 +8,7 @@
 
 ### 🧪 实验性功能
 
-- [+] 为 `Dialog` 组件新增了实验性的 CSS 属性 `--dls-dialog-width` 和 `--dls-dialog-content-width` 来更加精细地指定宽度。<!-- #Dialog -->
+- [+] 为 `Dialog` 组件新增了实验性的 CSS 自定义属性 `--dls-dialog-width` 和 `--dls-dialog-content-width` 来更加精细地指定宽度。<!-- #Dialog -->
 
 ## 2.11.0 "👻 Ghost" (2022-12-13)
 
