@@ -121,6 +121,20 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
 
   return {
     uiTypes: [type],
+    data () {
+      return {
+        slotReactiveHelpers__: fields.reduce((slots, field) => {
+          if (Array.isArray(field) && field.length === 3) {
+            // eslint-disable-next-line no-unused-vars
+            let [_, mapper, slotName] = field
+            if (typeof mapper === 'function') {
+              slots[slotName] = true
+            }
+          }
+          return slots
+        }, {})
+      }
+    },
     computed: {
       [parentKey] () {
         return getTypedAncestor(this, parentType, direct)
@@ -134,12 +148,20 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
           (proxy, field) => {
             if (typeof field === 'string') {
               proxy[field] = this[field]
-            } else if (Array.isArray(field) && field.length === 2) {
-              let [key, mapper] = field
+            } else if (Array.isArray(field) && field.length >= 2) {
+              let [key, mapper, slotName] = field
               if (typeof mapper === 'string') {
                 proxy[key] = this[mapper]
               } else if (typeof mapper === 'function') {
-                proxy[key] = mapper(this)
+                const fn = mapper(this)
+                proxy[key] = slotName
+                  ? (...args) => {
+                    // 通过访问响应式变量，让所有依赖的slots的地方得到通知
+                    // eslint-disable-next-line no-void, space-unary-ops
+                    void this.slotReactiveHelpers__[slotName]
+                    return fn(...args)
+                  }
+                  : fn
               } else {
                 throw new Error(
                   '[veui-coupled-child] `fields` mapper must either be a string or a function'
@@ -147,7 +169,7 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
               }
             } else {
               throw new Error(
-                '[veui-coupled-child] `fields` item must either be a string, or a tuple of length 2.'
+                '[veui-coupled-child] `fields` item must either be a string, or a tuple of length 2 or 3.'
               )
             }
 
@@ -168,6 +190,22 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
 
       this.childId = uniqueId(`veui-${type}-`)
       parent.addChild(this)
+    },
+    updated () {
+      const prevSlots = this._prevScoped || {}
+      Object.keys(this.slotReactiveHelpers__).forEach((slotName) => {
+        if (prevSlots[slotName] !== this.$scopedSlots[slotName]) {
+          this.triggerSlotChange(slotName)
+        }
+      })
+      this._prevScoped = { ...this.$scopedSlots }
+    },
+    methods: {
+      triggerSlotChange (slotName) {
+        // toggle 变量，触发更新
+        this.slotReactiveHelpers__[slotName] =
+          !this.slotReactiveHelpers__[slotName]
+      }
     },
     destroyed () {
       let parent = this[parentKey]

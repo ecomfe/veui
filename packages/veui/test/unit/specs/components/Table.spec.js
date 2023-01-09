@@ -2999,4 +2999,115 @@ describe('components/Table', function () {
 
     wrapper.destroy()
   })
+
+  it('should switch grouped columns correctly.', async () => {
+    const spy = sinon.spy(console, 'error')
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-column': Column
+        },
+        template: `
+        <veui-table :data="data">
+          <veui-column field="id" title="id" width="120"/>
+          <veui-column
+            v-if="exist"
+            field="operation"
+            title="第二列"
+            :group="isGroup"
+          >
+            <template #default>
+              <veui-column
+                v-if="isGroup"
+                field="op1"
+                title="Op1"
+              />
+              <veui-column
+                v-if="isGroup"
+                field="op2"
+                title="Op2"
+              />
+              <div v-if="!isGroup">1</div>
+            </template>
+          </veui-column>
+        </veui-table>`,
+        data () {
+          return {
+            exist: false,
+            isGroup: false,
+            data: [{}, {}]
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    await wait(0)
+
+    const { vm } = wrapper
+    vm.exist = true
+    await wait(0)
+    vm.isGroup = true
+    await wait(0)
+    expect(spy.called).to.equal(false)
+    spy.restore()
+    wrapper.destroy()
+  })
+
+  it('should handle scopedSlots of Columns correctly.', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-column': Column
+        },
+        template: `
+        <veui-table
+          :data="data"
+          key-field="id"
+        >
+          <veui-column
+            field="operation"
+            title="Operations"
+          >
+            <template v-if="swNo" #default="{ index }">
+              <div class="table-op" ui="text">OP1:{{ index }}</div>
+            </template>
+
+            <template v-else #default="{ index }">
+              <div class="table-op" ui="text">OP0:{{ index }}</div>
+            </template>
+          </veui-column>
+        </veui-table>`,
+        data () {
+          return {
+            swNo: 0,
+            data: [{}, {}]
+          }
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    await wait(0)
+
+    const { vm } = wrapper
+    vm.swNo ^= 1
+    await wait(0)
+    expect(wrapper.find('.table-op').text()).to.contains(`OP${vm.swNo}:`)
+    vm.swNo ^= 1
+    await wait(0)
+    expect(wrapper.find('.table-op').text()).to.contains(`OP${vm.swNo}:`)
+    vm.swNo ^= 1
+    await wait(0)
+    expect(wrapper.find('.table-op').text()).to.contains(`OP${vm.swNo}:`)
+    wrapper.destroy()
+  })
 })

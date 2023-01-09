@@ -247,56 +247,58 @@ export default {
       let item = subItem || table.data[index]
       let { realColumns } = table
 
-      return realColumns.map((col, i) => {
-        let data = this.getCellSpan(col)
-        return data ? (
-          <td
-            class={{
-              [this.$c(`table-cell-${col.align}`)]: !!col.align,
-              [this.$c(`table-cell-sticky-${col.fixed}`)]:
-                table.scrollableX && col.fixed,
-              [this.$c(`table-cell-sticky-edge`)]:
-                table.scrollableX && col.edge,
-              [this.$c('table-cell-first')]:
-                i === 0 && !table.selectable && !table.expandable,
-              [this.$c('table-cell-last')]: i === realColumns.length - 1
-            }}
-            style={
-              table.scrollableX && col.fixed
-                ? {
-                  [col.fixed]:
-                      col.bodyOffset != null ? col.bodyOffset : col.offset
-                }
-                : null
-            }
-            role="cell"
-            {...data}
-          >
-            <div class={this.$c('table-cell')}>
-              <div
-                class={this.$c('table-cell-content')}
-                {...(col.tooltip
+      return realColumns
+        .filter((col) => !col.group)
+        .map((col, i) => {
+          let data = this.getCellSpan(col)
+          return data ? (
+            <td
+              class={{
+                [this.$c(`table-cell-${col.align}`)]: !!col.align,
+                [this.$c(`table-cell-sticky-${col.fixed}`)]:
+                  table.scrollableX && col.fixed,
+                [this.$c(`table-cell-sticky-edge`)]:
+                  table.scrollableX && col.edge,
+                [this.$c('table-cell-first')]:
+                  i === 0 && !table.selectable && !table.expandable,
+                [this.$c('table-cell-last')]: i === realColumns.length - 1
+              }}
+              style={
+                table.scrollableX && col.fixed
                   ? {
-                    directives: [
-                      {
-                        name: 'tooltip',
-                        value: renderTooltip(col.tooltip, item, col.field),
-                        modifiers: { overflow: true }
-                      }
-                    ]
+                    [col.fixed]:
+                        col.bodyOffset != null ? col.bodyOffset : col.offset
                   }
-                  : {})}
-              >
-                {(isSubRow ? col.renderSubRow : col.renderBody)({
-                  ...item,
-                  item,
-                  index
-                })}
+                  : null
+              }
+              role="cell"
+              {...data}
+            >
+              <div class={this.$c('table-cell')}>
+                <div
+                  class={this.$c('table-cell-content')}
+                  {...(col.tooltip
+                    ? {
+                      directives: [
+                        {
+                          name: 'tooltip',
+                          value: renderTooltip(col.tooltip, item, col.field),
+                          modifiers: { overflow: true }
+                        }
+                      ]
+                    }
+                    : {})}
+                >
+                  {(isSubRow ? col.renderSubRow : col.renderBody)({
+                    ...item,
+                    item,
+                    index
+                  })}
+                </div>
               </div>
-            </div>
-          </td>
-        ) : null
-      })
+            </td>
+          ) : null
+        })
     }
   }
 }
