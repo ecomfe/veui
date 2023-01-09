@@ -15,6 +15,7 @@ let col = useChild('table-column', 'colgroup', [
   'sortable',
   'align',
   'span',
+  'group',
   'allowedOrders',
   'desc',
   'tooltip',
@@ -25,15 +26,24 @@ let col = useChild('table-column', 'colgroup', [
   'columns',
   ['fixed', 'realFixed'],
   ['hasFoot', (vm) => () => !!(vm.$scopedSlots.foot || vm.$slots.foot)],
-  ['renderBody', renderBody],
+  ['renderBody', renderBody, 'default'],
   [
     'renderSubRow',
-    (vm) => (item) => renderSlot(vm, 'sub-row', item) || renderBody(vm)(item)
+    (vm) => (item) => renderSlot(vm, 'sub-row', item) || renderBody(vm)(item),
+    'sub-row'
   ],
-  ['renderHead', (vm) => () => renderSlot(vm, 'head') || vm.title],
-  ['renderFoot', (vm) => () => renderSlot(vm, 'foot')],
-  ['renderDesc', (vm) => (props) => renderSlot(vm, 'desc', props) || vm.desc],
-  ['renderFilter', (vm) => (props) => renderSlot(vm, 'filter', props)],
+  ['renderHead', (vm) => () => renderSlot(vm, 'head') || vm.title, 'head'],
+  ['renderFoot', (vm) => () => renderSlot(vm, 'foot'), 'foot'],
+  [
+    'renderDesc',
+    (vm) => (props) => renderSlot(vm, 'desc', props) || vm.desc,
+    'desc'
+  ],
+  [
+    'renderFilter',
+    (vm) => (props) => renderSlot(vm, 'filter', props),
+    'filter'
+  ],
   [
     'hasFilter',
     (vm) => () =>
@@ -63,6 +73,7 @@ export default {
     field: String,
     width: [String, Number],
     sortable: Boolean,
+    group: Boolean,
     align: {
       type: String,
       validator (val) {

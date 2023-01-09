@@ -410,6 +410,36 @@
       <veui-table-column width="300" title="Head" field="typeId"/>
     </veui-table>
   </section>
+  <section>
+    <h5>列类型 group 变化</h5>
+    <veui-button @click="exist = !exist">切换第二列</veui-button>
+    <veui-button @click="isGroup = !isGroup">切换第二列类型</veui-button>
+    <veui-table :data="items" key-field="id">
+      <veui-table-column field="id" title="Id"/>
+      <veui-table-column v-if="exist" field="operation" title="第二列">
+        <template #default>
+          <veui-table-column v-if="isGroup" field="op1" title="Op1"/>
+          <veui-table-column v-if="isGroup" field="op2" title="Op2"/>
+          <div v-if="!isGroup">1</div>
+        </template>
+      </veui-table-column>
+    </veui-table>
+  </section>
+  <section>
+    <h5>列 scopedSlots 动态变化</h5>
+    <veui-button @click="swNo ^= 1">switch(OP{{ swNo }})</veui-button>
+    <veui-table :data="items" key-field="id">
+      <veui-table-column field="operation" title="Operations">
+        <template v-if="swNo" #default="{ index }">
+          <veui-button ui="text">OP1:{{ index }}</veui-button>
+        </template>
+
+        <template v-else #default="{ index }">
+          <veui-button ui="text">OP0:{{ index }}</veui-button>
+        </template>
+      </veui-table-column>
+    </veui-table>
+  </section>
 </article>
 </template>
 
@@ -627,6 +657,9 @@ export default {
     return {
       filtered: null,
       s: false,
+      swNo: 0,
+      isGroup: false,
+      exist: false,
       toggled: false,
       selectable: true,
       scrollX: true,
