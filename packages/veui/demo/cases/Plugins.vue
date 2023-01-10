@@ -22,7 +22,9 @@ export default {
   },
   methods: {
     async handleButtonClick () {
-      let ok = await this.$confirm('是否确定删除？', '删除确认')
+      let ok = await this.$confirm('是否确定删除？', '删除确认', {
+        okLabel: '删除'
+      })
       if (!ok) {
         return
       }
@@ -39,7 +41,9 @@ export default {
             }
             this.removed = false
           })
-        }
+        },
+        okLabel: '恢复它',
+        cancelLabel: '不恢复它'
       })
     }
   }
