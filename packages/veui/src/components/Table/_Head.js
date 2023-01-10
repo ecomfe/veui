@@ -16,11 +16,6 @@ export default {
       filterValues: {}
     }
   },
-  methods: {
-    update () {
-      ;(this.$refs.cells || []).forEach((cell) => cell.$forceUpdate())
-    }
-  },
   render () {
     let { table } = this
     let depth = table.headerRows.length
@@ -92,8 +87,6 @@ export default {
             ) : null}
             {row.map((col) => (
               <HeadCell
-                ref="cells"
-                refInFor
                 col={col}
                 onSort={(order) => this.$emit('sort', col.field, order)}
               />
