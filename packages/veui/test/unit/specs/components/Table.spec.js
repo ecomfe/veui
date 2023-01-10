@@ -1712,7 +1712,7 @@ describe('components/Table', function () {
     head.trigger('mouseout', {
       relatedTarget: document.body
     })
-    // skip the following assert for now due to unknown failure on circle ci
+    // skip the following assert for now due to unknown failure on ci env
     // await wait(300) // v-outside has a default delay of 200ms
     // expect(box.isVisible()).to.equal(false)
 
@@ -3058,7 +3058,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should handle scopedSlots of Columns correctly.', async () => {
+  it('should update scopedSlots of Columns correctly.', async () => {
     let wrapper = mount(
       {
         components: {
@@ -3108,6 +3108,136 @@ describe('components/Table', function () {
     vm.swNo ^= 1
     await wait(0)
     expect(wrapper.find('.table-op').text()).to.contains(`OP${vm.swNo}:`)
+    wrapper.destroy()
+  })
+
+  it('should rerender head and foot slots if reactive data changes', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-column': Column
+        },
+        template: `
+        <veui-table
+          :data="data"
+          key-field="id"
+        >
+          <veui-column
+            field="id"
+            title="ID"
+          >
+            <template #head>
+              <span class="id-head">Head#{{ count }}</span>
+            </template>
+            <template #foot>
+              <span class="id-foot">Foot#{{ count }}</span>
+            </template>
+          </veui-column>
+          <veui-column
+            v-if="showName"
+            field="name"
+            title="Name"
+          >
+            <template #head>
+              <span class="name-head">Head#{{ count }}</span>
+            </template>
+            <template #foot>
+              <span class="name-foot">Foot#{{ count }}</span>
+            </template>
+            <template #desc>
+              <span class="name-desc">Desc#{{ count }}</span>
+            </template>
+          </veui-column>
+          <template v-if="showFoot" #foot>
+            <span class="tfoot">Foot#{{ count }}</span>
+          </template>
+        </veui-table>`,
+        data () {
+          return {
+            showName: false,
+            showFoot: false,
+            count: 1,
+            data: []
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+
+    await vm.$nextTick()
+
+    expect(wrapper.find('.id-head').text()).to.equal('Head#1')
+    expect(wrapper.find('.id-foot').text()).to.equal('Foot#1')
+    expect(wrapper.find('.name-head').exists()).to.equal(false)
+    expect(wrapper.find('.name-foot').exists()).to.equal(false)
+    expect(wrapper.find('.tfoot').exists()).to.equal(false)
+
+    vm.count++
+    await vm.$nextTick()
+
+    expect(wrapper.find('.id-head').text()).to.equal('Head#2')
+    expect(wrapper.find('.id-foot').text()).to.equal('Foot#2')
+    expect(wrapper.find('.name-head').exists()).to.equal(false)
+    expect(wrapper.find('.name-foot').exists()).to.equal(false)
+    expect(wrapper.find('.tfoot').exists()).to.equal(false)
+
+    vm.showName = true
+    await vm.$nextTick()
+
+    expect(wrapper.find('.id-head').text()).to.equal('Head#2')
+    expect(wrapper.find('.id-foot').text()).to.equal('Foot#2')
+    expect(wrapper.find('.name-head').text()).to.equal('Head#2')
+    expect(wrapper.find('.name-foot').text()).to.equal('Foot#2')
+    expect(wrapper.find('.tfoot').exists()).to.equal(false)
+
+    vm.count++
+    await vm.$nextTick()
+
+    expect(wrapper.find('.id-head').text()).to.equal('Head#3')
+    expect(wrapper.find('.id-foot').text()).to.equal('Foot#3')
+    expect(wrapper.find('.name-head').text()).to.equal('Head#3')
+    expect(wrapper.find('.name-foot').text()).to.equal('Foot#3')
+    expect(wrapper.find('.tfoot').exists()).to.equal(false)
+
+    vm.showFoot = true
+    await vm.$nextTick()
+
+    expect(wrapper.find('.id-head').text()).to.equal('Head#3')
+    expect(wrapper.find('.id-foot').exists()).to.equal(false)
+    expect(wrapper.find('.name-head').text()).to.equal('Head#3')
+    expect(wrapper.find('.name-foot').exists()).to.equal(false)
+    expect(wrapper.find('.tfoot').text()).to.equal('Foot#3')
+
+    vm.count++
+    await vm.$nextTick()
+
+    expect(wrapper.find('.id-head').text()).to.equal('Head#4')
+    expect(wrapper.find('.id-foot').exists()).to.equal(false)
+    expect(wrapper.find('.name-head').text()).to.equal('Head#4')
+    expect(wrapper.find('.name-foot').exists()).to.equal(false)
+    expect(wrapper.find('.tfoot').text()).to.equal('Foot#4')
+
+    const head = wrapper.findAll('th').at(1)
+    const popover = wrapper.find(Popover)
+    const box = popover.find('.veui-popover-box')
+
+    head.trigger('mouseenter')
+    await vm.$nextTick()
+
+    expect(popover.exists()).to.equal(true)
+    expect(box.exists()).to.equal(true)
+    expect(box.text()).to.equal('Desc#4')
+
+    vm.count++
+    await vm.$nextTick()
+
+    expect(box.text()).to.equal('Desc#5')
+
     wrapper.destroy()
   })
 })
