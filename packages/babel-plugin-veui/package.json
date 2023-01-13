@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-veui",
-  "version": "2.11.1",
+  "version": "2.11.2",
   "description": "Import VEUI components with ease.",
   "main": "./index.js",
   "repository": "ecomfe/veui",
