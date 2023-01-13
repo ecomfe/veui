@@ -61,6 +61,9 @@
       ]"
     />
   </section>
+  <section class="options">
+    <veui-input v-model="foot"/>
+  </section>
   <section>
     <veui-table
       ui="s compact crowded"
@@ -93,7 +96,7 @@
           <strong>总计</strong>
         </template>
       </veui-table-column>
-      <veui-table-column title="元数据" :desc="popover">
+      <veui-table-column title="元数据" :desc="pop">
         <veui-table-column
           field="typeId"
           title="类型 ID"
@@ -105,6 +108,9 @@
             <p>
               <veui-button @click="close">知道了</veui-button>
             </p>
+          </template>
+          <template #foot>
+            {{ foot }}
           </template>
         </veui-table-column>
         <veui-table-column
@@ -362,8 +368,10 @@
       <veui-table-column field="id" title="id" sortable/>
     </veui-table>
     <h3>Orders: {{ allowedOrders2 }} , Current: {{ order2 }}</h3>
-    <veui-button @click="switchDisabled">切换disabled</veui-button>
-    <veui-button @click="switchAll">切换all</veui-button>
+    <section class="options">
+      <veui-button @click="switchDisabled">切换disabled</veui-button>
+      <veui-button @click="switchAll">切换all</veui-button>
+    </section>
     <veui-table
       key-field="id"
       :data="items"
@@ -388,9 +396,11 @@
       />
       <veui-table-column field="level" title="level"/>
     </veui-table>
-    <veui-button
-      @click="toggled = !toggled"
-    >toggle type and origin</veui-button>
+    <section class="options">
+      <veui-button
+        @click="toggled = !toggled"
+      >toggle type and origin</veui-button>
+    </section>
     <veui-table key-field="id" :data="items">
       <template v-if="!toggled">
         <veui-table-column field="id" title="id1" sortable/>
@@ -412,11 +422,18 @@
   </section>
   <section>
     <h5>列类型 group 变化</h5>
-    <veui-button @click="exist = !exist">切换第二列</veui-button>
-    <veui-button @click="isGroup = !isGroup">切换第二列类型</veui-button>
+    <section class="options">
+      <veui-button @click="exist = !exist">切换第二列</veui-button>
+      <veui-button @click="isGroup = !isGroup">切换第二列类型</veui-button>
+    </section>
     <veui-table :data="items" key-field="id">
       <veui-table-column field="id" title="Id"/>
-      <veui-table-column v-if="exist" field="operation" title="第二列">
+      <veui-table-column
+        v-if="exist"
+        field="operation"
+        title="第二列"
+        :group="isGroup"
+      >
         <template #default>
           <veui-table-column v-if="isGroup" field="op1" title="Op1"/>
           <veui-table-column v-if="isGroup" field="op2" title="Op2"/>
@@ -427,7 +444,9 @@
   </section>
   <section>
     <h5>列 scopedSlots 动态变化</h5>
-    <veui-button @click="swNo ^= 1">switch(OP{{ swNo }})</veui-button>
+    <section class="options">
+      <veui-button @click="swNo ^= 1">switch(OP{{ swNo }})</veui-button>
+    </section>
     <veui-table :data="items" key-field="id">
       <veui-table-column field="operation" title="Operations">
         <template v-if="swNo" #default="{ index }">
@@ -655,6 +674,7 @@ export default {
   },
   data () {
     return {
+      foot: 'foot',
       filtered: null,
       s: false,
       swNo: 0,
@@ -742,10 +762,15 @@ export default {
       ],
       loading: false,
       popover: '这是一条补充的 Popover 信息',
-      inputFilter: ''
+      inputFilter: '',
+      count: 0,
+      tick: null
     }
   },
   computed: {
+    pop () {
+      return `${this.popover}：${this.count}`
+    },
     total () {
       return this.data.reduce((total, item) => {
         return total + item.price
@@ -767,6 +792,12 @@ export default {
     // for (let i = 0; i < 300; i++) {
     //   this.append()
     // }
+    this.tick = setInterval(() => {
+      this.count += 1
+    }, 1000)
+  },
+  beforeDestroy () {
+    clearInterval(this.tick)
   },
   methods: {
     currency,

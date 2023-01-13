@@ -472,12 +472,6 @@ export default {
     scrollableY () {
       return !!(this.realScroll.y && this.data.length)
     },
-    staleHead () {
-      return this.realColumns.some(({ hasStaleHead }) => hasStaleHead())
-    },
-    staleFoot () {
-      return this.realColumns.some(({ hasStaleFoot }) => hasStaleFoot())
-    },
     offsetLeft () {
       return this.selectColumnWidth + this.expandColumnWidth
     },
@@ -543,14 +537,6 @@ export default {
   },
   beforeDestroy () {
     this.updateScrollListeners(true)
-  },
-  updated () {
-    if (this.staleHead) {
-      this.$refs.head.update()
-    }
-    if (this.hasFoot() && this.staleFoot) {
-      this.$refs.foot.$forceUpdate()
-    }
   },
   methods: {
     updateSelectColumnWidth () {

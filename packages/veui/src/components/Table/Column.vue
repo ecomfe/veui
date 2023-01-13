@@ -53,8 +53,6 @@ let col = useChild('table-column', 'colgroup', [
     'hasFilterSlot',
     (vm) => () => !!(vm.$scopedSlots.filter || vm.$slots.filter)
   ],
-  ['hasStaleHead', (vm) => () => !!(vm.$slots.head || vm.$slots.desc)],
-  ['hasStaleFoot', (vm) => () => !!vm.$slots.foot],
   ['handleFilterChange', (vm) => vm.handleFilterChange]
 ])
 
