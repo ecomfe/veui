@@ -10,6 +10,8 @@ describe('managers/confirm', function () {
     let component = confirm.create({
       title: 'Title',
       content: 'Content',
+      okLabel: 'OkLabel',
+      cancelLabel: 'CancelLabel',
       ok () {
         isOk = true
       },
@@ -27,6 +29,8 @@ describe('managers/confirm', function () {
     expect(getEl('.veui-dialog-content-body').textContent).to.equal('Content')
 
     let buttons = getButtons()
+    expect(buttons[0].textContent).to.contains('OkLabel')
+    expect(buttons[1].textContent).to.contains('CancelLabel')
     buttons[0].dispatchEvent(new MouseEvent('click'))
     await component.$nextTick()
 
@@ -45,6 +49,8 @@ describe('managers/confirm', function () {
     let isOk = false
     let isCancel = false
     confirm.show('Content', 'Title', {
+      okLabel: 'OkLabel',
+      cancelLabel: 'CancelLabel',
       open: true,
       ok () {
         isOk = true
@@ -61,6 +67,8 @@ describe('managers/confirm', function () {
     expect(getEl('.veui-dialog-content-body').textContent).to.equal('Content')
 
     let buttons = getButtons()
+    expect(buttons[0].textContent).to.contains('OkLabel')
+    expect(buttons[1].textContent).to.contains('CancelLabel')
     buttons[0].dispatchEvent(new MouseEvent('click'))
     await wait(0)
 

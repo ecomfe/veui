@@ -7,6 +7,7 @@
   <section>
     <button v-if="!removed" @click="handleButtonClick">删除我</button>
     <button @click="handleButton2Click">👈🏻恢复它</button>
+    <button @click="handlePromptInput">prompt输入</button>
   </section>
 </article>
 </template>
@@ -44,6 +45,16 @@ export default {
         },
         okLabel: '恢复它',
         cancelLabel: '不恢复它'
+      })
+    },
+    async handlePromptInput () {
+      let input = await this.$prompt('请输入！', 'PROMPT', {
+        okLabel: '输入',
+        cancelLabel: '不输入',
+        value: '初始值'
+      })
+      this.$alert(`prompt输入内容为:${input}`, 'title', {
+        okLabel: '收到'
       })
     }
   }
