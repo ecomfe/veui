@@ -19,7 +19,13 @@ export class ConfirmManager extends SimpleDialog {
           ConfirmBox,
           {
             props: {
-              ...pick(data, ['title', 'type', 'overlayClass']),
+              ...pick(data, [
+                'title',
+                'type',
+                'overlayClass',
+                'okLabel',
+                'cancelLabel'
+              ]),
               open: this.open,
               loading: this.loading,
               beforeClose: () => false

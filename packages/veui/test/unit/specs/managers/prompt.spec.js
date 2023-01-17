@@ -10,6 +10,8 @@ describe('managers/prompt', function () {
     let component = prompt.create({
       title: 'Title',
       content: 'Content',
+      okLabel: 'OkLabel',
+      cancelLabel: 'CancelLabel',
       ok (value) {
         expect(value).to.equal('123')
         isOk = true
@@ -30,6 +32,8 @@ describe('managers/prompt', function () {
     input.dispatchEvent(new InputEvent('input'))
     await component.$nextTick()
     let buttons = getButtons()
+    expect(buttons[0].textContent).to.contains('OkLabel')
+    expect(buttons[1].textContent).to.contains('CancelLabel')
     buttons[0].dispatchEvent(new MouseEvent('click'))
     await component.$nextTick()
 
@@ -49,6 +53,8 @@ describe('managers/prompt', function () {
     prompt
       .show('Content', 'Title', {
         open: true,
+        okLabel: 'OkLabel',
+        cancelLabel: 'CancelLabel',
         ok () {
           isOk = true
         },
@@ -69,6 +75,9 @@ describe('managers/prompt', function () {
     input.dispatchEvent(new InputEvent('input'))
     await wait(0)
     let buttons = getButtons()
+    expect(buttons[0].textContent).to.contains('OkLabel')
+    expect(buttons[1].textContent).to.contains('CancelLabel')
+
     buttons[0].dispatchEvent(new MouseEvent('click'))
     await wait(0)
 

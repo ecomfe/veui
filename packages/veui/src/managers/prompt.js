@@ -6,12 +6,12 @@ import { pick, isFunction, noop } from 'lodash'
 export class PromptManager extends SimpleDialog {
   createComponent (data) {
     const manager = this
-    data.value = data.value || ''
     return new Vue({
       data: {
         open: false,
         loading: false,
-        invalid: false
+        invalid: false,
+        value: data.value || ''
       },
       mounted () {
         this.open = true
@@ -21,17 +21,24 @@ export class PromptManager extends SimpleDialog {
           PromptBox,
           {
             props: {
-              ...pick(data, ['title', 'type', 'value', 'overlayClass']),
+              ...pick(data, [
+                'title',
+                'type',
+                'overlayClass',
+                'okLabel',
+                'cancelLabel'
+              ]),
+              value: this.value,
               open: this.open,
               invalid: this.invalid,
               loading: this.loading,
               beforeClose: () => false
             },
             on: {
-              ok: () => data.ok(data.value),
+              ok: () => data.ok(this.value),
               cancel: data.cancel,
               input: (val) => {
-                data.value = val
+                this.value = val
               },
               afterclose: () => {
                 manager.removeComponent(this)

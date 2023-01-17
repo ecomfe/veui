@@ -10,6 +10,7 @@ describe('managers/alert', function () {
       title: 'Title',
       content: 'Content',
       type: 'error',
+      okLabel: 'OkLabel',
       ok () {
         isClicked = true
       }
@@ -21,6 +22,10 @@ describe('managers/alert', function () {
     expect(alertBox.type).to.equal('error')
     expect(getEl('.veui-alert-box-title').textContent).to.equal('Title')
     expect(getEl('.veui-alert-box-content').textContent).to.equal('Content')
+    expect(
+      getEl('.veui-dialog-content-foot .veui-button .veui-button-native span')
+        .textContent
+    ).to.contains('OkLabel')
 
     getEl('.veui-dialog-content-foot')
       .querySelector('.veui-button')
@@ -36,6 +41,7 @@ describe('managers/alert', function () {
     let isClicked = false
     alert.success('Content', 'Title', {
       open: true,
+      okLabel: 'OkLabel',
       ok () {
         isClicked = true
       }
@@ -44,6 +50,10 @@ describe('managers/alert', function () {
 
     expect(getEl('.veui-alert-box-title').textContent).to.equal('Title')
     expect(getEl('.veui-alert-box-content').textContent).to.equal('Content')
+    expect(
+      getEl('.veui-dialog-content-foot .veui-button .veui-button-native span')
+        .textContent
+    ).to.contains('OkLabel')
 
     getEl('.veui-dialog-content-foot')
       .querySelector('.veui-button')
