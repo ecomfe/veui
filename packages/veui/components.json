@@ -396,6 +396,10 @@
     "path": "Span.vue"
   },
   {
+    "name": "Stack",
+    "path": "Stack.vue"
+  },
+  {
     "name": "Steps",
     "path": "Steps.vue"
   },

@@ -412,3 +412,9 @@ export function pull (array, target) {
     array.splice(index, 1)
   }
 }
+
+export function getEnumValidator (values) {
+  return function validator (val) {
+    return val == null || values.indexOf(val) >= 0
+  }
+}

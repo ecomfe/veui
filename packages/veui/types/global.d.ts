@@ -65,6 +65,7 @@ declare module '@vue/runtime-core' {
     VeuiSidenav: Components.Sidenav
     VeuiSlider: Components.Slider
     VeuiSpan: Components.Span
+    VeuiStack: Components.Stack
     VeuiSteps: Components.Steps
     VeuiSwitch: Components.Switch
     VeuiTab: Components.Tab

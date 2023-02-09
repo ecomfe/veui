@@ -56,6 +56,7 @@ export declare const SearchBox: Components.SearchBox
 export declare const Select: Components.Select
 export declare const Slider: Components.Slider
 export declare const Span: Components.Span
+export declare const Stack: Components.Stack
 export declare const Steps: Components.Steps
 export declare const Switch: Components.Switch
 export declare const Tab: Components.Tab
