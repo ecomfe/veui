@@ -62,6 +62,7 @@ import ConfigProvider from './ConfigProvider'
 import Layout from './Layout'
 import Message from './Message'
 import Empty from './Empty'
+import Stack from './Stack'
 
 export default [
   {
@@ -392,6 +393,11 @@ export default [
     path: '/slider',
     name: 'Slider',
     component: Slider
+  },
+  {
+    path: '/stack',
+    name: 'Stack',
+    component: Stack
   },
   {
     path: '/steps',
