@@ -77,3 +77,96 @@ export declare const Layout: Components.Layout
 export declare const Sidebar: Components.Sidebar
 export declare const Sidenav: Components.Sidenav
 export declare const Empty: Components.Empty
+
+interface DialogManagerOptions {
+  overlayClass: string | Array<string> | Record<string, boolean>
+  ok(): Promise<void>
+}
+
+interface Types {
+  type: 'success' | 'warning' | 'info' | 'error'
+}
+
+declare class AlertDialogManager {
+  show(
+    content: string,
+    title: string,
+    options?: DialogManagerOptions & Types
+  ): Promise<void>
+
+  success(
+    content: string,
+    title: string,
+    options?: DialogManagerOptions
+  ): Promise<void>
+
+  info(
+    content: string,
+    title: string,
+    options?: DialogManagerOptions
+  ): Promise<void>
+
+  error(
+    content: string,
+    title: string,
+    options?: DialogManagerOptions
+  ): Promise<void>
+
+  warn(
+    content: string,
+    title: string,
+    options?: DialogManagerOptions
+  ): Promise<void>
+}
+
+declare class ConfirmDialogManager<R> {
+  show(
+    content: string,
+    title: string,
+    options?: DialogManagerOptions & {
+      cancel(): Promise<void>
+    }
+  ): Promise<R>
+}
+
+interface ToastOptions {
+  duration?: number
+}
+
+declare class ToastDialogManager {
+  show(message: string, options?: ToastOptions & Types): void
+
+  success(message: string, options?: ToastOptions): void
+
+  info(message: string, options?: ToastOptions): void
+
+  error(message: string, options?: ToastOptions): void
+
+  warn(message: string, options?: ToastOptions): void
+}
+
+export declare const alert: AlertDialogManager
+export declare const confirm: ConfirmDialogManager<boolean>
+export declare const prompt: ConfirmDialogManager<string | null>
+export declare const toast: ToastDialogManager
+
+interface RuleOptions {
+  validate(value: any, ruleValue: any): boolean
+  message: string
+  priority: number
+}
+
+declare class RuleManager {
+  addRule(name: string, ruleOptions: RuleOptions): void
+}
+
+export declare const validation: RuleManager
+
+declare class ConfigManager {
+  defaults(key: string, val: any, ns?: string): void
+  // eslint-disable-next-line no-dupe-class-members
+  defaults(value: Record<string, any>, ns?: string): void
+}
+
+export declare const config: ConfigManager
+export declare const ui: ConfigManager
