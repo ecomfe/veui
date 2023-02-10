@@ -10,7 +10,7 @@
   @dls-spacing-7: 40px;
 
   --internal-veui-stack-gap: var(--dls-stack-gap, 0);
-  display: flow-root;
+  display: flex;
 
   &-gap-xxs {
     --internal-veui-stack-gap: @dls-spacing-1;
@@ -41,7 +41,17 @@
   }
 
   &-inline {
-    display: inline-block;
+    display: inline-flex;
+  }
+
+  &-inner {
+    --dls-stack-gap: 0;
+    display: flex;
+    flex-grow: 1;
+
+    & > * {
+      flex: 0 0 auto;
+    }
   }
 
   &-wrap > &-inner {
@@ -86,15 +96,6 @@
 
   &-inner-justify-space-between {
     justify-content: space-between;
-  }
-
-  &-inner {
-    --dls-stack-gap: 0;
-    display: flex;
-
-    & > * {
-      flex: 0 0 auto;
-    }
   }
 
   &-gap&-row > &-inner,
