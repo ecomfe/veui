@@ -9,6 +9,7 @@
 >
   <input
     ref="box"
+    :class="$c('checkbox-input')"
     type="checkbox"
     v-bind="attrs"
     :indeterminate.prop="indeterminate"
