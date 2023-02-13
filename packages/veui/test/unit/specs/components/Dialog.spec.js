@@ -8,7 +8,7 @@ config.stubs.transition = false
 describe('components/Dialog', function () {
   this.timeout(10000)
 
-  it('should support `sync` modifier for prop `open`.', async () => {
+  it('should support `sync` modifier for prop `open`', async () => {
     let wrapper = mount({
       components: {
         'veui-dialog': Dialog
@@ -83,7 +83,7 @@ describe('components/Dialog', function () {
     wrapper.destroy()
   })
 
-  it('should support async `before-close` function prop.', async () => {
+  it('should support async `before-close` function prop', async () => {
     let wrapper = mount({
       components: {
         'veui-dialog': Dialog
@@ -131,7 +131,7 @@ describe('components/Dialog', function () {
     wrapper.destroy()
   })
 
-  it('should support customized modal property correctly.', async () => {
+  it('should support customized modal property correctly', async () => {
     let wrapper = mount(Dialog, {
       propsData: {
         modal: false,
@@ -155,7 +155,7 @@ describe('components/Dialog', function () {
     wrapper.destroy()
   })
 
-  it('should render slot correctly.', () => {
+  it('should render slot correctly', () => {
     let wrapper = mount(Dialog, {
       sync: false,
       propsData: {
@@ -230,7 +230,7 @@ describe('components/Dialog', function () {
     wrapper.destroy()
   })
 
-  it('should make prop `open` fully controlled.', async () => {
+  it('should make prop `open` fully controlled', async () => {
     let wrapper = mount({
       data () {
         return {

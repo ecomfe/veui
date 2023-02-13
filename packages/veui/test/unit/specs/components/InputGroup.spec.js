@@ -6,7 +6,7 @@ import InputGroup from '@/components/InputGroup'
 describe('components/Span', function () {
   this.timeout(10000)
 
-  it('should render default slot correctly.', () => {
+  it('should render default slot correctly', () => {
     let wrapper = mount(InputGroup, {
       sync: false,
       slots: {

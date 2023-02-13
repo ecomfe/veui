@@ -34,7 +34,7 @@ describe('components/CheckboxGroup', function () {
     wrapper.destroy()
   })
 
-  it('should handle checked prop with `null` value.', (done) => {
+  it('should handle checked prop with `null` value', (done) => {
     const wrapper = mount(
       {
         components: {
@@ -68,7 +68,7 @@ describe('components/CheckboxGroup', function () {
     wrapper.findAll('input[type="checkbox"]').at(0).trigger('change')
   })
 
-  it('should make prop `value` fully controlled.', async () => {
+  it('should make prop `value` fully controlled', async () => {
     const wrapper = mount(
       {
         components: {
@@ -104,7 +104,7 @@ describe('components/CheckboxGroup', function () {
     wrapper.destroy()
   })
 
-  it('should handle exclusive items correctly.', async () => {
+  it('should handle exclusive items correctly', async () => {
     const wrapper = mount(
       {
         components: {
@@ -171,7 +171,7 @@ describe('components/CheckboxGroup', function () {
     wrapper.destroy()
   })
 
-  it('should handle empty value correctly.', async () => {
+  it('should handle empty value correctly', async () => {
     const wrapper = mount(
       {
         components: {
@@ -221,7 +221,7 @@ describe('components/CheckboxGroup', function () {
     wrapper.destroy()
   })
 
-  it('should handle disabled desc correctly.', async () => {
+  it('should handle disabled desc correctly', async () => {
     const wrapper = mount(
       {
         components: {

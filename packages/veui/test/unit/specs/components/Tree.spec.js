@@ -590,7 +590,7 @@ describe('components/Tree', function () {
     }
   })
 
-  it('should handle disabled items correctly.', async () => {
+  it('should handle disabled items correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -718,7 +718,7 @@ describe('components/Tree', function () {
     }
   })
 
-  it('should handle downwards mergeChecked correctly.', async () => {
+  it('should handle downwards mergeChecked correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -780,7 +780,7 @@ describe('components/Tree', function () {
     }
   })
 
-  it('should handle upwards mergeChecked correctly.', async () => {
+  it('should handle upwards mergeChecked correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -856,7 +856,7 @@ describe('components/Tree', function () {
     }
   })
 
-  it('should handle keep-all mergeChecked correctly.', async () => {
+  it('should handle keep-all mergeChecked correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -945,7 +945,7 @@ describe('components/Tree', function () {
     }
   })
 
-  it('should handle include-indeterminate correctly.', async () => {
+  it('should handle include-indeterminate correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -1049,7 +1049,7 @@ describe('components/Tree', function () {
     }
   })
 
-  it('should handle groups without value correctly.', async () => {
+  it('should handle groups without value correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -1123,7 +1123,7 @@ describe('components/Tree', function () {
     }
   })
 
-  it('should handle imcomplete data between keep-all, upwards and downwards strategies correctly.', async () => {
+  it('should handle imcomplete data between keep-all, upwards and downwards strategies correctly', async () => {
     let wrapper = mount(
       {
         components: {

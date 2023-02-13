@@ -2,7 +2,7 @@ import Progress from '@/components/Progress'
 import { wait, mount } from '../../../utils'
 
 describe('components/Progress', function () {
-  it('should handle value/min/max prop correctly.', async () => {
+  it('should handle value/min/max prop correctly', async () => {
     let wrapper = mount({
       components: {
         'veui-progress': Progress
@@ -40,7 +40,7 @@ describe('components/Progress', function () {
     wrapper.destroy()
   })
 
-  it('should handle desc/decimalPlace prop correctly.', async () => {
+  it('should handle desc/decimalPlace prop correctly', async () => {
     let wrapper = mount({
       components: {
         'veui-progress': Progress
@@ -79,7 +79,7 @@ describe('components/Progress', function () {
     wrapper.destroy()
   })
 
-  it('should handle status/autosucceed prop correctly.', async () => {
+  it('should handle status/autosucceed prop correctly', async () => {
     let wrapper = mount({
       components: {
         'veui-progress': Progress

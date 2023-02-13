@@ -642,7 +642,7 @@ describe('components/Cascader/Cascader', function () {
     wrapper.destroy()
   })
 
-  it('should handle disabled parents correctly.', async () => {
+  it('should handle disabled parents correctly', async () => {
     let wrapper = mount({
       components: {
         'veui-cascader': Cascader
@@ -673,7 +673,7 @@ describe('components/Cascader/Cascader', function () {
     wrapper.destroy()
   })
 
-  it('should handle load prop correctly.', async () => {
+  it('should handle load prop correctly', async () => {
     let resolveFn
     let wrapper = mount({
       components: {

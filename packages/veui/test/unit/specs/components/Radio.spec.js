@@ -7,7 +7,7 @@ import { expectFieldError } from '../../../utils'
 describe('components/Radio', function () {
   this.timeout(10000)
 
-  it('should handle value prop with `null` value.', (done) => {
+  it('should handle value prop with `null` value', (done) => {
     let wrapper = mount(Radio, {
       propsData: {
         value: null
@@ -25,7 +25,7 @@ describe('components/Radio', function () {
     wrapper.find('input').trigger('change')
   })
 
-  it('should update checked/model value before change event is fired.', (done) => {
+  it('should update checked/model value before change event is fired', (done) => {
     let wrapper = mount({
       components: {
         'veui-radio': Radio
@@ -240,7 +240,7 @@ describe('components/Radio', function () {
     wrapper.destroy()
   })
 
-  it('should apply validations correctly when using input(instance)/blur(native) as triggers.', async () => {
+  it('should apply validations correctly when using input(instance)/blur(native) as triggers', async () => {
     const ruleErr = 'required'
     const valiErr = 'gender出错啦'
     const validators = [

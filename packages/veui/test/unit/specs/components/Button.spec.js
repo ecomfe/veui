@@ -272,7 +272,7 @@ describe('components/Button', function () {
     ui.set('button.icons', {})
   })
 
-  it('should emit click before native form submit triggering.', async () => {
+  it('should emit click before native form submit triggering', async () => {
     let order = []
     const wrapper = mount(
       {

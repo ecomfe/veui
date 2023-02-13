@@ -14,7 +14,7 @@ describe('utils/datasource', function () {
     }
   ]
 
-  it('should walk items correctly.', () => {
+  it('should walk items correctly', () => {
     let count = 0
     walk(items, () => count++)
     expect(count).to.be.equal(6)
@@ -56,7 +56,7 @@ describe('utils/datasource', function () {
     })
   })
 
-  it('should map items correctly.', () => {
+  it('should map items correctly', () => {
     let result = mapDatasource(items, ({ l }) => ({ v: l, l }))
     let count = 0
     walk(result, ({ v, l }) => {

@@ -242,7 +242,7 @@ describe('components/Textarea', function () {
     wrapper.destroy()
   })
 
-  it('should apply validations correctly when using input(instance)/blur(native) as triggers.', async () => {
+  it('should apply validations correctly when using input(instance)/blur(native) as triggers', async () => {
     const ruleErr = 'required'
     const valiErr = 'gender出错啦'
     const validators = [

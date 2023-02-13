@@ -21,7 +21,7 @@ let routes = [
 describe('components/Breadcrumb', function () {
   this.timeout(10000)
 
-  it('should handle routes prop with `null` value.', () => {
+  it('should handle routes prop with `null` value', () => {
     let wrapper = mount(Breadcrumb, {
       propsData: {
         routes: undefined
@@ -32,7 +32,7 @@ describe('components/Breadcrumb', function () {
     wrapper.destroy()
   })
 
-  it('should render label correctly.', () => {
+  it('should render label correctly', () => {
     let wrapper = mount(Breadcrumb, {
       propsData: {
         routes
@@ -46,7 +46,7 @@ describe('components/Breadcrumb', function () {
     wrapper.destroy()
   })
 
-  it('should render item slot correctly.', () => {
+  it('should render item slot correctly', () => {
     let wrapper = mount(Breadcrumb, {
       propsData: {
         routes
@@ -67,7 +67,7 @@ describe('components/Breadcrumb', function () {
     wrapper.destroy()
   })
 
-  it('should render separator slot correctly.', () => {
+  it('should render separator slot correctly', () => {
     let wrapper = mount(Breadcrumb, {
       propsData: {
         routes
@@ -80,7 +80,7 @@ describe('components/Breadcrumb', function () {
     expect(wrapper.find('.test-separator').text()).to.equal('--')
   })
 
-  it('should set the default type of the last route to `text`.', () => {
+  it('should set the default type of the last route to `text`', () => {
     let wrapper = mount(Breadcrumb, {
       propsData: {
         routes
@@ -90,7 +90,7 @@ describe('components/Breadcrumb', function () {
     expect(wrapper.findAll(BreadcrumbItem).at(2).props('type')).to.equal('text')
   })
 
-  it('should handle `redirect` event correctly.', () => {
+  it('should handle `redirect` event correctly', () => {
     let wrapper = mount(Breadcrumb, {
       propsData: {
         routes

@@ -4,7 +4,7 @@ import Span from '@/components/Span'
 describe('components/Span', function () {
   this.timeout(10000)
 
-  it('should support customized ui correctly.', async () => {
+  it('should support customized ui correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -35,7 +35,7 @@ describe('components/Span', function () {
     wrapper.destroy()
   })
 
-  it('should render default slot correctly.', () => {
+  it('should render default slot correctly', () => {
     let wrapper = mount(
       {
         components: {

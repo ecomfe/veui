@@ -18,7 +18,7 @@ describe('components/Slider', function () {
     wrapper.destroy()
   })
 
-  it('should handle disabled prop correctly.', () => {
+  it('should handle disabled prop correctly', () => {
     let wrapper = mount(Slider, {
       propsData: {
         disabled: true,
@@ -30,7 +30,7 @@ describe('components/Slider', function () {
     wrapper.destroy()
   })
 
-  it('should handle readonly prop correctly.', () => {
+  it('should handle readonly prop correctly', () => {
     let wrapper = mount(Slider, {
       propsData: {
         readonly: true,
@@ -55,7 +55,7 @@ describe('components/Slider', function () {
     expect(obj.left).to.equal('100%')
   })
 
-  it('should display range correctly.', async () => {
+  it('should display range correctly', async () => {
     let wrapper = mount(Slider, {
       propsData: {
         max: 100,
@@ -70,7 +70,7 @@ describe('components/Slider', function () {
     expect(getStyle(obj.at(1).element).left).to.equal('30%')
   })
 
-  it('should display mark correctly.', async () => {
+  it('should display mark correctly', async () => {
     let wrapper = mount(Slider, {
       propsData: {
         max: 100,
@@ -85,7 +85,7 @@ describe('components/Slider', function () {
     expect(obj.length).to.equal(11)
   })
 
-  it('should make prop `value` fully controlled.', async () => {
+  it('should make prop `value` fully controlled', async () => {
     let wrapper = mount(Slider, {
       propsData: {
         max: 100,

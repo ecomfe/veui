@@ -7,7 +7,7 @@ import { wait } from '../../../utils'
 describe('components/Transfer', function () {
   this.timeout(10000)
 
-  it('should handle datasource change correctly.', async () => {
+  it('should handle datasource change correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -51,7 +51,7 @@ describe('components/Transfer', function () {
     wrapper.destroy()
   })
 
-  it('should handle selected change correctly.', async () => {
+  it('should handle selected change correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -156,7 +156,7 @@ describe('components/Transfer', function () {
     }
   ]
 
-  it('should generate selected tree correctly.', () => {
+  it('should generate selected tree correctly', () => {
     let wrapper = mount(
       {
         components: {
@@ -223,7 +223,7 @@ describe('components/Transfer', function () {
     wrapper.destroy()
   })
 
-  it('should select all and remove all correctly.', () => {
+  it('should select all and remove all correctly', () => {
     let wrapper = mount(
       {
         components: {
@@ -266,7 +266,7 @@ describe('components/Transfer', function () {
     wrapper.destroy()
   })
 
-  it('should handle select and remove correctly.', async () => {
+  it('should handle select and remove correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -306,7 +306,7 @@ describe('components/Transfer', function () {
     wrapper.destroy()
   })
 
-  it('should make `selected` prop fully controlled.', async () => {
+  it('should make `selected` prop fully controlled', async () => {
     let wrapper = mount(
       {
         components: {
@@ -341,7 +341,7 @@ describe('components/Transfer', function () {
     wrapper.destroy()
   })
 
-  it('should select and remove group correctly.', async () => {
+  it('should select and remove group correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -420,7 +420,7 @@ describe('components/Transfer', function () {
     wrapper.destroy()
   })
 
-  it('should select all after searching correctly.', async () => {
+  it('should select all after searching correctly', async () => {
     let datasourceWithRenaming = datasource.map((i) => ({ ...i }))
     datasourceWithRenaming[0].label = 'AAGroup'
     let children = datasourceWithRenaming[2].children
@@ -489,7 +489,7 @@ describe('components/Transfer', function () {
     wrapper.destroy()
   })
 
-  it('should select all and remove all correctly(excluding disabled).', async () => {
+  it('should select all and remove all correctly(excluding disabled)', async () => {
     let datasourceFirstItemDisabled = datasource.map((item, idx) => ({
       ...item,
       disabled: !idx // 第一个禁用
@@ -550,7 +550,7 @@ describe('components/Transfer', function () {
     wrapper.destroy()
   })
 
-  it('should select all and remove all correctly in various merge-checked.', async () => {
+  it('should select all and remove all correctly in various merge-checked', async () => {
     let wrapper = mount(
       {
         components: {

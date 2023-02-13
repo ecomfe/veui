@@ -10,7 +10,7 @@ testConfig.stubs.transition = false
 describe('components/Overlay', function () {
   this.timeout(10000)
 
-  it('should put the layer root node directly below the body.', async () => {
+  it('should put the layer root node directly below the body', async () => {
     let wrapper = mount(Overlay, { sync: false })
 
     await wait(0)
@@ -22,7 +22,7 @@ describe('components/Overlay', function () {
     wrapper.destroy()
   })
 
-  it('should provide default slot.', async () => {
+  it('should provide default slot', async () => {
     let wrapper = mount(
       {
         render () {
@@ -41,7 +41,7 @@ describe('components/Overlay', function () {
     wrapper.destroy()
   })
 
-  it('should generate proper zIndex when the two overlays have parent-child relationship.', async () => {
+  it('should generate proper zIndex when the two overlays have parent-child relationship', async () => {
     let wrapper = mount(
       {
         render () {
@@ -65,7 +65,7 @@ describe('components/Overlay', function () {
     wrapper.destroy()
   })
 
-  it('should use injected overlay manager.', async () => {
+  it('should use injected overlay manager', async () => {
     config.set(
       'managers.overlay',
       new OverlayManager({
@@ -268,7 +268,7 @@ describe('components/Overlay', function () {
     wrapper.destroy()
   })
 
-  it('should handle overlayStyle correctly.', () => {
+  it('should handle overlayStyle correctly', () => {
     let wrapper = mount(
       {
         data () {

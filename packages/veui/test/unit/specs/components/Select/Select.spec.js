@@ -983,7 +983,7 @@ describe('components/Select/Select', function () {
     wrapper.destroy()
   })
 
-  it('should handle select-all correctly.', async () => {
+  it('should handle select-all correctly', async () => {
     let wrapper = mount(
       {
         components: {

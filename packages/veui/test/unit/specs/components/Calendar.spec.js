@@ -5,7 +5,7 @@ import { expectDisabled, wait } from '../../../utils'
 describe('components/Calendar', function () {
   this.timeout(10000)
 
-  it('should handle selected prop with `null` value.', (done) => {
+  it('should handle selected prop with `null` value', (done) => {
     const wrapper = mount(Calendar, {
       propsData: {
         selected: null
@@ -23,7 +23,7 @@ describe('components/Calendar', function () {
     wrapper.find('.veui-calendar-day button').trigger('click')
   })
 
-  it('should select year correctly.', async () => {
+  it('should select year correctly', async () => {
     const wrapper = mount(Calendar, {
       propsData: {
         type: 'year'
@@ -42,7 +42,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should select month correctly.', (done) => {
+  it('should select month correctly', (done) => {
     const wrapper = mount(Calendar, {
       propsData: {
         type: 'month'
@@ -60,7 +60,7 @@ describe('components/Calendar', function () {
     wrapper.find('.veui-calendar-month button').trigger('click')
   })
 
-  it('should select date multiple correctly.', async () => {
+  it('should select date multiple correctly', async () => {
     const wrapper = mount(
       {
         components: {
@@ -94,7 +94,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should select date range correctly.', async () => {
+  it('should select date range correctly', async () => {
     const wrapper = mount(
       {
         components: {
@@ -127,7 +127,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support customized panel count correctly.', () => {
+  it('should support customized panel count correctly', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         panel: 3
@@ -141,7 +141,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support customized today property correctly.', () => {
+  it('should support customized today property correctly', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         today: new Date(2019, 10, 1)
@@ -157,7 +157,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support customized week-start correctly.', () => {
+  it('should support customized week-start correctly', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         weekStart: 6
@@ -172,7 +172,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support customized fill-month correctly.', () => {
+  it('should support customized fill-month correctly', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         fillMonth: false
@@ -185,7 +185,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support customized date-class correctly.', () => {
+  it('should support customized date-class correctly', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         dateClass: 'date-class'
@@ -201,7 +201,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support disabled-date correctly.', () => {
+  it('should support disabled-date correctly', () => {
     const wrapper = mount(Calendar, {
       propsData: {
         disabledDate: (date) => {
@@ -238,7 +238,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support readonly correctly.', () => {
+  it('should support readonly correctly', () => {
     let wrapper = mount(Calendar, {
       propsData: {
         readonly: true
@@ -254,7 +254,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should set selected date correctly.', async () => {
+  it('should set selected date correctly', async () => {
     const wrapper = mount(Calendar, {
       propsData: {
         selected: new Date(1987, 6, 11)
@@ -270,7 +270,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support before solt correctly.', () => {
+  it('should support before solt correctly', () => {
     const wrapper = mount(Calendar, {
       slots: {
         before: '<div class="calendar-before">Before</div>'
@@ -283,7 +283,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support after solt correctly.', () => {
+  it('should support after solt correctly', () => {
     const wrapper = mount(Calendar, {
       slots: {
         after: '<div class="calendar-after">After</div>'
@@ -296,7 +296,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should support date slot correctly.', () => {
+  it('should support date slot correctly', () => {
     const wrapper = mount(Calendar, {
       scopedSlots: {
         date: '<template slot-scope="{year, month,date}">{{ year }}-{{ month + 1 }}-{{ date }}</template>'
@@ -315,7 +315,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle select.', async () => {
+  it('should handle select', async () => {
     const wrapper = mount(
       {
         components: {
@@ -346,7 +346,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle select correctly when set range.', async () => {
+  it('should handle select correctly when set range', async () => {
     const wrapper = mount(
       {
         components: {
@@ -385,7 +385,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle select correctly when set multiple.', async () => {
+  it('should handle select correctly when set multiple', async () => {
     const wrapper = mount(
       {
         components: {
@@ -427,7 +427,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle selectstart.', async () => {
+  it('should handle selectstart', async () => {
     const wrapper = mount(
       {
         components: {
@@ -463,7 +463,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle selectprogress when multiple is false.', async () => {
+  it('should handle selectprogress when multiple is false', async () => {
     const wrapper = mount(
       {
         components: {
@@ -500,7 +500,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle selectprogress when multiple is true.', async () => {
+  it('should handle selectprogress when multiple is true', async () => {
     const wrapper = mount(
       {
         components: {
@@ -545,7 +545,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle viewchange.', async () => {
+  it('should handle viewchange', async () => {
     const wrapper = mount(
       {
         components: {
@@ -588,7 +588,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should has range classes and navigate correctly.', async () => {
+  it('should has range classes and navigate correctly', async () => {
     const wrapper = mount(Calendar, {
       propsData: {
         panel: 2,
@@ -620,7 +620,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle selected prop correctly on using as a uncontrolled component.', async () => {
+  it('should handle selected prop correctly on using as a uncontrolled component', async () => {
     const wrapper = mount(Calendar, {
       attachToDocument: true
     })
@@ -634,7 +634,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should handle selection correctly for year calendar.', async () => {
+  it('should handle selection correctly for year calendar', async () => {
     const wrapper = mount(Calendar, {
       propsData: {
         type: 'year'
@@ -668,7 +668,7 @@ describe('components/Calendar', function () {
     wrapper.destroy()
   })
 
-  it('should update panel date correctly on selecting next month.', async () => {
+  it('should update panel date correctly on selecting next month', async () => {
     const wrapper = mount(
       {
         components: {

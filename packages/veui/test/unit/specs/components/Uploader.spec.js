@@ -47,7 +47,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should handle value prop with `null` value.', async function () {
+  it('should handle value prop with `null` value', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
@@ -91,7 +91,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should handle value of object type correctly.', function () {
+  it('should handle value of object type correctly', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -118,7 +118,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should handle external value updating correctly.', async function () {
+  it('should handle external value updating correctly', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -203,7 +203,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should call `afterPick` hook after files are choosed.', async function () {
+  it('should call `afterPick` hook after files are choosed', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
@@ -242,7 +242,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should validate file count/size/type correctly.', async function () {
+  it('should validate file count/size/type correctly', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -305,7 +305,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should validate file with custom async validator correctly.', async function () {
+  it('should validate file with custom async validator correctly', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -335,7 +335,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should emit `statuschange` event when status is changed.', async function () {
+  it('should emit `statuschange` event when status is changed', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
@@ -405,7 +405,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should upload file correctly when mode is xhr.', async function () {
+  it('should upload file correctly when mode is xhr', async function () {
     let headers = {
       'x-aaa': 'aaa',
       'x-bbb': 'bbb'
@@ -448,7 +448,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should upload file correctly when mode is iframe.', async function () {
+  it('should upload file correctly when mode is iframe', async function () {
     const payload = {
       current: Date.now()
     }
@@ -493,7 +493,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should upload file correctly when mode is custom.', async function () {
+  it('should upload file correctly when mode is custom', async function () {
     let thisInsideUpload
     function successUpload (file, { onload, onprogress }) {
       thisInsideUpload = this
@@ -576,7 +576,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should handle cancel correctly.', async function () {
+  it('should handle cancel correctly', async function () {
     let called = 0
     let cancel
     let cancelled = new Promise((resolve) => {
@@ -623,7 +623,7 @@ describe('components/Uploader', function () {
     expect(wrapper.emitted('failure')).to.be.a('undefined')
   })
 
-  it('should be disabled when number of files reach max count.', function () {
+  it('should be disabled when number of files reach max count', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -644,7 +644,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should set src of image correctly when type is image.', function () {
+  it('should set src of image correctly when type is image', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -663,7 +663,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should set src of video correctly when type is video.', function () {
+  it('should set src of video correctly when type is video', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -682,7 +682,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should set src of video or image correctly when type is media.', function () {
+  it('should set src of video or image correctly when type is media', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -704,7 +704,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should config controls of media correctly.', function () {
+  it('should config controls of media correctly', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
@@ -769,7 +769,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should config entries of media correctly.', async function () {
+  it('should config entries of media correctly', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
@@ -854,7 +854,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should show preview of media correctly.', async function () {
+  it('should show preview of media correctly', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
@@ -881,7 +881,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should handle replace correctly.', async function () {
+  it('should handle replace correctly', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
@@ -913,7 +913,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should render help slot correctly.', function () {
+  it('should render help slot correctly', function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -928,7 +928,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should render button label slot correctly.', function () {
+  it('should render button label slot correctly', function () {
     let wrapper = mount(Uploader, {
       propsData: {
         action: '/upload/xhr'
@@ -942,7 +942,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should render file-before file-after slot correctly.', async function () {
+  it('should render file-before file-after slot correctly', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -970,7 +970,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should reorder files when move event triggered.', async function () {
+  it('should reorder files when move event triggered', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       propsData: {
@@ -1002,7 +1002,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should respect maxCount prop when value exceeds.', async function () {
+  it('should respect maxCount prop when value exceeds', async function () {
     let status
     function upload (file, { onload, onprogress }) {
       if (status !== 'uploading') {
@@ -1070,7 +1070,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should support validityDisplay prop correctly.', async function () {
+  it('should support validityDisplay prop correctly', async function () {
     let wrapper = mount(Uploader, {
       sync: false,
       attachToDocument: true,
@@ -1102,7 +1102,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should support help prop correctly.', async function () {
+  it('should support help prop correctly', async function () {
     const HELP = 'help\nprop'
     let wrapper = mount(Uploader, {
       sync: false,
@@ -1118,7 +1118,7 @@ describe('components/Uploader', function () {
     wrapper.destroy()
   })
 
-  it('should preview failure items correctly.', async function () {
+  it('should preview failure items correctly', async function () {
     let preview = true
     function convertResponse (data) {
       return { ...data, preview }

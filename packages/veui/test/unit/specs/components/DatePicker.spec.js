@@ -9,7 +9,7 @@ const debugInBrowser = {
 describe('components/DatePicker', function () {
   this.timeout(10000)
 
-  it('should use `localActive` when used as a uncontrolled component.', async () => {
+  it('should use `localActive` when used as a uncontrolled component', async () => {
     let wrapper = mount(DatePicker)
 
     wrapper.find('.veui-date-picker-trigger').trigger('click')
@@ -22,7 +22,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should handle selected prop with `null` value.', async () => {
+  it('should handle selected prop with `null` value', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -46,7 +46,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should select year correctly.', async () => {
+  it('should select year correctly', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -69,7 +69,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should select month correctly.', async () => {
+  it('should select month correctly', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -90,7 +90,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should select date range correctly.', async () => {
+  it('should select date range correctly', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -118,7 +118,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support customized today property correctly.', async () => {
+  it('should support customized today property correctly', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         today: new Date(2019, 10, 1)
@@ -135,7 +135,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support customized week-start correctly.', async () => {
+  it('should support customized week-start correctly', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         weekStart: 6
@@ -151,7 +151,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support customized fill-month correctly.', async () => {
+  it('should support customized fill-month correctly', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         fillMonth: false
@@ -168,7 +168,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support customized date-class correctly.', async () => {
+  it('should support customized date-class correctly', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         dateClass: 'date-class'
@@ -187,7 +187,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support disabled correctly.', () => {
+  it('should support disabled correctly', () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         disabled: true
@@ -201,7 +201,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support disabled-date correctly.', async () => {
+  it('should support disabled-date correctly', async () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         disabledDate: (date) => {
@@ -221,7 +221,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support readonly correctly.', () => {
+  it('should support readonly correctly', () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         disabled: true
@@ -235,7 +235,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should clear selected date correctly.', async () => {
+  it('should clear selected date correctly', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -260,7 +260,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should clear selected range date correctly.', async () => {
+  it('should clear selected range date correctly', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -289,7 +289,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support placeholder correctly.', () => {
+  it('should support placeholder correctly', () => {
     let wrapper = mount(DatePicker, {
       propsData: {
         placeholder: 'Select a date'
@@ -303,7 +303,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should format date correctly.', async () => {
+  it('should format date correctly', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -329,7 +329,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support shortcuts correctly.', async () => {
+  it('should support shortcuts correctly', async () => {
     let testToggle = false
     let selected = null
     let wrapper = mount({
@@ -391,7 +391,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should support date slot correctly.', async () => {
+  it('should support date slot correctly', async () => {
     let wrapper = mount(DatePicker, {
       scopedSlots: {
         date: `<template slot-scope="props">{{ props.year }}</template>`
@@ -408,7 +408,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should handle input correctly.', async () => {
+  it('should handle input correctly', async () => {
     let wrapper = mount(
       {
         data () {
@@ -439,7 +439,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should handle inputs correctly.', async () => {
+  it('should handle inputs correctly', async () => {
     let wrapper = mount(
       {
         data () {
@@ -475,7 +475,7 @@ describe('components/DatePicker', function () {
     wrapper.destroy()
   })
 
-  it('should update panel date correctly on opening overlay.', async () => {
+  it('should update panel date correctly on opening overlay', async () => {
     let wrapper = mount(
       {
         data () {

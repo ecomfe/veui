@@ -8,7 +8,7 @@ import { expectFieldError } from '../../../utils'
 describe('components/Switch', function () {
   this.timeout(10000)
 
-  it('should handle checked prop with `null` value.', (done) => {
+  it('should handle checked prop with `null` value', (done) => {
     let wrapper = mount(Switch, {
       propsData: {
         checked: null
@@ -25,7 +25,7 @@ describe('components/Switch', function () {
     wrapper.find('input').trigger('change')
   })
 
-  it('should update checked/model value before change event is fired.', (done) => {
+  it('should update checked/model value before change event is fired', (done) => {
     let wrapper = mount({
       components: {
         'veui-switch': Switch
@@ -51,7 +51,7 @@ describe('components/Switch', function () {
     wrapper.find('input').trigger('change')
   })
 
-  it('should handle disabled prop correctly.', (done) => {
+  it('should handle disabled prop correctly', (done) => {
     let wrapper = mount(Switch, {
       propsData: {
         disabled: true
@@ -351,7 +351,7 @@ describe('components/Switch', function () {
     expect(count).to.equal(1)
   })
 
-  it('should apply validations correctly when using input(instance)/blur(native) as triggers.', async () => {
+  it('should apply validations correctly when using input(instance)/blur(native) as triggers', async () => {
     const ruleErr = 'required'
     const valiErr = 'gender出错啦'
     const validators = [

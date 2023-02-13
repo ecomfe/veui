@@ -4,7 +4,7 @@ import Schedule from '@/components/Schedule'
 describe('components/Schedule', function () {
   this.timeout(10000)
 
-  it('should handle selected prop with `null` value.', (done) => {
+  it('should handle selected prop with `null` value', (done) => {
     let wrapper = mount({
       methods: {
         handleSelect (val) {
@@ -29,7 +29,7 @@ describe('components/Schedule', function () {
     button.trigger('mouseup')
   })
 
-  it('should support selected prop correctly.', () => {
+  it('should support selected prop correctly', () => {
     let wrapper = mount(Schedule, {
       sync: false,
       propsData: {
@@ -57,7 +57,7 @@ describe('components/Schedule', function () {
     wrapper.destroy()
   })
 
-  it('should support other props correctly.', async () => {
+  it('should support other props correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -237,7 +237,7 @@ describe('components/Schedule', function () {
     wrapper.destroy()
   })
 
-  it('should support select event correctly.', (done) => {
+  it('should support select event correctly', (done) => {
     let wrapper = mount(
       {
         components: {
@@ -274,7 +274,7 @@ describe('components/Schedule', function () {
     button.trigger('mouseup')
   })
 
-  it('should render header slot correctly.', () => {
+  it('should render header slot correctly', () => {
     let wrapper = mount(Schedule, {
       sync: false,
       slots: {
@@ -288,7 +288,7 @@ describe('components/Schedule', function () {
     wrapper.destroy()
   })
 
-  it('should render header-content slot correctly.', () => {
+  it('should render header-content slot correctly', () => {
     let wrapper = mount(Schedule, {
       sync: false,
       slots: {
@@ -302,7 +302,7 @@ describe('components/Schedule', function () {
     wrapper.destroy()
   })
 
-  it('should render slots of shortcuts & legend correctly.', () => {
+  it('should render slots of shortcuts & legend correctly', () => {
     let wrapper = mount(Schedule, {
       sync: false,
       propsData: {
@@ -331,7 +331,7 @@ describe('components/Schedule', function () {
     wrapper.destroy()
   })
 
-  it('should render slots of legend-label & hour & label & tooltip correctly.', async () => {
+  it('should render slots of legend-label & hour & label & tooltip correctly', async () => {
     let wrapper = mount(
       {
         components: {

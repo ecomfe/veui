@@ -27,7 +27,7 @@ function expectTransform (wrapper, transform) {
 describe('components/Drawer', function () {
   this.timeout(10000)
 
-  it('should support placement `top`.', async () => {
+  it('should support placement `top`', async () => {
     let wrapper = mount(
       {
         ...componentOptions,
@@ -46,7 +46,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should support placement `right`.', async () => {
+  it('should support placement `right`', async () => {
     let wrapper = mount(
       {
         ...componentOptions,
@@ -65,7 +65,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should support placement `bottom`.', async () => {
+  it('should support placement `bottom`', async () => {
     let wrapper = mount(
       {
         ...componentOptions,
@@ -84,7 +84,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should support placement `left`.', async () => {
+  it('should support placement `left`', async () => {
     let wrapper = mount(
       {
         ...componentOptions,
@@ -103,7 +103,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should render slot correctly.', async () => {
+  it('should render slot correctly', async () => {
     let wrapper = mount(
       {
         ...componentOptions,
@@ -129,7 +129,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should support `sync` modifier for prop `open`.', async () => {
+  it('should support `sync` modifier for prop `open`', async () => {
     let wrapper = mount({
       components: {
         'veui-drawer': Drawer
@@ -180,7 +180,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should support async `before-close` function prop.', async () => {
+  it('should support async `before-close` function prop', async () => {
     let wrapper = mount({
       components: {
         'veui-drawer': Drawer
@@ -228,7 +228,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should support customized modal property correctly.', async () => {
+  it('should support customized modal property correctly', async () => {
     let wrapper = mount(Drawer, {
       propsData: {
         modal: false,
@@ -251,7 +251,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should render slot correctly.', () => {
+  it('should render slot correctly', () => {
     let wrapper = mount(Drawer, {
       propsData: {
         open: true
@@ -325,7 +325,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should make prop `open` fully controlled.', async () => {
+  it('should make prop `open` fully controlled', async () => {
     let wrapper = mount({
       data () {
         return {
@@ -418,7 +418,7 @@ describe('components/Drawer', function () {
     wrapper.destroy()
   })
 
-  it('should forward `overlayClass` prop correctly.', async () => {
+  it('should forward `overlayClass` prop correctly', async () => {
     let wrapper = mount({
       components: {
         'veui-drawer': Drawer

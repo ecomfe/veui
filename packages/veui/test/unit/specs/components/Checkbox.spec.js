@@ -7,7 +7,7 @@ import { expectFieldError } from '../../../utils'
 describe('components/Checkbox', function () {
   this.timeout(10000)
 
-  it('should handle checked prop with `null` value.', (done) => {
+  it('should handle checked prop with `null` value', (done) => {
     let wrapper = mount(Checkbox, {
       propsData: {
         checked: null
@@ -25,7 +25,7 @@ describe('components/Checkbox', function () {
     wrapper.find('input').trigger('change')
   })
 
-  it('should update checked/model value before change event is fired.', (done) => {
+  it('should update checked/model value before change event is fired', (done) => {
     let wrapper = mount(
       {
         components: {
@@ -322,7 +322,7 @@ describe('components/Checkbox', function () {
     expect(count).to.equal(1)
   })
 
-  it('should apply validations correctly when using input(instance)/blur(native) as triggers.', async () => {
+  it('should apply validations correctly when using input(instance)/blur(native) as triggers', async () => {
     const ruleErr = 'required'
     const valiErr = 'gender出错啦'
     const validators = [

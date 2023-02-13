@@ -3,7 +3,7 @@ import Tooltip from '@/components/Tooltip'
 import { wait } from '../../../utils'
 
 describe('components/Tooltip', function () {
-  it('should put the layer root node directly below the body.', async () => {
+  it('should put the layer root node directly below the body', async () => {
     let wrapper = mount({
       components: {
         'veui-tooltip': Tooltip

@@ -7,7 +7,7 @@ import { expectFieldError } from '../../../utils'
 describe('components/Input', function () {
   this.timeout(10000)
 
-  it('should handle value prop with `null` value.', (done) => {
+  it('should handle value prop with `null` value', (done) => {
     let wrapper = mount(
       Input,
       {
@@ -30,7 +30,7 @@ describe('components/Input', function () {
     wrapper.find('input').trigger('input')
   })
 
-  it('should transparently pass-through attrs to the <input> element.', () => {
+  it('should transparently pass-through attrs to the <input> element', () => {
     let wrapper = mount(Input, {
       attrs: {
         autofocus: ''
@@ -68,7 +68,7 @@ describe('components/Input', function () {
           }
         },
         methods: {
-          handleChange (checked) {
+          handleChange () {
             changes++
           }
         },
@@ -356,7 +356,7 @@ describe('components/Input', function () {
     expect(el.value).to.equal('123')
   })
 
-  it('should apply validations correctly when using input(instance)/blur(native) as triggers.', async () => {
+  it('should apply validations correctly when using input(instance)/blur(native) as triggers', async () => {
     const ruleErr = 'required'
     const valiErr = 'gender出错啦'
     const validators = [

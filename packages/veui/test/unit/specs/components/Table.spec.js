@@ -13,7 +13,7 @@ import config from '@/managers/config'
 describe('components/Table', function () {
   this.timeout(10000)
 
-  it('should select the specified fields.', async () => {
+  it('should select the specified fields', async () => {
     let wrapper = mount(
       {
         components: {
@@ -65,7 +65,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should not fire change event if selected value is not changed.', async () => {
+  it('should not fire change event if selected value is not changed', async () => {
     let wrapper = mount(
       {
         components: {
@@ -131,7 +131,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should emit `select` event before `update:selected` event.', (done) => {
+  it('should emit `select` event before `update:selected` event', (done) => {
     let wrapper = mount(
       {
         components: {
@@ -276,7 +276,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should expand the sub rows correctly when controlled.', async () => {
+  it('should expand the sub rows correctly when controlled', async () => {
     let syncExpanded = true
     let wrapper = mount(
       {
@@ -359,7 +359,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should expand the sub rows correctly when not controlled.', async () => {
+  it('should expand the sub rows correctly when not controlled', async () => {
     let wrapper = mount(
       {
         components: {
@@ -414,7 +414,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should sort by key field properly.', async () => {
+  it('should sort by key field properly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -660,7 +660,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should filter columns correctly.', async () => {
+  it('should filter columns correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -718,7 +718,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should select all and cancel all selection correctly.', async () => {
+  it('should select all and cancel all selection correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -773,7 +773,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should select rows correctly when the select mode is single.', async () => {
+  it('should select rows correctly when the select mode is single', async () => {
     let syncSelected = true
     let wrapper = mount(
       {
@@ -849,7 +849,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should select rows correctly when the select mode is multiple.', async () => {
+  it('should select rows correctly when the select mode is multiple', async () => {
     let syncSelected = true
     let wrapper = mount(
       {
@@ -925,7 +925,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should present correctly when data is not provided.', () => {
+  it('should present correctly when data is not provided', () => {
     let wrapper = mount(
       {
         components: {
@@ -949,7 +949,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should warn when selected value is not correct according to multiple prop.', async () => {
+  it('should warn when selected value is not correct according to multiple prop', async () => {
     const spy = sinon.spy(Vue.util, 'warn')
 
     let wrapper = mount(
@@ -998,7 +998,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should merge cells correctly.', () => {
+  it('should merge cells correctly', () => {
     let wrapper = mount(
       {
         components: {
@@ -2764,7 +2764,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should render multiple-column wrappers correctly.', async () => {
+  it('should render multiple-column wrappers correctly', async () => {
     let wrapper = mount(
       {
         components: {
@@ -3000,7 +3000,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should switch grouped columns correctly.', async () => {
+  it('should switch grouped columns correctly', async () => {
     const spy = sinon.spy(console, 'error')
     let wrapper = mount(
       {
@@ -3058,7 +3058,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should update scopedSlots of Columns correctly.', async () => {
+  it('should update scopedSlots of Columns correctly', async () => {
     let wrapper = mount(
       {
         components: {

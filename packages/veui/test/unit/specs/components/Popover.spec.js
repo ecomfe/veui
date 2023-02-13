@@ -2,7 +2,7 @@ import Popover from '@/components/Popover'
 import { wait, mount } from '../../../utils'
 
 describe('components/Popover', function () {
-  it('should put the layer root node directly below the body.', async () => {
+  it('should put the layer root node directly below the body', async () => {
     let wrapper = mount({
       components: {
         'veui-popover': Popover
@@ -197,7 +197,7 @@ describe('components/Popover', function () {
     wrapper.destroy()
   })
 
-  it('should open correctly when used as uncontrolled component.', async () => {
+  it('should open correctly when used as uncontrolled component', async () => {
     let wrapper = mount(
       {
         components: {

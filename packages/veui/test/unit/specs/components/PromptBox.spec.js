@@ -139,7 +139,7 @@ describe('components/PromptBox', function () {
     wrapper.destroy()
   })
 
-  it('should make `open` prop and `value` prop fully controlled.', async () => {
+  it('should make `open` prop and `value` prop fully controlled', async () => {
     let wrapper = mount(
       {
         components: {

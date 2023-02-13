@@ -730,7 +730,7 @@ describe('utils/helper', function () {
     expect(wrapper.find('.foo').text()).to.equal('bar-foo')
   })
 
-  it('should slice string safely, considering surrogate pair.', () => {
+  it('should slice string safely, considering surrogate pair', () => {
     const str = '👩‍👩‍👧‍👧'
     expect(safeSlice(str, 1), '#1').to.equal('')
     expect(safeSlice(str, 2), '#2').to.equal(str.slice(0, 2))

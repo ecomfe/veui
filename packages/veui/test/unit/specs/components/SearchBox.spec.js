@@ -36,7 +36,7 @@ let cars = [
 describe('components/SearchBox', function () {
   this.timeout(10000)
 
-  it('should handle selected prop with `null` value.', (done) => {
+  it('should handle selected prop with `null` value', (done) => {
     let wrapper = mount({
       methods: {
         handleInput (val) {
@@ -56,7 +56,7 @@ describe('components/SearchBox', function () {
     wrapper.find('.veui-input-input').trigger('input')
   })
 
-  it('should support input event correctly.', (done) => {
+  it('should support input event correctly', (done) => {
     let wrapper = mount(
       {
         components: {
@@ -82,7 +82,7 @@ describe('components/SearchBox', function () {
     input.trigger('input')
   })
 
-  it('should support customized trigger correctly.', async () => {
+  it('should support customized trigger correctly', async () => {
     let wrapper = mount(
       {
         data () {
@@ -191,7 +191,7 @@ describe('components/SearchBox', function () {
     wrapper.destroy()
   })
 
-  it('should support other props correctly.', async () => {
+  it('should support other props correctly', async () => {
     let wrapper = mount(
       {
         data () {
@@ -241,7 +241,7 @@ describe('components/SearchBox', function () {
     wrapper.destroy()
   })
 
-  it('should support suggest event correctly.', (done) => {
+  it('should support suggest event correctly', (done) => {
     let wrapper = mount(
       {
         data () {
@@ -279,7 +279,7 @@ describe('components/SearchBox', function () {
     input.trigger('input')
   })
 
-  it('should support select event correctly.', async () => {
+  it('should support select event correctly', async () => {
     let wrapper = mount(
       {
         data () {
@@ -318,7 +318,7 @@ describe('components/SearchBox', function () {
     wrapper.destroy()
   })
 
-  it('should support search event correctly.', async () => {
+  it('should support search event correctly', async () => {
     let params = []
 
     let wrapper = mount(
@@ -360,7 +360,7 @@ describe('components/SearchBox', function () {
     wrapper.destroy()
   })
 
-  it('should render customized suggestions & suggestions-before & suggestions-after slot correctly.', async () => {
+  it('should render customized suggestions & suggestions-before & suggestions-after slot correctly', async () => {
     let wrapper = mount(
       {
         data () {
@@ -419,7 +419,7 @@ describe('components/SearchBox', function () {
     wrapper.destroy()
   })
 
-  it('should render customized suggestion slot correctly.', async () => {
+  it('should render customized suggestion slot correctly', async () => {
     let wrapper = mount(
       {
         data () {

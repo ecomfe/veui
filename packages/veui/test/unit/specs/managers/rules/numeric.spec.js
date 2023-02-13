@@ -4,27 +4,27 @@ import 'veui/locale/zh-Hans/common'
 describe('managers/rules/numeric', function () {
   this.timeout(10000)
 
-  it('should allow empty values.', () => {
+  it('should allow empty values', () => {
     expect(numeric.validate(null)).to.equal(true)
     expect(numeric.validate(undefined)).to.equal(true)
     expect(numeric.validate('')).to.equal(true)
     expect(numeric.validate([])).to.equal(true)
   })
 
-  it('should allow numbers.', () => {
+  it('should allow numbers', () => {
     expect(numeric.validate(2)).to.equal(true)
     expect(numeric.validate(-2)).to.equal(true)
     expect(numeric.validate(0e3)).to.equal(true)
   })
 
-  it('should allow strings that are like Number.', () => {
+  it('should allow strings that are like Number', () => {
     expect(numeric.validate('2')).to.equal(true)
     expect(numeric.validate('0.2')).to.equal(true)
     expect(numeric.validate('.2')).to.equal(true)
     expect(numeric.validate('0')).to.equal(true)
   })
 
-  it('should not allow strings that start with illegal zeros.', () => {
+  it('should not allow strings that start with illegal zeros', () => {
     expect(numeric.validate('00.2')).to.equal(false)
     expect(numeric.validate('00')).to.equal(false)
     expect(numeric.validate('00.0')).to.equal(false)
