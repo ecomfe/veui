@@ -61,7 +61,7 @@ export default {
       let { gap } = this
       return typeof gap === 'number' && gap > 0
         ? {
-          '--internal-veui-stack-gap': `${gap}px`
+          [`--${this.$c('stack-gap')}`]: `${gap}px`
         }
         : null
     }
