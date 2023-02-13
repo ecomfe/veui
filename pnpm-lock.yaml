@@ -125,7 +125,7 @@ importers:
       mocha: ^7.2.0
       moment: ^2.29.3
       popper.js: ^1.16.1
-      postcss: ^7.0.39
+      postcss: ^8.4.13
       promise-polyfill: ^8.2.3
       recursive-readdir: ^2.2.2
       regenerator-runtime: ^0.13.9
@@ -203,13 +203,13 @@ importers:
       lint-staged: 8.2.1
       mocha: 7.2.0
       moment: 2.29.3
-      postcss: 7.0.39
+      postcss: 8.4.13
       promise-polyfill: 8.2.3
       recursive-readdir: 2.2.2
       regenerator-runtime: 0.13.9
       rollup: 2.72.0
       rollup-plugin-replace: 2.2.0
-      rollup-plugin-vue: 5.1.9_ico47dexvaokhihpklf47juufm
+      rollup-plugin-vue: 5.1.9_6pj7bj2dnvpmwjq52b6oppz3o4
       sinon: 13.0.2
       veui-loader: link:../veui-loader
       veui-theme-dls: link:../veui-theme-dls
@@ -2678,7 +2678,7 @@ packages:
       - whiskers
     dev: true
 
-  /@vue/component-compiler/4.2.4_ico47dexvaokhihpklf47juufm:
+  /@vue/component-compiler/4.2.4_6pj7bj2dnvpmwjq52b6oppz3o4:
     resolution: {integrity: sha512-tFGw3h3+nxiqnyborwWQ+rUgKAwSFl0Sdg+BCZkWTyFfkEF5fqunTNoklEUDdtRQMmVqsajn1pOZdm0zh4Uicw==}
     peerDependencies:
       postcss: '>=6.0'
@@ -2687,7 +2687,7 @@ packages:
       '@vue/component-compiler-utils': 3.3.0_lodash@4.17.21+pug@3.0.2
       clean-css: 4.2.4
       hash-sum: 1.0.2
-      postcss: 7.0.39
+      postcss: 8.4.13
       postcss-modules-sync: 1.0.0
       source-map: 0.6.1
       vue-template-compiler: 2.6.14
@@ -13234,12 +13234,12 @@ packages:
       rollup-pluginutils: 2.8.2
     dev: true
 
-  /rollup-plugin-vue/5.1.9_ico47dexvaokhihpklf47juufm:
+  /rollup-plugin-vue/5.1.9_6pj7bj2dnvpmwjq52b6oppz3o4:
     resolution: {integrity: sha512-DXzrBUD2j68Y6nls4MmuJsFL1SrQDpdgjxvhk/oy04LzJmXJoX1x31yLEBFkkmvpbon6Q885WJLvEMiMyT+3rA==}
     peerDependencies:
       vue-template-compiler: '*'
     dependencies:
-      '@vue/component-compiler': 4.2.4_ico47dexvaokhihpklf47juufm
+      '@vue/component-compiler': 4.2.4_6pj7bj2dnvpmwjq52b6oppz3o4
       '@vue/component-compiler-utils': 3.3.0_lodash@4.17.21
       debug: 4.3.4
       hash-sum: 1.0.2

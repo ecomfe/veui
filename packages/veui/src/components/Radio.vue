@@ -9,6 +9,7 @@
 >
   <input
     ref="box"
+    :class="$c('radio-input')"
     type="radio"
     v-bind="attrs"
     :checked="realChecked"
