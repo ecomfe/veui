@@ -293,6 +293,102 @@ describe('components/Stack', function () {
     wrapper.destroy()
   })
 
+  it('should handle multi-level stack `gap` prop correctly', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-stack': Stack
+        },
+        template: `
+          <div>
+            <veui-stack :gap="outerGap">
+              <veui-stack :gap="innerGap">
+                <div class="a" style="background: red; min-width: 60px; min-height: 60px"/>
+                <div class="b" style="background: red; min-width: 60px; min-height: 60px"/>
+              </veui-stack>
+              <veui-stack :gap="innerGap">
+                <div class="c" style="background: red; min-width: 60px; min-height: 60px"/>
+                <div class="d" style="background: red; min-width: 60px; min-height: 60px"/>
+              </veui-stack>
+            </veui-stack>
+          </div>
+        `,
+        data () {
+          return {
+            outerGap: null,
+            innerGap: null
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+
+    const a = wrapper.find('.a').element
+    const b = wrapper.find('.b').element
+    const c = wrapper.find('.c').element
+    const d = wrapper.find('.d').element
+
+    expectRectProp(a, 'left', 0)
+    expectRectProp(b, 'left', 60)
+    expectRectProp(c, 'left', 120)
+    expectRectProp(d, 'left', 180)
+
+    vm.outerGap = 20
+    await vm.$nextTick()
+    expectRectProp(a, 'left', 0)
+    expectRectProp(b, 'left', 60)
+    expectRectProp(c, 'left', 140)
+    expectRectProp(d, 'left', 200)
+
+    vm.innerGap = 10
+    await vm.$nextTick()
+    expectRectProp(a, 'left', 0)
+    expectRectProp(b, 'left', 70)
+    expectRectProp(c, 'left', 150)
+    expectRectProp(d, 'left', 220)
+
+    vm.outerGap = 0
+    await vm.$nextTick()
+    expectRectProp(a, 'left', 0)
+    expectRectProp(b, 'left', 70)
+    expectRectProp(c, 'left', 130)
+    expectRectProp(d, 'left', 200)
+
+    vm.outerGap = null
+    await vm.$nextTick()
+    expectRectProp(a, 'left', 0)
+    expectRectProp(b, 'left', 70)
+    expectRectProp(c, 'left', 130)
+    expectRectProp(d, 'left', 200)
+
+    vm.innerGap = 'xxs'
+    await vm.$nextTick()
+    expectRectProp(a, 'left', 0)
+    expectRectProp(b, 'left', 64)
+    expectRectProp(c, 'left', 124)
+    expectRectProp(d, 'left', 188)
+
+    vm.outerGap = 'm'
+    await vm.$nextTick()
+    expectRectProp(a, 'left', 0)
+    expectRectProp(b, 'left', 64)
+    expectRectProp(c, 'left', 140)
+    expectRectProp(d, 'left', 204)
+
+    vm.innerGap = 0
+    await vm.$nextTick()
+    expectRectProp(a, 'left', 0)
+    expectRectProp(b, 'left', 60)
+    expectRectProp(c, 'left', 136)
+    expectRectProp(d, 'left', 196)
+
+    wrapper.destroy()
+  })
+
   it('should respect `inline` prop', async () => {
     const wrapper = mount(Stack, {
       propsData: {

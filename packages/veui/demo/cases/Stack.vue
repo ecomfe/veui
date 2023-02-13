@@ -123,6 +123,30 @@
       />
     </veui-stack>
   </section>
+  <section>
+    <veui-stack gap="xxl">
+      <veui-stack class="stack" align="start">
+        <div class="item"/>
+        <div class="item"/>
+        <div class="item"/>
+      </veui-stack>
+      <veui-stack class="stack" align="center">
+        <div class="item"/>
+        <div class="item"/>
+        <div class="item"/>
+      </veui-stack>
+      <veui-stack class="stack" align="end">
+        <div class="item"/>
+        <div class="item"/>
+        <div class="item"/>
+      </veui-stack>
+      <veui-stack class="stack" align="stretch">
+        <div class="item"/>
+        <div class="item"/>
+        <div class="item"/>
+      </veui-stack>
+    </veui-stack>
+  </section>
 </article>
 </template>
 
@@ -267,5 +291,24 @@ section {
   background-color: gold;
   resize: both;
   overflow: hidden;
+}
+
+.item {
+  width: 40px;
+  place-items: center;
+  background-color: gold;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.item:nth-child(1) {
+  min-height: 40px;
+}
+
+.item:nth-child(2) {
+  min-height: 80px;
+}
+
+.item:nth-child(3) {
+  min-height: 60px;
 }
 </style>
