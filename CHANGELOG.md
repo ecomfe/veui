@@ -1,3 +1,18 @@
+## 2.12.0 "🌱 Seedling" (2022-02-13)
+
+### 💡 主要变更
+
+- [+] 为 `alert` / `confirm` / `prompt` 插件新增 `okLabel` / `cancelLabel` 配置以允许自定义按钮文案。<!-- #$alert #$confirm #$prompt -->
+
+### 🐞 问题修复
+
+- [^] 修复了 `prompt` 插件值无法正常同步的问题。<!-- #$prompt -->
+- [^] 修正了 `Radio` / `Checkbox` 组件可能影响内部插槽内 `<input>` 元素样式的问题。<!-- #Radio #Checkbox -->
+
+### 🧪 实验性功能
+
+- [+] 新增 `Stack` 组件。<!-- #Stack -->
+
 ## 2.11.2 (2022-01-11)
 
 ### 🐞 问题修复
