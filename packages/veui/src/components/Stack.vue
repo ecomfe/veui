@@ -1,6 +1,6 @@
 <template>
-<div :class="rootClass" :style="rootStyle">
-  <div :class="innerClass">
+<div :class="rootClass">
+  <div :class="innerClass" :style="innerStyle">
     <slot/>
   </div>
 </div>
@@ -46,18 +46,18 @@ export default {
         [this.$c(`stack-wrap`)]: this.wrap,
         [this.$c(`stack-inline`)]: this.inline,
         [this.$c(`stack-${this.direction}`)]: this.direction,
-        [this.$c(`stack-gap`)]: this.gap != null,
-        [this.$c(`stack-gap-${this.gap}`)]: typeof this.gap === 'string'
+        [this.$c(`stack-gap`)]: this.gap
       }
     },
     innerClass () {
       return {
         [this.$c('stack-inner')]: true,
+        [this.$c(`stack-inner-gap-${this.gap}`)]: typeof this.gap === 'string',
         [this.$c(`stack-inner-align-${this.realAlign}`)]: this.realAlign,
         [this.$c(`stack-inner-justify-${this.justify}`)]: this.justify
       }
     },
-    rootStyle () {
+    innerStyle () {
       let { gap } = this
       return typeof gap === 'number' && gap > 0
         ? {
