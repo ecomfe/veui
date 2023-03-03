@@ -12,8 +12,8 @@ export { default as toast } from './managers/toast'
 
 export { default as useControllable } from './mixins/controllable'
 export { default as useSearchable } from './mixins/searchable'
-export { default as useUi } from './mixins/ui'
-export { default as useInput } from './mixins/input'
+export { useUi } from './mixins/ui'
+export { useInput } from './mixins/input'
 
 export {
   alert as $alert,
