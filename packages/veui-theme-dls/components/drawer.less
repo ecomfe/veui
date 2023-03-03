@@ -3,6 +3,20 @@
 .@{veui-prefix}-drawer {
   @indent: 180px;
 
+  .drawer-width(@ui-width) {
+    @padding-x: @dls-dialog-padding-x * 2;
+
+    --veui-drawer-ui-width: @ui-width;
+    --veui-drawer-content-fallback: calc(
+      var(--veui-drawer-ui-width) - @padding-x
+    );
+    --veui-drawer-width: calc(
+      var(--dls-drawer-content-width, var(--veui-drawer-content-fallback)) +
+        @padding-x
+    );
+    width: var(--dls-drawer-width, var(--veui-drawer-width));
+  }
+
   &-box {
     .veui-transition(background-color);
 
@@ -54,7 +68,6 @@
   &-right {
     .@{veui-prefix}-dialog-content {
       .absolute(0, 0, 0, auto);
-      width: @dls-drawer-width;
       box-shadow: @dls-drawer-shadow-right;
       transform: translateX(
         calc(var(~"--@{veui-prefix}-drawer-indent-level") * -@indent)
@@ -76,11 +89,17 @@
   &-left {
     .@{veui-prefix}-dialog-content {
       .absolute(0, auto, 0, 0);
-      width: @dls-drawer-width;
       box-shadow: @dls-drawer-shadow-left;
       transform: translateX(
         calc(var(~"--@{veui-prefix}-drawer-indent-level") * @indent)
       );
+    }
+  }
+
+  &-right,
+  &-left {
+    .@{veui-prefix}-dialog-content {
+      .drawer-width(@dls-drawer-width);
     }
   }
 

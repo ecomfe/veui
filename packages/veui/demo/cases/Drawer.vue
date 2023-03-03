@@ -40,6 +40,7 @@
     :outside-closable="outsideClosable"
     placement="right"
     title="Hey man"
+    :overlay-style="{ '--dls-drawer-width': '700px' }"
   >
     <veui-button @click="right2Open = true">Second</veui-button>
     <veui-drawer
