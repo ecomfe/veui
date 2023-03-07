@@ -60,7 +60,10 @@
       width: auto !important;
       box-shadow: @dls-drawer-shadow-top;
       transform: translateY(
-        calc(var(~"--@{veui-prefix}-drawer-indent-level") * @indent)
+        calc(
+          var(~"--@{veui-prefix}-drawer-indent-offset", 0) +
+            var(~"--@{veui-prefix}-drawer-indent-level") * @indent
+        )
       );
     }
   }
@@ -70,7 +73,10 @@
       .absolute(0, 0, 0, auto);
       box-shadow: @dls-drawer-shadow-right;
       transform: translateX(
-        calc(var(~"--@{veui-prefix}-drawer-indent-level") * -@indent)
+        calc(
+          var(~"--@{veui-prefix}-drawer-indent-offset", 0) * -1 +
+            var(~"--@{veui-prefix}-drawer-indent-level") * -@indent
+        )
       );
     }
   }
@@ -81,7 +87,10 @@
       width: auto !important;
       box-shadow: @dls-drawer-shadow-bottom;
       transform: translateY(
-        calc(var(~"--@{veui-prefix}-drawer-indent-level") * -@indent)
+        calc(
+          var(~"--@{veui-prefix}-drawer-indent-offset", 0) * -1 +
+            var(~"--@{veui-prefix}-drawer-indent-level") * -@indent
+        )
       );
     }
   }
@@ -91,7 +100,10 @@
       .absolute(0, auto, 0, 0);
       box-shadow: @dls-drawer-shadow-left;
       transform: translateX(
-        calc(var(~"--@{veui-prefix}-drawer-indent-level") * @indent)
+        calc(
+          var(~"--@{veui-prefix}-drawer-indent-offset", 0) +
+            var(~"--@{veui-prefix}-drawer-indent-level") * @indent
+        )
       );
     }
   }

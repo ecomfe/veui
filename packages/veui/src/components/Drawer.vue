@@ -1,5 +1,10 @@
 <template>
-<veui-dialog v-bind="attrs" :open.sync="realOpen" v-on="$listeners">
+<veui-dialog
+  ref="root"
+  v-bind="attrs"
+  :open.sync="realOpen"
+  v-on="$listeners"
+>
   <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope">
     <slot :name="slot" v-bind="scope"/>
   </template>
@@ -15,6 +20,12 @@ import '../common/global'
 import { LOOSE_PROP_DEF, normalizeClass, normalizeStyle } from '../utils/helper'
 
 const PLACEMENT = ['top', 'right', 'bottom', 'left']
+const DIMENSION_MAP = {
+  top: 'offsetHeight',
+  right: 'offsetWidth',
+  bottom: 'offsetHeight',
+  left: 'offsetWidth'
+}
 
 const state = Vue.observable({
   top: [],
@@ -42,6 +53,11 @@ export default {
     overlayClass: LOOSE_PROP_DEF,
     overlayStyle: LOOSE_PROP_DEF
   },
+  data () {
+    return {
+      dimension: null
+    }
+  },
   computed: {
     attrs () {
       return {
@@ -53,26 +69,40 @@ export default {
           this.overlayClass
         ),
         overlayStyle: normalizeStyle(
-          { [`--${prefixify('drawer-indent-level')}`]: this.indentLevel },
+          { [`--${prefixify('drawer-indent-level')}`]: this.indent.level },
+          {
+            [`--${prefixify(
+              'drawer-indent-offset'
+            )}`]: `${this.indent.offset}px`
+          },
           this.overlayStyle
         ),
         draggable: false
       }
     },
-    indentLevel () {
+    indent () {
       let stack = state[this.placement]
+      let top = stack[stack.length - 1]
       let index = stack.indexOf(this)
 
-      if (index === -1) {
-        return 0
+      if (index === -1 || stack.length === 0 || this === top) {
+        return {
+          level: 0,
+          offset: 0
+        }
       }
 
-      return stack.length - index - 1
+      return {
+        level: stack.length - index - 1,
+        offset: top.dimension - this.dimension
+      }
     }
   },
   watch: {
     realOpen (val) {
-      this.updateStack(this.placement, val)
+      this.$nextTick(() => {
+        this.updateStack(this.placement, val)
+      })
     },
     placement (val, oldVal) {
       if (!this.realOpen) {
@@ -98,6 +128,7 @@ export default {
     updateStack (side, val) {
       let stack = state[side]
       if (val) {
+        this.dimension = this.$refs.root.$refs.content[DIMENSION_MAP[side]]
         stack.push(this)
       } else {
         let index = stack.indexOf(this)

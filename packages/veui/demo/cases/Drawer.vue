@@ -40,7 +40,7 @@
     :outside-closable="outsideClosable"
     placement="right"
     title="Hey man"
-    :overlay-style="{ '--dls-drawer-width': '700px' }"
+    :overlay-style="{ '--dls-drawer-width': '960px' }"
   >
     <veui-button @click="right2Open = true">Second</veui-button>
     <veui-drawer
@@ -49,6 +49,7 @@
       :open.sync="right2Open"
       :outside-closable="outsideClosable"
       placement="right"
+      :overlay-style="{ '--dls-drawer-width': '480px' }"
     >
       <veui-button @click="right3Open = true">Third</veui-button>
       <veui-drawer
@@ -57,6 +58,7 @@
         :open.sync="right3Open"
         :outside-closable="outsideClosable"
         placement="right"
+        :overlay-style="{ '--dls-drawer-width': '320px' }"
       />
     </veui-drawer>
   </veui-drawer>
