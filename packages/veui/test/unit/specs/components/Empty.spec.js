@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import Button from '@/components/Button'
 import Empty from '@/components/Empty'
 
 describe('components/Empty', function () {
@@ -8,7 +9,8 @@ describe('components/Empty', function () {
     let wrapper = mount(
       {
         components: {
-          'veui-empty': Empty
+          'veui-empty': Empty,
+          'veui-button': Button
         },
         data () {
           return {
