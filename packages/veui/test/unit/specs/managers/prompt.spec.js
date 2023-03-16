@@ -44,7 +44,7 @@ describe('managers/prompt', function () {
 
     expect(isCancel).to.equal(true)
 
-    prompt.removeComponent(component)
+    prompt.clear()
   })
 
   it('should implement `_show` function correctly', async () => {
@@ -89,7 +89,7 @@ describe('managers/prompt', function () {
 
     expect(isCancel).to.equal(true)
 
-    document.body.removeChild(getEl('.veui-prompt-box'))
+    prompt.clear()
   })
 
   it('should handle async ok/cancel correctly', async () => {

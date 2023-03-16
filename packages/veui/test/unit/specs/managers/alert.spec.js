@@ -34,7 +34,7 @@ describe('managers/alert', function () {
 
     expect(isClicked).to.equal(true)
 
-    alert.removeComponent(component)
+    alert.clear()
   })
 
   it('should implement `_show` function correctly', async () => {
@@ -62,7 +62,7 @@ describe('managers/alert', function () {
 
     expect(isClicked).to.equal(true)
 
-    document.body.removeChild(getEl('.veui-alert-box'))
+    alert.clear()
   })
 })
 

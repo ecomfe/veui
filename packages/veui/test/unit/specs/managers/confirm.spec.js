@@ -42,7 +42,7 @@ describe('managers/confirm', function () {
 
     expect(isCancel).to.equal(true)
 
-    confirm.removeComponent(component)
+    confirm.clear()
   })
 
   it('should implement `_show` function correctly', async () => {
@@ -80,7 +80,7 @@ describe('managers/confirm', function () {
 
     expect(isCancel).to.equal(true)
 
-    document.body.removeChild(getEl('.veui-confirm-box'))
+    confirm.clear()
   })
 
   it('should handle async ok/cancel correctly', async () => {
@@ -108,6 +108,8 @@ describe('managers/confirm', function () {
     await wait(500)
 
     expect(getEl('.veui-dialog-content-foot')).to.equal(null)
+
+    confirm.clear()
   })
 })
 

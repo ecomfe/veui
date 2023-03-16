@@ -43,6 +43,8 @@ describe('managers/simple-dialog', function () {
       content: 'Content',
       open: true
     })
+
+    dialog.clear()
   })
 
   it('should implement contextual methods correctly', () => {
@@ -56,5 +58,7 @@ describe('managers/simple-dialog', function () {
         type: type === 'warn' ? 'warning' : type
       })
     })
+
+    dialog.clear()
   })
 })

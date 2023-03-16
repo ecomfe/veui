@@ -30,6 +30,10 @@ export default class SimpleDialog {
     }
   }
 
+  clear () {
+    this.components.forEach((component) => this.removeComponent(component))
+  }
+
   _show () {
     throw new Error("SimpleDialog's [_show] method must be implemented.")
   }
