@@ -1,0 +1,140 @@
+@import "../lib.less";
+
+.@{veui-prefix}-tag-input {
+  @dls-tag-input-padding-y: @dls-select-padding-y;
+  @dls-tag-input-tag-spacing: @dls-select-tag-spacing;
+  @dls-tag-input-tag-height-xs: @dls-select-tag-height-xs;
+  @dls-tag-input-tag-height-s: @dls-select-tag-height-s;
+  @dls-tag-input-tag-height-m: @dls-select-tag-height-m;
+  @dls-tag-input-tag-height-l: @dls-select-tag-height-l;
+
+  @adjusted-tag-input-padding-y: dls-sum(@dls-tag-input-padding-y, -1px);
+
+  position: relative;
+  display: inline-block;
+  width: @dls-input-width;
+  overflow: hidden;
+
+  &[ui] {
+    height: auto;
+  }
+
+  &:not(*:root) {
+    vertical-align: -0.5px; // hacks to align with other inputs
+  }
+
+  .@{veui-prefix}-input {
+    &-before {
+      display: block;
+      overflow: visible;
+      padding-right: 0;
+    }
+
+    &-content {
+      display: block;
+    }
+
+    &-input {
+      width: 0;
+      max-width: 100%;
+      margin-top: @adjusted-tag-input-padding-y;
+      float: left;
+    }
+
+    &-placeholder,
+    &-after {
+      margin: @adjusted-tag-input-padding-y 0;
+    }
+
+    &-after {
+      float: right;
+
+      &:empty {
+        width: 0;
+      }
+    }
+  }
+
+  &.@{veui-prefix}-focus:not(&-empty) .@{veui-prefix}-input-input {
+    width: 10px;
+  }
+
+  &-tag {
+    float: left;
+    margin-right: @dls-tag-input-tag-spacing;
+    margin-top: @adjusted-tag-input-padding-y;
+    cursor: default;
+  }
+
+  &-tag-count {
+    line-height: 2; // ensure even number
+    color: @dls-input-count-color;
+    font-variant-numeric: tabular-nums;
+    .veui-transition(color);
+
+    &-overflow {
+      color: @dls-input-count-color-error;
+    }
+  }
+
+  &-tag-count + &-clear {
+    margin-left: @dls-input-content-spacing;
+  }
+
+  .make-metrics (@size) {
+    @input-height: ~"dls-input-height-@{size}";
+    @height: ~"dls-tag-input-tag-height-@{size}";
+
+    min-height: @@input-height;
+
+    .@{veui-prefix}-tag-input-tag,
+    .@{veui-prefix}-input-after,
+    .@{veui-prefix}-input-input {
+      height: @@height;
+    }
+
+    .@{veui-prefix}-input-placeholder {
+      line-height: @@height;
+    }
+  }
+
+  &[ui~="m"] {
+    .make-metrics(m);
+  }
+
+  &[ui~="xs"] {
+    .make-metrics(xs);
+
+    &-tag {
+      font-size: @dls-tag-font-size-s;
+    }
+  }
+
+  &[ui~="s"] {
+    .make-metrics(s);
+
+    &-tag {
+      font-size: @dls-tag-font-size-s;
+    }
+  }
+
+  &[ui~="l"] {
+    .make-metrics(l);
+  }
+
+  .@{veui-prefix}-input-group & {
+    margin-right: -1px;
+
+    &:first-child .@{veui-prefix}-input {
+      .border-right-radius(0);
+    }
+
+    &:last-child .@{veui-prefix}-input {
+      .border-left-radius(0);
+    }
+
+    &:not(:first-child):not(:last-child) .@{veui-prefix}-input {
+      border-radius: 0;
+    }
+  }
+}

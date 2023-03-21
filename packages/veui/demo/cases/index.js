@@ -63,6 +63,7 @@ import Layout from './Layout'
 import Message from './Message'
 import Empty from './Empty'
 import Stack from './Stack'
+import TagInput from './TagInput'
 
 export default [
   {
@@ -442,6 +443,11 @@ export default [
     path: '/tag',
     name: 'Tag',
     component: Tag
+  },
+  {
+    path: '/tag-input',
+    name: 'TagInput',
+    component: TagInput
   },
   {
     path: '/textarea',
