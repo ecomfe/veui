@@ -363,6 +363,10 @@ export default {
       }
     },
     handleTriggerKeydown (e) {
+      if (this.realReadonly || this.realDisabled) {
+        return
+      }
+
       let passive = true
       switch (e.key) {
         case 'Up':
@@ -489,7 +493,7 @@ export default {
           return null
         }
         return matches.map(({ parts }, idx) => {
-          let item = parts.map(({ text, matched }, index) => {
+          let item = parts.map(({ text, matched }) => {
             return matched ? (
               <mark class={this.$c('option-matched')}>{text}</mark>
             ) : (
@@ -527,26 +531,30 @@ export default {
       : null
 
     let selected = Array.isArray(this.selected) ? this.selected : []
-    let selectedTags = selected.map(({ label, value, disabled }, index) => (
-      <Tag
-        key={value}
-        data-key={value}
-        onRemove={() => this.removeSelectedAt(index)}
-        disabled={this.realDisabled || this.realReadonly || disabled}
-        removable={!this.disabled && !disabled}
-        {...{
-          nativeOn: {
-            '!mouseup': stopPropagation
-          }
-        }}
-      >
-        {renderSlot(this, 'tag', {
-          label,
-          ...findOptionByValue(this.realOptions, value),
-          index
-        }) || label}
-      </Tag>
-    ))
+    let selectedTags = selected.map(({ label, value, disabled }, index) => {
+      const isDisabled = this.realDisabled || disabled
+
+      return (
+        <Tag
+          key={value}
+          data-key={value}
+          onRemove={() => this.removeSelectedAt(index)}
+          disabled={isDisabled}
+          removable={!this.realReadonly && !isDisabled}
+          {...{
+            nativeOn: {
+              '!mouseup': stopPropagation
+            }
+          }}
+        >
+          {renderSlot(this, 'tag', {
+            label,
+            ...findOptionByValue(this.realOptions, value),
+            index
+          }) || label}
+        </Tag>
+      )
+    })
 
     let renderCustomLabel = (props) => {
       let customLabel = renderSlot(this, 'label', props)
@@ -703,6 +711,9 @@ export default {
                     ui={this.uiParts.clear}
                     aria-label={this.t('clear')}
                     disabled={this.realDisabled || this.realReadonly}
+                    tabindex={
+                      this.realDisabled || this.realReadonly ? '-1' : '0'
+                    }
                     // had to do so because of vuejs/jsx#77
                     {...{
                       on: {
