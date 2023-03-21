@@ -51,6 +51,7 @@
       show-select-all
       clearable
       multiple
+      readonly
     >
       <template #tag="{ label }">
         <i>{{ label }}</i>

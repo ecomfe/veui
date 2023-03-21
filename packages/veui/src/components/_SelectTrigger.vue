@@ -74,10 +74,7 @@ export default {
       )
     },
     finalInvalid () {
-      if (this.realInvalid) {
-        return this.realInvalid
-      }
-      return this.countOverflow
+      return this.realInvalid || this.countOverflow
     },
     countOverflow () {
       if (this.multiple && this.max) {
@@ -163,14 +160,16 @@ export default {
     renderSelectedTags () {
       return this.realSelected.map((item, index) => {
         let { label, value, disabled } = item
+        const isDisabled = this.realDisabled || this.realReadonly || disabled
+
         return (
           <Tag
             key={value}
             ui={this.uiParts.tag}
             data-key={value}
             onRemove={() => this.$emit('remove', item)}
-            disabled={this.realDisabled || this.realReadonly || disabled}
-            removable={!this.disabled && !disabled}
+            disabled={isDisabled}
+            removable={!isDisabled}
             {...{
               nativeOn: {
                 '!mouseup': stopPropagation
