@@ -173,15 +173,15 @@
   },
   {
     "name": "Cascader",
-    "path": "Cascader/Cascader.vue"
-  },
-  {
-    "name": "Cascader",
     "path": "Cascader"
   },
   {
     "name": "Cascader",
     "path": "Cascader/index.js"
+  },
+  {
+    "name": "Cascader",
+    "path": "Cascader/Cascader.vue"
   },
   {
     "name": "CheckButtonGroup",
@@ -438,6 +438,10 @@
   {
     "name": "Tabs",
     "path": "Tabs/index.js"
+  },
+  {
+    "name": "TagInput",
+    "path": "TagInput.vue"
   },
   {
     "name": "Textarea",

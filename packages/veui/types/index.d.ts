@@ -63,6 +63,7 @@ export declare const Tab: Components.Tab
 export declare const Table: Components.Table
 export declare const Tabs: Components.Tabs
 export declare const Tag: Components.Tag
+export declare const TagInput: Components.TagInput
 export declare const Textarea: Components.Textarea
 export declare const TimePicker: Components.TimePicker
 export declare const Toast: Components.Toast

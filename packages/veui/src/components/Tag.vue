@@ -6,7 +6,6 @@ import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import useControllable from '../mixins/controllable'
 import i18n from '../mixins/i18n'
-import warn from '../utils/warn'
 import '../common/global'
 
 export default {
@@ -39,11 +38,6 @@ export default {
       return !this.disabled && this.selectable ? 0 : null
     }
   },
-  created () {
-    if (this.removable && this.selectable) {
-      warn('[veui-tag] `removable` and `selectable` cannot be both true.', this)
-    }
-  },
   methods: {
     focus () {
       this.$el.focus()
@@ -68,6 +62,7 @@ export default {
     let TagName = this.selectable ? 'button' : 'div'
     return this.realRemoved ? null : (
       <TagName
+        {...{ on: this.$listeners }}
         tabindex={this.tabIndex}
         ui={this.realUi}
         class={{
