@@ -160,7 +160,7 @@ export default {
     },
     countLabel () {
       if (this.max) {
-        return `${(this.realValue || []).length}/${this.max}`
+        return `${this.realValue.length}/${this.max}`
       }
       return null
     },
@@ -214,10 +214,6 @@ export default {
     updateInputWidth () {
       const { nativeInput } = this
 
-      if (!nativeInput) {
-        return
-      }
-
       nativeInput.style.width = ''
       nativeInput.style.width = `${nativeInput.scrollWidth + 1}px`
     },
@@ -255,7 +251,7 @@ export default {
         }
         case 'Enter': {
           const { input } = this.$refs
-          if (input && input.composing) {
+          if (input.composing) {
             return
           }
           this.appendTag(this.realInputValue)
@@ -274,15 +270,11 @@ export default {
       this.commit('inputValue', tag)
     },
     focus () {
-      const { input } = this.$refs
-      if (input) {
-        input.focus()
+      if (!this.realDisabled) {
+        this.$refs.input.focus()
       }
     },
     activate () {
-      if (this.realDisabled || this.realReadonly) {
-        return
-      }
       this.focus()
     },
     clear () {

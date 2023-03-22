@@ -1,4 +1,4 @@
-import { mount } from '../../../utils'
+import { mount, wait } from '../../../utils'
 import TagInput from '@/components/TagInput'
 
 describe('components/TagInput', function () {
@@ -86,17 +86,47 @@ describe('components/TagInput', function () {
     wrapper.destroy()
   })
 
-  it('disabled input should not be focused when activated', async () => {
-    let wrapper = mount(TagInput, {
-      propsData: {
-        disabled: true
+  it('should handle focus and activate correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-tag-input': TagInput
+        },
+        data () {
+          return {
+            value: null,
+            readonly: false,
+            disabled: false
+          }
+        },
+        template:
+          '<veui-tag-input ref="input" :readonly="readonly" :disabled="disabled"/>'
+      },
+      {
+        attachToDocument: true
       }
-    })
+    )
 
-    let { vm } = wrapper
-    vm.activate()
+    const { vm } = wrapper
+    const { input } = vm.$refs
+
+    input.activate()
+    await wait(0)
+    expect(wrapper.find('.veui-tag-input').classes('veui-focus')).to.equal(true)
+    document.body.focus()
+    vm.readonly = true
     await vm.$nextTick()
 
+    input.focus()
+    await wait(0)
+    expect(wrapper.find('.veui-tag-input').classes('veui-focus')).to.equal(true)
+    document.body.focus()
+    vm.readonly = false
+    vm.disabled = true
+    await vm.$nextTick()
+
+    input.activate()
+    await wait(0)
     expect(wrapper.find('.veui-tag-input').classes('veui-focus')).to.equal(
       false
     )
@@ -137,7 +167,7 @@ describe('components/TagInput', function () {
     expect(tags.at(1).text()).to.equal('bar')
     expect(input.element.value).to.equal('baz')
 
-    input.trigger('keydown.enter', { key: 'Enter' })
+    input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
     tags = wrapper.findAll('.veui-tag')
     expect(tags.length).to.equal(2)
@@ -181,7 +211,7 @@ describe('components/TagInput', function () {
     expect(tags.at(1).text()).to.equal('bar')
     expect(input.element.value).to.equal('baz')
 
-    input.trigger('keydown.enter', { key: 'Enter' })
+    input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
     tags = wrapper.findAll('.veui-tag')
     expect(tags.length).to.equal(3)
@@ -192,6 +222,68 @@ describe('components/TagInput', function () {
     expect(vm.value).to.deep.equal(['foo', 'bar', 'baz'])
     expect(vm.inputValue).to.equal('')
 
+    wrapper.destroy()
+  })
+
+  it('should append tags correctly', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
+      },
+      data () {
+        return {
+          value: ['foo'],
+          inputValue: ' ',
+          readonly: false
+        }
+      },
+      template:
+        '<veui-tag-input ref="input" v-model="value" :input-value.sync="inputValue" :readonly="readonly"/>'
+    })
+
+    let { vm } = wrapper
+    let input = wrapper.find('input')
+    let tags = wrapper.findAll('.veui-tag')
+
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    tags = wrapper.findAll('.veui-tag')
+    expect(tags.length).to.equal(1)
+    expect(input.element.value).to.equal(' ')
+
+    vm.inputValue = '  bar  '
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    tags = wrapper.findAll('.veui-tag')
+    expect(tags.length).to.equal(2)
+    expect(tags.at(0).text()).to.equal('foo')
+    expect(tags.at(1).text()).to.equal('bar')
+    expect(input.element.value).to.equal('')
+
+    input.trigger('keydown', { key: 'Esc' })
+    await vm.$nextTick()
+    expect(tags.length).to.equal(2)
+    expect(tags.at(0).text()).to.equal('foo')
+    expect(tags.at(1).text()).to.equal('bar')
+    expect(input.element.value).to.equal('')
+
+    vm.inputValue = 'baz'
+    await vm.$nextTick()
+    input.trigger('compositionupdate')
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    tags = wrapper.findAll('.veui-tag')
+    expect(tags.length).to.equal(2)
+
+    input.trigger('compositionend')
+    vm.readonly = true
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    tags = wrapper.findAll('.veui-tag')
+    expect(tags.length).to.equal(2)
+    expect(input.element.value).to.equal('baz')
     wrapper.destroy()
   })
 
@@ -230,7 +322,7 @@ describe('components/TagInput', function () {
     expect(inputVal).to.equal('foo')
     expect(tags.length).to.equal(0)
 
-    input.trigger('keydown.enter', { key: 'Enter' })
+    input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
     expect(val).to.deep.equal(['foo'])
     expect(inputVal).to.equal('')
@@ -290,6 +382,10 @@ describe('components/TagInput', function () {
     expect(count.text()).to.equal('3/5')
     expect(count.classes('veui-tag-input-tag-count-overflow')).to.equal(false)
     expect(me.classes('veui-invalid')).to.equal(false)
+
+    vm.value = null
+    await vm.$nextTick()
+    expect(count.text()).to.equal('0/5')
 
     vm.value = ['foo', 'bar', 'baz', 'qux', 'quux', 'corge']
     await vm.$nextTick()
@@ -362,6 +458,154 @@ describe('components/TagInput', function () {
     expect(tags.at(1).classes('veui-tag-error')).to.equal(false)
     expect(tags.at(2).classes('veui-tag-error')).to.equal(true)
     expect(me.classes('veui-invalid')).to.equal(true)
+
+    wrapper.destroy()
+  })
+
+  it('should handle tag removal correctly', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
+      },
+      template: `<veui-tag-input ref="input" v-model="value" :input-value.sync="inputValue"
+          :readonly="readonly" :disabled="disabled" clearable/>`,
+      data () {
+        return {
+          value: ['foo', 'bar', 'baz'],
+          inputValue: 'qux',
+          readonly: false,
+          disabled: false
+        }
+      }
+    })
+
+    const { vm } = wrapper
+    let tags = wrapper.findAll('.veui-tag')
+
+    tags.at(0).find('.veui-tag-remove').trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['bar', 'baz'])
+
+    tags = wrapper.findAll('.veui-tag')
+    tags.at(1).find('.veui-tag-remove').trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['bar'])
+
+    const input = wrapper.find('input')
+    input.trigger('keydown', { key: 'Backspace' })
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['bar'])
+
+    vm.inputValue = ''
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Backspace' })
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal([])
+
+    vm.value = ['foo', 'bar', 'baz']
+    vm.readonly = true
+    await vm.$nextTick()
+
+    tags = wrapper.findAll('.veui-tag')
+    expect(tags.at(0).find('.veui-tag-remove').exists()).to.equal(false)
+    expect(tags.at(1).find('.veui-tag-remove').exists()).to.equal(false)
+    expect(tags.at(2).find('.veui-tag-remove').exists()).to.equal(false)
+
+    vm.readonly = false
+    vm.disabled = true
+    await vm.$nextTick()
+
+    tags = wrapper.findAll('.veui-tag')
+    expect(tags.at(0).find('.veui-tag-remove').exists()).to.equal(false)
+    expect(tags.at(1).find('.veui-tag-remove').exists()).to.equal(false)
+    expect(tags.at(2).find('.veui-tag-remove').exists()).to.equal(false)
+
+    wrapper.destroy()
+  })
+
+  it('should handle `allow-duplicate` correctly', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
+      },
+      template: `
+        <veui-tag-input v-model="value" :input-value.sync="inputValue" :allow-duplicate="allowDuplicate"/>
+      `,
+      data () {
+        return {
+          value: ['foo', 'bar', 'baz'],
+          inputValue: 'foo',
+          allowDuplicate: false
+        }
+      }
+    })
+
+    const { vm } = wrapper
+    const input = wrapper.find('input')
+
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['foo', 'bar', 'baz'])
+
+    vm.allowDuplicate = true
+    vm.inputValue = 'foo'
+    await vm.$nextTick()
+
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['foo', 'bar', 'baz', 'foo'])
+
+    wrapper.destroy()
+  })
+
+  it('should handle tag edit correctly', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
+      },
+      template: `
+        <veui-tag-input v-model="value" :input-value.sync="inputValue" :readonly="readonly" :disabled="disabled"/>
+      `,
+      data () {
+        return {
+          value: ['foo', 'bar', 'baz'],
+          inputValue: 'qux',
+          readonly: false,
+          disabled: false
+        }
+      }
+    })
+
+    const { vm } = wrapper
+
+    let tags = wrapper.findAll('.veui-tag')
+    tags.at(0).find('.veui-tag').trigger('dblclick')
+    await vm.$nextTick()
+    expect(vm.inputValue).to.equal('foo')
+    expect(vm.value).to.deep.equal(['bar', 'baz'])
+
+    tags = wrapper.findAll('.veui-tag')
+    tags.at(0).find('.veui-tag').trigger('dblclick')
+    await vm.$nextTick()
+    expect(vm.inputValue).to.equal('bar')
+    expect(vm.value).to.deep.equal(['baz'])
+
+    vm.readonly = true
+    await vm.$nextTick()
+    tags = wrapper.findAll('.veui-tag')
+    tags.at(0).find('.veui-tag').trigger('dblclick')
+    await vm.$nextTick()
+    expect(vm.inputValue).to.equal('bar')
+    expect(vm.value).to.deep.equal(['baz'])
+
+    vm.readonly = false
+    vm.disabled = true
+    await vm.$nextTick()
+    tags = wrapper.findAll('.veui-tag')
+    tags.at(0).find('.veui-tag').trigger('dblclick')
+    await vm.$nextTick()
+    expect(vm.inputValue).to.equal('bar')
+    expect(vm.value).to.deep.equal(['baz'])
 
     wrapper.destroy()
   })
