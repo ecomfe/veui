@@ -1,3 +1,17 @@
+## 2.13.0 "☘️ Shamrock" (2023-03-23)
+
+### 🐞 问题修复
+
+- [^] 修复 `Button` 组件的 `strong text` 和 `strong icon` 样式下加载态的背景色。<!-- #Button -->
+- [^] 修复 `Autocomplete` 组件没有正确设置默认宽度的问题。<!-- #Autocomplete -->
+- [^] 修复 `Select` / `Cascader` 组件在只读状态下依然可以通过键盘进行展开、修改等操作的问题。<!-- #Select #Cascader -->
+- [^] 优化了 `Tag` 组件的文字截断样式<!-- #Tag -->
+- [^] 修复 `Select` / `Cascader` 在多选时超长选项可能溢出容器的样式问题。<!-- #Select #Cascader -->
+
+### 🧪 实验性功能
+
+- [+] 新增 `TagInput` 组件，支持自由输入多段文本形成标签列表。<!-- # TagInput -->
+
 ## 2.12.2 (2023-03-16)
 
 ### ⚠️ 非兼容性变更
