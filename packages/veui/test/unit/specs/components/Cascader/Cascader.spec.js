@@ -2,6 +2,7 @@ import Cascader from 'veui/components/Cascader/Cascader'
 import { mount } from '@vue/test-utils'
 import { wait } from '../../../../utils'
 
+const NATIVE_INPUT = '.veui-input input'
 const OPTION = '.veui-cascader-pane-option-wrap'
 const MENU = '.veui-cascader-pane-column-wrap'
 const SECOND_MENU = `${MENU}:nth-child(2)`
@@ -469,6 +470,70 @@ describe('components/Cascader/Cascader', function () {
     // 移入到不可展开的延时切换到展开上级，所以等一下
     await wait(250)
     expect(vm.expanded).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should handle keydown event correctly', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-cascader': Cascader
+        },
+        data () {
+          return {
+            expanded: true,
+            searchable: false,
+            readonly: false,
+            disabled: false,
+            options: casOptions
+          }
+        },
+        template: `<veui-cascader :readonly="readonly" :disabled="disabled"
+            :searchable="searchable" :expanded.sync="expanded" :options="options"/>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let input = wrapper.find(NATIVE_INPUT)
+    let overlay = wrapper.find('.veui-overlay-box')
+
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(true)
+    document.body.click()
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(false)
+
+    vm.searchable = true
+    await vm.$nextTick()
+    input.trigger('click')
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Esc' })
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(false)
+
+    input.trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(true)
+
+    vm.expanded = false
+    vm.readonly = true
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(false)
+
+    vm.readonly = false
+    vm.disabled = true
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Down' })
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(false)
+
     wrapper.destroy()
   })
 

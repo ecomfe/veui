@@ -412,6 +412,10 @@ export default {
       })
     },
     handleCascaderKeydown (e) {
+      if (this.realReadonly || this.realDisabled) {
+        return
+      }
+
       let passive = true
       let elem = null
       switch (e.key) {
