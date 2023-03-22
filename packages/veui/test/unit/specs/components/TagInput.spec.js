@@ -608,4 +608,28 @@ describe('components/TagInput', function () {
 
     wrapper.destroy()
   })
+
+  it('should append tag upon blur if input value is not empty', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
+      },
+      template: `<veui-tag-input v-model="value" :input-value.sync="inputValue"/>`,
+      data () {
+        return {
+          value: ['foo', 'bar', 'baz'],
+          inputValue: 'qux'
+        }
+      }
+    })
+
+    const { vm } = wrapper
+    const input = wrapper.find('input')
+
+    input.trigger('blur')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['foo', 'bar', 'baz', 'qux'])
+
+    wrapper.destroy()
+  })
 })

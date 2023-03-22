@@ -9,6 +9,7 @@
   v-bind="inputProps"
   v-on="inputEvents"
   @keydown="handleKeydown"
+  @blur="appendTag"
 >
   <template v-if="!empty" #before>
     <veui-tag
@@ -224,8 +225,8 @@ export default {
         ? realValue.concat(val)
         : uniq(realValue.concat(val))
     },
-    appendTag (val) {
-      const value = val.trim()
+    appendTag () {
+      const value = this.realInputValue.trim()
 
       if (!value) {
         return
@@ -254,7 +255,7 @@ export default {
           if (input.composing) {
             return
           }
-          this.appendTag(this.realInputValue)
+          this.appendTag()
           break
         }
         default:
