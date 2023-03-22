@@ -5,7 +5,7 @@
   </h1>
   <section>{{ tags }}</section>
   <section>
-    <h4>max + maxlength + allow-duplicate</h4>
+    <h4>最大个数(3) + 最大字符数(5) + 允许重复</h4>
     <veui-tag-input
       v-model="tags"
       placeholder="请输入"
@@ -18,17 +18,7 @@
     />
   </section>
   <section>
-    <h4>select-on-focus</h4>
-    <veui-tag-input
-      v-model="tags"
-      placeholder="请输入"
-      select-on-focus
-      ui="s"
-      :input-value.sync="value"
-    />
-  </section>
-  <section>
-    <h4>get-length + maxlength</h4>
+    <h4>自定义字符数计算逻辑(×2) + 最大字符数(10)</h4>
     <veui-tag-input
       v-model="tags"
       :get-length="(val) => val.length * 2"
@@ -38,7 +28,7 @@
     />
   </section>
   <section>
-    <h4>clearable + autofocus</h4>
+    <h4>可清除 + 自动聚焦</h4>
     <veui-tag-input
       v-model="tags"
       placeholder="请输入"
@@ -49,7 +39,7 @@
     />
   </section>
   <section>
-    <h4>readonly</h4>
+    <h4>只读</h4>
     <veui-tag-input
       v-model="tags"
       placeholder="请输入"
@@ -58,7 +48,7 @@
     />
   </section>
   <section>
-    <h4>disabled</h4>
+    <h4>禁用</h4>
     <veui-tag-input
       v-model="tags"
       placeholder="请输入"
@@ -67,17 +57,7 @@
     />
   </section>
   <section>
-    <h4>clearable + inline</h4>
-    <veui-tag-input
-      v-model="tags"
-      placeholder="请输入"
-      clearable
-      ui="inline"
-      :input-value.sync="value"
-    />
-  </section>
-  <section>
-    <h4>clearable + max</h4>
+    <h4>可清除 + 最大个数(5)</h4>
     <veui-tag-input
       v-model="tags"
       placeholder="请输入"
