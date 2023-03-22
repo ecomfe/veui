@@ -75,7 +75,7 @@ export default {
         disabled={this.selectable ? this.disabled : null}
         onClick={this.handleClick}
       >
-        {this.$slots.default}
+        <div class={this.$c('tag-label')}>{this.$slots.default}</div>
         {this.removable ? (
           <veui-button
             ui={this.uiParts.remove}
