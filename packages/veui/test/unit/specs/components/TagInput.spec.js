@@ -243,11 +243,10 @@ describe('components/TagInput', function () {
 
     let { vm } = wrapper
     let input = wrapper.find('input')
-    let tags = wrapper.findAll('.veui-tag')
 
     input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
-    tags = wrapper.findAll('.veui-tag')
+    let tags = wrapper.findAll('.veui-tag')
     expect(tags.length).to.equal(1)
     expect(input.element.value).to.equal(' ')
 
