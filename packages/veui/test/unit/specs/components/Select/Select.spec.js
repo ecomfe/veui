@@ -365,11 +365,14 @@ describe('components/Select/Select', function () {
           return {
             options: datasource,
             value: null,
-            searchable: false
+            searchable: false,
+            readonly: false,
+            disabled: false
           }
         },
-        template:
-          '<veui-select v-model="value" :options="options" :searchable="searchable"/>'
+        template: `<veui-select v-model="value" :options="options" :searchable="searchable"
+            :readonly="readonly" :disabled="disabled"
+          />`
       },
       {
         sync: false,
@@ -411,6 +414,20 @@ describe('components/Select/Select', function () {
     input.trigger('keydown', { key: 'Tab' })
     await vm.$nextTick()
     expect(overlay.isVisible()).to.equal(false)
+
+    vm.readonly = true
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(false)
+
+    vm.readonly = false
+    vm.disabled = true
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(overlay.isVisible()).to.equal(false)
+
     wrapper.destroy()
   })
 

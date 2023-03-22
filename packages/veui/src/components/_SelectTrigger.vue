@@ -160,7 +160,7 @@ export default {
     renderSelectedTags () {
       return this.realSelected.map((item, index) => {
         let { label, value, disabled } = item
-        const isDisabled = this.realDisabled || this.realReadonly || disabled
+        const isDisabled = this.realDisabled || disabled
 
         return (
           <Tag
@@ -169,7 +169,7 @@ export default {
             data-key={value}
             onRemove={() => this.$emit('remove', item)}
             disabled={isDisabled}
-            removable={!isDisabled}
+            removable={!this.realReadonly && !isDisabled}
             {...{
               nativeOn: {
                 '!mouseup': stopPropagation
