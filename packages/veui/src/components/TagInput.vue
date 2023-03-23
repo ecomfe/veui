@@ -66,7 +66,7 @@ import Tag from './Tag'
 import Input from './Input'
 import Button from './Button'
 import Icon from './Icon'
-import { pick, omit, uniq, without } from 'lodash'
+import { pick, omit, uniq } from 'lodash'
 
 const SHARED_PROPS = ['placeholder', 'clearable', 'maxlength', 'getLength']
 
@@ -224,10 +224,7 @@ export default {
       switch (e.key) {
         case 'Backspace': {
           if (!this.realInputValue && this.realValue.length) {
-            this.commit(
-              'value',
-              without(this.realValue, this.realValue[this.realValue.length - 1])
-            )
+            this.commit('value', this.realValue.slice(0, -1))
           }
           break
         }

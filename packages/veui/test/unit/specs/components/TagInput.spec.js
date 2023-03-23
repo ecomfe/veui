@@ -467,10 +467,10 @@ describe('components/TagInput', function () {
         'veui-tag-input': TagInput
       },
       template: `<veui-tag-input ref="input" v-model="value" :input-value.sync="inputValue"
-          :readonly="readonly" :disabled="disabled" clearable/>`,
+          :readonly="readonly" :disabled="disabled" allow-duplicate clearable/>`,
       data () {
         return {
-          value: ['foo', 'bar', 'baz'],
+          value: ['foo', 'bar', 'bar'],
           inputValue: 'qux',
           readonly: false,
           disabled: false
@@ -483,23 +483,18 @@ describe('components/TagInput', function () {
 
     tags.at(0).find('.veui-tag-remove').trigger('click')
     await vm.$nextTick()
-    expect(vm.value).to.deep.equal(['bar', 'baz'])
-
-    tags = wrapper.findAll('.veui-tag')
-    tags.at(1).find('.veui-tag-remove').trigger('click')
-    await vm.$nextTick()
-    expect(vm.value).to.deep.equal(['bar'])
+    expect(vm.value).to.deep.equal(['bar', 'bar'])
 
     const input = wrapper.find('input')
     input.trigger('keydown', { key: 'Backspace' })
     await vm.$nextTick()
-    expect(vm.value).to.deep.equal(['bar'])
+    expect(vm.value).to.deep.equal(['bar', 'bar'])
 
     vm.inputValue = ''
     await vm.$nextTick()
     input.trigger('keydown', { key: 'Backspace' })
     await vm.$nextTick()
-    expect(vm.value).to.deep.equal([])
+    expect(vm.value).to.deep.equal(['bar'])
 
     vm.value = ['foo', 'bar', 'baz']
     vm.readonly = true
