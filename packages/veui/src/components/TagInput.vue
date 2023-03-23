@@ -10,6 +10,7 @@
   v-on="inputEvents"
   @keydown="handleKeydown"
   @blur="appendTag"
+  @textwidthchange="handleTextWidthChange"
 >
   <template v-if="!empty" #before>
     <veui-tag
@@ -67,15 +68,7 @@ import Button from './Button'
 import Icon from './Icon'
 import { pick, omit, uniq, without } from 'lodash'
 
-const SHARED_PROPS = [
-  'placeholder',
-  'selectOnFocus',
-  'composition',
-  'clearable',
-  'maxlength',
-  'getLength',
-  'strict'
-]
+const SHARED_PROPS = ['placeholder', 'clearable', 'maxlength', 'getLength']
 
 const BASE_EVENTS = ['input', 'change']
 
@@ -194,29 +187,17 @@ export default {
       return !this.realDisabled && !this.realReadonly
     }
   },
-  watch: {
-    inputValue () {
-      this.$nextTick(() => {
-        this.updateInputWidth()
-      })
-    }
-  },
   mounted () {
     this.nativeInput = this.$refs.input && this.$refs.input.$refs.input
-
-    this.updateInputWidth()
   },
   methods: {
+    handleTextWidthChange (width) {
+      this.nativeInput.style.width = `${width + 1}px`
+    },
     getValueLength (value) {
       return typeof this.getLength === 'function'
         ? this.getLength(value)
         : value.length
-    },
-    updateInputWidth () {
-      const { nativeInput } = this
-
-      nativeInput.style.width = ''
-      nativeInput.style.width = `${nativeInput.scrollWidth + 1}px`
     },
     mergeValue (val) {
       const { realValue, allowDuplicate } = this

@@ -39,6 +39,11 @@
       @change="handleChange"
       @transitionstart="handleTransitionStart"
     >
+    <span
+      v-if="this.$listeners.textwidthchange"
+      ref="measurer"
+      :class="[$c('input-input'), $c('input-measurer')]"
+    />
   </div>
   <template v-if="$slots.after || clearable || realMaxlength !== null">
     <div :class="$c('input-after')">
@@ -251,9 +256,21 @@ export default {
   },
   mounted () {
     this.isSafari = isSafari()
+    this.syncTextWidth()
   },
   methods: {
+    syncTextWidth () {
+      if (this.$listeners.textwidthchange) {
+        const { input, measurer } = this.$refs
+        measurer.textContent = input.value
+
+        this.$nextTick(() => {
+          this.$emit('textwidthchange', measurer.scrollWidth)
+        })
+      }
+    },
     handleInput (e) {
+      this.syncTextWidth()
       this.tmpInputValue = e.target.value
 
       if (this.composing === COMPOSITION_UPDATE) {

@@ -440,9 +440,10 @@ export default {
       this.$emit('input', val)
       this.inputValue = val
       this.commit('expanded', true)
+    },
+    handleTextWidthChange (width) {
       if (this.multiple && this.searchable) {
-        this.nativeInput.style.width = ''
-        this.nativeInput.style.width = `${this.nativeInput.scrollWidth}px`
+        this.nativeInput.style.width = `${width + 1}px`
       }
     },
     handleAfteropen () {
@@ -683,6 +684,7 @@ export default {
             onMouseup={this.handleInputMouseup}
             onBlur={this.handleInputBlur}
             onInput={this.handleTriggerInput}
+            onTextwidthchange={this.handleTextWidthChange}
             autocomplete="off"
             composition={this.composition}
           >

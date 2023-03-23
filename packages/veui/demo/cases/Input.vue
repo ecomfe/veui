@@ -221,6 +221,12 @@
     <h3>Input mask</h3>
     <veui-input mask="####-##-##" placeholder="YYYY-MM-DD" @input="log"/>
   </section>
+
+  <section>
+    <h3>监听文本尺寸</h3>
+    <veui-input @textwidthchange="width = $event"/>
+    <p>Width: {{ width }}px</p>
+  </section>
 </article>
 </template>
 
@@ -257,7 +263,8 @@ export default {
       controlled2: '',
       uncontrolled1: '',
       uncontrolled2: '',
-      autofill: false
+      autofill: false,
+      width: 0
     }
   },
   methods: {

@@ -66,6 +66,10 @@
       :input-value.sync="value"
     />
   </section>
+  <section>
+    <h4>不受控</h4>
+    <veui-tag-input placeholder="请输入"/>
+  </section>
 </article>
 </template>
 

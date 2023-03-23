@@ -1,3 +1,13 @@
+## 2.13.1 (2023-03-23)
+
+### 💡 主要变更
+
+- [^] 优化了 `Select` / `Cascader` 组件在多选 + 可搜索状态下及 `TagInput` 组件的文字输入区域自动宽度计算逻辑。<!-- #Select #Cascader #TagInput -->
+
+### 🐞 问题修复
+
+- [^] 修复 `TagInput` 组件在非受控模式下，文字输入内容不可见的问题。<!-- #TagInput -->
+
 ## 2.13.0 "☘️ Shamrock" (2023-03-23)
 
 ### 🐞 问题修复
@@ -5,7 +15,7 @@
 - [^] 修复 `Button` 组件的 `strong text` 和 `strong icon` 样式下加载态的背景色。<!-- #Button -->
 - [^] 修复 `Autocomplete` 组件没有正确设置默认宽度的问题。<!-- #Autocomplete -->
 - [^] 修复 `Select` / `Cascader` 组件在只读状态下依然可以通过键盘进行展开、修改等操作的问题。<!-- #Select #Cascader -->
-- [^] 优化了 `Tag` 组件的文字截断样式<!-- #Tag -->
+- [^] 优化了 `Tag` 组件的文字截断样式。<!-- #Tag -->
 - [^] 修复 `Select` / `Cascader` 在多选时超长选项可能溢出容器的样式问题。<!-- #Select #Cascader -->
 
 ### 🧪 实验性功能

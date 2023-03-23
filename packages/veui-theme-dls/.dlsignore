@@ -70,6 +70,10 @@
 @dls-foreground-color-info-primary
 @dls-foreground-color-success-primary
 @dls-foreground-color-warning-primary
+@dls-input-height-l
+@dls-input-height-m
+@dls-input-height-s
+@dls-input-height-xs
 @dls-option-height-l
 @dls-option-height-m
 @dls-option-height-s
@@ -242,6 +246,10 @@
 @dls-tag-font-size-s
 @dls-tag-height-m
 @dls-tag-height-s
+@dls-tag-input-tag-height-l
+@dls-tag-input-tag-height-m
+@dls-tag-input-tag-height-s
+@dls-tag-input-tag-height-xs
 @dls-toast-icon-color-error
 @dls-toast-icon-color-info
 @dls-toast-icon-color-success

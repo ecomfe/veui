@@ -1,24 +1,17 @@
-import { mount } from '@vue/test-utils'
 import Input from '@/components/Input'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
-import { expectFieldError } from '../../../utils'
+import { mount, expectFieldError } from '../../../utils'
 
 describe('components/Input', function () {
   this.timeout(10000)
 
   it('should handle value prop with `null` value', (done) => {
-    let wrapper = mount(
-      Input,
-      {
-        propsData: {
-          value: null
-        }
-      },
-      {
-        sync: false
+    let wrapper = mount(Input, {
+      propsData: {
+        value: null
       }
-    )
+    })
 
     wrapper.vm.$on('input', (val) => {
       expect(val).to.equal('')
@@ -57,27 +50,22 @@ describe('components/Input', function () {
 
   it('should only emit input event upon user interaction', async () => {
     let changes = 0
-    let wrapper = mount(
-      {
-        components: {
-          'veui-input': Input
-        },
-        data () {
-          return {
-            value: null
-          }
-        },
-        methods: {
-          handleChange () {
-            changes++
-          }
-        },
-        template: '<veui-input :value="value" @input="handleChange"/>'
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
       },
-      {
-        sync: false
-      }
-    )
+      data () {
+        return {
+          value: null
+        }
+      },
+      methods: {
+        handleChange () {
+          changes++
+        }
+      },
+      template: '<veui-input :value="value" @input="handleChange"/>'
+    })
 
     let { vm } = wrapper
 
@@ -117,35 +105,30 @@ describe('components/Input', function () {
   })
 
   it('should clear value when clear button is clicked', (done) => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-input': Input
-        },
-        data () {
-          return {
-            value: 'test'
-          }
-        },
-        methods: {
-          handleInput (val) {
-            expect(val).to.equal('')
-            expect(this.value).to.equal('')
-            expect(this.$refs.input.localValue).to.equal('')
-
-            this.$nextTick(() => {
-              wrapper.destroy()
-              done()
-            })
-          }
-        },
-        template:
-          '<veui-input ref="input" v-model="value" @input="handleInput" clearable/>'
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
       },
-      {
-        sync: false
-      }
-    )
+      data () {
+        return {
+          value: 'test'
+        }
+      },
+      methods: {
+        handleInput (val) {
+          expect(val).to.equal('')
+          expect(this.value).to.equal('')
+          expect(this.$refs.input.localValue).to.equal('')
+
+          this.$nextTick(() => {
+            wrapper.destroy()
+            done()
+          })
+        }
+      },
+      template:
+        '<veui-input ref="input" v-model="value" @input="handleInput" clearable/>'
+    })
 
     wrapper.find('.veui-input-clear').trigger('click')
   })
@@ -267,25 +250,20 @@ describe('components/Input', function () {
   })
 
   it('should handle `trim` prop correctly', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-input': Input
-        },
-        data () {
-          return {
-            text: '  123  ',
-            trim: null
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      data () {
+        return {
+          text: '  123  ',
+          trim: null
+        }
+      },
+      template: `
         <veui-input :trim="trim" v-model="text"/>
       `
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
     let input = wrapper.find('input')
@@ -354,6 +332,49 @@ describe('components/Input', function () {
     input.trigger('change')
     await vm.$nextTick()
     expect(el.value).to.equal('123')
+  })
+
+  it('should support listening to `textwidthchange` event', async () => {
+    let width = 0
+
+    let wrapper = mount({
+      components: {
+        'veui-input': Input
+      },
+      template: '<veui-input value="foo" @textwidthchange="handleChange"/>',
+      methods: {
+        handleChange (e) {
+          width = e
+        }
+      }
+    })
+
+    let { vm } = wrapper
+    let input = wrapper.find('input')
+    let el = input.element
+
+    el.value += ' '
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(width).to.equal(input.element.scrollWidth)
+
+    el.value += ' '
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(width).to.equal(input.element.scrollWidth)
+
+    el.value += `w'x'y'y`
+    input.trigger('compositionstart', { data: `w'x'y'y` })
+    input.trigger('compositionupdate', { data: `w'x'y'y` })
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(width).to.equal(input.element.scrollWidth)
+
+    input.trigger('compositionupdate', { data: '文心一言' })
+    input.trigger('input')
+    input.trigger('compositionend', { data: '文心一言' })
+    await vm.$nextTick()
+    expect(width).to.equal(input.element.scrollWidth)
   })
 
   it('should apply validations correctly when using input(instance)/blur(native) as triggers', async () => {

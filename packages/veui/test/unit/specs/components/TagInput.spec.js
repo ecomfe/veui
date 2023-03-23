@@ -632,4 +632,28 @@ describe('components/TagInput', function () {
 
     wrapper.destroy()
   })
+
+  it('should sync input width with input value', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
+      },
+      template: `<veui-tag-input :input-value.sync="inputValue"/>`,
+      data () {
+        return {
+          inputValue: 'foo'
+        }
+      }
+    })
+
+    const { vm } = wrapper
+    const input = wrapper.find('input')
+    const { element } = input
+    element.value = 'quxquxqux'
+    input.trigger('input')
+    await vm.$nextTick()
+    expect(element.style.width).to.equal(`${element.scrollWidth + 1}px`)
+
+    wrapper.destroy()
+  })
 })
