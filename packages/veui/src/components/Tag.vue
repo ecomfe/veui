@@ -59,9 +59,8 @@ export default {
     }
   },
   render () {
-    let TagName = this.selectable ? 'button' : 'div'
     return this.realRemoved ? null : (
-      <TagName
+      <div
         {...{ on: this.$listeners }}
         tabindex={this.tabIndex}
         ui={this.realUi}
@@ -88,7 +87,7 @@ export default {
             <veui-icon name={this.icons.remove} />
           </veui-button>
         ) : null}
-      </TagName>
+      </div>
     )
   }
 }
