@@ -216,23 +216,24 @@ export default {
       this.commit('value', this.mergeValue(value))
       this.commit('inputValue', '')
     },
+    popTag () {
+      if (!this.realInputValue && this.realValue.length) {
+        this.commit('value', this.realValue.slice(0, -1))
+      }
+    },
     handleKeydown (e) {
-      if (this.realReadonly || this.realDisabled) {
+      const { input } = this.$refs
+
+      if (this.realReadonly || this.realDisabled || input.composing) {
         return
       }
 
       switch (e.key) {
         case 'Backspace': {
-          if (!this.realInputValue && this.realValue.length) {
-            this.commit('value', this.realValue.slice(0, -1))
-          }
+          this.popTag()
           break
         }
         case 'Enter': {
-          const { input } = this.$refs
-          if (input.composing) {
-            return
-          }
           this.appendTag()
           break
         }

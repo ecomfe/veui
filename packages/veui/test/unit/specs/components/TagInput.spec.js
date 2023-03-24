@@ -260,29 +260,51 @@ describe('components/TagInput', function () {
     expect(tags.at(1).text()).to.equal('bar')
     expect(input.element.value).to.equal('')
 
+    await vm.$nextTick()
     input.trigger('keydown', { key: 'Esc' })
+
     await vm.$nextTick()
     expect(tags.length).to.equal(2)
     expect(tags.at(0).text()).to.equal('foo')
     expect(tags.at(1).text()).to.equal('bar')
     expect(input.element.value).to.equal('')
 
-    vm.inputValue = 'baz'
+    vm.inputValue = `w'x'y'y`
     await vm.$nextTick()
-    input.trigger('compositionupdate')
+    input.trigger('compositionstart', { data: `w'x'y'y` })
+    input.trigger('compositionupdate', { data: `w'x'y'y` })
+    input.trigger('input')
+
+    await vm.$nextTick()
     input.trigger('keydown', { key: 'Enter' })
+
     await vm.$nextTick()
     tags = wrapper.findAll('.veui-tag')
     expect(tags.length).to.equal(2)
 
-    input.trigger('compositionend')
+    vm.inputValue = '文心一言'
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Enter' })
+    input.trigger('compositionupdate', { data: '文心一言' })
+    input.trigger('input')
+    input.trigger('compositionend', { data: '文心一言' })
+
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Enter' })
+
+    await vm.$nextTick()
+    tags = wrapper.findAll('.veui-tag')
+    expect(tags.length).to.equal(3)
+
     vm.readonly = true
+    vm.inputValue = 'baz'
     await vm.$nextTick()
     input.trigger('keydown', { key: 'Enter' })
     await vm.$nextTick()
     tags = wrapper.findAll('.veui-tag')
-    expect(tags.length).to.equal(2)
+    expect(tags.length).to.equal(3)
     expect(input.element.value).to.equal('baz')
+
     wrapper.destroy()
   })
 
@@ -492,9 +514,36 @@ describe('components/TagInput', function () {
 
     vm.inputValue = ''
     await vm.$nextTick()
+    input.trigger('compositionstart', { data: `w'x'y'y` })
+    input.trigger('compositionupdate', { data: `w'x'y'y` })
+    input.trigger('input')
+
+    await vm.$nextTick()
     input.trigger('keydown', { key: 'Backspace' })
+
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['bar', 'bar'])
+
+    vm.inputValue = '文心一言'
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Enter' })
+    input.trigger('compositionupdate', { data: '文心一言' })
+    input.trigger('input')
+    input.trigger('compositionend', { data: '文心一言' })
+
+    await vm.$nextTick()
+    input.trigger('keydown', { key: 'Backspace' })
+
     await vm.$nextTick()
     expect(vm.value).to.deep.equal(['bar'])
+
+    vm.inputValue = ''
+    await vm.$nextTick()
+    input.trigger('input')
+    input.trigger('keydown', { key: 'Backspace' })
+
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal([])
 
     vm.value = ['foo', 'bar', 'baz']
     vm.readonly = true
