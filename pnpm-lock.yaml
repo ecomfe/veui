@@ -119,6 +119,7 @@ importers:
       karma-webpack: ^4.0.2
       less: ^3.13.1
       less-loader: ^7.3.0
+      less-plugin-dls: 11.4.0
       less-plugin-est: ^3.0.1
       lint-staged: ^8.2.1
       lodash: ^4.17.21
@@ -134,6 +135,7 @@ importers:
       rollup-plugin-replace: ^2.2.0
       rollup-plugin-vue: ^5.1.9
       sinon: ^13.0.2
+      style-resources-loader: ^1.5.0
       veui-loader: workspace:*
       veui-theme-dls: workspace:*
       veui-theme-dls-icons: workspace:*
@@ -199,6 +201,7 @@ importers:
       karma-webpack: 4.0.2_webpack@4.46.0
       less: 3.13.1
       less-loader: 7.3.0_less@3.13.1+webpack@4.46.0
+      less-plugin-dls: 11.4.0
       less-plugin-est: 3.0.1
       lint-staged: 8.2.1
       mocha: 7.2.0
@@ -211,6 +214,7 @@ importers:
       rollup-plugin-replace: 2.2.0
       rollup-plugin-vue: 5.1.9_6pj7bj2dnvpmwjq52b6oppz3o4
       sinon: 13.0.2
+      style-resources-loader: 1.5.0_webpack@4.46.0
       veui-loader: link:../veui-loader
       veui-theme-dls: link:../veui-theme-dls
       veui-theme-dls-icons: link:../veui-theme-dls-icons
@@ -3184,7 +3188,6 @@ packages:
 
   /arg/4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
-    dev: false
 
   /argparse/1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
@@ -5008,7 +5011,6 @@ packages:
 
   /color-converters/0.1.1:
     resolution: {integrity: sha512-z38H2Ukv9BI0EQf1AT3ev3lbyBql4K9wSBJ6W32blnKxArRE59TbPxKdlQq/VC7Kl1lxCJuUFAV9Fy96pWfCaw==}
-    dev: false
 
   /color-name/1.1.3:
     resolution: {integrity: sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==}
@@ -6419,7 +6421,6 @@ packages:
     resolution: {integrity: sha512-wxBblJN5ayWpOpgJehDBuThZ4J6j0JA6AeroRCXJFEarOSPa91P/4FyeiQcoedFjyAoqmuEpbXQfS4rr0kyfKA==}
     dependencies:
       color-converters: 0.1.1
-    dev: false
 
   /dls-graphics/1.3.2:
     resolution: {integrity: sha512-hPCo8dpCQLffRLqtPsYIX8txrEzdgIIGfofN6XzRx2GOsm87SOlQIQoqdkir+rPZIuIHFScdb4ifSIsaicXDYQ==}
@@ -7723,7 +7724,7 @@ packages:
     dev: true
 
   /find-up/1.1.2:
-    resolution: {integrity: sha1-ay6YIrGizgpgq2TWEOzK1TyyTQ8=}
+    resolution: {integrity: sha512-jvElSjyuo4EMQGoTwo1uJU5pQMwTW5lS1x05zzfJuTIyLR3zwO27LYrxNg+dlvKpGOuGy/MzBdXh80g0ve5+HA==}
     engines: {node: '>=0.10.0'}
     dependencies:
       path-exists: 2.1.0
@@ -9778,7 +9779,6 @@ packages:
       esm: 3.2.25
       fast-glob: 3.2.11
       pkg-dir: 4.2.0
-    dev: false
 
   /less-plugin-est/3.0.1:
     resolution: {integrity: sha512-eBIlaO3J1YgWq7kQ1oKIuWnZJ786DNiUUNoj4V+9ZX1N5JPTUCiMDQpV7an3j3xZ9+34Q+Te9ByQusw1Xn+OBA==}
@@ -9998,7 +9998,7 @@ packages:
     dev: true
 
   /loader-utils/0.2.17:
-    resolution: {integrity: sha1-+G5jdNQyBabmxg6RlvF8Apm/s0g=}
+    resolution: {integrity: sha512-tiv66G0SmiOx+pLWMtGEkfSEejxvb6N6uRrQjfWJIT79W9GMpgKeCAmm9aVBKtd4WEgntciI8CsGqjpDoCWJug==}
     dependencies:
       big.js: 3.2.0
       emojis-list: 2.1.0
@@ -11399,7 +11399,7 @@ packages:
     dev: true
 
   /path-exists/2.1.0:
-    resolution: {integrity: sha1-D+tsZPD8UY2adU3V77YscCJ2H0s=}
+    resolution: {integrity: sha512-yTltuKuhtNeFJKa1PiRzfLAU5182q1y4Eb4XCJ3PBqyzEDkAZRzBrKKBct682ls9reBVHf9udYLN5Nd+K1B9BQ==}
     engines: {node: '>=0.10.0'}
     dependencies:
       pinkie-promise: 2.0.1
@@ -14201,6 +14201,19 @@ packages:
 
   /style-inject/0.3.0:
     resolution: {integrity: sha512-IezA2qp+vcdlhJaVm5SOdPPTUu0FCEqfNSli2vRuSIBbu5Nq5UvygTk/VzeCqfLz2Atj3dVII5QBKGZRZ0edzw==}
+    dev: true
+
+  /style-resources-loader/1.5.0_webpack@4.46.0:
+    resolution: {integrity: sha512-fIfyvQ+uvXaCBGGAgfh+9v46ARQB1AWdaop2RpQw0PBVuROsTBqGvx8dj0kxwjGOAyq3vepe4AOK3M6+Q/q2jw==}
+    engines: {node: '>=8.9'}
+    peerDependencies:
+      webpack: ^3.0.0 || ^4.0.0 || ^5.0.0
+    dependencies:
+      glob: 7.2.0
+      loader-utils: 2.0.2
+      schema-utils: 2.7.1
+      tslib: 2.4.0
+      webpack: 4.46.0
     dev: true
 
   /style-search/0.1.0:

@@ -1,0 +1,168 @@
+@import "~less-plugin-dls/tokens/index.less";
+
+/* Global */
+@dls-color-brand: #0054e6;
+@dls-color-info: #0054e6;
+@dls-color-success: #009940;
+@dls-color-warning: #f27318;
+@dls-color-error: #d9150b;
+@dls-shadow-color: #0047c2;
+
+@dls-color-translucent-0: transparent;
+@dls-color-translucent-1: fade(#3a55a6, 7%);
+@dls-color-translucent-2: fade(#3a57a6, 10%);
+@dls-color-translucent-3: fade(#365299, 15%);
+@dls-color-translucent-4: fade(#314c8c, 20%);
+@dls-color-translucent-5: fade(#3c5385, 30%);
+@dls-color-translucent-6: fade(#536280, 50%);
+@dls-color-translucent-7: fade(#505a6b, 80%);
+@dls-color-translucent-8: fade(#2d3440, 80%);
+@dls-color-translucent-9: fade(#13161a, 90%);
+@dls-color-translucent-10: fade(#040405, 95%);
+@dls-color-translucent-11: #000;
+
+@dls-font-family-number: "Baidu Number", sans-serif;
+
+@dls-font-size-3: 18px;
+@dls-font-size-4: 20px;
+@dls-font-size-5: 24px;
+@dls-font-size-6: 32px;
+
+@dls-spacing-x-1: @dls-padding-unit * 1;
+@dls-spacing-x-2: @dls-padding-unit * 2;
+@dls-spacing-x-3: @dls-padding-unit * 4;
+@dls-spacing-x-4: @dls-padding-unit * 6;
+@dls-spacing-x-5: @dls-padding-unit * 8;
+@dls-spacing-x-6: @dls-padding-unit * 10;
+
+@dls-spacing-y-1: @dls-padding-unit * 1;
+@dls-spacing-y-2: @dls-padding-unit * 2;
+@dls-spacing-y-3: @dls-padding-unit * 4;
+@dls-spacing-y-4: @dls-padding-unit * 6;
+@dls-spacing-y-5: @dls-padding-unit * 8;
+@dls-spacing-y-6: @dls-padding-unit * 10;
+
+@dls-foreground-color-neutral: @dls-color-translucent-9;
+@dls-foreground-color-neutral-hover: @dls-color-translucent-8;
+@dls-foreground-color-neutral-active: @dls-color-translucent-11;
+@dls-foreground-color-neutral-disabled: @dls-color-translucent-6;
+
+@dls-foreground-color-neutral-strong: @dls-color-translucent-11;
+@dls-foreground-color-neutral-strong-hover: @dls-color-translucent-10;
+@dls-foreground-color-neutral-strong-active: @dls-color-translucent-11;
+@dls-foreground-color-neutral-strong-disabled: @dls-color-translucent-6;
+
+@dls-foreground-color-neutral-light: @dls-color-translucent-8;
+@dls-foreground-color-neutral-light-hover: @dls-color-translucent-7;
+@dls-foreground-color-neutral-light-active: @dls-color-translucent-9;
+@dls-foreground-color-neutral-light-disabled: @dls-color-translucent-6;
+
+@dls-foreground-color-neutral-weak: @dls-color-translucent-7;
+@dls-foreground-color-neutral-weak-hover: @dls-color-translucent-8;
+@dls-foreground-color-neutral-weak-active: @dls-color-translucent-9;
+@dls-foreground-color-neutral-weak-disabled: @dls-color-translucent-5;
+
+@dls-foreground-color-neutral-dim: @dls-color-translucent-6;
+@dls-foreground-color-neutral-dim-hover: @dls-color-translucent-7;
+@dls-foreground-color-neutral-dim-active: @dls-color-translucent-8;
+@dls-foreground-color-neutral-dim-disabled: @dls-color-translucent-3;
+
+@dls-foreground-color-neutral-highlightable: @dls-color-translucent-9;
+@dls-foreground-color-neutral-highlightable-disabled: @dls-color-translucent-6;
+
+@dls-shadow-1: 0 4px 10px fade(@dls-shadow-color, 3%),
+  0 3px 9px fade(@dls-shadow-color, 2%), 0 2px 8px fade(@dls-shadow-color, 1%);
+@dls-shadow-2: 0 6px 28px 2px fade(@dls-shadow-color, 4%),
+  0 4px 26px 2px fade(@dls-shadow-color, 3%),
+  0 2px 24px 1px fade(@dls-shadow-color, 2%);
+@dls-shadow-3: 0 6px 32px 2px fade(@dls-shadow-color, 6%),
+  0 5px 30px 1px fade(@dls-shadow-color, 5%),
+  0 4px 28px 1px fade(@dls-shadow-color, 4%);
+@dls-shadow-4: 0 1px 8px fade(@dls-shadow-color, 6%),
+  0 7px 14px 2px fade(@dls-shadow-color, 5%),
+  0 8px 16px 4px fade(@dls-shadow-color, 4%);
+@dls-shadow-light-1: @dls-shadow-1;
+
+/* Alert */
+@dls-alert-border-radius-s: @dls-border-radius-1;
+@dls-alert-line-height: @dls-line-height-2;
+
+/* Button */
+@dls-button-border-radius-xs: @dls-border-radius-1;
+@dls-button-border-radius-s: @dls-border-radius-1;
+@dls-button-border-radius-l: @dls-border-radius-1;
+@dls-button-border-radius-xl: @dls-border-radius-1;
+
+/* Carousel */
+@dls-carousel-control-shadow: @dls-shadow-2;
+@dls-carousel-pages-border-radius: @dls-border-radius-1;
+
+/* Checkbox */
+@dls-checkbox-border-radius: @dls-border-radius-1;
+
+/* Collapse */
+@dls-collapse-body-line-height: @dls-line-height-2;
+@dls-collapse-border-radius-s: @dls-border-radius-1;
+
+/* DatePicker */
+@dls-date-picker-dropdown-border-radius-s: @dls-border-radius-1;
+@dls-date-picker-dropdown-shadow: @dls-shadow-4;
+@dls-date-picker-cell-border-radius-s: @dls-border-radius-1;
+
+/* Dialog */
+@dls-dialog-border-radius: @dls-border-radius-1;
+
+/* Drawer */
+@dls-drawer-shadow-top: @dls-shadow-4;
+@dls-drawer-shadow-right: @dls-shadow-4;
+@dls-drawer-shadow-bottom: @dls-shadow-4;
+@dls-drawer-shadow-left: @dls-shadow-4;
+
+/* Dropdown */
+@dls-dropdown-menu-border-radius-xs: @dls-border-radius-1;
+@dls-dropdown-menu-border-radius-s: @dls-border-radius-1;
+@dls-dropdown-menu-border-radius-l: @dls-border-radius-1;
+@dls-dropdown-menu-shadow: @dls-shadow-4;
+
+/* Input */
+@dls-input-border-radius-xs: @dls-border-radius-1;
+@dls-input-border-radius-s: @dls-border-radius-1;
+@dls-input-border-radius-l: @dls-border-radius-1;
+
+/* Layout */
+@dls-layout-header-shadow: @dls-shadow-1;
+@dls-layout-sidebar-shadow: @dls-shadow-1;
+
+/* Popover */
+@dls-popover-line-height: @dls-line-height-2;
+@dls-popover-border-radius-s: @dls-border-radius-1;
+
+/* Sidenav */
+@dls-sidenav-item-border-radius: @dls-border-radius-1;
+
+/* Table */
+@dls-table-border-radius-s: @dls-border-radius-1;
+@dls-table-overflow-shadow-right: @dls-shadow-4;
+@dls-table-overflow-shadow-left: @dls-shadow-4;
+
+/* Tabs */
+@dls-tab-overflow-shadow-right: @dls-shadow-2;
+@dls-tab-overflow-shadow-left: @dls-shadow-2;
+
+/* Tag */
+@dls-tag-border-radius-s: @dls-border-radius-1;
+
+/* Textarea */
+@dls-textarea-count-border-radius: @dls-border-radius-1;
+
+/* Toast */
+@dls-toast-border-radius-s: @dls-border-radius-1;
+@dls-toast-shadow: @dls-shadow-4;
+
+/* Tooltip */
+@dls-tooltip-line-height: @dls-line-height-2;
+@dls-tooltip-border-radius: @dls-border-radius-1;
+@dls-tooltip-shadow-normal: @dls-shadow-4;
+
+/* Transfer */
+@dls-transfer-border-radius-s: @dls-border-radius-1;

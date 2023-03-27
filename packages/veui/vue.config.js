@@ -94,6 +94,19 @@ module.exports = {
 
     config.module.rules.delete('sass')
 
+    const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
+    types.forEach((type) => {
+      config.module
+        .rule('less')
+        .oneOf(type)
+        .use('style-resources')
+        .loader('style-resources-loader')
+        .options({
+          patterns: [resolve('./d22.less')],
+          injector: 'append'
+        })
+    })
+
     config
       .plugin('context-replacement')
       .use(webpack.ContextReplacementPlugin, [/moment[\\/]locale$/, /^$/])
