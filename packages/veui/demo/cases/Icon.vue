@@ -5,11 +5,12 @@
   </h1>
   <section>
     <veui-checkbox v-model="compact">Compact</veui-checkbox>
+    <veui-radio-button-group v-model="color" :items="colors"/>
   </section>
   <div class="icons" :class="{ compact }">
     <div v-for="icon in icons" :key="icon" class="icon">
       <div v-tooltip="{ content: icon, disabled: !compact }" class="svg">
-        <veui-icon :name="icon"/>
+        <veui-icon :name="icon" :class="color"/>
       </div>
       <transition name="name">
         <div v-if="!compact" class="name">{{ icon }}</div>
@@ -24,6 +25,7 @@ import bus from '../bus'
 import { Icon } from 'veui'
 import 'veui-theme-dls-icons'
 import Checkbox from '@/components/Checkbox'
+import RadioButtonGroup from '@/components/RadioButtonGroup'
 import tooltip from '@/directives/tooltip'
 import icons from 'veui-theme-dls-icons/icon-names.json'
 
@@ -34,12 +36,22 @@ export default {
   },
   components: {
     'veui-checkbox': Checkbox,
-    'veui-icon': Icon
+    'veui-icon': Icon,
+    'veui-radio-button-group': RadioButtonGroup
   },
   data () {
     return {
       icons,
-      compact: false
+      compact: false,
+      colors: [
+        { label: 'Normal', value: 'normal' },
+        { label: 'Strong', value: 'strong' },
+        { label: 'Light', value: 'light' },
+        { label: 'Weak', value: 'weak' },
+        { label: 'Dim', value: 'dim' },
+        { label: 'Primary', value: 'primary' }
+      ],
+      color: 'normal'
     }
   },
   mounted () {
@@ -53,6 +65,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "~veui-theme-dls/lib.less";
+
+section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
 .icons {
   display: flex;
   flex-wrap: wrap;
@@ -104,6 +124,30 @@ export default {
     color: #333;
     font-size: 12px;
   }
+}
+
+.normal {
+  color: @dls-foreground-color-neutral;
+}
+
+.strong {
+  color: @dls-foreground-color-neutral-strong;
+}
+
+.light {
+  color: @dls-foreground-color-neutral-light;
+}
+
+.weak {
+  color: @dls-foreground-color-neutral-weak;
+}
+
+.dim {
+  color: @dls-foreground-color-neutral-dim;
+}
+
+.primary {
+  color: @dls-foreground-color-primary;
 }
 
 .compact {
