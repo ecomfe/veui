@@ -503,14 +503,14 @@ describe('components/TagInput', function () {
     const { vm } = wrapper
     let tags = wrapper.findAll('.veui-tag')
 
-    tags.at(0).find('.veui-tag-remove').trigger('click')
+    tags.at(1).find('.veui-tag-remove').trigger('click')
     await vm.$nextTick()
-    expect(vm.value).to.deep.equal(['bar', 'bar'])
+    expect(vm.value).to.deep.equal(['foo', 'bar'])
 
     const input = wrapper.find('input')
     input.trigger('keydown', { key: 'Backspace' })
     await vm.$nextTick()
-    expect(vm.value).to.deep.equal(['bar', 'bar'])
+    expect(vm.value).to.deep.equal(['foo', 'bar'])
 
     vm.inputValue = ''
     await vm.$nextTick()
@@ -522,7 +522,7 @@ describe('components/TagInput', function () {
     input.trigger('keydown', { key: 'Backspace' })
 
     await vm.$nextTick()
-    expect(vm.value).to.deep.equal(['bar', 'bar'])
+    expect(vm.value).to.deep.equal(['foo', 'bar'])
 
     vm.inputValue = '文心一言'
     await vm.$nextTick()
@@ -535,7 +535,7 @@ describe('components/TagInput', function () {
     input.trigger('keydown', { key: 'Backspace' })
 
     await vm.$nextTick()
-    expect(vm.value).to.deep.equal(['bar'])
+    expect(vm.value).to.deep.equal(['foo'])
 
     vm.inputValue = ''
     await vm.$nextTick()

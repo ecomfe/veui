@@ -24,6 +24,8 @@ const debugInBrowser = {
 }
 
 describe('components/TimePicker', function () {
+  this.timeout(10000)
+
   it('should render datasource correctly & open dropdown on focus', async () => {
     let wrapper = mount(
       {

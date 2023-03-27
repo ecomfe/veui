@@ -25,8 +25,8 @@
       tabindex="-1"
       :selectable="editable"
       :selected="false"
-      @dblclick="handleEditTag(tag)"
-      @remove="handleRemove(tag)"
+      @dblclick="handleEditTag(i)"
+      @remove="handleRemove(i)"
     >
       {{ tag }}
     </veui-tag>
@@ -199,26 +199,28 @@ export default {
         ? this.getLength(value)
         : value.length
     },
-    mergeValue (val) {
-      const { realValue, allowDuplicate } = this
-
-      return allowDuplicate
-        ? realValue.concat(val)
-        : uniq(realValue.concat(val))
-    },
     appendTag () {
-      const value = this.realInputValue.trim()
+      const inputValue = this.realInputValue.trim()
 
-      if (!value) {
+      if (!inputValue) {
         return
       }
 
-      this.commit('value', this.mergeValue(value))
+      const { realValue, allowDuplicate } = this
+
+      if (allowDuplicate || realValue.indexOf(inputValue) === -1) {
+        this.commit('value', realValue.concat(inputValue))
+      }
+
       this.commit('inputValue', '')
     },
     popTag () {
       if (!this.realInputValue && this.realValue.length) {
         this.commit('value', this.realValue.slice(0, -1))
+
+        // to fix input position in Chrome
+        this.nativeInput.blur()
+        this.nativeInput.focus()
       }
     },
     handleKeydown (e) {
@@ -241,12 +243,13 @@ export default {
           break
       }
     },
-    handleEditTag (tag) {
+    handleEditTag (i) {
       if (!this.editable) {
         return
       }
 
-      this.handleRemove(tag)
+      const tag = this.realValue[i]
+      this.handleRemove(i)
       this.commit('inputValue', tag)
     },
     focus () {
@@ -265,11 +268,15 @@ export default {
     handleInput (value) {
       this.commit('inputValue', value)
     },
-    handleRemove (tag) {
-      this.commit(
-        'value',
-        this.realValue.filter((item) => item !== tag)
-      )
+    handleRemove (i) {
+      const newValue = [...this.realValue]
+      newValue.splice(i, 1)
+
+      this.commit('value', newValue)
+
+      // to fix input position in Chrome
+      this.nativeInput.blur()
+      this.nativeInput.focus()
     }
   }
 }
