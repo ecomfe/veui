@@ -252,6 +252,9 @@ export default {
         }
       },
       immediate: true
+    },
+    realValue () {
+      this.syncTextWidth()
     }
   },
   mounted () {
@@ -261,10 +264,10 @@ export default {
   methods: {
     syncTextWidth () {
       if (this.$listeners.textwidthchange) {
-        const { input, measurer } = this.$refs
-        measurer.textContent = input.value
-
         this.$nextTick(() => {
+          const { input, measurer } = this.$refs
+          measurer.textContent = input.value
+
           this.$emit('textwidthchange', measurer.scrollWidth)
         })
       }
@@ -367,6 +370,12 @@ export default {
         return
       }
       this.focus()
+    },
+    select () {
+      let { input } = this.$refs
+      if (input) {
+        input.select()
+      }
     },
     clear () {
       this.compositionValue = ''
