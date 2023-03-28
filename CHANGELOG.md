@@ -1,3 +1,40 @@
+## 2.13.4 (2023-03-28)
+
+### 💡 主要变更
+
+- [+] `ConfigProvider` 组件现在可以设置组件的 `ui` 相关配置如 `icons` 了。<!-- #ConfigProvider -->
+
+  #### 使用方法
+
+  ```html
+  <veui-config-provider :value="config">
+    <veui-date-picker/>
+    <veui-dialog/>
+  </veui-config-provider>
+  ```
+
+  ```js
+  // ...
+  import { IconCalendarSolid } from 'dls-icons-vue'
+
+  export default {
+    // ...
+    data () {
+      return {
+        config: {
+          'datepicker.icons.calendar': IconCalendarSolid, // 替换日期选择器的日历图标
+          'dialog.parts.cancel': 'ghost' // 将对话框的取消按钮设置为 `ghost` 类型
+        }
+      }
+    },
+    // ...
+  }
+  ```
+
+### 🐞 问题修复
+
+- [^] 修复 `TagInput` 组件在开启 `allow-duplicate` 时，删除标签会删除所有与其值相同的标签的问题。<!-- #TagInput -->
+
 ## 2.13.3 (2023-03-27)
 
 ### 🐞 问题修复
