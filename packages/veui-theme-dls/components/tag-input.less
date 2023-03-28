@@ -35,6 +35,7 @@
     }
 
     &-input {
+      position: relative; // to fix chrome bug that input position is not updated upon deletion
       width: 0;
       max-width: 100%;
       margin-top: @adjusted-tag-input-padding-y;

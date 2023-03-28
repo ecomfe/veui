@@ -217,10 +217,6 @@ export default {
     popTag () {
       if (!this.realInputValue && this.realValue.length) {
         this.commit('value', this.realValue.slice(0, -1))
-
-        // to fix input position in Chrome
-        this.nativeInput.blur()
-        this.nativeInput.focus()
       }
     },
     handleKeydown (e) {
@@ -273,10 +269,6 @@ export default {
       newValue.splice(i, 1)
 
       this.commit('value', newValue)
-
-      // to fix input position in Chrome
-      this.nativeInput.blur()
-      this.nativeInput.focus()
     }
   }
 }
