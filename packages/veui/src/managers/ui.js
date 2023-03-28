@@ -1,3 +1,3 @@
-import { ConfigManager } from './config'
+import config from './config'
 
-export default new ConfigManager()
+export default config

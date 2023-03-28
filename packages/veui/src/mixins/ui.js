@@ -1,6 +1,6 @@
 import { getConfigKey, findAncestor, isTransparent } from '../utils/helper'
 import warn from '../utils/warn'
-import ui from '../managers/ui'
+import { configContext } from '../managers/config'
 import {
   compact,
   uniq,
@@ -27,6 +27,7 @@ export function useUi () {
     props: {
       ui: String
     },
+    mixins: [configContext.useConsumer('__veui_config')],
     computed: {
       uiParts () {
         let parts = this.getComponentConfig('parts') || {}
@@ -159,7 +160,8 @@ export function useUi () {
     },
     methods: {
       getComponentConfig (key) {
-        return ui.get(`${getConfigKey(this.$options.name)}.${key}`)
+        const realKey = `${getConfigKey(this.$options.name)}.${key}`
+        return this.__veui_config[realKey]
       }
     }
   }

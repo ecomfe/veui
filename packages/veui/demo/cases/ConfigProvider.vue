@@ -16,6 +16,25 @@
   </section>
 
   <section>
+    <h3>配置 Button 的ui</h3>
+    <p style="display: flex">
+      <code>button.icons.loading:</code>
+      <veui-switch v-model="loadingIcon"/>
+    </p>
+    <p style="display: flex">
+      <code>button.ui.style.default:</code>
+      <veui-radio-group
+        v-model="style"
+        :items="styles"
+        style="display: inline-block"
+      />
+    </p>
+    <veui-config-provider :value="contextValue">
+      <veui-button loading>按钮</veui-button>
+    </veui-config-provider>
+  </section>
+
+  <section>
     <h3>配置 Autocomplete 的搜索逻辑</h3>
     <p>
       <code>searchable.match/searchable.filter:</code>
@@ -33,7 +52,16 @@
 </template>
 
 <script>
-import { ConfigProvider, Select, Autocomplete, Input, RadioGroup } from 'veui'
+import {
+  ConfigProvider,
+  Select,
+  Autocomplete,
+  Input,
+  RadioGroup,
+  Button,
+  Switch,
+  ui
+} from 'veui'
 
 export default {
   name: 'config-provider-demo',
@@ -41,14 +69,18 @@ export default {
     'veui-config-provider': ConfigProvider,
     'veui-select': Select,
     'veui-input': Input,
+    'veui-button': Button,
     'veui-radio-group': RadioGroup,
-    'veui-autocomplete': Autocomplete
+    'veui-autocomplete': Autocomplete,
+    'veui-switch': Switch
   },
   data () {
     return {
       placeholder: undefined,
       autoValue: '大',
-      searchLogic: ''
+      searchLogic: '',
+      loadingIcon: false,
+      style: 'normal'
     }
   },
   computed: {
@@ -60,6 +92,12 @@ export default {
         { label: '分散机', value: '15' },
         { label: '编码器', value: '16' },
         { label: '相亲中介', value: '17' }
+      ]
+    },
+    styles () {
+      return [
+        { label: 'normal', value: 'normal' },
+        { label: 'primary', value: 'primary' }
       ]
     },
     searchItems () {
@@ -74,7 +112,11 @@ export default {
         // undefined 让默认 contextValue 生效
         'select.placeholder': this.placeholder || undefined,
         'searchable.filter': this.searchLogic === 'all_h' && (() => true),
-        'searchable.match': this.searchLogic === 'all_wh' && (() => true)
+        'searchable.match': this.searchLogic === 'all_wh' && (() => true),
+        'button.ui.style.default': this.style,
+        'button.icons.loading': this.loadingIcon
+          ? ui.get('alert.icons').success
+          : undefined
       }
     }
   }
