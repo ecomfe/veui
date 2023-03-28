@@ -4,9 +4,14 @@ import config from '@/managers/config'
 import useConfig from '@/mixins/config'
 
 const TEST_FIELD = '__veui_test.config'
+const TEST_OBJ_FIELD = '__veui_test.obj'
 
 config.defaults({
-  [TEST_FIELD]: 'test'
+  [TEST_FIELD]: 'test',
+  [TEST_OBJ_FIELD]: {
+    foo: 'bar',
+    baz: 'bop'
+  }
 })
 
 const DummyConsumer = {
@@ -25,7 +30,7 @@ describe('components/ConfigProvider', function () {
       {
         data () {
           return {
-            context: null
+            context: undefined
           }
         },
         render () {
@@ -57,7 +62,7 @@ describe('components/ConfigProvider', function () {
       {
         data () {
           return {
-            context: null
+            context: undefined
           }
         },
         render () {
@@ -88,6 +93,47 @@ describe('components/ConfigProvider', function () {
     }
     await vm.$nextTick()
     expect(vm.$refs.dummy.renderCount).to.equal(prevCount + 1)
+    wrapper.destroy()
+  })
+
+  it('should config ui/icons correctly.', async () => {
+    let wrapper = mount(
+      {
+        data () {
+          return {
+            context: {
+              [`${TEST_OBJ_FIELD}.foo`]: 'foo'
+            }
+          }
+        },
+        render () {
+          return (
+            <ConfigProvider value={this.context}>
+              <DummyConsumer ref="dummy" />
+            </ConfigProvider>
+          )
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    const { vm } = wrapper
+    let dummy = vm.$refs.dummy
+
+    await vm.$nextTick()
+    expect(dummy.config[TEST_OBJ_FIELD].foo).to.equal('foo')
+    expect(dummy.config[TEST_OBJ_FIELD].baz).to.equal('bop')
+
+    vm.context = {
+      [TEST_OBJ_FIELD]: {
+        foo: 'foo1'
+      }
+    }
+    await vm.$nextTick()
+    expect(dummy.config[TEST_OBJ_FIELD].foo).to.equal('foo1')
+    expect(dummy.config[TEST_OBJ_FIELD].baz).to.equal(undefined)
     wrapper.destroy()
   })
 })

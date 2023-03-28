@@ -5,7 +5,7 @@
  *  2. functional 组件定义 provide 无效（inject 有效）
  */
 
-import { uniqueId, isPlainObject, defaults } from 'lodash'
+import { uniqueId, isPlainObject, defaults, reduce, set } from 'lodash'
 
 const CommonProviderImpl = {
   name: 'veui-provider', // for better readability in devtools
@@ -18,6 +18,8 @@ const CommonProviderImpl = {
     return this.$slots.default
   }
 }
+
+const DEEP_KEY_RE = /^([^.]+\.[^.]+)\.(.+)$/
 
 export function createContext (name, defaultValue) {
   const realName = name ? `${name}-provider` : CommonProviderImpl.name
@@ -33,16 +35,25 @@ export function createContext (name, defaultValue) {
     },
     provide () {
       return {
+        // provide 一个函数，该函数在消费方的 computed 调用，这样保证最终值依赖每个 provider 的 this.value
         [contextId]: () => {
           let parentContextValue = this[contextId]()
-          if (
-            isPlainObject(parentContextValue) &&
-            isPlainObject(this.value) // provide 的值时函数，最后在消费方的 computed 调用，这样保证最终值依赖每个 provider 的 this.value
-          ) {
-            return defaults({}, this.value, parentContextValue) // 每层 provider 都会和上一层的值合并
+          const isObjParent = isPlainObject(parentContextValue)
+          const isObjSelf = isPlainObject(this.value)
+
+          // this.value['button.ui'] 覆盖 parentContextValue['button.ui.*']
+          if (isObjParent && isObjSelf) {
+            Object.keys(parentContextValue).forEach((key) => {
+              const match = key.match(DEEP_KEY_RE)
+              if (match && typeof this.value[match[1]] !== 'undefined') {
+                delete parentContextValue[key]
+              }
+            })
           }
-          // 无法合并，则以最近的 provider 为准
-          return this.value
+
+          return isObjParent && isObjSelf
+            ? defaults({}, this.value, parentContextValue) // 和上层合并
+            : this.value // 无法合并，则以最近的 provider 为准
         }
       }
     }
@@ -64,13 +75,37 @@ export function createContext (name, defaultValue) {
       },
       computed: {
         [injectionKey] () {
-          if (defaultValue) {
-            defaultValue =
-              typeof defaultValue === 'function' ? defaultValue() : defaultValue
-            // 消费方获取 context 值时和初始值做合并
-            return defaults({}, this[contextId](), defaultValue)
+          const value = this[contextId]()
+          const isObj = isPlainObject(value)
+          const [toMerge, deepKeys] = reduce(
+            isObj ? value : undefined,
+            (acc, val, key) => {
+              const match = key.match(DEEP_KEY_RE)
+              if (match) {
+                acc[1].push(match)
+              } else {
+                acc[0][key] = val
+              }
+              return acc
+            },
+            [{}, []]
+          )
+
+          const defaultVal =
+            typeof defaultValue === 'function' ? defaultValue() : defaultValue
+          let result = typeof value === 'undefined' ? defaultVal : value
+          if (isObj && isPlainObject(defaultVal)) {
+            // 消费方获取 context 值时和初始值做合并, 先不要 deepKeys
+            result = defaults({}, toMerge, defaultVal)
           }
-          return this[contextId]()
+
+          // deepKeys 设置进去: button.icons.loading -> set(button.icons, loading, value)
+          deepKeys.forEach(([key, prefix, rest]) => {
+            result[prefix] = result[prefix] || {}
+            set(result[prefix], rest, value[key])
+          })
+
+          return result
         }
       }
     }
