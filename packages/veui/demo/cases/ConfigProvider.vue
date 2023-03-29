@@ -16,7 +16,7 @@
   </section>
 
   <section>
-    <h3>配置 Button 的ui</h3>
+    <h3>配置 Button 的 ui</h3>
     <p style="display: flex">
       <code>button.icons.loading:</code>
       <veui-switch v-model="loadingIcon"/>
@@ -48,6 +48,25 @@
       <veui-autocomplete v-model="autoValue" :datasource="options" expanded/>
     </veui-config-provider>
   </section>
+
+  <section>
+    <h3>配置 icon</h3>
+    <section>
+      <veui-checkbox v-model="override"> Override icons </veui-checkbox>
+    </section>
+    <section>
+      <veui-config-provider :value="config">
+        <veui-form>
+          <veui-field label="Date" tip="The date must be earlier than today">
+            <veui-date-picker/>
+          </veui-field>
+        </veui-form>
+      </veui-config-provider>
+    </section>
+    <section>
+      <veui-date-picker/>
+    </section>
+  </section>
 </article>
 </template>
 
@@ -60,8 +79,13 @@ import {
   RadioGroup,
   Button,
   Switch,
+  Form,
+  Field,
+  DatePicker,
+  Checkbox,
   ui
 } from 'veui'
+import { IconQuestionCircleSolid, IconCalendarSolid } from 'dls-icons-vue'
 
 export default {
   name: 'config-provider-demo',
@@ -72,7 +96,11 @@ export default {
     'veui-button': Button,
     'veui-radio-group': RadioGroup,
     'veui-autocomplete': Autocomplete,
-    'veui-switch': Switch
+    'veui-switch': Switch,
+    'veui-form': Form,
+    'veui-field': Field,
+    'veui-date-picker': DatePicker,
+    'veui-checkbox': Checkbox
   },
   data () {
     return {
@@ -80,7 +108,8 @@ export default {
       autoValue: '大',
       searchLogic: '',
       loadingIcon: false,
-      style: 'normal'
+      style: 'normal',
+      override: true
     }
   },
   computed: {
@@ -118,6 +147,14 @@ export default {
           : {}),
         'button.ui.style.default': this.style
       }
+    },
+    config () {
+      return this.override
+        ? {
+          'field.icons.tip': IconQuestionCircleSolid,
+          'datepicker.icons.calendar': IconCalendarSolid
+        }
+        : {}
     }
   }
 }
