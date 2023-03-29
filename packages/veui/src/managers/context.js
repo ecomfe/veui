@@ -5,7 +5,14 @@
  *  2. functional 组件定义 provide 无效（inject 有效）
  */
 
-import { uniqueId, isPlainObject, defaults, reduce, set } from 'lodash'
+import {
+  uniqueId,
+  isPlainObject,
+  defaults,
+  reduce,
+  set,
+  cloneDeep
+} from 'lodash'
 
 const CommonProviderImpl = {
   name: 'veui-provider', // for better readability in devtools
@@ -100,10 +107,13 @@ export function createContext (name, defaultValue) {
           }
 
           // deepKeys 设置进去: button.icons.loading -> set(button.icons, loading, value)
-          deepKeys.forEach(([key, prefix, rest]) => {
-            result[prefix] = result[prefix] || {}
-            set(result[prefix], rest, value[key])
-          })
+          if (deepKeys.length) {
+            result = { ...result }
+            deepKeys.forEach(([key, prefix, rest]) => {
+              result[prefix] = result[prefix] ? cloneDeep(result[prefix]) : {}
+              set(result[prefix], rest, value[key])
+            })
+          }
 
           return result
         }

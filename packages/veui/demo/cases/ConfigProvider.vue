@@ -113,10 +113,10 @@ export default {
         'select.placeholder': this.placeholder || undefined,
         'searchable.filter': this.searchLogic === 'all_h' && (() => true),
         'searchable.match': this.searchLogic === 'all_wh' && (() => true),
-        'button.ui.style.default': this.style,
-        'button.icons.loading': this.loadingIcon
-          ? ui.get('alert.icons').success
-          : undefined
+        ...(this.loadingIcon
+          ? { 'button.icons.loading': ui.get('alert.icons').success }
+          : {}),
+        'button.ui.style.default': this.style
       }
     }
   }
