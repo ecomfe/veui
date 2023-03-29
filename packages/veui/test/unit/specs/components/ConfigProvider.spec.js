@@ -134,6 +134,13 @@ describe('components/ConfigProvider', function () {
     await vm.$nextTick()
     expect(dummy.config[TEST_OBJ_FIELD].foo).to.equal('foo1')
     expect(dummy.config[TEST_OBJ_FIELD].baz).to.equal(undefined)
+
+    vm.context = {
+      [`${TEST_OBJ_FIELD}.baz`]: 'baz1'
+    }
+    await vm.$nextTick()
+    expect(dummy.config[TEST_OBJ_FIELD].foo).to.equal('bar')
+    expect(dummy.config[TEST_OBJ_FIELD].baz).to.equal('baz1')
     wrapper.destroy()
   })
 })
