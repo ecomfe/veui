@@ -3,10 +3,11 @@
   <slot
     :open-suggestions="openSuggestions"
     :close-suggestions="closeSuggestions"
-    :handleKeydown="handleSuggestionKeydown"
+    :handle-keydown="handleSuggestionKeydown"
     :update-value="inputUpdateValue"
     :value="realValue"
     :datasource="realDatasource"
+    :filtered-datasource="filteredDatasource"
     name="input"
   />
   <veui-overlay

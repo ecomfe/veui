@@ -26,10 +26,12 @@
         :readonly="realReadonly"
         :disabled="realDisabled"
         :invalid="realInvalid"
+        :strict="realStrict.maxlength"
         v-bind="inputProps"
         v-on="inputEvents"
         @blur="props.closeSuggestions"
         @keydown="props.handleKeydown"
+        @change="handleChange(props)"
         @input="handleTrigger($event, props, 'input')"
         @focus="handleTrigger($event, props, 'focus')"
       />
@@ -86,7 +88,6 @@ const SHARED_PROPS = [
   'clearable',
   'maxlength',
   'getLength',
-  'strict',
   'trim'
 ]
 
@@ -114,6 +115,7 @@ export default {
       default: 'options'
     },
     autofocus: Boolean,
+    strict: [Boolean, Object],
     ...pick(Input.props, SHARED_PROPS)
   },
   computed: {
@@ -122,7 +124,7 @@ export default {
     },
     baseProps () {
       return {
-        ...omit(this.$props, [...SHARED_PROPS, 'suggestTrigger']),
+        ...omit(this.$props, [...SHARED_PROPS, 'suggestTrigger', 'strict']),
         ...this.$attrs
       }
     },
@@ -141,6 +143,11 @@ export default {
     },
     realMaxlength () {
       return normalizeInt(this.maxlength)
+    },
+    realStrict () {
+      return typeof this.strict === 'boolean'
+        ? { maxlength: this.strict }
+        : this.strict
     }
   },
   methods: {
@@ -149,7 +156,11 @@ export default {
     },
     handleSelect (value) {
       value = value || ''
-      if (this.isLimitSimpleLength && value.length > this.realMaxlength) {
+      if (
+        this.isLimitSimpleLength &&
+        value.length > this.realMaxlength &&
+        this.realStrict.maxlength
+      ) {
         value = safeSlice(value, this.realMaxlength)
       }
       this.$refs.base.suggestionUpdateValue(value)
@@ -163,6 +174,17 @@ export default {
       }
       if (eventName === 'input') {
         props.updateValue(val)
+      }
+    },
+    handleChange (props) {
+      if (this.realStrict.select) {
+        const { filteredDatasource, updateValue, value } = props
+        if (
+          filteredDatasource.length === 0 ||
+          filteredDatasource.every(({ label }) => label !== value)
+        ) {
+          updateValue('')
+        }
       }
     }
   }
