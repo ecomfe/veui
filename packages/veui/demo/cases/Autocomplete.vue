@@ -46,11 +46,12 @@
     />
   </section>
   <section>
-    <h2>树型数据，focus 时下拉，最多展示4个</h2>
+    <h2>树型数据，focus 时下拉，最多展示4个，必须选搜索结果</h2>
     <veui-autocomplete
       v-model="treeValue"
       :datasource="coffees"
       placeholder="请输入"
+      :strict="{ select: true }"
       suggest-trigger="focus"
       :overlay-style="{
         '--dls-dropdown-max-display-items': 4

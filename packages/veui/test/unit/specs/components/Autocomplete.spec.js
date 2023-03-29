@@ -59,7 +59,8 @@ let componentOptions = {
       readonly: false,
       disabled: false,
       filter: null,
-      match: null
+      match: null,
+      strict: true
     }
   }
 }
@@ -133,7 +134,7 @@ describe('components/Autocomplete', function () {
       {
         ...componentOptions,
         template:
-          '<veui-autocomplete v-model="value" strict maxlength="7" suggest-trigger="focus" :datasource="groupedDatasource"/>'
+          '<veui-autocomplete v-model="value" :strict="strict" :maxlength="7" suggest-trigger="focus" :datasource="groupedDatasource"/>'
       },
       debugInBrowser
     )
@@ -158,13 +159,42 @@ describe('components/Autocomplete', function () {
     options.at(options.length - 1).trigger('click')
     await vm.$nextTick()
     expect(vm.value).to.equal(FOUR.slice(0, 6))
+
+    await input('Just a random input...', true)
+    expect(vm.value).to.equal('Just a random input...')
+
+    vm.strict = { select: true }
+
+    await input('Just a random input...', true)
+    expect(vm.value).to.equal('')
+
+    vm.strict = { maxlength: false }
+
+    await input('')
+    options = wrapper.findAll(SUGGESTION_ITEM)
+    options.at(options.length - 1).trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.equal(FOUR)
+
+    vm.strict = { maxlength: true }
+
+    await input('')
+    options = wrapper.findAll(SUGGESTION_ITEM)
+    options.at(options.length - 1).trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.equal(FOUR.slice(0, 6))
+
     wrapper.destroy()
 
-    async function input (val) {
+    async function input (val, change = false) {
       let nativeInput = wrapper.find(NATIVE_INPUT)
       nativeInput.trigger('focus')
       nativeInput.element.value = val
       nativeInput.trigger('input')
+      await vm.$nextTick()
+      if (change) {
+        nativeInput.trigger('change')
+      }
       await vm.$nextTick()
     }
   })
