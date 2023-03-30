@@ -71,6 +71,7 @@
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
+import { useStrict } from '../../mixins/strict'
 import overlay from '../../mixins/overlay'
 import { normalizeInt, safeSlice } from '../../utils/helper'
 import outside from '../../directives/outside'
@@ -103,7 +104,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   directives: { outside },
-  mixins: [prefix, ui, input, overlay],
+  mixins: [prefix, ui, input, overlay, useStrict(['maxlength', 'select'])],
   inheritAttrs: false,
   props: {
     suggestTrigger: {
@@ -115,7 +116,6 @@ export default {
       default: 'options'
     },
     autofocus: Boolean,
-    strict: [Boolean, Object],
     ...pick(Input.props, SHARED_PROPS)
   },
   computed: {
@@ -142,16 +142,11 @@ export default {
       return (
         this.getLength == null &&
         this.realMaxlength != null &&
-        this.realStrict.maxlength
+        !!this.realStrict.maxlength
       )
     },
     realMaxlength () {
       return normalizeInt(this.maxlength)
-    },
-    realStrict () {
-      return typeof this.strict === 'boolean'
-        ? { maxlength: this.strict }
-        : this.strict
     }
   },
   methods: {
@@ -160,11 +155,7 @@ export default {
     },
     handleSelect (value) {
       value = value || ''
-      if (
-        this.isLimitSimpleLength &&
-        value.length > this.realMaxlength &&
-        this.realStrict.maxlength
-      ) {
+      if (this.isLimitSimpleLength && value.length > this.realMaxlength) {
         value = safeSlice(value, this.realMaxlength)
       }
       this.$refs.base.suggestionUpdateValue(value)

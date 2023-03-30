@@ -83,6 +83,7 @@ import resize from '../directives/resize'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
 import useControllable from '../mixins/controllable'
+import { useStrict } from '../mixins/strict'
 import { log10 } from '../utils/math'
 import { normalizeInt } from '../utils/helper'
 import warn from '../utils/warn'
@@ -113,7 +114,8 @@ export default {
       get (val) {
         return val || ''
       }
-    })
+    }),
+    useStrict(['maxlength'])
   ],
   inheritAttrs: false,
   props: {
@@ -129,8 +131,7 @@ export default {
     autoresize: Boolean,
     resizable: Boolean,
     maxlength: [Number, String],
-    getLength: Function,
-    strict: Boolean
+    getLength: Function
   },
   data () {
     return {
@@ -158,7 +159,7 @@ export default {
     attrs () {
       return {
         ...this.$attrs,
-        maxlength: this.strict ? this.realMaxlength : null,
+        maxlength: this.realStrict.maxlength ? this.realMaxlength : null,
         rows: this.realRows,
         disabled: this.realDisabled,
         readonly: this.realReadonly
@@ -225,7 +226,7 @@ export default {
     },
     checkStrict () {
       return {
-        strict: this.strict,
+        strict: this.realStrict.maxlength,
         getLength: this.getLength
       }
     }

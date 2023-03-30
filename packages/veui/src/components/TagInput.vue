@@ -60,6 +60,7 @@ import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import input from '../mixins/input'
+import { useStrict } from '../mixins/strict'
 import activatable from '../mixins/activatable'
 import useControllable from '../mixins/controllable'
 import Tag from './Tag'
@@ -109,7 +110,8 @@ export default {
           return val
         }
       }
-    ])
+    ]),
+    useStrict(['max', 'maxlength'])
   ],
   inheritAttrs: false,
   model: {
@@ -129,7 +131,6 @@ export default {
     },
     max: Number,
     allowDuplicate: Boolean,
-    getLength: Function,
     ...pick(Input.props, SHARED_PROPS)
   },
   computed: {
@@ -167,7 +168,8 @@ export default {
         clearable: false,
         placeholder: this.empty ? this.placeholder : '',
         autocomplete: 'off',
-        maxlength: null,
+        maxlength: this.realStrict.maxlength ? this.maxlength : null,
+        strict: this.realStrict.maxlength,
         value: this.realInputValue,
         readonly: this.realReadonly,
         disabled: this.realDisabled,
@@ -206,9 +208,12 @@ export default {
         return
       }
 
-      const { realValue, allowDuplicate } = this
+      const { realValue, allowDuplicate, max, realStrict } = this
 
-      if (allowDuplicate || realValue.indexOf(inputValue) === -1) {
+      if (
+        (!realStrict.max || max == null || realValue.length < max) &&
+        (allowDuplicate || realValue.indexOf(inputValue) === -1)
+      ) {
         this.commit('value', realValue.concat(inputValue))
       }
 

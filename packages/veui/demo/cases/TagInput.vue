@@ -5,6 +5,10 @@
   </h1>
   <section>{{ tags }}</section>
   <section>
+    <veui-checkbox v-model="strict.max">strict.max</veui-checkbox>
+    <veui-checkbox v-model="strict.maxlength">strict.maxlength</veui-checkbox>
+  </section>
+  <section>
     <h4>最大个数(3) + 最大字符数(5) + 允许重复</h4>
     <veui-tag-input
       v-model="tags"
@@ -12,6 +16,7 @@
       ui="xs"
       :max="3"
       :maxlength="5"
+      :strict="strict"
       allow-duplicate
       :input-value.sync="value"
       @change="handleChange"
@@ -23,6 +28,7 @@
       v-model="tags"
       :get-length="(val) => val.length * 2"
       :maxlength="10"
+      :strict="strict"
       placeholder="请输入"
       :input-value.sync="value"
     />
@@ -63,6 +69,7 @@
       placeholder="请输入"
       clearable
       :max="5"
+      :strict="strict"
       :input-value.sync="value"
     />
   </section>
@@ -74,17 +81,22 @@
 </template>
 
 <script>
-import { TagInput } from 'veui'
+import { TagInput, Checkbox } from 'veui'
 
 export default {
   name: 'tag-input-demo',
   components: {
-    'veui-tag-input': TagInput
+    'veui-tag-input': TagInput,
+    'veui-checkbox': Checkbox
   },
   data () {
     return {
       tags: ['一言', '一格', '快跑'],
-      value: ''
+      value: '',
+      strict: {
+        max: false,
+        maxlength: false
+      }
     }
   },
   methods: {

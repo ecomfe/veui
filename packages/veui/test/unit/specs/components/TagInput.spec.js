@@ -452,6 +452,70 @@ describe('components/TagInput', function () {
     wrapper.destroy()
   })
 
+  it('should handle `strict` prop correctly', async () => {
+    const wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
+      },
+      template: `
+        <veui-tag-input v-model="value" :input-value.sync="inputValue" :strict="strict" :max="3" :maxlength="5"/>
+      `,
+      data () {
+        return {
+          value: ['foo', 'bar', 'baz'],
+          inputValue: 'qux',
+          strict: true
+        }
+      }
+    })
+
+    const { vm } = wrapper
+    const input = wrapper.find('input')
+
+    input.trigger('keydown', { key: 'Enter' })
+    await vm.$nextTick()
+    expect(input.attributes('maxlength')).to.equal('5')
+    expect(vm.value).to.deep.equal(['foo', 'bar', 'baz'])
+
+    vm.strict = false
+    vm.inputValue = 'qux'
+    await vm.$nextTick()
+    expect(input.attributes('maxlength')).to.equal(undefined)
+    input.trigger('keydown', { key: 'Enter' })
+
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['foo', 'bar', 'baz', 'qux'])
+
+    vm.strict = { max: true }
+    vm.inputValue = 'quux'
+    await vm.$nextTick()
+    expect(input.attributes('maxlength')).to.equal(undefined)
+    input.trigger('keydown', { key: 'Enter' })
+
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['foo', 'bar', 'baz', 'qux'])
+
+    vm.strict = { maxlength: true }
+    vm.inputValue = 'quux'
+    await vm.$nextTick()
+    expect(input.attributes('maxlength')).to.equal('5')
+    input.trigger('keydown', { key: 'Enter' })
+
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['foo', 'bar', 'baz', 'qux', 'quux'])
+
+    vm.strict = { max: true, maxlength: true }
+    vm.inputValue = 'corge'
+    await vm.$nextTick()
+    expect(input.attributes('maxlength')).to.equal('5')
+    input.trigger('keydown', { key: 'Enter' })
+
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['foo', 'bar', 'baz', 'qux', 'quux'])
+
+    wrapper.destroy()
+  })
+
   it('should handle `getLength` prop correctly', () => {
     let wrapper = mount({
       components: {

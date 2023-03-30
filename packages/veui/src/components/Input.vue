@@ -80,6 +80,7 @@ import ui from '../mixins/ui'
 import input from '../mixins/input'
 import useControllable from '../mixins/controllable'
 import activatable from '../mixins/activatable'
+import { useStrict } from '../mixins/strict'
 import i18n from '../mixins/i18n'
 import { includes, pick } from 'lodash'
 import Button from './Button'
@@ -128,7 +129,8 @@ export default {
         // 最好不要用 number 吧，toString 可能会有精度问题
         return typeof val === 'number' && !isNaN(val) ? String(val) : val || ''
       }
-    })
+    }),
+    useStrict(['maxlength'])
   ],
   inheritAttrs: false,
   props: {
@@ -150,7 +152,6 @@ export default {
     clearable: Boolean,
     maxlength: [Number, String],
     getLength: Function,
-    strict: Boolean,
     trim: {
       type: [Boolean, String],
       default: false,
@@ -187,7 +188,7 @@ export default {
     attrs () {
       return {
         ...this.$attrs,
-        maxlength: this.strict ? this.realMaxlength : null,
+        maxlength: this.realStrict.maxlength ? this.realMaxlength : null,
         type: this.type,
         name: this.realName,
         disabled: this.realDisabled,
@@ -226,7 +227,7 @@ export default {
     },
     checkStrict () {
       return {
-        strict: this.strict,
+        strict: this.realStrict.maxlength,
         getLength: this.getLength
       }
     },
@@ -266,6 +267,9 @@ export default {
       if (this.$listeners.textwidthchange) {
         this.$nextTick(() => {
           const { input, measurer } = this.$refs
+          if (!input || !measurer) {
+            return
+          }
           measurer.textContent = input.value
 
           this.$emit('textwidthchange', measurer.scrollWidth)

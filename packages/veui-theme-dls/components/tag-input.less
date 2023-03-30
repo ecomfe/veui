@@ -42,6 +42,10 @@
       float: left;
     }
 
+    &-count {
+      display: none;
+    }
+
     &-placeholder,
     &-after {
       margin: @adjusted-tag-input-padding-y 0;
@@ -54,10 +58,6 @@
         width: 0;
       }
     }
-  }
-
-  &.@{veui-prefix}-focus:not(&-empty) .@{veui-prefix}-input-input {
-    width: 10px;
   }
 
   &-tag {

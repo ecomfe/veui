@@ -1,8 +1,15 @@
-## 2.13.5 (2023-03-29)
+## 2.13.5 (2023-03-30)
+
+### 💡 主要变更
+
+- [^] `Input` / `Textarea` / `SearchBox` 组件的 `strict` 属性支持通过 `{ maxlength?: boolean }` 类型配置了。<!-- #Input #Textarea #SearchBox -->
+- [^] `TagInput` 组件新增 `strict` 属性，支持分别配置严格限制最大标签个数和最大单个标签长度。<!-- #TagInput -->
+- [^] `Autocomplete` 组件的 `strict` 属性支持通过 `{ maxlength?: boolean, select?: boolean }` 类型分别配置严格限制文本最大长度和限制填写内容必须完全匹配数据源中某项了。<!-- #Autocomplete -->
 
 ### 🐞 问题修复
 
 - [^] 修复 `ConfigProvider` 组件在进行 `ui` 相关配置时，配置意外地对全局生效的问题。<!-- #ConfigProvider -->
+- [^] `help-position` 非 `side` 的 `Field` 组件的内容部分容器现在将自动撑满整行宽度。<!-- #Field -->
 
 ## 2.13.4 (2023-03-28)
 

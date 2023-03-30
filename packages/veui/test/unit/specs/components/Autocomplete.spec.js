@@ -161,7 +161,7 @@ describe('components/Autocomplete', function () {
     expect(vm.value).to.equal(FOUR.slice(0, 6))
 
     await input('Just a random input...', true)
-    expect(vm.value).to.equal('Just a random input...')
+    expect(vm.value).to.equal('')
 
     vm.strict = { select: true }
 
