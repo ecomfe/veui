@@ -29,9 +29,9 @@
         :strict="realStrict.maxlength"
         v-bind="inputProps"
         v-on="inputEvents"
-        @blur="props.closeSuggestions"
+        @blur="handleBlur(props)"
         @keydown="props.handleKeydown"
-        @change="handleChange(props)"
+        @change="checkStrictSelect(props)"
         @input="handleTrigger($event, props, 'input')"
         @focus="handleTrigger($event, props, 'focus')"
       />
@@ -171,7 +171,7 @@ export default {
         props.updateValue(val)
       }
     },
-    handleChange (props) {
+    checkStrictSelect (props) {
       if (this.realStrict.select) {
         const { filteredDatasource, updateValue, value } = props
         if (
@@ -181,6 +181,12 @@ export default {
           updateValue('')
         }
       }
+    },
+    handleBlur (props) {
+      const { closeSuggestions } = props
+      closeSuggestions()
+
+      this.checkStrictSelect(props)
     }
   }
 }

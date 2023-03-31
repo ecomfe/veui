@@ -160,6 +160,11 @@ describe('components/Autocomplete', function () {
     await vm.$nextTick()
     expect(vm.value).to.equal(FOUR.slice(0, 6))
 
+    wrapper.find(NATIVE_INPUT).trigger('blur')
+    await vm.$nextTick()
+
+    expect(vm.value === '')
+
     await input('Just a random input...', true)
     expect(vm.value).to.equal('')
 
