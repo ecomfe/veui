@@ -3,6 +3,7 @@ export function useStrict (features) {
     props: {
       strict: {
         type: [Boolean, Object],
+        default: false,
         validator (val) {
           if (typeof val === 'boolean') {
             return true
