@@ -2,7 +2,6 @@
 
 .@{veui-prefix}-table {
   position: relative;
-  overflow: hidden;
   border-bottom: 1px solid @dls-table-cell-border-color;
   font-variant-numeric: tabular-nums;
 
@@ -182,8 +181,18 @@
 
   @shadow-width: 30px;
 
-  &-overflow-right-edge::after,
-  &-overflow-left-edge::before {
+  &-overflow-shadow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  &-overflow-right-edge &-overflow-shadow::after,
+  &-overflow-left-edge &-overflow-shadow::before {
     content: "";
     position: absolute;
     top: 0;
@@ -193,7 +202,7 @@
     .veui-transition(box-shadow);
   }
 
-  &-overflow-right-edge::after {
+  &-overflow-right-edge &-overflow-shadow::after {
     left: 100%;
     box-shadow: @dls-table-overflow-shadow-left;
 
@@ -202,7 +211,7 @@
     }
   }
 
-  &-overflow-left-edge::before {
+  &-overflow-left-edge &-overflow-shadow::before {
     right: 100%;
     box-shadow: @dls-table-overflow-shadow-right;
 
@@ -639,6 +648,25 @@
 
   .@{veui-prefix}-loading {
     z-index: 2;
+  }
+
+  &-sticky-scrollbar {
+    position: sticky;
+    bottom: 0;
+    overflow: visible;
+    padding-right: var(~"--@{veui-prefix}-table-scrollbar-width", 0);
+
+    &-placeholder {
+      overflow-x: auto;
+      margin-top: calc(var(~"--@{veui-prefix}-table-scrollbar-height", 0) * -2);
+
+      &::after {
+        content: "";
+        display: block;
+        width: var(~"--@{veui-prefix}-table-scroll-width", 0);
+        height: var(~"--@{veui-prefix}-table-scrollbar-height", 0);
+      }
+    }
   }
 
   &[ui~="loose"] {

@@ -91,7 +91,7 @@ export default {
                 onSort={(order) => this.$emit('sort', col.field, order)}
               />
             ))}
-            {i === 0 && table.gutterWidth ? (
+            {i === 0 && table.scrollbarWidth ? (
               <th
                 class={{
                   [this.$c('table-gutter')]: true,

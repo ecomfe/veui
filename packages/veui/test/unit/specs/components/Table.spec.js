@@ -14,44 +14,39 @@ describe('components/Table', function () {
   this.timeout(10000)
 
   it('should select the specified fields', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'haha',
-                field2: 11
-              },
-              {
-                field1: 'heihei',
-                field2: 22
-              },
-              {
-                field1: 'heihei111',
-                field2: 33
-              },
-              {
-                field1: 'heihei1112333',
-                field2: 44
-              }
-            ],
-            selected: []
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'haha',
+              field2: 11
+            },
+            {
+              field1: 'heihei',
+              field2: 22
+            },
+            {
+              field1: 'heihei111',
+              field2: 33
+            },
+            {
+              field1: 'heihei1112333',
+              field2: 44
+            }
+          ],
+          selected: []
+        }
+      },
+      template: `
         <veui-table :data="data" key-field="field2" selectable :selected.sync="selected">
           <veui-table-column field="field1"></veui-table-column>
         </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let boxes = wrapper.findAll('td input[type="checkbox"]')
     let { vm } = wrapper
@@ -66,50 +61,45 @@ describe('components/Table', function () {
   })
 
   it('should not fire change event if selected value is not changed', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'haha',
-                field2: 11
-              },
-              {
-                field1: 'heihei',
-                field2: 22
-              },
-              {
-                field1: 'heihei111',
-                field2: 33
-              },
-              {
-                field1: 'heihei1112333',
-                field2: 44
-              }
-            ],
-            selected: [],
-            counter: 0
-          }
-        },
-        methods: {
-          handleSelected () {
-            this.counter++
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'haha',
+              field2: 11
+            },
+            {
+              field1: 'heihei',
+              field2: 22
+            },
+            {
+              field1: 'heihei111',
+              field2: 33
+            },
+            {
+              field1: 'heihei1112333',
+              field2: 44
+            }
+          ],
+          selected: [],
+          counter: 0
+        }
+      },
+      methods: {
+        handleSelected () {
+          this.counter++
+        }
+      },
+      template: `
         <veui-table :data="data" selectable :selected.sync="selected" @update:selected="handleSelected">
           <veui-table-column field="field1"></veui-table-column>
         </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
     let boxes = wrapper.findAll('td input[type="checkbox"]')
@@ -132,61 +122,55 @@ describe('components/Table', function () {
   })
 
   it('should emit `select` event before `update:selected` event', (done) => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'haha',
+              field2: 11
+            }
+          ],
+          isSelectEmitted: false
+        }
+      },
+      methods: {
+        handleSelect () {
+          this.isSelectEmitted = true
         },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'haha',
-                field2: 11
-              }
-            ],
-            isSelectEmitted: false
-          }
-        },
-        methods: {
-          handleSelect () {
-            this.isSelectEmitted = true
-          },
-          handleUpdateSelected () {
-            expect(this.isSelectEmitted).to.equal(true)
+        handleUpdateSelected () {
+          expect(this.isSelectEmitted).to.equal(true)
 
-            wrapper.destroy()
-            done()
-          }
-        },
-        template: `
+          wrapper.destroy()
+          done()
+        }
+      },
+      template: `
         <veui-table :data="data" selectable @select="handleSelect" @update:selected="handleUpdateSelected">
           <veui-table-column field="field1"></veui-table-column>
         </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     wrapper.findAll('td input[type="checkbox"]').at(0).trigger('change')
   })
 
   it('should support hero sub rows', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [{ id: 1 }],
-            selectable: false
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [{ id: 1 }],
+          selectable: false
+        }
+      },
+      template: `
         <veui-table key-field="id" :expanded="[1]" :data="data" :selectable="selectable" expandable>
           <veui-table-column title="ID" field="id"/>
           <template #sub-row="{ id, index }">
@@ -194,11 +178,7 @@ describe('components/Table', function () {
             <div class="sub-index">{{ index }}</div>
           </template>
         </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
 
@@ -218,19 +198,18 @@ describe('components/Table', function () {
   })
 
   it('should show hero row for `no-data` and `footer`', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            selectable: false,
-            expandable: false
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          selectable: false,
+          expandable: false
+        }
+      },
+      template: `
         <veui-table key-field="id" :selectable="selectable" :expandable="expandable">
           <veui-table-column title="Meta" field="meta">
             <veui-table-column title="ID" field="id"/>
@@ -238,11 +217,7 @@ describe('components/Table', function () {
           </veui-table-column>
           <template #foot>Hey</template>
         </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
 
@@ -278,41 +253,40 @@ describe('components/Table', function () {
 
   it('should expand the sub rows correctly when controlled', async () => {
     let syncExpanded = true
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'apple',
-                field2: 11
-              },
-              {
-                field1: 'banana',
-                field2: 22,
-                children: [
-                  {
-                    field3: 'red',
-                    field4: 222
-                  }
-                ]
-              }
-            ],
-            expanded: []
-          }
-        },
-        methods: {
-          updateExpanded (expanded) {
-            if (syncExpanded) {
-              this.expanded = expanded
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'apple',
+              field2: 11
+            },
+            {
+              field1: 'banana',
+              field2: 22,
+              children: [
+                {
+                  field3: 'red',
+                  field4: 222
+                }
+              ]
             }
+          ],
+          expanded: []
+        }
+      },
+      methods: {
+        updateExpanded (expanded) {
+          if (syncExpanded) {
+            this.expanded = expanded
           }
-        },
-        template: `
+        }
+      },
+      template: `
           <veui-table :data="data" :expanded="expanded" expandable @update:expanded="updateExpanded">
             <veui-table-column field="field1" title="field1">
               <template #sub-row="{ field3 }">{{ field3 }}</template>
@@ -321,11 +295,7 @@ describe('components/Table', function () {
               <template #sub-row="{ field4 }">{{ field4 }}</template>
             </veui-table-column>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
     let rows = wrapper.findAll('tbody tr')
@@ -360,34 +330,33 @@ describe('components/Table', function () {
   })
 
   it('should expand the sub rows correctly when not controlled', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'apple',
-                field2: 11
-              },
-              {
-                field1: 'banana',
-                field2: 22,
-                children: [
-                  {
-                    field3: 'red',
-                    field4: 222
-                  }
-                ]
-              }
-            ],
-            expanded: []
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'apple',
+              field2: 11
+            },
+            {
+              field1: 'banana',
+              field2: 22,
+              children: [
+                {
+                  field3: 'red',
+                  field4: 222
+                }
+              ]
+            }
+          ],
+          expanded: []
+        }
+      },
+      template: `
           <veui-table :data="data" expandable>
             <veui-table-column field="field1" title="field1">
               <template #sub-row="{ field3 }">{{ field3 }}</template>
@@ -396,11 +365,7 @@ describe('components/Table', function () {
               <template #sub-row="{ field4 }">{{ field4 }}</template>
             </veui-table-column>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
     let rows = wrapper.findAll('tbody tr')
@@ -415,49 +380,44 @@ describe('components/Table', function () {
   })
 
   it('should sort by key field properly', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'apple',
-                field2: 11
-              },
-              {
-                field1: 'pineapple',
-                field2: 33
-              },
-              {
-                field1: 'banana',
-                field2: 22
-              }
-            ],
-            keyField: 'field1',
-            order: 'desc',
-            orderBy: 'field1'
-          }
-        },
-        methods: {
-          handleSort (orderBy, order) {
-            this.orderBy = orderBy
-            this.order = order
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'apple',
+              field2: 11
+            },
+            {
+              field1: 'pineapple',
+              field2: 33
+            },
+            {
+              field1: 'banana',
+              field2: 22
+            }
+          ],
+          keyField: 'field1',
+          order: 'desc',
+          orderBy: 'field1'
+        }
+      },
+      methods: {
+        handleSort (orderBy, order) {
+          this.orderBy = orderBy
+          this.order = order
+        }
+      },
+      template: `
           <veui-table :data="data" :key-field="keyField" :order="order" :order-by="orderBy" @sort="handleSort">
             <veui-table-column field="field1" title="field1" sortable/>
             <veui-table-column field="field2" title="field2"/>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
     expect(wrapper.findAll('.veui-table-sorter').at(0).classes()).to.include(
@@ -520,7 +480,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -579,7 +538,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -661,46 +619,41 @@ describe('components/Table', function () {
   })
 
   it('should filter columns correctly', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'apple',
-                field2: 11,
-                field3: true
-              },
-              {
-                field1: 'banana',
-                field2: 22,
-                field3: false
-              },
-              {
-                field1: 'pineapple',
-                field2: 33,
-                field3: true
-              }
-            ],
-            columns: ['field1']
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'apple',
+              field2: 11,
+              field3: true
+            },
+            {
+              field1: 'banana',
+              field2: 22,
+              field3: false
+            },
+            {
+              field1: 'pineapple',
+              field2: 33,
+              field3: true
+            }
+          ],
+          columns: ['field1']
+        }
+      },
+      template: `
           <veui-table :data="data" :column-filter="columns">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2"/>
             <veui-table-column field="field3" title="field3"/>
             <template slot="foot">An awesome table foot!</template>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
     expect(wrapper.findAll('thead th').length).to.equal(1)
@@ -719,44 +672,39 @@ describe('components/Table', function () {
   })
 
   it('should select all and cancel all selection correctly', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'apple',
-                field2: 11,
-                field3: true
-              },
-              {
-                field1: 'banana',
-                field2: 22,
-                field3: false
-              },
-              {
-                field1: 'pineapple',
-                field2: 33,
-                field3: true
-              }
-            ],
-            selected: []
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'apple',
+              field2: 11,
+              field3: true
+            },
+            {
+              field1: 'banana',
+              field2: 22,
+              field3: false
+            },
+            {
+              field1: 'pineapple',
+              field2: 33,
+              field3: true
+            }
+          ],
+          selected: []
+        }
+      },
+      template: `
           <veui-table :data="data" key-field="field2" selectable :selected.sync="selected">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2" align="left"/>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     wrapper.find('th input[type="checkbox"]').trigger('change')
 
@@ -775,50 +723,45 @@ describe('components/Table', function () {
 
   it('should select rows correctly when the select mode is single', async () => {
     let syncSelected = true
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'apple',
-                field2: 11
-              },
-              {
-                field1: 'banana',
-                field2: 22
-              },
-              {
-                field1: 'pineapple',
-                field2: 33
-              }
-            ],
-            selected: null
-          }
-        },
-        methods: {
-          updateSelected (selected) {
-            if (syncSelected) {
-              this.selected = selected
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'apple',
+              field2: 11
+            },
+            {
+              field1: 'banana',
+              field2: 22
+            },
+            {
+              field1: 'pineapple',
+              field2: 33
             }
+          ],
+          selected: null
+        }
+      },
+      methods: {
+        updateSelected (selected) {
+          if (syncSelected) {
+            this.selected = selected
           }
-        },
-        template: `
+        }
+      },
+      template: `
           <veui-table :data="data" key-field="field2" selectable :selected="selected" @update:selected="updateSelected" select-mode="single">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2" align="left">
               <template slot="foot">总计</template>
             </veui-table-column>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
     let list = wrapper.findAll('td input[type="radio"]')
@@ -851,50 +794,45 @@ describe('components/Table', function () {
 
   it('should select rows correctly when the select mode is multiple', async () => {
     let syncSelected = true
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                field1: 'apple',
-                field2: 11
-              },
-              {
-                field1: 'banana',
-                field2: 22
-              },
-              {
-                field1: 'pineapple',
-                field2: 33
-              }
-            ],
-            selected: null
-          }
-        },
-        methods: {
-          updateSelected (selected) {
-            if (syncSelected) {
-              this.selected = selected
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'apple',
+              field2: 11
+            },
+            {
+              field1: 'banana',
+              field2: 22
+            },
+            {
+              field1: 'pineapple',
+              field2: 33
             }
+          ],
+          selected: null
+        }
+      },
+      methods: {
+        updateSelected (selected) {
+          if (syncSelected) {
+            this.selected = selected
           }
-        },
-        template: `
+        }
+      },
+      template: `
           <veui-table :data="data" key-field="field2" selectable :selected="selected" @update:selected="updateSelected" select-mode="multiple">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2" align="left">
               <template slot="foot">总计</template>
             </veui-table-column>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let { vm } = wrapper
     let list = wrapper.findAll('td input[type="checkbox"]')
@@ -926,22 +864,17 @@ describe('components/Table', function () {
   })
 
   it('should present correctly when data is not provided', () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      template: `
           <veui-table>
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2"/>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     expect(wrapper.findAll('tbody tr').length).to.equal(1)
     expect(wrapper.findAll('td.veui-table-no-data').length).to.equal(1)
@@ -952,29 +885,24 @@ describe('components/Table', function () {
   it('should warn when selected value is not correct according to multiple prop', async () => {
     const spy = sinon.spy(Vue.util, 'warn')
 
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      template: `
           <veui-table key-field="field1" selectable :data="data" :selected="selected" :select-mode="mode">
             <veui-table-column field="field1" title="field1"/>
             <veui-table-column field="field2" title="field2"/>
           </veui-table>`,
-        data () {
-          return {
-            selected: ['1'],
-            mode: 'single',
-            data: [{ field1: '1' }]
-          }
+      data () {
+        return {
+          selected: ['1'],
+          mode: 'single',
+          data: [{ field1: '1' }]
         }
-      },
-      {
-        sync: false
       }
-    )
+    })
 
     expect(
       spy.calledWith(
@@ -999,54 +927,49 @@ describe('components/Table', function () {
   })
 
   it('should merge cells correctly', () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                id: 1,
-                type: 'fruits',
-                name: 'apple'
-              },
-              {
-                id: 2,
-                type: 'fruits',
-                name: 'cherry'
-              },
-              {
-                id: 3,
-                type: 'veggie',
-                name: 'tomato'
-              },
-              {
-                id: 4,
-                type: 'veggie',
-                name: 'potato'
-              }
-            ],
-            groupSpan (i) {
-              return {
-                row: i % 2 ? 0 : 2
-              }
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              id: 1,
+              type: 'fruits',
+              name: 'apple'
+            },
+            {
+              id: 2,
+              type: 'fruits',
+              name: 'cherry'
+            },
+            {
+              id: 3,
+              type: 'veggie',
+              name: 'tomato'
+            },
+            {
+              id: 4,
+              type: 'veggie',
+              name: 'potato'
+            }
+          ],
+          groupSpan (i) {
+            return {
+              row: i % 2 ? 0 : 2
             }
           }
-        },
-        template: `
+        }
+      },
+      template: `
           <veui-table :data="data">
             <veui-table-column field="id" title="id"/>
             <veui-table-column field="type" title="type" :span="groupSpan"/>
             <veui-table-column field="name" title="name"/>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     expect(wrapper.findAll('tbody td').at(1).attributes('rowspan')).to.equal(
       '2'
@@ -1070,55 +993,50 @@ describe('components/Table', function () {
           </template>
         </veui-table-column>`
     }
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column,
-          AwesomeColumn
-        },
-        data () {
-          return {
-            data: [
-              {
-                id: 1,
-                type: 'fruits',
-                name: 'apple'
-              },
-              {
-                id: 2,
-                type: 'fruits',
-                name: 'cherry'
-              },
-              {
-                id: 3,
-                type: 'veggie',
-                name: 'tomato'
-              },
-              {
-                id: 4,
-                type: 'veggie',
-                name: 'potato'
-              }
-            ],
-            groupSpan (i) {
-              return {
-                row: i % 2 ? 0 : 2
-              }
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column,
+        AwesomeColumn
+      },
+      data () {
+        return {
+          data: [
+            {
+              id: 1,
+              type: 'fruits',
+              name: 'apple'
+            },
+            {
+              id: 2,
+              type: 'fruits',
+              name: 'cherry'
+            },
+            {
+              id: 3,
+              type: 'veggie',
+              name: 'tomato'
+            },
+            {
+              id: 4,
+              type: 'veggie',
+              name: 'potato'
+            }
+          ],
+          groupSpan (i) {
+            return {
+              row: i % 2 ? 0 : 2
             }
           }
-        },
-        template: `
+        }
+      },
+      template: `
           <veui-table :data="data">
             <veui-table-column field="id" title="id"/>
             <awesome-column field="type" title="type"/>
             <veui-table-column field="name" title="name"/>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let td = wrapper.findAll('tbody td').at(1)
     expect(td.classes('veui-table-cell-center')).to.equal(true)
@@ -1128,47 +1046,46 @@ describe('components/Table', function () {
   })
 
   it('should support grouped columns', () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              {
-                id: 1,
-                type: 'fruits',
-                name: 'apple',
-                origin: 'Japan',
-                level: 'A'
-              },
-              {
-                id: 2,
-                type: 'fruits',
-                name: 'cherry',
-                origin: 'Chile',
-                level: 'A'
-              },
-              {
-                id: 3,
-                type: 'veggie',
-                name: 'tomato',
-                origin: 'China',
-                level: 'A'
-              },
-              {
-                id: 4,
-                type: 'veggie',
-                name: 'potato',
-                origin: 'China',
-                level: 'A'
-              }
-            ]
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              id: 1,
+              type: 'fruits',
+              name: 'apple',
+              origin: 'Japan',
+              level: 'A'
+            },
+            {
+              id: 2,
+              type: 'fruits',
+              name: 'cherry',
+              origin: 'Chile',
+              level: 'A'
+            },
+            {
+              id: 3,
+              type: 'veggie',
+              name: 'tomato',
+              origin: 'China',
+              level: 'A'
+            },
+            {
+              id: 4,
+              type: 'veggie',
+              name: 'potato',
+              origin: 'China',
+              level: 'A'
+            }
+          ]
+        }
+      },
+      template: `
           <veui-table :data="data" bordered>
             <veui-table-column title="meta">
               <veui-table-column field="id" title="id"/>
@@ -1182,11 +1099,7 @@ describe('components/Table', function () {
               </veui-table-column>
             </veui-table-column>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
 
     let ths = wrapper.findAll('th')
 
@@ -1365,7 +1278,7 @@ describe('components/Table', function () {
             <veui-table-column field="id" title="id"/>
           </veui-table>`
       },
-      { sync: false, attachToDocument: true }
+      { attachToDocument: true }
     )
 
     expect(
@@ -1392,7 +1305,7 @@ describe('components/Table', function () {
             <veui-table-column field="id" title="id"/>
           </veui-table>`
       },
-      { sync: false, attachToDocument: true }
+      { attachToDocument: true }
     )
 
     expect(
@@ -1407,20 +1320,19 @@ describe('components/Table', function () {
   })
 
   it('should support allowedOrders', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
-            allowedOrders: ['asc', 'desc'],
-            order: 'asc'
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+          allowedOrders: ['asc', 'desc'],
+          order: 'asc'
+        }
+      },
+      template: `
           <veui-table
             key-field="id"
             :data="data"
@@ -1431,11 +1343,7 @@ describe('components/Table', function () {
           >
             <veui-table-column field="id" title="id" sortable/>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
     let { vm } = wrapper
     let sorter = wrapper.find('.veui-table-sorter')
     sorter.trigger('click')
@@ -1459,22 +1367,21 @@ describe('components/Table', function () {
   })
 
   it('should support disabled items', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-table': Table,
-          'veui-table-column': Column
-        },
-        data () {
-          return {
-            data: [
-              { id: 1, disabled: true },
-              { id: 2, disabled: false }
-            ],
-            selected: []
-          }
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            { id: 1, disabled: true },
+            { id: 2, disabled: false }
+          ],
+          selected: []
+        }
+      },
+      template: `
           <veui-table
             selectable
             key-field="id"
@@ -1483,11 +1390,7 @@ describe('components/Table', function () {
           >
             <veui-table-column field="id" title="id"/>
           </veui-table>`
-      },
-      {
-        sync: false
-      }
-    )
+    })
     let { vm } = wrapper
     let boxes = wrapper.findAll('td .veui-checkbox')
     let selectAll = wrapper.find('th input[type="checkbox"]')
@@ -1547,7 +1450,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -1609,7 +1511,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -1743,7 +1644,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -1784,7 +1684,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -1856,7 +1755,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -1937,7 +1835,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2015,7 +1912,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2109,7 +2005,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2219,7 +2114,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2327,7 +2221,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2440,7 +2333,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2508,7 +2400,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2590,7 +2481,6 @@ describe('components/Table', function () {
           </veui-table>`
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2662,7 +2552,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2733,7 +2622,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2811,7 +2699,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2860,7 +2747,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2930,7 +2816,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -2984,7 +2869,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -3041,7 +2925,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )
@@ -3055,6 +2938,47 @@ describe('components/Table', function () {
     await wait(0)
     expect(spy.called).to.equal(false)
     spy.restore()
+    wrapper.destroy()
+  })
+
+  it('should sync sticky scrollbar scroll position', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        data () {
+          return {
+            data: Array.from({ length: 10 }).map((_, i) => ({ id: i }))
+          }
+        },
+        template: `
+          <veui-table style="width: 600px;" :data="data" :scroll="{ x: 800, y: 200 }">
+            <veui-table-column field="id" title="id"/>
+          </veui-table>`
+      },
+      { attachToDocument: true }
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+
+    const table = wrapper.find(Table).vm
+    const { main, scrollbar } = table.$refs
+
+    main.scrollLeft = 42
+
+    await wait(50)
+    expect(scrollbar.scrollLeft).to.equal(42)
+    console.log(scrollbar.scrollLeft)
+
+    scrollbar.scrollLeft = 128
+
+    await wait(50)
+    console.log(main.scrollLeft)
+    expect(main.scrollLeft).to.equal(128)
+
     wrapper.destroy()
   })
 
@@ -3091,7 +3015,6 @@ describe('components/Table', function () {
         }
       },
       {
-        sync: false,
         attachToDocument: true
       }
     )

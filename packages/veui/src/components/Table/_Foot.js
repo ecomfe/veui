@@ -99,7 +99,7 @@ export default {
                 ))
               )
           )}
-          {table.gutterWidth ? (
+          {table.scrollbarWidth ? (
             <th
               class={{
                 [this.$c('table-gutter')]: true,
