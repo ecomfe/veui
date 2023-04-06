@@ -26,8 +26,8 @@ export default {
             class={this.$c('table-header-gutter')}
             aria-hidden="true"
             style={{
-              width: table.gutterWidth ? `${table.gutterWidth}px` : null,
-              display: table.gutterWidth ? null : 'none'
+              width: table.scrollbarWidth ? `${table.scrollbarWidth}px` : null,
+              display: table.scrollbarWidth ? null : 'none'
             }}
           />
         ) : null}

@@ -27,7 +27,7 @@
     <table
       :style="{
         minWidth: scrollableX
-          ? `calc(${realScroll.x} + ${gutterWidth}px)`
+          ? `calc(${realScroll.x} + ${scrollbarWidth}px)`
           : null
       }"
     >
@@ -71,11 +71,26 @@
       </table-body>
     </table>
   </div>
+  <div
+    :class="$c('table-sticky-scrollbar')"
+    :style="{
+      [`--${$c('table-scroll-width')}`]: `${scrollWidth}px`,
+      [`--${$c('table-scrollbar-width')}`]: `${scrollbarWidth}px`,
+      [`--${$c('table-scrollbar-height')}`]: `${scrollbarHeight}px`
+    }"
+    aria-hidden="true"
+  >
+    <div
+      ref="scrollbar"
+      :class="$c('table-sticky-scrollbar-placeholder')"
+      @scroll="syncMainScroll"
+    />
+  </div>
   <div v-if="hasFoot()" ref="fixedFooter" :class="$c('table-fixed-footer')">
     <table
       :style="{
         minWidth: scrollableX
-          ? `calc(${realScroll.x} + ${gutterWidth}px)`
+          ? `calc(${realScroll.x} + ${scrollbarWidth}px)`
           : null
       }"
     >
@@ -93,6 +108,7 @@
     >{{ t('loading') }}</veui-loading>
   </transition>
   <div :class="$c('table-loading-backdrop')" aria-hidden="true"/>
+  <div :class="$c('table-overflow-shadow')" aria-hidden="true"/>
 </div>
 </template>
 
@@ -255,7 +271,9 @@ export default {
   },
   data () {
     return {
-      gutterWidth: 0,
+      scrollbarWidth: 0,
+      scrollbarHeight: 0,
+      scrollWidth: 0,
       selectColumnWidth: 0,
       expandColumnWidth: 0,
       overflow: {
@@ -377,7 +395,7 @@ export default {
             let { colspan } = cell
             let rightEdge = i + (colspan > 1 ? colspan - 1 : 0) + 1
             let widths = row.slice(rightEdge).map(({ width }) => width)
-            cell.offset = sumWidths(widths.concat(this.gutterWidth))
+            cell.offset = sumWidths(widths.concat(this.scrollbarWidth))
             cell.bodyOffset = sumWidths(widths)
 
             if (prev && !prev.fixed) {
@@ -653,13 +671,15 @@ export default {
         x: table.offsetWidth > main.clientWidth,
         y: table.offsetHeight > main.clientHeight
       }
-      this.gutterWidth = getElementScrollbarWidth(main)
+      this.scrollbarWidth = getElementScrollbarWidth(main)
+      this.scrollbarHeight = getElementScrollbarWidth(main, true)
       this.width = main.clientWidth
+      this.scrollWidth = main.scrollWidth
 
       this.updateScrollState()
     },
     updateScrollState () {
-      let { main, fixedHeader, fixedFooter } = this.$refs
+      let { main, fixedHeader, fixedFooter, scrollbar } = this.$refs
 
       if (this.scrollableX) {
         this.hit.right = main.scrollLeft + main.clientWidth >= main.scrollWidth
@@ -679,6 +699,10 @@ export default {
       if (fixedFooter) {
         fixedFooter.scrollLeft = main.scrollLeft
       }
+
+      if (scrollbar) {
+        scrollbar.scrollLeft = main.scrollLeft
+      }
     },
     updateScrollListeners (isDestroy) {
       if ((this.scrollableX || this.scrollableY) && !isDestroy) {
@@ -696,6 +720,13 @@ export default {
         if (this.removeBackForwardPreventer) {
           this.removeBackForwardPreventer()
         }
+      }
+    },
+    syncMainScroll (e) {
+      const { main } = this.$refs
+
+      if (main) {
+        main.scrollLeft = e.target.scrollLeft
       }
     },
     filterColumns (columns) {
