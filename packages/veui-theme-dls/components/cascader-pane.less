@@ -31,7 +31,7 @@
   &-custom-width &-leave-to,
   &-custom-width &-enter {
     margin-left: calc(
-      -1 * var(--veui-cascader-pane-custom-width, @min-panel-width)
+      -1 * var(~"--@{veui-prefix}-cascader-pane-custom-width", @min-panel-width)
     );
   }
 

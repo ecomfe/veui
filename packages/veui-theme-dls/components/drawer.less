@@ -6,15 +6,17 @@
   .drawer-width(@ui-width) {
     @padding-x: @dls-dialog-padding-x * 2;
 
-    --veui-drawer-ui-width: @ui-width;
-    --veui-drawer-content-fallback: calc(
-      var(--veui-drawer-ui-width) - @padding-x
+    --@{veui-prefix}-drawer-ui-width: @ui-width;
+    --@{veui-prefix}-drawer-content-fallback: calc(
+      var(~"--@{veui-prefix}-drawer-ui-width") - @padding-x
     );
-    --veui-drawer-width: calc(
-      var(--dls-drawer-content-width, var(--veui-drawer-content-fallback)) +
-        @padding-x
+    --@{veui-prefix}-drawer-width: calc(
+      var(
+          --dls-drawer-content-width,
+          var(~"--@{veui-prefix}-drawer-content-fallback")
+        ) + @padding-x
     );
-    width: var(--dls-drawer-width, var(--veui-drawer-width));
+    width: var(--dls-drawer-width, var(~"--@{veui-prefix}-drawer-width"));
   }
 
   &-box {
