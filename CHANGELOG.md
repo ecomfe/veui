@@ -1,3 +1,14 @@
+## 2.13.6 (2023-04-08)
+
+### 💡 主要变更
+
+- [+] `Table` 组件新增的横向滚动条吸底功能。<!-- #Table -->
+
+### 🐞 问题修复
+
+- [^] `Autocomplete` 组件在严格模式下，在失焦时也会根据限制条件修正数据了。<!-- #Autocomplete -->
+- [^] 修正了 `ButtonGroup` / `RadioButtonGroup` / `CheckButtonGroup` 组件各按钮的层级，已在不同状态与交互下正确显示。<!-- #ButtonGroup #RadioButtonGroup #CheckButtonGroup -->
+
 ## 2.13.5 (2023-03-31)
 
 ### 💡 主要变更
