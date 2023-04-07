@@ -1,16 +1,12 @@
 @import "./lib.less";
 
 .veui-grouped-button() {
-  &.@{veui-prefix}-button-selected {
-    &,
-    &.@{veui-prefix}-disabled {
-      z-index: 3;
-    }
+  &[data-focus-visible-added] {
+    z-index: 8 !important;
+  }
 
-    &:hover,
-    &[data-focus-visible-added] {
-      z-index: 4;
-    }
+  &.@{veui-prefix}-button-selected {
+    z-index: 6;
 
     border-color: @dls-button-border-color-selected;
     background-color: @dls-button-background-color-selected;
@@ -19,6 +15,7 @@
     &:hover {
       border-color: @dls-button-border-color-selected;
       background-color: @dls-button-background-color-selected-hover;
+      z-index: 7;
     }
 
     &[data-focus-visible-added] {
@@ -34,9 +31,11 @@
       border-color: @dls-button-border-color-selected-disabled;
       background-color: @dls-button-background-color-selected-disabled;
       color: @dls-button-font-color-selected-disabled;
+      z-index: 4;
 
       &:hover {
         background-color: @dls-button-background-color-selected-disabled;
+        z-index: 5;
       }
     }
   }

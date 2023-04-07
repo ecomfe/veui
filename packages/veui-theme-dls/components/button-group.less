@@ -1,6 +1,8 @@
 @import "../lib.less";
 
 .@{veui-prefix}-button-group {
+  position: relative;
+  z-index: 0;
   display: inline-flex;
 
   &-items {
@@ -31,7 +33,7 @@
     }
 
     &[data-focus-visible-added] {
-      z-index: 2;
+      z-index: 3;
     }
   }
 
