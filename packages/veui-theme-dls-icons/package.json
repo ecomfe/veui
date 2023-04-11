@@ -18,7 +18,7 @@
     "prepare": "pnpm icons"
   },
   "dependencies": {
-    "dls-icons-vue": "~3.4.1"
+    "dls-icons-vue": "~3.5.0"
   },
   "peerDependencies": {
     "veui": "workspace:*"
