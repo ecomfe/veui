@@ -335,7 +335,12 @@
     </veui-table>
   </section>
   <section class="container">
-    <veui-table :data="items" :scroll="{ x: 1200 }" :loading="loading">
+    <veui-table
+      :data="items"
+      :scroll="{ x: 1200 }"
+      :loading="loading"
+      :style="{ '--dls-table-sticky-scrollbar-bottom': '20px' }"
+    >
       <veui-table-column fixed="right" title="meta">
         <veui-table-column field="id" :title="idTitle" width="120"/>
         <veui-table-column field="type" title="type" width="120"/>
