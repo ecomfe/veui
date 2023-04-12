@@ -61,10 +61,10 @@
     }
   }
 
-  .make-status-color(@status) {
-    &-@{status} {
-      @color-name: ~"dls-tag-color-@{status}";
-      @color: @@color-name;
+  .make-tag-color(@color-name) {
+    &-@{color-name} {
+      @color-var: ~"dls-tag-color-@{color-name}";
+      @color: @@color-var;
 
       .apply-color(@color);
 
@@ -78,10 +78,13 @@
     }
   }
 
-  .make-status-color(info);
-  .make-status-color(success);
-  .make-status-color(warning);
-  .make-status-color(error);
+  .make-tag-color(info);
+  .make-tag-color(success);
+  .make-tag-color(warning);
+  .make-tag-color(error);
+  .make-tag-color(turquoise);
+  .make-tag-color(violet);
+  .make-tag-color(green);
 
   &-selectable {
     cursor: pointer;

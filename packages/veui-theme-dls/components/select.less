@@ -2,7 +2,7 @@
 @import (reference) "../dropdown.less";
 
 .@{veui-prefix}-select {
-  @adjusted-select-padding-y: dls-sum(@dls-select-padding-y, -1px);
+  @adjusted-select-padding-y: dls-sum(@dls-select-padding-start, -1px);
 
   position: relative;
   display: inline-flex;
@@ -51,10 +51,14 @@
     }
   }
 
+  &-multiple:not(&-empty) &-trigger {
+    padding-left: @dls-select-padding-start;
+  }
+
   &-trigger {
     max-width: 100%;
     cursor: pointer;
-    .padding(_, @dls-select-padding-x);
+    .padding(_, @dls-input-padding);
 
     .@{veui-prefix}-input-before {
       flex-grow: 0;

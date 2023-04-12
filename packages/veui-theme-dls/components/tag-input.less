@@ -1,14 +1,7 @@
 @import "../lib.less";
 
 .@{veui-prefix}-tag-input {
-  @dls-tag-input-padding-y: @dls-select-padding-y;
-  @dls-tag-input-tag-spacing: @dls-select-tag-spacing;
-  @dls-tag-input-tag-height-xs: @dls-select-tag-height-xs;
-  @dls-tag-input-tag-height-s: @dls-select-tag-height-s;
-  @dls-tag-input-tag-height-m: @dls-select-tag-height-m;
-  @dls-tag-input-tag-height-l: @dls-select-tag-height-l;
-
-  @adjusted-tag-input-padding-y: dls-sum(@dls-tag-input-padding-y, -1px);
+  @adjusted-tag-input-padding-y: dls-sum(@dls-tag-input-padding-start, -1px);
 
   position: relative;
   display: inline-block;
@@ -21,6 +14,10 @@
 
   &:not(*:root) {
     vertical-align: -0.5px; // hacks to align with other inputs
+  }
+
+  &:not(&-empty) {
+    padding-left: @dls-tag-input-padding-start;
   }
 
   .@{veui-prefix}-input {
