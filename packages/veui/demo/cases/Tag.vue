@@ -26,6 +26,12 @@
         :type="type"
         :ui="bordered ? 'bordered' : ''"
       >{{ type }}</veui-tag>
+      <veui-tag
+        v-for="color in colors"
+        :key="color"
+        :color="color"
+        :ui="bordered ? 'bordered' : ''"
+      >{{ color }}</veui-tag>
     </div>
   </section>
 
@@ -35,7 +41,8 @@
       <veui-tag
         v-for="(team, index) in teams2"
         :key="team"
-        :type="types[index]"
+        :type="typesAndColors[index]"
+        :color="index >= 5 ? typesAndColors[index] : undefined"
         :ui="bordered ? 'bordered' : ''"
         removable
         @remove="handleRemove(team)"
@@ -49,7 +56,8 @@
       <veui-tag
         v-for="(team, index) in teams"
         :key="team"
-        :type="types[index]"
+        :type="typesAndColors[index]"
+        :color="index >= 5 ? typesAndColors[index] : undefined"
         removable
         :ui="'s' + (bordered ? ' bordered' : '')"
         @remove="handleRemove(team)"
@@ -80,6 +88,14 @@
         :ui="bordered ? 'bordered' : ''"
         selectable
       >{{ type }}</veui-tag>
+      <veui-tag
+        v-for="color in colors"
+        :key="color"
+        :color="color"
+        :selected.sync="selected"
+        :ui="bordered ? 'bordered' : ''"
+        selectable
+      >{{ color }}</veui-tag>
     </div>
   </section>
 
@@ -95,6 +111,15 @@
         disabled
         selectable
       >{{ type }}</veui-tag>
+      <veui-tag
+        v-for="color in colors"
+        :key="color"
+        :color="color"
+        :selected.sync="selected"
+        :ui="bordered ? 'bordered' : ''"
+        disabled
+        selectable
+      >{{ color }}</veui-tag>
     </div>
     <div style="margin-top: 20px">
       <veui-tag
@@ -105,6 +130,14 @@
         disabled
         removable
       >{{ type }}</veui-tag>
+      <veui-tag
+        v-for="color in colors"
+        :key="color"
+        :color="color"
+        :ui="bordered ? 'bordered' : ''"
+        disabled
+        removable
+      >{{ color }}</veui-tag>
     </div>
   </section>
 </article>
@@ -127,13 +160,19 @@ export default {
   },
   data () {
     return {
-      teams: ['湖人', '火箭', '猛龙', '马刺', '勇士'],
-      teams2: ['湖人', '火箭', '猛龙', '马刺', '勇士'],
+      teams: ['湖人', '火箭', '猛龙', '马刺', '勇士', '热火', '雷霆', '太阳'],
+      teams2: ['湖人', '火箭', '猛龙', '马刺', '勇士', '热火', '雷霆', '太阳'],
       types: ['default', 'info', 'success', 'warning', 'error'],
+      colors: ['turquoise', 'violet', 'green'],
       sizes: ['s', 'm', 'default'],
       selected: false,
       bordered: false,
       controlledRemoved: false
+    }
+  },
+  computed: {
+    typesAndColors () {
+      return this.types.concat(this.colors)
     }
   },
   methods: {

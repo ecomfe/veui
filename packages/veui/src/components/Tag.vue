@@ -27,6 +27,12 @@ export default {
       type: String,
       default: 'default'
     },
+    color: {
+      type: String,
+      validator (val) {
+        return ['turquoise', 'violet', 'green'].indexOf(val) !== -1
+      }
+    },
     selectable: Boolean,
     selected: Boolean,
     removable: Boolean,
@@ -66,7 +72,7 @@ export default {
         ui={this.realUi}
         class={{
           [this.$c('tag')]: true,
-          [this.$c(`tag-${this.type}`)]: true,
+          [this.$c(`tag-${this.color || this.type}`)]: true,
           [this.$c('tag-selected')]: !!this.realSelected,
           [this.$c('disabled')]: this.disabled,
           [this.$c('tag-selectable')]: this.selectable

@@ -45,6 +45,10 @@
     }
   }
 
+  &:not(&-default) &-remove {
+    color: currentcolor !important;
+  }
+
   &[data-focus-visible-added] {
     .dls-focus-ring(@dls-border-color-focus, @dls-shadow-focus);
   }
