@@ -465,6 +465,27 @@
         color: @dls-button-font-color-text-aux-disabled;
       }
     }
+
+    &[ui~="subtle"] {
+      color: @dls-button-font-color-text-subtle;
+
+      &:hover {
+        color: @dls-button-font-color-text-subtle-hover;
+      }
+
+      &[data-focsu-visible-added] {
+        color: @dls-button-font-color-text-subtle-focus;
+      }
+
+      &:active,
+      &.@{veui-prefix}-active {
+        color: @dls-button-font-color-text-subtle-active;
+      }
+
+      &.@{veui-prefix}-disabled {
+        color: @dls-button-font-color-text-subtle-disabled;
+      }
+    }
   }
 
   &[ui~="icon"] {

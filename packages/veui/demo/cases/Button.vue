@@ -248,8 +248,16 @@
       <veui-button ui="text strong" @click="handleClick">编辑</veui-button>
       <veui-button ui="text strong l" @click="handleClick">编辑</veui-button>
       <veui-button ui="text strong xl" @click="handleClick">编辑</veui-button>
-      <veui-button ui="text" disabled @click="handleClick">编辑</veui-button>
-      <veui-button ui="text" loading @click="handleClick">编辑</veui-button>
+      <veui-button
+        ui="text strong"
+        disabled
+        @click="handleClick"
+      >编辑</veui-button>
+      <veui-button
+        ui="text strong"
+        loading
+        @click="handleClick"
+      >编辑</veui-button>
     </section>
   </section>
   <section>
@@ -260,8 +268,36 @@
       <veui-button ui="text aux" @click="handleClick">编辑</veui-button>
       <veui-button ui="text aux l" @click="handleClick">编辑</veui-button>
       <veui-button ui="text aux xl" @click="handleClick">编辑</veui-button>
-      <veui-button ui="text" disabled @click="handleClick">编辑</veui-button>
-      <veui-button ui="text" loading @click="handleClick">编辑</veui-button>
+      <veui-button
+        ui="text aux"
+        disabled
+        @click="handleClick"
+      >编辑</veui-button>
+      <veui-button
+        ui="text aux"
+        loading
+        @click="handleClick"
+      >编辑</veui-button>
+    </section>
+  </section>
+  <section>
+    <h4>低调文字按钮</h4>
+    <section>
+      <veui-button ui="text subtle xs" @click="handleClick">编辑</veui-button>
+      <veui-button ui="text subtle s" @click="handleClick">编辑</veui-button>
+      <veui-button ui="text subtle" @click="handleClick">编辑</veui-button>
+      <veui-button ui="text subtle l" @click="handleClick">编辑</veui-button>
+      <veui-button ui="text subtle xl" @click="handleClick">编辑</veui-button>
+      <veui-button
+        ui="text subtle"
+        disabled
+        @click="handleClick"
+      >编辑</veui-button>
+      <veui-button
+        ui="text subtle"
+        loading
+        @click="handleClick"
+      >编辑</veui-button>
     </section>
   </section>
   <section>
@@ -338,6 +374,32 @@
         <veui-icon name="search"/>
       </veui-button>
       <veui-button ui="icon aux" loading @click="handleClick">
+        <veui-icon name="search"/>
+      </veui-button>
+    </section>
+  </section>
+  <section>
+    <h4>低调图标按钮</h4>
+    <section>
+      <veui-button ui="icon subtle xs" @click="handleClick">
+        <veui-icon name="search"/>
+      </veui-button>
+      <veui-button ui="icon subtle s" @click="handleClick">
+        <veui-icon name="search"/>
+      </veui-button>
+      <veui-button ui="icon subtle" @click="handleClick">
+        <veui-icon name="search"/>
+      </veui-button>
+      <veui-button ui="icon subtle l" @click="handleClick">
+        <veui-icon name="search"/>
+      </veui-button>
+      <veui-button ui="icon subtle xl" @click="handleClick">
+        <veui-icon name="search"/>
+      </veui-button>
+      <veui-button ui="icon subtle" disabled @click="handleClick">
+        <veui-icon name="search"/>
+      </veui-button>
+      <veui-button ui="icon subtle" loading @click="handleClick">
         <veui-icon name="search"/>
       </veui-button>
     </section>
