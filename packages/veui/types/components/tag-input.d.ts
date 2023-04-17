@@ -6,6 +6,7 @@ import {
   InputMixin,
   ControllableMixin
 } from '../common'
+import { TagEmits, TagProps } from './tag'
 
 export type Props = {
   value?: Array<string>
@@ -36,12 +37,28 @@ type Mixins = [
   }>
 ]
 
-type Slots = {
-  placeholder(): unknown
+type SlotProps = {
+  tag: string
+  index: number
+  invalid: boolean
+  readonly: boolean
+  disabled: boolean
+  key: string
+  edit: () => void
+  remove: () => void
+  attrs: TagProps
+  listeners: {
+    [key: string]: (e: Event) => unknown
+  } & TagEmits
 }
 
-type Input = VeuiDefineComponent<{
+type Slots = {
+  placeholder(): unknown
+  tag(slotProps: SlotProps): unknown
+}
+
+type TagInput = VeuiDefineComponent<{
   new (...args: any[]): VeuiDefineInstance<Props, Emits, Slots, Mixins>
 }>
 
-export default Input
+export default TagInput

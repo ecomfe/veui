@@ -29,3 +29,5 @@ type Tag = VeuiDefineComponent<{
 }>
 
 export default Tag
+export type TagProps = InstanceType<Tag>['$props']
+export type TagEmits = Emits

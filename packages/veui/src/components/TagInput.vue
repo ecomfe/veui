@@ -13,23 +13,15 @@
   @textwidthchange="handleTextWidthChange"
 >
   <template v-if="!empty" #before>
-    <veui-tag
-      v-for="({ tag, invalid }, i) in tags"
-      :key="`#${i}-${tag}`"
-      :class="$c('tag-input-tag')"
-      :ui="uiParts.tag"
-      :type="invalid ? 'error' : undefined"
-      :disabled="realDisabled"
-      :removable="editable"
-      :removed="false"
-      tabindex="-1"
-      :selectable="editable"
-      :selected="false"
-      @dblclick="handleEditTag(i)"
-      @remove="handleRemove(i)"
+    <slot
+      v-for="(props, index) in tags"
+      name="tag"
+      v-bind="{ ...props, index }"
     >
-      {{ tag }}
-    </veui-tag>
+      <veui-tag v-bind="props.attrs" v-on="props.listeners">
+        {{ props.tag }}
+      </veui-tag>
+    </slot>
   </template>
   <template #after>
     <span
@@ -69,7 +61,7 @@ import Button from './Button'
 import Icon from './Icon'
 import { pick, omit, uniq } from 'lodash'
 
-const SHARED_PROPS = ['placeholder', 'clearable', 'maxlength', 'getLength']
+const SHARED_PROPS = ['placeholder', 'clearable', 'getLength']
 
 const BASE_EVENTS = ['input', 'change']
 
@@ -130,17 +122,51 @@ export default {
       default: ''
     },
     max: Number,
+    maxlength: Number,
     allowDuplicate: Boolean,
     ...pick(Input.props, SHARED_PROPS)
   },
   computed: {
     tags () {
-      return this.realValue.map((tag) => ({
-        tag,
-        invalid: this.maxlength
+      return this.realValue.map((tag, i) => {
+        const invalid = this.maxlength
           ? this.getValueLength(tag) > this.maxlength
           : false
-      }))
+
+        const edit = () => {
+          this.handleEditTag(i)
+        }
+
+        const remove = () => {
+          this.handleRemove(i)
+        }
+
+        return {
+          tag,
+          invalid,
+          readonly: this.realReadonly,
+          disabled: this.realDisabled,
+          key: `#${i}-${tag}`,
+          edit,
+          remove,
+          attrs: {
+            key: `#${i}-${tag}`,
+            class: this.$c('tag-input-tag'),
+            ui: this.uiParts.tag,
+            type: invalid ? 'error' : undefined,
+            disabled: this.realDisabled,
+            removable: this.editable,
+            removed: false,
+            tabindex: -1,
+            selectable: this.editable,
+            selected: false
+          },
+          listeners: {
+            dblclick: edit,
+            remove
+          }
+        }
+      })
     },
     tagLengthOverflow () {
       return this.tags.some(({ invalid }) => invalid)
@@ -270,6 +296,10 @@ export default {
       this.commit('inputValue', value)
     },
     handleRemove (i) {
+      if (!this.editable) {
+        return
+      }
+
       const newValue = [...this.realValue]
       newValue.splice(i, 1)
 

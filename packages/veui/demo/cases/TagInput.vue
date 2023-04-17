@@ -77,21 +77,32 @@
     <h4>不受控</h4>
     <veui-tag-input placeholder="请输入"/>
   </section>
+  <section>
+    <h4>tag slot</h4>
+    <veui-tag-input placeholder="请输入">
+      <template #tag="{ tag, attrs, listeners, index }">
+        <veui-tag v-bind="attrs" :color="getColor(index)" v-on="listeners">{{
+          tag
+        }}</veui-tag>
+      </template>
+    </veui-tag-input>
+  </section>
 </article>
 </template>
 
 <script>
-import { TagInput, Checkbox } from 'veui'
+import { TagInput, Tag, Checkbox } from 'veui'
 
 export default {
   name: 'tag-input-demo',
   components: {
     'veui-tag-input': TagInput,
+    'veui-tag': Tag,
     'veui-checkbox': Checkbox
   },
   data () {
     return {
-      tags: ['一言', '一格', '快跑'],
+      tags: ['一言', '一格', '千帆'],
       value: '',
       strict: {
         max: false,
@@ -102,6 +113,9 @@ export default {
   methods: {
     handleChange (e) {
       console.log(e)
+    },
+    getColor (i) {
+      return ['turquoise', 'violet', 'green'][i % 3]
     }
   }
 }

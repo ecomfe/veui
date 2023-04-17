@@ -1,5 +1,6 @@
 import { mount, wait } from '../../../utils'
 import TagInput from '@/components/TagInput'
+import Tag from '@/components/Tag'
 
 describe('components/TagInput', function () {
   this.timeout(10000)
@@ -378,23 +379,17 @@ describe('components/TagInput', function () {
   })
 
   it('should render max limit correctly', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-tag-input': TagInput
-        },
-        template: '<veui-tag-input :value="value" :max="5"/>',
-        data () {
-          return {
-            value: ['foo', 'bar', 'baz']
-          }
-        }
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
       },
-      {
-        sync: false,
-        attachToDocument: true
+      template: '<veui-tag-input :value="value" :max="5"/>',
+      data () {
+        return {
+          value: ['foo', 'bar', 'baz']
+        }
       }
-    )
+    })
 
     const { vm } = wrapper
     const me = wrapper.find(TagInput)
@@ -423,7 +418,7 @@ describe('components/TagInput', function () {
         'veui-tag-input': TagInput
       },
       template: `
-        <veui-tag-input :value="value" maxlength="5"/>
+        <veui-tag-input :value="value" :maxlength="5"/>
       `,
       data () {
         return {
@@ -761,6 +756,112 @@ describe('components/TagInput', function () {
     input.trigger('input')
     await vm.$nextTick()
     expect(element.style.width).to.equal(`${element.scrollWidth + 1}px`)
+
+    wrapper.destroy()
+  })
+
+  it('should support `tag` slot with VEUI Tag', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput,
+        'veui-tag': Tag
+      },
+      template: `
+        <veui-tag-input v-model="value" :input-value.sync="inputValue">
+          <template #tag="{ tag, attrs, listeners, index }">
+            <veui-tag v-bind="attrs" v-on="listeners" :color="colors[index]">{{ tag }}</veui-tag>
+          </template>
+        </veui-tag-input>
+      `,
+      data () {
+        return {
+          value: ['foo', 'bar', 'baz'],
+          inputValue: ''
+        }
+      },
+      computed: {
+        colors () {
+          return this.value.map(
+            (_, i) => ['turquoise', 'violet', 'green'][i % 3]
+          )
+        }
+      }
+    })
+
+    const { vm } = wrapper
+    let tags = wrapper.findAll('.veui-tag')
+
+    expect(tags.at(0).classes('veui-tag-turquoise')).to.equal(true)
+    expect(tags.at(1).classes('veui-tag-violet')).to.equal(true)
+    expect(tags.at(2).classes('veui-tag-green')).to.equal(true)
+
+    tags.at(0).find('.veui-tag-remove').trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['bar', 'baz'])
+
+    tags = wrapper.findAll('.veui-tag')
+    tags.at(0).trigger('dblclick')
+
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['baz'])
+    expect(vm.inputValue).to.equal('bar')
+
+    wrapper.destroy()
+  })
+
+  it('should support `tag` slot with custom tag', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-tag-input': TagInput
+      },
+      template: `
+        <veui-tag-input v-model="value" :input-value.sync="inputValue" :disabled="disabled">
+          <template #tag="{ tag, key, edit, index, remove, disabled }">
+            <span
+              class="custom-tag"
+              :key="key"
+              :data-disabled="String(disabled)"
+              @click="edit"
+              @dblclick="remove"
+            >{{ tag }}</span>
+          </template>
+        </veui-tag-input>
+      `,
+      data () {
+        return {
+          value: ['foo', 'bar', 'baz'],
+          inputValue: '',
+          disabled: false
+        }
+      }
+    })
+
+    const { vm } = wrapper
+    let tags = wrapper.findAll('.custom-tag')
+
+    expect(tags.at(0).text()).to.equal('foo')
+    expect(tags.at(1).text()).to.equal('bar')
+    expect(tags.at(2).text()).to.equal('baz')
+
+    tags.at(0).trigger('dblclick')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['bar', 'baz'])
+
+    tags = wrapper.findAll('.custom-tag')
+    tags.at(0).trigger('click')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['baz'])
+    expect(vm.inputValue).to.equal('bar')
+
+    vm.disabled = true
+    vm.inputValue = ''
+
+    await vm.$nextTick()
+    tags = wrapper.findAll('.custom-tag')
+    tags.at(0).trigger('dblclick')
+    await vm.$nextTick()
+    expect(vm.value).to.deep.equal(['baz'])
+    expect(tags.at(0).attributes('data-disabled')).equal('true')
 
     wrapper.destroy()
   })
