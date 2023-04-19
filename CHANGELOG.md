@@ -1,3 +1,16 @@
+## 2.13.7 (2023-04-19)
+
+### 💡 主要变更
+
+- [+] `Tag` 组件新增 `color` 属性，目前提供 `turquoise` / `violet` / `green` 三种预设颜色。<!-- #Tag -->
+- [^] 优化了 `Tag` 组件的关闭按钮尺寸。<!-- #Tag -->
+- [^] 优化了 `TagInput` / `Select` / `Cascader` 组件中标签内容的边距。<!-- #TagInput #Select #Cascader -->
+- [+] `Button` 组件新增 `ui` 样式 `subtle`，可配合 `text` / `icon` 类型使用。<!-- #Button -->
+
+### 🐞 问题修复
+
+- [^] 修正了 `Select` 复选模式下标签没有遵循 `ui` 配置的问题。<!-- #Select -->
+
 ## 2.13.6 (2023-04-08)
 
 ### 💡 主要变更
