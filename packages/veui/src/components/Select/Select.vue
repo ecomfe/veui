@@ -542,6 +542,7 @@ export default {
           onRemove={() => this.removeSelectedAt(index)}
           disabled={isDisabled}
           removable={!this.realReadonly && !isDisabled}
+          ui={this.uiParts.tag}
           {...{
             nativeOn: {
               '!mouseup': stopPropagation
