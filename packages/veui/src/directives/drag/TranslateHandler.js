@@ -60,7 +60,6 @@ export default class TranslateHandler extends BaseHandler {
 
   start () {
     super.start()
-
     if (!this.elms || !this.elms.length) {
       this.elms = this.options.targets.reduce((prev, cur) => {
         prev.push(...getNodes(cur, this.context))
