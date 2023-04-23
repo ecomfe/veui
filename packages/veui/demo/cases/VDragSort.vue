@@ -1,6 +1,12 @@
 <template>
 <article>
   <h1>
+    <code>v-drag.translate</code>
+  </h1>
+  <div ref="target" v-drag:target.translate class="target">
+    <img src="https://via.placeholder.com/720x1020">
+  </div>
+  <h1>
     <code>v-drag.sort</code>
   </h1>
   <section v-if="hasDebug">
@@ -285,5 +291,14 @@ section {
 .dialog-content,
 .tooltip-content {
   height: 200px;
+}
+
+.target {
+  display: inline-block;
+
+  & > img {
+    width: 80px;
+    height: 80px;
+  }
 }
 </style>

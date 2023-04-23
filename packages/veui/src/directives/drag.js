@@ -169,6 +169,8 @@ function refresh (el, binding, vnode) {
       dragData.initY = clientY
       let args = { event }
       handler.start({ ...args })
+      // prevent default hehavior for images and links
+      event.preventDefault()
       contextComponent.$emit('dragstart', { ...args })
       options.dragstart({ ...args })
 
