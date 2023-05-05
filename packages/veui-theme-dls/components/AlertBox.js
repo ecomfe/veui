@@ -1,18 +1,18 @@
 import {
-  IconCheckCircle,
-  IconExclamationCircle,
-  IconInfoCircle,
-  IconTimesCircle
+  IconCheckCircleSolid,
+  IconExclamationCircleSolid,
+  IconInfoCircleSolid,
+  IconTimesCircleSolid
 } from 'dls-icons-vue'
 import ui from 'veui/managers/ui'
 
 ui.defaults(
   {
     icons: {
-      success: IconCheckCircle,
-      info: IconInfoCircle,
-      error: IconTimesCircle,
-      warning: IconExclamationCircle
+      success: IconCheckCircleSolid,
+      info: IconInfoCircleSolid,
+      error: IconTimesCircleSolid,
+      warning: IconExclamationCircleSolid
     },
     parts: {
       ok: 'primary'
