@@ -1,0 +1,21 @@
+@import "./lib.less";
+
+._veui-scrollbar() {
+  ::-webkit-scrollbar {
+    width: @dls-scrollbar-track-width;
+    height: @dls-scrollbar-track-width;
+    background-color: @dls-scrollbar-track-color;
+
+    &-thumb {
+      border-radius: @dls-scrollbar-thumb-border-radius;
+      border: (@dls-scrollbar-track-width - @dls-scrollbar-thumb-width) / 2
+        solid transparent;
+      background-clip: content-box;
+      background-color: @dls-scrollbar-thumb-color;
+    }
+  }
+
+  :hover::-webkit-scrollbar-thumb {
+    background-color: @dls-scrollbar-thumb-color-hover;
+  }
+}
