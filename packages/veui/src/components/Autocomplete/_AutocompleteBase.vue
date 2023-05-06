@@ -1,5 +1,5 @@
 <template>
-<div ref="self" :aria-expanded="finalExpanded" :aria-owns="dropdownId">
+<div ref="self" :aria-expanded="realExpanded" :aria-owns="dropdownId">
   <slot
     :open-suggestions="openSuggestions"
     :close-suggestions="closeSuggestions"
@@ -13,7 +13,7 @@
   <veui-overlay
     ref="overlay"
     target="self"
-    :open="finalExpanded"
+    :open="realExpanded"
     :overlay-class="overlayClass"
     :overlay-style="overlayStyle"
     :local="realOverlayOptions.local"
@@ -28,7 +28,7 @@
         :update-value="suggestionUpdateValue"
         :active-descendant="activeDescendant"
         :value="realValue"
-        :expanded="finalExpanded"
+        :expanded="realExpanded"
         name="suggestions"
       />
     </div>
@@ -121,12 +121,6 @@ export default {
         }, [])
       }
       return walk(this.clonedDatasource)
-    },
-    finalExpanded () {
-      let datasource = this.realValue
-        ? this.filteredDatasource
-        : this.realDatasource
-      return this.realExpanded && !!datasource.length
     },
     realValue () {
       return this.value === undefined ? this.localValue : this.value

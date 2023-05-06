@@ -61,6 +61,17 @@
             <span v-else>{{ props.label }}</span>
           </slot>
         </template>
+        <div
+          v-if="
+            suggestionsProps.keyword && !suggestionsProps.datasource.length
+          "
+          :class="$c('autocomplete-suggestion-group-no-data')"
+        >
+          <slot
+            name="no-data"
+            v-bind="{ keyword: suggestionsProps.keyword }"
+          >{{ t('noData') }}</slot>
+        </div>
       </veui-option-group>
     </slot>
   </template>
@@ -70,6 +81,7 @@
 <script>
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
+import i18n from '../../mixins/i18n'
 import input from '../../mixins/input'
 import { useStrict } from '../../mixins/strict'
 import overlay from '../../mixins/overlay'
@@ -104,7 +116,14 @@ export default {
     'veui-option-group': OptionGroup
   },
   directives: { outside },
-  mixins: [prefix, ui, input, overlay, useStrict(['maxlength', 'select'])],
+  mixins: [
+    prefix,
+    ui,
+    i18n,
+    input,
+    overlay,
+    useStrict(['maxlength', 'select'])
+  ],
   inheritAttrs: false,
   props: {
     suggestTrigger: {
