@@ -57,7 +57,9 @@
         '--dls-dropdown-max-display-items': 4
       }"
       expanded
-    />
+    >
+      <span slot="no-data">no-data</span>
+    </veui-autocomplete>
   </section>
   <section style="margin-top: 160px">
     <h2>strict: 强制不能超过最大长度7</h2>
