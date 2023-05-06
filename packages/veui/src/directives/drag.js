@@ -19,6 +19,13 @@ const isFirefox = checkIsFirefox()
 
 const HANDLERS = {}
 
+const IGNORE_EL = ['a', 'img']
+function disableDraggable (evTarget) {
+  if (IGNORE_EL.indexOf(evTarget.tagName.toLowerCase()) !== -1) {
+    evTarget.draggable = false
+  }
+}
+
 const OPTIONS_SCHEMA = {
   arg: 'targets[]',
   modifiers: () => ({
@@ -138,6 +145,7 @@ function refresh (el, binding, vnode) {
       if (match) {
         // 原生拖拽需要在 handle 触发 mousedown 时设置 draggable 后，在 dragend 时重置
         target.setAttribute('draggable', 'true')
+        disableDraggable(evTarget)
       }
     },
 
@@ -164,13 +172,16 @@ function refresh (el, binding, vnode) {
         return
       }
 
+      if (!isNative) {
+        // native 的已经在mousedown（prepare）处理了
+        disableDraggable(event.target)
+      }
+
       let { clientX, clientY } = event
       dragData.initX = clientX
       dragData.initY = clientY
       let args = { event }
       handler.start({ ...args })
-      // prevent default hehavior for images and links
-      event.preventDefault()
       contextComponent.$emit('dragstart', { ...args })
       options.dragstart({ ...args })
 

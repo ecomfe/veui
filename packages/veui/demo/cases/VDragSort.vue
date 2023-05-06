@@ -34,9 +34,10 @@
           debug,
           align
         }"
-        class="item"
+        class="item target"
       >
         {{ item }}
+        <img src="https://via.placeholder.com/720x1020">
       </div>
     </transition-group>
   </section>
