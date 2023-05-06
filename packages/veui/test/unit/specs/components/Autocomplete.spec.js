@@ -165,6 +165,11 @@ describe('components/Autocomplete', function () {
 
     expect(vm.value === '')
 
+    await input('Just a random input...', false)
+    expect(
+      wrapper.find('.veui-autocomplete-suggestion-group-no-data').exists()
+    ).to.equal(true)
+
     await input('Just a random input...', true)
     expect(vm.value).to.equal('')
 

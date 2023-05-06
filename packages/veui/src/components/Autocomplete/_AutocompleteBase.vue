@@ -126,7 +126,7 @@ export default {
       let datasource = this.realValue
         ? this.filteredDatasource
         : this.realDatasource
-      return this.realExpanded && !!datasource.length
+      return this.realExpanded && !!(datasource.length || this.keyword)
     },
     realValue () {
       return this.value === undefined ? this.localValue : this.value
