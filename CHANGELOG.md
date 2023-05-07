@@ -1,3 +1,26 @@
+## 2.14.0 "🍩 Doughnut" (2023-05-08)
+
+### 💡 主要变更
+
+- [^] `veui-theme-dls` 升级到 D22 样式。<!-- #veui-theme-dls -->
+- [+] 新增自定义的滚动条样式。<!-- #veui-theme-dls -->
+- [^] 各个组件的自定义 CSS 属性结束实验性状态，正式发布。包括：<!-- #Accordion #Carousel #Checkbox #Dialog #Drawer # Autocomplete #Select #Dropdown #SearchBox #Cascader #Field #Radio #Table -->
+
+  - `--dls-accordion-gutter`
+  - `--dls-carousel-slide-gutter`
+  - `--dls-carousel-transition-duration`
+  - `--dls-checkbox-button-min-width`
+  - `--dls-dialog-content-width`
+  - `--dls-dialog-width`
+  - `--dls-drawer-width`
+  - `--dls-dropdown-max-display-items`
+  - `--dls-field-label-width`
+  - `--dls-radio-button-min-width`
+  - `--dls-table-cell-lines`
+  - `--dls-table-head-cell-lines`
+
+- [^] `Stack` 组件和 `TagInput` 组件结束实验性状态，正式发布。<!-- #Stack #TagInput -->
+
 ## 2.13.9 (2023-05-08)
 
 ### 🐞 问题修复
