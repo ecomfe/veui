@@ -229,7 +229,7 @@
         >提交</veui-button>
         <veui-button
           :disabled="validating"
-          @click="() => $refs.form2.reset()"
+          @click="() => $refs.form.reset()"
         >重置</veui-button>
       </template>
     </veui-form>
