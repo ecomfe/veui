@@ -85,7 +85,7 @@
         自定义图标-太阳：
         <veui-loading loading>
           <template #spinner>
-            <veui-icon spin name="sun"/>
+            <veui-icon spin name="clockwise"/>
           </template>
           拼命加载中...
         </veui-loading>
@@ -94,7 +94,7 @@
         自定义图标-雨伞：
         <veui-loading loading ui="reverse" class="reverse">
           <template #spinner>
-            <veui-icon spin name="umbrella"/>
+            <veui-icon spin name="loading"/>
           </template>
           拼命加载中...
         </veui-loading>
@@ -137,9 +137,9 @@
 </article>
 </template>
 <script>
-import 'vue-awesome/icons/star'
-import 'vue-awesome/icons/sun'
-import 'vue-awesome/icons/umbrella'
+import 'veui-theme-dls-icons/star'
+import 'veui-theme-dls-icons/clockwise'
+import 'veui-theme-dls-icons/loading'
 
 import { Loading, Button, Icon, Span } from 'veui'
 export default {

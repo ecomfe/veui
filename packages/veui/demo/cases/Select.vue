@@ -487,8 +487,8 @@ import {
   Button
 } from 'veui'
 import type from 'veui/managers/type'
-import 'vue-awesome/icons/flag'
-import 'vue-awesome/icons/gift'
+import 'veui-theme-dls-icons/star'
+import 'veui-theme-dls-icons/gift'
 import 'veui-theme-dls-icons/info-circle'
 
 export default {

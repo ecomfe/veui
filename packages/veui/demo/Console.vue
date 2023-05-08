@@ -7,7 +7,7 @@
 >
   <h2 @click="expanded = !expanded">
     <icon
-      name="ban"
+      name="stop"
       label="Clear console"
       flip="horizontal"
       @click.native.stop="logs = []"
@@ -39,7 +39,7 @@
 <script>
 import bus from './bus'
 import Icon from 'veui/components/Icon'
-import 'vue-awesome/icons/ban'
+import 'veui-theme-dls-icons/stop'
 import 'veui-theme-dls-icons/chevron-up'
 import 'veui-theme-dls-icons/chevron-down'
 

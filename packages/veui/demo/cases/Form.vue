@@ -537,7 +537,7 @@ import {
 } from 'veui'
 import addMonths from 'date-fns/addMonths'
 import bus from '../bus'
-import 'vue-awesome/icons/indent'
+import 'veui-theme-dls-icons/indent'
 
 const REGIONS_BRAND = [
   {

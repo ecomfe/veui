@@ -34,7 +34,6 @@ import Console from './Console'
 import Icon from '@/components/Icon'
 import Select from '@/components/Select'
 import i18n from '@/managers/i18n'
-import 'vue-awesome/icons/ban'
 import 'vue-awesome/icons/brands/github'
 
 const LOCALES = [

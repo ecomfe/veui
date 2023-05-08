@@ -88,7 +88,7 @@
 
 <script>
 import { Checkbox, Steps, Icon } from 'veui'
-import 'vue-awesome/icons/star'
+import 'veui-theme-dls-icons/star'
 
 export default {
   name: 'steps-demo',

@@ -83,6 +83,7 @@ export default {
     animation: @animation-name 1s linear infinite;
   }
 
+  /* stylelint-disable-next-line keyframes-name-pattern */
   @keyframes @animation-name {
     0% {
       transform: rotate(0deg);

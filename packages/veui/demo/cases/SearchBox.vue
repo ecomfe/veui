@@ -239,7 +239,7 @@
 import bus from '../bus'
 import { includes } from 'lodash'
 import { SearchBox, Icon } from 'veui'
-import 'vue-awesome/icons/flag'
+import 'veui-theme-dls-icons/star'
 
 export default {
   name: 'demo-search-box',
