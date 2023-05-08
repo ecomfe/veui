@@ -133,8 +133,9 @@ describe('components/Autocomplete', function () {
     let wrapper = mount(
       {
         ...componentOptions,
-        template:
-          '<veui-autocomplete v-model="value" :strict="strict" :maxlength="7" suggest-trigger="focus" :datasource="groupedDatasource"/>'
+        template: `<veui-autocomplete v-model="value" :strict="strict" :maxlength="7" suggest-trigger="focus" :datasource="groupedDatasource">
+          <div slot="no-data">no-data</div>
+          </veui-autocomplete>`
       },
       debugInBrowser
     )

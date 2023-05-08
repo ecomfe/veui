@@ -1,7 +1,6 @@
 import './common'
 import './Alert'
 import './AlertBox'
-import './Autocomplete'
 import './Calendar'
 import './Carousel'
 import './Cascader'

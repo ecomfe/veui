@@ -86,7 +86,8 @@ export default {
     childrenKey: {
       type: String,
       default: 'children'
-    }
+    },
+    expandOnNoData: Boolean
   },
   data () {
     return {
@@ -123,10 +124,14 @@ export default {
       return walk(this.clonedDatasource)
     },
     finalExpanded () {
+      if (this.isControlled('expanded')) {
+        return this.realExpanded
+      }
+
       let datasource = this.realValue
         ? this.filteredDatasource
         : this.realDatasource
-      return this.realExpanded && !!(datasource.length || this.keyword)
+      return this.realExpanded && (!!datasource.length || this.expandOnNoData)
     },
     realValue () {
       return this.value === undefined ? this.localValue : this.value
