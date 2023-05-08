@@ -3,8 +3,8 @@
   <h1>
     <code>v-drag.translate</code>
   </h1>
-  <div ref="target" v-drag:target.translate class="target">
-    <img src="https://via.placeholder.com/720x1020">
+  <div ref="target" v-drag:target.translate>
+    <img class="target-img" src="https://via.placeholder.com/720x1020">
   </div>
   <h1>
     <code>v-drag.sort</code>
@@ -34,16 +34,17 @@
           debug,
           align
         }"
-        class="item"
+        class="item target"
       >
         {{ item }}
+        <img class="target-img" src="https://via.placeholder.com/720x1020">
       </div>
     </transition-group>
   </section>
   <section ref="itemGroup2x">
     <h2>Axis: X 宽度一致</h2>
     <transition-group name="list" tag="div" class="items">
-      <div
+      <img
         v-for="item in items"
         :key="item"
         v-drag.sort.x="{
@@ -53,10 +54,9 @@
           debug,
           align
         }"
-        class="item-fixed-width"
+        class="target-img item-fixed-width"
+        src="https://via.placeholder.com/720x1020"
       >
-        {{ item }}
-      </div>
     </transition-group>
   </section>
   <section>
@@ -293,12 +293,8 @@ section {
   height: 200px;
 }
 
-.target {
-  display: inline-block;
-
-  & > img {
-    width: 80px;
-    height: 80px;
-  }
+.target-img {
+  width: 80px;
+  height: 80px;
 }
 </style>
