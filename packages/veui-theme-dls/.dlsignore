@@ -235,8 +235,11 @@
 @dls-tag-border-radius-m
 @dls-tag-border-radius-s
 @dls-tag-color-error
+@dls-tag-color-green
 @dls-tag-color-info
 @dls-tag-color-success
+@dls-tag-color-turquoise
+@dls-tag-color-violet
 @dls-tag-color-warning
 @dls-tag-font-color-reverse
 @dls-tag-font-color-selected
