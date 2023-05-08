@@ -12,6 +12,19 @@
     <veui-autocomplete ui="s" clearable autofocus :datasource="suggestions"/>
   </section>
   <section>
+    <h2>强制展开</h2>
+    <veui-autocomplete :datasource="[]" expanded/>
+  </section>
+  <section>
+    <h2>展开后NoData生效</h2>
+    <veui-autocomplete :datasource="[]">
+      <template #no-data>No data</template>
+    </veui-autocomplete>
+    <veui-autocomplete :datasource="[]" suggest-trigger="focus">
+      <template #no-data>No data</template>
+    </veui-autocomplete>
+  </section>
+  <section>
     <h2>禁用(l)</h2>
     <veui-autocomplete
       ui="l"

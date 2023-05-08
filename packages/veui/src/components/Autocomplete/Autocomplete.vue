@@ -11,6 +11,7 @@
   :aria-readonly="realReadonly"
   :aria-disabled="realDisabled"
   aria-haspopup="listbox"
+  :expand-on-no-data="hasNoDataSlot()"
   v-bind="baseProps"
   v-on="baseEvents"
 >
@@ -62,15 +63,13 @@
           </slot>
         </template>
         <div
-          v-if="
-            suggestionsProps.keyword && !suggestionsProps.datasource.length
-          "
+          v-if="hasNoDataSlot() && !suggestionsProps.datasource.length"
           :class="$c('autocomplete-suggestion-group-no-data')"
         >
           <slot
             name="no-data"
             v-bind="{ keyword: suggestionsProps.keyword }"
-          >{{ t('noData') }}</slot>
+          />
         </div>
       </veui-option-group>
     </slot>
@@ -81,7 +80,6 @@
 <script>
 import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
-import i18n from '../../mixins/i18n'
 import input from '../../mixins/input'
 import { useStrict } from '../../mixins/strict'
 import overlay from '../../mixins/overlay'
@@ -116,14 +114,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   directives: { outside },
-  mixins: [
-    prefix,
-    ui,
-    i18n,
-    input,
-    overlay,
-    useStrict(['maxlength', 'select'])
-  ],
+  mixins: [prefix, ui, input, overlay, useStrict(['maxlength', 'select'])],
   inheritAttrs: false,
   props: {
     suggestTrigger: {
@@ -171,6 +162,9 @@ export default {
   methods: {
     focus () {
       this.$refs.base.focus()
+    },
+    hasNoDataSlot () {
+      return !!(this.$slots['no-data'] || this.$scopedSlots['no-data'])
     },
     handleSelect (value) {
       value = value || ''
