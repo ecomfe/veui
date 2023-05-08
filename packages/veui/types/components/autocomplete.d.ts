@@ -61,6 +61,7 @@ type Slots = {
     value: string
     matches: { text: string; matched: boolean }
   }): unknown
+  'no-data'(slotProps: { keyword: string }): unknown
 }
 
 type Autocomplete = VeuiDefineComponent<{
