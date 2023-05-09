@@ -23,6 +23,10 @@ Packages included in this repo are:
 * [`veui-theme-dls`](./packages/veui-theme-dls)
 * [`veui-theme-dls-icons`](./packages/veui-theme-dls-icons)
 
+## Start On Cloud IDE
+
+[https://idegithub.com/ecomfe/veui](https://idegithub.com/ecomfe/veui)
+
 ## Contribution
 
 To develop `veui` locally you need to clone this repo and run the following in `veui`'s root directory (VEUI uses pnpm as the package manager):
