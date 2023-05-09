@@ -1,15 +1,16 @@
 @import "./lib.less";
 
 ._veui-scrollbar() {
+  @border-width: (@dls-scrollbar-track-width - @dls-scrollbar-thumb-width) / 2;
+
   ::-webkit-scrollbar {
     width: @dls-scrollbar-track-width;
     height: @dls-scrollbar-track-width;
     background-color: @dls-scrollbar-track-color;
 
     &-thumb {
-      border-radius: @dls-scrollbar-thumb-border-radius;
-      border: (@dls-scrollbar-track-width - @dls-scrollbar-thumb-width) / 2
-        solid transparent;
+      border-radius: @dls-scrollbar-thumb-border-radius + @border-width;
+      border: @border-width solid transparent;
       background-clip: content-box;
       background-color: @dls-scrollbar-thumb-color;
     }
