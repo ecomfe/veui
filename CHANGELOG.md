@@ -1,9 +1,10 @@
-## 2.14.0 "🍩 Doughnut" (2023-05-08)
+## 2.14.0 "🍩 Doughnut" (2023-05-09)
 
 ### 💡 主要变更
 
 - [^] `veui-theme-dls` 升级到 D22 样式。<!-- #veui-theme-dls -->
 - [+] 新增自定义的滚动条样式。<!-- #veui-theme-dls -->
+- [+] `Autocomplete` 组件新增 `no-data` 插槽，允许在无匹配的候选项时自定义要显示的内容。<!-- #Autocomplete -->
 - [^] 各个组件的自定义 CSS 属性结束实验性状态，正式发布。包括：<!-- #Accordion #Carousel #Checkbox #Dialog #Drawer # Autocomplete #Select #Dropdown #SearchBox #Cascader #Field #Radio #Table -->
 
   - `--dls-accordion-gutter`
