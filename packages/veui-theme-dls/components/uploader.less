@@ -162,12 +162,14 @@
 
   &-list-media {
     margin: -@dls-uploader-media-spacing-y-m 0 0 -@dls-uploader-media-spacing-x-m;
+    pointer-events: none;
 
     &-item {
       display: inline-flex;
       vertical-align: top;
       margin: @dls-uploader-media-spacing-y-m 0 0
         @dls-uploader-media-spacing-x-m;
+      pointer-events: auto;
       width: @dls-uploader-media-width-m;
 
       &-hidden {

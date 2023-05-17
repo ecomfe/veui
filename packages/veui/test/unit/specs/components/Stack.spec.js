@@ -414,7 +414,7 @@ describe('components/Stack', function () {
         },
         template: `
           <div style="display: flex">
-            <div id="foo" style="background: red; width: 60px; height: 60px"/>
+            <div style="background: red; width: 60px; height: 60px"/>
             <veui-stack gap="m">
               <div style="background: pink; min-width: 60px; min-height: 60px"/>
               <div style="background: pink; min-width: 60px; min-height: 60px"/>

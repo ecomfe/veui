@@ -1154,6 +1154,34 @@ describe('components/Uploader', function () {
     ).to.equal(false)
     wrapper.destroy()
   })
+
+  it('should not obscure elements before it', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-uploader': Uploader
+        },
+        template: `
+        <div style="display: flex">
+          <div style="background: red; width: 60px; height: 60px"/>
+          <veui-uploader type="image"/>
+        </div>
+      `
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    const { element } = wrapper.find(Uploader)
+    const { top, left } = element.getBoundingClientRect()
+
+    expect(
+      element.contains(document.elementFromPoint(left - 1, top + 1))
+    ).to.equal(false)
+
+    wrapper.destroy()
+  })
 })
 
 function waitForEvent (vm, event) {
