@@ -405,6 +405,37 @@ describe('components/Stack', function () {
 
     wrapper.destroy()
   })
+
+  it('should not obscure elements before it', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-stack': Stack
+        },
+        template: `
+          <div style="display: flex">
+            <div id="foo" style="background: red; width: 60px; height: 60px"/>
+            <veui-stack gap="m">
+              <div style="background: pink; min-width: 60px; min-height: 60px"/>
+              <div style="background: pink; min-width: 60px; min-height: 60px"/>
+            </veui-stack>
+          </div>
+        `
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    const { element } = wrapper.find(Stack)
+    const { top, left } = element.getBoundingClientRect()
+
+    expect(
+      element.contains(document.elementFromPoint(left - 1, top + 1))
+    ).to.equal(false)
+
+    wrapper.destroy()
+  })
 })
 
 function expectRectProp (el, prop, value) {
