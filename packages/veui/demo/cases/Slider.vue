@@ -111,8 +111,9 @@
   </section>
 
   <section>
-    <h3>支持竖向、竖向区间</h3>
-    <veui-slider v-model="valueVertical" vertical/>
+    <h3>支持竖向，自定义高度</h3>
+    <veui-slider v-model="valueVertical" vertical style="height: 200px"/>
+    <h3>竖向区间，默认高度</h3>
     <veui-slider v-model="value4" :min="0" :max="100" vertical/>
   </section>
 </article>

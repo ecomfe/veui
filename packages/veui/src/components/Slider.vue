@@ -10,7 +10,6 @@
               $c('slider-track-default-bg'),
               $c('slider-track-default-progress')
             ]"
-            :style="bgProgressStyle"
           />
           <div
             :class="[
@@ -189,10 +188,6 @@ export default {
       type: Boolean,
       default: false
     },
-    height: {
-      type: String,
-      default: '200px'
-    },
     parse: {
       type: Function,
       default: identity
@@ -215,7 +210,7 @@ export default {
     sliderClasses () {
       return {
         [this.$c('slider')]: true,
-        'is-vertical': this.vertical,
+        [this.$c(`slider-${this.vertical ? 'vertical' : 'horizontal'}`)]: true,
         [this.$c('disabled')]: this.realDisabled,
         [this.$c('readonly')]: this.realReadonly
       }
@@ -284,13 +279,6 @@ export default {
     },
     secondaryProgressStyle () {
       return this.getProgressStyle(this.localSecondaryProgress)
-    },
-    bgProgressStyle () {
-      return this.vertical
-        ? {
-          height: this.height
-        }
-        : {}
     },
     thumbAttrs () {
       return this.realValue.map((value, index) => {

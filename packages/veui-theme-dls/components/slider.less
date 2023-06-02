@@ -226,7 +226,7 @@
 
   // 非竖向的，调用原先的样式方法，指定固定的高度等逻辑
   // 为了防止横向的样式也被初始化一遍、导致每个都需要清除、竖向直接不调用横向方法，所以需要把初始化的信息在竖向方法里重复放一遍
-  &:not(.is-vertical)[ui~="s"] {
+  &-horizontal[ui~="s"] {
     .slider-size(
       dls-line-height(@dls-line-height-1, @dls-slider-font-size-s),
       @dls-slider-track-width-s,
@@ -237,7 +237,7 @@
     );
   }
 
-  &:not(.is-vertical)[ui~="m"] {
+  &-horizontal[ui~="m"] {
     .slider-size(
       dls-line-height(@dls-line-height-1, @dls-slider-font-size-m),
       @dls-slider-track-width-m,
@@ -250,14 +250,26 @@
 
   // 竖向，改为指定最小宽度、偏移量从bottom算起，顶部没有
   // 为了防止横向的样式也被初始化一遍、导致每个都需要清除、竖向直接不调用横向方法，所以需要把初始化的信息重复放一遍
-  &.is-vertical {
+  &-vertical {
+    // 没有高度的话无法显示，需要给容器整体设置一个高度，如果调用组件指定了style高度那就按照指定的
+    height: 100px;
     .@{veui-prefix}-slider-track {
       flex-grow: 0;
 
       &-default {
+        // 高度自适应，需要明确写上100%才能自动
+        height: 100%;
+
         &-progress {
           min-height: 0;
           min-width: @dls-slider-track-min-width;
+          // 高度自适应，需要明确写上100%才能自动
+          height: 100%;
+        }
+
+        &-wrapper {
+          // 高度自适应，需要明确写上100%才能自动
+          height: 100%;
         }
 
         &-sp,
@@ -314,7 +326,7 @@
     }
   }
 
-  &.is-vertical[ui~="s"] {
+  &-vertical[ui~="s"] {
     .slider-vertical-size(
       dls-line-height(@dls-line-height-1, @dls-slider-font-size-s),
       @dls-slider-track-width-s,
@@ -325,7 +337,7 @@
     );
   }
 
-  &.is-vertical[ui~="m"] {
+  &-vertical[ui~="m"] {
     .slider-vertical-size(
       dls-line-height(@dls-line-height-1, @dls-slider-font-size-m),
       @dls-slider-track-width-m,
