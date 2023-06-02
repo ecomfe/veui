@@ -650,6 +650,15 @@
     z-index: 2;
   }
 
+  &-scrollbar-overlay {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: var(--veui-table-scrollbar-height);
+    background-color: @dls-table-cell-background-color;
+  }
+
   &-sticky-scrollbar {
     position: sticky;
     bottom: var(--dls-table-sticky-scrollbar-bottom, 0);

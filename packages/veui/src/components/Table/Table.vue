@@ -17,6 +17,7 @@
       scrollableX && (!supportSticky || !hasFixedRight),
     [$c('table-has-loading-backdrop')]: hasLoadingBackdrop
   }"
+  :style="scrollbarMetrics"
   :ui="realUi"
   @focusin="handleFocusIn"
 >
@@ -71,15 +72,8 @@
       </table-body>
     </table>
   </div>
-  <div
-    :class="$c('table-sticky-scrollbar')"
-    :style="{
-      [`--${$c('table-scroll-width')}`]: `${scrollWidth}px`,
-      [`--${$c('table-scrollbar-width')}`]: `${scrollbarWidth}px`,
-      [`--${$c('table-scrollbar-height')}`]: `${scrollbarHeight}px`
-    }"
-    aria-hidden="true"
-  >
+  <div :class="$c('table-scrollbar-overlay')"/>
+  <div :class="$c('table-sticky-scrollbar')" aria-hidden="true">
     <div
       ref="scrollbar"
       :class="$c('table-sticky-scrollbar-placeholder')"
@@ -505,6 +499,13 @@ export default {
         this.realLoadingOptions.type !== 'spinner' &&
         this.realLoadingOptions.modal !== false
       )
+    },
+    scrollbarMetrics () {
+      return {
+        [`--${this.$c('table-scroll-width')}`]: `${this.scrollWidth}px`,
+        [`--${this.$c('table-scrollbar-width')}`]: `${this.scrollbarWidth}px`,
+        [`--${this.$c('table-scrollbar-height')}`]: `${this.scrollbarHeight}px`
+      }
     }
   },
   watch: {
