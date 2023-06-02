@@ -140,4 +140,44 @@ describe('components/Slider', function () {
 
     wrapper.destroy()
   })
+
+  it('should support vertical mode', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-slider': Slider
+        },
+        template: `<veui-slider v-model="value" vertical :step="1" :min="0" :max="10"/>`,
+        data () {
+          return {
+            value: 1
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+    let track = wrapper.find('.veui-slider-track')
+
+    await vm.$nextTick()
+
+    let { element } = track
+    let event = new MouseEvent('click')
+
+    Object.defineProperty(event, 'offsetY', {
+      get () {
+        return element.offsetHeight / 2
+      }
+    })
+
+    element.dispatchEvent(event)
+
+    await vm.$nextTick()
+    expect(vm.value).to.equal(5)
+
+    wrapper.destroy()
+  })
 })
