@@ -251,39 +251,49 @@
   // 竖向，改为指定最小宽度、偏移量从bottom算起，顶部没有
   // 为了防止横向的样式也被初始化一遍、导致每个都需要清除、竖向直接不调用横向方法，所以需要把初始化的信息重复放一遍
   &-vertical {
-    // 没有高度的话无法显示，需要给容器整体设置一个高度，如果调用组件指定了style高度那就按照指定的
+    display: inline-flex;
+    width: max-content;
+    // TODO: use default height token
     height: 100px;
-    .@{veui-prefix}-slider-track {
-      flex-grow: 0;
+    flex-direction: column;
 
-      &-default {
+    .@{veui-prefix}-slider-track-default {
+      height: 100%;
+      flex-direction: column;
+
+      &-progress {
+        min-height: 0;
+        min-width: @dls-slider-track-min-width;
         // 高度自适应，需要明确写上100%才能自动
         height: 100%;
+      }
 
-        &-progress {
-          min-height: 0;
-          min-width: @dls-slider-track-min-width;
-          // 高度自适应，需要明确写上100%才能自动
-          height: 100%;
-        }
+      &-wrapper {
+        // 高度自适应，需要明确写上100%才能自动
+        height: 100%;
+      }
 
-        &-wrapper {
-          // 高度自适应，需要明确写上100%才能自动
-          height: 100%;
-        }
+      &-sp,
+      &-fg {
+        left: 0;
+        top: unset;
+      }
 
-        &-sp,
-        &-fg {
-          left: 0;
-          top: unset;
-        }
+      &-marks {
+        transform: translateX(50%);
+      }
+
+      &-mark {
+        transform: translate(-50%, 50%);
       }
     }
+
     // 滑动按钮的偏移量要竖向回返
     .@{veui-prefix}-slider-thumb {
-      transform: translate(-50%, 50%);
+      transform: translateY(50%);
     }
   }
+
   // 竖向的样式，使用新方法，指定固定宽度、偏移量等
   .slider-vertical-size(@total-height, @track-height, @track-radius, @thumb-size, @mark-size, @dot-size) {
     .@{veui-prefix}-slider {
@@ -312,8 +322,7 @@
       }
 
       &-thumb {
-        // track/thumb slot 高度变化需要调整 thumb 的位置
-        left: @track-height / 2;
+        left: (@total-height - @thumb-size) / 2;
 
         &-default {
           .size(@thumb-size);
