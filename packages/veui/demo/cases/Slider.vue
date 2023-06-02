@@ -109,6 +109,12 @@
       <span>{{ formatDuration(videoDuration) }}</span>
     </div>
   </section>
+
+  <section>
+    <h3>支持竖向、竖向区间</h3>
+    <veui-slider v-model="valueVertical" vertical/>
+    <veui-slider v-model="value4" :min="0" :max="100" vertical/>
+  </section>
 </article>
 </template>
 
@@ -131,6 +137,7 @@ export default {
       value2: 333,
       value3: makeArray(5).map((_, i) => `hsl(${(i + 1) * 60}, 100%, 50%)`),
       value4: [22, 66],
+      valueVertical: 0.5,
 
       videoPlayProgress: 0.11,
       videoBufferProgress: 0.57,
