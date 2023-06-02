@@ -224,7 +224,9 @@
     }
   }
 
-  &[ui~="s"] {
+  // 非竖向的，调用原先的样式方法，指定固定的高度等逻辑
+  // 为了防止横向的样式也被初始化一遍、导致每个都需要清除、竖向直接不调用横向方法，所以需要把初始化的信息在竖向方法里重复放一遍
+  &-horizontal[ui~="s"] {
     .slider-size(
       dls-line-height(@dls-line-height-1, @dls-slider-font-size-s),
       @dls-slider-track-width-s,
@@ -235,8 +237,108 @@
     );
   }
 
-  &[ui~="m"] {
+  &-horizontal[ui~="m"] {
     .slider-size(
+      dls-line-height(@dls-line-height-1, @dls-slider-font-size-m),
+      @dls-slider-track-width-m,
+      @dls-slider-track-border-radius-m,
+      @dls-slider-thumb-size-m,
+      @dls-slider-mark-size-m,
+      @dls-slider-thumb-dot-size-m
+    );
+  }
+
+  // 竖向，改为指定最小宽度、偏移量从bottom算起，顶部没有
+  // 为了防止横向的样式也被初始化一遍、导致每个都需要清除、竖向直接不调用横向方法，所以需要把初始化的信息重复放一遍
+  &-vertical {
+    // 没有高度的话无法显示，需要给容器整体设置一个高度，如果调用组件指定了style高度那就按照指定的
+    height: 100px;
+    .@{veui-prefix}-slider-track {
+      flex-grow: 0;
+
+      &-default {
+        // 高度自适应，需要明确写上100%才能自动
+        height: 100%;
+
+        &-progress {
+          min-height: 0;
+          min-width: @dls-slider-track-min-width;
+          // 高度自适应，需要明确写上100%才能自动
+          height: 100%;
+        }
+
+        &-wrapper {
+          // 高度自适应，需要明确写上100%才能自动
+          height: 100%;
+        }
+
+        &-sp,
+        &-fg {
+          left: 0;
+          top: unset;
+        }
+      }
+    }
+    // 滑动按钮的偏移量要竖向回返
+    .@{veui-prefix}-slider-thumb {
+      transform: translate(-50%, 50%);
+    }
+  }
+  // 竖向的样式，使用新方法，指定固定宽度、偏移量等
+  .slider-vertical-size(@total-height, @track-height, @track-radius, @thumb-size, @mark-size, @dot-size) {
+    .@{veui-prefix}-slider {
+      &-track {
+        &-default {
+          // Slider 宽度靠 default track 撑起来，如果替换了 track slot 就宽度自适应了
+          width: @total-height;
+
+          &-progress {
+            width: @track-height;
+            border-radius: @track-radius;
+          }
+
+          &-mark {
+            .size(@mark-size);
+
+            &::before {
+              .size(@thumb-size);
+            }
+
+            &::after {
+              .size(@dot-size);
+            }
+          }
+        }
+      }
+
+      &-thumb {
+        // track/thumb slot 高度变化需要调整 thumb 的位置
+        left: @track-height / 2;
+
+        &-default {
+          .size(@thumb-size);
+
+          &::before {
+            .size(@dot-size);
+          }
+        }
+      }
+    }
+  }
+
+  &-vertical[ui~="s"] {
+    .slider-vertical-size(
+      dls-line-height(@dls-line-height-1, @dls-slider-font-size-s),
+      @dls-slider-track-width-s,
+      @dls-slider-track-border-radius-s,
+      @dls-slider-thumb-size-s,
+      @dls-slider-mark-size-s,
+      @dls-slider-thumb-dot-size-s
+    );
+  }
+
+  &-vertical[ui~="m"] {
+    .slider-vertical-size(
       dls-line-height(@dls-line-height-1, @dls-slider-font-size-m),
       @dls-slider-track-width-m,
       @dls-slider-track-border-radius-m,
