@@ -40,7 +40,7 @@
                 )]: true
               }"
               :style="{
-                left: `${mk * 100}%`
+                [vertical ? 'bottom' : 'left']: `${mk * 100}%`
               }"
               @click="handleMarkClick($event, mk)"
             />
@@ -65,7 +65,7 @@
     :class="$c('slider-thumb')"
     :disabled="realDisabled"
     :style="{
-      left: `${ratios[index] * 100}%`
+      [vertical ? 'bottom' : 'left']: `${ratios[index] * 100}%`
     }"
     role="slider"
     v-bind="thumbAttrs[index]"
@@ -100,6 +100,7 @@
       trigger="custom"
       :interactive="false"
       :ui="uiParts.tooltip"
+      :position="vertical ? 'right' : 'top'"
     >
       <slot name="tip-label">{{ tooltipLabel }}</slot>
     </veui-tooltip>
@@ -184,6 +185,10 @@ export default {
       validator: (val) => val >= 0
     },
     mark: Boolean,
+    vertical: {
+      type: Boolean,
+      default: false
+    },
     parse: {
       type: Function,
       default: identity
@@ -206,6 +211,7 @@ export default {
     sliderClasses () {
       return {
         [this.$c('slider')]: true,
+        [this.$c(`slider-${this.vertical ? 'vertical' : 'horizontal'}`)]: true,
         [this.$c('disabled')]: this.realDisabled,
         [this.$c('readonly')]: this.realReadonly
       }
@@ -288,7 +294,7 @@ export default {
     },
     thumbDragOptions () {
       return fill(new Array(this.thumbCount), true).map((_, index) => ({
-        axis: 'x',
+        axis: this.vertical ? 'y' : 'x',
         dragstart: (...args) => this.handleThumbDragStart(index, ...args),
         drag: (...args) => this.handleThumbDrag(index, ...args),
         dragend: (...args) => this.handleThumbDragEnd(index, ...args)
@@ -330,12 +336,18 @@ export default {
       this.updateValueByRatio(ratio)
       this.$refs.thumb[0].focus()
     },
-    handleTrackClick ({ offsetX }) {
+    handleTrackClick ({ offsetX, offsetY }) {
       if (this.noInteractive || this.realValue.length > 1) {
         return
       }
-      let trackWidth = this.$refs.track.offsetWidth
-      this.updateValueByRatio(offsetX / trackWidth)
+      // 如果是竖向的，根据高度更新
+      if (this.vertical) {
+        let trackHeight = this.$refs.track.offsetHeight
+        this.updateValueByRatio(offsetY / trackHeight)
+      } else {
+        let trackWidth = this.$refs.track.offsetWidth
+        this.updateValueByRatio(offsetX / trackWidth)
+      }
       this.$refs.thumb[0].focus()
     },
     handleThumbMouseEnter (index) {
@@ -351,12 +363,18 @@ export default {
       this.currentThumbDraggingIndex = index
       this.previousRatio = this.ratios[index]
       this.trackWidth = this.$refs.track.offsetWidth
+      // 记录高度
+      this.trackHeight = this.$refs.track.offsetHeight
     },
-    handleThumbDrag (index, { distanceX }) {
+    handleThumbDrag (index, { distanceX, distanceY }) {
       if (this.noInteractive) {
         return
       }
-      let ratio = this.previousRatio + distanceX / this.trackWidth
+      // 计算变化量，竖向的：向上滑是增大、坐标减小，所以取反、计算变化值
+      let change = this.vertical
+        ? (0 - distanceY) / this.trackHeight
+        : distanceX / this.trackWidth
+      let ratio = this.previousRatio + change
       this.updateValueByRatio(ratio, index)
     },
     handleThumbDragEnd () {
@@ -430,17 +448,33 @@ export default {
       }
     },
     getProgressStyle (ratios) {
-      let left = 0
-      let width
-      if (ratios.length === 1) {
-        width = `${ratios[0] * 100}%`
+      // 竖向的，是需要指定高度、底部距离
+      if (this.vertical) {
+        let bottom = 0
+        let height
+        if (ratios.length === 1) {
+          height = `${ratios[0] * 100}%`
+        } else {
+          bottom = `${ratios[0] * 100}%`
+          height = `${(ratios[ratios.length - 1] - ratios[0]) * 100}%`
+        }
+        return {
+          bottom,
+          height
+        }
       } else {
-        left = `${ratios[0] * 100}%`
-        width = `${(ratios[ratios.length - 1] - ratios[0]) * 100}%`
-      }
-      return {
-        left,
-        width
+        let left = 0
+        let width
+        if (ratios.length === 1) {
+          width = `${ratios[0] * 100}%`
+        } else {
+          left = `${ratios[0] * 100}%`
+          width = `${(ratios[ratios.length - 1] - ratios[0]) * 100}%`
+        }
+        return {
+          left,
+          width
+        }
       }
     },
     focus () {
