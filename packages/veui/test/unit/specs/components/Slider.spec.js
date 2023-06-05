@@ -14,7 +14,9 @@ describe('components/Slider', function () {
       },
       template: '<veui-slider v-model="value"/>'
     })
+
     expect(wrapper.contains('.veui-slider')).to.equal(true)
+
     wrapper.destroy()
   })
 
@@ -27,6 +29,7 @@ describe('components/Slider', function () {
     })
 
     expect(wrapper.contains('.veui-slider.veui-disabled')).to.equal(true)
+
     wrapper.destroy()
   })
 
@@ -39,6 +42,7 @@ describe('components/Slider', function () {
     })
 
     expect(wrapper.contains('.veui-slider.veui-readonly')).to.equal(true)
+
     wrapper.destroy()
   })
 
@@ -53,6 +57,8 @@ describe('components/Slider', function () {
 
     let obj = getStyle(wrapper.find('.veui-slider-thumb').element)
     expect(obj.left).to.equal('100%')
+
+    wrapper.destroy()
   })
 
   it('should display range correctly', async () => {
@@ -63,11 +69,14 @@ describe('components/Slider', function () {
         value: [10, 30]
       }
     })
+
     let obj = wrapper.findAll('.veui-slider-thumb')
 
     expect(obj.length).to.equal(2)
     expect(getStyle(obj.at(0).element).left).to.equal('10%')
     expect(getStyle(obj.at(1).element).left).to.equal('30%')
+
+    wrapper.destroy()
   })
 
   it('should display mark correctly', async () => {
@@ -80,12 +89,15 @@ describe('components/Slider', function () {
         step: 10
       }
     })
+
     let obj = wrapper.find('.veui-slider-track-default-marks').element
       .childNodes
     expect(obj.length).to.equal(11)
+
+    wrapper.destroy()
   })
 
-  it('should make prop `value` fully controlled', async () => {
+  it('should support controlled `value`', async () => {
     let wrapper = mount(Slider, {
       propsData: {
         max: 100,
@@ -103,6 +115,26 @@ describe('components/Slider', function () {
     expect(getStyle(wrapper.find('.veui-slider-thumb').element).left).to.equal(
       '10%'
     )
+  })
+
+  it('should support uncontrolled `value`', async () => {
+    let wrapper = mount(Slider, {
+      attachToDocument: true
+    })
+
+    let track = wrapper.find('.veui-slider-track')
+    let { element } = track
+
+    await wrapper.vm.$nextTick()
+
+    triggerMouseClickWithOffsets(element, element.offsetWidth / 2, 1)
+
+    await wrapper.vm.$nextTick()
+    expect(getStyle(wrapper.find('.veui-slider-thumb').element).left).to.equal(
+      '50%'
+    )
+
+    wrapper.destroy()
   })
 
   it('should support keyboard access', async () => {
@@ -161,19 +193,9 @@ describe('components/Slider', function () {
 
     let { vm } = wrapper
     let track = wrapper.find('.veui-slider-track')
-
-    await vm.$nextTick()
-
     let { element } = track
-    let event = new MouseEvent('click')
 
-    Object.defineProperty(event, 'offsetY', {
-      get () {
-        return element.offsetHeight / 2
-      }
-    })
-
-    element.dispatchEvent(event)
+    triggerMouseClickWithOffsets(element, 1, element.offsetHeight / 2)
 
     await vm.$nextTick()
     expect(vm.value).to.equal(5)
@@ -181,3 +203,22 @@ describe('components/Slider', function () {
     wrapper.destroy()
   })
 })
+
+function triggerMouseClickWithOffsets (element, x, y) {
+  let event = new MouseEvent('click')
+
+  Object.defineProperties(event, {
+    offsetX: {
+      get () {
+        return x
+      }
+    },
+    offsetY: {
+      get () {
+        return y
+      }
+    }
+  })
+
+  element.dispatchEvent(event)
+}

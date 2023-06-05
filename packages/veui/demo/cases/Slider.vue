@@ -5,6 +5,10 @@
   </h1>
 
   <section>
+    <veui-slider/>
+  </section>
+
+  <section>
     <veui-slider v-model="value1"/>
     <veui-slider v-model="value1" readonly/>
     <veui-slider v-model="value1" disabled ui="s">

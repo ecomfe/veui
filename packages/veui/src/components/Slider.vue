@@ -146,7 +146,7 @@ export default {
       // 所以采用方案 2
       prop: 'value',
       get (val) {
-        val = val == null ? [] : [].concat(val)
+        val = val == null ? [this.min] : [].concat(val)
         return !this.isControlled('value')
           ? val
           : val
@@ -204,7 +204,7 @@ export default {
       currentThumbDraggingIndex: -1,
       currentThumbHoverIndex: -1,
       latestIndex: -1,
-      thumbCount: 0
+      thumbCount: 1
     }
   },
   computed: {
@@ -420,7 +420,9 @@ export default {
       return val
     },
     getValueByIndex (index) {
-      let val = Array.isArray(this.value) ? this.value[index] : this.value
+      let val = Array.isArray(this.realValue)
+        ? this.realValue[index]
+        : this.realValue
       return this.reduceDecimal(val)
     },
     reduceDecimal (val) {
