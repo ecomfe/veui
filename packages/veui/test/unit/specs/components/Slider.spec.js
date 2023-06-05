@@ -195,10 +195,10 @@ describe('components/Slider', function () {
     let track = wrapper.find('.veui-slider-track')
     let { element } = track
 
-    triggerMouseClickWithOffsets(element, 1, element.offsetHeight / 2)
+    triggerMouseClickWithOffsets(element, 1, element.offsetHeight / 5)
 
     await vm.$nextTick()
-    expect(vm.value).to.equal(5)
+    expect(vm.value).to.equal(8)
 
     wrapper.destroy()
   })

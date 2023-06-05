@@ -15,6 +15,7 @@
     &-default {
       display: flex;
       align-items: center;
+      pointer-events: none;
 
       &-progress {
         min-height: @dls-slider-track-min-width;
@@ -23,6 +24,7 @@
       &-wrapper {
         position: relative;
         flex-grow: 1;
+        pointer-events: auto;
       }
 
       &-bg {
@@ -156,6 +158,10 @@
       }
     }
 
+    &-latest {
+      z-index: 1;
+    }
+
     &:hover {
       .@{veui-prefix}-slider-thumb-default {
         background-color: @dls-slider-thumb-background-color-hover;
@@ -276,7 +282,7 @@
       &-sp,
       &-fg {
         left: 0;
-        top: unset;
+        top: auto;
       }
 
       &-marks {

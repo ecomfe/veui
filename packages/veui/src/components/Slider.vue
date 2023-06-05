@@ -62,7 +62,10 @@
       update: (...args) => handleThumbNudgeUpdage(index, ...args)
     }"
     type="button"
-    :class="$c('slider-thumb')"
+    :class="{
+      [$c('slider-thumb')]: true,
+      [$c('slider-thumb-latest')]: index === latestIndex
+    }"
     :disabled="realDisabled"
     :style="{
       [vertical ? 'bottom' : 'left']: `${ratios[index] * 100}%`
@@ -336,18 +339,29 @@ export default {
       this.updateValueByRatio(ratio)
       this.$refs.thumb[0].focus()
     },
-    handleTrackClick ({ offsetX, offsetY }) {
+    handleTrackClick ({ target, currentTarget, offsetX, offsetY }) {
       if (this.noInteractive || this.realValue.length > 1) {
         return
       }
-      // 如果是竖向的，根据高度更新
+
+      let { track } = this.$refs
+
       if (this.vertical) {
-        let trackHeight = this.$refs.track.offsetHeight
-        this.updateValueByRatio(offsetY / trackHeight)
+        let offset = offsetY
+
+        // should calculate offset against currentTarget
+        if (target !== currentTarget) {
+          let { top: tTop } = target.getBoundingClientRect()
+          let { top: cTop } = currentTarget.getBoundingClientRect()
+
+          offset = offsetY + tTop - cTop
+        }
+
+        this.updateValueByRatio(1 - offset / track.offsetHeight)
       } else {
-        let trackWidth = this.$refs.track.offsetWidth
-        this.updateValueByRatio(offsetX / trackWidth)
+        this.updateValueByRatio(offsetX / track.offsetWidth)
       }
+
       this.$refs.thumb[0].focus()
     },
     handleThumbMouseEnter (index) {
