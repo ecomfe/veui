@@ -7,6 +7,7 @@ type Props<T = number> = {
   max?: number
   step?: number
   mark?: boolean
+  vertical?: boolean
   parse?: (val: T) => number
   format?: (val: number) => T
 }
