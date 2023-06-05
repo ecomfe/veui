@@ -44,6 +44,9 @@ importers:
       eslint-plugin-vue:
         specifier: ^6.2.2
         version: 6.2.2(eslint@6.8.0)
+      esm:
+        specifier: ^3.2.25
+        version: 3.2.25
       husky:
         specifier: ^7.0.4
         version: 7.0.4
