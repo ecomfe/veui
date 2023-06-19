@@ -28,7 +28,7 @@
 - [^] `veui-theme-dls` 升级到 D22 样式。<!-- #veui-theme-dls -->
 - [+] 新增自定义的滚动条样式。<!-- #veui-theme-dls -->
 - [+] `Autocomplete` 组件新增 `no-data` 插槽，允许在无匹配的候选项时自定义要显示的内容。<!-- #Autocomplete -->
-- [^] 各个组件的自定义 CSS 属性结束实验性状态，正式发布。包括：<!-- #Accordion #Carousel #Checkbox #Dialog #Drawer # Autocomplete #Select #Dropdown #SearchBox #Cascader #Field #Radio #Table -->
+- [^] 各个组件的自定义 CSS 属性结束实验性状态，正式发布。包括：<!-- #Accordion #Carousel #Checkbox #Dialog #Drawer #Autocomplete #Select #Dropdown #SearchBox #Cascader #Field #Radio #Table -->
 
   - `--dls-accordion-gutter`
   - `--dls-carousel-slide-gutter`
@@ -167,7 +167,7 @@
 
 ### 🧪 实验性功能
 
-- [+] 新增 `TagInput` 组件，支持自由输入多段文本形成标签列表。<!-- # TagInput -->
+- [+] 新增 `TagInput` 组件，支持自由输入多段文本形成标签列表。<!-- #TagInput -->
 
 ## 2.12.2 (2023-03-16)
 
