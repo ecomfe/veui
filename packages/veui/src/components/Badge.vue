@@ -14,7 +14,7 @@
         [$c(
           `badge-${content && $scopedSlots.default ? 'label' : 'dot'}`
         )]: true,
-        [$c(`badge-${type}`)]: true
+        [$c(`badge-${realStatus}`)]: true
       }"
     >{{ $scopedSlots.default ? content : '' }}</span>
   </transition>
@@ -33,6 +33,7 @@ import ui from '../mixins/ui'
 import { isNumber } from 'lodash'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
+import { useRename } from '../mixins/deprecate'
 import '../common/global'
 
 config.defaults(
@@ -44,7 +45,21 @@ config.defaults(
 
 export default {
   name: 'veui-badge',
-  mixins: [prefix, ui, useConfig('config', 'badge')],
+  mixins: [
+    prefix,
+    ui,
+    useConfig('config', 'badge'),
+    useRename(
+      {
+        type: String,
+        default: 'error'
+      },
+      {
+        from: 'type',
+        to: 'status'
+      }
+    )
+  ],
   props: {
     value: [Number, String],
     max: {
@@ -53,11 +68,7 @@ export default {
         return val == null || (Math.floor(val) === val && val > 0)
       }
     },
-    hidden: Boolean,
-    type: {
-      type: String,
-      default: 'error'
-    }
+    hidden: Boolean
   },
   computed: {
     realMax () {

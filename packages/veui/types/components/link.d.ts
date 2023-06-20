@@ -9,14 +9,13 @@ import { AnchorHTMLAttributes } from '@vue/runtime-dom'
 export type Props = {
   to: LinkTo
   native?: boolean
-  /**
-   * @deprecated
-   */
-  replace?: boolean
   fallback?: string
   disabled?: boolean
   rel?: AnchorHTMLAttributes['rel']
   target?: AnchorHTMLAttributes['target']
+
+  /** @deprecated */
+  replace?: boolean
 }
 
 type Emits = {

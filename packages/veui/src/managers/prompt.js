@@ -24,6 +24,7 @@ export class PromptManager extends SimpleDialog {
               ...pick(data, [
                 'title',
                 'type',
+                'status',
                 'overlayClass',
                 'okLabel',
                 'cancelLabel'

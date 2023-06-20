@@ -1,12 +1,15 @@
 import { VeuiDefineComponent, VeuiDefineInstance, UiMixin } from '../common'
 
 type Props = {
-  type?: string
+  status?: string
   title?: string
   message?: string | Array<string>
   closable?: boolean
   open?: boolean
   index?: number
+
+  /** @deprecated */
+  type?: string
 }
 
 type Emits = {}

@@ -4,7 +4,7 @@
   :ui="realUi"
   :class="{
     [$c('alert')]: true,
-    [$c(`alert-${type}`)]: true,
+    [$c(`alert-${realStatus}`)]: true,
     [$c('alert-titled')]: !!(title || $slots.title),
     [$c('alert-multiline')]: multiline
   }"
@@ -13,7 +13,7 @@
 >
   <slot name="content">
     <div :class="$c('alert-state')">
-      <veui-icon :class="$c('alert-icon')" :name="icons[type]"/>
+      <veui-icon :class="$c('alert-icon')" :name="icons[realStatus]"/>
     </div>
     <div
       v-if="isMultiple"
@@ -97,20 +97,32 @@ import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
+import { useRename } from '../mixins/deprecate'
 import '../common/global'
 
 export default {
-  name: 'alert',
+  name: 'veui-alert',
   components: {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, ui, i18n, useControllable(['open', 'index'])],
+  mixins: [
+    prefix,
+    ui,
+    i18n,
+    useControllable(['open', 'index']),
+    useRename(
+      {
+        type: String,
+        default: 'success'
+      },
+      {
+        from: 'type',
+        to: 'status'
+      }
+    )
+  ],
   props: {
-    type: {
-      type: String,
-      default: 'success'
-    },
     title: String,
     message: [String, Array],
     closable: Boolean,

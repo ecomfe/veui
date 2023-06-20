@@ -5,14 +5,14 @@
     :ui="realUi"
     :class="{
       [$c('toast')]: true,
-      [$c(`toast-${type}`)]: true,
+      [$c(`toast-${realStatus}`)]: true,
       [$c('toast-titled')]: isTitled(),
       [$c('toast-multiline')]: multiline
     }"
     role="alert"
   >
     <div :class="$c('toast-state')">
-      <veui-icon :class="$c('toast-icon')" :name="icons[type]"/>
+      <veui-icon :class="$c('toast-icon')" :name="icons[realStatus]"/>
     </div>
     <div :class="$c('toast-content')">
       <div v-if="title || $slots.title" :class="$c('toast-content-title')">
@@ -44,6 +44,7 @@ import i18n from '../mixins/i18n'
 import useControllable from '../mixins/controllable'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
+import { useRename } from '../mixins/deprecate'
 import { includes } from 'lodash'
 import '../common/global'
 
@@ -54,7 +55,7 @@ config.defaults(
   'toast'
 )
 
-const TYPE_LIST = ['success', 'warning', 'info', 'error']
+const STATUS_LIST = ['success', 'warning', 'info', 'error']
 
 export default {
   name: 'veui-toast',
@@ -67,16 +68,22 @@ export default {
     ui,
     i18n,
     useControllable(['open']),
-    useConfig('config', 'toast')
+    useConfig('config', 'toast'),
+    useRename(
+      {
+        type: String,
+        default: 'success',
+        validator (val) {
+          return includes(STATUS_LIST, val)
+        }
+      },
+      {
+        from: 'type',
+        to: 'status'
+      }
+    )
   ],
   props: {
-    type: {
-      type: String,
-      default: 'success',
-      validator (val) {
-        return includes(TYPE_LIST, val)
-      }
-    },
     title: String,
     closable: Boolean,
     message: String,

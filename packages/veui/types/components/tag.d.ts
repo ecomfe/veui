@@ -5,13 +5,19 @@ import {
   FocusableMixin
 } from '../common'
 
+type TagColor = 'turquoise' | 'violet' | 'green'
+
 type Props = {
-  type?: string
+  color?: TagColor
+  status?: string
   selectable?: boolean
   selected?: boolean
   removable?: boolean
   removed?: boolean
   disabled?: boolean
+
+  /** @deprecated */
+  type?: string
 }
 
 type Emits = {

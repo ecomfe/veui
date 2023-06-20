@@ -144,21 +144,18 @@ type Mixins = [UiMixin, InputMixin]
 type SlotProps = FileInfo & { index: number }
 
 type Slots = {
-  /**
-   * @deprecated
-   */
-  'button-label'(): unknown
   upload(): unknown
-  /**
-   * @deprecated
-   */
-  desc(): unknown
   help(): unknown
   file(slotProps: SlotProps): unknown
   'file-before'(slotProps: SlotProps): unknown
   'file-after'(slotProps: SlotProps): unknown
   uploading(slotProps: SlotProps): unknown
   failure(slotProps: SlotProps): unknown
+
+  /** @deprecated */
+  'button-label'(): unknown
+  /** @deprecated */
+  desc(): unknown
 }
 
 type Uploader = VeuiDefineComponent<{

@@ -5,13 +5,16 @@ import {
   Status
 } from '../common'
 
-type BadgeType = Status | 'aux'
+type BadgeStatus = Status | 'aux'
 
 type Props = {
+  status?: BadgeStatus
   value?: number | string
   max?: number
   hidden?: boolean
-  type?: BadgeType
+
+  /** @deprecated */
+  type?: BadgeStatus
 }
 
 type Emits = {}

@@ -4,7 +4,7 @@
   :overlay-class="
     mergeOverlayClass({
       [$c('alert-box')]: true,
-      [$c(`alert-box-${type}`)]: true,
+      [$c(`alert-box-${realStatus}`)]: true,
       [$c('alert-box-titleless')]: !title && !$slots.title
     })
   "
@@ -19,9 +19,9 @@
 >
   <div :class="$c('alert-box-icon-wrapper')">
     <veui-icon
-      v-if="icons[type]"
+      v-if="icons[realStatus]"
       :class="$c('alert-box-icon')"
-      :name="icons[type]"
+      :name="icons[realStatus]"
     />
   </div>
   <div :class="$c('alert-box-wrapper')">
@@ -56,6 +56,7 @@ import i18n from '../mixins/i18n'
 import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
 import useControllable from '../mixins/controllable'
+import { useRename } from '../mixins/deprecate'
 import '../common/global'
 
 config.defaults(
@@ -78,7 +79,20 @@ export default {
     overlay,
     i18n,
     useControllable(['open']),
-    useConfig('config', 'alertbox')
+    useConfig('config', 'alertbox'),
+    useRename(
+      {
+        type: String,
+        validator (val) {
+          return includes(['success', 'error', 'info', 'warning'], val)
+        },
+        default: 'success'
+      },
+      {
+        from: 'type',
+        to: 'status'
+      }
+    )
   ],
   props: {
     ...pick(Dialog.props, [
@@ -88,14 +102,7 @@ export default {
       'loading',
       'disabled',
       'okLabel'
-    ]),
-    type: {
-      type: String,
-      validator (val) {
-        return includes(['success', 'error', 'info', 'warning'], val)
-      },
-      default: 'success'
-    }
+    ])
   },
   computed: {
     listeners () {

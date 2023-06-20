@@ -11,13 +11,10 @@ type Props = {
   falseValue?: unknown
   model?: unknown
   checked?: boolean
-  /**
-   * @deprecated
-   */
+
+  /** @deprecated */
   onLabel?: string
-  /**
-   * @deprecated
-   */
+  /** @deprecated */
   offLabel?: string
 }
 
