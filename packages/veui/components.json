@@ -173,15 +173,15 @@
   },
   {
     "name": "Cascader",
+    "path": "Cascader/Cascader.vue"
+  },
+  {
+    "name": "Cascader",
     "path": "Cascader"
   },
   {
     "name": "Cascader",
     "path": "Cascader/index.js"
-  },
-  {
-    "name": "Cascader",
-    "path": "Cascader/Cascader.vue"
   },
   {
     "name": "CheckButtonGroup",
@@ -353,15 +353,15 @@
   },
   {
     "name": "Select",
-    "path": "Select/Select.vue"
-  },
-  {
-    "name": "Select",
     "path": "Select"
   },
   {
     "name": "Select",
     "path": "Select/index.js"
+  },
+  {
+    "name": "Select",
+    "path": "Select/Select.vue"
   },
   {
     "name": "Pagination",

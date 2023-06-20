@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "test": "pnpm build && ava",
+    "test": "export NODE_OPTIONS=--openssl-legacy-provider && pnpm build && ava",
     "prepare": "pnpm build"
   },
   "keywords": [
