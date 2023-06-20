@@ -107,7 +107,7 @@
       <veui-icon :name="icons.next"/>
     </veui-link>
   </div>
-  <div v-if="goto || showGoto" :class="$c('pagination-goto')">
+  <div v-if="realShowGoto" :class="$c('pagination-goto')">
     <span
       v-if="gotoPageLabel[0]"
       :class="$c('pagination-goto-label-before')"
@@ -140,6 +140,7 @@ import useConfig from '../mixins/config'
 import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import { useRename } from '../mixins/deprecate'
 import tooltip from '../directives/tooltip'
 import warn from '../utils/warn'
 import '../common/global'
@@ -184,7 +185,21 @@ export default {
   directives: {
     tooltip
   },
-  mixins: [prefix, ui, i18n, useConfig('config', ['pagination'])],
+  mixins: [
+    prefix,
+    ui,
+    i18n,
+    useConfig('config', ['pagination']),
+    useRename(
+      {
+        type: Boolean
+      },
+      {
+        from: 'goto',
+        to: 'showGoto'
+      }
+    )
+  ],
   props: {
     page: {
       type: Number,
@@ -200,15 +215,7 @@ export default {
       type: Number
     },
     to: [String, Object],
-    native: {
-      type: Boolean,
-      default: false
-    },
-    goto: {
-      type: Boolean,
-      default: false
-    },
-    showGoto: Boolean,
+    native: Boolean,
     showPageSize: Boolean,
     showTotal: Boolean
   },

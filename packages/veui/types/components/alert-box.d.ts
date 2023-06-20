@@ -8,13 +8,16 @@ import {
 } from '../common'
 
 type Props = {
-  type?: Status
+  status?: Status
   open?: boolean
   title?: string
   beforeClose?: BeforeClose
   loading?: boolean
   disabled?: boolean
   okLabel?: string
+
+  /** @deprecated */
+  type?: Status
 }
 
 type Emits = {

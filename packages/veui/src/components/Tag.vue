@@ -6,6 +6,7 @@ import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import useControllable from '../mixins/controllable'
 import i18n from '../mixins/i18n'
+import { useRename } from '../mixins/deprecate'
 import '../common/global'
 
 export default {
@@ -20,13 +21,19 @@ export default {
     i18n,
     focusable,
     useControllable('selected'),
-    useControllable('removed')
+    useControllable('removed'),
+    useRename(
+      {
+        type: String,
+        default: 'default'
+      },
+      {
+        from: 'type',
+        to: 'status'
+      }
+    )
   ],
   props: {
-    type: {
-      type: String,
-      default: 'default'
-    },
     color: {
       type: String,
       validator (val) {
@@ -72,7 +79,7 @@ export default {
         ui={this.realUi}
         class={{
           [this.$c('tag')]: true,
-          [this.$c(`tag-${this.color || this.type}`)]: true,
+          [this.$c(`tag-${this.color || this.realStatus}`)]: true,
           [this.$c('tag-selected')]: !!this.realSelected,
           [this.$c('disabled')]: this.disabled,
           [this.$c('tag-selectable')]: this.selectable

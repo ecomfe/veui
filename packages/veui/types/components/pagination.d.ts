@@ -12,13 +12,12 @@ type Props = {
   total?: number
   to?: LinkTo
   native?: boolean
-  /**
-   * @deprecated
-   */
-  goto?: boolean
   showGoto?: boolean
   showPageSize?: boolean
   showTotal?: boolean
+
+  /** @deprecated */
+  goto?: boolean
 }
 
 type Emits = {

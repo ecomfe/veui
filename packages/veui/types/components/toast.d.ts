@@ -6,12 +6,15 @@ import {
 } from '../common'
 
 type Props = {
-  type?: Status
+  status?: Status
   title?: string
   closable?: boolean
   message?: string
   open?: boolean
   duration?: number
+
+  /** @deprecated */
+  type?: Status
 }
 
 type Emits = {

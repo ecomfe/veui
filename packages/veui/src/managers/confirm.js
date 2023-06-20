@@ -21,6 +21,7 @@ export class ConfirmManager extends SimpleDialog {
             props: {
               ...pick(data, [
                 'title',
+                'status',
                 'type',
                 'overlayClass',
                 'okLabel',
