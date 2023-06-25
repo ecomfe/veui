@@ -37,11 +37,11 @@
   },
   {
     "name": "Form",
-    "path": "Form/Form.vue"
+    "path": "Form"
   },
   {
     "name": "Form",
-    "path": "Form"
+    "path": "Form/Form.vue"
   },
   {
     "name": "Form",
@@ -77,11 +77,11 @@
   },
   {
     "name": "Tree",
-    "path": "Tree/Tree.vue"
+    "path": "Tree"
   },
   {
     "name": "Tree",
-    "path": "Tree"
+    "path": "Tree/Tree.vue"
   },
   {
     "name": "Tree",
@@ -117,11 +117,11 @@
   },
   {
     "name": "Autocomplete",
-    "path": "Autocomplete/Autocomplete.vue"
+    "path": "Autocomplete"
   },
   {
     "name": "Autocomplete",
-    "path": "Autocomplete"
+    "path": "Autocomplete/Autocomplete.vue"
   },
   {
     "name": "Autocomplete",
@@ -145,11 +145,11 @@
   },
   {
     "name": "Calendar",
-    "path": "Calendar/Calendar.vue"
+    "path": "Calendar"
   },
   {
     "name": "Calendar",
-    "path": "Calendar"
+    "path": "Calendar/Calendar.vue"
   },
   {
     "name": "Calendar",
@@ -173,11 +173,11 @@
   },
   {
     "name": "Cascader",
-    "path": "Cascader/Cascader.vue"
+    "path": "Cascader"
   },
   {
     "name": "Cascader",
-    "path": "Cascader"
+    "path": "Cascader/Cascader.vue"
   },
   {
     "name": "Cascader",
@@ -269,27 +269,27 @@
   },
   {
     "name": "GridColumn",
-    "path": "GridColumn.js"
-  },
-  {
-    "name": "GridColumn",
     "path": "Grid/GridColumn.vue"
   },
   {
-    "name": "GridContainer",
-    "path": "GridContainer.js"
+    "name": "GridColumn",
+    "path": "GridColumn.js"
   },
   {
     "name": "GridContainer",
     "path": "Grid/GridContainer.vue"
   },
   {
-    "name": "GridRow",
-    "path": "GridRow.js"
+    "name": "GridContainer",
+    "path": "GridContainer.js"
   },
   {
     "name": "GridRow",
     "path": "Grid/GridRow.vue"
+  },
+  {
+    "name": "GridRow",
+    "path": "GridRow.js"
   },
   {
     "name": "Header",
@@ -301,11 +301,11 @@
   },
   {
     "name": "Sidebar",
-    "path": "Sidebar.js"
+    "path": "Layout/Sidebar.vue"
   },
   {
     "name": "Sidebar",
-    "path": "Layout/Sidebar.vue"
+    "path": "Sidebar.js"
   },
   {
     "name": "Layout",
@@ -329,11 +329,11 @@
   },
   {
     "name": "Sidenav",
-    "path": "Sidenav.js"
+    "path": "Menu/Sidenav.vue"
   },
   {
     "name": "Sidenav",
-    "path": "Menu/Sidenav.vue"
+    "path": "Sidenav.js"
   },
   {
     "name": "Menu",
@@ -341,11 +341,11 @@
   },
   {
     "name": "Nav",
-    "path": "Nav.js"
+    "path": "Menu/Nav.vue"
   },
   {
     "name": "Nav",
-    "path": "Menu/Nav.vue"
+    "path": "Nav.js"
   },
   {
     "name": "NumberInput",
@@ -357,11 +357,11 @@
   },
   {
     "name": "Select",
-    "path": "Select/index.js"
+    "path": "Select/Select.vue"
   },
   {
     "name": "Select",
-    "path": "Select/Select.vue"
+    "path": "Select/index.js"
   },
   {
     "name": "Pagination",
@@ -417,11 +417,11 @@
   },
   {
     "name": "Table",
-    "path": "Table/Table.vue"
+    "path": "Table"
   },
   {
     "name": "Table",
-    "path": "Table"
+    "path": "Table/Table.vue"
   },
   {
     "name": "Table",
@@ -429,11 +429,11 @@
   },
   {
     "name": "Tabs",
-    "path": "Tabs/Tabs.vue"
+    "path": "Tabs"
   },
   {
     "name": "Tabs",
-    "path": "Tabs"
+    "path": "Tabs/Tabs.vue"
   },
   {
     "name": "Tabs",
@@ -449,11 +449,11 @@
   },
   {
     "name": "TimePicker",
-    "path": "TimePicker/TimePicker.vue"
+    "path": "TimePicker"
   },
   {
     "name": "TimePicker",
-    "path": "TimePicker"
+    "path": "TimePicker/TimePicker.vue"
   },
   {
     "name": "TimePicker",
@@ -469,11 +469,11 @@
   },
   {
     "name": "Transfer",
-    "path": "Transfer/Transfer.vue"
+    "path": "Transfer"
   },
   {
     "name": "Transfer",
-    "path": "Transfer"
+    "path": "Transfer/Transfer.vue"
   },
   {
     "name": "Transfer",
@@ -481,11 +481,11 @@
   },
   {
     "name": "Uploader",
-    "path": "Uploader/Uploader.vue"
+    "path": "Uploader"
   },
   {
     "name": "Uploader",
-    "path": "Uploader"
+    "path": "Uploader/Uploader.vue"
   },
   {
     "name": "Uploader",

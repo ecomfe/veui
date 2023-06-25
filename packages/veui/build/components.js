@@ -30,7 +30,22 @@ async function genComponentJson () {
 
   // components.json 里组件声明的顺序要确保遵循了依赖关系，样式打包时可参照此顺序输出
   const sorted = await getSortedComponents()
-  mappings.sort((a, b) => sorted.indexOf(a.name) - sorted.indexOf(b.name))
+  mappings.sort((a, b) => {
+    const indexA = sorted.indexOf(a.name)
+    const indexB = sorted.indexOf(b.name)
+
+    if (indexA === -1 || indexB === -1) {
+      throw new Error(
+        `Component ${indexA === -1 ? a.name : b.name} is not found.`
+      )
+    }
+
+    if (indexA === indexB) {
+      return a.path > b.path ? 1 : -1
+    }
+
+    return indexA > indexB ? 1 : -1
+  })
 
   writeFileSync(
     resolve(__dirname, '../components.json'),
