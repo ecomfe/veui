@@ -8,6 +8,7 @@
   :value="realInputValue"
   :ui="realUi"
   type="text"
+  composition
   v-bind="attrs"
   :class="{
     [$c('number-input')]: true,
