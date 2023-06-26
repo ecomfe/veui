@@ -301,7 +301,7 @@ export default {
       this.updateValue(val)
       this.$emit('change', val, e)
     },
-    handleMousedown (e) {
+    handleMousedown () {
       setTimeout(() => {
         this.focus()
       })
