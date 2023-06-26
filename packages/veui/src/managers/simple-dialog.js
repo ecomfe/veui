@@ -51,7 +51,7 @@ export default class SimpleDialog {
       ...options,
       title,
       content,
-      type: 'success'
+      status: 'success'
     })
   }
 
@@ -60,7 +60,7 @@ export default class SimpleDialog {
       ...options,
       title,
       content,
-      type: 'info'
+      status: 'info'
     })
   }
 
@@ -69,7 +69,7 @@ export default class SimpleDialog {
       ...options,
       title,
       content,
-      type: 'error'
+      status: 'error'
     })
   }
 
@@ -78,7 +78,7 @@ export default class SimpleDialog {
       ...options,
       title,
       content,
-      type: 'warning'
+      status: 'warning'
     })
   }
 }

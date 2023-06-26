@@ -1,22 +1,22 @@
-import { mount } from '@vue/test-utils'
 import Toast from '@/components/Toast'
-import { wait } from '../../../utils'
+import { mount, wait } from '../../../utils'
 
 describe('components/Toast', function () {
-  it('shoule render right type for Toast', () => {
+  it('shoule render right `status` for Toast', () => {
     let wrapper = mount({
       components: {
         'veui-toast': Toast
       },
-      data () {
-        return {
-          open: true
-        }
-      },
-      template:
-        '<veui-toast type="success" message="content" :open.sync="open"/>'
+      template: `
+        <div>
+          <veui-toast status="success" message="content" open/>
+          <veui-toast type="error" message="content" open/>
+        </div>`
     })
-    expect(wrapper.contains('.veui-toast-success')).to.equal(true)
+
+    const toasts = wrapper.findAll(Toast)
+    expect(toasts.at(0).contains('.veui-toast-success')).to.equal(true)
+    expect(toasts.at(1).contains('.veui-toast-error')).to.equal(true)
     wrapper.destroy()
   })
 
@@ -27,12 +27,11 @@ describe('components/Toast', function () {
       },
       data () {
         return {
-          message: 'default slot content',
-          open: true
+          message: 'default slot content'
         }
       },
       template: `
-        <veui-toast type="warning" :open.sync="open">
+        <veui-toast status="warning" open>
           <div>{{ message }}</div>
         </veui-toast>
       `
@@ -60,13 +59,12 @@ describe('components/Toast', function () {
       },
       template: `
         <veui-toast
-          type="info"
+          status="info"
           message="content"
           @close="close"
           :duration="duration"
           :open.sync="open"
-          />
-      `
+        />`
     })
     await wait(1000)
     expect(wrapper.find('.veui-toast').exists()).to.equal(false)
@@ -88,12 +86,11 @@ describe('components/Toast', function () {
       },
       template: `
         <veui-toast
-          type="info"
+          status="info"
           message="content"
           :duration="duration"
           :open.sync="open"
-          />
-      `
+        />`
     })
     await wait(500)
     expect(wrapper.find('.veui-toast').exists()).to.equal(true)
@@ -109,12 +106,11 @@ describe('components/Toast', function () {
       },
       template: `
         <veui-toast
-          type="info"
+          status="info"
           message="content"
           closable
           :open="true"
-          />
-      `
+        />`
     })
 
     wrapper.find('.veui-button').trigger('click')

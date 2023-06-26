@@ -33,10 +33,10 @@
       <veui-toast open>Test</veui-toast>
     </section>
     <section>
-      <veui-toast open closable type="warning">Test</veui-toast>
+      <veui-toast open closable status="warning">Test</veui-toast>
     </section>
     <section>
-      <veui-toast open closable type="error">
+      <veui-toast open closable status="error">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolores,
         sint harum aspernatur aliquid sed maxime dolorum qui recusandae
         voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam illo non
@@ -44,7 +44,7 @@
       </veui-toast>
     </section>
     <section>
-      <veui-toast open title="Lorem Ipsum" type="info">
+      <veui-toast open title="Lorem Ipsum" status="info">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
         laboriosam, atque cumque sequi, debitis impedit fugit vitae iure,
         rerum accusantium odio porro. Exercitationem excepturi adipisci unde
@@ -65,10 +65,10 @@
       <veui-toast ui="s" open>Test</veui-toast>
     </section>
     <section>
-      <veui-toast ui="s" open closable type="warning">Test</veui-toast>
+      <veui-toast ui="s" open closable status="warning">Test</veui-toast>
     </section>
     <section>
-      <veui-toast ui="s" open closable type="error">
+      <veui-toast ui="s" open closable status="error">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia dolores,
         sint harum aspernatur aliquid sed maxime dolorum qui recusandae
         voluptatem. Saepe dolorem placeat culpa nisi eligendi ipsam illo non
@@ -76,7 +76,7 @@
       </veui-toast>
     </section>
     <section>
-      <veui-toast ui="s" open title="Lorem Ipsum" type="info">
+      <veui-toast ui="s" open title="Lorem Ipsum" status="info">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
         laboriosam, atque cumque sequi, debitis impedit fugit vitae iure,
         rerum accusantium odio porro. Exercitationem excepturi adipisci unde
@@ -102,22 +102,22 @@ import toast from 'veui/managers/toast'
 
 let messages = [
   {
-    type: 'success',
+    status: 'success',
     message: '恭喜您，您的请求已成功处理',
     duration: 2500
   },
   {
-    type: 'warn',
+    status: 'warn',
     message: '警告，有法律风险存在',
     duration: 2000
   },
   {
-    type: 'info',
+    status: 'info',
     message: '提醒，请注意这个消息',
     duration: 1500
   },
   {
-    type: 'error',
+    status: 'error',
     message: '错误，请检查并修改后再提交',
     duration: 1000
   }
@@ -131,14 +131,14 @@ export default {
   },
   data () {
     return {
-      messages: messages,
+      messages,
       closeToast: null
     }
   },
   computed: {
     messageMap () {
       return this.messages.reduce((result, current) => {
-        result[current.type] = current
+        result[current.status] = current
         return result
       }, {})
     }
@@ -151,10 +151,10 @@ export default {
     })
   },
   methods: {
-    showToast (type) {
-      if (type === 'all') {
-        messages.forEach(({ type, message, duration }) => {
-          toast[type]({
+    showToast (status) {
+      if (status === 'all') {
+        messages.forEach(({ status, message, duration }) => {
+          toast[status]({
             message,
             title: '测试title',
             closable: true,
@@ -162,7 +162,7 @@ export default {
           })
         })
       } else {
-        toast[type](this.messageMap[type].message)
+        toast[status](this.messageMap[status].message)
       }
     },
     showSlottedToast () {

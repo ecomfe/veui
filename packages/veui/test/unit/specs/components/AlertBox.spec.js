@@ -1,24 +1,36 @@
-import { mount, config } from '@vue/test-utils'
+import { config } from '@vue/test-utils'
 import AlertBox from '@/components/AlertBox'
-import { wait } from '../../../utils'
+import { mount, wait } from '../../../utils'
 
 config.stubs.transition = false
 
 describe('components/AlertBox', function () {
   this.timeout(10000)
 
-  it('should render title prop correctly by AlertBox', () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-alert-box': AlertBox
-        },
-        template: '<veui-alert-box open title="this is title" />'
+  it('should render right status for AlertBox', () => {
+    let wrapper = mount({
+      components: {
+        'veui-alert-box': AlertBox
       },
-      {
-        sync: false
-      }
-    )
+      template: `
+          <div>
+            <veui-alert-box status="success" open />
+            <veui-alert-box type="error" open />
+          </div>`
+    })
+    const boxes = wrapper.findAll(AlertBox)
+    expect(boxes.at(0).contains('.veui-alert-box-success')).to.equal(true)
+    expect(boxes.at(1).contains('.veui-alert-box-error')).to.equal(true)
+    wrapper.destroy()
+  })
+
+  it('should render title prop correctly by AlertBox', () => {
+    let wrapper = mount({
+      components: {
+        'veui-alert-box': AlertBox
+      },
+      template: '<veui-alert-box open title="this is title" />'
+    })
     expect(wrapper.find('.veui-alert-box-title').text()).to.equal(
       'this is title'
     )
@@ -26,44 +38,34 @@ describe('components/AlertBox', function () {
   })
 
   it('should render slot correctly by AlertBox', () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-alert-box': AlertBox
-        },
-        template: `
+    let wrapper = mount({
+      components: {
+        'veui-alert-box': AlertBox
+      },
+      template: `
         <veui-alert-box open>
           <div class="test-title-slot" slot="title">this is title</div>
           <div class="test-default-slot">this is content</div>
         </veui-alert-box>
       `
-      },
-      {
-        sync: false
-      }
-    )
+    })
     expect(wrapper.find('.test-title-slot').exists()).to.equal(true)
     expect(wrapper.find('.test-default-slot').exists()).to.equal(true)
     wrapper.destroy()
   })
 
   it('should sync `open` status correctly by AlertBox', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-alert-box': AlertBox
-        },
-        data () {
-          return {
-            open: true
-          }
-        },
-        template: '<veui-alert-box :open.sync="open" title="title" />'
+    let wrapper = mount({
+      components: {
+        'veui-alert-box': AlertBox
       },
-      {
-        sync: false
-      }
-    )
+      data () {
+        return {
+          open: true
+        }
+      },
+      template: '<veui-alert-box :open.sync="open" title="title" />'
+    })
     let { vm } = wrapper
     wrapper.find('.veui-button').trigger('click')
     await vm.$nextTick()
@@ -116,22 +118,17 @@ describe('components/AlertBox', function () {
   })
 
   it('should make `open` prop fully controlled', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-alert-box': AlertBox
-        },
-        data () {
-          return {
-            open: true
-          }
-        },
-        template: '<veui-alert-box :open="open" title="title" />'
+    let wrapper = mount({
+      components: {
+        'veui-alert-box': AlertBox
       },
-      {
-        sync: false
-      }
-    )
+      data () {
+        return {
+          open: true
+        }
+      },
+      template: '<veui-alert-box :open="open" title="title" />'
+    })
     wrapper.find('.veui-button').trigger('click')
     await wait(600)
     expect(wrapper.find('.veui-alert-box-icon-wrapper').exists()).to.equal(true)

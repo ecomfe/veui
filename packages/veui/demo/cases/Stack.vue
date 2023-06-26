@@ -66,11 +66,11 @@
       :align="align"
       :justify="justify"
     >
-      <veui-badge type="success" value="审核中"/>
-      <veui-badge type="info" value="审核中"/>
+      <veui-badge status="success" value="审核中"/>
+      <veui-badge status="info" value="审核中"/>
       <veui-badge value="审核中"/>
-      <veui-badge type="warning" value="审核中"/>
-      <veui-badge type="aux" value="审核中"/>
+      <veui-badge status="warning" value="审核中"/>
+      <veui-badge status="aux" value="审核中"/>
     </veui-stack>
   </section>
   <section :class="sectionClass">
@@ -83,7 +83,7 @@
       :align="align"
       :justify="justify"
     >
-      <veui-badge type="success" value="审核中"/>
+      <veui-badge status="success" value="审核中"/>
       <veui-input class="input" ui="m"/>
       <veui-button>OK</veui-button>
       <veui-message>Please write something.</veui-message>

@@ -16,7 +16,7 @@
     <veui-button @click="alertSuccessBoxOpen = true">Success</veui-button>
     <veui-alert-box
       :open.sync="alertSuccessBoxOpen"
-      type="success"
+      status="success"
       :overlay-style="{
         '--dls-dropdown-max-display-items': 8
       }"
@@ -30,14 +30,14 @@
     <veui-button @click="alertWarningBoxOpen = true">Warning</veui-button>
     <veui-alert-box
       :open.sync="alertWarningBoxOpen"
-      type="warning"
+      status="warning"
       title="提交完毕"
     >您提交的数据量较小，请抽空进行补充。</veui-alert-box>
   </p>
 
   <p>
     <veui-button @click="alertInfoBoxOpen = true">Info</veui-button>
-    <veui-alert-box :open.sync="alertInfoBoxOpen" type="info">
+    <veui-alert-box :open.sync="alertInfoBoxOpen" status="info">
       <template #title>创建条目提醒</template>
       请完善你的资料，保证内容真实。
     </veui-alert-box>
@@ -45,7 +45,7 @@
 
   <p>
     <veui-button @click="alertErrorBoxOpen = true">Error</veui-button>
-    <veui-alert-box :open.sync="alertErrorBoxOpen" type="error">
+    <veui-alert-box :open.sync="alertErrorBoxOpen" status="error">
       <template #title>创建条目失败</template>
       请完善你的资料，保证内容真实。
     </veui-alert-box>

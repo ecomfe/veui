@@ -1,13 +1,13 @@
 import { assign } from 'lodash'
 
-const CONTEXTS = ['success', 'info', 'error', 'warn']
+const CONTEXTUAL_STATUSES = ['success', 'info', 'error', 'warn']
 
 export function makeContextualPopupApi (name, manager, method = 'show') {
-  function getMethod (type) {
-    return manager[type].bind(manager)
+  function getMethod (status) {
+    return manager[status].bind(manager)
   }
 
-  const METHODS = CONTEXTS.reduce((methods, name) => {
+  const METHODS = CONTEXTUAL_STATUSES.reduce((methods, name) => {
     methods[name] = getMethod(name)
     return methods
   }, {})

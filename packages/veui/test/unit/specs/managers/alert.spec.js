@@ -9,7 +9,7 @@ describe('managers/alert', function () {
     let component = alert.create({
       title: 'Title',
       content: 'Content',
-      type: 'error',
+      status: 'error',
       okLabel: 'OkLabel',
       ok () {
         isClicked = true
@@ -19,7 +19,7 @@ describe('managers/alert', function () {
     let alertBox = component.$children[0]
 
     expect(alertBox.open).to.equal(true)
-    expect(alertBox.type).to.equal('error')
+    expect(alertBox.status).to.equal('error')
     expect(getEl('.veui-alert-box-title').textContent).to.equal('Title')
     expect(getEl('.veui-alert-box-content').textContent).to.equal('Content')
     expect(

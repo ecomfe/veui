@@ -48,14 +48,14 @@ describe('managers/simple-dialog', function () {
   })
 
   it('should implement contextual methods correctly', () => {
-    ;['success', 'info', 'error', 'warn'].forEach((type) => {
-      let result = dialog[type]('Content', 'Title', { open: true })
+    ;['success', 'info', 'error', 'warn'].forEach((status) => {
+      let result = dialog[status]('Content', 'Title', { open: true })
 
       expect(result).to.deep.equal({
         title: 'Title',
         content: 'Content',
         open: true,
-        type: type === 'warn' ? 'warning' : type
+        status: status === 'warn' ? 'warning' : status
       })
     })
 

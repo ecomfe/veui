@@ -71,7 +71,7 @@ export default {
           <Toast
             key={m.__message_id__}
             open
-            type={m.type}
+            status={m.status || m.type}
             message={typeof m.message === 'string' ? m.message : null}
             closable={m.closable}
             title={m.title}

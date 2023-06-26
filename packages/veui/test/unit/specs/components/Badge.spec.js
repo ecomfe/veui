@@ -5,6 +5,24 @@ import config from '@/managers/config'
 describe('components/Badge', function () {
   this.timeout(10000)
 
+  it('should render `status` correctly', () => {
+    const wrapper = mount({
+      components: {
+        'veui-badge': Badge
+      },
+      template: `
+        <div>
+        <veui-badge status="success">News</veui-badge>
+        <veui-badge type="error">News</veui-badge>
+        </div>`
+    })
+
+    const badges = wrapper.findAll(Badge)
+    expect(badges.at(0).contains('.veui-badge-success')).to.equal(true)
+    expect(badges.at(1).contains('.veui-badge-error')).to.equal(true)
+    wrapper.destroy()
+  })
+
   it('should render corner badge without content correctly', async () => {
     const wrapper = mount({
       components: {

@@ -21,11 +21,11 @@
     <h2>不同样式</h2>
     <div>
       <veui-tag
-        v-for="type in types"
-        :key="type"
-        :type="type"
+        v-for="status in statuses"
+        :key="status"
+        :status="status"
         :ui="bordered ? 'bordered' : ''"
-      >{{ type }}</veui-tag>
+      >{{ status }}</veui-tag>
       <veui-tag
         v-for="color in colors"
         :key="color"
@@ -41,8 +41,8 @@
       <veui-tag
         v-for="(team, index) in teams2"
         :key="team"
-        :type="typesAndColors[index]"
-        :color="index >= 5 ? typesAndColors[index] : undefined"
+        :status="statusesAndColors[index]"
+        :color="index >= 5 ? statusesAndColors[index] : undefined"
         :ui="bordered ? 'bordered' : ''"
         removable
         @remove="handleRemove(team)"
@@ -56,8 +56,8 @@
       <veui-tag
         v-for="(team, index) in teams"
         :key="team"
-        :type="typesAndColors[index]"
-        :color="index >= 5 ? typesAndColors[index] : undefined"
+        :status="statusesAndColors[index]"
+        :color="index >= 5 ? statusesAndColors[index] : undefined"
         removable
         :ui="'s' + (bordered ? ' bordered' : '')"
         @remove="handleRemove(team)"
@@ -81,13 +81,13 @@
     <h2>选择性标签</h2>
     <div>
       <veui-tag
-        v-for="type in types"
-        :key="type"
-        :type="type"
+        v-for="status in statuses"
+        :key="status"
+        :status="status"
         :selected.sync="selected"
         :ui="bordered ? 'bordered' : ''"
         selectable
-      >{{ type }}</veui-tag>
+      >{{ status }}</veui-tag>
       <veui-tag
         v-for="color in colors"
         :key="color"
@@ -103,14 +103,14 @@
     <h2>禁用标签</h2>
     <div>
       <veui-tag
-        v-for="type in types"
-        :key="type"
-        :type="type"
+        v-for="status in statuses"
+        :key="status"
+        :status="status"
         :selected.sync="selected"
         :ui="bordered ? 'bordered' : ''"
         disabled
         selectable
-      >{{ type }}</veui-tag>
+      >{{ status }}</veui-tag>
       <veui-tag
         v-for="color in colors"
         :key="color"
@@ -123,13 +123,13 @@
     </div>
     <div style="margin-top: 20px">
       <veui-tag
-        v-for="type in types"
-        :key="type"
-        :type="type"
+        v-for="status in statuses"
+        :key="status"
+        :status="status"
         :ui="bordered ? 'bordered' : ''"
         disabled
         removable
-      >{{ type }}</veui-tag>
+      >{{ status }}</veui-tag>
       <veui-tag
         v-for="color in colors"
         :key="color"
@@ -162,7 +162,7 @@ export default {
     return {
       teams: ['湖人', '火箭', '猛龙', '马刺', '勇士', '热火', '雷霆', '太阳'],
       teams2: ['湖人', '火箭', '猛龙', '马刺', '勇士', '热火', '雷霆', '太阳'],
-      types: ['default', 'info', 'success', 'warning', 'error'],
+      statuses: ['default', 'info', 'success', 'warning', 'error'],
       colors: ['turquoise', 'violet', 'green'],
       sizes: ['s', 'm', 'default'],
       selected: false,
@@ -171,8 +171,8 @@ export default {
     }
   },
   computed: {
-    typesAndColors () {
-      return this.types.concat(this.colors)
+    statusesAndColors () {
+      return this.statuses.concat(this.colors)
     }
   },
   methods: {

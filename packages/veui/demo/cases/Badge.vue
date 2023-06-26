@@ -10,61 +10,61 @@
   <section>
     <veui-badge
       :hidden="hidden"
-      type="success"
+      status="success"
     ><span v-if="toggle">保存</span></veui-badge>
-    <veui-badge :hidden="hidden" type="info">保存</veui-badge>
+    <veui-badge :hidden="hidden" status="info">保存</veui-badge>
     <veui-badge :hidden="hidden">保存</veui-badge>
-    <veui-badge :hidden="hidden" type="warning">保存</veui-badge>
-    <veui-badge :hidden="hidden" type="aux">保存</veui-badge>
+    <veui-badge :hidden="hidden" status="warning">保存</veui-badge>
+    <veui-badge :hidden="hidden" status="aux">保存</veui-badge>
   </section>
   <section>
-    <veui-badge :hidden="hidden" value="New" type="success">
+    <veui-badge :hidden="hidden" value="New" status="success">
       <veui-button>消息</veui-button>
     </veui-badge>
-    <veui-badge :hidden="hidden" value="New" type="info">
+    <veui-badge :hidden="hidden" value="New" status="info">
       <veui-button>消息</veui-button>
     </veui-badge>
     <veui-badge :hidden="hidden" value="New">
       <veui-button>消息</veui-button>
     </veui-badge>
-    <veui-badge :hidden="hidden" value="New" type="warning">
+    <veui-badge :hidden="hidden" value="New" status="warning">
       <veui-button>消息</veui-button>
     </veui-badge>
-    <veui-badge :hidden="hidden" value="New" type="aux">
+    <veui-badge :hidden="hidden" value="New" status="aux">
       <veui-button>消息</veui-button>
     </veui-badge>
   </section>
   <section>
-    <veui-badge :hidden="hidden" :value="count" type="success">
+    <veui-badge :hidden="hidden" :value="count" status="success">
       <veui-button ui="primary" @click="count++">写文章</veui-button>
     </veui-badge>
-    <veui-badge :hidden="hidden" :value="count" type="info">
+    <veui-badge :hidden="hidden" :value="count" status="info">
       <veui-button ui="primary" @click="count++">写文章</veui-button>
     </veui-badge>
     <veui-badge :hidden="hidden" :value="count">
       <veui-button ui="primary" @click="count++">写文章</veui-button>
     </veui-badge>
-    <veui-badge :hidden="hidden" :value="count" type="warning">
+    <veui-badge :hidden="hidden" :value="count" status="warning">
       <veui-button ui="primary" @click="count++">写文章</veui-button>
     </veui-badge>
-    <veui-badge :hidden="hidden" :value="count" type="aux">
+    <veui-badge :hidden="hidden" :value="count" status="aux">
       <veui-button ui="primary" @click="count++">写文章</veui-button>
     </veui-badge>
   </section>
   <section>
-    <veui-badge :hidden="hidden" type="success"/>
-    <veui-badge :hidden="hidden" type="info"/>
+    <veui-badge :hidden="hidden" status="success"/>
+    <veui-badge :hidden="hidden" status="info"/>
     <veui-badge :hidden="hidden"/>
-    <veui-badge :hidden="hidden" type="error"/>
-    <veui-badge :hidden="hidden" type="warning"/>
-    <veui-badge :hidden="hidden" type="aux"/>
+    <veui-badge :hidden="hidden" status="error"/>
+    <veui-badge :hidden="hidden" status="warning"/>
+    <veui-badge :hidden="hidden" status="aux"/>
   </section>
   <section>
-    <veui-badge :hidden="hidden" type="success" value="审核中"/>
-    <veui-badge :hidden="hidden" type="info" value="审核中"/>
+    <veui-badge :hidden="hidden" status="success" value="审核中"/>
+    <veui-badge :hidden="hidden" status="info" value="审核中"/>
     <veui-badge :hidden="hidden" value="审核中"/>
-    <veui-badge :hidden="hidden" type="warning" value="审核中"/>
-    <veui-badge :hidden="hidden" type="aux" value="审核中"/>
+    <veui-badge :hidden="hidden" status="warning" value="审核中"/>
+    <veui-badge :hidden="hidden" status="aux" value="审核中"/>
   </section>
 </article>
 </template>

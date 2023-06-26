@@ -31,25 +31,31 @@ describe('components/Tag', function () {
     wrapper.destroy()
   })
 
-  it('should render `type` prop correctly', async () => {
+  it('should render `status` prop correctly', async () => {
     let wrapper = mount({
       components: {
         'veui-tag': Tag
       },
       data () {
         return {
-          type: 'success'
+          status: 'success'
         }
       },
-      template: '<veui-tag :type="type">small tag</veui-tag>'
+      template: `
+        <div>
+          <veui-tag :status="status">small tag</veui-tag>
+          <veui-tag type="error">small tag</veui-tag>
+        </div>`
     })
     let { vm } = wrapper
-    expect(wrapper.classes('veui-tag-success')).to.equal(true)
+    const tags = wrapper.findAll(Tag)
+    expect(tags.at(0).classes('veui-tag-success')).to.equal(true)
+    expect(tags.at(1).classes('veui-tag-error')).to.equal(true)
 
-    vm.type = 'error'
+    vm.status = 'error'
     await vm.$nextTick()
-    expect(wrapper.classes('veui-tag-success')).to.equal(false)
-    expect(wrapper.classes('veui-tag-error')).to.equal(true)
+    expect(tags.at(0).classes('veui-tag-success')).to.equal(false)
+    expect(tags.at(0).classes('veui-tag-error')).to.equal(true)
     wrapper.destroy()
   })
 

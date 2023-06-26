@@ -47,35 +47,35 @@ export class ToastManager {
     }
   }
 
-  show (message, type) {
+  show (message, status) {
     let options = {}
     if (isObject(message)) {
       options = { ...message }
     } else if (isString(message)) {
       options.message = message
     }
-    if (isObject(type)) {
-      options = { ...options, ...type }
-    } else if (isString(type)) {
-      options.type = type
+    if (isObject(status)) {
+      options = { ...options, ...status }
+    } else if (isString(status)) {
+      options.status = status
     }
     return this.add(options)
   }
 
   success (message, options) {
-    return this.show(message, { ...options, type: 'success' })
+    return this.show(message, { ...options, status: 'success' })
   }
 
   warn (message, options) {
-    return this.show(message, { ...options, type: 'warning' })
+    return this.show(message, { ...options, status: 'warning' })
   }
 
   info (message, options) {
-    return this.show(message, { ...options, type: 'info' })
+    return this.show(message, { ...options, status: 'info' })
   }
 
   error (message, options) {
-    return this.show(message, { ...options, type: 'error' })
+    return this.show(message, { ...options, status: 'error' })
   }
 }
 
