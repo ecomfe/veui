@@ -23,8 +23,6 @@ export class PromptManager extends SimpleDialog {
             props: {
               ...pick(data, [
                 'title',
-                'type',
-                'status',
                 'overlayClass',
                 'okLabel',
                 'cancelLabel'

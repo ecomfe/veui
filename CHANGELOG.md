@@ -1,3 +1,14 @@
+## 2.14.4 (2023-06-27)
+
+### 💡 主要变更
+
+- [^] `Alert` / `AlertBox` / `Badge` / `Tag` / `Toast`  组件的 `type` prop 更名为 `status`。`type` 被废弃，将在 `3.0.0` 以后移除。<!-- #Progress -->
+
+### 🐞 问题修复
+
+- [^] 修复 `NumbberInput` 组件在输入法模式下输入后，调节按钮失效的问题。<!-- #NumberInput -->
+- [^] 修复图标在半透明色下线条叠加时的样式问题。<!-- #Icon #veui-theme-dls-icons -->
+
 ## 2.14.3 (2023-06-05)
 
 ### 🐞 问题修复
