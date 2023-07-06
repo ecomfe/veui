@@ -153,8 +153,8 @@ export declare const prompt: ConfirmDialogManager<string | null>
 export declare const toast: ToastDialogManager
 
 interface RuleOptions {
-  validate(value: any, ruleValue: any): boolean
-  message: string
+  validate(value: unknown, ruleValue: unknown): boolean
+  message: string | ((value: unknown, ruleValue: unknown) => string)
   priority: number
 }
 
@@ -164,11 +164,17 @@ declare class RuleManager {
 
 export declare const validation: RuleManager
 
+/* eslint-disable no-dupe-class-members */
 declare class ConfigManager {
-  defaults(key: string, val: any, ns?: string): void
-  // eslint-disable-next-line no-dupe-class-members
-  defaults(value: Record<string, any>, ns?: string): void
+  defaults(key: string, value: unknown, ns?: string): void
+  defaults(values: Record<string, unknown>, ns?: string): void
+
+  set(key: string, val: unknown, ns?: string): void
+  set(values: Record<string, unknown>, ns?: string): void
+
+  get(path: string): unknown
 }
+/* eslint-enable no-dupe-class-members */
 
 export declare const config: ConfigManager
 export declare const ui: ConfigManager
