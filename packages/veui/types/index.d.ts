@@ -81,19 +81,21 @@ export declare const Sidenav: Components.Sidenav
 export declare const Empty: Components.Empty
 
 interface DialogManagerOptions {
-  overlayClass: string | Array<string> | Record<string, boolean>
-  ok(): Promise<void>
+  overlayClass?: string | Array<string> | Record<string, boolean>
+  ok?(): Promise<void>
 }
 
-interface Types {
-  type: 'success' | 'warning' | 'info' | 'error'
+interface Statuses {
+  status?: 'success' | 'warning' | 'info' | 'error'
+  /** @deprecated */
+  type?: 'success' | 'warning' | 'info' | 'error'
 }
 
 declare class AlertDialogManager {
   show(
     content: string,
     title: string,
-    options?: DialogManagerOptions & Types
+    options?: DialogManagerOptions & Statuses
   ): Promise<void>
 
   success(
@@ -136,7 +138,7 @@ interface ToastOptions {
 }
 
 declare class ToastDialogManager {
-  show(message: string, options?: ToastOptions & Types): void
+  show(message: string, options?: ToastOptions & Statuses): void
 
   success(message: string, options?: ToastOptions): void
 
