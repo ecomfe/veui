@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -199,8 +199,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.11.2
-        version: 3.11.2(vue@2.6.14)
+        specifier: ~3.13.0
+        version: 3.13.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.3.2
         version: 1.3.2(vue@2.6.14)
@@ -386,8 +386,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.11.2
-        version: 3.11.2(vue@2.6.14)
+        specifier: ~3.13.0
+        version: 3.13.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.3.2
         version: 1.3.2(vue@2.6.14)
@@ -450,8 +450,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.11.2
-        version: 3.11.2(vue@2.6.14)
+        specifier: ~3.13.0
+        version: 3.13.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -6479,15 +6479,15 @@ packages:
   /dls-graphics@1.3.2:
     resolution: {integrity: sha512-hPCo8dpCQLffRLqtPsYIX8txrEzdgIIGfofN6XzRx2GOsm87SOlQIQoqdkir+rPZIuIHFScdb4ifSIsaicXDYQ==}
 
-  /dls-icons-data@3.11.2:
-    resolution: {integrity: sha512-w9xrjrWkAVBt3M4jfqDG9scD7YGW2R4JPakGmNu5dcjSL5QHOtK0lPrz+bR540YNcNWsrk2eUZWIMvp76nHduQ==}
+  /dls-icons-data@3.13.0:
+    resolution: {integrity: sha512-UlloOMLnlsBOy4GEJgIkAaS0/VycVOhUFDmL/7puRrJB0ltWdQGr/DKrYVCvwPNFox0tlpDgSaonh0OyupZDsA==}
 
-  /dls-icons-vue@3.11.2(vue@2.6.14):
-    resolution: {integrity: sha512-RsCV5DRGmu9Lm6cTh+qBYf8YfM9hXnGHp6PTjhyWzaErFT0GXpdoonIZZaxlRsWQl4UjZh5q8J1pUYpera6FrQ==}
+  /dls-icons-vue@3.13.0(vue@2.6.14):
+    resolution: {integrity: sha512-JjXgmvFAUC6thIW1OuSyI4uRVdJHo2dpdXVeCVVnug7EU9fprvxdE1XtH3fwq7JMC2krTL3ib6zTTTF4jpe8FA==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-icons-data: 3.11.2
+      dls-icons-data: 3.13.0
       vue: 2.6.14
 
   /dls-illustrations-vue@1.3.2(vue@2.6.14):
@@ -10134,7 +10134,7 @@ packages:
     dependencies:
       big.js: 5.2.2
       emojis-list: 3.0.0
-      json5: 1.0.1
+      json5: 1.0.2
     dev: true
 
   /loader-utils@1.4.2:
