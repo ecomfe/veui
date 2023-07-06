@@ -4,6 +4,7 @@
 
 .@{veui-prefix}-cascader {
   display: inline-flex;
+  width: @dls-input-width;
   outline: none;
   .veui-stub();
 
@@ -26,7 +27,9 @@
     }
   }
 
-  .@{veui-prefix}-trigger.@{veui-prefix}-trigger-multiple:not(.@{veui-prefix}-trigger-empty) {
+  .@{veui-prefix}-trigger.@{veui-prefix}-trigger-multiple:not(
+      .@{veui-prefix}-trigger-empty
+    ) {
     padding-left: @dls-select-padding-start;
   }
 
