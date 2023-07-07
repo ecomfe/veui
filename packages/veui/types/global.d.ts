@@ -44,7 +44,6 @@ interface VeuiComponents {
   VeuiLink: Components.Link
   VeuiLoading: Components.Loading
   VeuiLoadingBar: Components.LoadingBar
-  VeuiMenu: Components.Menu
   VeuiMessage: Components.Message
   VeuiNav: Components.Nav
   VeuiNumberInput: Components.NumberInput
@@ -80,6 +79,9 @@ interface VeuiComponents {
   VeuiTransfer: Components.Transfer
   VeuiTree: Components.Tree
   VeuiUploader: Components.Uploader
+
+  /** @deprecated */
+  VeuiMenu: Components.Menu
 }
 
 // Vue 3 & Vue < 2.7
