@@ -1,6 +1,6 @@
 {
   "customSyntax": "postcss-less",
-  "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
+  "extends": ["stylelint-config-standard"],
   "rules": {
     "selector-class-pattern": "^_?([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
     "custom-property-pattern": "^(@\\{[a-z]+(-[a-z]+)*\\}|[a-z]+(-[a-z]+)*)(-(@\\{[a-z]+(-[a-z]+)*\\}|[a-z]+(-[a-z]+)*))*$",
