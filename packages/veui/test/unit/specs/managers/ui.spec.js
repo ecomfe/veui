@@ -57,12 +57,18 @@ describe('managers/ui', function () {
   })
 
   it('should support `addPropValue` function', () => {
+    ui.set('btn.ui', { foo: { values: ['bar'] }, baz: { boolean: true } })
+
+    ui.addPropValue('btn', 'foo', 'baz')
+
+    expect(ui.get('btn.ui').foo).to.deep.equal({ values: ['bar', 'baz'] })
+
     ui.addPropValue('btn', 'foo', 'baz')
 
     expect(ui.get('btn.ui').foo).to.deep.equal({ values: ['bar', 'baz'] })
 
     expect(() => {
-      ui.addPropValue('btn', 'wow', 'yeah')
+      ui.addPropValue('btn', 'baz', 'yeah')
     }).to.throw()
 
     expect(() => {
@@ -71,6 +77,11 @@ describe('managers/ui', function () {
   })
 
   it('should support `setPropDefault` function', () => {
+    ui.set('btn.ui', {
+      foo: { values: ['bar', 'baz'] },
+      baz: { boolean: true }
+    })
+
     ui.setPropDefault('btn', 'foo', 'baz')
 
     expect(ui.get('btn.ui').foo).to.deep.equal({
@@ -83,7 +94,7 @@ describe('managers/ui', function () {
     }).to.throw()
 
     expect(() => {
-      ui.setPropDefault('btn', 'bar', 'wow')
+      ui.setPropDefault('btn', 'baz', 'wow')
     }).to.throw()
 
     expect(() => {
@@ -92,7 +103,7 @@ describe('managers/ui', function () {
   })
 
   it('should support `setIcon` function', () => {
-    ui.set('btn.icons', {})
+    ui.set('btn.icons', undefined)
     ui.setIcon('btn', 'foo', 'baz')
 
     expect(ui.get('btn.icons').foo).to.equal('baz')
