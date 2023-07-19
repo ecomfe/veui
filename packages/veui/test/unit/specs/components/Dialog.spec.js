@@ -393,7 +393,10 @@ describe('components/Dialog', function () {
     await wait(100)
     expect(document.activeElement.textContent.trim()).to.equal('取消')
 
+    // 模拟让焦点回到 body，然后触发 mask 的mousedown
+    document.activeElement.blur()
     wrapper.find('.veui-dialog-box').trigger('mousedown')
+
     await wait(100)
     expect(
       document.activeElement.classList.contains('veui-dialog-content')

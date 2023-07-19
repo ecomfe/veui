@@ -196,10 +196,17 @@ export default {
       }
     },
     focusContent () {
-      let { content } = this.$refs
-      if (content) {
-        content.focus()
-      }
+      setTimeout(() => {
+        let { overlay, content } = this.$refs
+        if (
+          overlay &&
+          content &&
+          content !== document.activeElement &&
+          !content.contains(document.activeElement)
+        ) {
+          content.focus()
+        }
+      })
     },
     close (type) {
       if (typeof type !== 'string') {
