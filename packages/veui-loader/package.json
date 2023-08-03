@@ -16,7 +16,7 @@
     "veui"
   ],
   "dependencies": {
-    "loader-utils": "^2.0.2",
+    "loader-utils": "^2.0.4",
     "magic-string": "^0.25.9",
     "pkg-dir": "^4.2.0",
     "slash": "^3.0.0"

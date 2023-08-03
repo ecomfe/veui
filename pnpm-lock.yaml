@@ -334,8 +334,8 @@ importers:
   packages/veui-loader:
     dependencies:
       loader-utils:
-        specifier: ^2.0.2
-        version: 2.0.2
+        specifier: ^2.0.4
+        version: 2.0.4
       magic-string:
         specifier: ^0.25.9
         version: 0.25.9
@@ -3958,7 +3958,7 @@ packages:
     dependencies:
       '@babel/core': 7.17.10
       find-cache-dir: 3.3.2
-      loader-utils: 2.0.2
+      loader-utils: 2.0.4
       make-dir: 3.1.0
       schema-utils: 2.7.1
       webpack: 4.46.0
@@ -4821,7 +4821,7 @@ packages:
     dependencies:
       buffer-json: 2.0.0
       find-cache-dir: 3.3.2
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       mkdirp: 0.5.6
       neo-async: 2.6.2
       schema-utils: 2.7.1
@@ -5710,7 +5710,7 @@ packages:
       glob-parent: 3.1.0
       globby: 7.1.1
       is-glob: 4.0.3
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       minimatch: 3.1.2
       normalize-path: 3.0.0
       p-limit: 2.3.0
@@ -5902,7 +5902,7 @@ packages:
       camelcase: 5.3.1
       cssesc: 3.0.0
       icss-utils: 4.1.1
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       normalize-path: 3.0.0
       postcss: 7.0.39
       postcss-modules-extract-imports: 2.0.0
@@ -7725,7 +7725,7 @@ packages:
     peerDependencies:
       webpack: ^4.0.0
     dependencies:
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       schema-utils: 2.7.1
       webpack: 4.46.0
     dev: true
@@ -9699,14 +9699,13 @@ packages:
   /json5@2.2.1:
     resolution: {integrity: sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==}
     engines: {node: '>=6'}
+    dev: true
 
   /json5@2.2.3:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
     requiresBuild: true
-    dev: true
-    optional: true
 
   /jsonfile@4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
@@ -9807,7 +9806,7 @@ packages:
       webpack: ^4.0.0
     dependencies:
       clone-deep: 4.0.1
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       neo-async: 2.6.2
       schema-utils: 1.0.0
       source-map: 0.7.3
@@ -9927,7 +9926,7 @@ packages:
     dependencies:
       klona: 2.0.5
       less: 3.13.1
-      loader-utils: 2.0.2
+      loader-utils: 2.0.4
       schema-utils: 3.1.1
       webpack: 4.46.0
     dev: true
@@ -10158,21 +10157,12 @@ packages:
     dev: true
 
   /loader-utils@0.2.17:
-    resolution: {integrity: sha1-+G5jdNQyBabmxg6RlvF8Apm/s0g=}
+    resolution: {integrity: sha512-tiv66G0SmiOx+pLWMtGEkfSEejxvb6N6uRrQjfWJIT79W9GMpgKeCAmm9aVBKtd4WEgntciI8CsGqjpDoCWJug==}
     dependencies:
       big.js: 3.2.0
       emojis-list: 2.1.0
       json5: 0.5.1
       object-assign: 4.1.1
-    dev: true
-
-  /loader-utils@1.4.0:
-    resolution: {integrity: sha512-qH0WSMBtn/oHuwjy/NucEgbx5dbxxnxup9s4PVXJUDHZBQY+s0NWA9rJf53RBnQZxfch7euUui7hpoAPvALZdA==}
-    engines: {node: '>=4.0.0'}
-    dependencies:
-      big.js: 5.2.2
-      emojis-list: 3.0.0
-      json5: 1.0.2
     dev: true
 
   /loader-utils@1.4.2:
@@ -10184,14 +10174,6 @@ packages:
       json5: 1.0.2
     dev: true
 
-  /loader-utils@2.0.2:
-    resolution: {integrity: sha512-TM57VeHptv569d/GKh6TAYdzKblwDNiumOdkFnejjD0XwTH87K90w3O7AiJRqdQoXygvi1VQTJTLGhJl7WqA7A==}
-    engines: {node: '>=8.9.0'}
-    dependencies:
-      big.js: 5.2.2
-      emojis-list: 3.0.0
-      json5: 2.2.1
-
   /loader-utils@2.0.4:
     resolution: {integrity: sha512-xXqpXoINfFhgua9xiqD8fPFHgkoq1mmmpE92WlDbm9rNRd/EbRb+Gqf908T2DMfuHjjJlksiK2RbHVOdD/MqSw==}
     engines: {node: '>=8.9.0'}
@@ -10200,8 +10182,6 @@ packages:
       big.js: 5.2.2
       emojis-list: 3.0.0
       json5: 2.2.3
-    dev: true
-    optional: true
 
   /loader-utils@3.2.0:
     resolution: {integrity: sha512-HVl9ZqccQihZ7JM85dco1MvO9G+ONvxoGa9rkhzFsneGLKSUg1gJf9bWzhRhcvm2qChhWpebQhP44qxjKIUCaQ==}
@@ -10672,7 +10652,7 @@ packages:
     peerDependencies:
       webpack: ^4.4.0
     dependencies:
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       normalize-url: 1.9.1
       schema-utils: 1.0.0
       webpack: 4.46.0
@@ -11922,7 +11902,7 @@ packages:
     resolution: {integrity: sha512-cLWoDEY5OwHcAjDnkyRQzAXfs2jrKjXpO/HQFcc5b5u/r7aa471wdmChmwfnv7x2u840iat/wi0lQ5nbRgSkUA==}
     engines: {node: '>= 6'}
     dependencies:
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       postcss: 7.0.39
       postcss-load-config: 2.1.2
       schema-utils: 1.0.0
@@ -14633,7 +14613,7 @@ packages:
       webpack: ^2.0.0 || ^3.0.0 || ^4.0.0
     dependencies:
       loader-runner: 2.4.0
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       neo-async: 2.6.2
       webpack: 4.46.0
     dev: true
@@ -15081,7 +15061,7 @@ packages:
         optional: true
     dependencies:
       file-loader: 4.3.0(webpack@4.46.0)
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       mime: 2.6.0
       schema-utils: 2.7.1
       webpack: 4.46.0
@@ -15261,7 +15241,7 @@ packages:
       cache-loader: 4.1.0(webpack@4.46.0)
       css-loader: 3.6.0(webpack@4.46.0)
       hash-sum: 1.0.2
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       vue-hot-reload-api: 2.3.4
       vue-style-loader: 4.1.3
       vue-template-compiler: 2.6.14
@@ -15359,7 +15339,7 @@ packages:
     resolution: {integrity: sha512-sFuh0xfbtpRlKfm39ss/ikqs9AbKCoXZBpHeVZ8Tx650o0k0q/YCM7FRvigtxpACezfq6af+a7JeqVTWvncqDg==}
     dependencies:
       hash-sum: 1.0.2
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
     dev: true
 
   /vue-template-compiler@2.6.14:
@@ -15551,7 +15531,7 @@ packages:
       eslint-scope: 4.0.3
       json-parse-better-errors: 1.0.2
       loader-runner: 2.4.0
-      loader-utils: 1.4.0
+      loader-utils: 1.4.2
       memory-fs: 0.4.1
       micromatch: 3.1.10(supports-color@6.1.0)
       mkdirp: 0.5.6
