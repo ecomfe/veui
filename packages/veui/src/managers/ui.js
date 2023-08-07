@@ -10,11 +10,8 @@ const uiManager = Object.assign(Object.create(config), {
 
 export default uiManager
 
-window.uiManager = uiManager
-window.configManager = config
-
 function getConfig (component, key) {
-  return config.get(`${component}.${key}`)
+  return uiManager.get(`${component}.${key}`)
 }
 
 function addPropValue (component, prop, value) {
