@@ -1,6 +1,6 @@
 # babel-plugin-veui
 
-This Babel plugin enables you to wrtie simpler `import` statements by converting such statements:
+This Babel plugin enables you to write simpler `import` statements by converting such statements:
 
 ```js
 import { Button, Input } from 'veui'
