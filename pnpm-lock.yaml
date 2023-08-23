@@ -196,8 +196,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.16.0
-        version: 3.16.0(vue@2.6.14)
+        specifier: ~3.19.0
+        version: 3.19.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.0
         version: 1.4.0(vue@2.6.14)
@@ -383,8 +383,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.16.0
-        version: 3.16.0(vue@2.6.14)
+        specifier: ~3.19.0
+        version: 3.19.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.0
         version: 1.4.0(vue@2.6.14)
@@ -447,8 +447,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.16.0
-        version: 3.16.0(vue@2.6.14)
+        specifier: ~3.19.0
+        version: 3.19.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -3758,6 +3758,7 @@ packages:
   /atob@2.1.2:
     resolution: {integrity: sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==}
     engines: {node: '>= 4.5.0'}
+    requiresBuild: true
     dev: true
 
   /autoprefixer@9.8.8:
@@ -4574,6 +4575,7 @@ packages:
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dev: true
 
   /bindings@1.5.0:
@@ -6333,6 +6335,7 @@ packages:
   /decode-uri-component@0.2.0:
     resolution: {integrity: sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=}
     engines: {node: '>=0.10'}
+    requiresBuild: true
     dev: true
 
   /decompress-response@3.3.0:
@@ -6491,7 +6494,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       globby: 11.1.0
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       is-glob: 4.0.3
       is-path-cwd: 2.2.0
       is-path-inside: 3.0.3
@@ -6576,15 +6579,15 @@ packages:
   /dls-graphics@1.4.0:
     resolution: {integrity: sha512-+got6MX2dtXprnlizYfLYHGVnD3IP+IRVhDA6gGCiVRFoW+FaBfH455faOTI6Ikd0gVynnkpWqfBsAfHwwLyPg==}
 
-  /dls-icons-data@3.16.0:
-    resolution: {integrity: sha512-k9jsU28Q5h+cfShpINeL5L1Xslii/SJ9zqBXarc4QH/2vXlXCqzC4DD8FVvvtfpLmzUr21kWO3pHRNQ7cqC5gQ==}
+  /dls-icons-data@3.19.0:
+    resolution: {integrity: sha512-o8dsle45lOuNGDP9/ZEV2B2sTNqY8V99RCTPwA6tw1hzw3VSwPTD2lbtY0qlhJbKD1PakaQ6Bl1ToAtVV/3V+A==}
 
-  /dls-icons-vue@3.16.0(vue@2.6.14):
-    resolution: {integrity: sha512-VC2HJ4F8UDUyhIkRSb8F9aztOo/Y/B1xoOrj8rlxFDjOJ2AezJG1kLFzcgotZqjfoM5FWY/v1052cfT2B3VGng==}
+  /dls-icons-vue@3.19.0(vue@2.6.14):
+    resolution: {integrity: sha512-dRMQMWhLygW96eMZQKX3z1AnldWqXSKKyGloM/6CqeOHYwTXlbgnYO+KhBPSqNwPU0MYoIu01ZHJAz8Wk+eEFA==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-icons-data: 3.16.0
+      dls-icons-data: 3.19.0
       vue: 2.6.14
 
   /dls-illustrations-vue@1.4.0(vue@2.6.14):
@@ -9790,7 +9793,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
     dev: true
 
   /jsprim@1.4.2:
@@ -12722,6 +12725,7 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha1-0/wRS6BplaRexok/SEzrHXj19HY=}
+    requiresBuild: true
     dev: true
 
   /pseudomap@1.0.2:
@@ -13328,6 +13332,7 @@ packages:
 
   /resolve-url@0.2.1:
     resolution: {integrity: sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=}
+    requiresBuild: true
     dev: true
 
   /resolve@1.22.0:
@@ -14050,6 +14055,7 @@ packages:
 
   /source-map-url@0.4.1:
     resolution: {integrity: sha512-cPiFOTLUKvJFIg4SKVScy4ilPPW6rFgMgfuZJPNoDuMs3nC1HbMUycBoJw77xFIp6z1UJQJOfx6C9GMH80DiTw==}
+    requiresBuild: true
     dev: true
 
   /source-map@0.5.7:
@@ -15209,6 +15215,7 @@ packages:
 
   /urix@0.1.0:
     resolution: {integrity: sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=}
+    requiresBuild: true
     dev: true
 
   /url-loader@2.3.0(file-loader@4.3.0)(webpack@4.46.0):
