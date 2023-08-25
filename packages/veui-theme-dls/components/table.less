@@ -27,16 +27,11 @@
     line-height: @dls-line-height-1;
     align-items: center;
 
-    &-content {
+    &-content-ellipsis {
       display: -webkit-box;
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    &-select &-content,
-    &-expand &-content {
-      overflow: visible;
     }
   }
 
@@ -183,10 +178,7 @@
 
   &-overflow-shadow {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     overflow: hidden;
     pointer-events: none;
   }
@@ -630,10 +622,7 @@
   &-loading-backdrop {
     content: "";
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: 5;
     opacity: 0;
     pointer-events: none;

@@ -11,7 +11,6 @@
     "declaration-empty-line-before": null,
     "no-descending-specificity": null,
     "no-empty-source": null,
-    "number-leading-zero": "always",
     "declaration-colon-newline-after": null,
     "at-rule-no-unknown": [
       true,
@@ -19,12 +18,8 @@
         "ignoreAtRules": ["plugin"]
       }
     ],
-    "string-quotes": [
-      "double",
-      {
-        "avoidEscape": true
-      }
-    ]
+    "function-no-unknown": null,
+    "import-notation": "string"
   },
   "ignoreFiles": ["**/.*.*", "**/*.ts", "**/*.js", "**/*.json", "**/*.md"],
   "overrides": [

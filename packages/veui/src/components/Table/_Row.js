@@ -276,7 +276,10 @@ export default {
             >
               <div class={this.$c('table-cell')}>
                 <div
-                  class={this.$c('table-cell-content')}
+                  class={{
+                    [this.$c('table-cell-content')]: true,
+                    [this.$c('table-cell-content-ellipsis')]: !!col.tooltip
+                  }}
                   {...(col.tooltip
                     ? {
                       directives: [
