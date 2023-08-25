@@ -382,8 +382,10 @@ export class UploaderFile {
       this._valueKey = valueKey
     }
 
-    // 上传完成，有了 src，不需要再 hold 文件对象
-    this._file = undefined
+    // 上传完成，有了 src 的话，不需要再 hold 文件对象
+    if (this.src) {
+      this._file = undefined
+    }
   }
 
   onerror (err) {
