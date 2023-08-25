@@ -1,3 +1,13 @@
+## 2.14.6 (2023-08-25)
+
+### ⚠️ 非兼容性变更
+
+- [^] `Table` 组件只对设置了 `tooltip` 属性的 `Column` 进行默认的文字截断。<!-- #Table #Column -->
+
+### 🐞 问题修复
+
+- [^] `Uploader` 组件在上传成功且服务端没有返回 `src` 时，可以继续使用本地文件预览。<!-- #Uploader -->
+
 ## 2.14.5 (2023-08-07)
 
 ### 🐞 问题修复
@@ -2884,7 +2894,7 @@
 - [^] `Button` 组件的 `aux` 风格 `ui` 现在是默认样式，原有的默认样式更名为 `secondary`。<!-- #Button -->
 - [^] 为组件支持了 `:focus-ring` 的 polyfill，需要使用方自行引入。详见 [#121](https://github.com/ecomfe/veui/issues/121)。<!-- #veui -->
 - [^] 优化了 `Uploader` 组件的部分 prop、slot 的命名。详见 [#133](https://github.com/ecomfe/veui/issues/133)。<!-- #Uploader -->
-- [^] `Uploader` 的 prop `accept` 现在需要按规范书写，。详见[此处](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types)。<!-- #Uploader -->
+- [^] `Uploader` 的 prop `accept` 现在需要按规范书写。详见[此处](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Limiting_accepted_file_types)。<!-- #Uploader -->
 
 ### 💡 主要变更
 
