@@ -58,7 +58,7 @@
     "classlist-polyfill": "^1.2.0",
     "cross-env": "^5.2.1",
     "dls-icons-vue": "~3.19.0",
-    "dls-illustrations-vue": "^1.4.0",
+    "dls-illustrations-vue": "^1.4.1",
     "esbuild": "^0.12.29",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.15.0",

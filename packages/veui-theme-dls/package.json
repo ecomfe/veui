@@ -20,7 +20,7 @@
   "dependencies": {
     "classlist-polyfill": "^1.2.0",
     "dls-icons-vue": "~3.19.0",
-    "dls-illustrations-vue": "^1.4.0",
+    "dls-illustrations-vue": "^1.4.1",
     "focus-visible": "^4.1.5",
     "less-plugin-dls": "11.6.5",
     "less-plugin-est": "^3.0.1"
