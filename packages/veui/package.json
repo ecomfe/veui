@@ -30,7 +30,7 @@
     "clone-element": "^0.1.0",
     "core-js": "^3.22.4",
     "date-fns": "^2.28.0",
-    "dls-graphics": "^1.4.1",
+    "dls-graphics": "^1.4.2",
     "lodash": "^4.17.21",
     "popper.js": "^1.16.1",
     "resize-detector": "^0.1.10",
