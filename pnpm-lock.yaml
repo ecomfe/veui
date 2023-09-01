@@ -120,8 +120,8 @@ importers:
         specifier: ^2.28.0
         version: 2.28.0
       dls-graphics:
-        specifier: ^1.4.0
-        version: 1.4.0
+        specifier: ^1.4.1
+        version: 1.4.1
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -6578,6 +6578,10 @@ packages:
 
   /dls-graphics@1.4.0:
     resolution: {integrity: sha512-+got6MX2dtXprnlizYfLYHGVnD3IP+IRVhDA6gGCiVRFoW+FaBfH455faOTI6Ikd0gVynnkpWqfBsAfHwwLyPg==}
+
+  /dls-graphics@1.4.1:
+    resolution: {integrity: sha512-oyXdjBZcB/eYiQUfbIC0VkrtWo4ijANYu9q/M492gbhOL8LBOwMmN99wRR2OEsg0C2VbXjqgVsL5NcR2y6IlRw==}
+    dev: false
 
   /dls-icons-data@3.19.0:
     resolution: {integrity: sha512-o8dsle45lOuNGDP9/ZEV2B2sTNqY8V99RCTPwA6tw1hzw3VSwPTD2lbtY0qlhJbKD1PakaQ6Bl1ToAtVV/3V+A==}
