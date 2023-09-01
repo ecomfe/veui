@@ -199,8 +199,8 @@ importers:
         specifier: ~3.19.0
         version: 3.19.0(vue@2.6.14)
       dls-illustrations-vue:
-        specifier: ^1.4.1
-        version: 1.4.1(vue@2.6.14)
+        specifier: ^1.4.2
+        version: 1.4.2(vue@2.6.14)
       esbuild:
         specifier: ^0.12.29
         version: 0.12.29
@@ -386,8 +386,8 @@ importers:
         specifier: ~3.19.0
         version: 3.19.0(vue@2.6.14)
       dls-illustrations-vue:
-        specifier: ^1.4.1
-        version: 1.4.1(vue@2.6.14)
+        specifier: ^1.4.2
+        version: 1.4.2(vue@2.6.14)
       focus-visible:
         specifier: ^4.1.5
         version: 4.1.5
@@ -4574,6 +4574,7 @@ packages:
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dev: true
 
   /bindings@1.5.0:
@@ -6574,6 +6575,10 @@ packages:
 
   /dls-graphics@1.4.1:
     resolution: {integrity: sha512-oyXdjBZcB/eYiQUfbIC0VkrtWo4ijANYu9q/M492gbhOL8LBOwMmN99wRR2OEsg0C2VbXjqgVsL5NcR2y6IlRw==}
+    dev: false
+
+  /dls-graphics@1.4.2:
+    resolution: {integrity: sha512-+DOraMDkA6G7+uNPHjFOOHe+Ofd0I+yaVbz2cbCLqRyakeQvwON17gq6Ntv1LGBI/17sUhEiNkEfgwxQGXyLEw==}
 
   /dls-graphics@1.4.2:
     resolution: {integrity: sha512-+DOraMDkA6G7+uNPHjFOOHe+Ofd0I+yaVbz2cbCLqRyakeQvwON17gq6Ntv1LGBI/17sUhEiNkEfgwxQGXyLEw==}
@@ -6590,12 +6595,12 @@ packages:
       dls-icons-data: 3.19.0
       vue: 2.6.14
 
-  /dls-illustrations-vue@1.4.1(vue@2.6.14):
-    resolution: {integrity: sha512-MYW3rKr5c19vCtFRdns4GpBhlt+sJu8oNjoA3KZK8gE4g9wCILyuPS631acAHYGf7atY9eXY6F+IPtJfaZtNFw==}
+  /dls-illustrations-vue@1.4.2(vue@2.6.14):
+    resolution: {integrity: sha512-euF+l3aN+Uky9f5sMxnTJ05JvWrF8CMnGUekHI/5TdS+TJB1+iUOovmj00fMp4tqFkhMm/JPhFzaLnxamcSqaA==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-graphics: 1.4.1
+      dls-graphics: 1.4.2
       vue: 2.6.14
 
   /dns-equal@1.0.0:
