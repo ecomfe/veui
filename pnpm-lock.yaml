@@ -196,8 +196,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.19.0
-        version: 3.19.0(vue@2.6.14)
+        specifier: ~3.20.0
+        version: 3.20.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.2
         version: 1.4.2(vue@2.6.14)
@@ -383,8 +383,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.19.0
-        version: 3.19.0(vue@2.6.14)
+        specifier: ~3.20.0
+        version: 3.20.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.2
         version: 1.4.2(vue@2.6.14)
@@ -447,8 +447,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.19.0
-        version: 3.19.0(vue@2.6.14)
+        specifier: ~3.20.0
+        version: 3.20.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -500,6 +500,7 @@ packages:
   /@babel/cli@7.17.10(@babel/core@7.17.10):
     resolution: {integrity: sha512-OygVO1M2J4yPMNOW9pb+I6kFGpQK77HmG44Oz3hg8xQIl5L/2zq+ZohwAdSaqYgVwM0SfmPHZHphH4wR8qzVYw==}
     engines: {node: '>=6.9.0'}
+    hasBin: true
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
@@ -2756,6 +2757,7 @@ packages:
   /@vue/cli-service@4.5.17(less-loader@7.3.0)(lodash@4.17.21)(typescript@4.9.5)(vue-template-compiler@2.6.14)(vue@2.6.14):
     resolution: {integrity: sha512-MqfkRYIcIUACe3nYlzNrYstJTWRXHlIqh6JCkbWbdnXWN+IfaVdlG8zw5Q0DVcSdGvkevUW7zB4UhtZB4uyAcA==}
     engines: {node: '>=8'}
+    hasBin: true
     peerDependencies:
       '@vue/compiler-sfc': ^3.0.0-beta.14
       less-loader: '*'
@@ -3757,6 +3759,7 @@ packages:
   /atob@2.1.2:
     resolution: {integrity: sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==}
     engines: {node: '>= 4.5.0'}
+    requiresBuild: true
     dev: true
 
   /autoprefixer@9.8.8:
@@ -4574,6 +4577,7 @@ packages:
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dev: true
 
   /bindings@1.5.0:
@@ -6331,6 +6335,7 @@ packages:
   /decode-uri-component@0.2.0:
     resolution: {integrity: sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=}
     engines: {node: '>=0.10'}
+    requiresBuild: true
     dev: true
 
   /decompress-response@3.3.0:
@@ -6574,15 +6579,15 @@ packages:
   /dls-graphics@1.4.2:
     resolution: {integrity: sha512-+DOraMDkA6G7+uNPHjFOOHe+Ofd0I+yaVbz2cbCLqRyakeQvwON17gq6Ntv1LGBI/17sUhEiNkEfgwxQGXyLEw==}
 
-  /dls-icons-data@3.19.0:
-    resolution: {integrity: sha512-o8dsle45lOuNGDP9/ZEV2B2sTNqY8V99RCTPwA6tw1hzw3VSwPTD2lbtY0qlhJbKD1PakaQ6Bl1ToAtVV/3V+A==}
+  /dls-icons-data@3.20.0:
+    resolution: {integrity: sha512-ESvYUj2055yWsXG3aS2PKY06v3/6ClOsN35q/wRAZDWaDLPjr5WzR0wQk1J7HHHLvmqDRotyjr5QKwRv5kuziQ==}
 
-  /dls-icons-vue@3.19.0(vue@2.6.14):
-    resolution: {integrity: sha512-dRMQMWhLygW96eMZQKX3z1AnldWqXSKKyGloM/6CqeOHYwTXlbgnYO+KhBPSqNwPU0MYoIu01ZHJAz8Wk+eEFA==}
+  /dls-icons-vue@3.20.0(vue@2.6.14):
+    resolution: {integrity: sha512-52ewhwf/GkJ9BWoXQ7aBklEksjOF080ikfGtB89FEUB4lSWcF14J9yJMov+iy90fKkFQ1sKH3rFHz1Bk7mRbEA==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-icons-data: 3.19.0
+      dls-icons-data: 3.20.0
       vue: 2.6.14
 
   /dls-illustrations-vue@1.4.2(vue@2.6.14):
@@ -7051,6 +7056,7 @@ packages:
 
   /eslint-config-prettier@6.15.0(eslint@6.8.0):
     resolution: {integrity: sha512-a1+kOYLR8wMGustcgAjdydMsQ2A/2ipRPwRKUmfYaSxc9ZPcrku080Ctl6zrZzZNs/U82MjSv+qKREkoq3bJaw==}
+    hasBin: true
     peerDependencies:
       eslint: '>=3.14.1'
     dependencies:
@@ -12712,6 +12718,7 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha1-0/wRS6BplaRexok/SEzrHXj19HY=}
+    requiresBuild: true
     dev: true
 
   /pseudomap@1.0.2:
@@ -13320,6 +13327,7 @@ packages:
 
   /resolve-url@0.2.1:
     resolution: {integrity: sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=}
+    requiresBuild: true
     dev: true
 
   /resolve@1.22.0:
@@ -14034,6 +14042,7 @@ packages:
 
   /source-map-url@0.4.1:
     resolution: {integrity: sha512-cPiFOTLUKvJFIg4SKVScy4ilPPW6rFgMgfuZJPNoDuMs3nC1HbMUycBoJw77xFIp6z1UJQJOfx6C9GMH80DiTw==}
+    requiresBuild: true
     dev: true
 
   /source-map@0.5.7:
@@ -15192,6 +15201,7 @@ packages:
 
   /urix@0.1.0:
     resolution: {integrity: sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=}
+    requiresBuild: true
     dev: true
 
   /url-loader@2.3.0(file-loader@4.3.0)(webpack@4.46.0):
@@ -15582,6 +15592,7 @@ packages:
   /webpack-dev-server@3.11.3(webpack@4.46.0):
     resolution: {integrity: sha512-3x31rjbEQWKMNzacUZRE6wXvUFuGpH7vr0lIEbYpMAG9BOxi0928QU1BBswOAP3kg3H1O4hiS+sq4YyAn6ANnA==}
     engines: {node: '>= 6.11.5'}
+    hasBin: true
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
       webpack-cli: '*'
@@ -15652,6 +15663,7 @@ packages:
   /webpack@4.46.0:
     resolution: {integrity: sha512-6jJuJjg8znb/xRItk7bkT0+Q7AHCYjjFnvKIWQPkNIOyRqoCGvkOs0ipeQzrqz4l5FtN5ZI/ukEHroeX/o1/5Q==}
     engines: {node: '>=6.11.5'}
+    hasBin: true
     peerDependencies:
       webpack-cli: '*'
       webpack-command: '*'
