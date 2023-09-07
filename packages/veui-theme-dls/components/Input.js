@@ -7,6 +7,9 @@ ui.defaults(
       clear: IconTimesCircle
     },
     ui: {
+      style: {
+        values: ['inline']
+      },
       size: {
         values: ['xs', 's', 'm', 'l'],
         inherit: true

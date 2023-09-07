@@ -5,48 +5,82 @@
   </h1>
 
   <section>
+    <h3>配置子主题</h3>
+    <veui-stack class="config" gap="s">
+      <code>theme</code>
+      <veui-checkbox v-model="d22">D22</veui-checkbox>
+    </veui-stack>
+    <section class="case">
+      <veui-config-provider :value="contextValue">
+        <veui-collapse expanded label="Provide theme">
+          <veui-input clearable/>
+        </veui-collapse>
+      </veui-config-provider>
+    </section>
+    <section class="case">
+      <veui-collapse
+        expanded
+        label="UI theme"
+        :ui="contextValue.theme ? `theme:${contextValue.theme}` : null"
+      >
+        <veui-input clearable/>
+      </veui-collapse>
+    </section>
+  </section>
+
+  <section>
     <h3>配置 Select 的 placeholder</h3>
-    <p>
-      <code>select.placeholder:</code>
+    <veui-stack class="config" gap="s">
+      <code>select.placeholder</code>
       <veui-input v-model="placeholder"/>
-    </p>
-    <veui-config-provider :value="contextValue">
-      <veui-select :options="options" clearable/>
-    </veui-config-provider>
+    </veui-stack>
+    <section class="case">
+      <veui-config-provider :value="contextValue">
+        <veui-select :options="options" clearable/>
+      </veui-config-provider>
+    </section>
   </section>
 
   <section>
     <h3>配置 Button 的 ui</h3>
-    <p style="display: flex">
-      <code>button.icons.loading:</code>
+    <veui-stack class="config" gap="s">
+      <code>button.icons.loading</code>
       <veui-switch v-model="loadingIcon"/>
-    </p>
-    <p style="display: flex">
-      <code>button.ui.style.default:</code>
+    </veui-stack>
+    <veui-stack class="config" gap="s">
+      <code>button.ui.style.default</code>
       <veui-radio-group
         v-model="style"
         :items="styles"
         style="display: inline-block"
       />
-    </p>
-    <veui-config-provider :value="contextValue">
-      <veui-button loading>按钮</veui-button>
-    </veui-config-provider>
+    </veui-stack>
+    <section class="case">
+      <veui-config-provider :value="contextValue">
+        <veui-button loading>按钮</veui-button>
+      </veui-config-provider>
+    </section>
   </section>
 
   <section>
     <h3>配置 Autocomplete 的搜索逻辑</h3>
-    <p>
-      <code>searchable.match/searchable.filter:</code>
+    <veui-stack class="config" gap="s">
+      <code>searchable.match/searchable.filter</code>
       <veui-radio-group
         v-model="searchLogic"
         :items="searchItems"
         style="display: inline-block"
       />
-    </p>
-    <veui-config-provider :value="contextValue">
-      <veui-autocomplete v-model="autoValue" :datasource="options" expanded/>
-    </veui-config-provider>
+    </veui-stack>
+    <section class="case">
+      <veui-config-provider :value="contextValue">
+        <veui-autocomplete
+          v-model="autoValue"
+          :datasource="options"
+          expanded
+        />
+      </veui-config-provider>
+    </section>
   </section>
 
   <section>
@@ -54,7 +88,7 @@
     <section>
       <veui-checkbox v-model="override"> Override icons </veui-checkbox>
     </section>
-    <section>
+    <section class="case">
       <veui-config-provider :value="config">
         <veui-form>
           <veui-field label="Date" tip="The date must be earlier than today">
@@ -62,9 +96,6 @@
           </veui-field>
         </veui-form>
       </veui-config-provider>
-    </section>
-    <section>
-      <veui-date-picker/>
     </section>
   </section>
 </article>
@@ -83,6 +114,8 @@ import {
   Field,
   DatePicker,
   Checkbox,
+  Stack,
+  Collapse,
   ui
 } from 'veui'
 import { IconQuestionCircleSolid, IconCalendarSolid } from 'dls-icons-vue'
@@ -100,7 +133,9 @@ export default {
     'veui-form': Form,
     'veui-field': Field,
     'veui-date-picker': DatePicker,
-    'veui-checkbox': Checkbox
+    'veui-checkbox': Checkbox,
+    'veui-stack': Stack,
+    'veui-collapse': Collapse
   },
   data () {
     return {
@@ -109,7 +144,8 @@ export default {
       searchLogic: '',
       loadingIcon: false,
       style: 'normal',
-      override: true
+      override: true,
+      d22: false
     }
   },
   computed: {
@@ -145,7 +181,8 @@ export default {
         ...(this.loadingIcon
           ? { 'button.icons.loading': ui.get('alert.icons').success }
           : {}),
-        'button.ui.style.default': this.style
+        'button.ui.style.default': this.style,
+        theme: this.d22 ? 'd22' : null
       }
     },
     config () {
@@ -162,6 +199,16 @@ export default {
 
 <style lang="less" scoped>
 section {
-  margin-bottom: 10px;
+  margin-bottom: 24px;
+}
+
+.config {
+  margin-bottom: 16px;
+}
+
+.case {
+  background-color: #f8f8f8;
+  padding: 16px;
+  border-radius: 6px;
 }
 </style>

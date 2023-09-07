@@ -6,7 +6,7 @@
   overflow: hidden;
   width: @dls-textarea-width;
   border: 1px solid @dls-input-border-color;
-  background-color: @dls-background-color-base-2;
+  // background-color: @dls-background-color-base-2;
   font-size: @dls-textarea-font-size-m;
   line-height: @dls-textarea-line-height;
   color: @dls-input-font-color;
@@ -51,11 +51,6 @@
     }
   }
 
-  &.@{veui-prefix}-readonly &-input,
-  &.@{veui-prefix}-disabled &-input {
-    background: transparent;
-  }
-
   &.@{veui-prefix}-focus {
     &,
     &:hover {
@@ -85,6 +80,7 @@
     float: right;
     width: 100%;
     padding: @dls-textarea-padding-y @dls-textarea-padding-x;
+    background: transparent;
 
     // 和外部容器的高度保持一致
     height: inherit;
@@ -211,5 +207,15 @@
       @dls-textarea-padding-y,
       dls-line-height(@dls-textarea-line-height, @dls-textarea-font-size-s)
     );
+  }
+
+  &[ui~="theme:d22"] {
+    &:not(.@{veui-prefix}-invalid) {
+      .veui-d22-input();
+    }
+
+    .@{veui-prefix}-textarea-input {
+      background: transparent;
+    }
   }
 }

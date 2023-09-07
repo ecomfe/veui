@@ -21,9 +21,11 @@
     </footer>
   </nav>
   <veui-select id="locale" v-model="locale" :options="locales"/>
-  <main id="content">
-    <router-view/>
-  </main>
+  <veui-config-provider :value="config">
+    <main id="content">
+      <router-view/>
+    </main>
+  </veui-config-provider>
   <v-console id="console"/>
 </div>
 </template>
@@ -33,6 +35,7 @@ import routes from './cases'
 import Console from './Console'
 import Icon from '@/components/Icon'
 import Select from '@/components/Select'
+import ConfigProvider from '@/components/ConfigProvider'
 import i18n from '@/managers/i18n'
 import 'vue-awesome/icons/brands/github'
 
@@ -54,7 +57,8 @@ export default {
   components: {
     'v-console': Console,
     'veui-icon': Icon,
-    'veui-select': Select
+    'veui-select': Select,
+    'veui-config-provider': ConfigProvider
   },
   data () {
     return {
@@ -63,7 +67,10 @@ export default {
       locales: LOCALES,
       locale: i18n.locale,
 
-      collapsedNav: false
+      collapsedNav: false,
+      config: {
+        theme: 'd22'
+      }
     }
   },
   watch: {
@@ -75,8 +82,8 @@ export default {
 </script>
 
 <style lang="less">
-@import "~less-plugin-est/src/all.less";
-@import "~veui-theme-dls/common.less";
+@import '~less-plugin-est/src/all.less';
+@import '~veui-theme-dls/common.less';
 @veui-root-element: veui-x-demo;
 
 @nav-width: 240px;
@@ -90,10 +97,7 @@ body {
 
 #app {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
 
   &.collapse {
     @collapse-width: 30px;
@@ -117,7 +121,7 @@ body {
 
 #main-nav,
 #console {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
     sans-serif;
 }
 
@@ -161,7 +165,7 @@ body {
   }
 
   ul {
-    height: ~"calc(100vh - 105px)";
+    height: ~'calc(100vh - 105px)';
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -230,7 +234,7 @@ main {
   .absolute(0, 0, 0, @nav-width);
   overflow: scroll;
   padding: 1em 4em 0;
-  height: ~"calc(100vh - @{title-height})";
+  height: ~'calc(100vh - @{title-height})';
   transition: height 0.2s;
 
   h1 {
@@ -241,7 +245,7 @@ main {
   }
 
   .console-expanded & {
-    height: ~"calc(100vh - @{console-height} - @{title-height})";
+    height: ~'calc(100vh - @{console-height} - @{title-height})';
   }
 }
 

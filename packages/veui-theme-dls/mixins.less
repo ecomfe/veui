@@ -41,7 +41,8 @@
 }
 
 .dls-focus-ring(@border-color: @dls-border-color-focus, @shadow: @dls-shadow-focus) {
-  border: 1px solid @border-color;
+  border: 1px solid;
+  border-color: @border-color !important;
   box-shadow: @shadow;
 }
 
@@ -122,5 +123,29 @@
   &-enter-active,
   &-leave-active {
     .veui-transition(opacity);
+  }
+}
+
+.veui-d22-input() {
+  border-color: transparent;
+  background-color: @dls-color-translucent-1;
+  .veui-transition(background-color, border-color, color, box-shadow);
+
+  &:hover {
+    background-color: @dls-background-color-base-1;
+    border-color: @dls-color-brand-4;
+  }
+
+  &.@{veui-prefix}-focus {
+    background-color: @dls-background-color-base-1;
+  }
+
+  &.@{veui-prefix}-readonly {
+    background-color: @dls-color-translucent-2;
+  }
+
+  &.@{veui-prefix}-disabled {
+    background-color: @dls-color-translucent-1;
+    border-color: transparent;
   }
 }

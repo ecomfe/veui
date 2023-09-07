@@ -100,11 +100,7 @@ export default {
       type: String,
       required: true
     },
-    expanded: {
-      validator (val) {
-        return typeof val === 'boolean'
-      }
-    },
+    expanded: Boolean,
     togglePosition: togglePositionProp,
     disabled: Boolean,
     name: {
