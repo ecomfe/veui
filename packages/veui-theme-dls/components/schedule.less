@@ -1,5 +1,16 @@
 @import "../lib.less";
 
+.veui-focus-shadow(@color: fadeout(@dls-color-gray-5, 50%)) {
+  box-shadow: 0 0 0 2px @color;
+  outline: none;
+}
+
+.veui-focus-shadow(@color, @offset) {
+  outline: 2px solid @color;
+  outline-offset: @offset;
+  box-shadow: none;
+}
+
 .@{veui-prefix}-schedule {
   width: 653px;
   border: 1px solid @dls-line-color-1;
@@ -9,7 +20,7 @@
   &-header {
     overflow: hidden;
     padding: 10px 20px;
-    font-size: @veui-font-size-small;
+    font-size: @dls-font-size-0;
     line-height: 24px;
     border-bottom: 1px solid @dls-line-color-1;
   }
@@ -33,8 +44,8 @@
     }
 
     &-selected {
-      background-color: @veui-gray-color-7;
-      color: @veui-text-color-strong;
+      background-color: @dls-color-gray-2;
+      color: @dls-color-gray-9;
     }
   }
 
@@ -78,7 +89,7 @@
       float: right;
       color: @dls-foreground-color-neutral-weak;
       margin-bottom: 10px;
-      font-size: @veui-font-size-small;
+      font-size: @dls-font-size-0;
 
       &-item {
         float: left;
@@ -148,7 +159,7 @@
 
         &:hover,
         &[data-focus-visible-added] {
-          color: @veui-brand-color-10;
+          color: @dls-color-brand-1;
         }
 
         &[data-focus-visible-added] {
@@ -164,11 +175,11 @@
         &.@{veui-prefix}-schedule-selected {
           &:hover,
           &[data-focus-visible-added] {
-            color: @veui-brand-color-7;
+            color: @dls-color-brand-3;
           }
 
           &:hover:active {
-            color: @veui-brand-color-6;
+            color: @dls-color-brand-2;
           }
         }
 
@@ -186,7 +197,7 @@
 
       td {
         position: relative;
-        border: 1px solid @veui-gray-color-6;
+        border: 1px solid @dls-color-gray-2;
 
         &.@{veui-prefix}-schedule-selected
           + .@{veui-prefix}-schedule-selected
@@ -202,7 +213,7 @@
     &-selected {
       pointer-events: none; // for Firefox
       .absolute(0, _, _, 0);
-      font-size: @veui-font-size-small;
+      font-size: @dls-font-size-0;
       color: @dls-foreground-color-neutral;
 
       td {
