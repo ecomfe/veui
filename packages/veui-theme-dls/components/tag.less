@@ -63,6 +63,15 @@
     &[ui~="reverse"] {
       .apply-flip-color(reverse, @dls-tag-color);
     }
+
+    &[ui~="theme:d22"] {
+      .apply-color(fade(@dls-color-translucent-2, 100%), false);
+      color: @dls-foreground-color-neutral;
+
+      .@{veui-prefix}-tag-remove {
+        color: @dls-foreground-color-neutral-weak;
+      }
+    }
   }
 
   .make-tag-color(@color-name) {
@@ -98,14 +107,21 @@
     cursor: not-allowed;
   }
 
-  .apply-color(@color) {
+  .apply-color(@color, @pad: true) {
     border: 1px solid fade(@color, percentage(@dls-tag-border-opacity));
     color: @color;
-    // 将 rgba 转成相近的 rgb
-    background-color: multiply(
-      fade(@color, percentage(@dls-tag-background-opacity)),
-      #fff
-    );
+
+    .bg(true) {
+      // 将 rgba 转成相近的 rgb
+      background-color: multiply(
+        fade(@color, percentage(@dls-tag-background-opacity)),
+        #fff
+      );
+    }
+    .bg(false) {
+      background-color: fade(@color, percentage(@dls-tag-background-opacity));
+    }
+    .bg(@pad);
 
     &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
       &:hover {

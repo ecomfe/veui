@@ -512,4 +512,29 @@
     opacity: 0;
     margin-left: -@dls-button-content-spacing;
   }
+
+  &[ui~="theme:d22"][ui~="normal"]:not([ui~="strong"]) {
+    background-color: @dls-color-translucent-1;
+
+    &:hover {
+      background-color: @dls-color-translucent-2;
+    }
+
+    &:active,
+    &.@{veui-prefix}-active {
+      background-color: @dls-color-translucent-3;
+    }
+
+    &[data-focus-visible-added]:not(.@{veui-prefix}-disabled):not(&-loading) {
+      background-color: @dls-color-translucent-2;
+    }
+
+    &.@{veui-prefix}-disabled {
+      background-color: @dls-color-translucent-1;
+    }
+
+    &.@{veui-prefix}-button-loading {
+      background-color: @dls-color-translucent-3;
+    }
+  }
 }
