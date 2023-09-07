@@ -1,15 +1,14 @@
 import {
   IconUpload,
   IconTrash,
-  IconCheckCircle,
-  IconTimesCircle,
   IconFile,
   IconImageAdd,
+  IconImageSolid,
   IconVideoAdd,
+  IconVideoSolid,
   IconMediaAdd,
-  IconExclamationCircle,
+  IconVideoFilmSolid,
   IconLoading,
-  IconQuestionCircle,
   IconPlayCircle,
   IconZoomIn
 } from 'dls-icons-vue'
@@ -20,15 +19,11 @@ ui.defaults(
     icons: {
       upload: IconUpload,
       clear: IconTrash,
-      success: IconCheckCircle,
-      failure: IconTimesCircle,
       file: IconFile,
       addImage: IconImageAdd,
       addVideo: IconVideoAdd,
       addMedia: IconMediaAdd,
-      alert: IconExclamationCircle,
       loading: IconLoading,
-      message: IconQuestionCircle,
       previewImage: IconZoomIn,
       previewVideo: IconPlayCircle
     },
@@ -47,6 +42,18 @@ ui.defaults(
       preview: 'auto',
       media: 'basic',
       message: 's'
+    },
+    themes: {
+      d22: {
+        icons: {
+          addImage: IconImageSolid,
+          addVideo: IconVideoSolid,
+          addMedia: IconVideoFilmSolid
+        },
+        parts: {
+          media: 'normal'
+        }
+      }
     }
   },
   'uploader'
