@@ -1,6 +1,7 @@
 /* stylelint-disable at-rule-no-unknown */
 /* stylelint-disable no-invalid-position-at-import-rule */
 @plugin "./functions";
+
 @import "~less-plugin-est/src/all.less";
 @import "./variables.less";
 
@@ -60,17 +61,6 @@
  */
 .veui-overlay-shadow() {
   box-shadow: 0 1px 4px fadeout(#000, 80%);
-}
-
-.veui-focus-shadow(@color: fadeout(@veui-gray-color-4, 50%)) {
-  box-shadow: 0 0 0 2px @color;
-  outline: none;
-}
-
-.veui-focus-shadow(@color, @offset) {
-  outline: 2px solid @color;
-  outline-offset: @offset;
-  box-shadow: none;
 }
 
 .veui-search-result() {
