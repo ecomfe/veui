@@ -204,7 +204,9 @@
 
       &:hover {
         &
-          > .@{veui-prefix}-uploader-input-label-media:not(.@{veui-prefix}-disabled)
+          > .@{veui-prefix}-uploader-input-label-media:not(
+            .@{veui-prefix}-disabled
+          )
           + .@{veui-prefix}-uploader-entries-container {
           opacity: 1;
         }
@@ -461,5 +463,25 @@
 
   &-hide {
     display: none;
+  }
+
+  &[ui~="theme:d22"] {
+    .@{veui-prefix}-uploader {
+      &-input-label-media {
+        .@{veui-prefix}-icon {
+          color: @dls-foreground-color-neutral-dim;
+        }
+      }
+
+      &-list-media-container {
+        border-color: transparent;
+        background-color: @dls-color-translucent-1;
+
+        &.@{veui-prefix}-uploader-list-media-container-upload,
+        &.@{veui-prefix}-uploader-list-media-container-failure {
+          background-color: transparent;
+        }
+      }
+    }
   }
 }

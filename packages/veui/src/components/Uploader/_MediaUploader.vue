@@ -196,7 +196,9 @@
               [$c('disabled')]: pickerStatus.disabled
             }"
             :tabindex="disabled ? null : 0"
-            :ui="uiParts.media"
+            :ui="`${uiProps.theme ? `theme:${uiProps.theme} ` : ''}${
+              uiParts.media
+            }`"
             :disabled="pickerStatus.disabled"
             @keydown.enter.space.prevent="handleEnter"
             @click="handleAdd"
