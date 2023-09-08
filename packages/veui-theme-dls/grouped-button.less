@@ -40,3 +40,66 @@
     }
   }
 }
+
+.veui-d22-button-group () {
+  @padding: @dls-padding-unit * 0.5;
+
+  .@{veui-prefix}-button {
+    margin-left: 0;
+    background-color: @dls-color-translucent-1;
+    border-width: @padding;
+    border-color: transparent !important;
+
+    &[data-focus-visible-added] {
+      box-shadow: none;
+      border-width: @padding;
+
+      &::after {
+        .dls-focus-ring();
+      }
+    }
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      .veui-transition(background-color);
+    }
+
+    &::after {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-radius: @dls-border-radius-1;
+    }
+
+    &::before {
+      top: 50%;
+      left: -@padding;
+      width: 1px;
+      height: @dls-height-unit * 3;
+      transform: translate(-50%, -50%);
+    }
+
+    &:not(.@{veui-prefix}-disabled):hover,
+    &[data-focus-visible-added],
+    &-selected {
+      &::after {
+        background-color: @dls-background-color-base-1;
+      }
+    }
+  }
+
+  .@{veui-prefix}-button:not(:not(.@{veui-prefix}-disabled):hover):not(
+      .@{veui-prefix}-button-selected
+    ):not([data-focus-visible-added])
+    + .@{veui-prefix}-button:not(:not(.@{veui-prefix}-disabled):hover):not(
+      .@{veui-prefix}-button-selected
+    ):not([data-focus-visible-added]) {
+    &::before {
+      background-color: @dls-color-translucent-3;
+    }
+  }
+}
