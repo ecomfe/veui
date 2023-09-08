@@ -21,6 +21,7 @@
     </footer>
   </nav>
   <veui-select id="locale" v-model="locale" :options="locales"/>
+  <veui-select id="theme" v-model="config.theme" :options="themes"/>
   <veui-config-provider :value="config">
     <main id="content">
       <router-view/>
@@ -68,8 +69,12 @@ export default {
       locale: i18n.locale,
 
       collapsedNav: false,
+      themes: [
+        { label: 'D20', value: '' },
+        { label: 'D22', value: 'd22' }
+      ],
       config: {
-        theme: 'd22'
+        theme: ''
       }
     }
   },
@@ -261,6 +266,14 @@ main {
   top: 1.2em;
   right: 4em;
   width: 135px;
+  z-index: 200;
+}
+
+#theme {
+  position: fixed;
+  top: 1.2em;
+  right: calc(4em + 147px);
+  width: 80px;
   z-index: 200;
 }
 </style>
