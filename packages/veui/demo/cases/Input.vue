@@ -8,12 +8,10 @@
     <section>
       <h3>自动填充适配</h3>
       <veui-input
-        ui="inline"
         placeholder="请输入用户名"
         name="username"
         autocomplete="username"
         clearable
-        maxlength="10"
         select-on-focus
         @autofillchange="handleAutofillChange"
       />
@@ -316,7 +314,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~less-plugin-est/src/all.less";
+@import '~less-plugin-est/src/all.less';
 
 section {
   margin-bottom: 40px;
