@@ -28,7 +28,7 @@
     color: @dls-checkbox-icon-color-strong;
     border: @dls-checkbox-icon-size-strong / 2 solid transparent;
     .border-color(currentColor, currentColor, _, _);
-    .veui-transition(border-color);
+    .veui-transition(color);
 
     & + .@{veui-prefix}-icon:last-child {
       margin-right: 0;
@@ -67,7 +67,9 @@
     .@{veui-prefix}-disabled:not(.@{veui-prefix}-button-selected)
     &-checkmark,
   &[ui~="simple"]
-    .@{veui-prefix}-button:not(.@{veui-prefix}-button-selected):not(:hover):not(:active):not([data-focus-visible-added])
+    .@{veui-prefix}-button:not(.@{veui-prefix}-button-selected):not(:hover):not(
+      :active
+    ):not([data-focus-visible-added])
     &-checkmark {
     border-color: transparent;
   }
@@ -92,5 +94,16 @@
         @dls-button-min-width-stable-s
       );
     }
+  }
+
+  &[ui~="theme:d22"]:not([ui~="simple"]) &-checkmark {
+    @padding: @dls-padding-unit * 0.5;
+
+    top: dls-sum(@padding, -1px, @dls-checkbox-icon-spacing-strong);
+    right: dls-sum(@padding, -1px, @dls-checkbox-icon-spacing-strong);
+  }
+
+  &[ui~="theme:d22"]:not([ui~="simple"]) {
+    .veui-d22-button-group();
   }
 }

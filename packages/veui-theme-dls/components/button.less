@@ -10,7 +10,6 @@
   .veui-button-transition();
   justify-content: center;
   align-items: center;
-  .veui-stub();
 
   &-native {
     display: flex;
@@ -24,6 +23,7 @@
     cursor: inherit;
     padding: 0;
     pointer-events: none;
+    .veui-stub();
   }
 
   .make-metrics(@size) {
@@ -80,7 +80,7 @@
     .dls-focus-ring(
       @dls-button-border-color-focus,
       @dls-button-shadow-focus
-    ) !important;
+    );
   }
 
   &-loading {
