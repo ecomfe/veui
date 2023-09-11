@@ -671,6 +671,62 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
+  it('should function filter columns correctly', async () => {
+    let wrapper = mount({
+      components: {
+        'veui-table': Table,
+        'veui-table-column': Column
+      },
+      data () {
+        return {
+          data: [
+            {
+              field1: 'apple',
+              field2: 11,
+              field3: true
+            },
+            {
+              field1: 'banana',
+              field2: 22,
+              field3: false
+            },
+            {
+              field1: 'pineapple',
+              field2: 33,
+              field3: true
+            }
+          ],
+          columns: ['field1'],
+          filterColumns: (key) => {
+            return this.columns.includes(key)
+          }
+        }
+      },
+      template: `
+          <veui-table :data="data" :column-filter="filterColumns">
+            <veui-table-column field="field1" title="field1"/>
+            <veui-table-column field="field2" title="field2"/>
+            <veui-table-column field="field3" title="field3"/>
+            <template slot="foot">An awesome table foot!</template>
+          </veui-table>`
+    })
+
+    let { vm } = wrapper
+    expect(wrapper.findAll('thead th').length).to.equal(1)
+
+    wrapper.vm.columns.push('field2')
+
+    await vm.$nextTick()
+    expect(wrapper.findAll('thead th').length).to.equal(2)
+
+    wrapper.vm.columns.splice(1)
+
+    await vm.$nextTick()
+    expect(wrapper.findAll('thead th').length).to.equal(1)
+
+    wrapper.destroy()
+  })
+
   it('should select all and cancel all selection correctly', async () => {
     let wrapper = mount({
       components: {
