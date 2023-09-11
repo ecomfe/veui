@@ -1,8 +1,20 @@
+## 2.15.0 "🧊 Ice" (2023-09-12)
+
+### 💡 主要变更
+
+- [+] 新增内置的子主题 D22，允许通过指定 `ui="theme:d22"` 方式、或者为 `ConfigProvider` 组件传入 `{ theme: 'd22' }` 来指定使用。<!-- #veui-theme-dls #ConfigProvider #Uploader #Input #Textarea #NumberInput #SearchBox #Autocomplete #Button #Select #Cascader #DatePicker #TimePicker #InputGroup #Tag #Pagination #RadioButtonGroup #CheckButtonGroup -->
+- [+] `Table` 组件的 `column-filter` prop 现在支持传入函数，允许更灵活地控制列是否展示。<!-- #Table -->
+- [+] `Column` 组件新增 `ellipsis` prop，允许设置列内容超出时自动截断。同时 `Column` 组件的 `ellipsis` / `tooltip` prop 现在均可通过 `tablecolumn.ellipsis` / `tablecolumn.tooltip` 配置项进行全局配置。（`v2.14.6` 起表格内容不再默认截断，可以通过配置 `tablecolumn.ellipsis` 快速设置全局自动截断。）<!-- #Table #Column -->
+
+### 🐞 问题修复
+
+- [^] 修复 `Table` 组件的滚动条样式在有 footer 时不正确的问题。<!-- #Table -->
+
 ## 2.14.6 (2023-08-25)
 
 ### ⚠️ 非兼容性变更
 
-- [^] `Table` 组件只对设置了 `tooltip` 属性的 `Column` 进行默认的文字截断。<!-- #Table #Column -->
+- [^] `Table` 组件只对设置了 `tooltip` prop 的 `Column` 进行默认的文字截断。<!-- #Table #Column -->
 
 ### 🐞 问题修复
 
