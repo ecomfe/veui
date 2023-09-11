@@ -120,8 +120,8 @@ importers:
         specifier: ^2.28.0
         version: 2.28.0
       dls-graphics:
-        specifier: ^1.4.2
-        version: 1.4.2
+        specifier: ^1.4.3
+        version: 1.4.3
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -199,8 +199,8 @@ importers:
         specifier: ~3.20.0
         version: 3.20.0(vue@2.6.14)
       dls-illustrations-vue:
-        specifier: ^1.4.2
-        version: 1.4.2(vue@2.6.14)
+        specifier: ^1.4.3
+        version: 1.4.3(vue@2.6.14)
       esbuild:
         specifier: ^0.12.29
         version: 0.12.29
@@ -386,8 +386,8 @@ importers:
         specifier: ~3.20.0
         version: 3.20.0(vue@2.6.14)
       dls-illustrations-vue:
-        specifier: ^1.4.2
-        version: 1.4.2(vue@2.6.14)
+        specifier: ^1.4.3
+        version: 1.4.3(vue@2.6.14)
       focus-visible:
         specifier: ^4.1.5
         version: 4.1.5
@@ -6576,8 +6576,8 @@ packages:
       color-converters: 0.1.1
     dev: false
 
-  /dls-graphics@1.4.2:
-    resolution: {integrity: sha512-+DOraMDkA6G7+uNPHjFOOHe+Ofd0I+yaVbz2cbCLqRyakeQvwON17gq6Ntv1LGBI/17sUhEiNkEfgwxQGXyLEw==}
+  /dls-graphics@1.4.3:
+    resolution: {integrity: sha512-Z6uE++BTxa+EQNlGfSQy9cHRc92a1Y5HBANNkuRvec4jADc3N9i+eEyJD6qPcuqLCeWKGKFhihkn2+BjvjkmZQ==}
 
   /dls-icons-data@3.20.0:
     resolution: {integrity: sha512-ESvYUj2055yWsXG3aS2PKY06v3/6ClOsN35q/wRAZDWaDLPjr5WzR0wQk1J7HHHLvmqDRotyjr5QKwRv5kuziQ==}
@@ -6590,12 +6590,12 @@ packages:
       dls-icons-data: 3.20.0
       vue: 2.6.14
 
-  /dls-illustrations-vue@1.4.2(vue@2.6.14):
-    resolution: {integrity: sha512-euF+l3aN+Uky9f5sMxnTJ05JvWrF8CMnGUekHI/5TdS+TJB1+iUOovmj00fMp4tqFkhMm/JPhFzaLnxamcSqaA==}
+  /dls-illustrations-vue@1.4.3(vue@2.6.14):
+    resolution: {integrity: sha512-uhNnanbjUbXGwot2V/OAd0pgiWnW3m0KxXnwRE8ts0xVIwvOM831povo6VvPKOfdCYH5qngno+k5EDM3wkMJgg==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-graphics: 1.4.2
+      dls-graphics: 1.4.3
       vue: 2.6.14
 
   /dns-equal@1.0.0:
@@ -8052,7 +8052,7 @@ packages:
     resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==}
     engines: {node: '>=12'}
     dependencies:
-      graceful-fs: 4.2.11
+      graceful-fs: 4.2.10
       jsonfile: 6.1.0
       universalify: 2.0.0
     dev: true
@@ -9789,7 +9789,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.11
+      graceful-fs: 4.2.10
     dev: true
 
   /jsprim@1.4.2:
