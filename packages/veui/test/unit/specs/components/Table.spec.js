@@ -2409,7 +2409,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should support tooltip prop on Columns', async () => {
+  it('should support ellipsis/tooltip prop on Columns', async () => {
     const loremIpsum =
       'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!'
 
@@ -2423,8 +2423,14 @@ describe('components/Table', function () {
           return {
             selectable: true,
             data: [
-              { id: 1, foo: loremIpsum, bar: loremIpsum, baz: loremIpsum },
-              { id: 2, foo: 'foo', bar: 'bar', baz: 'baz' }
+              {
+                id: 1,
+                foo: loremIpsum,
+                bar: loremIpsum,
+                baz: loremIpsum,
+                qux: loremIpsum
+              },
+              { id: 2, foo: 'foo', bar: 'bar', baz: 'baz', qux: 'qux' }
             ]
           }
         },
@@ -2451,7 +2457,12 @@ describe('components/Table', function () {
               field="baz"
               title="Baz"
               :width="200"
-              :tooltip="null"
+            />
+            <veui-table-column
+              field="qux"
+              title="Qux"
+              :width="200"
+              ellipsis
             />
           </veui-table>`
       },
@@ -2460,9 +2471,11 @@ describe('components/Table', function () {
       }
     )
 
-    let [longFoo, longBar, longBaz, shortFoo] = wrapper.findAll(
+    let [longFoo, longBar, longBaz, longQux, shortFoo] = wrapper.findAll(
       'tbody .veui-table-cell-content'
     ).wrappers
+
+    expect(longQux.classes('veui-table-cell-content-ellipsis')).to.equal(true)
 
     longFoo.trigger('mouseenter')
     let warmup = config.get('tooltip.warmup')
