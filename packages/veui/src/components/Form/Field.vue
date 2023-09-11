@@ -13,6 +13,11 @@
 >
   <div v-if="!abstract && (label || $slots.label)" :class="$c('field-label')">
     <slot name="label">
+      <veui-icon
+        v-if="isRequired"
+        :class="$c('field-required-symbol')"
+        :name="icons.required"
+      />
       <veui-label>{{ label }}</veui-label>
     </slot>
     <div v-if="tip || $slots.tip" :class="$c('field-tip')">
