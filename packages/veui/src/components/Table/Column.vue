@@ -3,7 +3,17 @@ import { useChild } from '../../mixins/coupled'
 import useControllable from '../../mixins/controllable'
 import colgroup from '../../mixins/colgroup'
 import { renderSlot } from '../../utils/helper'
+import config from '../../managers/config'
+import useConfig from '../../mixins/config'
 import '../../common/global'
+
+config.defaults(
+  {
+    tooltip: false,
+    ellipsis: false
+  },
+  'tablecolumn'
+)
 
 let renderBody = (vm) => (item) =>
   renderSlot(vm, 'default', item) || item[vm.field]
@@ -18,7 +28,8 @@ let col = useChild('table-column', 'colgroup', [
   'group',
   'allowedOrders',
   'desc',
-  'tooltip',
+  ['ellipsis', 'realEllipsis'],
+  ['tooltip', 'realTooltip'],
   ['filterValue', 'realFilterValue'],
   'filterTitle',
   ['filterOptions', 'realFilterOptions'],
@@ -64,7 +75,8 @@ export default {
     colgroup,
     useControllable({
       prop: 'filterValue'
-    })
+    }),
+    useConfig('config', 'tablecolumn')
   ],
   props: {
     title: String,
@@ -92,6 +104,7 @@ export default {
     filterTitle: String,
     filterOptions: Array,
     filterMultiple: Boolean,
+    ellipsis: Boolean,
     tooltip: [Boolean, Function]
   },
   computed: {
@@ -117,6 +130,12 @@ export default {
         ]
       }
       return this.filterOptions
+    },
+    realEllipsis () {
+      return this.ellipsis || this.config['tablecolumn.ellipsis']
+    },
+    realTooltip () {
+      return this.tooltip || this.config['tablecolumn.tooltip']
     }
   },
   methods: {
