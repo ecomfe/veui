@@ -3766,7 +3766,7 @@ packages:
     resolution: {integrity: sha512-eM9d/swFopRt5gdJ7jrpCwgvEMIayITpojhkkSMRsFHYuH5bkSQ4p/9qTEHtmNudUZh22Tehu7I6CxAW0IXTKA==}
     dependencies:
       browserslist: 4.20.3
-      caniuse-lite: 1.0.30001338
+      caniuse-lite: 1.0.30001532
       normalize-range: 0.1.2
       num2fraction: 1.2.2
       picocolors: 0.2.1
@@ -4758,7 +4758,7 @@ packages:
   /browserslist@3.2.8:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     dependencies:
-      caniuse-lite: 1.0.30001338
+      caniuse-lite: 1.0.30001532
       electron-to-chromium: 1.4.136
     dev: true
 
@@ -4766,7 +4766,7 @@ packages:
     resolution: {integrity: sha512-NBhymBQl1zM0Y5dQT/O+xiLP9/rzOIQdKM/eMJBAq7yBgaB6krIYLGejrwVYnSHZdqjscB1SPuAjHwxjvN6Wdg==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     dependencies:
-      caniuse-lite: 1.0.30001338
+      caniuse-lite: 1.0.30001532
       electron-to-chromium: 1.4.136
       escalade: 3.1.1
       node-releases: 2.0.4
@@ -4967,13 +4967,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.20.3
-      caniuse-lite: 1.0.30001338
+      caniuse-lite: 1.0.30001532
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: true
 
-  /caniuse-lite@1.0.30001338:
-    resolution: {integrity: sha512-1gLHWyfVoRDsHieO+CaeYe7jSo/MT7D7lhaXUiwwbuR5BwQxORs0f1tAwUSQr3YbxRXJvxHM/PA5FfPQRnsPeQ==}
+  /caniuse-lite@1.0.30001532:
+    resolution: {integrity: sha512-FbDFnNat3nMnrROzqrsg314zhqN5LGQ1kyyMk2opcrwGbVGpHRhgCWtAgD5YJUqNAiQ+dklreil/c3Qf1dfCTw==}
     dev: true
 
   /case-sensitive-paths-webpack-plugin@2.4.0:
