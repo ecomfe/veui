@@ -32,6 +32,13 @@ uiManager.defaults(
     },
     parts: {
       foo: 'secondary'
+    },
+    themes: {
+      d22: {
+        parts: {
+          foo: 'primary'
+        }
+      }
     }
   },
   'bar'
@@ -111,7 +118,7 @@ describe('mixins/ui', () => {
 
     expect(uiBF2.includes('medium')).to.equal(false)
     expect(uiBF2.includes('large')).to.equal(true)
-    expect(uiBF2.includes('primary')).to.equal(false)
+    expect(uiBF2.includes('primary')).to.equal(true)
     expect(uiBF2.includes('theme:d22')).to.equal(true)
 
     wrapper.destroy()
