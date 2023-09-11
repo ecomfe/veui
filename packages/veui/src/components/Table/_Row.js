@@ -278,7 +278,9 @@ export default {
                 <div
                   class={{
                     [this.$c('table-cell-content')]: true,
-                    [this.$c('table-cell-content-ellipsis')]: !!col.tooltip
+                    [this.$c('table-cell-content-ellipsis')]: !!(
+                      col.ellipsis || col.tooltip
+                    )
                   }}
                   {...(col.tooltip
                     ? {
