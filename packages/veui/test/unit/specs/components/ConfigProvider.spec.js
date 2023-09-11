@@ -1,7 +1,9 @@
-import { mount } from '@vue/test-utils'
 import ConfigProvider from '@/components/ConfigProvider'
+import Collapse from '@/components/Collapse'
+import Input from '@/components/Input'
 import config from '@/managers/config'
 import useConfig from '@/mixins/config'
+import { mount } from '../../../utils'
 
 const TEST_FIELD = '__veui_test.config'
 const TEST_OBJ_FIELD = '__veui_test.obj'
@@ -26,25 +28,20 @@ describe('components/ConfigProvider', function () {
   this.timeout(10000)
 
   it('should ConfigProvider works correctly', async () => {
-    let wrapper = mount(
-      {
-        data () {
-          return {
-            context: undefined
-          }
-        },
-        render () {
-          return (
-            <ConfigProvider value={this.context}>
-              <DummyConsumer />
-            </ConfigProvider>
-          )
+    let wrapper = mount({
+      data () {
+        return {
+          context: undefined
         }
       },
-      {
-        sync: false
+      render () {
+        return (
+          <ConfigProvider value={this.context}>
+            <DummyConsumer />
+          </ConfigProvider>
+        )
       }
-    )
+    })
 
     let { vm } = wrapper
     expect(wrapper.text()).to.equal(JSON.stringify(config.get(TEST_FIELD)))
@@ -58,25 +55,20 @@ describe('components/ConfigProvider', function () {
   })
 
   it('should make config consumers only reactive to specific prefixes', async () => {
-    let wrapper = mount(
-      {
-        data () {
-          return {
-            context: undefined
-          }
-        },
-        render () {
-          return (
-            <ConfigProvider value={this.context}>
-              <DummyConsumer ref="dummy" />
-            </ConfigProvider>
-          )
+    let wrapper = mount({
+      data () {
+        return {
+          context: undefined
         }
       },
-      {
-        sync: false
+      render () {
+        return (
+          <ConfigProvider value={this.context}>
+            <DummyConsumer ref="dummy" />
+          </ConfigProvider>
+        )
       }
-    )
+    })
 
     const { vm } = wrapper
     await vm.$nextTick()
@@ -97,27 +89,22 @@ describe('components/ConfigProvider', function () {
   })
 
   it('should config ui/icons correctly.', async () => {
-    let wrapper = mount(
-      {
-        data () {
-          return {
-            context: {
-              [`${TEST_OBJ_FIELD}.foo`]: 'foo'
-            }
+    let wrapper = mount({
+      data () {
+        return {
+          context: {
+            [`${TEST_OBJ_FIELD}.foo`]: 'foo'
           }
-        },
-        render () {
-          return (
-            <ConfigProvider value={this.context}>
-              <DummyConsumer ref="dummy" />
-            </ConfigProvider>
-          )
         }
       },
-      {
-        sync: false
+      render () {
+        return (
+          <ConfigProvider value={this.context}>
+            <DummyConsumer ref="dummy" />
+          </ConfigProvider>
+        )
       }
-    )
+    })
 
     const { vm } = wrapper
     let dummy = vm.$refs.dummy
@@ -141,6 +128,38 @@ describe('components/ConfigProvider', function () {
     await vm.$nextTick()
     expect(dummy.config[TEST_OBJ_FIELD].foo).to.equal('bar')
     expect(dummy.config[TEST_OBJ_FIELD].baz).to.equal('baz1')
+    wrapper.destroy()
+  })
+
+  it('should config ui sub themes correctly.', async () => {
+    let wrapper = mount({
+      data () {
+        return {
+          context: {
+            theme: 'd22'
+          }
+        }
+      },
+      render () {
+        return (
+          <div>
+            <h1>Hello</h1>
+            <ConfigProvider value={this.context}>
+              <Collapse label="Test" expanded>
+                <Input />
+              </Collapse>
+            </ConfigProvider>
+          </div>
+        )
+      }
+    })
+
+    const collapse = wrapper.find(Collapse)
+    const input = collapse.find(Input)
+
+    expect(collapse.attributes('ui').includes('theme:d22')).to.equal(true)
+    expect(input.attributes('ui').includes('theme:d22')).to.equal(true)
+
     wrapper.destroy()
   })
 })
