@@ -5,6 +5,7 @@ const uiManager = Object.assign(Object.create(config), {
   setPropDefault,
   setProp,
   setIcon,
+  setIllustration,
   setPart
 })
 
@@ -77,6 +78,10 @@ function setProp (component, prop, propDef) {
 
 function setIcon (component, icon, iconDef) {
   set('icons', component, icon, iconDef)
+}
+
+function setIllustration (component, illustration, illustrationDef) {
+  set('illustrations', component, illustration, illustrationDef)
 }
 
 function setPart (component, part, partDef) {

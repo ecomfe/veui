@@ -105,6 +105,7 @@ interface BooleanPropDef {
 
 type PropDef = { inherited?: boolean } & (EnumPropDef | BooleanPropDef)
 type IconDef = string | unknown
+type IllustrationDef = unknown
 type PartDef = string | ((props: Record<string, unknown>) => string)
 
 interface PropDefs {
@@ -115,16 +116,22 @@ interface IconDefs {
   [key: string]: IconDef
 }
 
+interface IllustrationDefs {
+  [key: string]: IllustrationDef
+}
+
 interface PartDefs {
   [key: string]: PartDef
 }
 
-type UIConfigKey = 'ui' | 'icons' | 'parts'
+type UIConfigKey = 'ui' | 'icons' | 'illustrations' | 'parts'
 
 type UIConfigMap<K extends UIConfigKey> = K extends 'ui'
   ? PropDefs
   : K extends 'icons'
   ? IconDefs
+  : K extends 'illustrations'
+  ? IllustrationDefs
   : K extends 'parts'
   ? PartDefs
   : never
@@ -164,6 +171,11 @@ interface UIManager extends ConfigManager {
   setPropDefault(component: string, prop: string, value: string): void
   setProp(component: string, prop: string, propDef: PropDef): void
   setIcon(component: string, icon: string, iconDef: IconDef): void
+  setIllustration(
+    component: string,
+    illustration: string,
+    illustrationDef: IllustrationDef
+  ): void
   setPart(component: string, part: string, partDef: PartDef): void
 }
 
