@@ -196,8 +196,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.20.0
-        version: 3.20.0(vue@2.6.14)
+        specifier: ~3.21.0
+        version: 3.21.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.6.14)
@@ -383,8 +383,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.20.0
-        version: 3.20.0(vue@2.6.14)
+        specifier: ~3.21.0
+        version: 3.21.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.6.14)
@@ -447,8 +447,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.20.0
-        version: 3.20.0(vue@2.6.14)
+        specifier: ~3.21.0
+        version: 3.21.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -6579,15 +6579,15 @@ packages:
   /dls-graphics@1.4.3:
     resolution: {integrity: sha512-Z6uE++BTxa+EQNlGfSQy9cHRc92a1Y5HBANNkuRvec4jADc3N9i+eEyJD6qPcuqLCeWKGKFhihkn2+BjvjkmZQ==}
 
-  /dls-icons-data@3.20.0:
-    resolution: {integrity: sha512-ESvYUj2055yWsXG3aS2PKY06v3/6ClOsN35q/wRAZDWaDLPjr5WzR0wQk1J7HHHLvmqDRotyjr5QKwRv5kuziQ==}
+  /dls-icons-data@3.21.0:
+    resolution: {integrity: sha512-sTGK4VlAlmYNae8H//oHwQq0D285ppPHY2BCxizaZTaQJ97xG9D5AhOBNTZLD2RzWKRov9rvFqUrLjRVn9qDHw==}
 
-  /dls-icons-vue@3.20.0(vue@2.6.14):
-    resolution: {integrity: sha512-52ewhwf/GkJ9BWoXQ7aBklEksjOF080ikfGtB89FEUB4lSWcF14J9yJMov+iy90fKkFQ1sKH3rFHz1Bk7mRbEA==}
+  /dls-icons-vue@3.21.0(vue@2.6.14):
+    resolution: {integrity: sha512-zlB9qc8QUjpyL+cke9cgXUiwyUHD+PgyaUB99m7p/iru0Eg//5EkQrl4rvstO4mveDvqCeSPgBmoy/VRtaEgkw==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-icons-data: 3.20.0
+      dls-icons-data: 3.21.0
       vue: 2.6.14
 
   /dls-illustrations-vue@1.4.3(vue@2.6.14):
@@ -8040,7 +8040,7 @@ packages:
     resolution: {integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==}
     engines: {node: '>=12'}
     dependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       jsonfile: 6.1.0
       universalify: 2.0.0
     dev: true
@@ -9778,7 +9778,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
     dev: true
 
   /jsprim@1.4.2:
