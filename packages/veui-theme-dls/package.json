@@ -39,7 +39,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "esm": "^3.2.25",
     "less": "^4.1.2",
-    "postcss": "^8.4.13",
+    "postcss": "^8.4.31",
     "rollup": "^2.72.0",
     "rollup-plugin-postcss": "^4.0.2",
     "veui": "workspace:*",
