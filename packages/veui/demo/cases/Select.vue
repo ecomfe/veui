@@ -184,7 +184,12 @@
   </section>
   <section>
     <h2>多选Select：(自定义 selected slot)</h2>
-    <veui-select v-model="defaultSearchMultiValue" v-bind="attrs" multiple>
+    <veui-select
+      v-model="defaultSearchMultiValue"
+      v-bind="attrs"
+      multiple
+      searchable
+    >
       <template #selected="{ selected }">
         {{ selected[0].label
         }}{{ selected.length > 1 ? `等${selected.length}个` : '' }}
@@ -792,7 +797,7 @@ export default {
   padding-left: 24px;
 
   &::after {
-    content: "❤️";
+    content: '❤️';
     position: absolute;
     top: 50%;
     left: 0;
