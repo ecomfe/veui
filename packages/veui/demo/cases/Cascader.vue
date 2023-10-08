@@ -34,7 +34,7 @@
         <veui-input v-model="columnWidth1"/>
       </label>
     </div>
-    <cascader
+    <veui-cascader
       v-model="value1"
       :options="options"
       :searchable="searchable1"
@@ -74,7 +74,7 @@
         <veui-input v-model="columnWidth2"/>
       </label>
     </div>
-    <cascader
+    <veui-cascader
       v-model="value2"
       :options="options"
       :searchable="searchable2"
@@ -91,7 +91,7 @@
   </section>
   <section>
     <h3>Slots: before/after/column-before/column-after</h3>
-    <cascader
+    <veui-cascader
       v-model="value2"
       :options="options"
       :searchable="searchable2"
@@ -116,13 +116,13 @@
       <template #column-after>
         <div class="center-align">column-after</div>
       </template>
-    </cascader>
+    </veui-cascader>
   </section>
   <section>
     <h3>Sizes: xs/s/m/l</h3>
     <div class="size-wrap">
       <span class="size">xs:</span>
-      <cascader
+      <veui-cascader
         v-model="value2"
         :options="options"
         :searchable="searchable2"
@@ -144,11 +144,11 @@
         <template #column-after>
           <div class="center-align">column-after</div>
         </template>
-      </cascader>
+      </veui-cascader>
     </div>
     <div class="size-wrap">
       <span class="size">s:</span>
-      <cascader
+      <veui-cascader
         :options="options"
         :searchable="searchable1"
         :select-mode="selectMode1"
@@ -160,7 +160,7 @@
     </div>
     <div class="size-wrap">
       <span class="size">m:</span>
-      <cascader
+      <veui-cascader
         :options="options"
         :searchable="searchable1"
         :select-mode="selectMode1"
@@ -172,7 +172,7 @@
     </div>
     <div class="size-wrap">
       <span class="size">l:</span>
-      <cascader
+      <veui-cascader
         :options="options"
         :searchable="searchable2"
         :column-trigger="trigger2"
@@ -185,7 +185,7 @@
   </section>
   <section>
     <h3>Disabled</h3>
-    <cascader
+    <veui-cascader
       :options="options"
       :searchable="searchable2"
       :column-trigger="trigger2"
@@ -196,7 +196,7 @@
   </section>
   <section>
     <h3>Readonly</h3>
-    <cascader
+    <veui-cascader
       :options="options"
       :searchable="searchable2"
       :column-trigger="trigger2"
@@ -259,7 +259,7 @@ const hzChildren = [
 export default {
   name: 'cascader-demo',
   components: {
-    Cascader,
+    'veui-cascader': Cascader,
     'veui-checkbox': Checkbox,
     'veui-radio': Radio,
     'veui-number-input': NumberInput,

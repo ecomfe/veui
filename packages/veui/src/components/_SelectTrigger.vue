@@ -64,15 +64,6 @@ export default {
       }
       return this.realSelected.map(({ label, value }) => label || value)
     },
-    // float multiple tags
-    layoutWrap () {
-      return (
-        this.multiple &&
-        !this.isEmpty &&
-        (!this.hasLabelSlot() || this.expanded) &&
-        !this.hasSelectedSlot()
-      )
-    },
     finalInvalid () {
       return this.realInvalid || this.countOverflow
     },
@@ -105,6 +96,15 @@ export default {
       if (this.expanded) {
         this.focus()
       }
+    },
+    // float multiple tags
+    layoutWrap () {
+      return (
+        this.multiple &&
+        !this.isEmpty &&
+        (!this.hasLabelSlot() || this.expanded) &&
+        !this.hasSelectedSlot()
+      )
     },
     handleInputMouseup (e) {
       if (this.realReadonly || this.realDisabled) {
@@ -248,7 +248,7 @@ export default {
           [this.$c('trigger-searchable')]: this.searchable,
           [this.$c('trigger-expanded')]: this.expanded,
           [this.$c('trigger-multiple')]: this.multiple,
-          [this.$c('trigger-wrap')]: this.layoutWrap,
+          [this.$c('trigger-wrap')]: this.layoutWrap(),
           [this.$c('trigger-empty')]: this.isEmpty
         }}
         disabled={this.realDisabled}
