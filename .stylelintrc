@@ -26,7 +26,8 @@
       {
         "ignoreShorthands": ["inset"]
       }
-    ]
+    ],
+    "media-feature-range-notation": "prefix"
   },
   "ignoreFiles": ["**/.*.*", "**/*.ts", "**/*.js", "**/*.json", "**/*.md"],
   "overrides": [
