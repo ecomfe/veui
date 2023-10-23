@@ -1,0 +1,91 @@
+@import "../lib.less";
+
+.@{veui-prefix}-rating {
+  display: inline-flex;
+  line-height: @dls-line-height-1;
+  min-height: dls-even(
+    dls-line-height(@dls-line-height-1, @dls-rating-label-font-size)
+  );
+
+  &-symbols {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  &-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+  }
+
+  &-symbol {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    transform-origin: 50% 50%;
+    cursor: pointer;
+    .veui-transition(transform);
+
+    [data-focus-visible-added] ~ &-part:last-child {
+      outline: 1px solid @dls-border-color-focus;
+      outline-offset: -1px;
+      border-radius: @dls-border-radius-1;
+      box-shadow: @dls-shadow-focus;
+      .veui-transition(outline, box-shadow);
+    }
+
+    .@{veui-prefix}-readonly & {
+      cursor: default;
+    }
+
+    & + & {
+      margin-left: @dls-rating-symbol-gap;
+    }
+
+    &-part {
+      display: flex;
+      color: @dls-rating-symbol-color;
+      cursor: inherit;
+      .veui-transition(color);
+
+      &-selected {
+        color: @dls-rating-symbol-color-selected;
+      }
+
+      &-half {
+        position: absolute;
+        width: 50%;
+        overflow: hidden;
+        z-index: 1;
+      }
+    }
+
+    &-wrapper {
+      display: flex;
+    }
+
+    &:hover &-wrapper,
+    [data-focus-visible-added] ~ &-wrapper {
+      transform: scale(@dls-rating-symbol-scale-hover);
+
+      .@{veui-prefix}-readonly & {
+        transform: none;
+      }
+    }
+
+    .@{veui-prefix}-icon,
+    .dls-icon {
+      width: @dls-rating-symbol-size;
+      height: @dls-rating-symbol-size;
+    }
+  }
+
+  &-label {
+    margin-left: @dls-rating-label-spacing;
+    color: @dls-rating-label-font-color;
+  }
+}

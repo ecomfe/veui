@@ -1,4 +1,4 @@
-import 'focus-visible'
+// import 'focus-visible'
 import 'veui-theme-dls/common.less'
 
 // Safely ignore ResizeObserver loop limit exceeded

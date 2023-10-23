@@ -57,6 +57,7 @@ export declare const PromptBox: Components.PromptBox
 export declare const Radio: Components.Radio
 export declare const RadioButtonGroup: Components.RadioButtonGroup
 export declare const RadioGroup: Components.RadioGroup
+export declare const Rating: Components.Rating
 export declare const SearchBox: Components.SearchBox
 export declare const Select: Components.Select
 export declare const Sidebar: Components.Sidebar
