@@ -103,18 +103,24 @@ export default {
       this.realValue = null
     },
     formatDateTime (value) {
-      // implement date time formatting
+      let dateData = toDateData(value)
+      return `${dateData.year}-${padStart(dateData.month, 2, '0')}-${padStart(dateData.day, 2, '0')} ${padStart(dateData.hours, 2, '0')}:${padStart(dateData.minutes, 2, '0')}`
     },
     parseDateTime (value) {
-      // implement date time parsing
+      let [datePart, timePart] = value.split(' ')
+      let [year, month, day] = datePart.split('-').map(Number)
+      let [hours, minutes] = timePart.split(':').map(Number)
+      return add(startOf(new Date(year, month - 1, day), 'day'), { hours, minutes })
     },
     handleDropdownChange (index, value) {
-      // implement dropdown change handling
+      this.realValue = value
     }
   }
 }
 </script>
 
 <style>
-/* implement styles */
+.veui-date-time-picker {
+  /* Add necessary styles here */
+}
 </style>
