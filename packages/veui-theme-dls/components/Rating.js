@@ -3,6 +3,9 @@ import { IconStarSolid } from 'dls-icons-vue'
 
 ui.defaults(
   {
+    parts: {
+      tooltip: 'reverse'
+    },
     icons: {
       symbol: IconStarSolid
     }
