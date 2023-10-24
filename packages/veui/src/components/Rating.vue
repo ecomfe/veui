@@ -5,6 +5,7 @@ import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import { focusIn } from '../utils/dom'
 import Icon from './Icon'
+import Tooltip from './Tooltip'
 import useControllable from '../mixins/controllable'
 import { uniqueId } from 'lodash'
 import '../common/global'
@@ -32,11 +33,18 @@ export default {
     value: Number,
     labels: [Object, Function],
     clearable: Boolean,
-    allowHalf: Boolean
+    allowHalf: Boolean,
+    labelPosition: {
+      type: String,
+      validator (val) {
+        return ['inline', 'popup'].indexOf(val) !== -1
+      }
+    }
   },
   data () {
     return {
-      hoverValue: null
+      hoverValue: null,
+      tooltipTarget: null
     }
   },
   computed: {
@@ -100,6 +108,11 @@ export default {
         return
       }
       this.hoverValue = value
+
+      if (this.labelPosition === 'popup') {
+        const index = Math.floor(value - 0.5)
+        this.tooltipTarget = this.$refs[`symbol-${index}`]
+      }
     },
     handleMouseLeave () {
       if (this.realReadonly) {
@@ -160,7 +173,7 @@ export default {
     }
   },
   render () {
-    const labelSlot =
+    const labelContent =
       (this.$scopedSlots.label
         ? this.$scopedSlots.label({ value: this.activeValue })
         : this.label) || null
@@ -188,6 +201,7 @@ export default {
             return (
               <div
                 key={value}
+                ref={`symbol-${index}`}
                 class={{
                   [this.$c('rating-symbol')]: true,
                   [this.$c('rating-symbol-allow-half')]: this.allowHalf
@@ -199,8 +213,18 @@ export default {
             )
           })}
         </div>
-        {labelSlot ? (
-          <div class={this.$c('rating-label')}>{labelSlot}</div>
+        {labelContent ? (
+          this.labelPosition === 'popup' ? (
+            <Tooltip
+              ui={this.uiParts.tooltip}
+              open={!!this.hoverValue}
+              target={this.tooltipTarget}
+            >
+              {labelContent}
+            </Tooltip>
+          ) : (
+            <div class={this.$c('rating-label')}>{labelContent}</div>
+          )
         ) : null}
       </div>
     )

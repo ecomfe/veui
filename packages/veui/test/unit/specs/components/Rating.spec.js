@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Rating from '@/components/Rating'
+import { Tooltip } from 'veui'
 
 describe('components/Rating', function () {
   this.timeout(10000)
@@ -331,6 +332,44 @@ describe('components/Rating', function () {
     wrapper.findAll('.veui-rating-symbol-part').at(5).trigger('mouseenter')
     await vm.$nextTick()
     expect(wrapper.find('.custom-label').text()).to.equal('3 / 3')
+
+    wrapper.destroy()
+  })
+
+  it('should respect `label-position` prop', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-rating': Rating
+        },
+        template:
+          '<veui-rating v-model="value" :labels="labels" :max="3" label-position="popup"/>',
+        data () {
+          return {
+            value: null,
+            labels: {
+              1: 'bad',
+              2: 'normal',
+              3: 'good'
+            }
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    let { vm } = wrapper
+
+    const symbols = wrapper.findAll('.veui-rating-symbol')
+    symbols.at(0).trigger('mouseenter')
+    symbols.at(0).find('.veui-rating-symbol-part').trigger('mouseenter')
+    await vm.$nextTick()
+
+    expect(wrapper.find(Tooltip).find('.veui-tooltip-content').text()).to.equal(
+      'bad'
+    )
 
     wrapper.destroy()
   })
