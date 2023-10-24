@@ -1,0 +1,120 @@
+<template>
+  <div :class="[$c('date-time-picker'), { [$c('disabled')]: realDisabled, [$c('readonly')]: realReadonly }]">
+    <veui-input
+      ref="input"
+      v-model="realInputValue"
+      :disabled="realDisabled"
+      :readonly="realReadonly"
+      :placeholder="placeholder"
+      @focus="openDropdown"
+      @click="openDropdown"
+      @keydown.enter="closeDropdown"
+    >
+      <veui-button
+        v-if="clearable && localValue"
+        :class="$c('date-time-picker-clear')"
+        :ui="uiParts.clear"
+        :aria-label="t('clear')"
+        :disabled="realDisabled || realReadonly"
+        @click="clear"
+        @mouseup.stop
+      >
+        <veui-icon :name="icons.clear"/>
+      </veui-button>
+    </veui-input>
+    <veui-overlay
+      v-show="realExpanded"
+      ref="overlay"
+      target="self"
+      match-width
+      :overlay-class="mergeOverlayClass({ [$c('date-time-picker-overlay')]: true })"
+      :overlay-style="overlayStyle"
+      :local="realOverlayOptions.local"
+      :options="realOverlayOptions"
+      :open="realExpanded"
+      @afteropen="scrollSelectedToCenter(0)"
+    >
+      <veui-calendar
+        :ui="realUi"
+        role="dialog"
+        :options="realHours"
+        :value="realValue[0]"
+        @change="handleDropdownChange(0, $event)"
+      />
+    </veui-overlay>
+  </div>
+</template>
+
+<script>
+import Overlay from '../Overlay'
+import Input from '../Input'
+import Button from '../Button'
+import Icon from '../Icon'
+import Calendar from '../Calendar'
+import prefix from '../../mixins/prefix'
+import dropdown from '../../mixins/dropdown'
+import useControllable from '../../mixins/controllable'
+import ui from '../../mixins/ui'
+import input from '../../mixins/input'
+import i18n from '../../mixins/i18n'
+import { range, padStart, isEqual, includes, get, times, constant, startOf, toDateData, lt, add } from '../../utils'
+
+export default {
+  name: 'veui-date-time-picker',
+  components: {
+    'veui-overlay': Overlay,
+    'veui-input': Input,
+    'veui-button': Button,
+    'veui-icon': Icon,
+    'veui-calendar': Calendar
+  },
+  mixins: [prefix, ui, input, dropdown, useControllable, i18n],
+  props: {
+    value: [String, Date],
+    placeholder: String,
+    readonly: Boolean,
+    disabled: Boolean,
+    clearable: Boolean
+  },
+  data () {
+    return {
+      realValue: this.value,
+      realExpanded: false
+    }
+  },
+  computed: {
+    realInputValue: {
+      get () {
+        return this.formatDateTime(this.realValue)
+      },
+      set (val) {
+        this.realValue = this.parseDateTime(val)
+      }
+    }
+  },
+  methods: {
+    openDropdown () {
+      this.realExpanded = true
+    },
+    closeDropdown () {
+      this.realExpanded = false
+    },
+    clear () {
+      this.realValue = null
+    },
+    formatDateTime (value) {
+      // implement date time formatting
+    },
+    parseDateTime (value) {
+      // implement date time parsing
+    },
+    handleDropdownChange (index, value) {
+      // implement dropdown change handling
+    }
+  }
+}
+</script>
+
+<style>
+/* implement styles */
+</style>
