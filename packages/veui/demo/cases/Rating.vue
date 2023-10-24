@@ -1,7 +1,7 @@
 <template>
 <article>
   <h1>
-    <code>&lt;veui-stack&gt;</code>
+    <code>&lt;veui-rating&gt;</code>
   </h1>
   <veui-stack direction="column" gap="m">
     <veui-stack gap="s">
@@ -44,7 +44,7 @@
     </section>
     <section>
       <h3>自定义符号</h3>
-      <veui-rating>
+      <veui-rating :clearable="clearable" :readonly="readonly" allow-half>
         <template #symbol>♥︎</template>
       </veui-rating>
     </section>
