@@ -10,6 +10,7 @@ type Props = {
   max?: number
   value?: number
   labels?: Record<number, string> | ((value: number) => string)
+  labelPosition?: 'inline' | 'popup'
   clearable?: boolean
   allowHalf?: boolean
 }
