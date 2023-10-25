@@ -1,6 +1,6 @@
 {
   "name": "veui",
-  "version": "2.16.0",
+  "version": "2.16.1",
   "description": "Baidu Enterprise UI for Vue.js.",
   "scripts": {
     "serve": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service serve",
