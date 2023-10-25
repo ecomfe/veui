@@ -9,7 +9,8 @@
     "build": "pnpm -r build",
     "prepare": "husky install",
     "sync": "node -r esm build/sync.js",
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public && pnpm sync"
+    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public && pnpm sync",
+    "update-version": "node scripts/update-version.js"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.62.0",
