@@ -91,7 +91,6 @@ export default {
 
         const inputs = this.$el.querySelectorAll('input')
         inputs[index].checked = true
-        inputs[index].focus()
       })
 
       this.commit('value', value)
