@@ -1,0 +1,6 @@
+rules:
+  - "Use consistent indentation throughout the codebase."
+  - "Avoid using magic numbers or hardcoding values."
+  - "Remove commented out code and unused variables or functions."
+  - "Follow the coding style and conventions of the project."
+  - "Use meaningful variable and function names."
