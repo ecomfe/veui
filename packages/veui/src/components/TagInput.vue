@@ -24,13 +24,6 @@
     </slot>
   </template>
   <template #after>
-    <span
-      v-if="countLabel"
-      :class="{
-        [$c('tag-input-tag-count')]: true,
-        [$c('tag-input-tag-count-overflow')]: countOverflow
-      }"
-    >{{ countLabel }}</span>
     <veui-button
       v-if="showClear"
       :class="$c('tag-input-clear')"
@@ -40,6 +33,13 @@
     >
       <veui-icon :name="icons.clear"/>
     </veui-button>
+    <span
+      v-if="countLabel"
+      :class="{
+        [$c('tag-input-tag-count')]: true,
+        [$c('tag-input-tag-count-overflow')]: countOverflow
+      }"
+    >{{ countLabel }}</span>
   </template>
   <template v-if="$slots.placeholder" #placeholder>
     <slot name="placeholder"/>
