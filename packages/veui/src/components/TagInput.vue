@@ -153,7 +153,7 @@ export default {
             key: `#${i}-${tag}`,
             class: this.$c('tag-input-tag'),
             ui: this.uiParts.tag,
-            type: invalid ? 'error' : undefined,
+            status: invalid ? 'error' : undefined,
             disabled: this.realDisabled,
             removable: this.editable,
             removed: false,
