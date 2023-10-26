@@ -337,39 +337,40 @@ describe('components/Rating', function () {
   })
 
   it('should respect `label-position` prop', async () => {
-    let wrapper = mount(
-      {
-        components: {
-          'veui-rating': Rating
-        },
-        template:
-          '<veui-rating v-model="value" :labels="labels" :max="3" label-position="popup"/>',
-        data () {
-          return {
-            value: null,
-            labels: {
-              1: 'bad',
-              2: 'normal',
-              3: 'good'
-            }
+    let wrapper = mount({
+      components: {
+        'veui-rating': Rating
+      },
+      template:
+        '<veui-rating v-model="value" :labels="labels" :max="3" label-position="popup"/>',
+      data () {
+        return {
+          value: 3,
+          labels: {
+            1: 'bad',
+            2: 'normal',
+            3: 'good'
           }
         }
-      },
-      {
-        attachToDocument: true
       }
-    )
+    })
 
     let { vm } = wrapper
 
-    const symbols = wrapper.findAll('.veui-rating-symbol')
-    symbols.at(0).trigger('mouseenter')
-    symbols.at(0).find('.veui-rating-symbol-part').trigger('mouseenter')
+    const parts = wrapper.findAll('.veui-rating-symbol-part')
+    parts.at(0).trigger('mouseenter')
     await vm.$nextTick()
 
-    expect(wrapper.find(Tooltip).find('.veui-tooltip-content').text()).to.equal(
-      'bad'
-    )
+    const tooltipContent = wrapper.find(Tooltip).find('.veui-tooltip-content')
+    expect(tooltipContent.text()).to.equal('bad')
+
+    parts.at(1).trigger('mouseenter')
+    await vm.$nextTick()
+    expect(tooltipContent.text()).to.equal('normal')
+
+    wrapper.find('.veui-rating-symbols').trigger('mouseleave')
+    await vm.$nextTick()
+    expect(tooltipContent.text()).to.equal('normal')
 
     wrapper.destroy()
   })
