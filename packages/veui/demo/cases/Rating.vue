@@ -66,6 +66,7 @@ export default {
   data () {
     return {
       labels: {
+        0.5: '极差',
         1: '很差',
         1.5: '差',
         2: '较差',

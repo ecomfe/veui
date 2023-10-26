@@ -28,7 +28,6 @@
     flex: 0 0 auto;
     transform-origin: 50% 50%;
     cursor: pointer;
-    .veui-transition(transform);
 
     [data-focus-visible-added] ~ &-part:last-child {
       outline: 1px solid @dls-border-color-focus;
@@ -50,7 +49,7 @@
       display: flex;
       color: @dls-rating-symbol-color;
       cursor: inherit;
-      .veui-transition(color);
+      .veui-transition(color, transform);
 
       &-selected {
         color: @dls-rating-symbol-color-selected;
@@ -61,20 +60,21 @@
         width: 50%;
         overflow: hidden;
         z-index: 1;
+        transform-origin: 100% 50%;
       }
     }
 
-    &-wrapper {
-      display: flex;
-    }
-
-    &:hover &-wrapper,
-    [data-focus-visible-added] ~ &-wrapper {
+    &:hover &-part,
+    [data-focus-visible-added] ~ &-part {
       transform: scale(@dls-rating-symbol-scale-hover);
 
       .@{veui-prefix}-readonly & {
         transform: none;
       }
+    }
+
+    &-wrapper {
+      display: flex;
     }
 
     .@{veui-prefix}-icon,

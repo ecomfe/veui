@@ -67,6 +67,9 @@ export default {
       return this.labels[this.activeValue]
     },
     activeValue () {
+      if (this.labelPosition === 'popup') {
+        return this.hoverValue
+      }
       return this.hoverValue == null ? this.realValue : this.hoverValue
     }
   },
@@ -174,7 +177,12 @@ export default {
   render () {
     const labelContent =
       (this.$scopedSlots.label
-        ? this.$scopedSlots.label({ value: this.activeValue })
+        ? this.$scopedSlots.label({
+          value:
+              this.labelPosition === 'popup'
+                ? this.hoverValue
+                : this.activeValue
+        })
         : this.label) || null
 
     return (
