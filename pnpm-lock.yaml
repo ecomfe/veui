@@ -392,8 +392,8 @@ importers:
         specifier: ^4.1.5
         version: 4.1.5
       less-plugin-dls:
-        specifier: 11.7.1
-        version: 11.7.1
+        specifier: 11.8.2
+        version: 11.8.2
       less-plugin-est:
         specifier: ^3.0.1
         version: 3.0.1
@@ -9991,8 +9991,8 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /less-plugin-dls@11.7.1:
-    resolution: {integrity: sha512-78/gNR3mn34+sCNsAzvQYKeyDdKqM/3/Z4xvgwtts7Op+kGhxrEY6EWlxXENz90F0BNrzhZKc0r5cOGc0+21Ew==}
+  /less-plugin-dls@11.8.2:
+    resolution: {integrity: sha512-Rvc/Oy/Tcyww2TEToIw+hWIpVeBF+5iKcBRSVQ8U7GYxTrvAY5BaMoZiw+2xlqvy0NA1tcps5iEDo+tMmualjg==}
     hasBin: true
     dependencies:
       arg: 4.1.3
