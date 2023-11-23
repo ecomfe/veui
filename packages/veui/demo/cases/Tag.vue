@@ -100,6 +100,28 @@
   </section>
 
   <section>
+    <h2>反色标签</h2>
+    <div>
+      <veui-tag
+        v-for="status in statuses"
+        :key="status"
+        :status="status"
+        :selected.sync="selected"
+        :ui="'reverse' + (bordered ? ' bordered' : '')"
+        selectable
+      >{{ status }}</veui-tag>
+      <veui-tag
+        v-for="color in colors"
+        :key="color"
+        :color="color"
+        :selected.sync="selected"
+        :ui="'reverse' + (bordered ? ' bordered' : '')"
+        selectable
+      >{{ color }}</veui-tag>
+    </div>
+  </section>
+
+  <section>
     <h2>禁用标签</h2>
     <div>
       <veui-tag

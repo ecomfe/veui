@@ -54,23 +54,20 @@
   }
 
   &-default {
-    .apply-color(@dls-tag-color);
+    .apply-color(@dls-tag-color-default, false);
 
     &.@{veui-prefix}-tag-selected {
-      .apply-flip-color(selected, @dls-tag-color);
+      .apply-color(@dls-tag-color-default-selected);
     }
 
     &[ui~="reverse"] {
-      .apply-flip-color(reverse, @dls-tag-color);
+      .apply-flip-color(reverse, @dls-tag-color-default);
     }
 
-    &[ui~="theme:d22"] {
-      .apply-color(fade(@dls-color-translucent-2, 100%), false);
-      color: @dls-foreground-color-neutral;
+    color: @dls-tag-font-color-default;
 
-      .@{veui-prefix}-tag-remove {
-        color: @dls-foreground-color-neutral-weak;
-      }
+    .@{veui-prefix}-tag-remove {
+      color: @dls-foreground-color-neutral-weak;
     }
   }
 
