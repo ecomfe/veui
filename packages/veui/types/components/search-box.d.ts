@@ -25,6 +25,7 @@ type SHARED_PROPS =
   | 'getLength'
   | 'strict'
   | 'trim'
+  | 'autofocus'
 
 type Item =
   | string

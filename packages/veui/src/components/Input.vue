@@ -149,6 +149,7 @@ export default {
     },
     selectOnFocus: Boolean,
     composition: Boolean,
+    autofocus: Boolean,
     clearable: Boolean,
     maxlength: [Number, String],
     getLength: Function,

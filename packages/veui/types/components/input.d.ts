@@ -16,6 +16,7 @@ export type Props = {
   placeholder?: string
   selectOnFocus?: boolean
   composition?: boolean
+  autofocus?: boolean
   clearable?: boolean
   maxlength?: number
   getLength?: (value: string) => number

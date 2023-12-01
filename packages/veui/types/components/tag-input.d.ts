@@ -7,8 +7,11 @@ import {
   ControllableMixin
 } from '../common'
 import { TagEmits, TagProps } from './tag'
+import { Props as InputProps } from './input'
 
-export type Props = {
+type SHARED_PROPS = 'placeholder' | 'clearable' | 'getLength' | 'autofocus'
+
+export type Props = Pick<InputProps, SHARED_PROPS> & {
   value?: Array<string>
   inputValue?: string
   placeholder?: string

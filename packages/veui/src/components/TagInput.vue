@@ -61,7 +61,7 @@ import Button from './Button'
 import Icon from './Icon'
 import { pick, omit, uniq } from 'lodash'
 
-const SHARED_PROPS = ['placeholder', 'clearable', 'getLength']
+const SHARED_PROPS = ['placeholder', 'clearable', 'getLength', 'autofocus']
 
 const BASE_EVENTS = ['input', 'change']
 

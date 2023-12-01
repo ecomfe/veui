@@ -23,7 +23,6 @@
         autocomplete="off"
         :value="props.value"
         :ui="realUi"
-        :autofocus="autofocus"
         :readonly="realReadonly"
         :disabled="realDisabled"
         :invalid="realInvalid"
@@ -96,6 +95,7 @@ const SHARED_PROPS = [
   'placeholder',
   'selectOnFocus',
   'composition',
+  'autofocus',
   'clearable',
   'maxlength',
   'getLength',
@@ -125,7 +125,6 @@ export default {
       type: String,
       default: 'options'
     },
-    autofocus: Boolean,
     ...pick(Input.props, SHARED_PROPS)
   },
   computed: {

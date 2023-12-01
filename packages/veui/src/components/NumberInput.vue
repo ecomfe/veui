@@ -99,11 +99,22 @@ import Icon from './Icon'
 import { sign, add, round } from '../utils/math'
 import warn from '../utils/warn'
 import { VALUE_EVENTS } from '../utils/dom'
-import { isInteger, isNaN, get, find, omit, isFunction, repeat } from 'lodash'
+import {
+  pick,
+  isInteger,
+  isNaN,
+  get,
+  find,
+  omit,
+  isFunction,
+  repeat
+} from 'lodash'
 import nudge from '../directives/nudge'
 import longpress from '../directives/longpress'
 import useControllable from '../mixins/controllable'
 import '../common/global'
+
+const SHARED_PROPS = ['placeholder', 'selectOnFocus', 'autofocus']
 
 export default {
   name: 'veui-number-input',
@@ -149,7 +160,8 @@ export default {
     max: Number,
     min: Number,
     format: Function,
-    parse: Function
+    parse: Function,
+    ...pick(Input.props, SHARED_PROPS)
   },
   data () {
     return {
@@ -182,7 +194,8 @@ export default {
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly,
-        invalid: this.realInvalid
+        invalid: this.realInvalid,
+        ...pick(this.$props, SHARED_PROPS)
       }
     },
     editable () {
