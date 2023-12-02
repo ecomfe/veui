@@ -191,6 +191,7 @@ export default {
         ...this.$attrs,
         maxlength: this.realStrict.maxlength ? this.realMaxlength : null,
         type: this.type,
+        autofocus: this.autofocus,
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly
