@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils'
 import sinon from 'sinon'
-import Input from '@/components/Input'
 import NumberInput from '@/components/NumberInput'
 import Form from '@/components/Form'
 import Field from '@/components/Field'
@@ -28,14 +27,12 @@ describe('components/NumberInput', function () {
   it('should transparently pass-through attrs to the <input> element', () => {
     let wrapper = mount(NumberInput, {
       attrs: {
-        autofocus: '',
-        selectOnFocus: ''
+        'data-foo': 'bar'
       },
       sync: false
     })
 
-    expect(wrapper.find(Input).props('selectOnFocus')).to.equal(true)
-    expect(wrapper.find('input').element.autofocus).to.equal(true)
+    expect(wrapper.find('input').element.dataset.foo).to.equal('bar')
   })
 
   it('should handle focus event correctly', async () => {

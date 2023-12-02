@@ -27,11 +27,11 @@ describe('components/TagInput', function () {
   it('should transparently pass-through attrs to the <input> element', () => {
     let wrapper = mount(TagInput, {
       attrs: {
-        autofocus: ''
+        'data-foo': 'bar'
       }
     })
 
-    expect(wrapper.find('input').element.autofocus).to.equal(true)
+    expect(wrapper.find('input').element.dataset.foo).to.equal('bar')
 
     wrapper.destroy()
   })
