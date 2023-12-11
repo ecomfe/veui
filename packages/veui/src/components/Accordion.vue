@@ -7,7 +7,6 @@
 <script>
 import ui from '../mixins/ui'
 import { useParent } from '../mixins/coupled'
-import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 import { clone } from 'lodash'
 import { togglePositionProp } from './Collapse'
@@ -20,7 +19,7 @@ let accordion = useParent('accordion', 'accordion-item', {
 export default {
   name: 'veui-accordion',
   uiTypes: ['accordion'],
-  mixins: [prefix, ui, accordion, useControllable(['expanded'])],
+  mixins: [ui, accordion, useControllable(['expanded'])],
   props: {
     multiple: Boolean,
     disabled: Boolean,

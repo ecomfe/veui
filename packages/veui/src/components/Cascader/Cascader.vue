@@ -113,6 +113,7 @@
               :matches="option.matches"
               :separator="icons.separator"
               :separator-class="$c('cascader-search-result-item-separator')"
+              :theme-variant="uiThemeVariant"
             />
           </template>
           <template
@@ -143,7 +144,6 @@ import useConfig from '../../mixins/config'
 import dropdown from '../../mixins/dropdown'
 import useControllable from '../../mixins/controllable'
 import useSearchable, { getDefaultFilter } from '../../mixins/searchable'
-import prefix from '../../mixins/prefix'
 import i18n from '../../mixins/i18n'
 import useTree from '../../mixins/tree'
 import input from '../../mixins/input'
@@ -180,7 +180,6 @@ export default {
     'veui-select-trigger': SelectTrigger
   },
   mixins: [
-    prefix,
     ui,
     i18n,
     dropdown(),

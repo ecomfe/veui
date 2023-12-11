@@ -33,7 +33,6 @@
 import Tree from './Tree'
 import Link from './Link'
 import ui from '../mixins/ui'
-import prefix from '../mixins/prefix'
 import { debounce, reduce, startsWith, includes, get } from 'lodash'
 import {
   scrollToAlign,
@@ -97,7 +96,7 @@ export default {
     'veui-tree': Tree,
     'veui-link': Link
   },
-  mixins: [prefix, ui],
+  mixins: [ui],
   props: {
     items: Tree.props.datasource,
     sticky: Boolean,

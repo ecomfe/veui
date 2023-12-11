@@ -20,6 +20,7 @@
     </p>
     <veui-form
       ref="form"
+      class="form"
       :data="storeData4"
       :validators="validators"
       :before-validate="beforeValidate"
@@ -37,7 +38,7 @@
         help="不支持特殊字符"
         :help-position="helpPos"
       >
-        <veui-input v-model="storeData4.name"/>
+        <veui-input v-model="storeData4.name" class="input"/>
       </veui-field>
 
       <veui-field
@@ -49,6 +50,7 @@
       >
         <veui-input
           v-model="storeData4.alias"
+          class="input"
           maxlength="6"
           placeholder="长度不能大于6"
         />
@@ -496,7 +498,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 .veui-form-demo {
   margin-bottom: 50px;
@@ -517,7 +519,7 @@ export default {
     margin-top: 50px;
   }
 
-  .veui-form[ui~="inline"] + .veui-form[ui~="inline"] {
+  .form[ui~='inline'] + .form[ui~='inline'] {
     margin-top: 30px;
   }
 
@@ -539,7 +541,7 @@ export default {
     &::before {
       position: absolute;
       left: -80px;
-      content: "⇒";
+      content: '⇒';
       line-height: 32px;
       font-size: 30px;
       color: #999;
@@ -547,23 +549,14 @@ export default {
   }
 
   .two-name {
-    .veui-input {
+    .input {
       width: 75px;
     }
   }
 
   .salary {
-    .veui-input {
+    .input {
       width: 67px;
-    }
-  }
-
-  .start-field {
-    .veui-field-error:first-of-type {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 80px;
-      white-space: nowrap;
     }
   }
 
@@ -571,11 +564,11 @@ export default {
     margin-top: 60px;
     margin-left: 120px;
 
-    [class*="veui"] {
+    [class*='veui'] {
       margin-left: 10px;
     }
 
-    [class*="veui"]:first-child {
+    [class*='veui']:first-child {
       margin-left: 0;
     }
   }

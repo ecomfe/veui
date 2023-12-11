@@ -653,17 +653,19 @@
     position: sticky;
     bottom: var(--dls-table-sticky-scrollbar-bottom, 0);
     overflow: visible;
-    padding-right: var(~"--@{veui-prefix}-table-scrollbar-width", 0);
+    padding-right: var(~"--@{veui-fixed-prefix}-table-scrollbar-width", 0);
 
     &-placeholder {
       overflow-x: auto;
-      margin-top: calc(var(~"--@{veui-prefix}-table-scrollbar-height", 0) * -2);
+      margin-top: calc(
+        var(~"--@{veui-fixed-prefix}-table-scrollbar-height", 0) * -2
+      );
 
       &::after {
         content: "";
         display: block;
-        width: var(~"--@{veui-prefix}-table-scroll-width", 0);
-        height: var(~"--@{veui-prefix}-table-scrollbar-height", 0);
+        width: var(~"--@{veui-fixed-prefix}-table-scroll-width", 0);
+        height: var(~"--@{veui-fixed-prefix}-table-scrollbar-height", 0);
       }
     }
   }

@@ -1,13 +1,13 @@
 import Checkbox from '../Checkbox'
 import HeadCell from './_HeadCell'
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 
 export default {
   name: 'veui-table-head',
-  mixins: [prefix, table, i18n],
   uiTypes: ['transparent'],
+  mixins: [ui, table, i18n],
   data () {
     return {
       descOpen: {},

@@ -2,7 +2,6 @@
 import Button from '../Button'
 import Link from '../Link'
 import Icon from '../Icon'
-import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import config from '../../managers/config'
@@ -37,7 +36,6 @@ export default {
     drag
   },
   mixins: [
-    prefix,
     ui,
     i18n,
     tabs,
@@ -152,7 +150,8 @@ export default {
           exclude: `.${this.$c('tabs-item-remove')}`,
           sort: (fromIndex, toIndex) => {
             this.$emit('sort', fromIndex, toIndex)
-          }
+          },
+          themeVariant: this.uiThemeVariant
         },
         modifiers: { sort: true, x: true }
       }

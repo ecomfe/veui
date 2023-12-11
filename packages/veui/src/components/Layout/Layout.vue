@@ -11,12 +11,13 @@
 </template>
 
 <script>
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import Sidebar from './Sidebar'
 
 export default {
   name: 'veui-layout',
-  mixins: [prefix],
+  uiTypes: ['transparent'],
+  mixins: [ui],
   props: {
     direction: {
       type: String,

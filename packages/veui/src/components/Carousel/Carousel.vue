@@ -105,7 +105,6 @@ import Icon from '../Icon'
 import Indicator from './_Indicator'
 import Slide, { props as slideProps } from './_Slide'
 import Fade from './_Fade'
-import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import carousel from '../../mixins/carousel'
@@ -121,7 +120,7 @@ export default {
     'veui-carousel-fade': Fade,
     'veui-carousel-slide': Slide
   },
-  mixins: [prefix, ui, i18n, carousel],
+  mixins: [ui, i18n, carousel],
   props: {
     indicator: {
       type: String,

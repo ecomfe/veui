@@ -116,7 +116,6 @@ import Label from '../Label'
 import Loading from '../Loading'
 import Message from '../Message'
 import type from '../../managers/type'
-import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import useConfig from '../../mixins/config'
@@ -158,7 +157,6 @@ export default {
     'veui-message': Message
   },
   mixins: [
-    prefix,
     ui,
     i18n,
     useConfig('config', 'field'),

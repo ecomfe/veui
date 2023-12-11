@@ -2,7 +2,6 @@
 import Tooltip from './Tooltip'
 import Button from './Button'
 import { getNodes } from '../utils/context'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import useControllable from '../mixins/controllable'
@@ -12,7 +11,7 @@ import '../common/global'
 
 export default {
   name: 'veui-popover',
-  mixins: [prefix, ui, overlay, i18n, useControllable('open')],
+  mixins: [ui, overlay, i18n, useControllable('open')],
   inheritAttrs: false,
   props: {
     title: String,

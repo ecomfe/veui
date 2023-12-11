@@ -21,7 +21,6 @@
 <script>
 import { uniqueId } from 'lodash'
 import Icon from './Icon'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import { loadingContent as loading } from 'dls-graphics'
@@ -32,7 +31,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, i18n],
+  mixins: [ui, i18n],
   props: {
     loading: Boolean
   },
@@ -41,12 +40,15 @@ export default {
       descId: uniqueId('veui-loading-')
     }
   },
+  computed: {
+    attrs () {
+      let attrs = loading.attrs
+      let { class: className, ...others } = attrs
+      return { class: [className, this.$c('loading-content')], ...others }
+    }
+  },
   created () {
     this.contents = loading.contents
-
-    let attrs = loading.attrs
-    let { class: className, ...others } = attrs
-    this.attrs = { class: [className, this.$c('loading-content')], ...others }
   },
   methods: {
     hasDefaultSlot () {

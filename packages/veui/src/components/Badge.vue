@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import { isNumber } from 'lodash'
 import config from '../managers/config'
@@ -46,7 +45,6 @@ config.defaults(
 export default {
   name: 'veui-badge',
   mixins: [
-    prefix,
     ui,
     useConfig('config', 'badge'),
     useRename(

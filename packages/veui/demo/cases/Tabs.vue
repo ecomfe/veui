@@ -16,7 +16,7 @@
           style="margin-left: 8px"
         >底边</veui-checkbox>
       </p>
-      <veui-tabs :ui="`l ${bordered}`" :active.sync="active0">
+      <veui-tabs class="tabs" :ui="`l ${bordered}`" :active.sync="active0">
         <veui-tab :label="label1" name="answers" removable>{{
           count
         }}</veui-tab>
@@ -27,6 +27,7 @@
         <template #extra>
           <div class="extra">
             <veui-button
+              class="button"
               ui="primary s"
               @click="label1 += '1'"
             >修改1</veui-button>
@@ -38,13 +39,13 @@
         <template #tab-label="{ label }">{{ label }}</template>
       </veui-tabs>
 
-      <veui-tabs :active.sync="active0" :ui="bordered">
+      <veui-tabs class="tabs" :active.sync="active0" :ui="bordered">
         <veui-tab label="回答问题" name="answers" removable/>
         <veui-tab label="文章评论" name="articles"/>
         <veui-tab label="分享朋友圈" name="shares" removable/>
       </veui-tabs>
 
-      <veui-tabs :ui="`s ${bordered}`" active.sync="active0">
+      <veui-tabs class="tabs" :ui="`s ${bordered}`" active.sync="active0">
         <veui-tab label="回答问题" name="answers" removable/>
         <veui-tab label="文章评论" name="articles" removable/>
         <veui-tab
@@ -57,17 +58,17 @@
     </section>
     <section>
       <h2>简单样式：</h2>
-      <veui-tabs ui="simple s" :active.sync="active0">
+      <veui-tabs class="tabs" ui="simple s" :active.sync="active0">
         <veui-tab label="回答问题" name="answers"/>
         <veui-tab label="文章评论" name="articles"/>
         <veui-tab label="分享朋友圈" name="shares"/>
       </veui-tabs>
-      <veui-tabs ui="simple" :active.sync="active0">
+      <veui-tabs class="tabs" ui="simple" :active.sync="active0">
         <veui-tab label="回答问题" name="answers"/>
         <veui-tab label="文章评论" name="articles"/>
         <veui-tab label="分享朋友圈" name="shares"/>
       </veui-tabs>
-      <veui-tabs ui="simple l" :active.sync="active0">
+      <veui-tabs class="tabs" ui="simple l" :active.sync="active0">
         <veui-tab label="回答问题" name="answers"/>
         <veui-tab label="文章评论" name="articles"/>
         <veui-tab label="分享朋友圈" name="shares"/>
@@ -75,9 +76,9 @@
     </section>
     <section>
       <h2>加强样式：</h2>
-      <veui-tabs ui="strong" :active.sync="active0">
+      <veui-tabs class="tabs" ui="strong" :active.sync="active0">
         <veui-tab label="回答问题" name="answers">
-          <veui-tabs ui="simple" :active.sync="active0">
+          <veui-tabs class="tabs" ui="simple" :active.sync="active0">
             <veui-tab label="回答问题" name="answers"/>
             <veui-tab label="文章评论" name="articles"/>
             <veui-tab label="分享朋友圈" name="shares"/>
@@ -89,7 +90,7 @@
     </section>
     <section>
       <h2>不受控</h2>
-      <veui-tabs>
+      <veui-tabs class="tabs">
         <veui-tab label="回答问题">Answers</veui-tab>
         <veui-tab label="文章评论" status="error">Articles</veui-tab>
         <veui-tab label="分享朋友圈">Shares</veui-tab>
@@ -97,7 +98,7 @@
           <em>{{ label }}</em>
         </template>
       </veui-tabs>
-      <veui-tabs ui="l">
+      <veui-tabs class="tabs" ui="l">
         <veui-tab label="回答问题" status="warning">Answers</veui-tab>
         <veui-tab label="文章评论">Articles</veui-tab>
         <veui-tab label="分享朋友圈">
@@ -116,7 +117,7 @@
     </section>
     <section>
       <h2>溢出样式</h2>
-      <veui-tabs>
+      <veui-tabs class="tabs">
         <veui-tab
           v-for="n in 30"
           :key="n"
@@ -126,7 +127,7 @@
           tooltip
         />
       </veui-tabs>
-      <veui-tabs ui="s">
+      <veui-tabs class="tabs" ui="s">
         <veui-tab
           v-for="n in 30"
           :key="n"
@@ -139,7 +140,7 @@
     </section>
     <section>
       <h2>禁用样式：</h2>
-      <veui-tabs eager>
+      <veui-tabs class="tabs" eager>
         <veui-tab label="Tab1">
           <p>This is Tab1</p>
         </veui-tab>
@@ -153,7 +154,7 @@
           <p>This is Tab4</p>
         </veui-tab>
       </veui-tabs>
-      <veui-tabs ui="strong">
+      <veui-tabs class="tabs" ui="strong">
         <veui-tab label="Tab1">
           <p>This is Tab1</p>
         </veui-tab>
@@ -170,7 +171,10 @@
     </section>
     <section>
       <h2>路由模式：</h2>
-      <veui-tabs :matches="(current, to) => current.path === to.path">
+      <veui-tabs
+        class="tabs"
+        :matches="(current, to) => current.path === to.path"
+      >
         <veui-tab label="Button" to="/tabs/button"/>
         <veui-tab label="Input" to="input"/>
         <veui-tab label="Progress" to="/tabs/progress">
@@ -203,6 +207,7 @@
     >选中新增</veui-checkbox>
     <veui-tabs
       ref="dataTab0"
+      class="tabs"
       :active.sync="active1"
       addable
       :max="totalTabs0"
@@ -218,6 +223,7 @@
     </veui-tabs>
     <veui-tabs
       ref="dataTab1"
+      class="tabs"
       ui="simple"
       :active.sync="active1"
       addable
@@ -235,6 +241,7 @@
     <veui-tabs
       ref="dataTab2"
       key="totalTabs01"
+      class="tabs"
       ui="strong"
       :active.sync="active1"
       addable
@@ -254,7 +261,7 @@
     <section>
       <h2>增删模式2（完全外部控制）：</h2>
       <veui-button class="add-btn" @click="addTab2">添加 TAB</veui-button>
-      <veui-tabs :active.sync="active3">
+      <veui-tabs class="tabs" :active.sync="active3">
         <veui-tab
           v-for="tab in tabs2"
           :key="tab.name"
@@ -267,7 +274,7 @@
         </veui-tab>
       </veui-tabs>
       <veui-button class="add-btn" @click="addTab3">添加 TAB</veui-button>
-      <veui-tabs :active.sync="active4">
+      <veui-tabs class="tabs" :active.sync="active4">
         <veui-tab
           v-for="tab in tabs3"
           :key="tab.name"
@@ -294,7 +301,7 @@
         :disabled="tabIfRemoving"
         @click="insertVisiable = !insertVisiable"
       >{{ insertVisiable ? '隐藏' : '显示' }}中间一个可切换 TAB</veui-button>
-      <veui-tabs ui="l" :active.sync="active5">
+      <veui-tabs class="tabs" ui="l" :active.sync="active5">
         <veui-tab label="DuerOS" name="os">
           <p>os</p>
         </veui-tab>
@@ -308,7 +315,7 @@
           <p>sound</p>
         </veui-tab>
       </veui-tabs>
-      <veui-tabs ui="l" :active.sync="active5">
+      <veui-tabs class="tabs" ui="l" :active.sync="active5">
         <veui-tab label="DuerOS" name="os">
           <p>os</p>
         </veui-tab>
@@ -324,14 +331,14 @@
       </veui-tabs>
     </section>
     <section>
-      <veui-tabs :active.sync="active6">
+      <veui-tabs class="tabs" :active.sync="active6">
         <veui-tab v-for="tab in tabs4" :key="tab.name" :label="tab.label"/>
       </veui-tabs>
       <veui-button @click="tabs4 = tabs5">Change</veui-button>
     </section>
     <section>
       <veui-button @click="compact = !compact">toggle</veui-button>
-      <veui-tabs :active.sync="active7">
+      <veui-tabs class="tabs" :active.sync="active7">
         <template v-if="!compact">
           <veui-tab key="answers" label="回答问题" name="answers"/>
           <veui-tab key="articles" label="文章评论" name="articles"/>
@@ -342,7 +349,7 @@
         </template>
         <veui-tab label="分享朋友圈" name="shares"/>
       </veui-tabs>
-      <veui-tabs :active.sync="active7">
+      <veui-tabs class="tabs" :active.sync="active7">
         <veui-tab
           v-if="!compact || active7 === 'answers'"
           key="answers"
@@ -526,18 +533,9 @@ section + section {
   margin-top: 60px;
 }
 
-.veui-tabs {
-  & + &[ui~="block"] {
+.tabs {
+  & + &[ui~='block'] {
     margin-top: 20px;
-  }
-}
-
-.large-block-demo .veui-tab {
-  border: 1px solid #e7e7e7;
-  margin-top: -1px;
-
-  p {
-    padding: 0 30px;
   }
 }
 
@@ -546,7 +544,7 @@ section + section {
   flex-grow: 1;
   justify-content: flex-end;
 
-  .veui-button {
+  .button {
     margin-left: 12px;
   }
 }
@@ -555,7 +553,7 @@ section + section {
   margin-bottom: 10px;
 }
 
-.veui-tabs[ui~="simple"] {
+.tabs[ui~='simple'] {
   margin-bottom: 16px;
 }
 </style>

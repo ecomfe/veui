@@ -242,6 +242,7 @@
     <details>
       <summary>Value</summary>
       <veui-textarea
+        class="textarea"
         ui="s"
         readonly
         :value="JSON.stringify(files, null, 4)"
@@ -763,7 +764,7 @@ fieldset > div {
   overflow: hidden;
 }
 
-.veui-textarea {
+.textarea {
   width: 100%;
   height: 300px;
 }

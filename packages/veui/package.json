@@ -3,6 +3,7 @@
   "version": "2.16.4",
   "description": "Baidu Enterprise UI for Vue.js.",
   "scripts": {
+    "serve:dual": "cross-env VEUI_STYLE=dual pnpm serve",
     "serve": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service serve",
     "demo": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service build",
     "lint": "vue-cli-service lint",

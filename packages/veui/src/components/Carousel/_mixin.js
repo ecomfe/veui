@@ -1,11 +1,11 @@
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import { get, noop } from 'lodash'
 
 export const CUSTOM_GUTTER = '--dls-carousel-slide-gutter'
 export const FALLBACK_GUTTER = '24px'
 
 export default {
-  mixins: [prefix],
+  mixins: [ui],
   props: {
     slideAspectRatio: [String, Number],
     options: Object,

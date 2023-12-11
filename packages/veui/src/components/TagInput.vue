@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import input from '../mixins/input'
@@ -74,7 +73,6 @@ export default {
     'veui-icon': Icon
   },
   mixins: [
-    prefix,
     ui,
     i18n,
     input,

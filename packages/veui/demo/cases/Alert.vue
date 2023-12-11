@@ -6,6 +6,7 @@
   <section>
     <div>固定提示</div>
     <veui-alert
+      class="alert"
       status="success"
       ui="strong"
       message="恭喜你，你的请求已成功处理"
@@ -18,6 +19,7 @@
       恭喜你，你的请求已成功处理
     </veui-alert>
     <veui-alert
+      class="alert"
       status="success"
       ui="s"
       message="恭喜你，你的请求已成功处理"
@@ -29,6 +31,7 @@
       <a href="#" ui="strong">查看详情</a>。
     </veui-alert>
     <veui-alert
+      class="alert"
       status="success"
       message="恭喜你，你的请求已成功处理"
       closable
@@ -41,26 +44,27 @@
       恭喜你，你的请求已成功处理
     </veui-alert>
     <veui-alert
-      class="limit-width"
+      class="alert limit-width"
       ui="strong s"
       status="success"
       message="恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理 恭喜你，你的请求已成功处理"
       closable
     />
     <veui-alert
+      class="alert"
       status="warning"
       ui="strong"
       message="警告，进行检查，有风险信息存在"
     />
     <veui-alert
-      class="limit-width"
+      class="alert limit-width"
       status="warning"
       ui="s"
       :message="messages"
       closable
     />
     <veui-alert
-      class="limit-width"
+      class="alert limit-width"
       status="warning"
       :message="messages"
       closable
@@ -69,20 +73,26 @@
         <veui-button ui="text">查看详情 {{ message }}</veui-button>
       </template>
     </veui-alert>
-    <veui-alert status="info" ui="s" message="提醒，这个消息需要注意"/>
     <veui-alert
-      class="limit-width"
+      class="alert"
+      status="info"
+      ui="s"
+      message="提醒，这个消息需要注意"
+    />
+    <veui-alert
+      class="alert limit-width"
       status="info"
       message="提醒，这个消息需要注意"
       close-label="不再提示"
     />
     <veui-alert
+      class="alert"
       status="error"
       ui="s"
       message="错误，请检查并修改后再进行操作"
     />
     <veui-alert
-      class="limit-width"
+      class="alert limit-width"
       status="error"
       message="错误，请检查并修改后再进行操作"
     />
@@ -133,11 +143,11 @@ section {
   margin: 30px;
 }
 
-.veui-alert {
+.alert {
   margin: 30px 0;
 }
 
-.veui-alert.limit-width {
+.alert.limit-width {
   width: 650px;
 }
 </style>

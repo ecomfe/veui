@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { assign } from 'lodash'
 import Tooltip from '../components/Tooltip'
-import { prefixify } from '../mixins/prefix'
+import { prefixify } from '../mixins/ui'
 import config from './config'
 
 config.defaults(
@@ -12,7 +12,11 @@ config.defaults(
   'tooltip'
 )
 
-export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
+export function createTooltipManager ({
+  warmup,
+  cooldown = warmup,
+  themeVariant
+} = {}) {
   let component = null
   let timer = null
   let currentTarget = null
@@ -100,7 +104,7 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
     }
 
     if (!component) {
-      component = createComponent()
+      component = createComponent({ themeVariant })
     }
 
     assign(component, {
@@ -125,7 +129,7 @@ export function createTooltipManager ({ warmup, cooldown = warmup } = {}) {
   }
 }
 
-function createComponent () {
+function createComponent ({ themeVariant }) {
   const el = document.createElement('div')
   document.body.appendChild(el)
 
@@ -147,7 +151,7 @@ function createComponent () {
             target: this.target,
             position: this.position,
             trigger: 'custom',
-            overlayClass: prefixify('global-tooltip')
+            overlayClass: prefixify('global-tooltip', themeVariant)
           }
         },
         [h('template', { slot: 'default' }, this.content)]

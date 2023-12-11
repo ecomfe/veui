@@ -8,7 +8,6 @@ import Overlay from '../Overlay'
 import Checkbox from '../Checkbox'
 import config from '../../managers/config'
 import useConfig from '../../mixins/config'
-import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import dropdown from '../../mixins/dropdown'
@@ -36,7 +35,6 @@ export default {
   name: 'veui-select',
   uiTypes: ['select'],
   mixins: [
-    prefix,
     ui,
     input,
     dropdown(),

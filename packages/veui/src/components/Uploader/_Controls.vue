@@ -47,7 +47,7 @@
 import Button from '../Button'
 import Icon from '../Icon'
 import Dropdown from '../Dropdown'
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 
 export default {
   name: 'veui-uploader-controls',
@@ -57,7 +57,8 @@ export default {
     'veui-button': Button,
     'veui-dropdown': Dropdown
   },
-  mixins: [prefix],
+  uiTypes: ['transparent'],
+  mixins: [ui],
   props: {
     items: Array,
     expanded: Boolean,

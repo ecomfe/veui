@@ -5,13 +5,13 @@
   </h1>
 
   <section>
-    <veui-slider/>
+    <veui-slider class="slider"/>
   </section>
 
   <section>
-    <veui-slider v-model="value1"/>
-    <veui-slider v-model="value1" readonly/>
-    <veui-slider v-model="value1" disabled ui="s">
+    <veui-slider v-model="value1" class="slider"/>
+    <veui-slider v-model="value1" class="slider" readonly/>
+    <veui-slider v-model="value1" class="slider" disabled ui="s">
       <template #tip-label>
         <span>{{ value1.toFixed(2) }}</span>
       </template>
@@ -20,13 +20,22 @@
   </section>
 
   <section>
-    <veui-slider v-model="value2" ui="s" :min="10" :max="100" :step="7" mark>
+    <veui-slider
+      v-model="value2"
+      class="slider"
+      ui="s"
+      :min="10"
+      :max="100"
+      :step="7"
+      mark
+    >
       <template #tip-label>
         <span>{{ value2 }}%</span>
       </template>
     </veui-slider>
     <veui-slider
       v-model="value2"
+      class="slider"
       disabled
       :min="10"
       :max="100"
@@ -35,17 +44,18 @@
     />
     <div class="desc">Range: 10~100, Step: 7, Value: {{ value2 }}</div>
     <h3>固定比例</h3>
-    <veui-slider :value="50" :min="1" :max="100" mark/>
+    <veui-slider class="slider" :value="50" :min="1" :max="100" mark/>
   </section>
 
   <section>
-    <veui-slider v-model="value4" :min="0" :max="100"/>
+    <veui-slider v-model="value4" class="slider" :min="0" :max="100"/>
     <div class="desc">Range: 0~100, Value: {{ value4 }}</div>
   </section>
 
   <section>
     <veui-slider
       v-model="value3"
+      class="slider"
       :min="0"
       :max="360"
       :step="1"
@@ -100,6 +110,7 @@
     <div class="play-button">▶️</div>
     <veui-slider
       v-model="videoPlayProgress"
+      class="slider"
       :secondary-progress="videoBufferProgress"
       ui="micro"
     >
@@ -118,6 +129,7 @@
     <h3>支持竖向，自定义高度</h3>
     <veui-slider
       v-model="valueVertical"
+      class="slider"
       mark
       :step="0.1"
       vertical
@@ -126,6 +138,7 @@
     <h3>竖向区间，默认高度</h3>
     <veui-slider
       v-model="value4"
+      class="slider"
       :min="0"
       :max="100"
       mark
@@ -195,17 +208,17 @@ section {
   padding: 1em;
 }
 
-.veui-slider {
+.slider {
   margin: 10px 0;
-  background: repeating-linear-gradient(
-    135deg,
-    #fff 0,
-    #fff 10px,
-    #f7f7f7 11px,
-    #f7f7f7 12px,
-    #fff 13px,
-    #fff 14px
-  );
+  // background: repeating-linear-gradient(
+  //   135deg,
+  //   #fff 0,
+  //   #fff 10px,
+  //   #f7f7f7 11px,
+  //   #f7f7f7 12px,
+  //   #fff 13px,
+  //   #fff 14px
+  // );
 }
 
 .desc {

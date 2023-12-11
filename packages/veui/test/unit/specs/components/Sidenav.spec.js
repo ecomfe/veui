@@ -84,20 +84,24 @@ describe('components/Sidenav', function () {
       }
     )
 
-    let menuUI = wrapper.find('.veui-menu.small-menu').attributes().ui
-    let menuTreeUI = wrapper.find('.small-menu .veui-menu-tree').attributes().ui
-    let menuLinkUI = wrapper.find('.small-menu .veui-menu-link').attributes().ui
+    let menuUI = wrapper.find('.veui-menu.small-menu').attributes('ui')
+    let menuTreeUI = wrapper
+      .find('.small-menu .veui-menu-tree')
+      .attributes('ui')
+    let menuLinkUI = wrapper
+      .find('.small-menu .veui-menu-link')
+      .attributes('ui')
     expect(menuUI).to.include('s')
     expect(menuTreeUI).to.include('s')
     expect(menuLinkUI).to.include('s')
 
-    let largeMenuUI = wrapper.find('.veui-menu.large-menu').attributes().ui
+    let largeMenuUI = wrapper.find('.veui-menu.large-menu').attributes('ui')
     let largeMenuTreeUI = wrapper
       .find('.large-menu .veui-menu-tree')
-      .attributes().ui
+      .attributes('ui')
     let largeMenuLinkUI = wrapper
       .find('.large-menu .veui-menu-link')
-      .attributes().ui
+      .attributes('ui')
     expect(largeMenuUI).to.include('l')
     expect(largeMenuTreeUI).to.include('l')
     expect(largeMenuLinkUI).to.include('l')
