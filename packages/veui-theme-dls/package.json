@@ -14,7 +14,7 @@
     "lint": "stylelint **/*.less --syntax=less",
     "build:entry": "node -r esm build/entry.js",
     "build:theme": "node -r esm build/theme.js",
-    "build": "pnpm run build:entry && rollup -c && node -r esm build/normalize-ignore.js",
+    "build": "pnpm run build:theme && pnpm run build:entry && rollup -c && node -r esm build/normalize-ignore.js",
     "prepublishOnly": "pnpm build"
   },
   "module": "dist/dls.esm.js",
