@@ -8,12 +8,15 @@
     <h3>配置子主题</h3>
     <veui-stack class="config" gap="s">
       <code>theme</code>
-      <veui-checkbox v-model="d22">D22</veui-checkbox>
+      <veui-radio-button-group v-model="theme" :items="themes"/>
     </veui-stack>
     <section class="case">
       <veui-config-provider :value="contextValue">
         <veui-collapse expanded label="Provide theme">
-          <veui-input clearable/>
+          <veui-stack gap="xs">
+            <veui-input clearable/>
+            <veui-button ui="primary">OK</veui-button>
+          </veui-stack>
         </veui-collapse>
       </veui-config-provider>
     </section>
@@ -21,9 +24,12 @@
       <veui-collapse
         expanded
         label="UI theme"
-        :ui="contextValue.theme ? `theme:${contextValue.theme}` : null"
+        :ui="contextValue.theme ? `theme:${contextValue.theme}` : 'theme:d20'"
       >
-        <veui-input clearable/>
+        <veui-stack gap="xs">
+          <veui-input clearable/>
+          <veui-button ui="primary">OK</veui-button>
+        </veui-stack>
       </veui-collapse>
     </section>
   </section>
@@ -116,6 +122,7 @@ import {
   Checkbox,
   Stack,
   Collapse,
+  RadioButtonGroup,
   ui
 } from 'veui'
 import { IconQuestionCircleSolid, IconCalendarSolid } from 'dls-icons-vue'
@@ -135,7 +142,8 @@ export default {
     'veui-date-picker': DatePicker,
     'veui-checkbox': Checkbox,
     'veui-stack': Stack,
-    'veui-collapse': Collapse
+    'veui-collapse': Collapse,
+    'veui-radio-button-group': RadioButtonGroup
   },
   data () {
     return {
@@ -145,33 +153,32 @@ export default {
       loadingIcon: false,
       style: 'normal',
       override: true,
-      d22: false
-    }
-  },
-  computed: {
-    options () {
-      return [
+      theme: 'd22',
+      options: [
         { label: '工程师培训', value: '12' },
         { label: '大数据培训班', value: '13' },
         { label: '双眼皮产品类', value: '14' },
         { label: '分散机', value: '15' },
         { label: '编码器', value: '16' },
         { label: '相亲中介', value: '17' }
-      ]
-    },
-    styles () {
-      return [
+      ],
+      styles: [
         { label: 'normal', value: 'normal' },
         { label: 'primary', value: 'primary' }
-      ]
-    },
-    searchItems () {
-      return [
+      ],
+      searchItems: [
         { label: '默认', value: '' },
         { label: '全中无高亮', value: 'all_wh' },
         { label: '全中有高亮', value: 'all_h' }
+      ],
+      themes: [
+        { label: 'D20', value: '' },
+        { label: 'D22', value: 'd22' },
+        { label: 'AI', value: 'ai' }
       ]
-    },
+    }
+  },
+  computed: {
     contextValue () {
       return {
         // undefined 让默认 contextValue 生效
@@ -182,7 +189,7 @@ export default {
           ? { 'button.icons.loading': ui.get('alert.icons').success }
           : {}),
         'button.ui.style.default': this.style,
-        theme: this.d22 ? 'd22' : null
+        theme: this.theme
       }
     },
     config () {
