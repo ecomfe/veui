@@ -1,11 +1,13 @@
 {
   "version": "2.16.4",
   "scripts": {
-    "dev": "cd packages/veui && pnpm run serve",
+    "dev": "pnpm --filter=veui run serve",
     "test": "pnpm -r test",
-    "build-components": "cd packages/veui && pnpm run components && pnpm run demo && cd ../..",
-    "build-plugin": "cd packages/babel-plugin-veui && pnpm run build && cd ../..",
-    "build-loader": "cd packages/veui-loader && pnpm run build && cd ../..",
+    "build:demo": "pnpm run build:theme-variants && pnpm --filter=veui run demo",
+    "build:theme-variants": "pnpm --filter=veui-theme-dls run build:theme",
+    "build:components": "pnpm --filter=veui run components && pnpm --filter=veui run demo",
+    "build:plugin": "pnpm --filter=babel-plugin-veui run build",
+    "build:loader": "pnpm --filter=veui-loader run build",
     "build": "pnpm -r build",
     "prepare": "husky install",
     "sync": "node -r esm build/sync.js",

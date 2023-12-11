@@ -5,7 +5,7 @@
   "scripts": {
     "serve:dual": "cross-env VEUI_STYLE=dual pnpm serve",
     "serve": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service serve",
-    "demo": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service build",
+    "demo": "cross-env VEUI_STYLE=dual NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service build",
     "lint": "vue-cli-service lint",
     "components": "node ./build/components.js",
     "build": "rollup -c",
