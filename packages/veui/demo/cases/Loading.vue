@@ -106,7 +106,7 @@
         MVP选票数：
         <veui-loading :loading="loading">实时MVP选票数加载中...</veui-loading>
         <template v-if="!loading">
-          <veui-span>{{ voteAccount }}</veui-span>
+          <veui-span class="span">{{ voteAccount }}</veui-span>
           <veui-button
             ui="primary"
             @click="handleClick"
@@ -179,7 +179,7 @@ export default {
     line-height: 32px;
   }
 
-  .veui-span {
+  .span {
     margin-right: 15px;
   }
 

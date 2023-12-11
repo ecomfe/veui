@@ -7,7 +7,7 @@
 <script>
 import config from '../../managers/config'
 import useConfig from '../../mixins/config'
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import '../../common/global'
 
 config.defaults(
@@ -21,7 +21,8 @@ config.defaults(
 
 export default {
   name: 'veui-grid-container',
-  mixins: [prefix, useConfig('config', 'gridcontainer')],
+  uiTypes: ['transparent'],
+  mixins: [ui, useConfig('config', 'gridcontainer')],
   props: {
     width: {
       type: Number

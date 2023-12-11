@@ -1,5 +1,5 @@
 <script>
-import { prefixify } from '../mixins/prefix'
+import { prefixify } from '../mixins/ui'
 import Icon from './Icon'
 
 export default {
@@ -10,12 +10,19 @@ export default {
     matchClass: [Object, String, Array],
     separatorClass: [Object, String, Array],
     // eslint-disable-next-line vue/require-prop-types
-    separator: {}
+    separator: {},
+    themeVariant: String
   },
   render (_, { props }) {
-    let { matches, matchClass, separatorClass, separator } = props
-    matchClass = [prefixify('search-result-item-matched'), matchClass]
-    separatorClass = [prefixify('search-result-item-separator'), separatorClass]
+    let { matches, matchClass, separatorClass, separator, themeVariant } = props
+    matchClass = [
+      prefixify('search-result-item-matched', themeVariant),
+      matchClass
+    ]
+    separatorClass = [
+      prefixify('search-result-item-separator', themeVariant),
+      separatorClass
+    ]
     return (matches || []).reduce((result, { parts }, idx) => {
       let items = parts.map(({ text, matched }, index) =>
         matched ? (

@@ -137,7 +137,7 @@
     >
       <template #label="{ label }">
         {{ label }}
-        <veui-icon name="flag"/>
+        <veui-icon class="icon" name="flag"/>
       </template>
     </veui-select>
     <veui-button>OK</veui-button>
@@ -152,7 +152,7 @@
     >
       <template #selected="{ label }">
         {{ label }}
-        <veui-icon name="flag"/>
+        <veui-icon class="icon" name="flag"/>
       </template>
     </veui-select>
     <veui-button>OK</veui-button>
@@ -228,7 +228,7 @@
     <h2>Slot[name=option-label] 样式：</h2>
     <veui-select v-model="defaultValue3" v-bind="attrs" ui="alt">
       <template #option-label="props">
-        <span class="veui-option-custom-label">{{ props.label }}</span>
+        <span class="option-custom-label">{{ props.label }}</span>
       </template>
     </veui-select>
     <veui-button>OK</veui-button>
@@ -237,8 +237,8 @@
     <h2>Slot 样式 2：</h2>
     <veui-select v-model="defaultValue4" v-bind="attrs">
       <template #option="props">
-        <span class="veui-option-label-text">{{ props.label }}</span>
-        <veui-icon name="flag"/>
+        <span class="option-label-text">{{ props.label }}</span>
+        <veui-icon class="icon" name="flag"/>
       </template>
     </veui-select>
     <veui-button>OK</veui-button>
@@ -384,7 +384,7 @@
             </template>
             <template v-if="group.label === '业务点'" #before>
               <div class="note">
-                <veui-icon name="info-circle"/>
+                <veui-icon class="icon" name="info-circle"/>
                 <div class="text">
                   此处仅显示业务点 Top n，您可通过搜索添加其它业务点标签。
                 </div>
@@ -440,10 +440,10 @@
     <h2>Slot[name=option] 分组样式 2：</h2>
     <veui-select v-model="defaultValue8" v-bind="optGroupAttrs">
       <template #option="props">
-        <span class="veui-option-label-text veui-option-custom-label">
+        <span class="option-label-text option-custom-label">
           {{ props.label }}
         </span>
-        <veui-icon name="gift"/>
+        <veui-icon class="icon" name="gift"/>
       </template>
     </veui-select>
     <veui-button>OK</veui-button>
@@ -781,18 +781,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.veui-option-label {
+section + section {
+  margin-top: 10px;
+}
+
+.option-label {
   &-text,
-  .veui-icon {
+  .icon {
     vertical-align: middle;
   }
 
-  .veui-icon {
+  .icon {
     margin-left: 5px;
   }
 }
 
-.veui-option-custom {
+.option-custom {
   position: relative;
   padding-left: 24px;
 
@@ -819,7 +823,7 @@ export default {
   font-size: 12px;
   width: 240px;
 
-  .veui-icon {
+  .icon {
     float: left;
     margin-top: 3px;
     margin-right: 8px;
@@ -831,7 +835,7 @@ export default {
   }
 }
 
-.veui-button {
+.button {
   margin-left: 8px;
 }
 </style>

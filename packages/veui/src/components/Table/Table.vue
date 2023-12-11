@@ -110,8 +110,7 @@
 import { map, mapValues, intersection, find, omit, filter } from 'lodash'
 import warn from '../../utils/warn'
 import { normalizeLength } from '../../utils/helper'
-import prefix from '../../mixins/prefix'
-import ui from '../../mixins/ui'
+import ui, { prefixify } from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import colgroup from '../../mixins/colgroup'
 import useControllable from '../../mixins/controllable'
@@ -168,7 +167,6 @@ export default {
     resize
   },
   mixins: [
-    prefix,
     ui,
     i18n,
     colgroup,
@@ -502,9 +500,11 @@ export default {
     },
     scrollbarMetrics () {
       return {
-        [`--${this.$c('table-scroll-width')}`]: `${this.scrollWidth}px`,
-        [`--${this.$c('table-scrollbar-width')}`]: `${this.scrollbarWidth}px`,
-        [`--${this.$c('table-scrollbar-height')}`]: `${this.scrollbarHeight}px`
+        [`--${prefixify('table-scroll-width')}`]: `${this.scrollWidth}px`,
+        [`--${prefixify('table-scrollbar-width')}`]: `${this.scrollbarWidth}px`,
+        [`--${prefixify(
+          'table-scrollbar-height'
+        )}`]: `${this.scrollbarHeight}px`
       }
     }
   },

@@ -5,9 +5,17 @@
   </h1>
   <section>
     <div class="control-wrapper">
-      <veui-radio-button-group v-model="ui" :items="uiValues"/>
+      <veui-radio-button-group
+        v-model="ui"
+        class="radio-button-group"
+        :items="uiValues"
+      />
 
-      <veui-radio-button-group v-model="display" :items="displayValues"/>
+      <veui-radio-button-group
+        v-model="display"
+        class="radio-button-group"
+        :items="displayValues"
+      />
     </div>
     <div v-for="(status, index) in statuses" :key="index">
       <span class="message-label">{{ status }}:</span>
@@ -64,7 +72,7 @@ section {
   }
 }
 
-.veui-radio-button-group {
+.radio-button-group {
   & + & {
     margin-left: 24px;
   }

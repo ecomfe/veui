@@ -68,6 +68,14 @@
     width: 100%;
     background-color: transparent;
     .ellipsis();
+
+    // to trigger autofill detection
+    opacity: 1;
+    transition: opacity 0.0001s;
+
+    &:-webkit-autofill {
+      opacity: 0.9999;
+    }
   }
 
   &-measurer {

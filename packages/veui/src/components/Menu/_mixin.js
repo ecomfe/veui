@@ -4,7 +4,6 @@ import Overlay from '../Overlay'
 import OptionGroup from '../OptionGroup'
 import overlay from '../../mixins/overlay'
 import ui from '../../mixins/ui'
-import prefix from '../../mixins/prefix'
 import useControllable from '../../mixins/controllable'
 import outside from '../../directives/outside'
 import { find } from '../../utils/datasource'
@@ -20,6 +19,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   uiTypes: ['select'],
+  mixins: [overlay, ui, useControllable(['active'])],
   directives: { outside },
   props: {
     active: String,
@@ -50,7 +50,6 @@ export default {
       return this.exactAndActiveItems ? this.exactAndActiveItems.slice(1) : []
     }
   },
-  mixins: [prefix, overlay, ui, useControllable(['active'])],
   created () {
     if (this.$router) {
       const updateActive = (route) => {

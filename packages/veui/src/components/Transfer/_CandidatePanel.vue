@@ -52,7 +52,7 @@
 import FilterPanel from '../FilterPanel'
 import Tree from '../Tree'
 import Button from '../Button'
-import prefix from '../../mixins/prefix'
+import { prefixify } from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import useTree from '../../mixins/tree'
 import useControllable from '../../mixins/controllable'
@@ -65,8 +65,8 @@ export default {
     'veui-tree': Tree,
     'veui-button': Button
   },
+  uiTypes: ['transparent'],
   mixins: [
-    prefix,
     i18n,
     useControllable({
       prop: 'selected',
@@ -86,7 +86,8 @@ export default {
     selected: Array,
     ...useTree().props,
     uiParts: Object,
-    ui: String
+    ui: String,
+    themeVariant: String
   },
   data () {
     return {
@@ -107,6 +108,9 @@ export default {
     }
   },
   methods: {
+    $c (name) {
+      return prefixify(name, this.themeVariant)
+    },
     realFilter (keyword, option) {
       return this.filter('candidate', keyword, option, this.datasource)
     },

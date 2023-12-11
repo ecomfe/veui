@@ -58,7 +58,6 @@ import {
   isUndefined,
   noop
 } from 'lodash'
-import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import i18n from '../../mixins/i18n'
@@ -127,7 +126,6 @@ export default {
     'veui-uploader-media': MediaUploader
   },
   mixins: [
-    prefix,
     ui,
     input,
     i18n,

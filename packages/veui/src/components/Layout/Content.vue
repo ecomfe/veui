@@ -5,10 +5,11 @@
 </template>
 
 <script>
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 
 export default {
   name: 'veui-content',
-  mixins: [prefix]
+  uiTypes: ['transparent'],
+  mixins: [ui]
 }
 </script>

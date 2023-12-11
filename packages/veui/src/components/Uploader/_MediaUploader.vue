@@ -248,7 +248,7 @@
 
 <script>
 import { includes, upperFirst } from 'lodash'
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import upload from './_mixin'
 import i18n from '../../mixins/i18n'
 import Icon from '../Icon'
@@ -277,7 +277,7 @@ export default {
     'veui-uploader-file-viewer': FileViewer,
     'veui-message': Message
   },
-  mixins: [prefix, upload, i18n],
+  mixins: [ui, upload, i18n],
   provide () {
     return {
       uiParts: this.uiParts

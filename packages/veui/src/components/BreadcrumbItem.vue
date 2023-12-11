@@ -24,7 +24,6 @@
 
 <script>
 import { includes } from 'lodash'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import Link from './Link'
 import Icon from './Icon'
@@ -38,7 +37,7 @@ export default {
     'veui-link': Link,
     'veui-icon': Icon
   },
-  mixins: [prefix, ui],
+  mixins: [ui],
   props: {
     to: [String, Object],
     // TODO: 提供replace这个属性缺少实际use case？

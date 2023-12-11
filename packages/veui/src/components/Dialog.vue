@@ -82,7 +82,6 @@
 import { pick } from 'lodash'
 import Overlay from './Overlay'
 import Button from './Button'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import focusable from '../mixins/focusable'
@@ -102,15 +101,7 @@ export default {
     'veui-icon': Icon
   },
   directives: { outside, drag },
-  mixins: [
-    prefix,
-    ui,
-    overlay,
-    modal,
-    focusable,
-    i18n,
-    useControllable(['open'])
-  ],
+  mixins: [ui, overlay, modal, focusable, i18n, useControllable(['open'])],
   inheritAttrs: false,
   props: {
     modal: {

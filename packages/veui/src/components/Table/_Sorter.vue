@@ -26,7 +26,7 @@
 <script>
 import Icon from '../Icon'
 import Button from '../Button'
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import table from '../../mixins/table'
 import config from '../../managers/config'
 import useConfig from '../../mixins/config'
@@ -48,8 +48,8 @@ export default {
     'veui-icon': Icon,
     'veui-button': Button
   },
-  mixins: [prefix, table, useConfig('config', 'table')],
   uiTypes: ['transparent'],
+  mixins: [ui, table, useConfig('config', 'table')],
   props: {
     order: [Boolean, String],
     allowedOrders: {

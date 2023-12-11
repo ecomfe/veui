@@ -9,9 +9,16 @@
       <input v-model="progress" type="number" step="0.01" min="0" :max="1">
     </p>
     <p>
-      <veui-button @click="status = 'error'">Trigger Error</veui-button>
-      <veui-button @click="status = null">Clear Status</veui-button>
       <veui-button
+        class="button"
+        @click="status = 'error'"
+      >Trigger Error</veui-button>
+      <veui-button
+        class="button"
+        @click="status = null"
+      >Clear Status</veui-button>
+      <veui-button
+        class="button"
         @click="indeterminate = !indeterminate"
       >Toggle Indeterminate</veui-button>
     </p>
@@ -126,7 +133,7 @@ section {
   margin-bottom: 30px;
 }
 
-.veui-button {
+.button {
   margin-right: 10px;
 }
 </style>

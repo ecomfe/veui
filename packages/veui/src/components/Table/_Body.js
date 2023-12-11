@@ -1,5 +1,5 @@
 import Row from './_Row'
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import { flatMap } from 'lodash'
@@ -7,7 +7,7 @@ import { flatMap } from 'lodash'
 export default {
   name: 'veui-table-body',
   uiTypes: ['transparent'],
-  mixins: [prefix, table, i18n],
+  mixins: [ui, table, i18n],
   render () {
     let { table } = this
     let subRow = table.$scopedSlots['sub-row']

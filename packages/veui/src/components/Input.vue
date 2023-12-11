@@ -75,7 +75,6 @@
 
 <script>
 import { maska } from '@justfork/maska'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import useControllable from '../mixins/controllable'
@@ -116,7 +115,6 @@ export default {
     maska
   },
   mixins: [
-    prefix,
     ui,
     input,
     activatable,
@@ -398,16 +396,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-@veui-prefix: veui;
-
-.@{veui-prefix}-input-input {
-  opacity: 1;
-  transition: opacity 0.0001s;
-
-  &:-webkit-autofill {
-    opacity: 0.9999;
-  }
-}
-</style>

@@ -60,6 +60,7 @@ import carousel from './_mixin'
 
 export default {
   name: 'veui-carousel-fade',
+  uiTypes: ['transparent'],
   mixins: [carousel],
   watch: {
     index (_, oldVal) {

@@ -1,7 +1,6 @@
 <script>
 import { uniq, noop, omit } from 'lodash'
 import config from '../managers/config'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import useConfig from '../mixins/config'
 import '../common/global'
@@ -17,7 +16,7 @@ const ABS_RE = /^(\w+:)?\/\//
 
 export default {
   name: 'veui-link',
-  mixins: [prefix, ui, useConfig('config', 'link')],
+  mixins: [ui, useConfig('config', 'link')],
   inheritAttrs: false,
   props: {
     to: {

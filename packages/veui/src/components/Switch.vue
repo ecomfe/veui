@@ -37,7 +37,6 @@
 
 <script>
 import Loading from './Loading'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import useControllable from '../mixins/controllable'
@@ -51,7 +50,6 @@ export default {
     'veui-loading': Loading
   },
   mixins: [
-    prefix,
     ui,
     input,
     useControllable({

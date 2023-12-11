@@ -1,3 +1,5 @@
+import { resolve, extname } from 'path'
+import { readFile } from 'fs/promises'
 import postcss from 'rollup-plugin-postcss'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
@@ -22,6 +24,40 @@ function transformVeuiConfig (veuiId) {
   }
 }
 
+const THEME_DIR = resolve(__dirname, 'themes')
+
+function transformThemedLess () {
+  return {
+    name: 'transform-themed-less',
+    async load (source) {
+      const [id, query] = source.split('?')
+
+      if (!query || extname(id) !== '.less') {
+        return null
+      }
+
+      return await readFile(id, 'utf-8')
+    },
+    transform (code, id) {
+      const [pure, query] = id.split('?')
+
+      if (!query || extname(pure) !== '.less') {
+        return null
+      }
+
+      const params = new URLSearchParams(query)
+      const theme = params.get('theme')
+
+      if (!theme) {
+        return null
+      }
+
+      const themeOverrides = resolve(THEME_DIR, `${theme}.less`)
+      return `${code}\n@import "${themeOverrides}";`
+    }
+  }
+}
+
 const commonPlugins = [
   replace({
     preventAssignment: true,
@@ -29,6 +65,7 @@ const commonPlugins = [
   }),
   nodeResolve(),
   commonjs(),
+  transformThemedLess(),
   postcss({
     minimize: true,
     use: {

@@ -34,5 +34,10 @@
     "stylelint": "^15.10.3",
     "stylelint-config-standard": "^34.0.0",
     "typescript": "^4.9.5"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "rollup-plugin-postcss@4.0.2": "patches/rollup-plugin-postcss@4.0.2.patch"
+    }
   }
 }

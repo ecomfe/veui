@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import { focusIn } from '../utils/dom'
@@ -63,7 +62,6 @@ export default {
     'veui-popover': Popover
   },
   mixins: [
-    prefix,
     ui,
     input,
     useControllable({

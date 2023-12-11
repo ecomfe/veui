@@ -5,12 +5,13 @@
 </template>
 
 <script>
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import '../../common/global'
 
 export default {
   name: 'veui-grid-column',
-  mixins: [prefix],
+  uiTypes: ['transparent'],
+  mixins: [ui],
   props: {
     span: {
       type: Number

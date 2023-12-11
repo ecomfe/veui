@@ -38,7 +38,6 @@
 <script>
 import Icon from './Icon'
 import Button from './Button'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import useControllable from '../mixins/controllable'
@@ -64,7 +63,6 @@ export default {
     'veui-button': Button
   },
   mixins: [
-    prefix,
     ui,
     i18n,
     useControllable(['open']),
