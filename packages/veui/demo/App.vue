@@ -76,7 +76,7 @@ export default {
       ],
       theme: 'ai',
       config: {
-        theme: 'ai'
+        theme: 'd22'
       }
     }
   },
