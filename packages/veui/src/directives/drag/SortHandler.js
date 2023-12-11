@@ -44,7 +44,7 @@ export default class SortHandler extends BaseHandler {
       return
     }
 
-    const { target, handle, themeVariant } = options
+    const { target, handle, themeVariant } = this.options
     if (target) {
       delete target.dataset[datasetDragSortKey(themeVariant)]
     }
