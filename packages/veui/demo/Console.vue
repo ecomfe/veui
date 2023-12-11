@@ -2,17 +2,19 @@
 <aside
   :class="{
     expanded,
-    'veui-console': true
+    console: true
   }"
 >
   <h2 @click="expanded = !expanded">
     <icon
+      class="icon"
       name="stop"
       label="Clear console"
       flip="horizontal"
       @click.native.stop="logs = []"
     />
     <icon
+      class="icon"
       :name="expanded ? 'chevron-down' : 'chevron-up'"
       label="Toggle console"
     />Console
@@ -44,7 +46,7 @@ import 'veui-theme-dls-icons/chevron-up'
 import 'veui-theme-dls-icons/chevron-down'
 
 export default {
-  name: 'veui-console',
+  name: 'console',
   components: {
     Icon
   },
@@ -83,15 +85,15 @@ export default {
 }
 </script>
 
-<style lang="less">
-@import "~less-plugin-est/src/all.less";
+<style lang="less" scoped>
+@import '~less-plugin-est/src/all.less';
 
 @nav-width: 240px;
 @light-bg-color: #f6f9ff;
 @title-height: 30px;
 @console-height: 40vh;
 
-.veui-console {
+.console {
   position: fixed;
   right: 0;
   bottom: 0;
@@ -112,7 +114,7 @@ export default {
       margin-right: 5px;
     }
 
-    .veui-icon {
+    .icon {
       vertical-align: middle;
     }
 
@@ -141,7 +143,7 @@ export default {
       }
 
       &:last-child::before {
-        content: "";
+        content: '';
         .absolute(0, _, 0, 0);
         width: 2px;
         background-color: #369;

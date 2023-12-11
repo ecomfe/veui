@@ -95,7 +95,6 @@ import Icon from './Icon'
 import Button from './Button'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
-import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 import { useRename } from '../mixins/deprecate'
 import '../common/global'
@@ -107,7 +106,6 @@ export default {
     'veui-button': Button
   },
   mixins: [
-    prefix,
     ui,
     i18n,
     useControllable(['open', 'index']),

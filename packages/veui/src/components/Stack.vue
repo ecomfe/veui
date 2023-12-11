@@ -1,5 +1,5 @@
 <template>
-<div :class="rootClass">
+<div :class="rootClass" :ui="realUi">
   <div :class="innerClass" :style="innerStyle">
     <slot/>
   </div>
@@ -7,12 +7,13 @@
 </template>
 
 <script>
-import prefix from '../mixins/prefix'
+import ui, { prefixify } from '../mixins/ui'
 import { getEnumValidator } from '../utils/helper'
 
 export default {
   name: 'veui-stack',
-  mixins: [prefix],
+  uiTypes: ['transparent'],
+  mixins: [ui],
   props: {
     direction: {
       type: String,
@@ -61,7 +62,7 @@ export default {
       let { gap } = this
       return typeof gap === 'number' && gap > 0
         ? {
-          [`--${this.$c('stack-gap')}`]: `${gap}px`
+          [`--${prefixify('stack-gap')}`]: `${gap}px`
         }
         : null
     }

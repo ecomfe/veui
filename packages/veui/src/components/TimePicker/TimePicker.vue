@@ -130,7 +130,6 @@ import TimePickerOptionGroup from './_TimePickerOptionGroup'
 import Input from '../Input'
 import Button from '../Button'
 import Icon from '../Icon'
-import prefix from '../../mixins/prefix'
 import dropdown from '../../mixins/dropdown'
 import useControllable from '../../mixins/controllable'
 import ui from '../../mixins/ui'
@@ -178,7 +177,6 @@ export default {
     'veui-icon': Icon
   },
   mixins: [
-    prefix,
     ui,
     input,
     dropdown(),

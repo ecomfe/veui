@@ -20,10 +20,14 @@
         nisi beatae possimus. Accusantium.
       </p>
       <p>
-        <veui-button @click="handleGoto">Goto Button</veui-button>
+        <veui-button
+          class="button"
+          @click="handleGoto"
+        >Goto Button</veui-button>
       </p>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="modalDialogVisible = !modalDialogVisible"
     >Open a modal dialog box</veui-button>
@@ -43,6 +47,7 @@
       </p>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="fullscreenDialogVisible = !fullscreenDialogVisible"
     >Open a fullscreen dialog box</veui-button>
@@ -58,6 +63,7 @@
       <textarea class="resizable"/>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="autoDialogVisible = !autoDialogVisible"
     >Open an footless dialog box with auto dimension</veui-button>
@@ -81,6 +87,7 @@
       </p>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="customDialogVisible = !customDialogVisible"
     >Open an dialog box with customed width</veui-button>
@@ -98,6 +105,7 @@
       </p>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="titlelessDialogVisible = !titlelessDialogVisible"
     >Open a titleless dialog box</veui-button>
@@ -112,14 +120,20 @@
       The content of the Dialog. You can use the default slot to override it.
       <template #foot="{ close }">
         <veui-button
+          class="button"
           ui="primary"
           :loading="loading"
           @click="close('ok')"
         >OK</veui-button>
-        <veui-button autofocus @click="close">CANCEL</veui-button>
+        <veui-button
+          class="button"
+          autofocus
+          @click="close"
+        >CANCEL</veui-button>
       </template>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="nonModalDialogVisible = !nonModalDialogVisible"
     >Open a modaless dialog box</veui-button>
@@ -134,11 +148,20 @@
     >
       You can drag the dialog box in the viewport.
       <template #foot="{ close }">
-        <veui-button ui="primary" @click="close('ok')">OK</veui-button>
-        <veui-button autofocus @click="close">CANCEL</veui-button>
+        <veui-button
+          class="button"
+          ui="primary"
+          @click="close('ok')"
+        >OK</veui-button>
+        <veui-button
+          class="button"
+          autofocus
+          @click="close"
+        >CANCEL</veui-button>
       </template>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="draggableDialog1Visible = !draggableDialog1Visible"
     >Open the first draggable dialog box</veui-button>
@@ -164,6 +187,7 @@
       </div>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="draggableDialog2Visible = !draggableDialog2Visible"
     >Open the second draggable dialog box</veui-button>
@@ -179,12 +203,14 @@
       Click the `reset` button to put the dialog to the initial position.
       <template #foot>
         <veui-button
+          class="button"
           ui="alt"
           @click="() => $refs.resetDialog.resetPosition()"
         >Reset</veui-button>
       </template>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="alt"
       @click="draggableDialog3Visible = !draggableDialog3Visible"
     >Draggable dialog box with reset button</veui-button>
@@ -198,6 +224,7 @@
     >The two built-in buttons emit their own event when
       clicked.</veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="operationDialogVisible = true"
     >The Built-in Button</veui-button>
@@ -211,16 +238,19 @@
       passing in the `title` slot parameter.
       <template #foot>
         <veui-button
+          class="button"
           ui="primary"
           @click="customTextTitleDialogVisible = false"
         >OK</veui-button>
         <veui-button
+          class="button"
           autofocus
           @click="customTextTitleDialogVisible = false"
         >CANCEL</veui-button>
       </template>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="customTextTitleDialogVisible = true"
     >Custom Title</veui-button>
@@ -232,10 +262,12 @@
       </template>
       <template #foot>
         <veui-button
+          class="button"
           ui="primary"
           @click="customIconTitleDialogVisible = false"
         >OK</veui-button>
         <veui-button
+          class="button"
           autofocus
           @click="customIconTitleDialogVisible = false"
         >CANCEL</veui-button>
@@ -243,6 +275,7 @@
       You can add icons to title by the `title slot`.
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="customIconTitleDialogVisible = true"
     >Custom Title With ICON</veui-button>
@@ -260,16 +293,19 @@
       <div v-html="dynamicContent"/>
       <template #foot>
         <veui-button
+          class="button"
           ui="primary"
           @click="contentAutoHeightDialogVisible = false"
         >OK</veui-button>
         <veui-button
+          class="button"
           autofocus
           @click="contentAutoHeightDialogVisible = false"
         >CANCEL</veui-button>
       </template>
     </veui-dialog>
     <veui-button
+      class="button"
       ui="primary"
       @click="contentAutoHeightDialogVisible = true"
     >Adaptive Content Height</veui-button>
@@ -277,26 +313,39 @@
 
   <section>
     <veui-button
+      class="button"
       @click="popupAlert('info', 'You\'ve got a new message', 'Message')"
     >Info Box</veui-button>
     <veui-button
+      class="button"
       @click="popupAlert('error', 'You\'ve got an error', 'Error')"
     >Error Box</veui-button>
     <veui-button
+      class="button"
       @click="
         popupAlert('success', 'Congratulations! Everything is ok!', 'Success')
       "
     >Success Box</veui-button>
     <veui-button
+      class="button"
       ui="primary"
       @click="popupAlerts"
     >Open a stack of AlertBox</veui-button>
   </section>
 
   <section>
-    <veui-button @click="alertOpen = true">Inline AlertBox</veui-button>
-    <veui-button @click="confirmOpen = true">Inline ConfirmBox</veui-button>
-    <veui-button @click="promptOpen = true">Inline PromptBox</veui-button>
+    <veui-button
+      class="button"
+      @click="alertOpen = true"
+    >Inline AlertBox</veui-button>
+    <veui-button
+      class="button"
+      @click="confirmOpen = true"
+    >Inline ConfirmBox</veui-button>
+    <veui-button
+      class="button"
+      @click="promptOpen = true"
+    >Inline PromptBox</veui-button>
     <veui-alert-box
       ui="s"
       :open.sync="alertOpen"
@@ -310,20 +359,38 @@
 
   <section>
     <veui-button
+      class="button"
       ui="primary"
       @click="popupConfirms"
     >Open ConfirmBox</veui-button>
   </section>
   <section>
-    <veui-button @click="popupToasts('info')">Info Toast</veui-button>
-    <veui-button @click="popupToasts('warn')">Warn Toast</veui-button>
-    <veui-button @click="popupToasts('error')">Error Toast</veui-button>
-    <veui-button @click="popupToasts('success')">Success Toast</veui-button>
-    <veui-button ui="primary" @click="popupToasts">Open Toasts</veui-button>
+    <veui-button
+      class="button"
+      @click="popupToasts('info')"
+    >Info Toast</veui-button>
+    <veui-button
+      class="button"
+      @click="popupToasts('warn')"
+    >Warn Toast</veui-button>
+    <veui-button
+      class="button"
+      @click="popupToasts('error')"
+    >Error Toast</veui-button>
+    <veui-button
+      class="button"
+      @click="popupToasts('success')"
+    >Success Toast</veui-button>
+    <veui-button
+      class="button"
+      ui="primary"
+      @click="popupToasts"
+    >Open Toasts</veui-button>
   </section>
   <section>
     <veui-button
       ref="p"
+      class="button"
       ui="primary"
       @click="popupPrompt"
     >Open Prompt</veui-button>
@@ -517,32 +584,12 @@ section {
 }
 
 .demo-dialog {
-  .veui-button {
+  .button {
     margin-right: 10px;
-  }
-
-  &-standard-dialog .veui-dialog-content {
-    width: 540px;
-
-    &-body {
-      border: 1px dashed #999;
-      height: 280px;
-
-      p {
-        margin: 0;
-      }
-    }
   }
 }
 
 .auto-dialog-standard-dialog {
-  .veui-dialog-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 100px;
-  }
-
   .resizable {
     resize: both;
   }

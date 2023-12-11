@@ -14,7 +14,7 @@
 <script>
 import Vue from 'vue'
 import Dialog from './Dialog'
-import prefix, { prefixify } from '../mixins/prefix'
+import ui, { prefixify } from '../mixins/ui'
 import useControllable from '../mixins/controllable'
 import '../common/global'
 import { LOOSE_PROP_DEF, normalizeClass, normalizeStyle } from '../utils/helper'
@@ -39,7 +39,7 @@ export default {
   components: {
     'veui-dialog': Dialog
   },
-  mixins: [prefix, useControllable(['open'])],
+  mixins: [ui, useControllable(['open'])],
   inheritAttrs: false,
   props: {
     open: Boolean,

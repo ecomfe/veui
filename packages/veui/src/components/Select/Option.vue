@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import menuItem from '../../mixins/menu-item'
 import selectItem from '../../mixins/select-item'
@@ -37,7 +36,7 @@ import '../../common/global'
 
 export default {
   name: 'veui-option',
-  mixins: [prefix, ui, menuItem, selectItem, useSelectConsumer('renderFor')],
+  mixins: [ui, menuItem, selectItem, useSelectConsumer('renderFor')],
   props: {
     label: {
       type: [String, Number]

@@ -37,7 +37,8 @@ const OPTIONS_SCHEMA = {
     dragstart: noop,
     drag: noop,
     dragend: noop,
-    ready: noop
+    ready: noop,
+    themeVariant: null
   }
 }
 

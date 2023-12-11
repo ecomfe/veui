@@ -118,7 +118,6 @@ import { includes } from 'lodash'
 import Button from './Button'
 import Icon from './Icon'
 import Overlay from './Overlay'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import modal from '../mixins/modal'
@@ -135,7 +134,6 @@ export default {
     'veui-overlay': Overlay
   },
   mixins: [
-    prefix,
     ui,
     overlay,
     modal,

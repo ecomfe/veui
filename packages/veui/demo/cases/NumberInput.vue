@@ -197,12 +197,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.veui-form {
-  & /deep/ .veui-field-label {
-    width: 140px;
-  }
-}
-
 section + section {
   margin-top: 60px;
 }

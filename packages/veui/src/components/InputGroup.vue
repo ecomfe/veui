@@ -6,11 +6,10 @@
 
 <script>
 import ui from '../mixins/ui'
-import prefix from '../mixins/prefix'
 import '../common/global'
 
 export default {
   name: 'veui-input-group',
-  mixins: [ui, prefix]
+  mixins: [ui]
 }
 </script>

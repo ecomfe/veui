@@ -31,7 +31,7 @@
       >hover展开</veui-radio>
       <label>
         列宽度:
-        <veui-input v-model="columnWidth1"/>
+        <veui-input v-model="columnWidth1" class="input"/>
       </label>
     </div>
     <veui-cascader
@@ -71,7 +71,7 @@
       </label>
       <label>
         列宽度:
-        <veui-input v-model="columnWidth2"/>
+        <veui-input v-model="columnWidth2" class="input"/>
       </label>
     </div>
     <veui-cascader
@@ -379,7 +379,7 @@ export default {
     margin-right: 32px;
   }
 
-  .veui-input {
+  .input {
     width: 80px;
   }
 }

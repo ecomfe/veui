@@ -1,11 +1,12 @@
 <script>
 import Dialog from './Dialog'
-import prefix from '../mixins/prefix'
+import ui from '../mixins/ui'
 import '../common/global'
 
 export default {
   name: 'veui-embedded',
-  mixins: [prefix],
+  uiTypes: ['transparent'],
+  mixins: [ui],
   inheritAttrs: false,
   render (h) {
     let data = {

@@ -1,5 +1,4 @@
 <script>
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -13,7 +12,6 @@ import '../common/global'
 export default {
   name: 'veui-rating',
   mixins: [
-    prefix,
     ui,
     input,
     i18n,

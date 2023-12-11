@@ -116,7 +116,6 @@ import { fill, clamp, isEqual, identity } from 'lodash'
 import drag from '../directives/drag'
 import nudge from '../directives/nudge'
 import outside from '../directives/outside'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import useControllable from '../mixins/controllable'
@@ -134,7 +133,6 @@ export default {
     outside
   },
   mixins: [
-    prefix,
     ui,
     input,
     useControllable({

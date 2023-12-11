@@ -1,0 +1,13 @@
+diff --git a/dist/index.js b/dist/index.js
+index 8ca4cf35ac17b3874f116a5620c6816854311099..1b33059078c8a701de128e07e8c10c8e1122d4b4 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -596,7 +596,7 @@ var stylusLoader = {
+ 
+ var lessLoader = {
+   name: 'less',
+-  test: /\.less$/,
++  test: /\.less(?:\?.+)?$/,
+ 
+   process({
+     code

@@ -71,7 +71,6 @@
 <script>
 import Icon from './Icon'
 import Link from './Link'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import '../common/global'
@@ -82,7 +81,7 @@ export default {
     'veui-icon': Icon,
     'veui-link': Link
   },
-  mixins: [prefix, ui, i18n],
+  mixins: [ui, i18n],
   props: {
     steps: {
       type: Array,

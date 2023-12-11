@@ -25,7 +25,6 @@ import {
   mergeWith,
   uniq
 } from 'lodash'
-import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import '../../common/global'
 import { pull } from '../../utils/helper'
@@ -45,7 +44,6 @@ export default {
   name: 'veui-form',
   uiTypes: ['form-container'],
   mixins: [
-    prefix,
     ui,
     useFacade((vm) => ({
       // 全写成函数目的：惰性响应式

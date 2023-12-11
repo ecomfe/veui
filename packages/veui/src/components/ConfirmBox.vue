@@ -33,7 +33,6 @@ import { pick } from 'lodash'
 import Dialog from './Dialog'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import useControllable from '../mixins/controllable'
@@ -52,7 +51,6 @@ export default {
     'veui-dialog': Dialog
   },
   mixins: [
-    prefix,
     ui,
     overlay,
     useControllable(['open']),

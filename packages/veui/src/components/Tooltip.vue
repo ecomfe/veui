@@ -1,6 +1,5 @@
 <script>
 import Overlay from './Overlay'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import overlay from '../mixins/overlay'
 import outside from '../directives/outside'
@@ -29,7 +28,6 @@ export default {
     'veui-overlay': Overlay
   },
   mixins: [
-    prefix,
     ui,
     overlay,
     useConfig('config', 'tooltip'),

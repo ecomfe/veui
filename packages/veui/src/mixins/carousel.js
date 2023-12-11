@@ -1,5 +1,4 @@
 import { contains } from '../utils/dom'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import useControllable from '../mixins/controllable'
@@ -9,7 +8,7 @@ const DEFAULT_LAZY_OPTIONS = {
 }
 
 export default {
-  mixins: [prefix, ui, i18n, useControllable(['index'])],
+  mixins: [ui, i18n, useControllable(['index'])],
   props: {
     datasource: {
       type: Array,

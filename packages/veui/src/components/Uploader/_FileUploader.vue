@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import prefix from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import upload from './_mixin'
 import i18n from '../../mixins/i18n'
 import Button from '../Button'
@@ -122,7 +122,7 @@ export default {
     'veui-progress': Progress,
     'veui-message': Message
   },
-  mixins: [prefix, upload, i18n],
+  mixins: [ui, upload, i18n],
   methods: {
     handleItemAction (index, { name }) {
       if (INTERNAL_ACTION_EVENTS.indexOf(name) >= 0) {

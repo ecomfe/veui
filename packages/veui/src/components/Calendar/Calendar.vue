@@ -327,7 +327,6 @@ import {
   isEqual,
   isNumber
 } from 'lodash'
-import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import useControllable from '../../mixins/controllable'
@@ -361,7 +360,6 @@ export default {
     InfiniteScroll
   },
   mixins: [
-    prefix,
     ui,
     input,
     i18n,
@@ -776,7 +774,10 @@ export default {
     getDateClass (day, panel) {
       let extraClass =
         typeof this.dateClass === 'function'
-          ? this.dateClass(fromDateData(day))
+          ? this.dateClass(fromDateData(day), {
+            today: day.isToday,
+            selected: day.isSelected
+          })
           : this.dateClass
 
       return {

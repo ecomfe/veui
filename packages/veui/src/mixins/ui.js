@@ -25,6 +25,13 @@ function callWithProps (val, props) {
 
 const RE_THEME = /^theme:([a-z0-9-]+)$/i
 
+function getThemeProps (theme) {
+  if (theme === 'ai') {
+    return { theme: 'd22', themeVariant: 'ai' }
+  }
+  return { theme }
+}
+
 export function useUi () {
   return {
     props: {
@@ -44,7 +51,10 @@ export function useUi () {
           (result, token) => {
             const [, theme] = token.match(RE_THEME) || []
             if (theme) {
-              result.theme = theme
+              // theme ai is a variant on d22
+              // convert to d22 and an ai variant under the hood
+              assign(result, getThemeProps(theme))
+
               return result
             }
 
@@ -95,7 +105,7 @@ export function useUi () {
             }
             return result
           },
-          theme ? { theme } : {}
+          theme ? getThemeProps(theme) : {}
         )
       },
       inheritableUiProps () {
@@ -104,7 +114,7 @@ export function useUi () {
         }
 
         return pickBy(this.uiProps, (val, key) => {
-          if (key === 'theme') {
+          if (key === 'theme' || key === 'themeVariant') {
             return true
           }
 
@@ -168,6 +178,10 @@ export function useUi () {
                   return `theme:${props.theme}`
                 }
 
+                if (key === 'themeVariant') {
+                  return null
+                }
+
                 if (props[key] === true) {
                   return key
                 }
@@ -177,6 +191,9 @@ export function useUi () {
               .concat(this.declaredUiProps[UNKNOWN_KEY])
           ).join(' ') || null
         )
+      },
+      uiThemeVariant () {
+        return (this.uiProps && this.uiProps.themeVariant) || null
       }
     },
     methods: {
@@ -200,9 +217,20 @@ export function useUi () {
         }
 
         return config
+      },
+      $c (name) {
+        return prefixify(name, this.uiThemeVariant)
       }
     }
   }
+}
+
+const PREFIX_CONFIG = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
+
+export function prefixify (name, themeVariant) {
+  return `${PREFIX_CONFIG || 'veui'}${
+    themeVariant ? `-${themeVariant}` : ''
+  }-${name}`
 }
 
 export default useUi()

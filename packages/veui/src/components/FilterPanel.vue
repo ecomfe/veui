@@ -35,7 +35,6 @@
 
 <script>
 import SearchBox from './SearchBox'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import { includes, debounce, cloneDeep } from 'lodash'
@@ -46,7 +45,7 @@ export default {
   components: {
     'veui-search-box': SearchBox
   },
-  mixins: [prefix, ui, i18n],
+  mixins: [ui, i18n],
   props: {
     title: String,
     datasource: {

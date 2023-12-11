@@ -6,37 +6,37 @@
   <div>active: {{ active }}</div>
   <section>
     <h3>small nav</h3>
-    <veui-nav :items="items" :active.sync="active" ui="s"/>
+    <veui-nav class="nav" :items="items" :active.sync="active" ui="s"/>
   </section>
   <section>
     <h3>medium nav</h3>
-    <veui-nav :items="items" :active.sync="active"/>
+    <veui-nav class="nav" :items="items" :active.sync="active"/>
   </section>
   <section>
     <h3>large nav</h3>
-    <veui-nav :items="items" ui="l"/>
+    <veui-nav class="nav" :items="items" ui="l"/>
   </section>
   <section>
     <h3>folded nav</h3>
-    <veui-nav class="rest-nav" :items="items"/>
+    <veui-nav class="nav rest-nav" :items="items"/>
   </section>
   <section>
     <h3>uncontrolled nav</h3>
-    <veui-nav :items="items"/>
+    <veui-nav class="nav" :items="items"/>
   </section>
   <section>
     <h3>item-label scoped slot</h3>
-    <veui-nav :items="items">
+    <veui-nav class="nav" :items="items">
       <template #item-label="item">{{ item.label }}🐂</template>
     </veui-nav>
   </section>
   <section>
     <h3>named nav（without to）</h3>
-    <veui-nav :items="nameItems"/>
+    <veui-nav class="nav" :items="nameItems"/>
   </section>
   <section>
     <h3>nav based on params</h3>
-    <veui-nav :items="nameItems"/>
+    <veui-nav class="nav" :items="nameItems"/>
   </section>
   <section>
     <router-view/>
@@ -223,7 +223,7 @@ export default {
 
 <style lang="less">
 .veui-nav-demo {
-  .veui-nav {
+  .nav {
     height: 100px;
   }
 

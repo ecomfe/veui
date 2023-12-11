@@ -88,7 +88,7 @@ import FilterPanel from '../FilterPanel'
 import Icon from '../Icon'
 import Button from '../Button'
 import Tree from '../Tree'
-import prefix from '../../mixins/prefix'
+import { prefixify } from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import { get } from 'lodash'
 import { getLeaves } from '../../utils/datasource'
@@ -101,7 +101,8 @@ export default {
     'veui-button': Button,
     'veui-tree': Tree
   },
-  mixins: [prefix, i18n],
+  uiTypes: ['transparent'],
+  mixins: [i18n],
   props: {
     datasource: Array,
     showMode: String,
@@ -110,7 +111,8 @@ export default {
     isSelectable: Boolean,
     ui: String,
     icons: Object,
-    uiParts: Object
+    uiParts: Object,
+    themeVariant: String
   },
   data () {
     return {
@@ -177,6 +179,9 @@ export default {
     }
   },
   methods: {
+    $c (name) {
+      return prefixify(name, this.themeVariant)
+    },
     removeAll () {
       this.$emit('removeall')
     },

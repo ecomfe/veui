@@ -200,6 +200,7 @@ export default {
       return (
         <section>
           <CheckButtonGroup
+            class="check-button-group"
             value={this.feature}
             items={this.features}
             onChange={(e) => {
@@ -207,6 +208,7 @@ export default {
             }}
           />
           <CheckButtonGroup
+            class="check-button-group"
             value={this.header}
             items={this.headerFeatures}
             onChange={(e) => {
@@ -214,6 +216,7 @@ export default {
             }}
           />
           <CheckButtonGroup
+            class="check-button-group"
             value={this.sidebar}
             items={this.sidebarFeatures}
             onChange={(e) => {
@@ -221,6 +224,7 @@ export default {
             }}
           />
           <CheckButtonGroup
+            class="check-button-group"
             value={this.outerFooter}
             items={this.outerFooterFeatures}
             onChange={(e) => {
@@ -228,6 +232,7 @@ export default {
             }}
           />
           <CheckButtonGroup
+            class="check-button-group"
             value={this.innerFooter}
             items={this.innerFooterFeatures}
             onChange={(e) => {
@@ -235,6 +240,7 @@ export default {
             }}
           />
           <Button
+            class="button"
             onClick={() => {
               this.open = false
             }}
@@ -249,7 +255,7 @@ export default {
         <Layout>
           <Content style={this.long}>{this.renderControls()}</Content>
           {this.innerFooter.includes('footer') && (
-            <Footer sticky={this.innerFooter.includes('sticky')}>
+            <Footer class="footer" sticky={this.innerFooter.includes('sticky')}>
               夜深风竹敲秋韵，万叶千声皆是恨。
             </Footer>
           )}
@@ -263,13 +269,14 @@ export default {
             <Header sticky={this.header.includes('sticky')}>
               <div class="demo-header-content">
                 {!this.isTongding && <div class="demo-header-logo" />}
-                <Nav items={navItems} active="order" />
+                <Nav class="nav" items={navItems} active="order" />
               </div>
             </Header>
           )
         case 'Sidebar':
           return (
             <Sidebar
+              class="sidebar"
               sticky={this.sidebar.includes('sticky')}
               collapseMode={this.sidebar.includes('slim') ? 'slim' : 'hidden'}
               collapsible={this.sidebar.includes('collapsible')}
@@ -326,6 +333,7 @@ export default {
           <code>&lt;veui-layout&gt;</code>
         </h1>
         <Button
+          class="button"
           onClick={() => {
             this.open = true
           }}
@@ -347,7 +355,7 @@ article {
   flex-direction: column;
   margin-bottom: 20px;
 
-  .veui-button {
+  .button {
     align-self: start;
   }
 }
@@ -383,7 +391,7 @@ article {
     height: 100%;
     display: flex;
 
-    .veui-nav {
+    .nav {
       flex: auto;
     }
   }
@@ -397,9 +405,9 @@ article {
     margin-bottom: 15px;
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url("https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png");
+    background-image: url('https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png');
 
-    .veui-layout-sidebar & {
+    .sidebar & {
       height: 64px;
       width: 100%;
     }
@@ -411,16 +419,16 @@ section {
   flex-direction: column;
   padding: 100px;
 
-  .veui-check-button-group {
+  .check-button-group {
     margin-bottom: 24px;
   }
 
-  .veui-button {
+  .button {
     align-self: start;
   }
 }
 
-.veui-layout-footer {
+.footer {
   padding: 24px 0;
 }
 </style>

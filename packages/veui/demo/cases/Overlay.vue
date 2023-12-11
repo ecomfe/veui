@@ -8,6 +8,7 @@
     <veui-button
       slot="target"
       ref="clickOpen"
+      class="button"
       ui="primary"
       @click="overlayVisible = !overlayVisible"
     >
@@ -26,6 +27,7 @@
   <div class="row">
     <veui-button
       ref="inlineOverlay"
+      class="button"
       @click="inline = !inline"
     >toggle inline</veui-button>
     <veui-overlay
@@ -38,10 +40,12 @@
   <div class="row">
     <veui-button
       ref="overlay3"
+      class="button"
       @click="showMultiFirst"
     >第一个target</veui-button>
     <veui-button
       ref="overlay4"
+      class="button"
       @click="showMultiSecond"
     >第二个target</veui-button>
     <veui-overlay
@@ -55,6 +59,7 @@
   <div class="row">
     <veui-button
       ref="local"
+      class="button"
       @click="localOpen = !localOpen"
     >不加入全局管理</veui-button>
     <veui-overlay
@@ -82,7 +87,10 @@
       :open="true"
     >全局定位在右下角</veui-overlay>
 
-    <veui-button ref="vnodeComponentTest">组件vnode</veui-button>
+    <veui-button
+      ref="vnodeComponentTest"
+      class="button"
+    >组件vnode</veui-button>
     <veui-overlay
       overlay-class="demo-overlay-box"
       :target="vnodeComponentTarget"
@@ -193,7 +201,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~less-plugin-est/src/all.less";
+@import '~less-plugin-est/src/all.less';
 
 .demo-overlay-box {
   box-shadow: 1px 1px 6px fadeout(#000, 80%);
@@ -221,30 +229,13 @@ export default {
     margin: 0;
   }
 
-  .preview {
-    margin-left: 400px;
-    height: 160px;
-    overflow: scroll;
-    border: 1px solid #dbdbdb;
-
-    .scroll-content {
-      width: 2000px;
-      height: 2000px;
-    }
-
-    .veui-overlay {
-      margin-top: 65px;
-      margin-left: 100px;
-    }
-  }
-
   .target {
     background: #6c9;
     width: 100px;
     height: 80px;
   }
 
-  .veui-button {
+  .button {
     margin-right: 20px;
   }
 }

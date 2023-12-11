@@ -1,7 +1,6 @@
 <script>
 import Icon from './Icon'
 import Loading from './Loading'
-import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import '../common/global'
@@ -22,7 +21,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [prefix, ui, focusable],
+  mixins: [ui, focusable],
   inheritAttrs: false,
   props: {
     disabled: Boolean,

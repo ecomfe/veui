@@ -14,9 +14,15 @@
       >Toggle</veui-button>
     </p>
     <p>
-      <veui-radio v-model="size" value="m" name="size">正常状态</veui-radio>
       <veui-radio
         v-model="size"
+        class="radio"
+        value="m"
+        name="size"
+      >正常状态</veui-radio>
+      <veui-radio
+        v-model="size"
+        class="radio"
         value="s"
         checked
         ui="s"
@@ -33,7 +39,10 @@
       <veui-button ui="s" @click="checked = !checked">Toggle</veui-button>
     </p>
     <p>
-      <veui-radio :checked.sync="checked">绑定状态：{{ checked }}</veui-radio>
+      <veui-radio
+        class="radio"
+        :checked.sync="checked"
+      >绑定状态：{{ checked }}</veui-radio>
     </p>
   </section>
   <section>
@@ -42,36 +51,52 @@
       <code>name</code>
     </h3>
     <h4>Outside a &lt;form&gt;</h4>
-    <veui-radio value="m" name="g1" :checked.sync="c1">{{ c1 }}</veui-radio>
-    <veui-radio value="s" name="g1" :checked.sync="c2">{{ c2 }}</veui-radio>
+    <veui-radio class="radio" value="m" name="g1" :checked.sync="c1">{{
+      c1
+    }}</veui-radio>
+    <veui-radio class="radio" value="s" name="g1" :checked.sync="c2">{{
+      c2
+    }}</veui-radio>
     <h4>Inside a &lt;form&gt;</h4>
     <form>
-      <veui-radio value="m" name="g1" :checked.sync="c1">{{ c1 }}</veui-radio>
-      <veui-radio value="s" name="g1" :checked.sync="c2">{{ c2 }}</veui-radio>
+      <veui-radio class="radio" value="m" name="g1" :checked.sync="c1">{{
+        c1
+      }}</veui-radio>
+      <veui-radio class="radio" value="s" name="g1" :checked.sync="c2">{{
+        c2
+      }}</veui-radio>
     </form>
   </section>
   <section>
-    <veui-radio ui="s" checked>选中状态</veui-radio>
+    <veui-radio class="radio" ui="s" checked>选中状态</veui-radio>
   </section>
   <section>
-    <veui-radio checked disabled>选中禁用状态</veui-radio>
+    <veui-radio class="radio" checked disabled>选中禁用状态</veui-radio>
   </section>
   <section>
-    <veui-radio ui="s" checked disabled>选中禁用状态</veui-radio>
+    <veui-radio
+      class="radio"
+      ui="s"
+      checked
+      disabled
+    >选中禁用状态</veui-radio>
   </section>
   <section>
-    <veui-radio disabled>未选禁用状态</veui-radio>
+    <veui-radio class="radio" disabled>未选禁用状态</veui-radio>
   </section>
   <section>
-    <veui-radio ui="s" disabled>未选禁用状态</veui-radio>
+    <veui-radio class="radio" ui="s" disabled>未选禁用状态</veui-radio>
   </section>
   <section style="width: 200px">
     <h4>换行样式</h4>
     <section>
-      <veui-radio>这是一句很长很长很长很长很长很长很长很长很长的文案</veui-radio>
+      <veui-radio
+        class="radio"
+      >这是一句很长很长很长很长很长很长很长很长很长的文案</veui-radio>
     </section>
     <section>
       <veui-radio
+        class="radio"
         ui="s"
       >这是一句很长很长很长很长很长很长很长很长很长的文案</veui-radio>
     </section>
@@ -79,30 +104,64 @@
   <section>
     <h4>无文字</h4>
     <section>
-      <veui-radio/>
+      <veui-radio class="radio"/>
     </section>
   </section>
   <section>
     <h3>单选组</h3>
     <p>
-      <veui-radio v-model="group" name="group" value="A">A</veui-radio>
-      <veui-radio v-model="group" name="group" value="B">B</veui-radio>
-      <veui-radio v-model="group" name="group" value="C">C</veui-radio>
+      <veui-radio
+        v-model="group"
+        class="radio"
+        name="group"
+        value="A"
+      >A</veui-radio>
+      <veui-radio
+        v-model="group"
+        class="radio"
+        name="group"
+        value="B"
+      >B</veui-radio>
+      <veui-radio
+        v-model="group"
+        class="radio"
+        name="group"
+        value="C"
+      >C</veui-radio>
       <veui-button @click="group = 'B'">select B</veui-button>
     </p>
     <p>{{ group }}</p>
     <h3>受控单选组（固定选中C）</h3>
     <p>
       <veui-form>
-        <veui-radio model="C" name="group2" value="A">A</veui-radio>
-        <veui-radio model="C" name="group2" value="B">B</veui-radio>
-        <veui-radio model="C" name="group2" value="C">C</veui-radio>
+        <veui-radio
+          class="radio"
+          model="C"
+          name="group2"
+          value="A"
+        >A</veui-radio>
+        <veui-radio
+          class="radio"
+          model="C"
+          name="group2"
+          value="B"
+        >B</veui-radio>
+        <veui-radio
+          class="radio"
+          model="C"
+          name="group2"
+          value="C"
+        >C</veui-radio>
       </veui-form>
     </p>
   </section>
   <section>
-    <veui-radio ui="s" checked>always checked</veui-radio>
-    <veui-radio ui="s" :checked="false">always unchecked</veui-radio>
+    <veui-radio class="radio" ui="s" checked>always checked</veui-radio>
+    <veui-radio
+      class="radio"
+      ui="s"
+      :checked="false"
+    >always unchecked</veui-radio>
   </section>
 </article>
 </template>
@@ -130,7 +189,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.veui-radio {
+.radio {
   margin-right: 10px;
 }
 
