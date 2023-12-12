@@ -1,3 +1,28 @@
+## 2.17.0-beta.1 (2023-12-12)
+
+### 💡 主要变更
+
+- [+] 新增 `ai` 主题变体。<!-- #veui-theme-dls -->
+
+  > #### 使用示例
+  >
+  > 如果需要在运行时同时使用 AI 样式与基础样式，可以按如下方式修改 VEUI 的配置：
+  >
+  > ```js
+  > [
+  >   {
+  >     package: 'veui-theme-dls',
+  >     path: 'dist/themes/ai/components',
+  >     fileName: '{module}.css'
+  >   },
+  >   {
+  >     package: 'veui-theme-dls',
+  >     path: 'dist/themes/d22/components',
+  >     fileName: '{module}.css'
+  >   }
+  > ]
+  > ```
+
 ## 2.16.4 (2023-12-03)
 
 ### 💡 主要变更
