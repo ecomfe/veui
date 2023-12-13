@@ -160,6 +160,15 @@ describe('components/ConfigProvider', function () {
     expect(collapse.attributes('ui').includes('theme:d22')).to.equal(true)
     expect(input.attributes('ui').includes('theme:d22')).to.equal(true)
 
+    wrapper.vm.context.theme = 'ai'
+
+    await wrapper.vm.$nextTick()
+
+    expect(collapse.attributes('ui').includes('theme:d22')).to.equal(true)
+    expect(input.attributes('ui').includes('theme:d22')).to.equal(true)
+    expect(collapse.classes('veui-ai-collapse')).to.equal(true)
+    expect(input.classes('veui-ai-input')).to.equal(true)
+
     wrapper.destroy()
   })
 })

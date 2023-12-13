@@ -3,7 +3,7 @@ import Select from '../Select'
 import Icon from '../Icon'
 import Sorter from './_Sorter'
 import Popover from '../Popover'
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import { isInsideFocusable, contains } from '../../utils/dom'
@@ -11,7 +11,7 @@ import { isInsideFocusable, contains } from '../../utils/dom'
 export default {
   name: 'veui-table-head-cell',
   uiTypes: ['transparent'],
-  mixins: [ui, table, i18n],
+  mixins: [prefix, table, i18n],
   props: {
     leaf: Boolean,
     col: {

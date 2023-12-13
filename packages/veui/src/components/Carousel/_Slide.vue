@@ -86,7 +86,6 @@ export const props = {
 
 export default {
   name: 'veui-carousel-slide',
-  uiTypes: ['transparent'],
   mixins: [carousel],
   props,
   data () {

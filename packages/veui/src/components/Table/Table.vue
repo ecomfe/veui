@@ -110,7 +110,8 @@
 import { map, mapValues, intersection, find, omit, filter } from 'lodash'
 import warn from '../../utils/warn'
 import { normalizeLength } from '../../utils/helper'
-import ui, { prefixify } from '../../mixins/ui'
+import prefix, { prefixify } from '../../mixins/prefix'
+import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import colgroup from '../../mixins/colgroup'
 import useControllable from '../../mixins/controllable'
@@ -167,6 +168,7 @@ export default {
     resize
   },
   mixins: [
+    prefix,
     ui,
     i18n,
     colgroup,

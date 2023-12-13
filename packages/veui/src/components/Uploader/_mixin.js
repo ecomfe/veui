@@ -1,5 +1,5 @@
 import { pick, isNumber, uniqueId } from 'lodash'
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 import drag from '../../directives/drag'
 
 export const sharedProps = [
@@ -30,7 +30,7 @@ const computed = sharedProps.reduce((ret, key) => {
 }, {})
 
 export default {
-  mixins: [ui],
+  mixins: [prefix],
   directives: { drag },
   props: {
     files: Array,
@@ -49,7 +49,7 @@ export default {
         disabled: !this.sortable,
         name: uniqueId('veui-uploader-drag-sort-'),
         sort: this.handleDragSort,
-        themeVariant: this.uiThemeVariant
+        themeVariant: this.themeVariant
       }
     },
     realHelp () {

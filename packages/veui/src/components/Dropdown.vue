@@ -148,6 +148,7 @@ import Button from './Button'
 import Overlay from './Overlay'
 import SearchBox from './SearchBox'
 import OptionGroup from './Select/OptionGroup'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import dropdown from '../mixins/dropdown'
 import { useKeySelect } from '../mixins/key-select'
@@ -179,6 +180,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   mixins: [
+    prefix,
     ui,
     dropdown(),
     useKeySelect({

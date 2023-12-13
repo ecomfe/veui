@@ -12,6 +12,7 @@
 <script>
 import { random } from 'lodash'
 import Progress from './Progress'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import '../common/global'
 
@@ -26,7 +27,7 @@ export default {
   components: {
     'veui-progress': Progress
   },
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     loading: Boolean
   },

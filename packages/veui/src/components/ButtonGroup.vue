@@ -27,6 +27,7 @@
 
 <script>
 import Button from './Button'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import { focusIn } from '../utils/dom'
@@ -37,7 +38,7 @@ export default {
   components: {
     'veui-button': Button
   },
-  mixins: [ui, focusable],
+  mixins: [prefix, ui, focusable],
   props: {
     items: {
       type: Array,

@@ -1,5 +1,5 @@
 <template>
-<ul :class="$c('abstract-tree')" role="tree" :ui="realUi">
+<ul :class="$c('abstract-tree')" role="tree">
   <li
     v-for="(item, index) in items"
     :key="getKey(item, index)"
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 import ExpandTransition from '../_ExpandTransition'
 import { hasChildren } from '../../utils/datasource'
 
@@ -45,8 +45,8 @@ export default {
   components: {
     'veui-expand-transition': ExpandTransition
   },
+  mixins: [prefix],
   uiTypes: ['transparent'],
-  mixins: [ui],
   props: {
     items: {
       type: Array,

@@ -244,6 +244,7 @@
 <script>
 import Checkbox from './Checkbox'
 import Overlay from './Overlay'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import overlay from '../mixins/overlay'
@@ -262,7 +263,7 @@ export default {
     'veui-overlay': Overlay
   },
   directives: { outside },
-  mixins: [ui, input, overlay, i18n],
+  mixins: [prefix, ui, input, overlay, i18n],
   model: {
     prop: 'selected',
     event: 'select'

@@ -4,7 +4,7 @@ import Toast from './Toast'
 import { assign, findIndex, uniqueId } from 'lodash'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
-import ui from '../mixins/ui'
+import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
 import '../common/global'
 
@@ -18,7 +18,7 @@ config.defaults(
 export default {
   name: 'veui-toast-list',
   uiTypes: ['transparent'],
-  mixins: [ui, overlay, useConfig('config', 'toast')],
+  mixins: [prefix, overlay, useConfig('config', 'toast')],
   data () {
     return {
       messages: []

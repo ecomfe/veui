@@ -5,13 +5,12 @@
 </template>
 
 <script>
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 import '../../common/global'
 
 export default {
   name: 'veui-grid-row',
-  uiTypes: ['transparent'],
-  mixins: [ui],
+  mixins: [prefix],
   provide () {
     let { columns, gutter } = this
 

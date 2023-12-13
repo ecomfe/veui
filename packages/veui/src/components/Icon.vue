@@ -1,6 +1,6 @@
 <script>
 import FaIcon from 'vue-awesome/components/Icon'
-import ui from '../mixins/ui'
+import prefix from '../mixins/prefix'
 import '../common/global'
 
 const {
@@ -15,7 +15,7 @@ export default {
   ...options,
   name: 'veui-icon',
   mixins: [
-    ui,
+    prefix,
     {
       computed: {
         classes () {

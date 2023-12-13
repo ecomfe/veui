@@ -14,65 +14,71 @@ import {
   cloneDeep
 } from 'lodash'
 
-const CommonProviderImpl = {
-  name: 'veui-provider', // for better readability in devtools
-  uiTypes: ['transparent'],
-  props: {
-    // eslint-disable-next-line vue/require-prop-types
-    value: {}
-  },
-  render () {
-    return this.$slots.default
-  }
-}
-
 const DEEP_KEY_RE = /^([^.]+\.[^.]+)\.(.+)$/
 
 export function createContext (name, defaultValue) {
-  const realName = name ? `${name}-provider` : CommonProviderImpl.name
-  let contextId = `__${uniqueId(realName)}`
-  let RealProviderImpl = {
-    ...CommonProviderImpl,
-    name: realName,
-    inject: {
-      [contextId]: {
-        from: contextId,
-        default: () => () => undefined
-      }
-    },
-    provide () {
-      return {
-        // provide 一个函数，该函数在消费方的 computed 调用，这样保证最终值依赖每个 provider 的 this.value
-        [contextId]: () => {
-          let parentContextValue = this[contextId]()
-          const isObjParent = isPlainObject(parentContextValue)
-          const isObjSelf = isPlainObject(this.value)
+  const realName = `${name || 'veui'}-provider`
+  const contextId = `__${uniqueId(realName)}`
 
-          // this.value['button.ui'] 覆盖 parentContextValue['button.ui.*']
-          if (isObjParent && isObjSelf) {
-            Object.keys(parentContextValue).forEach((key) => {
-              const match = key.match(DEEP_KEY_RE)
-              if (match && typeof this.value[match[1]] !== 'undefined') {
-                delete parentContextValue[key]
-              }
-            })
+  function useProvider (valueKey = 'value', { override } = {}) {
+    return {
+      inject: {
+        [contextId]: {
+          from: contextId,
+          default: () => () => undefined
+        }
+      },
+      provide () {
+        return {
+          // provide 一个函数，该函数在消费方的 computed 调用，这样保证最终值依赖每个 provider 的 this.value
+          [contextId]: () => {
+            const parentContextValue = this[contextId]()
+            const isObjParent = isPlainObject(parentContextValue)
+            const isObjSelf = isPlainObject(this[valueKey])
+
+            // this.value['button.ui'] 覆盖 parentContextValue['button.ui.*']
+            if (isObjParent && isObjSelf) {
+              Object.keys(parentContextValue).forEach((key) => {
+                const match = key.match(DEEP_KEY_RE)
+                if (match && typeof this[valueKey][match[1]] !== 'undefined') {
+                  delete parentContextValue[key]
+                }
+              })
+            }
+
+            const base = override ? override.call(this) : {}
+
+            return isObjParent && isObjSelf
+              ? defaults(base, this[valueKey], parentContextValue) // 和上层合并
+              : isObjSelf
+                ? defaults(base, this[valueKey])
+                : this[valueKey] // 无法合并，则以最近的 provider 为准
           }
-
-          return isObjParent && isObjSelf
-            ? defaults({}, this.value, parentContextValue) // 和上层合并
-            : this.value // 无法合并，则以最近的 provider 为准
         }
       }
     }
   }
 
-  let Provider = {
-    functional: true,
-    // 这里实际上接受一个 value prop，用来传递 context，但是因为直接透传给 ProviderImpl，所以不用声明了
-    render: (h, context) => wrapChildren(h, context, RealProviderImpl)
+  const ProviderImpl = {
+    name: realName,
+    uiTypes: ['transparent'],
+    mixins: [useProvider()],
+    props: {
+      // eslint-disable-next-line vue/require-prop-types
+      value: {}
+    },
+    render () {
+      return this.$slots.default
+    }
   }
 
-  let useConsumer = (injectionKey) => {
+  const Provider = {
+    functional: true,
+    // 这里实际上接受一个 value prop，用来传递 context，但是因为直接透传给 ProviderImpl，所以不用声明了
+    render: (h, context) => wrapChildren(h, context, ProviderImpl)
+  }
+
+  function useConsumer (injectionKey) {
     return {
       inject: {
         [contextId]: {
@@ -121,14 +127,14 @@ export function createContext (name, defaultValue) {
     }
   }
 
-  let Consumer = {
-    ...useConsumer('context'),
+  const Consumer = {
+    mixins: [useConsumer('context')],
     render () {
       return this.$scopedSlots.default(this.context)
     }
   }
 
-  return { Provider, Consumer, useConsumer }
+  return { useProvider, useConsumer, Provider, Consumer }
 }
 
 function wrapChildren (h, { data, children }, Provider) {

@@ -1,10 +1,10 @@
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 
 export default {
   name: 'veui-table-foot',
+  mixins: [prefix, table],
   uiTypes: ['transparent'],
-  mixins: [ui, table],
   render () {
     let { table } = this
     return (

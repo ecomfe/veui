@@ -1,6 +1,7 @@
 <script>
 import Button from './Button'
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import focusable from '../mixins/focusable'
 import useControllable from '../mixins/controllable'
@@ -15,6 +16,7 @@ export default {
     'veui-button': Button
   },
   mixins: [
+    prefix,
     ui,
     i18n,
     focusable,

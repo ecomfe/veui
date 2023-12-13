@@ -40,6 +40,7 @@
 <script>
 import { pick, includes, pull } from 'lodash'
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import useControllable from '../mixins/controllable'
@@ -58,6 +59,7 @@ export default {
     'veui-icon': Icon
   },
   mixins: [
+    prefix,
     ui,
     input,
     focusable,

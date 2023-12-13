@@ -33,6 +33,7 @@
 
 <script>
 import { pick } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import activatable from '../mixins/activatable'
@@ -55,6 +56,7 @@ const orphans = new Map()
 export default {
   name: 'veui-radio',
   mixins: [
+    prefix,
     ui,
     input,
     activatable,

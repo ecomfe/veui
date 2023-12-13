@@ -1,4 +1,5 @@
-import { useUi } from '@/mixins/ui'
+import ui from '@/mixins/ui'
+import prefix from '@/mixins/prefix'
 import uiManager from '@/managers/ui'
 import { mount } from '../../../utils'
 
@@ -59,13 +60,13 @@ uiManager.defaults(
 
 const Foo = {
   name: 'veui-foo',
-  mixins: [useUi()],
+  mixins: [prefix, ui],
   template: `<div :class="$c('foo')" :ui="realUi"><slot>Foo Component</slot></div>`
 }
 
 const Bar = {
   name: 'veui-bar',
-  mixins: [useUi()],
+  mixins: [prefix, ui],
   components: {
     'veui-foo': Foo
   },
@@ -75,7 +76,7 @@ const Bar = {
 
 const Baz = {
   name: 'veui-baz',
-  mixins: [useUi()],
+  mixins: [prefix, ui],
   components: {
     'veui-foo': Foo
   },
@@ -94,11 +95,11 @@ describe('mixins/ui', () => {
         template: `
         <div>
           <veui-foo ref="f1"/>
-          <veui-foo ref="f2" ui="large primary theme:d22"/>
+          <veui-foo ref="f2" ui="large primary" theme="d22"/>
           <veui-bar ref="b1"/>
-          <veui-bar ref="b2" ui="large primary theme:d22"/>
+          <veui-bar ref="b2" ui="large primary" theme="d22"/>
           <veui-baz ref="z1"/>
-          <veui-baz ref="z2" ui="large primary theme:ai"/>
+          <veui-baz ref="z2" ui="large primary" theme="ai"/>
         </div>`
       },
       {

@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import Icon from './Icon'
 import warn from '../utils/warn'
@@ -83,7 +84,7 @@ export default {
   components: {
     'veui-icon': Icon
   },
-  mixins: [ui, useControllable('status')],
+  mixins: [prefix, ui, useControllable('status')],
   props: {
     type: {
       type: String,

@@ -145,6 +145,7 @@ import Checkbox from '../Checkbox'
 import Icon from '../Icon'
 import Button from '../Button'
 import Loading from '../Loading'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import keySelect from '../../mixins/key-select'
 import useControllable from '../../mixins/controllable'
@@ -175,6 +176,7 @@ export default {
     outside
   },
   mixins: [
+    prefix,
     ui,
     keySelect,
     useControllable([

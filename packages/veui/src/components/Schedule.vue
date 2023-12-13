@@ -173,6 +173,7 @@ import {
   mapValues,
   isEqual
 } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
@@ -205,7 +206,7 @@ export default {
     'veui-tooltip': Tooltip,
     'veui-dropdown': Dropdown
   },
-  mixins: [ui, input, i18n, useConfig('config', 'schedule')],
+  mixins: [prefix, ui, input, i18n, useConfig('config', 'schedule')],
   model: {
     prop: 'selected',
     event: 'select'

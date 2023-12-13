@@ -12,6 +12,7 @@ import {
 import { getConfigKey, findAncestor, isTransparent } from '../utils/helper'
 import warn from '../utils/warn'
 import { configContext } from '../managers/config'
+import prefix from './prefix'
 
 const UNKNOWN_KEY = '$unknown'
 const DEFAULT_VAL = '__default__'
@@ -23,21 +24,12 @@ function callWithProps (val, props) {
   return val
 }
 
-const RE_THEME = /^theme:([a-z0-9-]+)$/i
-
-function getThemeProps (theme) {
-  if (theme === 'ai') {
-    return { theme: 'd22', themeVariant: 'ai' }
-  }
-  return { theme }
-}
-
 export function useUi () {
   return {
     props: {
       ui: String
     },
-    mixins: [configContext.useConsumer('__veui_config')],
+    mixins: [configContext.useConsumer('__veui_config'), prefix],
     computed: {
       uiParts () {
         const parts = this.getComponentConfig('parts') || {}
@@ -49,15 +41,6 @@ export function useUi () {
         const { uiConfig = {} } = this
         return tokens.reduce(
           (result, token) => {
-            const [, theme] = token.match(RE_THEME) || []
-            if (theme) {
-              // theme ai is a variant on d22
-              // convert to d22 and an ai variant under the hood
-              assign(result, getThemeProps(theme))
-
-              return result
-            }
-
             const name = find(Object.keys(uiConfig), (name) => {
               const { boolean = false, values = [] } = uiConfig[name]
               if (boolean) {
@@ -93,20 +76,16 @@ export function useUi () {
       },
       defaultUiProps () {
         const { uiConfig = {} } = this
-        const { theme } = this.__veui_config
-        return Object.keys(uiConfig).reduce(
-          (result, name) => {
-            result[name] = null
-            const prop = uiConfig[name]
-            if (prop.boolean) {
-              result[name] = false
-            } else {
-              result[name] = prop.default || DEFAULT_VAL
-            }
-            return result
-          },
-          theme ? getThemeProps(theme) : {}
-        )
+        return Object.keys(uiConfig).reduce((result, name) => {
+          result[name] = null
+          const prop = uiConfig[name]
+          if (prop.boolean) {
+            result[name] = false
+          } else {
+            result[name] = prop.default || DEFAULT_VAL
+          }
+          return result
+        }, {})
       },
       inheritableUiProps () {
         if (!this.uiConfig) {
@@ -114,10 +93,6 @@ export function useUi () {
         }
 
         return pickBy(this.uiProps, (val, key) => {
-          if (key === 'theme' || key === 'themeVariant') {
-            return true
-          }
-
           const uiProp = this.uiConfig[key]
           return val !== DEFAULT_VAL && uiProp && uiProp.inherit
         })
@@ -174,14 +149,6 @@ export function useUi () {
           uniq(
             Object.keys(props)
               .map((key) => {
-                if (key === 'theme') {
-                  return `theme:${props.theme}`
-                }
-
-                if (key === 'themeVariant') {
-                  return null
-                }
-
                 if (props[key] === true) {
                   return key
                 }
@@ -189,11 +156,9 @@ export function useUi () {
               })
               .filter((val) => val && val !== DEFAULT_VAL && val !== false)
               .concat(this.declaredUiProps[UNKNOWN_KEY])
+              .concat(this.themeBase ? `theme:${this.themeBase}` : [])
           ).join(' ') || null
         )
-      },
-      uiThemeVariant () {
-        return (this.uiProps && this.uiProps.themeVariant) || null
       }
     },
     methods: {
@@ -208,7 +173,8 @@ export function useUi () {
 
         // icons/illustrations/parts can be configured by themes
         const themes = this.__veui_config[`${prefix}.themes`]
-        const { theme } = this.uiProps
+
+        const theme = this.themeBase
         if (themes && themes[theme]) {
           const themeConfig = themes[theme][key]
           if (themeConfig) {
@@ -217,20 +183,9 @@ export function useUi () {
         }
 
         return config
-      },
-      $c (name) {
-        return prefixify(name, this.uiThemeVariant)
       }
     }
   }
-}
-
-const PREFIX_CONFIG = process.env.VEUI_PREFIX || process.env.VUE_APP_VEUI_PREFIX
-
-export function prefixify (name, themeVariant) {
-  return `${PREFIX_CONFIG || 'veui'}${
-    themeVariant ? `-${themeVariant}` : ''
-  }-${name}`
 }
 
 export default useUi()

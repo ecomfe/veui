@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import Icon from './Icon'
 import Popover from './Popover'
@@ -33,7 +34,7 @@ export default {
     'veui-icon': Icon,
     'veui-popover': Popover
   },
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     status: {
       type: String,

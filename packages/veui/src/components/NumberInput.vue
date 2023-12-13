@@ -90,6 +90,7 @@
 <script>
 import Input from './Input'
 import Button from './Button'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import activatable from '../mixins/activatable'
 import input from '../mixins/input'
@@ -127,6 +128,7 @@ export default {
     'veui-button': Button
   },
   mixins: [
+    prefix,
     ui,
     input,
     activatable,

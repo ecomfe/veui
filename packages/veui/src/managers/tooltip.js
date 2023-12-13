@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { assign } from 'lodash'
 import Tooltip from '../components/Tooltip'
-import { prefixify } from '../mixins/ui'
+import { prefixify } from '../mixins/prefix'
 import config from './config'
 
 config.defaults(

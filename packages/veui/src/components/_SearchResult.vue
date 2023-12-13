@@ -1,5 +1,5 @@
 <script>
-import { prefixify } from '../mixins/ui'
+import { prefixify } from '../mixins/prefix'
 import Icon from './Icon'
 
 export default {
@@ -24,7 +24,7 @@ export default {
       separatorClass
     ]
     return (matches || []).reduce((result, { parts }, idx) => {
-      let items = parts.map(({ text, matched }, index) =>
+      const items = parts.map(({ text, matched }, index) =>
         matched ? (
           <mark key={`${idx}-${index}`} class={matchClass}>
             {text}
