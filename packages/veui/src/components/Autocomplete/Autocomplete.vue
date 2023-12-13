@@ -57,7 +57,7 @@
               :separator-class="
                 $c('autocomplete-search-result-item-separator')
               "
-              :theme-variant="uiThemeVariant"
+              :theme-variant="themeVariant"
             />
             <span v-else>{{ props.label }}</span>
           </slot>
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import { useStrict } from '../../mixins/strict'
@@ -114,7 +115,7 @@ export default {
     'veui-option-group': OptionGroup
   },
   directives: { outside },
-  mixins: [ui, input, overlay, useStrict(['maxlength', 'select'])],
+  mixins: [prefix, ui, input, overlay, useStrict(['maxlength', 'select'])],
   inheritAttrs: false,
   props: {
     suggestTrigger: {

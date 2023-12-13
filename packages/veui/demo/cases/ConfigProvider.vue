@@ -21,11 +21,7 @@
       </veui-config-provider>
     </section>
     <section class="case">
-      <veui-collapse
-        expanded
-        label="UI theme"
-        :ui="contextValue.theme ? `theme:${contextValue.theme}` : 'theme:d20'"
-      >
+      <veui-collapse expanded label="UI theme" :theme="contextValue.theme">
         <veui-stack gap="xs">
           <veui-input clearable/>
           <veui-button ui="primary">OK</veui-button>
@@ -172,6 +168,7 @@ export default {
         { label: '全中有高亮', value: 'all_h' }
       ],
       themes: [
+        { label: '不设置', value: undefined },
         { label: 'D20', value: '' },
         { label: 'D22', value: 'd22' },
         { label: 'AI', value: 'ai' }

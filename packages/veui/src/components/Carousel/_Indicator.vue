@@ -21,12 +21,11 @@
 </template>
 
 <script>
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 
 export default {
   name: 'veui-carousel-indicator',
-  uiTypes: ['transparent'],
-  mixins: [ui],
+  mixins: [prefix],
   props: {
     type: String,
     labels: Array,

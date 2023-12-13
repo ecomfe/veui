@@ -327,6 +327,7 @@ import {
   isEqual,
   isNumber
 } from 'lodash'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import useControllable from '../../mixins/controllable'
@@ -360,6 +361,7 @@ export default {
     InfiniteScroll
   },
   mixins: [
+    prefix,
     ui,
     input,
     i18n,

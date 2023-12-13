@@ -1,16 +1,16 @@
 <template>
-<span :class="$c('span')" v-bind="$attrs" :ui="realUi" v-on="$listeners">
+<span :class="$c('span')" v-bind="$attrs" v-on="$listeners">
   <slot/>
 </span>
 </template>
 
 <script>
 import '../common/global'
-import ui from '../mixins/ui'
+import prefix from '../mixins/prefix'
 
 export default {
   name: 'veui-span',
   uiTypes: ['transparent'],
-  mixins: [ui]
+  mixins: [prefix]
 }
 </script>

@@ -10,7 +10,7 @@ import {
   kebabCase
 } from 'lodash'
 import cloneElement from 'clone-element'
-import { prefixify } from '../../mixins/ui'
+import { prefixify } from '../../mixins/prefix'
 import {
   isInsideTransformedContainer,
   getStableBoundingClientRect,

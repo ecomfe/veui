@@ -2,7 +2,7 @@
 import { includes } from 'lodash'
 import { useChild } from '../../mixins/coupled'
 import '../../common/global'
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 import { renderSlot, Void } from '../../utils/helper'
 
 let tab = useChild('tab', 'tabs', [
@@ -27,7 +27,7 @@ const STATUS_LIST = ['success', 'warning', 'info', 'error']
 
 export default {
   name: 'veui-tab',
-  mixins: [ui, tab],
+  mixins: [prefix, tab],
   props: {
     label: String,
     name: String,

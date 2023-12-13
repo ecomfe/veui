@@ -1,5 +1,5 @@
 <template>
-<div :class="rootClass" :ui="realUi">
+<div :class="rootClass">
   <div :class="innerClass" :style="innerStyle">
     <slot/>
   </div>
@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import ui, { prefixify } from '../mixins/ui'
+import prefix, { prefixify } from '../mixins/prefix'
 import { getEnumValidator } from '../utils/helper'
 
 export default {
   name: 'veui-stack',
   uiTypes: ['transparent'],
-  mixins: [ui],
+  mixins: [prefix],
   props: {
     direction: {
       type: String,

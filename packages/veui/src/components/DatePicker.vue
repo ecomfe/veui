@@ -162,6 +162,7 @@ import Overlay from './Overlay'
 import Input from './Input'
 import Calendar from './Calendar'
 import Icon from './Icon'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
@@ -239,6 +240,7 @@ export default {
     'veui-input': Input
   },
   mixins: [
+    prefix,
     ui,
     input,
     dropdown(),

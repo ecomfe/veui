@@ -3,7 +3,7 @@ import Button from '../Button'
 import Checkbox from '../Checkbox'
 import Radio from '../Radio'
 import Icon from '../Icon'
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 import i18n from '../../mixins/i18n'
 import tooltip from '../../directives/tooltip'
@@ -23,11 +23,11 @@ function renderTooltip (tooltip, item, field) {
 
 export default {
   name: 'veui-table-row',
-  uiTypes: ['transparent'],
-  mixins: [ui, table, i18n],
+  mixins: [prefix, table, i18n],
   directives: {
     tooltip
   },
+  uiTypes: ['transparent'],
   props: {
     index: Number,
     item: Object,

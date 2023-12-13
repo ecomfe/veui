@@ -2,6 +2,7 @@
 import CandidatePanel from './_CandidatePanel'
 import SelectedPanel from './_SelectedPanel'
 import { includes, isString } from 'lodash'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import input from '../../mixins/input'
 import useControllable from '../../mixins/controllable'
@@ -18,6 +19,7 @@ function defaultFilter (type, keyword, item, datasource) {
 export default {
   name: 'veui-transfer',
   mixins: [
+    prefix,
     ui,
     input,
     useControllable({
@@ -141,8 +143,7 @@ export default {
                 mergeChecked: this.mergeChecked,
                 includeIndeterminate: this.includeIndeterminate,
                 uiParts: this.uiParts,
-                ui: this.realUi,
-                themeVariant: this.uiThemeVariant
+                ui: this.realUi
               },
               on: {
                 select: (value) => {
@@ -174,8 +175,7 @@ export default {
                 isSelectable: this.isSelectable,
                 icons: this.icons,
                 uiParts: this.uiParts,
-                ui: this.realUi,
-                themeVariant: this.uiThemeVariant
+                ui: this.realUi
               },
               on: {
                 remove: (item, parents) => {

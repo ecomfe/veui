@@ -27,12 +27,13 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 
 export default {
   name: 'veui-empty',
-  mixins: [ui, i18n],
+  mixins: [prefix, ui, i18n],
   props: {
     title: String,
     desc: {

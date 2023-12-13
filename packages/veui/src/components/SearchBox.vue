@@ -131,6 +131,7 @@
 </template>
 
 <script>
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import dropdown from '../mixins/dropdown'
@@ -173,6 +174,7 @@ export default {
     'veui-input-group': InputGroup
   },
   mixins: [
+    prefix,
     ui,
     input,
     dropdown(),

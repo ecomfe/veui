@@ -53,6 +53,7 @@ import useConfig from '../mixins/config'
 import config from '../managers/config'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
+import prefix from '../mixins/prefix'
 import overlay from '../mixins/overlay'
 import useControllable from '../mixins/controllable'
 import { useRename } from '../mixins/deprecate'
@@ -73,6 +74,7 @@ export default {
     'veui-icon': Icon
   },
   mixins: [
+    prefix,
     ui,
     overlay,
     i18n,

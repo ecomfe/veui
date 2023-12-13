@@ -77,6 +77,7 @@
 
 <script>
 import { pick } from 'lodash'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import resize from '../directives/resize'
 import input from '../mixins/input'
@@ -103,6 +104,7 @@ export default {
     resize
   },
   mixins: [
+    prefix,
     ui,
     input,
     activatable,

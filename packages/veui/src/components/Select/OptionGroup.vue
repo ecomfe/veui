@@ -2,6 +2,7 @@
 import Option from './Option'
 import Overlay from '../Overlay'
 import Icon from '../Icon'
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import overlay from '../../mixins/overlay'
 import menuItem from '../../mixins/menu-item'
@@ -39,6 +40,7 @@ const OptionGroup = {
     outside
   },
   mixins: [
+    prefix,
     ui,
     menuItem,
     selectItem,

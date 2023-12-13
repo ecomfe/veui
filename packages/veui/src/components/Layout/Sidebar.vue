@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import prefix from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import useControllable from '../../mixins/controllable'
 import Button from '../Button'
@@ -55,6 +56,7 @@ export default {
     'veui-icon': Icon
   },
   mixins: [
+    prefix,
     ui,
     useControllable('collapsed'),
     useParent((vm) => ({

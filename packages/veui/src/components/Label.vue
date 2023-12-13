@@ -7,12 +7,13 @@
 <script>
 import { isFunction } from 'lodash'
 import { getTypedAncestor, isType, isVueComponent } from '../utils/helper'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import '../common/global'
 
 export default {
   name: 'veui-label',
-  mixins: [ui],
+  mixins: [prefix, ui],
   props: {
     for: {
       type:

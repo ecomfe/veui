@@ -137,6 +137,7 @@ import Input from './Input'
 import Button from './Button'
 import config from '../managers/config'
 import useConfig from '../mixins/config'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import { useRename } from '../mixins/deprecate'
@@ -185,6 +186,7 @@ export default {
     tooltip
   },
   mixins: [
+    prefix,
     ui,
     i18n,
     useConfig('config', ['pagination']),

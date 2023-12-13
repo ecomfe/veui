@@ -3,7 +3,7 @@ import Icon from './Icon'
 import Input from './Input'
 import Button from './Button'
 import Tag from './Tag'
-import ui from '../mixins/ui'
+import prefix from '../mixins/prefix'
 import input from '../mixins/input'
 import i18n from '../mixins/i18n'
 import { uniqueId } from 'lodash'
@@ -12,7 +12,7 @@ import { renderSlot } from '../utils/helper'
 export default {
   name: 'veui-select-trigger',
   uiTypes: ['transparent'],
-  mixins: [ui, input, i18n],
+  mixins: [prefix, input, i18n],
   props: {
     /* eslint-disable vue/require-prop-types */
     selected: {},

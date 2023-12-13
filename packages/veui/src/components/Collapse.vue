@@ -42,6 +42,7 @@ import Icon from './Icon'
 import ExpandTransition from './_ExpandTransition'
 import ui from '../mixins/ui'
 import { useChild } from '../mixins/coupled'
+import prefix from '../mixins/prefix'
 import useControllable from '../mixins/controllable'
 import '../common/global'
 
@@ -63,6 +64,7 @@ export default {
     'veui-expand-transition': ExpandTransition
   },
   mixins: [
+    prefix,
     ui,
     accordionItem,
     useControllable({

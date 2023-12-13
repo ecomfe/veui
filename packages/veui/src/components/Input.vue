@@ -75,6 +75,7 @@
 
 <script>
 import { maska } from '@justfork/maska'
+import prefix from '../mixins/prefix'
 import ui from '../mixins/ui'
 import input from '../mixins/input'
 import useControllable from '../mixins/controllable'
@@ -115,6 +116,7 @@ export default {
     maska
   },
   mixins: [
+    prefix,
     ui,
     input,
     activatable,

@@ -1,10 +1,10 @@
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 import table from '../../mixins/table'
 
 export default {
   name: 'veui-table-col-group',
   uiTypes: ['transparent'],
-  mixins: [ui, table],
+  mixins: [prefix, table],
   props: {
     gutter: Boolean
   },

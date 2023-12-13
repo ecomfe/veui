@@ -10,12 +10,11 @@
 </template>
 
 <script>
-import ui from '../../mixins/ui'
+import prefix from '../../mixins/prefix'
 
 export default {
   name: 'veui-footer',
-  uiTypes: ['transparent'],
-  mixins: [ui],
+  mixins: [prefix],
   props: {
     sticky: Boolean
   }
