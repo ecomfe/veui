@@ -1,3 +1,18 @@
+## 2.17.0 "✨ Sparkles" (2023-12-18)
+
+### ⚠️ 非兼容性变更
+
+- [^] 所有组件新增 `theme` 属性，不再使用 `ui="theme:d22"` 的方式设置组件的主题。<!-- #veui -->
+
+### 💡 主要变更
+
+- [^] `Calendar` / `DatePicker` 组件的 `date-class` 属性新增第二个参数 `{ today: boolean, selected: boolean }`。<!-- #Calendar #DatePicker -->
+
+### 🐞 问题修复
+
+- [^] 修正 `Loading` 组件没有响应动态透传的属性变化的问题。<!-- #Loading -->
+
+
 ## 2.17.0-beta.1 (2023-12-12)
 
 ### 💡 主要变更
