@@ -1,6 +1,6 @@
 {
   "name": "veui",
-  "version": "2.17.0-beta.1",
+  "version": "2.17.0",
   "description": "Baidu Enterprise UI for Vue.js.",
   "scripts": {
     "serve:dual": "cross-env VEUI_STYLE=dual pnpm serve",
