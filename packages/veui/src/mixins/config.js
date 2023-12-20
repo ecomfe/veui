@@ -6,11 +6,7 @@ const { useProvider, useConsumer } = configContext
 const internalKey = '__veui_config' // 直接固定保留吧，保证多次 useConfig 时可以复用统一注入逻辑
 
 // useConfig('foo', ['bar']): 将 ConfigProvider 中的配置项 bar/bar.* 读取到 this.foo 中去
-export default function useConfig (
-  injectionKey,
-  configPrefixes = [''],
-  override
-) {
+export default function useConfig (injectionKey, configPrefixes = ['']) {
   configPrefixes = Array.isArray(configPrefixes)
     ? configPrefixes
     : [configPrefixes]
@@ -23,7 +19,7 @@ export default function useConfig (
     )
   )
   return {
-    mixins: [useConsumer(internalKey), useProvider(internalKey, { override })],
+    mixins: [useConsumer(internalKey)],
     data () {
       return {
         // 实际组件依赖这个state，避免类似 datepicker.xxx 影响 Alert 组件
@@ -81,7 +77,10 @@ export function useConfigurable (injectionKey, configurable) {
   // generate computeds
   const namespaces = realConfigurable.map((i) => i.namespace || '')
   return {
-    mixins: [useConfig(injectionKey, namespaces, override)],
+    mixins: [
+      useConfig(injectionKey, namespaces, override),
+      useProvider(internalKey, { override })
+    ],
     computed: realConfigurable.reduce((acc, { namespace, props }) => {
       return props.reduce((acc, { prop, computed }) => {
         acc[computed || `real${upperFirst(prop)}`] = function () {

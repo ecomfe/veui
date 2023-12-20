@@ -64,6 +64,7 @@
       <veui-search-box
         class="search-box"
         clearable
+        theme="ai"
         ui="strong xs"
         replace-on-select
         :placeholder="placeholder"
