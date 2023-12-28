@@ -13,6 +13,9 @@ importers:
 
   .:
     devDependencies:
+      '@justineo/npmmirror-sync':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.62.0
         version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@6.8.0)(typescript@4.9.5)
@@ -2022,6 +2025,13 @@ packages:
     resolution: {integrity: sha512-0kug/g3AXzhe0NbkvD5R/BGEGz8GBEZBzgmsMpAoPU19OHtls85vjBi77PyitnzdV9ZVBLBM3AXRA50wdNiZCw==}
     dev: false
 
+  /@justineo/npmmirror-sync@0.1.0:
+    resolution: {integrity: sha512-vMv3oLD/oQ6LavtVsTIRYFwX6k3U9o5+pRs/kEIy0mWOqbU6zfUytpTCTCxMlhIWQ3oKCxoXY+29OMk2RWPZAQ==}
+    hasBin: true
+    dependencies:
+      '@types/node': 20.10.5
+    dev: true
+
   /@mrmlnc/readdir-enhanced@2.2.1:
     resolution: {integrity: sha512-bPHp6Ji8b41szTOcaP63VlnbbO5Ny6dwAATtY6JTjh5N2OLrb5Qk/Th5cRkRQhkWCt+EJsYrNB0MiL+Gpn6e3g==}
     engines: {node: '>=4'}
@@ -2340,6 +2350,12 @@ packages:
 
   /@types/node@17.0.31:
     resolution: {integrity: sha512-AR0x5HbXGqkEx9CadRH3EBYx/VkiUgZIhP4wvPn/+5KIsgpNoyFaRlVe0Zlx9gRtg8fA06a9tskE2MSN7TcG4Q==}
+    dev: true
+
+  /@types/node@20.10.5:
+    resolution: {integrity: sha512-nNPsNE65wjMxEKI93yOP+NPGGBJz/PoN3kZsVLee0XMiJolxSekEVD8wRwBUBqkwc7UWop0edW50yrCQW4CyRw==}
+    dependencies:
+      undici-types: 5.26.5
     dev: true
 
   /@types/normalize-package-data@2.4.1:
@@ -15130,6 +15146,10 @@ packages:
       has-bigints: 1.0.2
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
+    dev: true
+
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
     dev: true
 
   /unicode-canonical-property-names-ecmascript@2.0.0:
