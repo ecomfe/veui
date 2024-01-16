@@ -204,8 +204,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.29.0
-        version: 3.29.0(vue@2.6.14)
+        specifier: ~3.30.0
+        version: 3.30.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.6.14)
@@ -391,8 +391,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.29.0
-        version: 3.29.0(vue@2.6.14)
+        specifier: ~3.30.0
+        version: 3.30.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.6.14)
@@ -467,8 +467,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.29.0
-        version: 3.29.0(vue@2.6.14)
+        specifier: ~3.30.0
+        version: 3.30.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -6627,15 +6627,15 @@ packages:
   /dls-graphics@1.4.3:
     resolution: {integrity: sha512-Z6uE++BTxa+EQNlGfSQy9cHRc92a1Y5HBANNkuRvec4jADc3N9i+eEyJD6qPcuqLCeWKGKFhihkn2+BjvjkmZQ==}
 
-  /dls-icons-data@3.29.0:
-    resolution: {integrity: sha512-fjPYCgJahr8dIMdOX8ZLAnVBgUU25/eK1B9WPDw7BCMBR1zLNx1C2G3VEXQq32fx9CHn64E5TO338rEbqN7L8Q==}
+  /dls-icons-data@3.30.0:
+    resolution: {integrity: sha512-dQr0C4wub1R2zDrGdHtuMXL6g73zBTylgv/blczIjF2k4TGA2MnVarMCmnHBzjncncOiZ3Msd5uNAVmE2lC55g==}
 
-  /dls-icons-vue@3.29.0(vue@2.6.14):
-    resolution: {integrity: sha512-rVMuUPb4f1s7NrBNZM+bDBTODqFFb5DDKzyRlL5OTLCw0bzFDHv39SWz9tPF7aPlYnJBSYO2XbBg5qEEJeoeHw==}
+  /dls-icons-vue@3.30.0(vue@2.6.14):
+    resolution: {integrity: sha512-7sTYikTaM6AB4mDMo33ls4LtK9NlBraJXcucj8dH8jZ+v28oC3SJuuU0ISoQcLT37HKMNSVEyAUlRd/WGH22PA==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-icons-data: 3.29.0
+      dls-icons-data: 3.30.0
       vue: 2.6.14
 
   /dls-illustrations-vue@1.4.3(vue@2.6.14):
