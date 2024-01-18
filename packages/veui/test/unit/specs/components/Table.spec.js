@@ -3040,12 +3040,10 @@ describe('components/Table', function () {
 
     await wait(50)
     expect(scrollbar.scrollLeft).to.equal(42)
-    console.log(scrollbar.scrollLeft)
 
     scrollbar.scrollLeft = 128
 
     await wait(50)
-    console.log(main.scrollLeft)
     expect(main.scrollLeft).to.equal(128)
 
     wrapper.destroy()
@@ -3229,6 +3227,70 @@ describe('components/Table', function () {
     await vm.$nextTick()
 
     expect(box.text()).to.equal('Desc#5')
+
+    wrapper.destroy()
+  })
+
+  it('should update layout correctly upon columns change', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        template: `
+        <veui-table
+          :data="data"
+          key-field="id"
+          selectable
+          :column-filter="columns"
+          style="width: 800px"
+        >
+          <veui-table-column
+            key="id"
+            field="id"
+            title="ID"
+            fixed="left"
+            width="180"
+          />
+          <veui-table-column key="name" field="name" title="Name" width="180"/>
+          <veui-table-column
+            key="title"
+            field="title"
+            title="title"
+            width="180"
+          />
+          <veui-table-column key="text" field="text" title="text" width="180"/>
+          <veui-table-column
+            field="desc"
+            title="Description"
+            tooltip
+            fixed="right"
+            width="180"
+          />
+        </veui-table>`,
+        data () {
+          return {
+            data: [],
+            columns: ['id', 'desc']
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+
+    vm.columns = ['id', 'desc', 'name', 'title', 'text']
+    await wait(0)
+
+    const ths = wrapper.findAll('th')
+    expect(parseFloat(ths.at(1).element.style.left)).to.equal(
+      ths.at(0).element.offsetWidth
+    )
 
     wrapper.destroy()
   })
