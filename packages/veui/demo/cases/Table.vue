@@ -501,6 +501,45 @@
       </veui-table-column>
     </veui-table>
   </section>
+  <section>
+    <h5>动态切换 column-filter</h5>
+    <div class="options">
+      <veui-button
+        class="button"
+        @click="toggleFilter"
+      >切换列过滤</veui-button>
+    </div>
+    <veui-table
+      :data="tableData"
+      key-field="id"
+      selectable
+      :column-filter="tableColumns"
+      style="width: 800px"
+    >
+      <veui-table-column
+        key="id"
+        field="id"
+        title="ID"
+        fixed="left"
+        width="180"
+      />
+      <veui-table-column key="name" field="name" title="Name" width="180"/>
+      <veui-table-column
+        key="title"
+        field="title"
+        title="title"
+        width="180"
+      />
+      <veui-table-column key="text" field="text" title="text" width="180"/>
+      <veui-table-column
+        field="desc"
+        title="Description"
+        tooltip
+        fixed="right"
+        width="180"
+      />
+    </veui-table>
+  </section>
 </article>
 </template>
 
@@ -682,6 +721,10 @@ function date (value) {
   return value.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')
 }
 
+const long =
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, quibusdam! Pariatur, laboriosam? Voluptatibus, sunt.'
+const short = 'Lorem ipsum.'
+
 export default {
   name: 'table-demo',
   components: {
@@ -806,7 +849,30 @@ export default {
       popover: '这是一条补充的 Popover 信息',
       inputFilter: '',
       count: 0,
-      tick: null
+      tick: null,
+      tableColumns: ['id', 'desc'],
+      tableData: [
+        {
+          id: '3154',
+          name: 'Steve Rogers',
+          desc: long
+        },
+        {
+          id: '3155',
+          name: 'Thor Odinson',
+          desc: short
+        },
+        {
+          id: '3156',
+          name: 'Tony Stark',
+          desc: short
+        },
+        {
+          id: '3157',
+          name: 'Stephen Strange',
+          desc: long
+        }
+      ]
     }
   },
   computed: {
@@ -847,6 +913,9 @@ export default {
     time,
     toggle () {
       this.data = this.data === tableData ? [] : tableData
+    },
+    toggleFilter () {
+      this.tableColumns = ['id', 'desc', 'name', 'title', 'text']
     },
     switchDisabled () {
       let first = this.items[0]

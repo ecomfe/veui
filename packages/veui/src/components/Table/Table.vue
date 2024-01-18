@@ -528,6 +528,12 @@ export default {
       } else {
         this.expandColumnWidth = 0
       }
+    },
+    filteredColumns () {
+      this.$nextTick(() => {
+        this.updateSelectColumnWidth()
+        this.updateExpandColumnWidth()
+      })
     }
   },
   mounted () {
@@ -560,11 +566,6 @@ export default {
     this.updateScrollListeners(true)
   },
   methods: {
-    updateSelectColumnWidth () {
-      this.selectColumnWidth = this.$el.querySelector(
-        `.${this.$c('table-cell-select')}`
-      ).offsetWidth
-    },
     hasFoot () {
       return (
         this.$scopedSlots.foot ||
@@ -572,10 +573,19 @@ export default {
         this.filteredColumns.some((col) => col.hasFoot())
       )
     },
+    updateSelectColumnWidth () {
+      const select = this.$el.querySelector(`.${this.$c('table-cell-select')}`)
+      if (!select) {
+        return
+      }
+      this.selectColumnWidth = select.offsetWidth
+    },
     updateExpandColumnWidth () {
-      this.expandColumnWidth = this.$el.querySelector(
-        `.${this.$c('table-cell-expand')}`
-      ).offsetWidth
+      const expand = this.$el.querySelector(`.${this.$c('table-cell-expand')}`)
+      if (!expand) {
+        return
+      }
+      this.expandColumnWidth = expand.offsetWidth
     },
     select (selected, index) {
       let item = null
