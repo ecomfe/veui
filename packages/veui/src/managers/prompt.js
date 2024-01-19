@@ -25,7 +25,8 @@ export class PromptManager extends SimpleDialog {
                 'title',
                 'overlayClass',
                 'okLabel',
-                'cancelLabel'
+                'cancelLabel',
+                'theme'
               ]),
               value: this.value,
               open: this.open,

@@ -834,9 +834,9 @@ export default {
     // for (let i = 0; i < 300; i++) {
     //   this.append()
     // }
-    this.tick = setInterval(() => {
-      this.count += 1
-    }, 1000)
+    // this.tick = setInterval(() => {
+    //   this.count += 1
+    // }, 1000)
   },
   beforeDestroy () {
     clearInterval(this.tick)

@@ -23,7 +23,8 @@ export class ConfirmManager extends SimpleDialog {
                 'title',
                 'overlayClass',
                 'okLabel',
-                'cancelLabel'
+                'cancelLabel',
+                'theme'
               ]),
               open: this.open,
               loading: this.loading,

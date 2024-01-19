@@ -48,6 +48,7 @@ export class ToastManager {
   }
 
   show (message, status) {
+    console.log(status)
     let options = {}
     if (isObject(message)) {
       options = { ...message }

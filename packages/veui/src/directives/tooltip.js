@@ -1,7 +1,8 @@
 import { normalize } from 'vue-directive-normalizer'
 import tooltip from '../managers/tooltip'
 import { flatMap, pick } from 'lodash'
-import { isOverflow } from '../utils/dom'
+import { isOverflow, getClosestComponent } from '../utils/dom'
+import { findAncestor } from '../utils/helper'
 
 const OPTIONS_SCHEMA = {
   value: 'content',
@@ -33,6 +34,22 @@ function refresh (el, binding) {
     }
 
     if (!options.overflow || isOverflow(el)) {
+      const component = findAncestor(
+        getClosestComponent(el),
+        (current) => {
+          return (current.$options.name || '').indexOf('veui-') === 0
+        },
+        true
+      )
+
+      const theme =
+        component &&
+        (component.theme ||
+          (component.themeConfig && component.themeConfig.theme))
+      if (theme) {
+        options.theme = theme
+      }
+
       tooltip.enter(this, options)
     }
   }

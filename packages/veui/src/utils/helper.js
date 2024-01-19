@@ -35,8 +35,8 @@ export function getTypedAncestor (component, type, direct) {
   return null
 }
 
-export function findAncestor (component, predicate) {
-  let current = component.$parent
+export function findAncestor (component, predicate, includesSelf = false) {
+  let current = includesSelf ? component : component.$parent
   while (current) {
     if (predicate(current)) {
       return current

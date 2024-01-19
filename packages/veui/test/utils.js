@@ -58,8 +58,12 @@ export function expectTooltip (content, position) {
     expect(tooltip).to.not.equal(null)
     expect(tooltip.textContent.trim()).to.equal(content)
 
-    if (position) {
+    if (typeof position === 'string') {
       expect(tooltip.getAttribute('x-placement')).to.equal(position)
+    }
+
+    if (typeof position === 'function') {
+      position(tooltip)
     }
   }
 }

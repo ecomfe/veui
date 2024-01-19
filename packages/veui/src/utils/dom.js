@@ -862,6 +862,32 @@ export function getPortalEntry (element) {
   return null
 }
 
+/**
+ * 获取最接近的Vue组件
+ *
+ * @param {Element} element 起始的元素
+ * @returns {Vue} 返回最接近的 Vue 组件，如果找不到则返回 null
+ */
+export function getClosestComponent (element) {
+  let current = element
+
+  while (!current.__vue__) {
+    current = current.parentNode
+
+    if (!current) {
+      return null
+    }
+  }
+
+  let component = current.__vue__
+
+  while (component.$children.length === 1) {
+    component = component.$children[0]
+  }
+
+  return component
+}
+
 export function trigger (el, type) {
   let evt = document.createEvent('HTMLEvents')
   evt.initEvent(type, true, false)
