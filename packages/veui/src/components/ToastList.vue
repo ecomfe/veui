@@ -78,6 +78,7 @@ export default {
             title={m.title}
             ui={m.ui}
             duration={m.duration}
+            theme={m.theme}
             style={`top: ${m.top}px`}
             onClose={() => this.remove(m)}
             onReady={(e) => this.updateHeight(m, e)}
