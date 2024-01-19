@@ -72,6 +72,7 @@ export default {
           <Toast
             key={m.__message_id__}
             open
+            appear
             status={m.status || m.type}
             message={typeof m.message === 'string' ? m.message : null}
             closable={m.closable}

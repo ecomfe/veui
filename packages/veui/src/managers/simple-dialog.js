@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { remove } from 'lodash'
+import config from './config'
 
 export default class SimpleDialog {
   components = []
@@ -12,7 +13,10 @@ export default class SimpleDialog {
   }
 
   create (data) {
-    const component = this.createComponent(data)
+    const component = this.createComponent({
+      theme: config.get('theme'),
+      ...data
+    })
     const el = document.createElement('div')
     document.body.appendChild(el)
     component.$mount(el)

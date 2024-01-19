@@ -14,6 +14,10 @@
 </template>
 
 <script>
+import config from '@/managers/config'
+
+config.set({ theme: 'ai' })
+
 export default {
   name: 'plugins-demo',
   components: {},
@@ -25,7 +29,7 @@ export default {
   methods: {
     handleToast () {
       this.$toast.info('我是提示', {
-        theme: 'ai'
+        theme: Math.random() > 0.5 ? 'd20' : 'ai'
       })
     },
     async handleRemove () {
@@ -53,8 +57,7 @@ export default {
           })
         },
         okLabel: '恢复它',
-        cancelLabel: '不恢复它',
-        theme: 'ai'
+        cancelLabel: '不恢复它'
       })
     },
     async handlePromptInput () {
