@@ -10,6 +10,17 @@
   background-color: @dls-toast-background-color;
   color: @dls-toast-font-color;
   box-shadow: @dls-toast-shadow;
+  transform: translateY(0);
+  .veui-transition(opacity, top, transform);
+
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter {
+    transform: translateY(-100%);
+  }
 
   &-multiline {
     .padding(@dls-toast-padding-y, _);
