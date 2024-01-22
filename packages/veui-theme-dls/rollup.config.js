@@ -58,25 +58,28 @@ function transformThemedLess () {
   }
 }
 
-const commonPlugins = [
-  replace({
-    preventAssignment: true,
-    'process.env.NODE_ENV': '"development"'
-  }),
-  nodeResolve(),
-  commonjs(),
-  transformThemedLess(),
-  postcss({
-    minimize: true,
-    use: {
-      less: {
-        plugins: [varPlugin(), filePlugin()],
-        javascriptEnabled: true,
-        math: 'always'
-      }
-    }
-  })
-]
+function getCommonPlugins ({ extractCSS = false } = {}) {
+  return [
+    replace({
+      preventAssignment: true,
+      'process.env.NODE_ENV': '"development"'
+    }),
+    nodeResolve(),
+    commonjs(),
+    transformThemedLess(),
+    postcss({
+      minimize: true,
+      use: {
+        less: {
+          plugins: [varPlugin(), filePlugin()],
+          javascriptEnabled: true,
+          math: 'always'
+        }
+      },
+      extract: extractCSS
+    })
+  ]
+}
 
 const externals = ['veui', 'veui/dist/veui.esm']
 
@@ -90,7 +93,22 @@ export default [
         veui: 'veui'
       }
     },
-    plugins: [transformVeuiConfig('veui'), ...commonPlugins],
+    plugins: [transformVeuiConfig('veui'), ...getCommonPlugins()],
+    external: (id) => externals.indexOf(id) >= 0
+  },
+  {
+    input: 'index.js',
+    output: {
+      file: 'dist/dls.extract.js',
+      format: 'umd',
+      globals: {
+        veui: 'veui'
+      }
+    },
+    plugins: [
+      transformVeuiConfig('veui'),
+      ...getCommonPlugins({ extractCSS: resolve('dist/dls.css') })
+    ],
     external: (id) => externals.indexOf(id) >= 0
   },
   {
@@ -99,7 +117,19 @@ export default [
       file: 'dist/dls.esm.js',
       format: 'esm'
     },
-    plugins: [transformVeuiConfig('veui/dist/veui.esm'), ...commonPlugins],
+    plugins: [transformVeuiConfig('veui/dist/veui.esm'), ...getCommonPlugins()],
+    external: (id) => externals.indexOf(id) >= 0
+  },
+  {
+    input: 'index.js',
+    output: {
+      file: 'dist/dls.extract.esm.js',
+      format: 'esm'
+    },
+    plugins: [
+      transformVeuiConfig('veui/dist/veui.esm'),
+      ...getCommonPlugins({ extractCSS: resolve('dist/dls.css') })
+    ],
     external: (id) => externals.indexOf(id) >= 0
   }
 ]

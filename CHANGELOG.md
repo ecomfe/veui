@@ -1,3 +1,14 @@
+## 2.17.3 (2024-01-22)
+
+### 💡 主要变更
+
+- [^] `$alert` / `$confirm` / `$prompt` / `$toast` 插件调用对应功能时现在可以设置 `theme` 参数了，并且默认会使用全局配置的 `theme`。<!-- #$alert #$confirm #$prompt #$toast -->
+- [^] `v-tooltip` 指令现在会使用最近的 VEUI 组件的 `theme` 配置。<!-- #v-tooltip -->
+
+### 🐞 问题修复
+
+- [^] 修复 `Table` 组件在 `column-filter` 动态切换时固定列位置可能计算不正确的问题。<!-- #Table -->
+
 ## 2.17.2 (2023-12-26)
 
 ### 💡 主要变更
