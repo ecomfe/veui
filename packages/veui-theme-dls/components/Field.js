@@ -1,8 +1,4 @@
-import {
-  IconAsterisk,
-  IconQuestionCircle,
-  IconQuestionCircleSolid
-} from 'dls-icons-vue'
+import { IconAsterisk, IconQuestionCircle } from 'dls-icons-vue'
 import ui from 'veui/managers/ui'
 
 ui.defaults(
@@ -20,13 +16,6 @@ ui.defaults(
     },
     parts: {
       message: 's'
-    },
-    themes: {
-      d22: {
-        icons: {
-          tip: IconQuestionCircleSolid
-        }
-      }
     }
   },
   'field'
