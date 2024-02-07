@@ -39,7 +39,7 @@ export function useInput () {
     },
     computed: {
       realName () {
-        return (this.field && this.field.getName()) || this.name
+        return this.name || (this.field && this.field.getName())
       },
       realDisabled () {
         return Boolean(

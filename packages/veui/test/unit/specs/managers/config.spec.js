@@ -100,12 +100,12 @@ describe('managers/config', function () {
     expect(function () {
       let config = new ConfigManager()
       config.set(1)
-    }).to.throw('Config key must be a string value.')
+    }).to.throw('[veui-config] Config key must be a string value.')
 
     expect(function () {
       let config = new ConfigManager()
       config.defaults(1)
-    }).to.throw('Config key must be a string value.')
+    }).to.throw('[veui-config] Config key must be a string value.')
   })
 
   it('should be able to handle `Date` and `Function` instances', () => {

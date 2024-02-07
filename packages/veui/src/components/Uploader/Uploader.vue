@@ -635,7 +635,7 @@ export default {
             .map(({ message }) => message)
             .join(this.t('separator'))
           file.preview = errors.some(({ preview }) => !!preview)
-          throw new Error('validate failed') // skip to next catch block
+          throw new Error('[veui] Validation failed.') // skip to next catch block
         })
         .then(() => {
           // validate success, start to upload

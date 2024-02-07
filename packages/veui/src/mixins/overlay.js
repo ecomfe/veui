@@ -22,7 +22,9 @@ export default {
     },
     relocate () {
       if (!this.$refs.overlay) {
-        throw new Error('Can not find [this.$refs.overlay] to relocate')
+        throw new Error(
+          '[veui-overlay] Can not find `this.$refs.overlay` to relocate.'
+        )
       }
       this.$refs.overlay.relocate()
     }

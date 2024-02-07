@@ -583,7 +583,7 @@ export function scrollToAlign (viewport, target, options) {
     options = {}
   } else {
     throw new Error(
-      'the third argument of `scrollToAlign` must be a object or an array or a number'
+      '[veui-dom] The third argument of `scrollToAlign` must be a object or an array or a number.'
     )
   }
 
@@ -630,7 +630,7 @@ export function scrollTo (viewport, options) {
     options = {}
   }
   if (!isNumber(left) || !isNumber(top)) {
-    throw new Error('left and top must be numbers')
+    throw new Error('[veui-dom] `left` and `top` must be numbers.')
   }
 
   let distanceLeft = left - scrollLeft
@@ -951,7 +951,9 @@ function getStableOffset (el, context) {
  */
 export function getScrollOffset (el, context) {
   if (!context.contains(el)) {
-    throw new Error('The context element must contain the starting element.')
+    throw new Error(
+      '[veui-dom] The context element must contain the starting element.'
+    )
   }
 
   let current = el

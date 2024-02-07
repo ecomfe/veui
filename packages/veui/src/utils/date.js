@@ -129,7 +129,7 @@ export function startOf (base, startOf, { weekStartsOn } = {}) {
   const impl = START_OF_FN_MAP[startOf]
 
   if (!impl) {
-    throw new Error(`[veui] Invalid unit for \`startOf\`: ${startOf}`)
+    throw new Error(`[veui-date] Invalid unit for \`startOf\`: ${startOf}.`)
   }
 
   if (startOf === 'week') {
@@ -152,7 +152,7 @@ export function add (base, offset) {
     const impl = ADD_FN_MAP[key] || ADD_FN_MAP[`${key}s`]
 
     if (!impl) {
-      throw new Error(`[veui] Invalid unit for \`add\`: ${key}`)
+      throw new Error(`[veui-date] Invalid unit for \`add\`: ${key}.`)
     }
 
     if (offset[key] !== 0) {

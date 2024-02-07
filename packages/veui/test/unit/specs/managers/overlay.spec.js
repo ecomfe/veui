@@ -49,7 +49,7 @@ describe('managers/overlay', () => {
 
         expect(() => {
           mgr.createNode({ parentId: child.id })
-        }).to.throw(Error, `The given node id doesn't exist!`)
+        }).to.throw(Error, "[veui-overlay] The given node id doesn't exist.")
       })
     })
 

@@ -141,7 +141,7 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
       },
       coupledProxy () {
         if (!Array.isArray(fields)) {
-          throw new Error('[veui-coupled-child] `fields` must be an array.')
+          throw new Error('[veui-coupled] `fields` must be an array.')
         }
 
         return fields.reduce(
@@ -164,12 +164,12 @@ export function useChild (type, parentType, fields, { direct = false } = {}) {
                   : fn
               } else {
                 throw new Error(
-                  '[veui-coupled-child] `fields` mapper must either be a string or a function'
+                  '[veui-coupled] `fields` mapper must either be a string or a function.'
                 )
               }
             } else {
               throw new Error(
-                '[veui-coupled-child] `fields` item must either be a string, or a tuple of length 2 or 3.'
+                '[veui-coupled] `fields` item must either be a string, or a tuple of length 2 or 3.'
               )
             }
 

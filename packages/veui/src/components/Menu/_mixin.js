@@ -84,7 +84,7 @@ export default {
           item.path = to
         } else {
           throw new Error(
-            '[veui-menu] Non-string `to` cannot be resolved without Vue Router.'
+            '[veui-nav] Non-string `to` cannot be resolved without Vue Router.'
           )
         }
 

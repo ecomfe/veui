@@ -184,7 +184,7 @@ export default {
     },
     resetPosition () {
       if (!this.resetDrag) {
-        throw new Error('The dialog is not ready for drag.')
+        throw new Error('[veui-dialog] The dialog is not ready for drag.')
       }
 
       this.resetDrag()

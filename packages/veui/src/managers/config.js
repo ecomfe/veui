@@ -21,7 +21,7 @@ export class ConfigManager {
         }
 
         if (typeof key !== 'string') {
-          throw new Error('`Config key must be a string value.')
+          throw new Error('[veui-config] Config key must be a string value.')
         }
 
         let k = ns ? `${ns}.${key}` : key

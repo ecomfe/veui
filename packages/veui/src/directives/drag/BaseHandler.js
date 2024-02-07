@@ -18,7 +18,7 @@ export default class BaseHandler {
   }
 
   drag () {
-    throw new Error('`drag` method must be implemented.')
+    throw new Error('[v-drag] `drag` method must be implemented.')
   }
 
   end () {
@@ -26,17 +26,17 @@ export default class BaseHandler {
   }
 
   destroy () {
-    throw new Error('`destroy` method must be implemented.')
+    throw new Error('[v-drag] `destroy` method must be implemented.')
   }
 
   setOptions (options) {
     if (this.isDragging) {
-      throw new Error('Do not set `options` while dragging.')
+      throw new Error('[v-drag] Do not set `options` while dragging.')
     }
     this.options = options
   }
 
   reset () {
-    throw new Error('`reset` method must be implemented.')
+    throw new Error('[v-drag] `reset` method must be implemented.')
   }
 }

@@ -110,7 +110,7 @@ describe('directives/drag', function () {
   it(`doesn't accept non-BaseHandler derivatives in registerHandler method`, () => {
     expect(() => {
       registerHandler('foo', {})
-    }).to.throw('The handler class must derive from `BaseHandler`.')
+    }).to.throw('[v-drag] The handler class must derive from `BaseHandler`.')
   })
 
   it('should handle clear up correctly', () => {
@@ -307,7 +307,9 @@ describe('directives/drag', function () {
           attachToDocument: true
         }
       )
-    }).to.throw('[v-drag] The handler type "foo" is not registered.')
+    }).to.throw(
+      '[v-drag] The handler type `${options.type}` is not registered.'
+    )
 
     document.getElementById('foo10').remove()
   })

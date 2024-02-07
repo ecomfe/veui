@@ -15,14 +15,14 @@ let options = {
         return
       }
       throw new Error(
-        `[controllable] Unkown prop key: '${prop}' on committing.`
+        `[veui-controllable] Unkown prop key: \`${prop}\` on committing.`
       )
     }
   }
 }
 
 const errorMsg =
-  '[controllable] prop config must be either a string, an object or an object array.'
+  '[veui-controllable] Prop config must be either a string, an object or an object array.'
 
 /**
  * 自动将对应的 prop 转换成受控的
@@ -75,7 +75,7 @@ export default function useControllable (props) {
       result.computed[getRealName(def)] = {
         get () {
           if (get === false) {
-            throw new Error("[controllable] Can't access disabled getter!")
+            throw new Error("[veui-controllable] Can't access disabled getter.")
           }
           return computedGetter(this, def)
         },
@@ -83,7 +83,7 @@ export default function useControllable (props) {
           // 一般可以用来禁用 assignment，而强制使用 vm.commit !
           // 对于 v-model/.sync，这个 set 还是有点用处
           if (set === false) {
-            throw new Error("[controllable] Can't access disabled setter!")
+            throw new Error("[veui-controllable] Can't access disabled setter.")
           }
           return computedSetter(this, value, def)
         }
