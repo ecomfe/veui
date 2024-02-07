@@ -83,6 +83,29 @@ describe('components/Form/Field', function () {
     wrapper.destroy()
   })
 
+  it('should respect `name` from input props', () => {
+    let wrapper = mount({
+      components: {
+        'veui-form': Form,
+        'veui-field': Field,
+        'veui-input': Input
+      },
+      template: `
+        <veui-form>
+          <veui-field field="foo" name="foo">
+            <veui-input/>
+            <veui-input name="bar"/>
+          </veui-field>
+        </veui-form>`
+    })
+
+    let inputs = wrapper.findAll('input')
+    expect(inputs.at(0).attributes().name).to.equal('foo')
+    expect(inputs.at(1).attributes().name).to.equal('bar')
+
+    wrapper.destroy()
+  })
+
   it('should set other props correctly', async () => {
     let template = genTemplate('disabled')
     let { wrapper } = genWrapper(template)

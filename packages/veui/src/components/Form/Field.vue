@@ -417,7 +417,7 @@ export default {
     assertForm () {
       const { form } = this
       if (!form) {
-        throw new Error('veui fields should be used in a form scope.')
+        throw new Error('[veui-field] Fields should be used in a form.')
       }
     },
     isPassThrough (input) {
