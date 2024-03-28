@@ -33,18 +33,21 @@ export default {
           <span key={`${idx}-${index}`}>{text}</span>
         )
       )
+
+      const level = [<span key={`label-${idx}`}>{items}</span>]
+
       if (idx < matches.length - 1) {
-        items.push(
+        level.push(
           separator ? (
-            <Icon key={idx} class={separatorClass} name={separator} />
+            <Icon key={`sep-${idx}`} class={separatorClass} name={separator} />
           ) : (
-            <span key={idx} class={separatorClass}>
+            <span key={`sep-${idx}`} class={separatorClass}>
               &gt;
             </span>
           )
         )
       }
-      return [...result, ...items]
+      return [...result, ...level]
     }, [])
   }
 }

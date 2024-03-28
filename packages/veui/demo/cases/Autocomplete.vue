@@ -65,11 +65,10 @@
       :datasource="coffees"
       placeholder="请输入"
       :strict="{ select: true }"
-      suggest-trigger="focus"
+      suggest-on-focus
       :overlay-style="{
         '--dls-dropdown-max-display-items': 4
       }"
-      expanded
     >
       <span slot="no-data">no-data</span>
     </veui-autocomplete>
@@ -79,10 +78,7 @@
     <veui-autocomplete
       v-model="treeValue"
       :datasource="
-        coffees.concat([
-          { label: '👩‍👩‍👧‍👧'.slice(0, 5), value: '👩‍👩‍👧‍👧'.slice(0, 5) },
-          { label: '👩‍👩‍👧‍👧', value: '👩‍👩‍👧‍👧' }
-        ])
+        coffees.concat([{ value: '👩‍👩‍👧‍👧'.slice(0, 5) }, { value: '👩‍👩‍👧‍👧' }])
       "
       placeholder="请输入"
       :suggest-trigger="['focus', 'input']"
@@ -122,64 +118,52 @@ export default {
           value: 'Turkish'
         },
         {
-          value: 'latte'
+          value: 'Latte'
         },
         {
-          value: 'cappuccino'
+          value: 'Cappuccino'
         }
       ],
       coffees: [
         {
-          label: 'Infused',
-          value: 'infused',
+          value: 'Infused',
           options: [
             {
-              label: 'French press',
-              value: 'french-press'
+              value: 'French press'
             },
             {
-              label: 'Cold brew',
-              value: 'cold-brew'
+              value: 'Cold brew'
             }
           ]
         },
         {
-          label: 'Espresso',
-          value: 'espresso',
+          value: 'Espresso',
           options: [
             {
-              label: 'Espresso Romano',
-              value: 'espresso-romano'
+              value: 'Espresso Romano'
             },
             {
-              label: 'Guillermo',
-              value: 'guillermo'
+              value: 'Guillermo'
             },
             {
-              label: 'Ristretto',
-              value: 'ristretto'
+              value: 'Ristretto'
             }
           ]
         },
         {
-          label: 'Milk coffee',
-          value: 'milk-coffee',
+          value: 'Milk coffee',
           options: [
             {
-              label: 'Latte',
-              value: 'latte'
+              value: 'Latte'
             },
             {
-              label: 'Macchiato',
-              value: 'macchiato'
+              value: 'Macchiato'
             },
             {
-              label: 'Cappuccino',
-              value: 'cappuccino'
+              value: 'Cappuccino'
             },
             {
-              label: 'White coffee',
-              value: 'white-coffee'
+              value: 'White coffee'
             }
           ]
         }

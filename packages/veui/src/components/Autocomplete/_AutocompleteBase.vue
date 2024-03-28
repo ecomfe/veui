@@ -42,12 +42,8 @@ import { useKeySelect } from '../../mixins/key-select'
 import useSearchable from '../../mixins/searchable'
 import Overlay from '../Overlay'
 import { findComponent } from '../../utils/context'
-import warn from '../../utils/warn'
+import warn, { getLink } from '../../utils/warn'
 import { isFunction, cloneDeep, uniqueId } from 'lodash'
-
-function createFinder (valueKey) {
-  return (item, value) => (item[valueKey] === value ? item : false)
-}
 
 export default {
   name: 'veui-autocomplete-base',
@@ -135,21 +131,20 @@ export default {
     },
     realValue () {
       return this.value === undefined ? this.localValue : this.value
-    },
-    realFinder () {
-      return createFinder(this.valueKey)
     }
   },
   watch: {
     realValue (val) {
-      if (this.realExpanded) {
-        this.keyword = val
-      }
+      this.keyword = val
     },
     $listeners ({ suggest }) {
       if (suggest) {
         warn(
-          '[veui-autocomplete] The `suggest` event is deprecated and will be removed in future versions. Please use the `select` event instead.'
+          `[veui-autocomplete] The \`suggest\` event is deprecated and will be removed in future versions. Please use the \`select\` event (${getLink(
+            'autocomplete',
+            'select',
+            'event'
+          )}) instead.`
         )
       }
     }
