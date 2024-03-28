@@ -6700,12 +6700,12 @@ packages:
       vue: 2.6.14
     dev: false
 
-  /dls-icons-vue@3.33.0(vue@2.7.16):
-    resolution: {integrity: sha512-XaUwE4drDW/0cL2hy5Jm6p1HFWyfxtm5auaBZucjBPdvFDsukGuZIFu+kxBwmESjpM565X6EYqe46e1DQ7257A==}
+  /dls-icons-vue@3.34.0(vue@2.7.16):
+    resolution: {integrity: sha512-mFyeVhZ+hAXguzidNv5MqkaDziDjg0qmzPs8jOR37SnUXrRhlbGkEB/oazAM820l7422K0G1NQ3Sx8Kmmg9W0g==}
     peerDependencies:
       vue: 2.x
     dependencies:
-      dls-icons-data: 3.33.0
+      dls-icons-data: 3.34.0
       vue: 2.7.16
     dev: true
 
