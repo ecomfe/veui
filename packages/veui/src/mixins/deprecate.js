@@ -1,14 +1,10 @@
-import warn from '../utils/warn'
+import warn, { getLink } from '../utils/warn'
 import { kebabCase } from 'lodash'
 
-function getPropLink (component, prop) {
-  if (!component || !prop) {
-    return null
-  }
-  return `https://veui.dev/components/${component}#props-${prop}`
-}
-
-export function useRename (propDef, { from, to, component }) {
+export function useRename (
+  propDef,
+  { from, to, component, hasFromLink = true }
+) {
   const realKey = `real${to[0].toUpperCase()}${to.slice(1)}`
   const fromProp = kebabCase(from)
   const toProp = kebabCase(to)
@@ -24,8 +20,8 @@ export function useRename (propDef, { from, to, component }) {
           component == null
             ? this.$options.name.replace(/^veui-/, '')
             : component
-        const fromLink = getPropLink(name, fromProp)
-        const toLink = getPropLink(name, toProp)
+        const fromLink = hasFromLink ? getLink(name, fromProp) : null
+        const toLink = getLink(name, toProp)
         const fromSuffix = fromLink ? ` (${fromLink})` : ''
         const toSuffix = toLink ? ` (${toLink})` : ''
         warn(

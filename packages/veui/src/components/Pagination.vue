@@ -142,7 +142,6 @@ import ui from '../mixins/ui'
 import i18n from '../mixins/i18n'
 import { useRename } from '../mixins/deprecate'
 import tooltip from '../directives/tooltip'
-import warn from '../utils/warn'
 import '../common/global'
 
 config.defaults(
@@ -196,7 +195,8 @@ export default {
       },
       {
         from: 'goto',
-        to: 'showGoto'
+        to: 'showGoto',
+        hasFromLink: false
       }
     )
   ],
@@ -375,13 +375,6 @@ export default {
     realPageSize (val) {
       // User updated pageSize -> Tell caller the modification
       this.$emit('update:pageSize', val)
-    }
-  },
-  created () {
-    if ('goto' in this.$options.propsData) {
-      warn(
-        '[veui-pagination] The `goto` prop is deprecated and will be removed in future versions. Please use the `show-goto` prop instead.'
-      )
     }
   },
   methods: {
