@@ -476,6 +476,10 @@
     </veui-select>
     <veui-button>OK</veui-button>
   </section>
+  <section>
+    <h2>200 个 option</h2>
+    <veui-select :options="many"/>
+  </section>
 </article>
 </template>
 
@@ -716,7 +720,11 @@ export default {
             { label: '相亲中介', value: '17' }
           ]
         }
-      ]
+      ],
+      many: Array.from({ length: 200 }).map((_, i) => ({
+        label: i.toString(),
+        value: i
+      }))
     }
   },
   computed: {

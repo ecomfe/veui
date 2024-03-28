@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import config from '@/managers/config'
+// import config from '@/managers/config'
 
-config.set({ theme: 'ai' })
+// config.set({ theme: 'ai' })
 
 export default {
   name: 'plugins-demo',

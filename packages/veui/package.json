@@ -98,9 +98,9 @@
     "veui-loader": "workspace:*",
     "veui-theme-dls": "workspace:*",
     "veui-theme-dls-icons": "workspace:*",
-    "vue": "^2.6.14",
+    "vue": "^2.7.16",
     "vue-router": "^3.5.3",
-    "vue-template-compiler": "^2.6.14",
+    "vue-template-compiler": "^2.7.16",
     "webpack": "^4.46.0"
   },
   "peerDependencies": {
