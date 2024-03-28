@@ -764,7 +764,7 @@ export default {
 
     triggerUpload () {
       warn(
-        `[veui-uploader] \`triggerUpload\` (${getLink(
+        `[veui-uploader] The \`triggerUpload\` (${getLink(
           'uploader',
           'triggerUpload',
           'method'

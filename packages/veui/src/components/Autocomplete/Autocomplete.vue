@@ -168,7 +168,7 @@ export default {
   created () {
     if ('suggestTrigger' in this.$options.propsData) {
       warn(
-        `[veui-autocomplete] \`suggest-trigger\` prop (${getLink(
+        `[veui-autocomplete] The \`suggest-trigger\` prop (${getLink(
           'autocomplete',
           'suggest-trigger'
         )}) is deprecated and will be removed in future versions. Please use the \`suggest-on-focus\` prop (${getLink(

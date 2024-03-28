@@ -112,7 +112,7 @@ describe('components/Pagination', function () {
 
     expect(
       spy.calledWith(
-        '[veui-pagination] The `goto` prop is deprecated and will be removed in future versions. Please use the `show-goto` prop instead.'
+        '[veui-pagination] The `goto` prop is deprecated and will be removed in future versions. Please use the `show-goto` prop (https://veui.dev/components/pagination#props-show-goto) instead.'
       )
     ).to.equal(true)
 

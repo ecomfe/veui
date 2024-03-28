@@ -25,7 +25,7 @@ export function useRename (
         const fromSuffix = fromLink ? ` (${fromLink})` : ''
         const toSuffix = toLink ? ` (${toLink})` : ''
         warn(
-          `[${this.$options.name}] \`${fromProp}\` prop${fromSuffix} is deprecated and will be removed in future versions. Please use the \`${toProp}\` prop${toSuffix} instead.`,
+          `[${this.$options.name}] The \`${fromProp}\` prop${fromSuffix} is deprecated and will be removed in future versions. Please use the \`${toProp}\` prop${toSuffix} instead.`,
           this
         )
       }
