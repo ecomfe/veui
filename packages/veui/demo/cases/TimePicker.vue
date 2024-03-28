@@ -4,12 +4,12 @@
     <code>&lt;veui-time-picker&gt;</code>
   </h1>
   <section>
-    <h2>小尺寸 + 小时</h2>
+    <h2>超小尺寸 + 小时</h2>
     <veui-time-picker
       v-model="value0"
       class="time-picker"
       mode="hour"
-      ui="s"
+      ui="xs"
       :min="min0"
       :max="max0"
       clearable
@@ -19,7 +19,7 @@
     />
     <veui-input
       class="input"
-      ui="s"
+      ui="xs"
       :value="value0"
       placeholder="请输入时间，change触发"
       @change="value0 = $event"
