@@ -39,6 +39,7 @@ function genEntry (sortedComponents) {
     theme.js.join('\n') +
     '\n\n' +
     `import './common.less'\n` +
+    `import './common.less?theme=ai'\n` +
     theme.less.join('\n') +
     '\n'
 

@@ -64,6 +64,7 @@ import './components/Transfer'
 import './components/Uploader'
 
 import './common.less'
+import './common.less?theme=ai'
 import './components/icon.less'
 import './components/icon.less?theme=ai'
 import './components/collapse.less'
