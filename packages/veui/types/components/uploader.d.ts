@@ -158,10 +158,14 @@ type Slots = {
   desc(): unknown
 }
 
+type Methods = {
+  startUpload(): void
+}
+
 type Uploader = VeuiDefineComponent<{
   new <T extends Item = Item, KeyField extends string = 'key'>(
     ...args: any[]
-  ): VeuiDefineInstance<Props<T, KeyField>, Emits, Slots, Mixins>
+  ): VeuiDefineInstance<Props<T, KeyField>, Emits, Slots, Mixins, Methods>
 }>
 
 export default Uploader

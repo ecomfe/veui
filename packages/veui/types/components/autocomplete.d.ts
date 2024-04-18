@@ -31,7 +31,9 @@ type Item =
 type Props<T extends Item> = Pick<InputProps, SHARED_PROPS> & {
   datasource?: Array<T>
   value?: string
+  /** @deprecated */
   suggestTrigger?: 'input' | 'focus' | Array<'input' | 'focus'>
+  suggestOnFocus?: boolean
   strict?: boolean
 } & SearchableProps<Normalized<'children', T>>
 
