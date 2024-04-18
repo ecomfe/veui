@@ -31,7 +31,8 @@ jobs:
         run: pnpm test
 
       - name: Collect coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           directory: ./packages/veui/test/coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
