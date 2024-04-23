@@ -70,7 +70,7 @@
     "eslint-plugin-standard": "^4.1.0",
     "eslint-plugin-vue": "^6.2.2",
     "focus-visible": "^5.2.0",
-    "formidable": "^1.2.6",
+    "formidable": "^3.2.4",
     "fs-extra": "^9.1.0",
     "karma": "^6.3.19",
     "karma-chai": "^0.1.0",
