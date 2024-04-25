@@ -151,7 +151,7 @@ function createComponent ({ theme }) {
             overlayClass: 'veui-global-tooltip'
           }
         },
-        [h('template', { slot: 'default' }, this.content)]
+        [h('template', { slot: 'default' }, [].concat(this.content))]
       )
     }
   })

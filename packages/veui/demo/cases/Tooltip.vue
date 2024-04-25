@@ -374,7 +374,7 @@
       >[A]</mark>
       <mark
         v-tooltip="{
-          content: descB,
+          content: realDescB,
           disabled: !showDesc
         }"
       >[B]</mark>
@@ -418,7 +418,7 @@
       </p>
       <p
         v-tooltip.overflow="{
-          content: descB,
+          content: realDescB,
           disabled: !showDesc
         }"
         class="line-clamp"
@@ -440,6 +440,7 @@
 </template>
 
 <script>
+import { h } from 'vue'
 import bus from '../bus'
 import { Tooltip, Checkbox, Button, Input } from 'veui'
 import { tooltip } from 'veui/directives'
@@ -471,6 +472,11 @@ export default {
       descB: 'B',
       showDesc: true,
       aimCenter: false
+    }
+  },
+  computed: {
+    realDescB () {
+      return h('h1', this.descB)
     }
   },
   mounted () {
