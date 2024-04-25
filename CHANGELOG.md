@@ -1,3 +1,12 @@
+## 2.17.7 (2024-04-25)
+
+### 🐞 问题修复
+
+- [^] 修复了 `Uploader` 组件的类型声明缺失 `startUpload` 方法的问题。<!-- #Uploader -->
+- [^] 修复了 `Autocomplete` 组件的类型声明缺失 `suggest-on-focus` 属性的问题。<!-- #Autocomplete -->
+- [^] 修复了预编译版本样式代码缺失 `ai` 主题基础样式的问题。<!-- #veui #veui-theme-dls -->
+- [^] 修复了 `v-tooltip` 指令传入 `VNode[]` 类型 `content` 时无法正常渲染的问题。<!-- #v-tooltip -->
+
 ## 2.17.6 (2024-03-28)
 
 ### 💡 主要变更
