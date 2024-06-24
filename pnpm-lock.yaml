@@ -204,8 +204,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.41.0
-        version: 3.41.0(vue@2.7.16)
+        specifier: ~3.44.0
+        version: 3.44.0(vue@2.7.16)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.7.16)
@@ -391,8 +391,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.41.0
-        version: 3.41.0(vue@2.6.14)
+        specifier: ~3.44.0
+        version: 3.44.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.6.14)
@@ -467,8 +467,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.41.0
-        version: 3.41.0(vue@2.6.14)
+        specifier: ~3.44.0
+        version: 3.44.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -3486,11 +3486,11 @@ packages:
   dls-graphics@1.4.3:
     resolution: {integrity: sha512-Z6uE++BTxa+EQNlGfSQy9cHRc92a1Y5HBANNkuRvec4jADc3N9i+eEyJD6qPcuqLCeWKGKFhihkn2+BjvjkmZQ==}
 
-  dls-icons-data@3.41.0:
-    resolution: {integrity: sha512-mU+EL1/KKCV/6a8sBT1y5TZLPwcy7HXp7K56580MuKR5MO4PTFs2jy68VTJBbVzvEdmDbwzU5rEhuEsURNTctQ==}
+  dls-icons-data@3.44.0:
+    resolution: {integrity: sha512-mZ3KPLmNIgFgoqVh43RBwEOmUu6VP6Cac0kv0ZQG+zbl76wiDuhmRJWU64pa8Bgi1FxxMd3RYDwNb45ishnOQg==}
 
-  dls-icons-vue@3.41.0:
-    resolution: {integrity: sha512-yIArqYxwj6CHhQV40tqFk5S2zO/8WS6JB25+aIUMaChxtAc9tf0vqFWYfs3NbKc1coIpres7KyhjkTIjQaWfrw==}
+  dls-icons-vue@3.44.0:
+    resolution: {integrity: sha512-t28HmTG0h/qk+JMrk66khQ02J2fbzXkCQMS/KnKC4sbrOHEKyQbv2cMN1mv8ioNWY9xtkFszzBfWk0vvKyJ1wg==}
     peerDependencies:
       vue: 2.x
 
@@ -4335,9 +4335,11 @@ packages:
 
   glob@7.1.3:
     resolution: {integrity: sha512-vcfuiIxogLV4DlGBHIUOwI0IbrJ8HWPc4MU7HzviGeNho/UJDfi6B5p3sHeWIQ0KGIU0Jpxi5ZHxemQfLkkAwQ==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@7.2.0:
     resolution: {integrity: sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   global-dirs@3.0.0:
     resolution: {integrity: sha512-v8ho2DS5RiCjftj1nD9NmnfaOzTdud7RRnVd9kFNOjqZbISlx5DQ+OrTkywgd0dIt7oFCvKetZSHoHcP3sDdiA==}
@@ -4726,6 +4728,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.1:
     resolution: {integrity: sha512-8nWq2nLTAwd02jTqJExUYFSD/fKq6VH9Y/oG2accc/kdI0V98Bag8d5a4gi3XHz73rDWa2PvTtvcWYquKqSENA==}
@@ -6870,6 +6873,10 @@ packages:
   q@1.5.1:
     resolution: {integrity: sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==}
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
+    deprecated: |-
+      You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
+      (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qjobs@1.2.0:
     resolution: {integrity: sha512-8YOJEHtxpySA3fFDyCRxA+UUV+fA+rTWnuWvylOK/NCjhY+b4ocCtmu8TtsWb+mYeU+GCHf/S66KZF/AsteKHg==}
@@ -7160,14 +7167,17 @@ packages:
 
   rimraf@2.6.3:
     resolution: {integrity: sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@2.7.1:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@4.1.4:
@@ -12434,16 +12444,16 @@ snapshots:
 
   dls-graphics@1.4.3: {}
 
-  dls-icons-data@3.41.0: {}
+  dls-icons-data@3.44.0: {}
 
-  dls-icons-vue@3.41.0(vue@2.6.14):
+  dls-icons-vue@3.44.0(vue@2.6.14):
     dependencies:
-      dls-icons-data: 3.41.0
+      dls-icons-data: 3.44.0
       vue: 2.6.14
 
-  dls-icons-vue@3.41.0(vue@2.7.16):
+  dls-icons-vue@3.44.0(vue@2.7.16):
     dependencies:
-      dls-icons-data: 3.41.0
+      dls-icons-data: 3.44.0
       vue: 2.7.16
 
   dls-illustrations-vue@1.4.3(vue@2.6.14):
@@ -14515,7 +14525,7 @@ snapshots:
       dom-serialize: 2.2.1
       glob: 7.2.0
       graceful-fs: 4.2.10
-      http-proxy: 1.18.1(debug@4.3.4)
+      http-proxy: 1.18.1(debug@4.3.4(supports-color@6.1.0))
       isbinaryfile: 4.0.10
       lodash: 4.17.21
       log4js: 6.4.6
