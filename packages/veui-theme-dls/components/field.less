@@ -8,8 +8,6 @@
   display: flex;
   align-self: stretch;
 
-  --dls-field-label-width: @dls-form-label-width;
-
   &-label {
     display: flex;
     align-items: center;
@@ -27,8 +25,7 @@
     align-items: flex-start;
   }
 
-  &-required > &-label::before {
-    content: "*";
+  &-required-symbol {
     margin-right: @dls-form-label-content-spacing;
     color: @dls-form-label-required-color;
   }

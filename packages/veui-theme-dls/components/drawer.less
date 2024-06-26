@@ -6,17 +6,17 @@
   .drawer-width(@ui-width) {
     @padding-x: @dls-dialog-padding-x * 2;
 
-    --@{veui-prefix}-drawer-ui-width: @ui-width;
-    --@{veui-prefix}-drawer-content-fallback: calc(
-      var(~"--@{veui-prefix}-drawer-ui-width") - @padding-x
+    --@{veui-fixed-prefix}-drawer-ui-width: @ui-width;
+    --@{veui-fixed-prefix}-drawer-content-fallback: calc(
+      var(~"--@{veui-fixed-prefix}-drawer-ui-width") - @padding-x
     );
-    --@{veui-prefix}-drawer-width: calc(
+    --@{veui-fixed-prefix}-drawer-width: calc(
       var(
           --dls-drawer-content-width,
-          var(~"--@{veui-prefix}-drawer-content-fallback")
+          var(~"--@{veui-fixed-prefix}-drawer-content-fallback")
         ) + @padding-x
     );
-    width: var(--dls-drawer-width, var(~"--@{veui-prefix}-drawer-width"));
+    width: var(--dls-drawer-width, var(~"--@{veui-fixed-prefix}-drawer-width"));
   }
 
   &-box {
@@ -63,8 +63,8 @@
       box-shadow: @dls-drawer-shadow-top;
       transform: translateY(
         calc(
-          var(~"--@{veui-prefix}-drawer-indent-offset", 0) +
-            var(~"--@{veui-prefix}-drawer-indent-level") * @indent
+          var(~"--@{veui-fixed-prefix}-drawer-indent-offset", 0) +
+            var(~"--@{veui-fixed-prefix}-drawer-indent-level") * @indent
         )
       );
     }
@@ -76,8 +76,8 @@
       box-shadow: @dls-drawer-shadow-right;
       transform: translateX(
         calc(
-          var(~"--@{veui-prefix}-drawer-indent-offset", 0) * -1 +
-            var(~"--@{veui-prefix}-drawer-indent-level") * -@indent
+          var(~"--@{veui-fixed-prefix}-drawer-indent-offset", 0) * -1 +
+            var(~"--@{veui-fixed-prefix}-drawer-indent-level") * -@indent
         )
       );
     }
@@ -90,8 +90,8 @@
       box-shadow: @dls-drawer-shadow-bottom;
       transform: translateY(
         calc(
-          var(~"--@{veui-prefix}-drawer-indent-offset", 0) * -1 +
-            var(~"--@{veui-prefix}-drawer-indent-level") * -@indent
+          var(~"--@{veui-fixed-prefix}-drawer-indent-offset", 0) * -1 +
+            var(~"--@{veui-fixed-prefix}-drawer-indent-level") * -@indent
         )
       );
     }
@@ -103,8 +103,8 @@
       box-shadow: @dls-drawer-shadow-left;
       transform: translateX(
         calc(
-          var(~"--@{veui-prefix}-drawer-indent-offset", 0) +
-            var(~"--@{veui-prefix}-drawer-indent-level") * @indent
+          var(~"--@{veui-fixed-prefix}-drawer-indent-offset", 0) +
+            var(~"--@{veui-fixed-prefix}-drawer-indent-level") * @indent
         )
       );
     }

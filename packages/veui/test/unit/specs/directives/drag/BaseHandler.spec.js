@@ -29,21 +29,21 @@ describe('directives/drag/BaseHandler', () => {
 
     expect(() => {
       handler.drag()
-    }).to.throw('`drag` method must be implemented.')
+    }).to.throw('[v-drag] `drag` method must be implemented.')
 
     expect(() => {
       handler.setOptions({})
-    }).to.throw('Do not set `options` while dragging.')
+    }).to.throw('[v-drag] Do not set `options` while dragging.')
 
     handler.end()
     expect(handler.isDragging).to.be.equal(false)
 
     expect(() => {
       handler.reset()
-    }).to.throw('`reset` method must be implemented.')
+    }).to.throw('[v-drag] `reset` method must be implemented.')
 
     expect(() => {
       handler.destroy()
-    }).to.throw('`destroy` method must be implemented.')
+    }).to.throw('[v-drag] `destroy` method must be implemented.')
   })
 })

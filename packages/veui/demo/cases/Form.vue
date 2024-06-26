@@ -5,13 +5,13 @@
   </h1>
   <section>
     <h2>通过指定data、field及v-model来创建一个form</h2>
-    <veui-form ref="form1" :data="storeData1">
+    <veui-form ref="form1" class="form" :data="storeData1">
       <veui-field label="昵称" field="nickName">
-        <veui-input v-model="storeData1.nickName"/>
+        <veui-input v-model="storeData1.nickName" class="input"/>
       </veui-field>
 
       <veui-field>
-        <veui-input readonly value="Labeless field"/>
+        <veui-input class="input" readonly value="Labeless field"/>
       </veui-field>
 
       <veui-field label="性别" field="sex">
@@ -70,11 +70,12 @@
   </section>
   <section>
     <h2>行内多组件表单</h2>
-    <veui-form>
+    <veui-form class="form">
       <veui-fieldset ui="large" class="two-name" label="姓名">
         <veui-field>
           <veui-input
             v-model="storeData2.lastName"
+            class="input"
             ui="large"
             placeholder="姓"
           />
@@ -83,6 +84,7 @@
         <veui-field style="margin-left: 4px">
           <veui-input
             v-model="storeData2.firstName"
+            class="input"
             ui="large"
             placeholder="名"
           />
@@ -98,7 +100,11 @@
         </veui-field>
 
         <veui-field style="margin-left: 4px">
-          <veui-input v-model="storeData2.phone" placeholder="名"/>
+          <veui-input
+            v-model="storeData2.phone"
+            class="input"
+            placeholder="名"
+          />
         </veui-field>
       </veui-fieldset>
 
@@ -107,11 +113,11 @@
           <veui-label>预期收入</veui-label>
         </template>
         <veui-field>
-          <veui-input v-model="storeData2.start"/>
+          <veui-input v-model="storeData2.start" class="input"/>
         </veui-field>
         <veui-span style="margin: 0 4px">-</veui-span>
         <veui-field>
-          <veui-input v-model="storeData2.end"/>
+          <veui-input v-model="storeData2.end" class="input"/>
         </veui-field>
         <veui-span>万</veui-span>
         <template #tip>
@@ -138,7 +144,7 @@
   </section>
   <!-- <section>
     <h2>行内表单</h2>
-    <veui-form ui="inline">
+    <veui-form class="form" ui="inline">
       <veui-fieldset class="left">
         <veui-field label="状态">
           <veui-select
@@ -162,7 +168,7 @@
       </veui-fieldset>
     </veui-form>
 
-    <veui-form ui="inline">
+    <veui-form class="form" ui="inline">
       <veui-fieldset
         class="left"
         ui="alt"
@@ -196,9 +202,9 @@
     </section>-->
   <section>
     <h2>表单的禁用或只读</h2>
-    <veui-form disabled :data="storeData1">
+    <veui-form class="form" disabled :data="storeData1">
       <veui-field label="昵称" field="nickName">
-        <veui-input v-model="storeData1.nickName"/>
+        <veui-input v-model="storeData1.nickName" class="input"/>
       </veui-field>
 
       <veui-field label="性别" field="sex">
@@ -243,21 +249,21 @@
       </veui-field>
     </veui-form>
     <!-- <h2>行内禁用或只读</h2>
-    <veui-form>
+    <veui-form class="form">
       <veui-fieldset
         disabled
         class="two-name"
         label="姓名"
       >
         <veui-field>
-          <veui-input
+          <veui-input class="input"
             v-model="storeData2.lastName"
             placeholder="姓"
           />
         </veui-field>
 
         <veui-field>
-          <veui-input
+          <veui-input class="input"
             v-model="storeData2.firstName"
             placeholder="名"
           />
@@ -273,7 +279,7 @@
         </veui-field>
 
         <veui-field readonly>
-          <veui-input
+          <veui-input class="input"
             v-model="storeData2.phone"
             placeholder="名"
           />
@@ -288,11 +294,11 @@
           <veui-label>预期收入</veui-label>💰
         </template>
         <veui-field>
-          <veui-input v-model="storeData2.start"/>
+          <veui-input class="input" v-model="storeData2.start"/>
         </veui-field>
         <veui-span>-</veui-span>
         <veui-field>
-          <veui-input
+          <veui-input class="input"
             v-model="storeData2.end"
             disabled
           />
@@ -319,6 +325,7 @@
     <h2>使用 field 来支持表单验证，使用 name 来定位验证提示</h2>
     <veui-form
       ref="form2"
+      class="form"
       :data="storeData4"
       :validators="validators"
       :before-validate="beforeValidate"
@@ -333,7 +340,7 @@
         label="姓名"
         tip="disabled 值提交时会过滤"
       >
-        <veui-input v-model="storeData4.name"/>
+        <veui-input v-model="storeData4.name" class="input"/>
       </veui-field>
 
       <veui-field
@@ -344,6 +351,7 @@
       >
         <veui-input
           v-model="storeData4.name1"
+          class="input"
           disabled
           placeholder="长度不能短于2"
         />
@@ -352,6 +360,7 @@
       <veui-field field="name3" name="name3" label="别名" tip="有内置错误">
         <veui-input
           v-model="storeData4.name3"
+          class="input"
           maxlength="4"
           placeholder="长度不能大于4"
         />
@@ -360,6 +369,7 @@
       <veui-field field="age" name="age1" :rules="ageRule" label="年龄">
         <veui-input
           v-model="storeData4.age"
+          class="input"
           placeholder="错误提示优先出在右侧, 长度不能超过3"
         />
       </veui-field>
@@ -382,7 +392,7 @@
           name="phone"
           :rules="numRequiredRule"
         >
-          <veui-input v-model="storeData4.phone"/>
+          <veui-input v-model="storeData4.phone" class="input"/>
         </veui-field>
       </veui-fieldset>
 
@@ -412,11 +422,11 @@
           :rules="numRequiredRule"
           class="start-field"
         >
-          <veui-input v-model="storeData4.start"/>
+          <veui-input v-model="storeData4.start" class="input"/>
         </veui-field>
         <veui-span style="margin: 0 4px">-</veui-span>
         <veui-field field="end" name="end" :rules="numRequiredRule">
-          <veui-input v-model="storeData4.end"/>
+          <veui-input v-model="storeData4.end" class="input"/>
         </veui-field>
         <veui-span>万</veui-span>
       </veui-fieldset>
@@ -461,6 +471,7 @@
   <section>
     <h2>动态表单</h2>
     <veui-form
+      class="form"
       :data="storeData5"
       :validators="qindianValidator"
       :before-validate="beforeValidate"
@@ -469,7 +480,7 @@
       @invalid="handleInvalid"
     >
       <veui-field field="qindian" label="负责人" name="qindian">
-        <veui-input v-model="storeData5.qindian"/>
+        <veui-input v-model="storeData5.qindian" class="input"/>
       </veui-field>
 
       <veui-fieldset
@@ -483,7 +494,11 @@
           :name="'projectName' + (index + 1)"
           :rules="requiredRule"
         >
-          <veui-input v-model="item.project" placeholder="项目名称"/>
+          <veui-input
+            v-model="item.project"
+            class="input"
+            placeholder="项目名称"
+          />
         </veui-field>
         <veui-field
           style="margin-left: 4px"
@@ -2954,7 +2969,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 .veui-form-demo {
   h2 {
@@ -2967,7 +2982,7 @@ export default {
 
   margin-bottom: 50px;
 
-  .veui-form[ui~="inline"] + .veui-form[ui~="inline"] {
+  .form[ui~='inline'] + .form[ui~='inline'] {
     margin-top: 30px;
   }
 
@@ -2989,7 +3004,7 @@ export default {
     &::before {
       position: absolute;
       left: -80px;
-      content: "⇒";
+      content: '⇒';
       line-height: 32px;
       font-size: 30px;
       color: #999;
@@ -2997,23 +3012,14 @@ export default {
   }
 
   .two-name {
-    .veui-input {
+    .input {
       width: 75px;
     }
   }
 
   .salary {
-    .veui-input {
+    .input {
       width: 67px;
-    }
-  }
-
-  .start-field {
-    .veui-field-error:first-of-type {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 80px;
-      white-space: nowrap;
     }
   }
 
@@ -3021,11 +3027,11 @@ export default {
     margin-top: 60px;
     margin-left: 120px;
 
-    [class*="veui"] {
+    [class*='veui'] {
       margin-left: 10px;
     }
 
-    [class*="veui"]:first-child {
+    [class*='veui']:first-child {
       margin-left: 0;
     }
   }

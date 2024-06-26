@@ -1,47 +1,63 @@
-import { resolve } from 'path'
-import { existsSync, writeFileSync } from 'fs'
-import components from '../../veui/components.json'
+import { resolve, basename } from 'path'
+import { mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs'
+import globby from 'globby'
+import { rimrafSync } from 'rimraf'
+import less from 'less'
+import postcss from 'postcss'
+import postcssrc from 'postcss-load-config'
+import filePlugin from './less/file-plugin'
 
-const themeDir = resolve(__dirname, '..')
+const ENTRIES = ['common.less', 'typography.less', 'components/*.less']
+const OUTPUT_DIR = resolve(__dirname, '..', 'dist/themes')
+const THEMES = resolve(__dirname, '..', 'themes')
 
-// 简单实现
-function kebabCase (str) {
-  return str.replace(/[A-Z]/g, (s) => `-${s.toLowerCase()}`).replace(/^-/, '')
-}
+rimrafSync(OUTPUT_DIR)
+mkdirSync(OUTPUT_DIR, { recursive: true })
 
-function getSortedComponents () {
-  let result = []
-  components.forEach(({ name }) => {
-    if (result.indexOf(name) === -1) {
-      result.push(name)
-    }
-  })
-  return result
-}
+async function build () {
+  const paths = await globby(ENTRIES)
+  const { plugins, options } = await postcssrc()
 
-function genThemeIndex (sortedComponents) {
-  const theme = sortedComponents.reduce(
-    (acc, name) => {
-      if (existsSync(`${themeDir}/components/${name}.js`)) {
-        acc.js.push(`import './components/${name}'`)
-      }
-      if (existsSync(`${themeDir}/components/${kebabCase(name)}.less`)) {
-        acc.less.push(`import './components/${kebabCase(name)}.less'`)
-      }
-      return acc
-    },
-    { js: [], less: [] }
+  const filePluginInstance = filePlugin()
+  const postcssInstance = postcss(plugins)
+
+  const themes = readdirSync(THEMES)
+  await Promise.all(
+    themes
+      .map((themeFileName) => {
+        const theme = basename(themeFileName, '.less')
+
+        return paths.map(async (path) => {
+          const filePath = resolve(__dirname, '..', path)
+          const lessCode = readFileSync(filePath, 'utf-8')
+
+          const { css } = await less.render(
+            `${lessCode}\n@import "${resolve(THEMES, themeFileName)}";`,
+            {
+              javascriptEnabled: true,
+              math: 'always',
+              filename: filePath,
+              plugins: [filePluginInstance]
+            }
+          )
+
+          const outputPath = resolve(
+            OUTPUT_DIR,
+            theme,
+            path.replace(/\.less$/, '.css')
+          )
+          const { css: postcssResult } = await postcssInstance.process(css, {
+            ...options,
+            from: filePath,
+            to: outputPath
+          })
+
+          mkdirSync(resolve(outputPath, '..'), { recursive: true })
+          writeFileSync(outputPath, postcssResult)
+        })
+      })
+      .flat()
   )
-
-  const content =
-    '// This file is generated automatically by `npm run theme`\n' +
-    theme.js.join('\n') +
-    '\n\n' +
-    `import './common.less'\n` +
-    theme.less.join('\n') +
-    '\n'
-
-  writeFileSync(`${themeDir}/index.js`, content, { encoding: 'utf-8' })
 }
 
-genThemeIndex(getSortedComponents())
+build()

@@ -5,18 +5,18 @@
   </h1>
   <section>
     <h2>实验定制样式</h2>
-    <veui-calendar ui="display" class="experimental-calendar">
+    <veui-calendar class="calendar experimental-calendar" ui="display">
       <template #date="{ date }">
         <div class="experimental-cell">
           {{ date }}
-          <veui-badge v-if="date === 15"/>
+          <veui-badge v-if="date === 15" class="badge"/>
         </div>
       </template>
     </veui-calendar>
   </section>
   <section>
     <h2>非受控</h2>
-    <veui-calendar type="date"/>
+    <veui-calendar class="calendar" type="date"/>
   </section>
   <section>
     <h2>日期选择</h2>
@@ -28,7 +28,12 @@
   </section>
   <section>
     <h2>日期多选</h2>
-    <veui-calendar v-model="multipleDate" type="date" multiple/>
+    <veui-calendar
+      v-model="multipleDate"
+      class="calendar"
+      type="date"
+      multiple
+    />
   </section>
   <section>
     <h2>日期范围单选(small)</h2>
@@ -42,7 +47,13 @@
   </section>
   <section>
     <h2>日期范围多选</h2>
-    <veui-calendar v-model="multipleDateRange" type="date" range multiple/>
+    <veui-calendar
+      v-model="multipleDateRange"
+      class="calendar"
+      type="date"
+      range
+      multiple
+    />
   </section>
 
   <section>
@@ -61,15 +72,32 @@
   </section>
   <section>
     <h2>月份多选</h2>
-    <veui-calendar v-model="multipleMonth" type="month" multiple/>
+    <veui-calendar
+      v-model="multipleMonth"
+      class="calendar"
+      type="month"
+      multiple
+    />
   </section>
   <section>
     <h2>月份范围单选(small)</h2>
-    <veui-calendar v-model="singleMonthRange" type="month" range ui="s"/>
+    <veui-calendar
+      v-model="singleMonthRange"
+      class="calendar"
+      type="month"
+      range
+      ui="s"
+    />
   </section>
   <section>
     <h2>月份范围多选</h2>
-    <veui-calendar v-model="multipleMonthRange" type="month" range multiple/>
+    <veui-calendar
+      v-model="multipleMonthRange"
+      class="calendar"
+      type="month"
+      range
+      multiple
+    />
   </section>
 
   <section>
@@ -82,23 +110,40 @@
   </section>
   <section>
     <h2>年份多选</h2>
-    <veui-calendar v-model="multipleYear" type="year" multiple/>
+    <veui-calendar
+      v-model="multipleYear"
+      class="calendar"
+      type="year"
+      multiple
+    />
   </section>
   <section>
     <h2>年份范围单选(small)</h2>
-    <veui-calendar v-model="singleYearRange" type="year" range ui="s"/>
+    <veui-calendar
+      v-model="singleYearRange"
+      class="calendar"
+      type="year"
+      range
+      ui="s"
+    />
   </section>
   <section>
     <h2>年份范围多选</h2>
-    <veui-calendar v-model="multipleYearRange" type="year" range multiple/>
+    <veui-calendar
+      v-model="multipleYearRange"
+      class="calendar"
+      type="year"
+      range
+      multiple
+    />
   </section>
   <section>
     <h2>禁用</h2>
-    <veui-calendar v-model="selected1" disabled/>
+    <veui-calendar v-model="selected1" class="calendar" disabled/>
   </section>
   <section>
     <h2>部分禁用</h2>
-    <veui-calendar :disabled-date="disabledDate"/>
+    <veui-calendar class="calendar" :disabled-date="disabledDate"/>
   </section>
   <section>
     <h2>
@@ -108,7 +153,12 @@
         <code>multiple</code>)
       </small>
     </h2>
-    <veui-calendar v-model="selected0" multiple :date-class="dateClass"/>
+    <veui-calendar
+      v-model="selected0"
+      class="calendar"
+      multiple
+      :date-class="dateClass"
+    />
   </section>
   <section>
     <h2>
@@ -133,7 +183,13 @@
         <code>multiple</code> &amp; <code>range</code>)
       </small>
     </h2>
-    <veui-calendar v-model="selected3" range multiple :panel="3">
+    <veui-calendar
+      v-model="selected3"
+      class="calendar"
+      range
+      multiple
+      :panel="3"
+    >
       <template #date="day">
         {{ day.date }}
         <span v-if="day.date % 7 === 0" style="position: absolute">*</span>
@@ -145,12 +201,12 @@
       外部设置
       <code>selected</code>
     </h2>
-    <veui-calendar v-model="selected4" range :panel="2"/>
+    <veui-calendar v-model="selected4" class="calendar" range :panel="2"/>
     <veui-button @click="setSelected">设置</veui-button>
   </section>
   <section>
     <h2>年份选择</h2>
-    <veui-calendar v-model="selected6" type="year"/>
+    <veui-calendar v-model="selected6" class="calendar" type="year"/>
     Selected: {{ selected6 ? selected6.getFullYear() : '-' }}
   </section>
 </article>
@@ -201,10 +257,10 @@ export default {
       isYearDisabled (day) {
         return day.getFullYear() === 2018
       },
-      dateClass (day) {
-        if ((day.getDay() + 1) % 7 < 2) {
+      dateClass (day, { selected }) {
+        if ((day.getDay() + 1) % 7 < 2 && selected) {
           return {
-            'veui-calendar-weekend': true
+            'calendar-weekend': true
           }
         }
         return {}
@@ -223,7 +279,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~veui-theme-dls/lib.less";
+@import '~veui-theme-dls/lib.less';
 
 .veui-demo-calendar {
   section {
@@ -231,11 +287,11 @@ export default {
     margin-bottom: 10px;
   }
 
-  .veui-calendar {
+  .calendar {
     float: left;
     margin-right: 10px;
 
-    &-weekend:not(.veui-calendar-selected) {
+    &-weekend {
       button {
         background-color: tint(rebeccapurple, 90%);
       }
@@ -258,7 +314,7 @@ export default {
     align-items: center;
     justify-content: center;
 
-    .veui-badge {
+    .badge {
       position: absolute;
       top: calc(100% + 4px);
       left: 50%;

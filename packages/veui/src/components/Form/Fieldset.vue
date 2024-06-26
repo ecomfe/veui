@@ -8,6 +8,7 @@
   }"
   role="group"
   v-bind="$attrs"
+  :required="required"
 >
   <template slot="label">
     <slot name="label"/>

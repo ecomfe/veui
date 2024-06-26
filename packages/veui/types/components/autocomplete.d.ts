@@ -6,9 +6,19 @@ import {
   UiMixin,
   InputMixin,
   OverlayMixin,
-  DropdownMixin,
-  InputTrim
+  DropdownMixin
 } from '../common'
+import { Props as InputProps } from './input'
+
+type SHARED_PROPS =
+  | 'placeholder'
+  | 'selectOnFocus'
+  | 'composition'
+  | 'autofocus'
+  | 'clearable'
+  | 'maxlength'
+  | 'getLength'
+  | 'trim'
 
 type Item =
   | string
@@ -18,19 +28,13 @@ type Item =
       children?: Array<Item> | null
     }
 
-type Props<T extends Item> = {
+type Props<T extends Item> = Pick<InputProps, SHARED_PROPS> & {
   datasource?: Array<T>
   value?: string
+  /** @deprecated */
   suggestTrigger?: 'input' | 'focus' | Array<'input' | 'focus'>
-  autofocus?: boolean
-  placeholder?: string
-  selectOnFocus?: boolean
-  composition?: boolean
-  clearable?: boolean
-  maxlength?: number | string
-  getLength?: (str: string) => number
+  suggestOnFocus?: boolean
   strict?: boolean
-  trim?: InputTrim
 } & SearchableProps<Normalized<'children', T>>
 
 type Emits = {

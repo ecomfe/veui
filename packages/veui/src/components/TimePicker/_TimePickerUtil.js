@@ -53,7 +53,7 @@ export default class TimePickerUtil {
       !datasource.length ||
       datasource.some((i) => !isArray(i))
     ) {
-      throw new Error('datasource array required')
+      throw new Error('[veui-time-picker] Time options are not valid.')
     }
 
     this.datasource = map(datasource, (i) => i.sort((a, b) => (a > b ? 1 : -1)))

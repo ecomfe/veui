@@ -108,7 +108,9 @@ describe('managers/focus', function () {
 
     expect(() => {
       other.createContext()
-    }).to.throw('Root must be specified to create a FocusContext instance.')
+    }).to.throw(
+      '[veui-focus] Root must be specified to create a `FocusContext` instance.'
+    )
 
     document.body.removeChild(root)
   })

@@ -128,6 +128,7 @@ export default {
     rows: [Number, String],
     selectOnFocus: Boolean,
     composition: Boolean,
+    autofocus: Boolean,
     autoresize: Boolean,
     resizable: Boolean,
     maxlength: [Number, String],
@@ -161,6 +162,7 @@ export default {
         ...this.$attrs,
         maxlength: this.realStrict.maxlength ? this.realMaxlength : null,
         rows: this.realRows,
+        autofocus: this.autofocus,
         disabled: this.realDisabled,
         readonly: this.realReadonly
       }

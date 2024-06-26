@@ -6,9 +6,13 @@
   <div>expanded: {{ expanded }}</div>
   <div>active: {{ active1 }}</div>
   <veui-button
+    class="button"
     @click="$router.push('/sidenav/input')"
   >跳转到 input</veui-button>
-  <veui-button @click="collapsed = !collapsed">切换展开</veui-button>
+  <veui-button
+    class="button"
+    @click="collapsed = !collapsed"
+  >切换展开</veui-button>
   <section>
     <h3>small collapsible sidenav</h3>
     <veui-sidenav
@@ -185,7 +189,7 @@ export default {
     height: 300px;
   }
 
-  .veui-button + .veui-button {
+  .button + .button {
     margin-left: 8px;
   }
 }

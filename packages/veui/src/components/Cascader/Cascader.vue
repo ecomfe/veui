@@ -113,6 +113,7 @@
               :matches="option.matches"
               :separator="icons.separator"
               :separator-class="$c('cascader-search-result-item-separator')"
+              :theme-variant="themeVariant"
             />
           </template>
           <template
@@ -627,7 +628,7 @@ export default {
         { alias: 'options', includeSelf: true }
       )
       if (!parents) {
-        throw new Error(`[veui] Unknown option`)
+        throw new Error('[veui-cascader] Unknown option.')
       }
       option = parents[parents.length - 1]
       parents = parents.slice(0, -1)

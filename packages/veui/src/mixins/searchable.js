@@ -103,7 +103,7 @@ function search (datasource, keyword, options, result = []) {
     let isBool = !isArray && typeof offsets === 'boolean'
     if (!isArray && !isBool) {
       throw new Error(
-        'The return value of the `match` function must either be a boolean or an array.'
+        '[veui-searchable] The return value of the `match` function must either be a boolean or an array.'
       )
     }
     itemWrap.matched = toBoolean(offsets)
@@ -112,7 +112,7 @@ function search (datasource, keyword, options, result = []) {
     let filtered = filterFn(item, keyword, { ancestors, offsets })
     if (typeof filtered !== 'boolean') {
       throw new Error(
-        'The return value of the `filter` function must be a boolean.'
+        '[veui-searchable] The return value of the `filter` function must be a boolean.'
       )
     }
     itemWrap.filtered = filtered

@@ -464,7 +464,7 @@ describe('utils/date', function () {
       new Date(2022, 10, 3).getTime()
     )
     expect(() => startOf(new Date(2022, 10, 3), 'century')).to.throw(
-      '[veui] Invalid unit for `startOf`: century'
+      '[veui-date] Invalid unit for `startOf`: century.'
     )
   })
 
@@ -491,7 +491,7 @@ describe('utils/date', function () {
     ).to.equal(new Date(2023, 8, 10).getTime())
 
     expect(() => add(new Date(2022, 10, 3), { centuries: 1 })).to.throw(
-      '[veui] Invalid unit for `add`: centuries'
+      '[veui-date] Invalid unit for `add`: centuries.'
     )
   })
 })

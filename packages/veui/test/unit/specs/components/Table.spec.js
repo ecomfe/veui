@@ -2409,7 +2409,7 @@ describe('components/Table', function () {
     wrapper.destroy()
   })
 
-  it('should support tooltip prop on Columns', async () => {
+  it('should support ellipsis/tooltip prop on Columns', async () => {
     const loremIpsum =
       'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed dolores culpa ipsa alias pariatur cumque libero in earum vel vitae officia ullam, eum consequuntur perferendis! Optio maxime error qui veritatis!'
 
@@ -2423,8 +2423,14 @@ describe('components/Table', function () {
           return {
             selectable: true,
             data: [
-              { id: 1, foo: loremIpsum, bar: loremIpsum, baz: loremIpsum },
-              { id: 2, foo: 'foo', bar: 'bar', baz: 'baz' }
+              {
+                id: 1,
+                foo: loremIpsum,
+                bar: loremIpsum,
+                baz: loremIpsum,
+                qux: loremIpsum
+              },
+              { id: 2, foo: 'foo', bar: 'bar', baz: 'baz', qux: 'qux' }
             ]
           }
         },
@@ -2451,7 +2457,12 @@ describe('components/Table', function () {
               field="baz"
               title="Baz"
               :width="200"
-              :tooltip="null"
+            />
+            <veui-table-column
+              field="qux"
+              title="Qux"
+              :width="200"
+              ellipsis
             />
           </veui-table>`
       },
@@ -2460,9 +2471,11 @@ describe('components/Table', function () {
       }
     )
 
-    let [longFoo, longBar, longBaz, shortFoo] = wrapper.findAll(
+    let [longFoo, longBar, longBaz, longQux, shortFoo] = wrapper.findAll(
       'tbody .veui-table-cell-content'
     ).wrappers
+
+    expect(longQux.classes('veui-table-cell-content-ellipsis')).to.equal(true)
 
     longFoo.trigger('mouseenter')
     let warmup = config.get('tooltip.warmup')
@@ -3027,12 +3040,10 @@ describe('components/Table', function () {
 
     await wait(50)
     expect(scrollbar.scrollLeft).to.equal(42)
-    console.log(scrollbar.scrollLeft)
 
     scrollbar.scrollLeft = 128
 
     await wait(50)
-    console.log(main.scrollLeft)
     expect(main.scrollLeft).to.equal(128)
 
     wrapper.destroy()
@@ -3216,6 +3227,70 @@ describe('components/Table', function () {
     await vm.$nextTick()
 
     expect(box.text()).to.equal('Desc#5')
+
+    wrapper.destroy()
+  })
+
+  it('should update layout correctly upon columns change', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          'veui-table': Table,
+          'veui-table-column': Column
+        },
+        template: `
+        <veui-table
+          :data="data"
+          key-field="id"
+          selectable
+          :column-filter="columns"
+          style="width: 800px"
+        >
+          <veui-table-column
+            key="id"
+            field="id"
+            title="ID"
+            fixed="left"
+            width="180"
+          />
+          <veui-table-column key="name" field="name" title="Name" width="180"/>
+          <veui-table-column
+            key="title"
+            field="title"
+            title="title"
+            width="180"
+          />
+          <veui-table-column key="text" field="text" title="text" width="180"/>
+          <veui-table-column
+            field="desc"
+            title="Description"
+            tooltip
+            fixed="right"
+            width="180"
+          />
+        </veui-table>`,
+        data () {
+          return {
+            data: [],
+            columns: ['id', 'desc']
+          }
+        }
+      },
+      {
+        attachToDocument: true
+      }
+    )
+
+    const { vm } = wrapper
+    await vm.$nextTick()
+
+    vm.columns = ['id', 'desc', 'name', 'title', 'text']
+    await wait(0)
+
+    const ths = wrapper.findAll('th')
+    expect(parseFloat(ths.at(1).element.style.left)).to.equal(
+      ths.at(0).element.offsetWidth
+    )
 
     wrapper.destroy()
   })

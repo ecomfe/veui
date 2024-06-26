@@ -17,6 +17,7 @@ type Props = {
   filterTitle?: string
   filterOptions?: Array<unknown>
   filterMultiple?: boolean
+  ellipsis?: boolean
   tooltip?: boolean | ((item: unknown, field: string) => unknown)
 }
 

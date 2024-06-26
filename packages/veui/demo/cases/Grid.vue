@@ -7,7 +7,7 @@
     <h3>Default Grid</h3>
     <figure>
       <veui-grid-container>
-        <veui-grid-row>
+        <veui-grid-row class="row">
           <veui-grid-column :span="8">
             <div class="content">1/3</div>
           </veui-grid-column>
@@ -15,7 +15,7 @@
             <div class="content">2/3</div>
           </veui-grid-column>
         </veui-grid-row>
-        <veui-grid-row>
+        <veui-grid-row class="row">
           <veui-grid-column :span="6">
             <div class="content">1/4</div>
           </veui-grid-column>
@@ -29,7 +29,7 @@
             <div class="content">1/4</div>
           </veui-grid-column>
         </veui-grid-row>
-        <veui-grid-row>
+        <veui-grid-row class="row">
           <veui-grid-column :span="12">
             <div class="content">1/2</div>
           </veui-grid-column>
@@ -51,7 +51,7 @@
     <h3>4 Columns</h3>
     <figure>
       <veui-grid-container :columns="4">
-        <veui-grid-row>
+        <veui-grid-row class="row">
           <veui-grid-column :span="1">
             <div class="content">1/4</div>
           </veui-grid-column>
@@ -73,9 +73,9 @@
     <h3>12 Columns + 15px Gutter Embedded Grid</h3>
     <figure>
       <veui-grid-container :columns="12" :gutter="15">
-        <veui-grid-row>
+        <veui-grid-row class="row">
           <veui-grid-column :span="8">
-            <veui-grid-row>
+            <veui-grid-row class="row">
               <veui-grid-column :span="4">
                 <div class="content">4/12</div>
               </veui-grid-column>
@@ -83,7 +83,7 @@
                 <div class="content">4/12</div>
               </veui-grid-column>
             </veui-grid-row>
-            <veui-grid-row>
+            <veui-grid-row class="row">
               <veui-grid-column :span="3">
                 <div class="content">3/12</div>
               </veui-grid-column>
@@ -104,7 +104,7 @@
     <h3>Offset, push & pull</h3>
     <figure>
       <veui-grid-container>
-        <veui-grid-row>
+        <veui-grid-row class="row">
           <veui-grid-column :span="8" :offset="8">
             <div class="content">8/24 (offset: 8)</div>
           </veui-grid-column>
@@ -112,7 +112,7 @@
             <div class="content">8/24</div>
           </veui-grid-column>
         </veui-grid-row>
-        <veui-grid-row>
+        <veui-grid-row class="row">
           <veui-grid-column :span="8" :push="16">
             <div class="content">8/24 (push: 16)</div>
           </veui-grid-column>
@@ -162,7 +162,7 @@ figure {
   height: 100%;
 }
 
-.veui-grid-row {
+.row {
   text-align: center;
 
   & + & {

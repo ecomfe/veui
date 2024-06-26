@@ -12,6 +12,7 @@
       <veui-tag
         v-for="size in sizes"
         :key="size"
+        class="tag"
         :ui="size + (bordered ? ' bordered' : '')"
       >{{ size }}</veui-tag>
     </div>
@@ -23,12 +24,14 @@
       <veui-tag
         v-for="status in statuses"
         :key="status"
+        class="tag"
         :status="status"
         :ui="bordered ? 'bordered' : ''"
       >{{ status }}</veui-tag>
       <veui-tag
         v-for="color in colors"
         :key="color"
+        class="tag"
         :color="color"
         :ui="bordered ? 'bordered' : ''"
       >{{ color }}</veui-tag>
@@ -41,6 +44,7 @@
       <veui-tag
         v-for="(team, index) in teams2"
         :key="team"
+        class="tag"
         :status="statusesAndColors[index]"
         :color="index >= 5 ? statusesAndColors[index] : undefined"
         :ui="bordered ? 'bordered' : ''"
@@ -56,6 +60,7 @@
       <veui-tag
         v-for="(team, index) in teams"
         :key="team"
+        class="tag"
         :status="statusesAndColors[index]"
         :color="index >= 5 ? statusesAndColors[index] : undefined"
         removable
@@ -69,6 +74,7 @@
     <h2>可移除标签（受控）</h2>
     <div>
       <veui-tag
+        class="tag"
         :ui="bordered ? 'bordered' : ''"
         removable
         :removed="controlledRemoved"
@@ -83,6 +89,7 @@
       <veui-tag
         v-for="status in statuses"
         :key="status"
+        class="tag"
         :status="status"
         :selected.sync="selected"
         :ui="bordered ? 'bordered' : ''"
@@ -91,9 +98,34 @@
       <veui-tag
         v-for="color in colors"
         :key="color"
+        class="tag"
         :color="color"
         :selected.sync="selected"
         :ui="bordered ? 'bordered' : ''"
+        selectable
+      >{{ color }}</veui-tag>
+    </div>
+  </section>
+
+  <section>
+    <h2>反色标签</h2>
+    <div>
+      <veui-tag
+        v-for="status in statuses"
+        :key="status"
+        class="tag"
+        :status="status"
+        :selected.sync="selected"
+        :ui="'reverse' + (bordered ? ' bordered' : '')"
+        selectable
+      >{{ status }}</veui-tag>
+      <veui-tag
+        v-for="color in colors"
+        :key="color"
+        class="tag"
+        :color="color"
+        :selected.sync="selected"
+        :ui="'reverse' + (bordered ? ' bordered' : '')"
         selectable
       >{{ color }}</veui-tag>
     </div>
@@ -105,6 +137,7 @@
       <veui-tag
         v-for="status in statuses"
         :key="status"
+        class="tag"
         :status="status"
         :selected.sync="selected"
         :ui="bordered ? 'bordered' : ''"
@@ -114,6 +147,7 @@
       <veui-tag
         v-for="color in colors"
         :key="color"
+        class="tag"
         :color="color"
         :selected.sync="selected"
         :ui="bordered ? 'bordered' : ''"
@@ -125,6 +159,7 @@
       <veui-tag
         v-for="status in statuses"
         :key="status"
+        class="tag"
         :status="status"
         :ui="bordered ? 'bordered' : ''"
         disabled
@@ -133,6 +168,7 @@
       <veui-tag
         v-for="color in colors"
         :key="color"
+        class="tag"
         :color="color"
         :ui="bordered ? 'bordered' : ''"
         disabled
@@ -191,7 +227,7 @@ export default {
 </script>
 
 <style scoped>
-.veui-tag {
+.tag {
   margin-right: 15px;
 }
 </style>

@@ -21,6 +21,7 @@
         <div class="top">
           <veui-button
             ref="topLeftHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -31,6 +32,7 @@
           >上左</veui-button>
           <veui-button
             ref="topCenterHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -41,6 +43,7 @@
           >上边</veui-button>
           <veui-button
             ref="topRightHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -53,6 +56,7 @@
         <div class="left">
           <veui-button
             ref="leftTopHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -63,6 +67,7 @@
           >左上</veui-button>
           <veui-button
             ref="leftCenterHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -73,6 +78,7 @@
           >左边</veui-button>
           <veui-button
             ref="leftBottomHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -85,6 +91,7 @@
         <div class="right">
           <veui-button
             ref="rightTopHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -95,6 +102,7 @@
           >右上</veui-button>
           <veui-button
             ref="rightCenterHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -105,6 +113,7 @@
           >右边</veui-button>
           <veui-button
             ref="rightBottomHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -117,6 +126,7 @@
         <div class="bottom">
           <veui-button
             ref="BottomLeftHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -127,6 +137,7 @@
           >下左</veui-button>
           <veui-button
             ref="BottomCenterHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -137,6 +148,7 @@
           >下边</veui-button>
           <veui-button
             ref="BottomRightHover"
+            class="button"
             ui="aux"
             @mouseenter.native="
               show({
@@ -165,6 +177,7 @@
         <div class="top">
           <veui-button
             ref="topLeftClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -175,6 +188,7 @@
           >上左</veui-button>
           <veui-button
             ref="topCenterClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -185,6 +199,7 @@
           >上边</veui-button>
           <veui-button
             ref="topRightClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -197,6 +212,7 @@
         <div class="left">
           <veui-button
             ref="leftTopClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -207,6 +223,7 @@
           >左上</veui-button>
           <veui-button
             ref="leftCenterClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -217,6 +234,7 @@
           >左边</veui-button>
           <veui-button
             ref="leftBottomClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -229,6 +247,7 @@
         <div class="right">
           <veui-button
             ref="rightTopClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -239,6 +258,7 @@
           >右上</veui-button>
           <veui-button
             ref="rightCenterClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -249,6 +269,7 @@
           >右边</veui-button>
           <veui-button
             ref="rightBottomClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -261,6 +282,7 @@
         <div class="bottom">
           <veui-button
             ref="BottomLeftClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -271,6 +293,7 @@
           >下左</veui-button>
           <veui-button
             ref="BottomCenterClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -281,6 +304,7 @@
           >下边</veui-button>
           <veui-button
             ref="BottomRightClick"
+            class="button"
             ui="aux"
             @click.native="
               clickShow({
@@ -327,7 +351,7 @@
 
   <section>
     <div style="margin-bottom: 10px">排除自己</div>
-    <veui-button ref="exclude">target</veui-button>
+    <veui-button ref="exclude" class="button">target</veui-button>
     <veui-tooltip
       position="top"
       target="exclude"
@@ -350,16 +374,18 @@
       >[A]</mark>
       <mark
         v-tooltip="{
-          content: descB,
+          content: realDescB,
           disabled: !showDesc
         }"
       >[B]</mark>
       <veui-button
         v-tooltip.bottom-start="'Change content of A and B'"
+        class="button"
         @click="changeDesc"
       >Change</veui-button>
       <veui-button
         v-tooltip="'Toggle content of A and B'"
+        class="button"
         @click="showDesc = !showDesc"
       >{{ showDesc ? 'Disable' : 'Enable' }}</veui-button>
     </section>
@@ -392,7 +418,7 @@
       </p>
       <p
         v-tooltip.overflow="{
-          content: descB,
+          content: realDescB,
           disabled: !showDesc
         }"
         class="line-clamp"
@@ -414,6 +440,7 @@
 </template>
 
 <script>
+import { h } from 'vue'
 import bus from '../bus'
 import { Tooltip, Checkbox, Button, Input } from 'veui'
 import { tooltip } from 'veui/directives'
@@ -445,6 +472,11 @@ export default {
       descB: 'B',
       showDesc: true,
       aimCenter: false
+    }
+  },
+  computed: {
+    realDescB () {
+      return h('h1', this.descB)
     }
   },
   mounted () {
@@ -507,13 +539,13 @@ section {
   float: right;
 }
 
-.top .veui-button,
-.bottom .veui-button {
+.top .button,
+.bottom .button {
   margin-right: 10px;
 }
 
-.left .veui-button,
-.right .veui-button {
+.left .button,
+.right .button {
   margin-bottom: 10px;
 }
 

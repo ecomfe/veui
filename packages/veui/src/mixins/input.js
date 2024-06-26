@@ -39,7 +39,7 @@ export function useInput () {
     },
     computed: {
       realName () {
-        return (this.field && this.field.getName()) || this.name
+        return this.name || (this.field && this.field.getName())
       },
       realDisabled () {
         return Boolean(
@@ -67,7 +67,9 @@ export function useInput () {
         return this.field && this.field.getName() && this.isTopMostInput
       },
       listenersFromField () {
-        return this.field.getInteractiveListeners(this.getFacade())
+        return this.field
+          ? this.field.getInteractiveListeners(this.getFacade())
+          : {}
       },
       listenersWithValidations () {
         // 为啥要 wrap listeners: 避免 $listener 和 field/form 上交互事件合并时导致无限递归

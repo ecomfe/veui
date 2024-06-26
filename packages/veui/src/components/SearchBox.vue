@@ -15,6 +15,7 @@
       ref="input"
       v-model="realValue"
       v-outside:input,box="closeSuggestions"
+      :ui="realUi"
       :name="realName"
       :readonly="realReadonly"
       :disabled="realDisabled"
@@ -230,7 +231,7 @@ export default {
   },
   computed: {
     attrs () {
-      return pick(this, ['ui', ...without(SHARED_PROPS, 'value')])
+      return pick(this.$props, without(SHARED_PROPS, 'value'))
     },
     listeners () {
       return omit(this.$listeners, ['suggest', 'select', 'search'])

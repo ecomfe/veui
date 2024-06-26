@@ -9,7 +9,7 @@ ui.defaults(
     },
     ui: {
       size: {
-        values: ['s', 'm'],
+        values: ['xs', 's', 'm', 'l'],
         default: 'm',
         inherit: true
       }

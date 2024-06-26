@@ -24,13 +24,6 @@
     </slot>
   </template>
   <template #after>
-    <span
-      v-if="countLabel"
-      :class="{
-        [$c('tag-input-tag-count')]: true,
-        [$c('tag-input-tag-count-overflow')]: countOverflow
-      }"
-    >{{ countLabel }}</span>
     <veui-button
       v-if="showClear"
       :class="$c('tag-input-clear')"
@@ -40,6 +33,13 @@
     >
       <veui-icon :name="icons.clear"/>
     </veui-button>
+    <span
+      v-if="countLabel"
+      :class="{
+        [$c('tag-input-tag-count')]: true,
+        [$c('tag-input-tag-count-overflow')]: countOverflow
+      }"
+    >{{ countLabel }}</span>
   </template>
   <template v-if="$slots.placeholder" #placeholder>
     <slot name="placeholder"/>
@@ -61,7 +61,7 @@ import Button from './Button'
 import Icon from './Icon'
 import { pick, omit, uniq } from 'lodash'
 
-const SHARED_PROPS = ['placeholder', 'clearable', 'getLength']
+const SHARED_PROPS = ['placeholder', 'clearable', 'getLength', 'autofocus']
 
 const BASE_EVENTS = ['input', 'change']
 
@@ -153,7 +153,7 @@ export default {
             key: `#${i}-${tag}`,
             class: this.$c('tag-input-tag'),
             ui: this.uiParts.tag,
-            type: invalid ? 'error' : undefined,
+            status: invalid ? 'error' : undefined,
             disabled: this.realDisabled,
             removable: this.editable,
             removed: false,

@@ -352,7 +352,7 @@ export default {
     checkPropValidity () {
       if (this.value && !this.util.isAvailable(this.realValue, true)) {
         // TODO 需要恢复到之前的状态吗
-        throw new Error('value prop is invalid!')
+        throw new Error('[veui-time-picker] `value` prop is invalid.')
       }
     },
     scrollSelectedTime (viewport, duration) {

@@ -225,7 +225,7 @@ describe('components/SearchBox', function () {
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.veui-input-placeholder').text()).to.equal('content')
     expect(wrapper.find('input').element.value).to.equal('initial')
-    expect(wrapper.attributes('autofocus')).to.equal('autofocus')
+    expect(wrapper.find('input').attributes('autofocus')).to.equal('autofocus')
     expect(wrapper.attributes('ui')).to.include('primary')
 
     wrapper.find('.veui-input-clear').trigger('click')
@@ -610,5 +610,39 @@ describe('components/SearchBox', function () {
     )
 
     wrapper.find('input').trigger('keydown', { key: 'Enter' })
+  })
+
+  it('should support `theme` prop', async () => {
+    let wrapper = mount(
+      {
+        components: {
+          'veui-search-box': SearchBox
+        },
+        template: `<veui-search-box :theme="theme"/>`,
+        data () {
+          return {
+            theme: 'ai'
+          }
+        }
+      },
+      {
+        sync: false
+      }
+    )
+
+    let { vm } = wrapper
+
+    expect(wrapper.find('.veui-ai-search-box').exists()).to.equal(true)
+    expect(wrapper.find('.veui-ai-input').exists()).to.equal(true)
+    expect(wrapper.find('.veui-ai-button').exists()).to.equal(true)
+
+    vm.theme = 'd22'
+    await vm.$nextTick()
+
+    expect(wrapper.find('.veui-search-box').exists()).to.equal(true)
+    expect(wrapper.find('.veui-input').exists()).to.equal(true)
+    expect(wrapper.find('.veui-button').exists()).to.equal(true)
+
+    wrapper.destroy()
   })
 })

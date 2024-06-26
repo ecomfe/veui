@@ -110,7 +110,7 @@
 import { map, mapValues, intersection, find, omit, filter } from 'lodash'
 import warn from '../../utils/warn'
 import { normalizeLength } from '../../utils/helper'
-import prefix from '../../mixins/prefix'
+import prefix, { prefixify } from '../../mixins/prefix'
 import ui from '../../mixins/ui'
 import i18n from '../../mixins/i18n'
 import colgroup from '../../mixins/colgroup'
@@ -502,9 +502,11 @@ export default {
     },
     scrollbarMetrics () {
       return {
-        [`--${this.$c('table-scroll-width')}`]: `${this.scrollWidth}px`,
-        [`--${this.$c('table-scrollbar-width')}`]: `${this.scrollbarWidth}px`,
-        [`--${this.$c('table-scrollbar-height')}`]: `${this.scrollbarHeight}px`
+        [`--${prefixify('table-scroll-width')}`]: `${this.scrollWidth}px`,
+        [`--${prefixify('table-scrollbar-width')}`]: `${this.scrollbarWidth}px`,
+        [`--${prefixify(
+          'table-scrollbar-height'
+        )}`]: `${this.scrollbarHeight}px`
       }
     }
   },
@@ -526,6 +528,12 @@ export default {
       } else {
         this.expandColumnWidth = 0
       }
+    },
+    filteredColumns () {
+      this.$nextTick(() => {
+        this.updateSelectColumnWidth()
+        this.updateExpandColumnWidth()
+      })
     }
   },
   mounted () {
@@ -558,11 +566,6 @@ export default {
     this.updateScrollListeners(true)
   },
   methods: {
-    updateSelectColumnWidth () {
-      this.selectColumnWidth = this.$el.querySelector(
-        `.${this.$c('table-cell-select')}`
-      ).offsetWidth
-    },
     hasFoot () {
       return (
         this.$scopedSlots.foot ||
@@ -570,10 +573,19 @@ export default {
         this.filteredColumns.some((col) => col.hasFoot())
       )
     },
+    updateSelectColumnWidth () {
+      const select = this.$el.querySelector(`.${this.$c('table-cell-select')}`)
+      if (!select) {
+        return
+      }
+      this.selectColumnWidth = select.offsetWidth
+    },
     updateExpandColumnWidth () {
-      this.expandColumnWidth = this.$el.querySelector(
-        `.${this.$c('table-cell-expand')}`
-      ).offsetWidth
+      const expand = this.$el.querySelector(`.${this.$c('table-cell-expand')}`)
+      if (!expand) {
+        return
+      }
+      this.expandColumnWidth = expand.offsetWidth
     },
     select (selected, index) {
       let item = null

@@ -4,16 +4,24 @@
     <code>&lt;veui-table&gt;</code>
   </h1>
   <section class="options">
-    <veui-button ui="primary" @click="append">添加</veui-button>
-    <veui-button @click="toggle">切换数据</veui-button>
-    <veui-button @click="toggleLoading">切换加载</veui-button>
-    <veui-button @click="filtered = null">清空筛选</veui-button>
+    <veui-button
+      class="button"
+      ui="primary"
+      @click="append"
+    >添加</veui-button>
+    <veui-button class="button" @click="toggle">切换数据</veui-button>
+    <veui-button class="button" @click="toggleLoading">切换加载</veui-button>
+    <veui-button
+      class="button"
+      @click="filtered = null"
+    >清空筛选</veui-button>
   </section>
   <section class="options">
     <veui-label>
       内容固定行
       <veui-number-input
         v-model="lines"
+        class="number-input"
         :disabled="linesAuto"
         :min="1"
         :max="2"
@@ -24,6 +32,7 @@
       表头固定行
       <veui-number-input
         v-model="headLines"
+        class="number-input"
         :disabled="headLinesAuto"
         :min="1"
         :max="2"
@@ -66,6 +75,7 @@
   </section>
   <section>
     <veui-table
+      class="table"
       ui="s compact crowded"
       :scroll="{
         x: scrollX ? 1280 : null,
@@ -106,7 +116,7 @@
           <template #desc="{ close }">
             <p>一段说明文本……</p>
             <p>
-              <veui-button @click="close">知道了</veui-button>
+              <veui-button class="button" @click="close">知道了</veui-button>
             </p>
           </template>
           <template #foot>
@@ -180,8 +190,16 @@
         width="160"
       >
         <template slot-scope="props">
-          <veui-button ui="text" @click="log(props.item)">编辑</veui-button>
-          <veui-button ui="text" @click="del(props.index)">删除</veui-button>
+          <veui-button
+            class="button"
+            ui="text"
+            @click="log(props.item)"
+          >编辑</veui-button>
+          <veui-button
+            class="button"
+            ui="text"
+            @click="del(props.index)"
+          >删除</veui-button>
           <veui-link ui="strong" to="table">查看</veui-link>
         </template>
       </veui-table-column>
@@ -190,6 +208,7 @@
   </section>
   <section class="container">
     <veui-table
+      class="table"
       ui="loose"
       :data="data"
       :column-filter="columns"
@@ -253,6 +272,7 @@
   </section>
   <section class="container">
     <veui-table
+      class="table"
       :data="data"
       key-field="id"
       selectable
@@ -277,6 +297,7 @@
   </section>
   <section class="container">
     <veui-table
+      class="table"
       :data="data"
       key-field="id"
       expandable
@@ -306,7 +327,7 @@
     <section>
       <veui-input v-model="idTitle" placeholder="列标题"/>
     </section>
-    <veui-table :data="data" key-field="id" :loading="loading">
+    <veui-table class="table" :data="data" key-field="id" :loading="loading">
       <veui-table-column field="id" title="数据 ID">
         <template #head>{{ idTitle }}</template>
       </veui-table-column>
@@ -325,7 +346,7 @@
     </veui-table>
   </section>
   <section class="container">
-    <veui-table key-field="id" :data="data" :loading="loading">
+    <veui-table class="table" key-field="id" :data="data" :loading="loading">
       <veui-table-column
         v-for="field in fields"
         :key="field.name"
@@ -336,6 +357,7 @@
   </section>
   <section class="container">
     <veui-table
+      class="table"
       :data="items"
       :scroll="{ x: 1200 }"
       :loading="loading"
@@ -358,6 +380,7 @@
   <section class="container">
     <h3>Orders: {{ allowedOrders1 }} , Current: {{ order1 }}</h3>
     <veui-table
+      class="table"
       key-field="id"
       :data="items"
       :order="order1"
@@ -374,10 +397,14 @@
     </veui-table>
     <h3>Orders: {{ allowedOrders2 }} , Current: {{ order2 }}</h3>
     <section class="options">
-      <veui-button @click="switchDisabled">切换disabled</veui-button>
-      <veui-button @click="switchAll">切换all</veui-button>
+      <veui-button
+        class="button"
+        @click="switchDisabled"
+      >切换disabled</veui-button>
+      <veui-button class="button" @click="switchAll">切换all</veui-button>
     </section>
     <veui-table
+      class="table"
       key-field="id"
       :data="items"
       selectable
@@ -389,7 +416,7 @@
       <veui-table-column field="id" title="id" sortable/>
     </veui-table>
 
-    <veui-table key-field="id" :data="items">
+    <veui-table class="table" key-field="id" :data="items">
       <veui-table-column field="id" title="id" sortable/>
       <veui-table-column v-if="!toggled" field="type" title="type"/>
       <veui-table-column v-if="false" field="name" title="name"/>
@@ -403,10 +430,11 @@
     </veui-table>
     <section class="options">
       <veui-button
+        class="button"
         @click="toggled = !toggled"
       >toggle type and origin</veui-button>
     </section>
-    <veui-table key-field="id" :data="items">
+    <veui-table class="table" key-field="id" :data="items">
       <template v-if="!toggled">
         <veui-table-column field="id" title="id1" sortable/>
         <veui-table-column field="type" title="type2"/>
@@ -416,7 +444,7 @@
     </veui-table>
   </section>
   <section>
-    <veui-table key-field="id" :data="data">
+    <veui-table class="table" key-field="id" :data="data">
       <veui-table-column width="300" title="Head" field="id"/>
       <veui-table-column width="300" title="Head" field="desc"/>
       <veui-table-column width="300" title="Head" field="price"/>
@@ -428,10 +456,16 @@
   <section>
     <h5>列类型 group 变化</h5>
     <section class="options">
-      <veui-button @click="exist = !exist">切换第二列</veui-button>
-      <veui-button @click="isGroup = !isGroup">切换第二列类型</veui-button>
+      <veui-button
+        class="button"
+        @click="exist = !exist"
+      >切换第二列</veui-button>
+      <veui-button
+        class="button"
+        @click="isGroup = !isGroup"
+      >切换第二列类型</veui-button>
     </section>
-    <veui-table :data="items" key-field="id">
+    <veui-table class="table" :data="items" key-field="id">
       <veui-table-column field="id" title="Id"/>
       <veui-table-column
         v-if="exist"
@@ -450,18 +484,60 @@
   <section>
     <h5>列 scopedSlots 动态变化</h5>
     <section class="options">
-      <veui-button @click="swNo ^= 1">switch(OP{{ swNo }})</veui-button>
+      <veui-button
+        class="button"
+        @click="swNo ^= 1"
+      >switch(OP{{ swNo }})</veui-button>
     </section>
-    <veui-table :data="items" key-field="id">
+    <veui-table class="table" :data="items" key-field="id">
       <veui-table-column field="operation" title="Operations">
         <template v-if="swNo" #default="{ index }">
-          <veui-button ui="text">OP1:{{ index }}</veui-button>
+          <veui-button class="button" ui="text">OP1:{{ index }}</veui-button>
         </template>
 
         <template v-else #default="{ index }">
-          <veui-button ui="text">OP0:{{ index }}</veui-button>
+          <veui-button class="button" ui="text">OP0:{{ index }}</veui-button>
         </template>
       </veui-table-column>
+    </veui-table>
+  </section>
+  <section>
+    <h5>动态切换 column-filter</h5>
+    <div class="options">
+      <veui-button
+        class="button"
+        @click="toggleFilter"
+      >切换列过滤</veui-button>
+    </div>
+    <veui-table
+      :data="tableData"
+      key-field="id"
+      selectable
+      :column-filter="tableColumns"
+      style="width: 800px"
+    >
+      <veui-table-column
+        key="id"
+        field="id"
+        title="ID"
+        fixed="left"
+        width="180"
+      />
+      <veui-table-column key="name" field="name" title="Name" width="180"/>
+      <veui-table-column
+        key="title"
+        field="title"
+        title="title"
+        width="180"
+      />
+      <veui-table-column key="text" field="text" title="text" width="180"/>
+      <veui-table-column
+        field="desc"
+        title="Description"
+        tooltip
+        fixed="right"
+        width="180"
+      />
     </veui-table>
   </section>
 </article>
@@ -645,6 +721,10 @@ function date (value) {
   return value.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')
 }
 
+const long =
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, quibusdam! Pariatur, laboriosam? Voluptatibus, sunt.'
+const short = 'Lorem ipsum.'
+
 export default {
   name: 'table-demo',
   components: {
@@ -769,7 +849,30 @@ export default {
       popover: '这是一条补充的 Popover 信息',
       inputFilter: '',
       count: 0,
-      tick: null
+      tick: null,
+      tableColumns: ['id', 'desc'],
+      tableData: [
+        {
+          id: '3154',
+          name: 'Steve Rogers',
+          desc: long
+        },
+        {
+          id: '3155',
+          name: 'Thor Odinson',
+          desc: short
+        },
+        {
+          id: '3156',
+          name: 'Tony Stark',
+          desc: short
+        },
+        {
+          id: '3157',
+          name: 'Stephen Strange',
+          desc: long
+        }
+      ]
     }
   },
   computed: {
@@ -797,9 +900,9 @@ export default {
     // for (let i = 0; i < 300; i++) {
     //   this.append()
     // }
-    this.tick = setInterval(() => {
-      this.count += 1
-    }, 1000)
+    // this.tick = setInterval(() => {
+    //   this.count += 1
+    // }, 1000)
   },
   beforeDestroy () {
     clearInterval(this.tick)
@@ -810,6 +913,9 @@ export default {
     time,
     toggle () {
       this.data = this.data === tableData ? [] : tableData
+    },
+    toggleFilter () {
+      this.tableColumns = ['id', 'desc', 'name', 'title', 'text']
     },
     switchDisabled () {
       let first = this.items[0]
@@ -868,7 +974,7 @@ export default {
 section {
   margin-bottom: 20px;
 
-  .veui-button + .veui-button {
+  .button + .button {
     margin-left: 20px;
   }
 
@@ -878,7 +984,7 @@ section {
   }
 }
 
-.veui-number-input {
+.number-input {
   margin-left: 8px;
 }
 
@@ -886,7 +992,7 @@ label {
   margin-right: 10px;
 }
 
-.veui-table {
+.table {
   margin-bottom: 30px;
 
   tfoot strong {

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { isString, isObject, isNumber } from 'lodash'
 import ToastList from '../components/ToastList'
 import warn from '../utils/warn'
+import config from './config'
 
 let Container = Vue.extend(ToastList)
 
@@ -22,11 +23,13 @@ export class ToastManager {
       this.init()
     }
 
+    const theme = config.get('theme')
+
     let messages = []
     if (Array.isArray(option)) {
-      messages = option.map((item) => this.container.add(item))
+      messages = option.map((item) => this.container.add({ theme, ...item }))
     } else if (isObject(option)) {
-      messages = [this.container.add(option)]
+      messages = [this.container.add({ theme, ...option })]
     } else {
       warn('[toast-manager] Invalid arguments for Toasts.')
     }

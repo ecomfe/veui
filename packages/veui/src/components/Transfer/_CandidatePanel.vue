@@ -65,6 +65,7 @@ export default {
     'veui-tree': Tree,
     'veui-button': Button
   },
+  uiTypes: ['transparent'],
   mixins: [
     prefix,
     i18n,

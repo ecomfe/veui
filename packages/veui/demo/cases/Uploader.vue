@@ -14,6 +14,8 @@
         :items="availableTypes"
       />
       <div class="space"/>
+      <veui-checkbox v-model="d22">D22</veui-checkbox>
+      <div class="space"/>
       <veui-checkbox v-model="autoupload">autoupload</veui-checkbox>
       <div class="space"/>
       <veui-checkbox v-model="sortable">sortable</veui-checkbox>
@@ -240,6 +242,7 @@
     <details>
       <summary>Value</summary>
       <veui-textarea
+        class="textarea"
         ui="s"
         readonly
         :value="JSON.stringify(files, null, 4)"
@@ -389,6 +392,7 @@ export default {
       inDialog: false,
       order: 'append',
       failureImage: false,
+      d22: false,
 
       enabledCustoms: [],
       tooltipOpen: false,
@@ -475,7 +479,7 @@ export default {
           'pickerPosition',
           'convertResponse'
         ]),
-        ui: this.size,
+        ui: `${this.size} ${this.d22 ? 'theme:d22' : ''}`,
         upload: this.customUploadRequest,
         controls: includes(this.enabledCustoms, ':controls')
           ? this.customItemControls
@@ -488,17 +492,17 @@ export default {
     }
   },
   watch: {
-    type (val) {
+    type () {
       this.localFiles = undefined
     },
-    files (val) {
+    files () {
       console.log(
         'Files updated',
         this.files,
         this.files.map((file) => [file.key, file.name].join('\t'))
       )
     },
-    maxCount (val) {
+    maxCount () {
       this.multiple = undefined
     }
   },
@@ -760,7 +764,7 @@ fieldset > div {
   overflow: hidden;
 }
 
-.veui-textarea {
+.textarea {
   width: 100%;
   height: 300px;
 }

@@ -66,7 +66,7 @@ import { sharedProps } from './_mixin'
 import config from '../../managers/config'
 import { useConfigurable } from '../../mixins/config'
 import toast from '../../managers/toast'
-import warn from '../../utils/warn'
+import warn, { getLink } from '../../utils/warn'
 import { addOnceEventListener } from '../../utils/dom'
 import { isSupportFileListContructor } from '../../utils/file'
 import Lightbox from '../Lightbox'
@@ -635,7 +635,7 @@ export default {
             .map(({ message }) => message)
             .join(this.t('separator'))
           file.preview = errors.some(({ preview }) => !!preview)
-          throw new Error('validate failed') // skip to next catch block
+          throw new Error('[veui] Validation failed.') // skip to next catch block
         })
         .then(() => {
           // validate success, start to upload
@@ -764,7 +764,15 @@ export default {
 
     triggerUpload () {
       warn(
-        '[veui-uploader] `triggerUpload` is deprecated and will be removed in future versions. Use `startUpload` instead.',
+        `[veui-uploader] The \`triggerUpload\` (${getLink(
+          'uploader',
+          'triggerUpload',
+          'method'
+        )}) is deprecated and will be removed in future versions. Use \`startUpload\` (${getLink(
+          'uploader',
+          'startUpload',
+          'method'
+        )}) instead.`,
         this
       )
       this.startUpload()

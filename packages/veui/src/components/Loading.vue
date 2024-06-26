@@ -41,12 +41,15 @@ export default {
       descId: uniqueId('veui-loading-')
     }
   },
+  computed: {
+    attrs () {
+      let attrs = loading.attrs
+      let { class: className, ...others } = attrs
+      return { class: [className, this.$c('loading-content')], ...others }
+    }
+  },
   created () {
     this.contents = loading.contents
-
-    let attrs = loading.attrs
-    let { class: className, ...others } = attrs
-    this.attrs = { class: [className, this.$c('loading-content')], ...others }
   },
   methods: {
     hasDefaultSlot () {

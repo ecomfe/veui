@@ -86,7 +86,9 @@ export function getIndexOfType (current, parentType) {
     : current.$parent
 
   if (parentType && !parent) {
-    throw new Error(`No ancestor typed as [${parentType}] found.`)
+    throw new Error(
+      `[veui-context] No ancestor typed as \`${parentType}\` found.`
+    )
   }
 
   let parentVnodes = parent.$slots.default

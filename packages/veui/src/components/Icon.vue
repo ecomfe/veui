@@ -1,6 +1,6 @@
 <script>
 import FaIcon from 'vue-awesome/components/Icon'
-import { prefixify } from '../mixins/prefix'
+import prefix from '../mixins/prefix'
 import '../common/global'
 
 const {
@@ -15,12 +15,13 @@ export default {
   ...options,
   name: 'veui-icon',
   mixins: [
+    prefix,
     {
       computed: {
         classes () {
           return {
-            [prefixify('icon')]: true,
-            [prefixify('icon-spin')]: this.spin
+            [this.$c('icon')]: true,
+            [this.$c('icon-spin')]: this.spin
           }
         }
       }
@@ -72,26 +73,3 @@ export default {
   icons
 }
 </script>
-
-<style lang="less">
-@veui-prefix: veui;
-
-.@{veui-prefix}-icon {
-  @animation-name: ~'@{veui-prefix}-icon-spin';
-
-  &-spin {
-    animation: @animation-name 1s linear infinite;
-  }
-
-  /* stylelint-disable-next-line keyframes-name-pattern */
-  @keyframes @animation-name {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-}
-</style>

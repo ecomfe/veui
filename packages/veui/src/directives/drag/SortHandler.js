@@ -25,27 +25,38 @@ const isSafari = checkIsSafari()
 const defaultDragSortInsertAlign = 'middle'
 const preventDragOverDefault = (evt) => evt.preventDefault()
 
-const datasetDragSortKey = camelCase(prefixify('drag-sort'))
-const datasetDragSortHandleKey = camelCase(prefixify('drag-sort-handle'))
-const datasetDraggingKey = datasetDragSortKey + 'Dragging'
-const datasetDragGhostKey = datasetDraggingKey + 'Ghost'
-const datasetDragSnapshotKey = datasetDragSortKey + 'Snapshot'
+const datasetDragSortKey = (themeVariant) =>
+  camelCase(prefixify('drag-sort', themeVariant))
+const datasetDragSortHandleKey = (themeVariant) =>
+  camelCase(prefixify('drag-sort-handle', themeVariant))
+const datasetDraggingKey = (themeVariant) =>
+  datasetDragSortKey(themeVariant) + 'Dragging'
+const datasetDragGhostKey = (themeVariant) =>
+  datasetDraggingKey(themeVariant) + 'Ghost'
+const datasetDragSnapshotKey = (themeVariant) =>
+  datasetDragSortKey(themeVariant) + 'Snapshot'
 const dragContainerChildrenKey = '__drag_container_children__'
 const dragContainerRestoreKey = '__drag_container_restore__'
 
 export default class SortHandler extends BaseHandler {
-  constructor (options, context, vnode) {
-    super(options, context, vnode)
-
-    // 加上标记，开始拖动时需要通过这个找到同组元素
-    options.target.dataset[datasetDragSortKey] = this.options.name
-    options.handle.dataset[datasetDragSortHandleKey] = ''
-  }
-
   setOptions (options) {
     if (isEqual(this.options, options)) {
       return
     }
+
+    const { target, handle, themeVariant } = this.options
+    if (target) {
+      delete target.dataset[datasetDragSortKey(themeVariant)]
+    }
+    if (handle) {
+      delete handle.dataset[datasetDragSortHandleKey(themeVariant)]
+    }
+
+    // 加上标记，开始拖动时需要通过这个找到同组元素
+    options.target.dataset[datasetDragSortKey(options.themeVariant)] =
+      options.name
+    options.handle.dataset[datasetDragSortHandleKey(options.themeVariant)] = ''
+
     if (isUndefined(options.align)) {
       options = { ...options, align: defaultDragSortInsertAlign }
     }
@@ -53,7 +64,15 @@ export default class SortHandler extends BaseHandler {
 
     this.options = assign(
       this.options,
-      pick(options, ['name', 'containment', 'axis', 'sort', 'debug', 'align'])
+      pick(options, [
+        'name',
+        'containment',
+        'axis',
+        'sort',
+        'debug',
+        'align',
+        'themeVariant'
+      ])
     )
   }
 
@@ -112,11 +131,13 @@ export default class SortHandler extends BaseHandler {
     // 避免拖动完成后的原生动画
     document.addEventListener('dragover', preventDragOverDefault)
 
+    const { themeVariant } = this.options
+
     // 加上拖动中标记，用于匹配css
-    target.dataset[datasetDraggingKey] = ''
-    document.body.classList.add(kebabCase(datasetDraggingKey))
+    target.dataset[datasetDraggingKey(themeVariant)] = ''
+    document.body.classList.add(kebabCase(datasetDraggingKey(themeVariant)))
     // 加上 Snapshot 标记，用来调整截图的宽高（隐藏一些元素）有效，但是改颜色无效
-    target.dataset[datasetDragSnapshotKey] = ''
+    target.dataset[datasetDragSnapshotKey(themeVariant)] = ''
     // 计算热区
     this.updateHotRects()
 
@@ -130,15 +151,16 @@ export default class SortHandler extends BaseHandler {
 
     // 下一帧再加上 ghost 样式，避免拖动的 snapshot 也是 ghost 样式
     requestAnimationFrame(() => {
-      delete target.dataset[datasetDragSnapshotKey]
-      target.dataset[datasetDragGhostKey] = ''
+      delete target.dataset[datasetDragSnapshotKey(themeVariant)]
+      target.dataset[datasetDragGhostKey(themeVariant)] = ''
     })
   }
 
   getElements () {
-    return this.container.querySelectorAll(
-      `[data-${kebabCase(datasetDragSortKey)}="${this.options.name}"]`
-    )
+    const itemsSelector = `[data-${kebabCase(
+      datasetDragSortKey(this.options.themeVariant)
+    )}="${this.options.name}"]`
+    return this.container.querySelectorAll(itemsSelector)
   }
 
   updateHotRects () {
@@ -156,8 +178,10 @@ export default class SortHandler extends BaseHandler {
       this.dragElementIndex
     )
 
-    if (process.env.NODE_ENV === 'development' && this.options.debug) {
-      let id = `${datasetDragSortKey}debug-layer`
+    const { debug, themeVariant } = this.options
+
+    if (process.env.NODE_ENV === 'development' && debug) {
+      let id = `${datasetDragSortKey(themeVariant)}debug-layer`
       let layer = document.getElementById(id)
       if (layer) {
         layer.parentNode.removeChild(layer)
@@ -222,16 +246,18 @@ export default class SortHandler extends BaseHandler {
 
   end (...args) {
     super.end(...args)
-    let { target } = this.options
+    let { target, themeVariant } = this.options
 
     // 清理
-    delete target.dataset[datasetDragGhostKey]
-    delete target.dataset[datasetDraggingKey]
+    delete target.dataset[datasetDragGhostKey(themeVariant)]
+    delete target.dataset[datasetDraggingKey(themeVariant)]
     this.clear()
   }
 
   clear () {
-    document.body.classList.remove(kebabCase(datasetDraggingKey))
+    document.body.classList.remove(
+      kebabCase(datasetDraggingKey(this.options.themeVariant))
+    )
     document.removeEventListener('dragover', preventDragOverDefault)
   }
 
@@ -240,11 +266,11 @@ export default class SortHandler extends BaseHandler {
   destroy () {
     this.clear()
 
-    let { target, handle } = this.options
+    let { target, handle, themeVariant } = this.options
     target.draggable = false
 
-    delete target.dataset[datasetDragSortKey]
-    delete handle.dataset[datasetDragSortHandleKey]
+    delete target.dataset[datasetDragSortKey(themeVariant)]
+    delete handle.dataset[datasetDragSortHandleKey(themeVariant)]
 
     let { container } = this
 

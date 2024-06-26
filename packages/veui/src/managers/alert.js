@@ -23,7 +23,8 @@ export class AlertManager extends SimpleDialogManager {
                 'status',
                 'type',
                 'overlayClass',
-                'okLabel'
+                'okLabel',
+                'theme'
               ]),
               open: this.open,
               beforeClose: () => false

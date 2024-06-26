@@ -1,10 +1,11 @@
-import { IconQuestionCircle } from 'dls-icons-vue'
+import { IconAsterisk, IconQuestionCircle } from 'dls-icons-vue'
 import ui from 'veui/managers/ui'
 
 ui.defaults(
   {
     icons: {
-      tip: IconQuestionCircle
+      tip: IconQuestionCircle,
+      required: IconAsterisk
     },
     ui: {
       size: {

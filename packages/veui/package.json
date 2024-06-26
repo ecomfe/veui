@@ -1,10 +1,11 @@
 {
   "name": "veui",
-  "version": "2.14.6",
+  "version": "2.17.9",
   "description": "Baidu Enterprise UI for Vue.js.",
   "scripts": {
+    "serve:dual": "cross-env VEUI_STYLE=dual pnpm serve",
     "serve": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service serve",
-    "demo": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service build",
+    "demo": "cross-env VEUI_STYLE=dual NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" vue-cli-service build",
     "lint": "vue-cli-service lint",
     "components": "node ./build/components.js",
     "build": "rollup -c",
@@ -57,7 +58,7 @@
     "chai": "^4.3.6",
     "classlist-polyfill": "^1.2.0",
     "cross-env": "^5.2.1",
-    "dls-icons-vue": "~3.20.0",
+    "dls-icons-vue": "~3.41.0",
     "dls-illustrations-vue": "^1.4.3",
     "esbuild": "^0.12.29",
     "eslint": "^6.8.0",
@@ -86,7 +87,7 @@
     "lint-staged": "^8.2.1",
     "mocha": "^7.2.0",
     "moment": "^2.29.3",
-    "postcss": "^8.4.13",
+    "postcss": "^8.4.31",
     "promise-polyfill": "^8.2.3",
     "recursive-readdir": "^2.2.2",
     "regenerator-runtime": "^0.13.9",
@@ -97,9 +98,9 @@
     "veui-loader": "workspace:*",
     "veui-theme-dls": "workspace:*",
     "veui-theme-dls-icons": "workspace:*",
-    "vue": "^2.6.14",
+    "vue": "^2.7.16",
     "vue-router": "^3.5.3",
-    "vue-template-compiler": "^2.6.14",
+    "vue-template-compiler": "^2.7.16",
     "webpack": "^4.46.0"
   },
   "peerDependencies": {

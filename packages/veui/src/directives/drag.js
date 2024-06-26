@@ -37,13 +37,16 @@ const OPTIONS_SCHEMA = {
     dragstart: noop,
     drag: noop,
     dragend: noop,
-    ready: noop
+    ready: noop,
+    themeVariant: null
   }
 }
 
 export function registerHandler (name, Handler, isNativeDrag) {
   if (!(Handler.prototype instanceof BaseHandler)) {
-    throw new Error('The handler class must derive from `BaseHandler`.')
+    throw new Error(
+      '[v-drag] The handler class must derive from `BaseHandler`.'
+    )
   }
   HANDLERS[name] = { Handler, isNativeDrag }
 }
@@ -118,7 +121,7 @@ function refresh (el, binding, vnode) {
     handler = new Handler(options, contextComponent, vnode)
   } else {
     throw new Error(
-      `[v-drag] The handler type "${options.type}" is not registered.`
+      '[v-drag] The handler type `${options.type}` is not registered.'
     )
   }
 

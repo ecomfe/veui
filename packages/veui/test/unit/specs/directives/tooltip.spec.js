@@ -1,4 +1,6 @@
+import { h } from 'vue'
 import { expectTooltip, mount, wait } from '../../../utils'
+import Button from '@/components/Button'
 import tooltip from '@/directives/tooltip'
 import tooltipManager from '@/managers/tooltip'
 import config from '@/managers/config'
@@ -330,6 +332,66 @@ describe('directives/tooltip', function () {
 
     tooltipManager.destroy()
 
+    wrapper.destroy()
+  })
+
+  it('should respect the theme of the closest component', async () => {
+    let warmup = config.get('tooltip.warmup')
+
+    let wrapper = mount(
+      {
+        directives: { tooltip },
+        components: {
+          'veui-button': Button
+        },
+        template: `
+          <veui-button theme="ai">
+            <span class="a" v-tooltip="'Hi'">A</span>
+          </veui-button>`
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let a = wrapper.find('.a')
+
+    a.trigger('mouseenter')
+    await wait(warmup + 50)
+    expectTooltip('Hi', (tooltip) => {
+      expect(tooltip.matches('.veui-ai-tooltip-box')).to.equal(true)
+    })
+
+    wrapper.destroy()
+  })
+
+  it('should support rendering component', async () => {
+    let warmup = config.get('tooltip.warmup')
+
+    let wrapper = mount(
+      {
+        directives: { tooltip },
+        template: `<div class="foo" v-tooltip="{ content }">A</div>`,
+        created () {
+          this.content = h(Button, ['Hello'])
+        }
+      },
+      {
+        sync: false,
+        attachToDocument: true
+      }
+    )
+
+    let foo = wrapper.find('.foo')
+
+    foo.trigger('mouseenter')
+    await wait(warmup + 50)
+    expectTooltip('Hello', (tooltip) => {
+      expect(tooltip.querySelector('.veui-button')).to.not.equal(null)
+    })
+
+    tooltipManager.destroy()
     wrapper.destroy()
   })
 })

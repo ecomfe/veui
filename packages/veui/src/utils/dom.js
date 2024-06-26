@@ -583,7 +583,7 @@ export function scrollToAlign (viewport, target, options) {
     options = {}
   } else {
     throw new Error(
-      'the third argument of `scrollToAlign` must be a object or an array or a number'
+      '[veui-dom] The third argument of `scrollToAlign` must be a object or an array or a number.'
     )
   }
 
@@ -630,7 +630,7 @@ export function scrollTo (viewport, options) {
     options = {}
   }
   if (!isNumber(left) || !isNumber(top)) {
-    throw new Error('left and top must be numbers')
+    throw new Error('[veui-dom] `left` and `top` must be numbers.')
   }
 
   let distanceLeft = left - scrollLeft
@@ -862,6 +862,32 @@ export function getPortalEntry (element) {
   return null
 }
 
+/**
+ * 获取最接近的Vue组件
+ *
+ * @param {Element} element 起始的元素
+ * @returns {Vue} 返回最接近的 Vue 组件，如果找不到则返回 null
+ */
+export function getClosestComponent (element) {
+  let current = element
+
+  while (!current.__vue__) {
+    current = current.parentNode
+
+    if (!current) {
+      return null
+    }
+  }
+
+  let component = current.__vue__
+
+  while (component.$children.length === 1) {
+    component = component.$children[0]
+  }
+
+  return component
+}
+
 export function trigger (el, type) {
   let evt = document.createEvent('HTMLEvents')
   evt.initEvent(type, true, false)
@@ -925,7 +951,9 @@ function getStableOffset (el, context) {
  */
 export function getScrollOffset (el, context) {
   if (!context.contains(el)) {
-    throw new Error('The context element must contain the starting element.')
+    throw new Error(
+      '[veui-dom] The context element must contain the starting element.'
+    )
   }
 
   let current = el

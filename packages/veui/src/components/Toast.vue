@@ -1,5 +1,5 @@
 <template>
-<transition :name="$c('toast')" appear>
+<transition :name="$c('toast')" :appear="appear">
   <div
     v-if="realOpen"
     :ui="realUi"
@@ -90,7 +90,8 @@ export default {
     open: Boolean,
     duration: {
       type: Number
-    }
+    },
+    appear: Boolean
   },
   data () {
     return {

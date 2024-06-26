@@ -54,14 +54,20 @@
   }
 
   &-default {
-    .apply-color(@dls-tag-color);
+    .apply-color(@dls-tag-color-default, false);
 
     &.@{veui-prefix}-tag-selected {
-      .apply-flip-color(selected, @dls-tag-color);
+      .apply-color(@dls-tag-color-default-selected);
     }
 
     &[ui~="reverse"] {
-      .apply-flip-color(reverse, @dls-tag-color);
+      .apply-flip-color(reverse, @dls-tag-color-default);
+    }
+
+    color: @dls-tag-font-color-default;
+
+    .@{veui-prefix}-tag-remove {
+      color: @dls-foreground-color-neutral-weak;
     }
   }
 
@@ -98,14 +104,21 @@
     cursor: not-allowed;
   }
 
-  .apply-color(@color) {
+  .apply-color(@color, @pad: true) {
     border: 1px solid fade(@color, percentage(@dls-tag-border-opacity));
     color: @color;
-    // 将 rgba 转成相近的 rgb
-    background-color: multiply(
-      fade(@color, percentage(@dls-tag-background-opacity)),
-      #fff
-    );
+
+    .bg(true) {
+      // 将 rgba 转成相近的 rgb
+      background-color: multiply(
+        fade(@color, percentage(@dls-tag-background-opacity)),
+        #fff
+      );
+    }
+    .bg(false) {
+      background-color: fade(@color, percentage(@dls-tag-background-opacity));
+    }
+    .bg(@pad);
 
     &.@{veui-prefix}-tag-selectable:not(.@{veui-prefix}-disabled) {
       &:hover {

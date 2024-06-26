@@ -5,3 +5,10 @@ export default function warn (message, vm) {
     Vue.util.warn(message, vm)
   }
 }
+
+export function getLink (component, name, type = 'prop') {
+  if (!component || !name) {
+    return null
+  }
+  return `https://veui.dev/components/${component}#${type}s-${name}`
+}

@@ -91,6 +91,12 @@
       <veui-field label="Strong invalid:">
         <veui-number-input v-model="number8" ui="strong" invalid/>
       </veui-field>
+      <veui-field label="Strong readonly:">
+        <veui-number-input v-model="number8" ui="strong" readonly/>
+      </veui-field>
+      <veui-field label="Strong disabled:">
+        <veui-number-input v-model="number8" ui="strong" disabled/>
+      </veui-field>
     </veui-form>
   </section>
 
@@ -191,12 +197,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.veui-form {
-  & /deep/ .veui-field-label {
-    width: 140px;
-  }
-}
-
 section + section {
   margin-top: 60px;
 }

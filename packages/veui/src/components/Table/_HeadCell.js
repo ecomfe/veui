@@ -205,8 +205,7 @@ export default {
                       name={this.table.icons.filter}
                       class={{
                         [this.$c('table-header-icon')]: true,
-                        [this.$c('table-header-icon-active')]:
-                          this.filterActive
+                        [this.$c('table-header-icon-active')]: this.filterActive
                       }}
                     />
                   </Button>

@@ -14,6 +14,7 @@ type Props = {
   rows?: number | string
   selectOnFocus?: boolean
   composition?: boolean
+  autofocus?: boolean
   autoresize?: boolean
   resizable?: boolean
   maxlength?: number

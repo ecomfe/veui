@@ -17,6 +17,7 @@ config.defaults(
 
 export default {
   name: 'veui-toast-list',
+  uiTypes: ['transparent'],
   mixins: [prefix, overlay, useConfig('config', 'toast')],
   data () {
     return {
@@ -71,12 +72,14 @@ export default {
           <Toast
             key={m.__message_id__}
             open
+            appear
             status={m.status || m.type}
             message={typeof m.message === 'string' ? m.message : null}
             closable={m.closable}
             title={m.title}
             ui={m.ui}
             duration={m.duration}
+            theme={m.theme}
             style={`top: ${m.top}px`}
             onClose={() => this.remove(m)}
             onReady={(e) => this.updateHeight(m, e)}

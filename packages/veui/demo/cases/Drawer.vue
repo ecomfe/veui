@@ -5,15 +5,21 @@
   </h1>
 
   <section>
-    <veui-checkbox v-model="modal">Modal</veui-checkbox>
-    <veui-checkbox v-model="outsideClosable">outside Closable</veui-checkbox>
+    <veui-checkbox v-model="modal" class="checkbox">Modal</veui-checkbox>
+    <veui-checkbox
+      v-model="outsideClosable"
+      class="checkbox"
+    >outside Closable</veui-checkbox>
   </section>
 
   <section>
-    <veui-button @click="topOpen = true">Top</veui-button>
-    <veui-button @click="rightOpen = true">Right</veui-button>
-    <veui-button @click="bottomOpen = true">Bottom</veui-button>
-    <veui-button @click="leftOpen = true">Left</veui-button>
+    <veui-button class="button" @click="topOpen = true">Top</veui-button>
+    <veui-button class="button" @click="rightOpen = true">Right</veui-button>
+    <veui-button
+      class="button"
+      @click="bottomOpen = true"
+    >Bottom</veui-button>
+    <veui-button class="button" @click="leftOpen = true">Left</veui-button>
   </section>
 
   <veui-drawer
@@ -30,8 +36,12 @@
       <a @click="close">点我也可关闭</a>
     </template>
     <template #foot="{ close }">
-      <veui-button ui="primary" @click="close('foo')">foo</veui-button>
-      <veui-button @click="close">cancel</veui-button>
+      <veui-button
+        class="button"
+        ui="primary"
+        @click="close('foo')"
+      >foo</veui-button>
+      <veui-button class="button" @click="close">cancel</veui-button>
     </template>
   </veui-drawer>
   <veui-drawer
@@ -42,7 +52,10 @@
     title="Hey man"
     :overlay-style="{ '--dls-drawer-width': '960px' }"
   >
-    <veui-button @click="right2Open = true">Second</veui-button>
+    <veui-button
+      class="button"
+      @click="right2Open = true"
+    >Second</veui-button>
     <veui-drawer
       title="Hey second"
       :modal="modal"
@@ -51,7 +64,10 @@
       placement="right"
       :overlay-style="{ '--dls-drawer-width': '480px' }"
     >
-      <veui-button @click="right3Open = true">Third</veui-button>
+      <veui-button
+        class="button"
+        @click="right3Open = true"
+      >Third</veui-button>
       <veui-drawer
         title="Hey third"
         :modal="modal"
@@ -69,7 +85,7 @@
     :outside-closable="outsideClosable"
     placement="bottom"
   >
-    <veui-button @click="left2Open = true">Left</veui-button>
+    <veui-button class="button" @click="left2Open = true">Left</veui-button>
     <veui-drawer
       title="Hey left"
       :modal="modal"
@@ -77,7 +93,7 @@
       :outside-closable="outsideClosable"
       placement="left"
     >
-      <veui-button @click="top2Open = true">Top</veui-button>
+      <veui-button class="button" @click="top2Open = true">Top</veui-button>
       <veui-drawer
         title="Hey third"
         :modal="modal"
@@ -85,7 +101,10 @@
         :outside-closable="outsideClosable"
         placement="top"
       >
-        <veui-button @click="bottom2Open = true">Bottom</veui-button>
+        <veui-button
+          class="button"
+          @click="bottom2Open = true"
+        >Bottom</veui-button>
         <veui-drawer
           title="Hey bottom"
           :modal="modal"
@@ -93,7 +112,10 @@
           :outside-closable="outsideClosable"
           placement="bottom"
         >
-          <veui-button @click="left3Open = true">Left</veui-button>
+          <veui-button
+            class="button"
+            @click="left3Open = true"
+          >Left</veui-button>
           <veui-drawer
             title="Hey left"
             :modal="modal"
@@ -159,8 +181,8 @@ section {
   }
 }
 
-.veui-button,
-.veui-checkbox {
+.button,
+.checkbox {
   & + & {
     margin-left: 20px;
   }

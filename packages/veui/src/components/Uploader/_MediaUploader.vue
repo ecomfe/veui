@@ -193,10 +193,14 @@
             :class="{
               [$c('button')]: true,
               [$c('uploader-input-label-media')]: true,
+              [$c('uploader-input-label-media-has-entries')]:
+                uiProps.size === 'm' && getMediaEntries().length > 1,
               [$c('disabled')]: pickerStatus.disabled
             }"
             :tabindex="disabled ? null : 0"
-            :ui="uiParts.media"
+            :ui="`${uiProps.theme ? `theme:${uiProps.theme} ` : ''}${
+              uiParts.media
+            }`"
             :disabled="pickerStatus.disabled"
             @keydown.enter.space.prevent="handleEnter"
             @click="handleAdd"

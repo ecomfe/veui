@@ -14,7 +14,7 @@ function getNode (node) {
     node = nodeIndex[node]
 
     if (!node) {
-      throw new Error(`The given node id doesn't exist!`)
+      throw new Error("[veui-overlay] The given node id doesn't exist.")
     }
   }
 

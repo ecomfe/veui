@@ -44,6 +44,7 @@ export declare const Layout: Components.Layout
 export declare const Lightbox: Components.Lightbox
 export declare const Link: Components.Link
 export declare const Loading: Components.Loading
+export declare const LoadingBar: Components.LoadingBar
 export declare const Message: Components.Message
 export declare const Nav: Components.Nav
 export declare const NumberInput: Components.NumberInput
@@ -57,6 +58,7 @@ export declare const PromptBox: Components.PromptBox
 export declare const Radio: Components.Radio
 export declare const RadioButtonGroup: Components.RadioButtonGroup
 export declare const RadioGroup: Components.RadioGroup
+export declare const Rating: Components.Rating
 export declare const SearchBox: Components.SearchBox
 export declare const Select: Components.Select
 export declare const Sidebar: Components.Sidebar

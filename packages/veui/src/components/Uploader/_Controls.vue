@@ -57,6 +57,7 @@ export default {
     'veui-button': Button,
     'veui-dropdown': Dropdown
   },
+  uiTypes: ['transparent'],
   mixins: [prefix],
   props: {
     items: Array,

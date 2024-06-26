@@ -37,7 +37,9 @@ export class Rule {
       const { name, value: ruleValue, message } = rule
       let validator = this.ruleValidators[name] || rule
       if (!isFunction(validator.validate)) {
-        throw new Error('[veui] `validate` function is required for rules')
+        throw new Error(
+          '[veui-rule] `validate` function is required for rules.'
+        )
       }
 
       if (!validator.validate(val, ruleValue, contextData)) {

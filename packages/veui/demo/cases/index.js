@@ -64,6 +64,7 @@ import Message from './Message'
 import Empty from './Empty'
 import Stack from './Stack'
 import TagInput from './TagInput'
+import Rating from './Rating'
 
 export default [
   {
@@ -324,6 +325,11 @@ export default [
     path: '/radio-group',
     name: 'RadioGroup',
     component: RadioGroup
+  },
+  {
+    path: '/rating',
+    name: 'Rating',
+    component: Rating
   },
   {
     path: '/region-picker',

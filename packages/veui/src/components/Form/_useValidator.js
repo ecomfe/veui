@@ -167,7 +167,7 @@ function normalizeTriggers (triggers, length) {
     triggers = fill(Array(length), triggers)
   } else if (!Array.isArray(triggers)) {
     throw new Error(
-      '[veui-form] The triggers of validators must be an array or a string.'
+      '[veui-form] The trigger of a validator must be an array or a string.'
     )
   }
   return triggers.map((item) => {

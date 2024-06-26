@@ -23,18 +23,17 @@
         autocomplete="off"
         :value="props.value"
         :ui="realUi"
-        :autofocus="autofocus"
         :readonly="realReadonly"
         :disabled="realDisabled"
         :invalid="realInvalid"
         :strict="realStrict.maxlength"
         v-bind="inputProps"
         v-on="inputEvents"
-        @blur="handleBlur(props)"
         @keydown="props.handleKeydown"
-        @change="checkStrictSelect(props)"
+        @change="handleChange(props)"
         @input="handleTrigger($event, props, 'input')"
         @focus="handleTrigger($event, props, 'focus')"
+        @blur="handleBlur(props)"
       />
     </slot>
   </template>
@@ -58,6 +57,7 @@
               :separator-class="
                 $c('autocomplete-search-result-item-separator')
               "
+              :theme-variant="themeVariant"
             />
             <span v-else>{{ props.label }}</span>
           </slot>
@@ -88,14 +88,16 @@ import outside from '../../directives/outside'
 import AutocompleteBase from './_AutocompleteBase'
 import SearchResult from '../_SearchResult'
 import Input from '../Input'
-import { includes, pick, omit } from 'lodash'
+import { uniq, includes, pick, omit } from 'lodash'
 import OptionGroup from '../Select/OptionGroup'
 import '../../common/global'
+import warn, { getLink } from '../../utils/warn'
 
 const SHARED_PROPS = [
   'placeholder',
   'selectOnFocus',
   'composition',
+  'autofocus',
   'clearable',
   'maxlength',
   'getLength',
@@ -121,11 +123,11 @@ export default {
       type: [String, Array],
       default: 'input'
     },
+    suggestOnFocus: Boolean,
     childrenKey: {
       type: String,
       default: 'options'
     },
-    autofocus: Boolean,
     ...pick(Input.props, SHARED_PROPS)
   },
   computed: {
@@ -145,7 +147,11 @@ export default {
       return omit(this.listenersWithValidations, BASE_EVENTS)
     },
     realTriggers () {
-      return [].concat(this.suggestTrigger)
+      if (this.suggestOnFocus) {
+        return ['focus', 'input']
+      }
+
+      return uniq(['input'].concat(this.suggestTrigger))
     },
     // strict 且没有定制 getLength，选中建议也遵循 input 的 strict 的行为
     isLimitSimpleLength () {
@@ -157,6 +163,20 @@ export default {
     },
     realMaxlength () {
       return normalizeInt(this.maxlength)
+    }
+  },
+  created () {
+    if ('suggestTrigger' in this.$options.propsData) {
+      warn(
+        `[veui-autocomplete] The \`suggest-trigger\` prop (${getLink(
+          'autocomplete',
+          'suggest-trigger'
+        )}) is deprecated and will be removed in future versions. Please use the \`suggest-on-focus\` prop (${getLink(
+          'autocomplete',
+          'suggest-on-focus'
+        )}) instead.`,
+        this
+      )
     }
   },
   methods: {
@@ -185,20 +205,26 @@ export default {
       }
     },
     checkStrictSelect (props) {
-      if (this.realStrict.select) {
-        const { filteredDatasource, updateValue, value } = props
-        if (
-          filteredDatasource.length === 0 ||
-          filteredDatasource.every(({ label }) => label !== value)
-        ) {
-          updateValue('')
-        }
+      if (!this.realStrict.select || !props.value) {
+        return
+      }
+
+      const { filteredDatasource, updateValue, value } = props
+
+      if (
+        filteredDatasource.length === 0 ||
+        filteredDatasource.every(
+          ({ value: optionValue }) => optionValue !== value
+        )
+      ) {
+        updateValue('')
       }
     },
+    handleChange (props) {
+      this.checkStrictSelect(props)
+    },
     handleBlur (props) {
-      const { closeSuggestions } = props
-      closeSuggestions()
-
+      props.closeSuggestions()
       this.checkStrictSelect(props)
     }
   }

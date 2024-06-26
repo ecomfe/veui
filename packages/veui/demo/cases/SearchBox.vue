@@ -7,6 +7,7 @@
     <h2>sizes</h2>
     <section>
       <veui-search-box
+        class="search-box"
         clearable
         ui="xs"
         replace-on-select
@@ -21,6 +22,7 @@
         @keydown="log('keydown', $event)"
       />
       <veui-search-box
+        class="search-box"
         clearable
         ui="s"
         replace-on-select
@@ -34,6 +36,7 @@
     </section>
     <section>
       <veui-search-box
+        class="search-box"
         clearable
         ui="m"
         replace-on-select
@@ -45,6 +48,7 @@
         @keydown="log('keydown', $event)"
       />
       <veui-search-box
+        class="search-box"
         clearable
         ui="l"
         replace-on-select
@@ -58,7 +62,9 @@
     </section>
     <section>
       <veui-search-box
+        class="search-box"
         clearable
+        theme="ai"
         ui="strong xs"
         replace-on-select
         :placeholder="placeholder"
@@ -69,6 +75,7 @@
         @keydown="log('keydown', $event)"
       />
       <veui-search-box
+        class="search-box"
         clearable
         ui="strong s"
         replace-on-select
@@ -82,6 +89,7 @@
     </section>
     <section>
       <veui-search-box
+        class="search-box"
         clearable
         ui="strong m"
         replace-on-select
@@ -93,6 +101,7 @@
         @keydown="log('keydown', $event)"
       />
       <veui-search-box
+        class="search-box"
         clearable
         ui="strong l"
         replace-on-select
@@ -109,11 +118,13 @@
     <h2>styles</h2>
     <section>
       <veui-search-box
+        class="search-box"
         ui="m"
         :placeholder="placeholder"
         @search="log($event)"
       />
       <veui-search-box
+        class="search-box"
         ui="m strong"
         :placeholder="placeholder"
         @search="log($event)"
@@ -124,6 +135,7 @@
     <h2>disabled</h2>
     <section>
       <veui-search-box
+        class="search-box"
         :value="value"
         clearable
         :placeholder="placeholder"
@@ -131,6 +143,7 @@
         @search="log($event)"
       />
       <veui-search-box
+        class="search-box"
         ui=" strong"
         disabled
         :placeholder="placeholder"
@@ -144,6 +157,7 @@
     <h2>readonly</h2>
     <section>
       <veui-search-box
+        class="search-box"
         :value="value"
         clearable
         :placeholder="placeholder"
@@ -151,6 +165,7 @@
         @search="log($event)"
       />
       <veui-search-box
+        class="search-box"
         :value="value"
         clearable
         ui="strong"
@@ -165,6 +180,7 @@
     <section>
       <veui-search-box
         v-model="value2"
+        class="search-box"
         clearable
         :placeholder="placeholder"
         :suggestions="suggestions1"
@@ -174,6 +190,7 @@
         @select="value2 = $event.label"
       />
       <veui-search-box
+        class="search-box"
         :placeholder="placeholder"
         :suggestions="suggestions8"
         suggest-trigger="focus"
@@ -189,6 +206,7 @@
         </template>
       </veui-search-box>
       <veui-search-box
+        class="search-box"
         :placeholder="placeholder"
         :suggestions="suggestions9"
         replace-on-select
@@ -210,6 +228,7 @@
     <h2>inline</h2>
     <div>
       <veui-search-box
+        class="search-box"
         clearable
         ui="inline"
         :placeholder="placeholder"
@@ -222,8 +241,14 @@
   <section>
     <h2>maxlength</h2>
     <div>
-      <veui-search-box clearable maxlength="10" placeholder="maxlength"/>
       <veui-search-box
+        class="search-box"
+        clearable
+        maxlength="10"
+        placeholder="maxlength"
+      />
+      <veui-search-box
+        class="search-box"
         ui="strong"
         clearable
         maxlength="10"
@@ -370,7 +395,7 @@ export default {
 .veui-search-box-demo {
   padding-bottom: 20px;
 
-  .veui-search-box {
+  .search-box {
     margin-right: 12px;
   }
 }

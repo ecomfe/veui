@@ -4,7 +4,7 @@
     <code>&lt;veui-stack&gt;</code>
   </h1>
   <section>
-    <veui-stack gap="xs" align="center">
+    <veui-stack class="stack" gap="xs" align="center">
       <span class="label">Gap</span>
       <veui-radio-button-group
         v-model="gap"
@@ -25,8 +25,8 @@
     </veui-stack>
   </section>
   <section>
-    <veui-stack gap="s" align="center">
-      <veui-stack gap="xs">
+    <veui-stack class="stack" gap="s" align="center">
+      <veui-stack class="stack" gap="xs">
         <span class="label">Direction</span>
         <veui-radio-button-group
           v-model="direction"
@@ -41,12 +41,12 @@
     </veui-stack>
   </section>
   <section>
-    <veui-stack gap="s" align="center">
-      <veui-stack gap="xs">
+    <veui-stack class="stack" gap="s" align="center">
+      <veui-stack class="stack" gap="xs">
         <span class="label">Align</span>
         <veui-radio-button-group v-model="align" ui="s" :items="alignments"/>
       </veui-stack>
-      <veui-stack gap="xs">
+      <veui-stack class="stack" gap="xs">
         <span class="label">Justify</span>
         <veui-radio-button-group
           v-model="justify"
@@ -58,6 +58,7 @@
   </section>
   <section :class="sectionClass">
     <veui-stack
+      class="stack"
       :class="stackClass"
       :gap="realGap"
       :direction="direction"
@@ -75,6 +76,7 @@
   </section>
   <section :class="sectionClass">
     <veui-stack
+      class="stack"
       :class="stackClass"
       :gap="realGap"
       :direction="direction"
@@ -91,6 +93,7 @@
   </section>
   <section :class="sectionClass">
     <veui-stack
+      class="stack"
       :class="stackClass"
       :gap="realGap"
       :direction="direction"
@@ -107,6 +110,7 @@
   </section>
   <section :class="sectionClass">
     <veui-stack
+      class="stack"
       :class="stackClass"
       :gap="realGap"
       :direction="direction"
@@ -124,7 +128,7 @@
     </veui-stack>
   </section>
   <section>
-    <veui-stack gap="xxl">
+    <veui-stack class="stack" gap="xxl">
       <veui-stack class="stack" align="start">
         <div class="item"/>
         <div class="item"/>
@@ -276,7 +280,7 @@ section {
   height: 80px;
 }
 
-.fixed.column .veui-stack {
+.fixed.column .stack {
   height: 100%;
 }
 

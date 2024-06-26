@@ -101,6 +101,7 @@ export default {
     'veui-button': Button,
     'veui-tree': Tree
   },
+  uiTypes: ['transparent'],
   mixins: [prefix, i18n],
   props: {
     datasource: Array,

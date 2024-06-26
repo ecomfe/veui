@@ -380,6 +380,10 @@
     "path": "RadioGroup.vue"
   },
   {
+    "name": "Rating",
+    "path": "Rating.vue"
+  },
+  {
     "name": "RegionPicker",
     "path": "RegionPicker.vue"
   },

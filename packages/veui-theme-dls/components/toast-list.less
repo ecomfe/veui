@@ -6,18 +6,7 @@
   align-items: center;
   flex-flow: column;
 
-  .@{veui-prefix}-toast {
-    .veui-transition(opacity, top, transform);
-    transform: translateY(0);
+  & > div {
     margin-bottom: @dls-toast-spacing;
-
-    &-enter,
-    &-leave-to {
-      opacity: 0;
-    }
-
-    &-enter {
-      transform: translateY(-100%);
-    }
   }
 }

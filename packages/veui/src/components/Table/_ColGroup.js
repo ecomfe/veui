@@ -3,6 +3,7 @@ import table from '../../mixins/table'
 
 export default {
   name: 'veui-table-col-group',
+  uiTypes: ['transparent'],
   mixins: [prefix, table],
   props: {
     gutter: Boolean

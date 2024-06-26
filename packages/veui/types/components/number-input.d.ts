@@ -6,15 +6,16 @@ import {
   ActivatableMixin,
   ControllableMixin
 } from '../common'
+import { Props as InputProps } from './input'
 
-type Props = {
+type SHARED_PROPS = 'placeholder' | 'selectOnFocus' | 'autofocus'
+
+type Props = Pick<InputProps, SHARED_PROPS> & {
   value?: number
   step?: number
   decimalPlace?: number
   max?: number
   min?: number
-  placeholder?: string
-  selectOnFocus?: boolean
   format?: (val: number, defaultFormattedValue: string) => string
   parse?: (val: string) => number
 }

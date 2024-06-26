@@ -18,11 +18,12 @@
   .veui-transition(border-color, color, box-shadow);
 
   &-autofill {
-    background-color: #e8f0fe;
+    transition: 0s !important;
+    background-color: #e8f0fe !important;
   }
 
   &-autofill&-safari {
-    background-color: #faffbd;
+    background-color: #faffbd !important;
   }
 
   &-hidden {
@@ -67,6 +68,14 @@
     width: 100%;
     background-color: transparent;
     .ellipsis();
+
+    // to trigger autofill detection
+    opacity: 1;
+    transition: opacity 0.0001s;
+
+    &:-webkit-autofill {
+      opacity: 0.9999;
+    }
   }
 
   &-measurer {
@@ -215,5 +224,9 @@
         box-shadow: @dls-input-shadow-inline-error-focus;
       }
     }
+  }
+
+  &[ui~="theme:d22"]:not([ui~="inline"]):not(.@{veui-prefix}-invalid) {
+    .veui-d22-input();
   }
 }

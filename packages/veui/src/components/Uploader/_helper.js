@@ -420,7 +420,7 @@ export function getUploadRequest (options) {
     return getCustomUploadRequest(options)
   }
   throw new Error(
-    '`action` is required for `xhr` or `iframe` mode and `upload` is requried for `custom` mode'
+    '[veui-uploader] `action` is required for `xhr` or `iframe` mode and `upload` is requried for `custom` mode.'
   )
 }
 
@@ -531,7 +531,7 @@ function getIframeUploadRequest (options) {
         form
       )
     } else {
-      throw new Error('no matched iframe mode')
+      throw new Error('[veui-uploader] `iframe-mode` is invalid.')
     }
 
     // TODO: timeout ?

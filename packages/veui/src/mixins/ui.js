@@ -1,6 +1,3 @@
-import { getConfigKey, findAncestor, isTransparent } from '../utils/helper'
-import warn from '../utils/warn'
-import { configContext } from '../managers/config'
 import {
   compact,
   uniq,
@@ -8,9 +5,14 @@ import {
   includes,
   get,
   merge,
+  assign,
   pickBy,
   mapValues
 } from 'lodash'
+import { getConfigKey, findAncestor, isTransparent } from '../utils/helper'
+import warn from '../utils/warn'
+import { configContext } from '../managers/config'
+import prefix from './prefix'
 
 const UNKNOWN_KEY = '$unknown'
 const DEFAULT_VAL = '__default__'
@@ -27,20 +29,20 @@ export function useUi () {
     props: {
       ui: String
     },
-    mixins: [configContext.useConsumer('__veui_config')],
+    mixins: [configContext.useConsumer('__veui_config'), prefix],
     computed: {
       uiParts () {
-        let parts = this.getComponentConfig('parts') || {}
+        const parts = this.getComponentConfig('parts') || {}
         return mapValues(parts, (ui) => callWithProps(ui, this.uiProps))
       },
       declaredUiProps () {
-        let ui = (this.ui || '').trim()
-        let tokens = compact(uniq(ui.split(/\s+/)))
-        let { uiConfig = {} } = this
+        const ui = (this.ui || '').trim()
+        const tokens = compact(uniq(ui.split(/\s+/)))
+        const { uiConfig = {} } = this
         return tokens.reduce(
           (result, token) => {
-            let name = find(Object.keys(uiConfig), (name) => {
-              let { boolean = false, values = [] } = uiConfig[name]
+            const name = find(Object.keys(uiConfig), (name) => {
+              const { boolean = false, values = [] } = uiConfig[name]
               if (boolean) {
                 return token === name
               }
@@ -56,7 +58,7 @@ export function useUi () {
                   `[${this.$options.name}] Duplicated \`${name}\` value for \`ui\`: [${result[name]}], [${token}].`
                 )
               }
-              let { boolean } = uiConfig[name]
+              const { boolean } = uiConfig[name]
               if (boolean) {
                 result[name] = true
               } else {
@@ -73,10 +75,10 @@ export function useUi () {
         )
       },
       defaultUiProps () {
-        let { uiConfig = {} } = this
+        const { uiConfig = {} } = this
         return Object.keys(uiConfig).reduce((result, name) => {
           result[name] = null
-          let prop = uiConfig[name]
+          const prop = uiConfig[name]
           if (prop.boolean) {
             result[name] = false
           } else {
@@ -91,12 +93,12 @@ export function useUi () {
         }
 
         return pickBy(this.uiProps, (val, key) => {
-          let uiProp = this.uiConfig[key]
+          const uiProp = this.uiConfig[key]
           return val !== DEFAULT_VAL && uiProp && uiProp.inherit
         })
       },
       uiProps () {
-        let { inheritableUiProps = {} } =
+        const { inheritableUiProps = {} } =
           findAncestor(this, (component) => !isTransparent(component)) || {}
 
         return {
@@ -109,22 +111,22 @@ export function useUi () {
         return this.getComponentConfig('ui')
       },
       uiData () {
-        let { uiConfig = {}, uiProps } = this
+        const { uiConfig = {}, uiProps } = this
         return Object.keys(uiProps)
           .filter((name) => name !== UNKNOWN_KEY)
           .reduce((result, name) => {
-            let data = get(uiConfig[name], ['data', uiProps[name]], {})
+            const data = get(uiConfig[name], ['data', uiProps[name]], {})
             merge(result, data)
             return result
           }, {})
       },
       icons () {
-        let icons = this.getComponentConfig('icons')
+        const icons = this.getComponentConfig('icons')
         if (typeof icons === 'function') {
           return icons(this.uiProps)
         }
 
-        let uiIcons = this.uiData.icons || {}
+        const uiIcons = this.uiData.icons || {}
 
         return mapValues(
           {
@@ -142,7 +144,7 @@ export function useUi () {
         return illustrations
       },
       realUi () {
-        let props = this.uiProps
+        const props = this.uiProps
         return (
           uniq(
             Object.keys(props)
@@ -154,14 +156,33 @@ export function useUi () {
               })
               .filter((val) => val && val !== DEFAULT_VAL && val !== false)
               .concat(this.declaredUiProps[UNKNOWN_KEY])
+              .concat(this.themeBase ? `theme:${this.themeBase}` : [])
           ).join(' ') || null
         )
       }
     },
     methods: {
       getComponentConfig (key) {
-        const realKey = `${getConfigKey(this.$options.name)}.${key}`
-        return this.__veui_config[realKey]
+        const prefix = getConfigKey(this.$options.name)
+        const config = this.__veui_config[`${prefix}.${key}`]
+
+        // ui config is not overridable by themes
+        if (key === 'ui') {
+          return config
+        }
+
+        // icons/illustrations/parts can be configured by themes
+        const themes = this.__veui_config[`${prefix}.themes`]
+
+        const theme = this.themeBase
+        if (themes && themes[theme]) {
+          const themeConfig = themes[theme][key]
+          if (themeConfig) {
+            return assign({}, config, themeConfig)
+          }
+        }
+
+        return config
       }
     }
   }

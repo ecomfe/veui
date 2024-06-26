@@ -28,7 +28,7 @@ function toggleSelector (elem, selector, force) {
     }
   } else {
     throw new Error(
-      'focusSelector only accepts a simple class selector (.foo) or an attribute existence selector ([foo]).'
+      '[veui-key-select] `focusSelector` only accepts a simple class selector (`.foo`) or an attribute existence selector (`[foo]`).'
     )
   }
 }

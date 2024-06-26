@@ -1,17 +1,20 @@
 {
-  "version": "2.14.6",
+  "version": "2.17.9",
   "scripts": {
-    "dev": "cd packages/veui && pnpm run serve",
+    "dev": "pnpm --filter=veui run serve",
     "test": "pnpm -r test",
-    "build-components": "cd packages/veui && pnpm run components && pnpm run demo && cd ../..",
-    "build-plugin": "cd packages/babel-plugin-veui && pnpm run build && cd ../..",
-    "build-loader": "cd packages/veui-loader && pnpm run build && cd ../..",
+    "build:demo": "pnpm run build:theme-variants && pnpm --filter=veui run demo",
+    "build:theme-variants": "pnpm --filter=veui-theme-dls run build:theme",
+    "build:components": "pnpm --filter=veui run components && pnpm --filter=veui run demo",
+    "build:plugin": "pnpm --filter=babel-plugin-veui run build",
+    "build:loader": "pnpm --filter=veui-loader run build",
     "build": "pnpm -r build",
     "prepare": "husky install",
     "sync": "node -r esm build/sync.js",
     "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public && pnpm sync"
   },
   "devDependencies": {
+    "@justineo/npmmirror-sync": "^0.1.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "babel-eslint": "^10.1.0",
@@ -34,5 +37,10 @@
     "stylelint": "^15.10.3",
     "stylelint-config-standard": "^34.0.0",
     "typescript": "^4.9.5"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "rollup-plugin-postcss@4.0.2": "patches/rollup-plugin-postcss@4.0.2.patch"
+    }
   }
 }

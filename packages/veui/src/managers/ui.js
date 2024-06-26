@@ -5,6 +5,7 @@ const uiManager = Object.assign(Object.create(config), {
   setPropDefault,
   setProp,
   setIcon,
+  setIllustration,
   setPart
 })
 
@@ -19,14 +20,14 @@ function addPropValue (component, prop, value) {
 
   if (!ui || !ui[prop]) {
     throw new Error(
-      `[veui] Unknown ui prop "${prop}" of component "${component}".`
+      `[veui-ui] Unknown ui prop \`${prop}\` of component \`${component}\`.`
     )
   }
 
   const { values } = ui[prop]
   if (!values) {
     throw new Error(
-      `[veui] ui prop "${prop}" of component "${component}" is not a enum prop.`
+      `[veui-ui] ui prop \`${prop}\` of component \`${component}\` is not a enum prop.`
     )
   }
 
@@ -40,20 +41,20 @@ function setPropDefault (component, prop, value) {
 
   if (!ui || !ui[prop]) {
     throw new Error(
-      `[veui] Unknown ui prop "${prop}" of component "${component}".`
+      `[veui-ui] Unknown ui prop \`${prop}\` of component \`${component}\`.`
     )
   }
 
   const { values } = ui[prop]
   if (!values) {
     throw new Error(
-      `[veui] ui prop "${prop}" of component "${component}" is not a enum prop. Only enum props can have default values.`
+      `[veui-ui] ui prop \`${prop}\` of component \`${component}\` is not a enum prop. Only enum props can have default values.`
     )
   }
 
   if (values.indexOf(value) === -1) {
     throw new Error(
-      `[veui] ui prop "${prop}" of component "${component}" does not have value "${value}".`
+      `[veui-ui] ui prop \`${prop}\` of component \`${component}\` does not have value \`${value}\`.`
     )
   }
 
@@ -77,6 +78,10 @@ function setProp (component, prop, propDef) {
 
 function setIcon (component, icon, iconDef) {
   set('icons', component, icon, iconDef)
+}
+
+function setIllustration (component, illustration, illustrationDef) {
+  set('illustrations', component, illustration, illustrationDef)
 }
 
 function setPart (component, part, partDef) {

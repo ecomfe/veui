@@ -12,6 +12,7 @@
     "no-descending-specificity": null,
     "no-empty-source": null,
     "declaration-colon-newline-after": null,
+    "selector-not-notation": null,
     "at-rule-no-unknown": [
       true,
       {
@@ -19,7 +20,14 @@
       }
     ],
     "function-no-unknown": null,
-    "import-notation": "string"
+    "import-notation": "string",
+    "declaration-block-no-redundant-longhand-properties": [
+      true,
+      {
+        "ignoreShorthands": ["inset"]
+      }
+    ],
+    "media-feature-range-notation": "prefix"
   },
   "ignoreFiles": ["**/.*.*", "**/*.ts", "**/*.js", "**/*.json", "**/*.md"],
   "overrides": [

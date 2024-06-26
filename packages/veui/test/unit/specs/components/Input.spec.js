@@ -26,11 +26,11 @@ describe('components/Input', function () {
   it('should transparently pass-through attrs to the <input> element', () => {
     let wrapper = mount(Input, {
       attrs: {
-        autofocus: ''
+        'data-foo': 'bar'
       }
     })
 
-    expect(wrapper.find('input').element.autofocus).to.equal(true)
+    expect(wrapper.find('input').element.dataset.foo).to.equal('bar')
 
     wrapper.destroy()
   })

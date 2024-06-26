@@ -152,7 +152,8 @@ export default {
           exclude: `.${this.$c('tabs-item-remove')}`,
           sort: (fromIndex, toIndex) => {
             this.$emit('sort', fromIndex, toIndex)
-          }
+          },
+          themeVariant: this.themeVariant
         },
         modifiers: { sort: true, x: true }
       }
@@ -632,7 +633,7 @@ function pickFields (tab) {
 function normalizeItems (items) {
   return (items || []).map((item) => {
     if (!item.name) {
-      throw new Error('[veui-tabs] The name of tab is required!')
+      throw new Error('[veui-tabs] Tab name is required.')
     }
     return {
       ...item,

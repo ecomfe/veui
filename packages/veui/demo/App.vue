@@ -3,7 +3,7 @@
   <nav id="main-nav">
     <h1 @contextmenu.prevent="collapsedNav = !collapsedNav">
       <a href="https://github.com/ecomfe/veui">VEUI components</a>
-      <veui-icon name="brands/github" scale="6"/>
+      <veui-icon class="icon" name="brands/github" scale="6"/>
     </h1>
     <ul>
       <li v-for="(route, index) in routes" :key="index">
@@ -17,13 +17,16 @@
         href="https://www.baidu.com/"
         target="_blank"
       >© {{ year }} Baidu, Inc.</a>
-      <veui-icon name="baidu" scale="8"/>
+      <veui-icon class="icon" name="baidu" scale="8"/>
     </footer>
   </nav>
   <veui-select id="locale" v-model="locale" :options="locales"/>
-  <main id="content">
-    <router-view/>
-  </main>
+  <veui-select id="theme" v-model="config.theme" :options="themes"/>
+  <veui-config-provider :value="config">
+    <main id="content">
+      <router-view/>
+    </main>
+  </veui-config-provider>
   <v-console id="console"/>
 </div>
 </template>
@@ -33,6 +36,7 @@ import routes from './cases'
 import Console from './Console'
 import Icon from '@/components/Icon'
 import Select from '@/components/Select'
+import ConfigProvider from '@/components/ConfigProvider'
 import i18n from '@/managers/i18n'
 import 'vue-awesome/icons/brands/github'
 
@@ -54,7 +58,8 @@ export default {
   components: {
     'v-console': Console,
     'veui-icon': Icon,
-    'veui-select': Select
+    'veui-select': Select,
+    'veui-config-provider': ConfigProvider
   },
   data () {
     return {
@@ -63,7 +68,16 @@ export default {
       locales: LOCALES,
       locale: i18n.locale,
 
-      collapsedNav: false
+      collapsedNav: false,
+      themes: [
+        { label: 'D20', value: '' },
+        { label: 'D22', value: 'd22' },
+        { label: 'AI', value: 'ai' }
+      ],
+      theme: 'ai',
+      config: {
+        theme: 'd22'
+      }
     }
   },
   watch: {
@@ -75,12 +89,11 @@ export default {
 </script>
 
 <style lang="less">
-@import "~less-plugin-est/src/all.less";
-@import "~veui-theme-dls/common.less";
+@import '~less-plugin-est/src/all.less';
+@import '~veui-theme-dls/common.less';
 @veui-root-element: veui-x-demo;
 
 @nav-width: 240px;
-@light-bg-color: #f6f9ff;
 @title-height: 30px;
 @console-height: 40vh;
 
@@ -90,10 +103,7 @@ body {
 
 #app {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
 
   &.collapse {
     @collapse-width: 30px;
@@ -115,20 +125,49 @@ body {
   }
 }
 
+main {
+  position: absolute;
+  inset: 0 0 0 @nav-width;
+  overflow: scroll;
+  padding: 1em 4em 0;
+  height: ~'calc(100vh - @{title-height})';
+  transition: height 0.2s;
+
+  h1 {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 2em;
+    padding-bottom: 1em;
+    font-size: 18px;
+  }
+
+  .console-expanded & {
+    height: ~'calc(100vh - @{console-height} - @{title-height})';
+  }
+}
+</style>
+
+<style lang="less" scoped>
+@light-bg-color: #f6f9ff;
+@nav-width: 240px;
+
 #main-nav,
 #console {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
     sans-serif;
 }
 
 #main-nav {
-  .absolute(0, _, 0, 0);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
   width: @nav-width;
   border-right: 1px solid #eee;
   font-weight: 300;
 
   h1 {
-    .centered-line(60px);
+    height: 60px;
+    line-height: 60px;
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid #eee;
@@ -143,7 +182,7 @@ body {
       text-decoration: none;
     }
 
-    .veui-icon {
+    .icon {
       position: absolute;
       opacity: 0.05;
       z-index: -1;
@@ -153,7 +192,7 @@ body {
     }
 
     &:hover {
-      .veui-icon {
+      .icon {
         transform: scale(0.8);
         opacity: 0.1;
       }
@@ -161,7 +200,7 @@ body {
   }
 
   ul {
-    height: ~"calc(100vh - 105px)";
+    height: ~'calc(100vh - 105px)';
     margin: 0;
     padding: 0;
     overflow: auto;
@@ -208,7 +247,7 @@ body {
       text-decoration: none;
     }
 
-    .veui-icon {
+    .icon {
       position: absolute;
       opacity: 0.05;
       z-index: -1;
@@ -218,30 +257,11 @@ body {
     }
 
     &:hover {
-      .veui-icon {
+      .icon {
         transform: translateY(10px) scale(0.3);
         opacity: 0.1;
       }
     }
-  }
-}
-
-main {
-  .absolute(0, 0, 0, @nav-width);
-  overflow: scroll;
-  padding: 1em 4em 0;
-  height: ~"calc(100vh - @{title-height})";
-  transition: height 0.2s;
-
-  h1 {
-    border-bottom: 1px solid #eee;
-    margin-bottom: 2em;
-    padding-bottom: 1em;
-    font-size: 18px;
-  }
-
-  .console-expanded & {
-    height: ~"calc(100vh - @{console-height} - @{title-height})";
   }
 }
 
@@ -257,6 +277,14 @@ main {
   top: 1.2em;
   right: 4em;
   width: 135px;
+  z-index: 200;
+}
+
+#theme {
+  position: fixed;
+  top: 1.2em;
+  right: calc(4em + 147px);
+  width: 80px;
   z-index: 200;
 }
 </style>

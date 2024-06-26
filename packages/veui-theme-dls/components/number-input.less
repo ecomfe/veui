@@ -68,6 +68,11 @@
     overflow: visible;
   }
 
+  &.@{veui-prefix}-readonly &-step,
+  &.@{veui-prefix}-disabled &-step {
+    pointer-events: none;
+  }
+
   &-step,
   &-step[ui] {
     display: flex;
@@ -198,6 +203,12 @@
           .dls-icon-size(@dls-number-input-spin-icon-size-strong);
         }
       }
+    }
+  }
+
+  &[ui~="theme:d22"][ui~="strong"] {
+    .@{veui-prefix}-number-input-step:not(:hover):not(:active) {
+      background-color: transparent;
     }
   }
 }

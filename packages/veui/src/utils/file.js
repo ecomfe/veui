@@ -14,7 +14,7 @@ export function createFileList (files) {
   files = [].concat(files)
   if (some(files, (file) => !(file instanceof File))) {
     throw new Error(
-      'expected argument to FileList is File or array of File objects'
+      '[veui-file] Expected argument to `FileList` is `File` or array of `File` objects.'
     )
   }
   let dataTransfer = createDataTransfer()

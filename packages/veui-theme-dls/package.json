@@ -1,6 +1,6 @@
 {
   "name": "veui-theme-dls",
-  "version": "2.14.6",
+  "version": "2.17.9",
   "description": "Theme Light DLS for VEUI.",
   "repository": "ecomfe/veui",
   "license": "MIT",
@@ -12,17 +12,18 @@
   ],
   "scripts": {
     "lint": "stylelint **/*.less --syntax=less",
-    "theme": "node -r esm build/theme.js",
-    "build": "pnpm run theme && rollup -c && node -r esm build/normalize-ignore.js",
+    "build:entry": "node -r esm build/entry.js",
+    "build:theme": "node -r esm build/theme.js",
+    "build": "pnpm run build:theme && pnpm run build:entry && rollup -c && node -r esm build/normalize-ignore.js",
     "prepublishOnly": "pnpm build"
   },
   "module": "dist/dls.esm.js",
   "dependencies": {
     "classlist-polyfill": "^1.2.0",
-    "dls-icons-vue": "~3.20.0",
+    "dls-icons-vue": "~3.41.0",
     "dls-illustrations-vue": "^1.4.3",
     "focus-visible": "^4.1.5",
-    "less-plugin-dls": "11.6.5",
+    "less-plugin-dls": "^11.12.0",
     "less-plugin-est": "^3.0.1"
   },
   "peerDependencies": {
@@ -37,9 +38,13 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
+    "cssnano": "^5.1.7",
     "esm": "^3.2.25",
+    "globby": "^11.1.0",
     "less": "^4.1.2",
-    "postcss": "^8.4.13",
+    "postcss": "^8.4.31",
+    "postcss-load-config": "^3.1.4",
+    "rimraf": "^4.1.4",
     "rollup": "^2.72.0",
     "rollup-plugin-postcss": "^4.0.2",
     "veui": "workspace:*",

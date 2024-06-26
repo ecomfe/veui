@@ -776,7 +776,10 @@ export default {
     getDateClass (day, panel) {
       let extraClass =
         typeof this.dateClass === 'function'
-          ? this.dateClass(fromDateData(day))
+          ? this.dateClass(fromDateData(day), {
+            today: day.isToday,
+            selected: day.isSelected
+          })
           : this.dateClass
 
       return {

@@ -6,10 +6,14 @@
 
   <h2>点击左侧图标展开收起</h2>
   <p>当前展开：{{ expanded1 }}</p>
-  <veui-tree :datasource="treeDatasource1" :expanded.sync="expanded1"/>
+  <veui-tree
+    class="tree"
+    :datasource="treeDatasource1"
+    :expanded.sync="expanded1"
+  />
 
   <h2>点击整行展开收起</h2>
-  <veui-tree :datasource="treeDatasource2" item-click="toggle"/>
+  <veui-tree class="tree" :datasource="treeDatasource2" item-click="toggle"/>
 
   <h1>
     <code>&lt;veui-filter-panel&gt;</code>
@@ -21,7 +25,7 @@
   >
     <template #head>列表</template>
     <template slot-scope="{ items }">
-      <veui-tree :datasource="items">
+      <veui-tree class="tree" :datasource="items">
         <template #item-label="props">
           <slot name="tree-item-label" v-bind="props">{{
             props.item.label
@@ -413,7 +417,7 @@ export default {
   }
 
   .veui-select-panel-demo1 {
-    .veui-tree {
+    .tree {
       padding: 0 20px;
     }
   }

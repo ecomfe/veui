@@ -149,6 +149,7 @@ export default {
     },
     selectOnFocus: Boolean,
     composition: Boolean,
+    autofocus: Boolean,
     clearable: Boolean,
     maxlength: [Number, String],
     getLength: Function,
@@ -190,6 +191,7 @@ export default {
         ...this.$attrs,
         maxlength: this.realStrict.maxlength ? this.realMaxlength : null,
         type: this.type,
+        autofocus: this.autofocus,
         name: this.realName,
         disabled: this.realDisabled,
         readonly: this.realReadonly
@@ -396,16 +398,3 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
-@veui-prefix: veui;
-
-.@{veui-prefix}-input-input {
-  opacity: 1;
-  transition: opacity 0.0001s;
-
-  &:-webkit-autofill {
-    opacity: 0.9999;
-  }
-}
-</style>

@@ -57,6 +57,7 @@ interface VeuiComponents {
   VeuiRadio: Components.Radio
   VeuiRadioButtonGroup: Components.RadioButtonGroup
   VeuiRadioGroup: Components.RadioGroup
+  VeuiRating: Components.Rating
   VeuiSearchBox: Components.SearchBox
   VeuiSelect: Components.Select
   VeuiSidebar: Components.Sidebar

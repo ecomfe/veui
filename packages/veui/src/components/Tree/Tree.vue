@@ -165,9 +165,7 @@ export default {
             ...item,
             ...(nameOrValue == null
               ? {
-                name: `veui-${label}-${parentIndices
-                    .concat(index)
-                    .join('-')}`
+                name: `veui-${label}-${parentIndices.concat(index).join('-')}`
               }
               : {})
           }
