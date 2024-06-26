@@ -701,6 +701,7 @@ export default {
                 </template>
               ) : null}
             <template slot="before">
+              {renderSlot(this, 'label-before', this.slotProps)}
               {this.multiple ? multiBeforeSlot : beforeSlot}
             </template>
             <template slot="after">
@@ -735,6 +736,7 @@ export default {
                   name={this.icons[this.realExpanded ? 'collapse' : 'expand']}
                 />
               </div>
+              {renderSlot(this, 'label-after', this.slotProps)}
             </template>
           </Input>
         )}

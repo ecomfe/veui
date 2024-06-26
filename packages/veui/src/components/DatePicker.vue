@@ -34,7 +34,11 @@
         [$c('readonly')]: realReadonly
       }"
       tabindex="-1"
-    />
+    >
+      <template v-if="$slots.before" #before>
+        <slot name="before"/>
+      </template>
+    </veui-input>
     <template v-if="range">
       <span :class="$c('date-picker-tilde')">~</span>
       <veui-input
