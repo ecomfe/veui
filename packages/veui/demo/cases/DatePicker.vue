@@ -144,6 +144,14 @@
         <veui-date-picker v-model="selectedDateRange" range clearable/>
       </section>
     </section>
+    <section>
+      <h2>before slot</h2>
+      <section>
+        <veui-date-picker v-model="selectedDateRange" range clearable>
+          <template #before> before </template>
+        </veui-date-picker>
+      </section>
+    </section>
   </veui-config-provider>
 </article>
 </template>

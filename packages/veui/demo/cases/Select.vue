@@ -480,6 +480,22 @@
     <h2>200 个 option</h2>
     <veui-select :options="many"/>
   </section>
+  <section>
+    <h2>Select：(自定义 label-before slot)</h2>
+    <veui-select v-model="defaultValue2" v-bind="attrs" ui="checkmark">
+      <template #label-before>
+        <span>before</span>
+      </template>
+    </veui-select>
+  </section>
+  <section>
+    <h2>Select：(自定义 label-after slot)</h2>
+    <veui-select v-model="defaultValue2" v-bind="attrs" ui="checkmark">
+      <template #label-after>
+        <span>after</span>
+      </template>
+    </veui-select>
+  </section>
 </article>
 </template>
 
@@ -720,11 +736,7 @@ export default {
             { label: '相亲中介', value: '17' }
           ]
         }
-      ],
-      many: Array.from({ length: 200 }).map((_, i) => ({
-        label: i.toString(),
-        value: i
-      }))
+      ]
     }
   },
   computed: {
@@ -789,22 +801,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
-section + section {
-  margin-top: 10px;
-}
-
-.option-label {
+.veui-option-label {
   &-text,
-  .icon {
+  .veui-icon {
     vertical-align: middle;
   }
 
-  .icon {
+  .veui-icon {
     margin-left: 5px;
   }
 }
 
-.option-custom {
+.veui-option-custom {
   position: relative;
   padding-left: 24px;
 
@@ -831,7 +839,7 @@ section + section {
   font-size: 12px;
   width: 240px;
 
-  .icon {
+  .veui-icon {
     float: left;
     margin-top: 3px;
     margin-right: 8px;
@@ -843,7 +851,7 @@ section + section {
   }
 }
 
-.button {
+.veui-button {
   margin-left: 8px;
 }
 </style>
