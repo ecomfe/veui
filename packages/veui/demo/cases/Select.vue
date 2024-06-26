@@ -736,7 +736,11 @@ export default {
             { label: '相亲中介', value: '17' }
           ]
         }
-      ]
+      ],
+      many: Array.from({ length: 200 }).map((_, i) => ({
+        label: i.toString(),
+        value: i
+      }))
     }
   },
   computed: {
@@ -801,18 +805,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.veui-option-label {
+section + section {
+  margin-top: 10px;
+}
+
+.option-label {
   &-text,
-  .veui-icon {
+  .icon {
     vertical-align: middle;
   }
 
-  .veui-icon {
+  .icon {
     margin-left: 5px;
   }
 }
 
-.veui-option-custom {
+.option-custom {
   position: relative;
   padding-left: 24px;
 
@@ -839,7 +847,7 @@ export default {
   font-size: 12px;
   width: 240px;
 
-  .veui-icon {
+  .icon {
     float: left;
     margin-top: 3px;
     margin-right: 8px;
@@ -851,7 +859,7 @@ export default {
   }
 }
 
-.veui-button {
+.button {
   margin-left: 8px;
 }
 </style>
