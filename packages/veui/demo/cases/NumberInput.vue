@@ -151,6 +151,31 @@
       >
         <veui-number-input v-model="typeValue" :min="0" :decimal-place="1"/>
       </veui-field>
+      <veui-field label="before">
+        <veui-number-input
+          v-model="precisionValue"
+          :min="0"
+          :decimal-place="2"
+          style="width: 200px"
+        >
+          <template #before>
+            <span>before内容</span>
+          </template>
+        </veui-number-input>
+      </veui-field>
+      <veui-field label="before strong">
+        <veui-number-input
+          v-model="precisionValue"
+          ui="strong"
+          :min="0"
+          :decimal-place="2"
+          style="width: 200px"
+        >
+          <template #before>
+            <span>before内容</span>
+          </template>
+        </veui-number-input>
+      </veui-field>
     </veui-form>
   </section>
 </article>
