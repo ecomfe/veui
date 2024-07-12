@@ -480,6 +480,22 @@
     <h2>200 个 option</h2>
     <veui-select :options="many"/>
   </section>
+  <section>
+    <h2>Select：(自定义 label-before slot)</h2>
+    <veui-select v-model="defaultValue2" v-bind="attrs" ui="checkmark">
+      <template #label-before>
+        <span>before</span>
+      </template>
+    </veui-select>
+  </section>
+  <section>
+    <h2>Select：(自定义 label-after slot)</h2>
+    <veui-select v-model="defaultValue2" v-bind="attrs" ui="checkmark">
+      <template #label-after>
+        <span>after</span>
+      </template>
+    </veui-select>
+  </section>
 </article>
 </template>
 
