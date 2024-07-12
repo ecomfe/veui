@@ -33,6 +33,10 @@
         :aria-label="t('decrease', { value: step })"
       />
     </veui-button>
+    <slot name="before"/>
+  </template>
+  <template v-else slot="before">
+    <slot name="before"/>
   </template>
   <template slot="after">
     <div
