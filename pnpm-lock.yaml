@@ -174,7 +174,7 @@ importers:
         specifier: ^4.5.17
         version: 4.5.19(@vue/cli-service@4.5.19(less-loader@7.3.0(less@3.13.1)(webpack@4.46.0))(lodash@4.17.21)(pug@3.0.2)(typescript@4.9.5)(vue-template-compiler@2.7.16)(vue@2.7.16))(eslint@6.8.0)
       '@vue/cli-service':
-        specifier: ^4.5.17
+        specifier: ^4.5.19
         version: 4.5.19(less-loader@7.3.0(less@3.13.1)(webpack@4.46.0))(lodash@4.17.21)(pug@3.0.2)(typescript@4.9.5)(vue-template-compiler@2.7.16)(vue@2.7.16)
       '@vue/eslint-config-standard':
         specifier: ^5.1.2
@@ -2451,11 +2451,6 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
-  browserslist@4.22.2:
-    resolution: {integrity: sha512-0UgcrvQmBDvZHFGdYUehrCNIazki7/lUP3kkoi/r3YB2amZbFM9J43ZRkJTXBUZK4gmx56+Sqk9+Vs9mwZx9+A==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-
   browserslist@4.23.0:
     resolution: {integrity: sha512-QW8HiM1shhT2GuzkvklfjcKDiWFXHOeFCIA/huJPwHsslwcydgk7X+z2zXpEijP98UCY7HbubZt5J2Zgvf0CaQ==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -2562,9 +2557,6 @@ packages:
 
   caniuse-lite@1.0.30001532:
     resolution: {integrity: sha512-FbDFnNat3nMnrROzqrsg314zhqN5LGQ1kyyMk2opcrwGbVGpHRhgCWtAgD5YJUqNAiQ+dklreil/c3Qf1dfCTw==}
-
-  caniuse-lite@1.0.30001566:
-    resolution: {integrity: sha512-ggIhCsTxmITBAMmK8yZjEhCO5/47jKXPu6Dha/wuCS4JePVL+3uiDEBuhu2aIoT+bqTOR8L76Ip1ARL9xYsEJA==}
 
   caniuse-lite@1.0.30001593:
     resolution: {integrity: sha512-UWM1zlo3cZfkpBysd7AS+z+v007q9G1+fLTUU42rQnY6t2axoogPW/xol6T7juU5EUoOhML4WgBIdG+9yYqAjQ==}
@@ -3600,9 +3592,6 @@ packages:
 
   electron-to-chromium@1.4.136:
     resolution: {integrity: sha512-GnITX8rHnUrIVnTxU9UlsTnSemHUA2iF+6QrRqxFbp/mf0vfuSc/goEyyQhUX3TUUCE3mv/4BNuXOtaJ4ur0eA==}
-
-  electron-to-chromium@1.4.604:
-    resolution: {integrity: sha512-JAJ4lyLJYudlgJPYJicimU9R+qZ/3iyeyQS99bfT7PWi7psYWeN84lPswTjpHxQueU34PKxM/IJzQS6poYlovQ==}
 
   electron-to-chromium@1.4.690:
     resolution: {integrity: sha512-+2OAGjUx68xElQhydpcbqH50hE8Vs2K6TkAeLhICYfndb67CVH0UsZaijmRUE3rHlIxU1u0jxwhgVe6fK3YANA==}
@@ -9629,7 +9618,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 17.0.31
+      '@types/node': 20.10.5
 
   '@types/mime@1.3.2': {}
 
@@ -9659,7 +9648,7 @@ snapshots:
 
   '@types/responselike@1.0.0':
     dependencies:
-      '@types/node': 17.0.31
+      '@types/node': 20.10.5
 
   '@types/semver@7.5.0': {}
 
@@ -10082,7 +10071,7 @@ snapshots:
       lru-cache: 4.1.5
       merge-source-map: 1.1.0
       postcss: 7.0.39
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
       source-map: 0.6.1
       vue-template-es2015-compiler: 1.9.1
     optionalDependencies:
@@ -10554,7 +10543,7 @@ snapshots:
     dependencies:
       array-buffer-byte-length: 1.0.0
       call-bind: 1.0.2
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       get-intrinsic: 1.2.1
       is-array-buffer: 3.0.2
       is-shared-array-buffer: 1.0.2
@@ -11370,13 +11359,6 @@ snapshots:
       node-releases: 2.0.4
       picocolors: 1.0.0
 
-  browserslist@4.22.2:
-    dependencies:
-      caniuse-lite: 1.0.30001566
-      electron-to-chromium: 1.4.604
-      node-releases: 2.0.14
-      update-browserslist-db: 1.0.13(browserslist@4.22.2)
-
   browserslist@4.23.0:
     dependencies:
       caniuse-lite: 1.0.30001593
@@ -11515,14 +11497,12 @@ snapshots:
 
   caniuse-api@3.0.0:
     dependencies:
-      browserslist: 4.20.3
-      caniuse-lite: 1.0.30001532
+      browserslist: 4.23.0
+      caniuse-lite: 1.0.30001593
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
   caniuse-lite@1.0.30001532: {}
-
-  caniuse-lite@1.0.30001566: {}
 
   caniuse-lite@1.0.30001593: {}
 
@@ -12352,7 +12332,7 @@ snapshots:
   define-properties@1.2.1:
     dependencies:
       define-data-property: 1.1.4
-      has-property-descriptors: 1.0.0
+      has-property-descriptors: 1.0.2
       object-keys: 1.1.1
 
   define-property@0.2.5:
@@ -12581,8 +12561,6 @@ snapshots:
 
   electron-to-chromium@1.4.136: {}
 
-  electron-to-chromium@1.4.604: {}
-
   electron-to-chromium@1.4.690: {}
 
   elegant-spinner@1.0.1: {}
@@ -12619,7 +12597,7 @@ snapshots:
     dependencies:
       '@types/cookie': 0.4.1
       '@types/cors': 2.8.12
-      '@types/node': 17.0.31
+      '@types/node': 20.10.5
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.4.2
@@ -13459,7 +13437,7 @@ snapshots:
   function.prototype.name@1.1.5:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.1.4
+      define-properties: 1.2.1
       es-abstract: 1.20.0
       functions-have-names: 1.2.3
 
@@ -13588,7 +13566,7 @@ snapshots:
 
   globalthis@1.0.3:
     dependencies:
-      define-properties: 1.2.0
+      define-properties: 1.2.1
 
   globby@11.1.0:
     dependencies:
@@ -14050,7 +14028,7 @@ snapshots:
 
   is-arguments@1.1.1:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.7
       has-tostringtag: 1.0.0
 
   is-array-buffer@3.0.2:
@@ -14077,7 +14055,7 @@ snapshots:
 
   is-boolean-object@1.1.2:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.7
       has-tostringtag: 1.0.0
 
   is-buffer@1.1.6: {}
@@ -14432,11 +14410,11 @@ snapshots:
 
   json5@1.0.1:
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.8
 
   json5@1.0.2:
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.8
 
   json5@2.2.1: {}
 
@@ -15119,7 +15097,7 @@ snapshots:
 
   mkdirp@0.5.5:
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.8
 
   mkdirp@0.5.6:
     dependencies:
@@ -15394,7 +15372,7 @@ snapshots:
   object.assign@4.1.4:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       has-symbols: 1.0.3
       object-keys: 1.1.1
 
@@ -15743,7 +15721,7 @@ snapshots:
   postcss-calc@8.2.4(postcss@8.4.31):
     dependencies:
       postcss: 8.4.31
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
       postcss-value-parser: 4.2.0
 
   postcss-colormin@4.0.3:
@@ -15756,7 +15734,7 @@ snapshots:
 
   postcss-colormin@5.3.0(postcss@8.4.31):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.0
       caniuse-api: 3.0.0
       colord: 2.9.3
       postcss: 8.4.31
@@ -15856,11 +15834,11 @@ snapshots:
 
   postcss-merge-rules@5.1.1(postcss@8.4.31):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.0
       caniuse-api: 3.0.0
       cssnano-utils: 3.1.0(postcss@8.4.31)
       postcss: 8.4.31
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
 
   postcss-minify-font-values@4.0.2:
     dependencies:
@@ -15897,7 +15875,7 @@ snapshots:
 
   postcss-minify-params@5.1.2(postcss@8.4.31):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.0
       cssnano-utils: 3.1.0(postcss@8.4.31)
       postcss: 8.4.31
       postcss-value-parser: 4.2.0
@@ -15912,7 +15890,7 @@ snapshots:
   postcss-minify-selectors@5.2.0(postcss@8.4.31):
     dependencies:
       postcss: 8.4.31
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
 
   postcss-modules-extract-imports@2.0.0:
     dependencies:
@@ -15938,7 +15916,7 @@ snapshots:
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.31)
       postcss: 8.4.31
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
       postcss-value-parser: 4.2.0
 
   postcss-modules-scope@1.1.0:
@@ -15954,7 +15932,7 @@ snapshots:
   postcss-modules-scope@3.0.0(postcss@8.4.31):
     dependencies:
       postcss: 8.4.31
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
 
   postcss-modules-sync@1.0.0:
     dependencies:
@@ -16060,7 +16038,7 @@ snapshots:
 
   postcss-normalize-unicode@5.1.0(postcss@8.4.31):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.0
       postcss: 8.4.31
       postcss-value-parser: 4.2.0
 
@@ -16108,7 +16086,7 @@ snapshots:
 
   postcss-reduce-initial@5.1.0(postcss@8.4.31):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.0
       caniuse-api: 3.0.0
       postcss: 8.4.31
 
@@ -16167,7 +16145,7 @@ snapshots:
   postcss-unique-selectors@5.1.1(postcss@8.4.31):
     dependencies:
       postcss: 8.4.31
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
 
   postcss-value-parser@3.3.1: {}
 
@@ -16426,7 +16404,7 @@ snapshots:
     dependencies:
       deep-extend: 0.6.0
       ini: 1.3.8
-      minimist: 1.2.6
+      minimist: 1.2.8
       strip-json-comments: 2.0.1
 
   read-pkg-up@4.0.0:
@@ -16529,13 +16507,13 @@ snapshots:
   regexp.prototype.flags@1.4.3:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.1.4
+      define-properties: 1.2.1
       functions-have-names: 1.2.3
 
   regexp.prototype.flags@1.5.0:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       functions-have-names: 1.2.3
 
   regexp.prototype.flags@1.5.2:
@@ -17304,31 +17282,31 @@ snapshots:
   string.prototype.trim@1.2.7:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.1
 
   string.prototype.trimend@1.0.5:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.1.4
+      define-properties: 1.2.1
       es-abstract: 1.20.0
 
   string.prototype.trimend@1.0.6:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.1
 
   string.prototype.trimstart@1.0.5:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.1.4
+      define-properties: 1.2.1
       es-abstract: 1.20.0
 
   string.prototype.trimstart@1.0.6:
     dependencies:
       call-bind: 1.0.2
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.1
 
   string_decoder@1.1.1:
@@ -17389,9 +17367,9 @@ snapshots:
 
   stylehacks@5.1.0(postcss@8.4.31):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.0
       postcss: 8.4.31
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
 
   stylelint-config-recommended@13.0.0(stylelint@15.10.3):
     dependencies:
@@ -17678,7 +17656,7 @@ snapshots:
     dependencies:
       '@types/json5': 0.0.29
       json5: 1.0.1
-      minimist: 1.2.6
+      minimist: 1.2.8
       strip-bom: 3.0.0
 
   tsconfig-paths@3.14.2:
@@ -17834,12 +17812,6 @@ snapshots:
 
   upath@1.2.0: {}
 
-  update-browserslist-db@1.0.13(browserslist@4.22.2):
-    dependencies:
-      browserslist: 4.22.2
-      escalade: 3.1.1
-      picocolors: 1.0.0
-
   update-browserslist-db@1.0.13(browserslist@4.23.0):
     dependencies:
       browserslist: 4.23.0
@@ -17900,12 +17872,12 @@ snapshots:
 
   util.promisify@1.0.0:
     dependencies:
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       object.getownpropertydescriptors: 2.1.3
 
   util.promisify@1.0.1:
     dependencies:
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.1
       has-symbols: 1.0.3
       object.getownpropertydescriptors: 2.1.3
