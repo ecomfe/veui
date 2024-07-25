@@ -83,7 +83,7 @@
     "karma-webpack": "^4.0.2",
     "less": "^3.13.1",
     "less-loader": "^7.3.0",
-    "less-plugin-est": "^3.0.1",
+    "less-plugin-est": "^3.0.2",
     "lint-staged": "^8.2.1",
     "mocha": "^7.2.0",
     "moment": "^2.29.3",

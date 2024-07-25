@@ -279,8 +279,8 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0(less@3.13.1)(webpack@4.46.0)
       less-plugin-est:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^3.0.2
+        version: 3.0.2
       lint-staged:
         specifier: ^8.2.1
         version: 8.2.1
@@ -403,8 +403,8 @@ importers:
         specifier: ^11.12.0
         version: 11.12.0
       less-plugin-est:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^3.0.2
+        version: 3.0.2
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -5354,8 +5354,8 @@ packages:
     resolution: {integrity: sha512-in6CUOj05n8td3jnQa9tN9tPwMfxneam9qhW5THzVCIGrJBE8NjgT8KGRco7nCRyvt83FckOBKny3QTAlCQ7mw==}
     hasBin: true
 
-  less-plugin-est@3.0.1:
-    resolution: {integrity: sha512-eBIlaO3J1YgWq7kQ1oKIuWnZJ786DNiUUNoj4V+9ZX1N5JPTUCiMDQpV7an3j3xZ9+34Q+Te9ByQusw1Xn+OBA==}
+  less-plugin-est@3.0.2:
+    resolution: {integrity: sha512-IJMWS3/NBH1gUTC3ZoI2KQIXCfr7/32QleYWaVhU32xdjsamHb1cr26p52ihZL2XtqTNSXq9OtMmZZLdYjxu0w==}
 
   less@3.13.1:
     resolution: {integrity: sha512-SwA1aQXGUvp+P5XdZslUOhhLnClSLIjWvJhmd+Vgib5BFIr9lMNlQwmwUNOjXThF/A0x+MCYYPeWEfeWiLRnTw==}
@@ -14599,7 +14599,7 @@ snapshots:
       fast-glob: 3.3.2
       pkg-dir: 4.2.0
 
-  less-plugin-est@3.0.1: {}
+  less-plugin-est@3.0.2: {}
 
   less@3.13.1:
     dependencies:
