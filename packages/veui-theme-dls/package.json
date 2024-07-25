@@ -38,7 +38,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
-    "cssnano": "^5.1.7",
+    "cssnano": "^5.1.15",
     "esm": "^3.2.25",
     "globby": "^11.1.0",
     "less": "^4.1.2",
