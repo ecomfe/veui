@@ -79,7 +79,7 @@
     "karma-express-server": "^0.1.4",
     "karma-mocha": "^2.0.1",
     "karma-sourcemap-loader": "^0.3.8",
-    "karma-spec-reporter": "0.0.32",
+    "karma-spec-reporter": "0.0.36",
     "karma-webpack": "^4.0.2",
     "less": "^3.13.1",
     "less-loader": "^7.3.0",
