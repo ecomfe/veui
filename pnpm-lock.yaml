@@ -204,8 +204,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.44.0
-        version: 3.44.0(vue@2.7.16)
+        specifier: ~3.47.0
+        version: 3.47.0(vue@2.7.16)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.7.16)
@@ -391,8 +391,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.44.0
-        version: 3.44.0(vue@2.6.14)
+        specifier: ~3.47.0
+        version: 3.47.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.6.14)
@@ -467,8 +467,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.44.0
-        version: 3.44.0(vue@2.6.14)
+        specifier: ~3.47.0
+        version: 3.47.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -3486,11 +3486,11 @@ packages:
   dls-graphics@1.4.3:
     resolution: {integrity: sha512-Z6uE++BTxa+EQNlGfSQy9cHRc92a1Y5HBANNkuRvec4jADc3N9i+eEyJD6qPcuqLCeWKGKFhihkn2+BjvjkmZQ==}
 
-  dls-icons-data@3.44.0:
-    resolution: {integrity: sha512-mZ3KPLmNIgFgoqVh43RBwEOmUu6VP6Cac0kv0ZQG+zbl76wiDuhmRJWU64pa8Bgi1FxxMd3RYDwNb45ishnOQg==}
+  dls-icons-data@3.47.0:
+    resolution: {integrity: sha512-ajPRkaXCBY1Q3ojwTC1x5BYX/8YPSKQ91efn1jYUixas/C1nWFOHPwcjQO6OnfyDnFL29sMmHzN98eGPj15GaQ==}
 
-  dls-icons-vue@3.44.0:
-    resolution: {integrity: sha512-t28HmTG0h/qk+JMrk66khQ02J2fbzXkCQMS/KnKC4sbrOHEKyQbv2cMN1mv8ioNWY9xtkFszzBfWk0vvKyJ1wg==}
+  dls-icons-vue@3.47.0:
+    resolution: {integrity: sha512-oIET4TtJvV/nAkp6kTWuLYQCfkFcBK1tzSfetg66sJxr0C2IC5KW6IQlXrzFwqIpfX5a5GM5L9Hb/VHTrJ1ixg==}
     peerDependencies:
       vue: 2.x
 
@@ -12444,16 +12444,16 @@ snapshots:
 
   dls-graphics@1.4.3: {}
 
-  dls-icons-data@3.44.0: {}
+  dls-icons-data@3.47.0: {}
 
-  dls-icons-vue@3.44.0(vue@2.6.14):
+  dls-icons-vue@3.47.0(vue@2.6.14):
     dependencies:
-      dls-icons-data: 3.44.0
+      dls-icons-data: 3.47.0
       vue: 2.6.14
 
-  dls-icons-vue@3.44.0(vue@2.7.16):
+  dls-icons-vue@3.47.0(vue@2.7.16):
     dependencies:
-      dls-icons-data: 3.44.0
+      dls-icons-data: 3.47.0
       vue: 2.7.16
 
   dls-illustrations-vue@1.4.3(vue@2.6.14):
