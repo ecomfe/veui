@@ -204,8 +204,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.48.0
-        version: 3.48.0(vue@2.7.16)
+        specifier: ~3.49.0
+        version: 3.49.0(vue@2.7.16)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.7.16)
@@ -391,8 +391,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.48.0
-        version: 3.48.0(vue@2.6.14)
+        specifier: ~3.49.0
+        version: 3.49.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.6.14)
@@ -467,8 +467,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.48.0
-        version: 3.48.0(vue@2.6.14)
+        specifier: ~3.49.0
+        version: 3.49.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -3486,11 +3486,11 @@ packages:
   dls-graphics@1.4.3:
     resolution: {integrity: sha512-Z6uE++BTxa+EQNlGfSQy9cHRc92a1Y5HBANNkuRvec4jADc3N9i+eEyJD6qPcuqLCeWKGKFhihkn2+BjvjkmZQ==}
 
-  dls-icons-data@3.48.0:
-    resolution: {integrity: sha512-N2q3myY2Lq7kPUbGlVjMGGIcegGhR5G/7XqMqDqzrhpy1r39FA09Bee0v+P936d0TSZJV/E6Ole/4nGVRQraZQ==}
+  dls-icons-data@3.49.0:
+    resolution: {integrity: sha512-qfnUzVDMjU6x6JUROBls7T/kX6UVTLhfyLNX4kiAArz0sTP16LE5rOZpjwq7/rabG7MZYnc8KgTcULfIjjBZRQ==}
 
-  dls-icons-vue@3.48.0:
-    resolution: {integrity: sha512-yJ6pHuZwTll9g4RN+MlOXqklF1+ImTl91tbsaaKQFmbV02s8IFmLAC3JrjouaZ3+Rf3/YXTr0MhPB8knBvyR0Q==}
+  dls-icons-vue@3.49.0:
+    resolution: {integrity: sha512-0eaD+Bu5R7reBGJF5Nsa8nx7FXAV4u+3YW5FoKJFTrXtuen04w/SdOC5sOL/CeJmp2V/N8yZ6wjxWRC+wYZrqg==}
     peerDependencies:
       vue: 2.x
 
@@ -12444,16 +12444,16 @@ snapshots:
 
   dls-graphics@1.4.3: {}
 
-  dls-icons-data@3.48.0: {}
+  dls-icons-data@3.49.0: {}
 
-  dls-icons-vue@3.48.0(vue@2.6.14):
+  dls-icons-vue@3.49.0(vue@2.6.14):
     dependencies:
-      dls-icons-data: 3.48.0
+      dls-icons-data: 3.49.0
       vue: 2.6.14
 
-  dls-icons-vue@3.48.0(vue@2.7.16):
+  dls-icons-vue@3.49.0(vue@2.7.16):
     dependencies:
-      dls-icons-data: 3.48.0
+      dls-icons-data: 3.49.0
       vue: 2.7.16
 
   dls-illustrations-vue@1.4.3(vue@2.6.14):
@@ -13373,10 +13373,6 @@ snapshots:
 
   focus-visible@5.2.0: {}
 
-  follow-redirects@1.15.0(debug@4.3.4(supports-color@6.1.0)):
-    optionalDependencies:
-      debug: 4.3.4(supports-color@6.1.0)
-
   follow-redirects@1.15.0(debug@4.3.4):
     optionalDependencies:
       debug: 4.3.4(supports-color@6.1.0)
@@ -13842,9 +13838,9 @@ snapshots:
 
   http-parser-js@0.5.6: {}
 
-  http-proxy-middleware@0.19.1(debug@4.3.4(supports-color@6.1.0))(supports-color@6.1.0):
+  http-proxy-middleware@0.19.1(debug@4.3.4)(supports-color@6.1.0):
     dependencies:
-      http-proxy: 1.18.1(debug@4.3.4(supports-color@6.1.0))
+      http-proxy: 1.18.1(debug@4.3.4)
       is-glob: 4.0.3
       lodash: 4.17.21
       micromatch: 3.1.10(supports-color@6.1.0)
@@ -13859,14 +13855,6 @@ snapshots:
       is-glob: 4.0.3
       is-plain-obj: 3.0.0
       micromatch: 4.0.5
-    transitivePeerDependencies:
-      - debug
-
-  http-proxy@1.18.1(debug@4.3.4(supports-color@6.1.0)):
-    dependencies:
-      eventemitter3: 4.0.7
-      follow-redirects: 1.15.0(debug@4.3.4(supports-color@6.1.0))
-      requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
 
@@ -14525,7 +14513,7 @@ snapshots:
       dom-serialize: 2.2.1
       glob: 7.2.0
       graceful-fs: 4.2.10
-      http-proxy: 1.18.1(debug@4.3.4(supports-color@6.1.0))
+      http-proxy: 1.18.1(debug@4.3.4)
       isbinaryfile: 4.0.10
       lodash: 4.17.21
       log4js: 6.4.6
@@ -18143,7 +18131,7 @@ snapshots:
       del: 4.1.1
       express: 4.18.1(supports-color@6.1.0)
       html-entities: 1.4.0
-      http-proxy-middleware: 0.19.1(debug@4.3.4(supports-color@6.1.0))(supports-color@6.1.0)
+      http-proxy-middleware: 0.19.1(debug@4.3.4)(supports-color@6.1.0)
       import-local: 2.0.0
       internal-ip: 4.3.0
       ip: 1.1.9
