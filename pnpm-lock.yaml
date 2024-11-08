@@ -204,8 +204,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       dls-icons-vue:
-        specifier: ~3.49.0
-        version: 3.49.0(vue@2.7.16)
+        specifier: ~3.50.0
+        version: 3.50.0(vue@2.7.16)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.7.16)
@@ -391,8 +391,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       dls-icons-vue:
-        specifier: ~3.49.0
-        version: 3.49.0(vue@2.6.14)
+        specifier: ~3.50.0
+        version: 3.50.0(vue@2.6.14)
       dls-illustrations-vue:
         specifier: ^1.4.3
         version: 1.4.3(vue@2.6.14)
@@ -467,8 +467,8 @@ importers:
   packages/veui-theme-dls-icons:
     dependencies:
       dls-icons-vue:
-        specifier: ~3.49.0
-        version: 3.49.0(vue@2.6.14)
+        specifier: ~3.50.0
+        version: 3.50.0(vue@2.6.14)
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^20.0.0
@@ -3486,11 +3486,11 @@ packages:
   dls-graphics@1.4.3:
     resolution: {integrity: sha512-Z6uE++BTxa+EQNlGfSQy9cHRc92a1Y5HBANNkuRvec4jADc3N9i+eEyJD6qPcuqLCeWKGKFhihkn2+BjvjkmZQ==}
 
-  dls-icons-data@3.49.0:
-    resolution: {integrity: sha512-qfnUzVDMjU6x6JUROBls7T/kX6UVTLhfyLNX4kiAArz0sTP16LE5rOZpjwq7/rabG7MZYnc8KgTcULfIjjBZRQ==}
+  dls-icons-data@3.50.0:
+    resolution: {integrity: sha512-elXWNRk+As+JrtCEDVKvwEpXR21ghlPSjY9TuN39bXzf08OwdyLIU/Fp8sDDJ9IBJSVd5uecteCeX8kaxT/p0g==}
 
-  dls-icons-vue@3.49.0:
-    resolution: {integrity: sha512-0eaD+Bu5R7reBGJF5Nsa8nx7FXAV4u+3YW5FoKJFTrXtuen04w/SdOC5sOL/CeJmp2V/N8yZ6wjxWRC+wYZrqg==}
+  dls-icons-vue@3.50.0:
+    resolution: {integrity: sha512-rOjT8MR0OY+/xkyZ3PvlaoaWKrcrXPFbhEMKhJbIGDA4LIAhfEfcpKzZ+bg3JqYgHzwDCJN8VWOwxpX45w14og==}
     peerDependencies:
       vue: 2.x
 
@@ -3884,6 +3884,7 @@ packages:
   eslint@6.8.0:
     resolution: {integrity: sha512-K+Iayyo2LtyYhDSYwz5D5QdWw0hCacNzyq1Y821Xna2xSJj7cijoLLYmLxTQgcgZ9mC61nryMy9S7GRbYpI5Ig==}
     engines: {node: ^8.10.0 || ^10.13.0 || >=11.10.1}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   esm@3.2.25:
@@ -4233,7 +4234,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
 
   fsevents@2.1.3:
     resolution: {integrity: sha512-Auw9a4AxqWpa9GUfj370BMPzzyncfBABW8Mab7BGWBYDj4Isgq+cDKtx0i6u9jcX9pQDnswsaaOTgTmA5pEjuQ==}
@@ -12444,16 +12445,16 @@ snapshots:
 
   dls-graphics@1.4.3: {}
 
-  dls-icons-data@3.49.0: {}
+  dls-icons-data@3.50.0: {}
 
-  dls-icons-vue@3.49.0(vue@2.6.14):
+  dls-icons-vue@3.50.0(vue@2.6.14):
     dependencies:
-      dls-icons-data: 3.49.0
+      dls-icons-data: 3.50.0
       vue: 2.6.14
 
-  dls-icons-vue@3.49.0(vue@2.7.16):
+  dls-icons-vue@3.50.0(vue@2.7.16):
     dependencies:
-      dls-icons-data: 3.49.0
+      dls-icons-data: 3.50.0
       vue: 2.7.16
 
   dls-illustrations-vue@1.4.3(vue@2.6.14):
