@@ -114,14 +114,14 @@ describe('components/TagInput', function () {
     input.activate()
     await wait(0)
     expect(wrapper.find('.veui-tag-input').classes('veui-focus')).to.equal(true)
-    document.body.focus()
+    wrapper.find('input').element.blur()
     vm.readonly = true
     await vm.$nextTick()
 
     input.focus()
     await wait(0)
     expect(wrapper.find('.veui-tag-input').classes('veui-focus')).to.equal(true)
-    document.body.focus()
+    wrapper.find('input').element.blur()
     vm.readonly = false
     vm.disabled = true
     await vm.$nextTick()
