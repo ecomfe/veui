@@ -1,6 +1,17 @@
+// Karma bundles tests for browsers; keep Vue CLI's Babel preset in browser mode.
+process.env.VUE_CLI_TEST = 'true'
 const webpackConfig = require('@vue/cli-service/webpack.config.js')
 const devServer = require('./build/dev-server')
 const { devDependencies } = require('./package')
+
+// Keep each spec's Vue/test-utils state isolated, as with karma-webpack 4.
+// karma-webpack 5 otherwise shares a single runtime and module cache.
+webpackConfig.plugins.push({
+  apply (compiler) {
+    compiler.options.optimization.runtimeChunk = false
+    compiler.options.optimization.splitChunks = false
+  }
+})
 
 let files = ['test/global.js']
 if (process.env.TEST_FILES) {
@@ -40,11 +51,6 @@ module.exports = function (config) {
     },
 
     webpack: webpackConfig,
-
-    webpackMiddleware: {
-      logLevel: 'warn',
-      stats: 'errors-only'
-    },
 
     reporters: ['spec', 'coverage-istanbul'],
 

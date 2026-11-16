@@ -94,7 +94,10 @@ SPECS.forEach(({ entry, expect, title }) => {
               },
               {
                 test: /\.vue$/,
-                use: 'raw-loader'
+                use: {
+                  loader: 'raw-loader',
+                  options: { esModule: false }
+                }
               }
             ]
           }
@@ -121,11 +124,13 @@ SPECS.forEach(({ entry, expect, title }) => {
 })
 
 function getSource (stats) {
-  let s = stats.toJson()
+  let s = stats.toJson({ source: true })
   let module = s.modules[0]
   let source = null
   if (module && module.source) {
-    let json = module.source.replace('module.exports =', '')
+    let json = module.source
+      .replace('module.exports =', '')
+      .replace(/;\s*$/, '')
     try {
       source = JSON.parse(json)
     } catch (e) {

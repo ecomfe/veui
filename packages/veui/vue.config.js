@@ -46,7 +46,11 @@ module.exports = {
     })
 
     if (process.env.NODE_ENV === 'test') {
-      config.devtool('cheap-module-eval-source-map')
+      config.devtool('eval-cheap-module-source-map')
+      config.resolve.alias.set(
+        'sinon$',
+        require.resolve('sinon/pkg/sinon-esm.js')
+      )
     }
 
     config.resolve.alias
@@ -98,5 +102,10 @@ module.exports = {
       .plugin('context-replacement')
       .use(webpack.ContextReplacementPlugin, [/moment[\\/]locale$/, /^$/])
   },
-  devServer
+  devServer: {
+    setupMiddlewares (middlewares, server) {
+      devServer.before(server.app)
+      return middlewares
+    }
+  }
 }
