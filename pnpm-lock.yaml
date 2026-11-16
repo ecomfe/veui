@@ -259,8 +259,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(eslint@7.32.0)
       eslint-plugin-vue:
-        specifier: ^6.2.2
-        version: 6.2.2(eslint@7.32.0)
+        specifier: ^7.20.0
+        version: 7.20.0(eslint@7.32.0)
       focus-visible:
         specifier: ^5.2.0
         version: 5.2.1
@@ -3564,6 +3564,12 @@ packages:
     engines: {node: '>=8.10'}
     peerDependencies:
       eslint: ^5.0.0 || ^6.0.0
+
+  eslint-plugin-vue@7.20.0:
+    resolution: {integrity: sha512-oVNDqzBC9h3GO+NTgWeLMhhGigy6/bQaQbHS+0z7C4YEu/qK/yxHvca/2PTZtGNPsCrHwOTgKMrwu02A9iPBmw==}
+    engines: {node: '>=8.10'}
+    peerDependencies:
+      eslint: ^6.2.0 || ^7.0.0 || ^8.0.0
 
   eslint-scope@5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
@@ -11012,11 +11018,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-vue@6.2.2(eslint@7.32.0):
+  eslint-plugin-vue@7.20.0(eslint@7.32.0):
     dependencies:
       eslint: 7.32.0
+      eslint-utils: 2.1.0
       natural-compare: 1.4.0
-      semver: 5.7.3
+      semver: 6.3.2
       vue-eslint-parser: 7.11.0(eslint@7.32.0)
     transitivePeerDependencies:
       - supports-color
