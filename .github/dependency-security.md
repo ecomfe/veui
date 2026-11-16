@@ -50,6 +50,9 @@ compatible releases introduce syntax/dependencies that the existing `esm` build
 runner cannot parse. Neither pinned package has an entry in the captured backlog.
 The browser test process has an 8 GB heap limit because the full instrumented
 webpack 4 suite exhausted its former 4 GB limit both locally and on GitHub CI.
+The TagInput focus test explicitly blurs its input instead of focusing the
+non-focusable document body. Its assertions are unchanged; this prevents the
+failed fixture from leaking DOM into subsequent drag and prompt tests.
 
 ## Remaining work and compatibility boundaries
 
