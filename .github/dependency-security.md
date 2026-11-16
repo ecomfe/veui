@@ -50,8 +50,10 @@ The existing PostCSS plugin patch is retained.
 Upgrade Vue CLI to 5, webpack to 5, karma-webpack to 5, and matching Less/raw
 loaders. Remove the unused `@vue/eslint-config-standard` dependency, whose old
 webpack resolver retained the obsolete crypto tree. The active lint rules remain
-in the repository's existing ESLint configuration; ESLint 7 supports the CLI 5
-lint integration. Migrate the theme's Babel 6 presets to Babel 7, AVA to 4 with
+in the repository's existing ESLint configuration. VEUI uses ESLint 7 for the
+CLI 5 lint integration; keep the root ESLint 6/plugin-vue 6 pair compatible for
+repository linting, with vulnerable descendants patched by overrides.
+Migrate the theme's Babel 6 presets to Babel 7, AVA to 4 with
 `@babel/register`, and esbuild to 0.25. Autoprefixer 10 matches the theme's PostCSS 8
 pipeline. These changes remove `request`, `html-minifier`, `babel-traverse`,
 `simple-git`, `property-expr`, webpack 4's crypto tree (including unpatched
