@@ -45,37 +45,67 @@ Overrides are limited to dependencies that retain the APIs their callers use:
 `lint-staged` 10 stages changes itself, so its task list no longer runs `git add`.
 The existing PostCSS plugin patch is retained.
 
-The theme's Less compiler and rimraf stay on the validated 4.1.2 and 4.1.4
-versions. Neither pinned package has an entry in the captured backlog.
-Icon/theme build scripts use a Babel module-loading hook because the legacy
-`esm` runner fails on the preview deployment's Node 24 runtime. The hook only
-transforms module syntax and ignores the packages' browser Babel configurations.
-The browser test process has an 8 GB heap limit because the full instrumented
-webpack 4 suite exhausted its former 4 GB limit both locally and on GitHub CI.
-The TagInput focus test explicitly blurs its input instead of focusing the
-non-focusable document body. Its assertions are unchanged; this prevents the
-failed fixture from leaking DOM into subsequent drag and prompt tests.
+## Second change: remove obsolete build/test dependency trees
 
-## Remaining work and compatibility boundaries
+Upgrade Vue CLI to 5, webpack to 5, karma-webpack to 5, and matching Less/raw
+loaders. Remove the unused `@vue/eslint-config-standard` dependency, whose old
+webpack resolver retained the obsolete crypto tree. The active lint rules remain
+in the repository's existing ESLint configuration; ESLint 7 supports the CLI 5
+lint integration. Migrate the theme's Babel 6 presets to Babel 7, AVA to 4 with
+`@babel/register`, and esbuild to 0.25. Autoprefixer 10 matches the theme's PostCSS 8
+pipeline. These changes remove `request`, `html-minifier`, `babel-traverse`,
+`simple-git`, `property-expr`, webpack 4's crypto tree (including unpatched
+`elliptic`), and the old update notifier's `got` dependency.
 
-1. Upgrade the build/test tools together: Vue CLI 5, webpack 5 and matching
-   Karma/loader integrations. This removes webpack 4's crypto/browser polyfills,
-   obsolete minifiers, middleware and `request` tree. Vue CLI 5's default dev
-   server is also vulnerable, so verify a patched v5 server and its middleware
-   instead of stopping at the CLI upgrade. Preserve the existing test patterns
-   and validate development-server uploads and production demo builds.
-2. Migrate the remaining independent tools: Babel 6 theme configuration to Babel
-   7, AVA's obsolete update notifier, esbuild, and lint tool descendants. Replace
-   legacy Vue/Rollup CSS compilation only with demonstrated build compatibility;
-   do not force PostCSS 8 into plugins written for PostCSS 5–7.
-3. Track Vue 2 framework/compiler advisories separately. A Vue 3 migration changes
-   the supported framework and public component behavior, so it cannot be treated
-   as a compatible dependency update. The open `elliptic` advisory likewise has
-   no patched release; remove its dependency roots instead of overriding it.
+Additional scoped overrides are necessary because the latest compatible parent
+releases still request vulnerable dependencies:
+
+| Override | Compatibility check / purpose |
+| --- | --- |
+| Vue CLI's `webpack-dev-server` 4 → patched 5 | Use `setupMiddlewares` for the existing upload routes. |
+| `webpack-dev-middleware` 5/6 → patched 7 | Supports webpack 5; removes both known path-traversal advisories. |
+| `serialize-javascript` → patched 7 | Retains its synchronous CommonJS serialization API; development requires Node 20. |
+| `cross-spawn` 5 → patched 6; `flatted` → patched 3; `tmp` → patched 0.2 | Retain the APIs used by the existing lint tools. |
+| `generic-names` 1's `loader-utils` → patched 1.4 | Uses only `interpolateName`; checked that generated CSS module names are unchanged. Removes JSON5 0.x too. |
+| `sockjs`'s `uuid` → patched 11 | Retains the CommonJS `v4()` API used for session IDs. |
+| `@vue/component-compiler`'s Stylus → 0.59 | Retains its rendering API and removes the old CSS parser/URI decoder; stays on glob 7. |
+| `karma-webpack`'s `minimatch` → patched 11 | Retains its named CommonJS `minimatch()` export. |
+
+Keep the existing spec globs and assertions. Karma-webpack 5 normally shares a
+module cache between spec files; disable shared runtimes/chunks to preserve the
+old per-file Vue and Vue Test Utils state. Keep Babel in browser mode for Karma,
+use Sinon's browser bundle, and adapt the loader test's source extraction to
+webpack 5/raw-loader 4. The TagInput fixture explicitly blurs its input rather
+than focusing a non-focusable document body; failed focus assertions previously
+left DOM behind and caused downstream drag/prompt failures.
+The table layout test uses the existing `doubleNextFrame()` helper before
+asserting measured column offsets, rather than assuming a zero-delay timer has
+allowed ResizeObserver/layout work to finish.
+
+Keep the validated Less 4.1.2 and rimraf 4.1.4 versions. Icon/theme build scripts
+use a Babel module-loading hook because `esm` fails on Vercel's Node 24 runtime.
+The hook only transforms module syntax and ignores browser Babel configurations.
+The complete instrumented browser suite needs an 8 GB heap; the
+former 4 GB limit failed locally and on GitHub CI.
+
+The combined changes remove vulnerable versions for **186 of 195 baseline alert
+entries**, including **all 16 critical entries**. Nine remain:
+
+| Remaining alerts | Roots | Smallest safe follow-up |
+| --- | --- | --- |
+| PostCSS: #60, #96, #217, #249, #252, #256 | Vue CLI's `@vue/component-compiler-utils` (PostCSS 7), and `rollup-plugin-vue > @vue/component-compiler > postcss-modules-sync` (PostCSS 5/6/7). | Replace the legacy Vue 2 CSS compilation integrations with a supported PostCSS 8 pipeline, with scoped-style/CSS-module and theme output regression checks. Do not force PostCSS 8 into old plugins via a global override. |
+| Vue: #138; vue-template-compiler: #110, #123 | Vue 2 runtime, test utils, CLI, and Rollup compiler. | Requires a supported framework/compiler migration; no compatible patched Vue 2 release exists for these advisories. Preserve the current Vue 2 peer contract until that migration is explicitly reviewed. |
 
 The live npm audit database also contains advisories absent from the captured
 Dependabot backlog. Audit results must therefore be reported separately from the
 195-entry baseline; this change does not claim a clean audit.
+
+Validation: all 875 browser tests, two Babel plugin tests, and three loader tests
+pass. Frozen pnpm 9 installation, package builds, the production demo, and
+component scanning pass. The webpack-dev-server 5 demo renders in a browser;
+XHR/iframe uploads and downloading the uploaded file pass with the existing
+routes. The live audit has no critical findings; remaining packages are PostCSS,
+Vue, vue-template-compiler, and deepmerge (no patched release reported).
 
 References: [Vue CLI 5 migration](https://cli.vuejs.org/migrations/migrate-from-v4.html),
 [webpack 5 migration](https://webpack.js.org/migrate/5/),

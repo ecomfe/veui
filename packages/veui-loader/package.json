@@ -30,16 +30,17 @@
     "@babel/plugin-transform-runtime": "^7.29.7",
     "@babel/preset-env": "^7.29.14",
     "@babel/runtime": "^7.29.14",
-    "ava": "^3.15.0",
+    "@babel/register": "^7.17.7",
+    "ava": "^4.3.3",
     "esm": "^3.2.25",
-    "raw-loader": "^0.5.1",
+    "raw-loader": "^4.0.2",
     "veui": "workspace:*",
     "veui-theme-dls": "workspace:*",
-    "webpack": "^4.47.0"
+    "webpack": "^5.112.2"
   },
   "ava": {
     "require": [
-      "esm"
+      "@babel/register"
     ],
     "files": [
       "test/index.js"

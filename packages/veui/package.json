@@ -12,7 +12,7 @@
     "prepublishOnly": "pnpm build && cp -r ./src/* . && cp ../../CHANGELOG.md .",
     "publish": "rm -rf ./common ./components ./directives ./locale ./managers ./mixins ./plugins ./utils ./icons.js ./index.js ./index-with-locale.js ./CHANGELOG.md",
     "test": "cross-env NODE_OPTIONS=\"--max_old_space_size=8192 --openssl-legacy-provider\" NODE_ENV=test BABEL_ENV=test karma start --single-run",
-    "test:start": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096 --openssl-legacy-provider\" NODE_ENV=test BABEL_ENV=test karma start"
+    "test:start": "cross-env NODE_OPTIONS=\"--max_old_space_size=8192 --openssl-legacy-provider\" NODE_ENV=test BABEL_ENV=test karma start"
   },
   "module": "index.js",
   "sideEffects": [
@@ -46,10 +46,9 @@
     "@rollup/plugin-commonjs": "^19.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",
-    "@vue/cli-plugin-babel": "^4.5.17",
-    "@vue/cli-plugin-eslint": "^4.5.17",
-    "@vue/cli-service": "^4.5.17",
-    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/cli-plugin-babel": "^5.0.9",
+    "@vue/cli-plugin-eslint": "^5.0.9",
+    "@vue/cli-service": "^5.0.9",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.1.0",
     "babel-plugin-istanbul": "^5.2.0",
@@ -60,8 +59,8 @@
     "cross-env": "^5.2.1",
     "dls-icons-vue": "~3.55.0",
     "dls-illustrations-vue": "^1.4.3",
-    "esbuild": "^0.12.29",
-    "eslint": "^6.8.0",
+    "esbuild": "^0.25.12",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.26.0",
@@ -80,9 +79,9 @@
     "karma-mocha": "^2.0.1",
     "karma-sourcemap-loader": "^0.3.8",
     "karma-spec-reporter": "0.0.32",
-    "karma-webpack": "^4.0.2",
+    "karma-webpack": "^5.0.1",
     "less": "^3.13.1",
-    "less-loader": "^7.3.0",
+    "less-loader": "^8.1.1",
     "less-plugin-est": "^3.0.1",
     "lint-staged": "^10.5.4",
     "mocha": "^7.2.0",
@@ -101,7 +100,7 @@
     "vue": "^2.7.16",
     "vue-router": "^3.5.3",
     "vue-template-compiler": "^2.7.16",
-    "webpack": "^4.47.0"
+    "webpack": "^5.112.2"
   },
   "peerDependencies": {
     "@vue/runtime-dom": "^3.2.26",

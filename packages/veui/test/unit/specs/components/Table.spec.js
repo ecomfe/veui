@@ -6,7 +6,7 @@ import Table from '@/components/Table'
 import Column from '@/components/Table/Column'
 import Select from '@/components/Select'
 import ConfigProvider from '@/components/ConfigProvider'
-import { expectTooltip, mount, wait } from '../../../utils'
+import { doubleNextFrame, expectTooltip, mount, wait } from '../../../utils'
 import tooltipManager from '@/managers/tooltip'
 import config from '@/managers/config'
 
@@ -3285,7 +3285,7 @@ describe('components/Table', function () {
     await vm.$nextTick()
 
     vm.columns = ['id', 'desc', 'name', 'title', 'text']
-    await wait(0)
+    await doubleNextFrame()
 
     const ths = wrapper.findAll('th')
     expect(parseFloat(ths.at(1).element.style.left)).to.equal(
