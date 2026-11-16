@@ -45,6 +45,12 @@ Overrides are limited to dependencies that retain the APIs their callers use:
 `lint-staged` 10 stages changes itself, so its task list no longer runs `git add`.
 The existing PostCSS plugin patch is retained.
 
+The theme's Less compiler and rimraf stay on 4.1.2 and 4.1.4 respectively: newer
+compatible releases introduce syntax/dependencies that the existing `esm` build
+runner cannot parse. Neither pinned package has an entry in the captured backlog.
+The browser test process has an 8 GB heap limit because the full instrumented
+webpack 4 suite exhausted its former 4 GB limit both locally and on GitHub CI.
+
 ## Remaining work and compatibility boundaries
 
 1. Upgrade the build/test tools together: Vue CLI 5, webpack 5 and matching
