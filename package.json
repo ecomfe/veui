@@ -14,6 +14,9 @@
     "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public && pnpm sync"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.13",
+    "@babel/plugin-transform-modules-commonjs": "^7.29.7",
+    "@babel/register": "^7.29.3",
     "@justineo/npmmirror-sync": "^0.1.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",

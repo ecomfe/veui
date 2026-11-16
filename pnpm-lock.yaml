@@ -21,6 +21,15 @@ importers:
 
   .:
     devDependencies:
+      '@babel/core':
+        specifier: ^7.29.13
+        version: 7.29.13
+      '@babel/plugin-transform-modules-commonjs':
+        specifier: ^7.29.7
+        version: 7.29.14(@babel/core@7.29.13)
+      '@babel/register':
+        specifier: ^7.29.3
+        version: 7.29.13(@babel/core@7.29.13)
       '@justineo/npmmirror-sync':
         specifier: ^0.1.0
         version: 0.1.0
@@ -441,9 +450,6 @@ importers:
       cssnano:
         specifier: ^5.1.7
         version: 5.1.15(postcss@8.5.33)
-      esm:
-        specifier: ^3.2.25
-        version: 3.2.25
       globby:
         specifier: ^11.1.0
         version: 11.1.0
@@ -487,9 +493,6 @@ importers:
       del-cli:
         specifier: ^4.0.1
         version: 4.0.1
-      esm:
-        specifier: ^3.2.25
-        version: 3.2.25
       mkdirp:
         specifier: ^0.5.6
         version: 0.5.6
@@ -1039,6 +1042,12 @@ packages:
     resolution: {integrity: sha512-HrcgcIESLm9aIR842yhJ5RWan/gebQUJ6E/E5+rf0y9o6oj7w0Br+sWuL6kEQ/o/AdfvR1Je9jG18/gnpwjEyA==}
     peerDependencies:
       '@babel/core': ^7.0.0-0 || ^8.0.0-0 <8.0.0
+
+  '@babel/register@7.29.13':
+    resolution: {integrity: sha512-MgjJHsquuHn0BvPonFcJuBZkeqOG3rz9X1ViQZRl+a0EXvLXMKlhCAaqsu6OpijCrRRAmMWvFc9uuWS7lkFwdg==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
 
   '@babel/runtime@7.29.14':
     resolution: {integrity: sha512-Y5tqevQaUAZhhj82BpYMNC1ssvLQTVAfwKdm8iy8qwmhvC2/CpcAu8OC+QEtjM7pMk7knx83u1Qj8gzkicyelw==}
@@ -6092,6 +6101,10 @@ packages:
     resolution: {integrity: sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==}
     engines: {node: '>=0.10.0'}
 
+  pirates@4.0.7:
+    resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
+    engines: {node: '>= 6'}
+
   pkg-conf@3.1.0:
     resolution: {integrity: sha512-m0OTbR/5VPNPqO1ph6Fqbj7Hv6QU7gR/tQW40ZqrL1rjgCU85W6C1bJn0BItuJqnR98PWzw7Z8hHeChD1WrgdQ==}
     engines: {node: '>=6'}
@@ -8991,6 +9004,15 @@ snapshots:
       '@babel/helper-plugin-utils': 7.29.7
       '@babel/types': 7.29.14
       esutils: 2.0.3
+
+  '@babel/register@7.29.13(@babel/core@7.29.13)':
+    dependencies:
+      '@babel/core': 7.29.13
+      clone-deep: 4.0.1
+      find-cache-dir: 2.1.0
+      make-dir: 2.1.0
+      pirates: 4.0.7
+      source-map-support: 0.5.21
 
   '@babel/runtime@7.29.14': {}
 
@@ -15250,6 +15272,8 @@ snapshots:
       pinkie: 2.0.4
 
   pinkie@2.0.4: {}
+
+  pirates@4.0.7: {}
 
   pkg-conf@3.1.0:
     dependencies:
